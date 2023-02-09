@@ -1,0 +1,21 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Menu:Home": "Trang chủ",
+    "Welcome": "Xin chào",
+    "LongWelcomeMessage": "Chào mừng bạn đến WebBase!",
+
+    // Permission
+    "Permission:AbpIdentity.Roles": "Quản lý vai trò",
+    "Permission:AbpIdentity.Roles.Create": "Tạo vai trò",
+    "Permission:AbpIdentity.Roles.Update": "Sửa vai trò",
+    "Permission:AbpIdentity.Roles.Delete": "Xóa vai trò",
+    "Permission:AbpIdentity.Roles.ManagePermissions": "Phân quyền cho vai trò",
+
+    "Permission:AbpIdentity.Users": "Quản lý người dùng",
+    "Permission:AbpIdentity.Users.Create": "Tạo người dùng",
+    "Permission:AbpIdentity.Users.Update": "Sửa người dùng",
+    "Permission:AbpIdentity.Users.Delete": "Xóa người dùng",
+    "Permission:AbpIdentity.Users.ManagePermissions": "Phân quyền cho người dùng"
+  }
+}

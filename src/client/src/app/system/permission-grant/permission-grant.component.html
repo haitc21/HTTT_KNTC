@@ -1,0 +1,39 @@
+<p-panel #pnlPm>
+  <p-listbox
+    [options]="groupedPermisssions"
+    [group]="true"
+    [(ngModel)]="selectedPermissions"
+    [metaKeySelection]="false"
+    [checkbox]="true"
+    [filter]="true"
+    [multiple]="true"
+    filterPlaceHolder="Tên quyền"
+    [listStyle]="{ 'max-height': '250px' }"
+  >
+    <ng-template let-group pTemplate="group">
+      <div class="p-d-flex p-ai-center">
+        <span>{{ group.label }}</span>
+      </div>
+    </ng-template>
+  </p-listbox>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipples
+      type="submit"
+      label="Lưu"
+      class=" p-button-info"
+      icon="pi pi-check"
+      (click)="saveChange()"
+    >
+    </button>
+  </ng-template>
+
+  <p-blockUI [target]="pnlPm" [blocked]="blockedPanelDetail">
+    <p-progressSpinner
+      [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+      strokeWidth="2"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </p-blockUI>
+</p-panel>

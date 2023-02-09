@@ -1,0 +1,76 @@
+<form
+  class="form-horizontal form-label-left"
+  skipValidation
+  [formGroup]="form"
+  (ngSubmit)="saveChange()"
+>
+  <p-panel #pnlDetail   [collapsed]="false">
+    <div class="formgrid grid">
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-12">
+        <span class="p-float-label">
+          <input
+            id="name"
+            type="text"
+            pInputText
+            formControlName="name"
+            [style]="{ width: '100%' }"
+          />
+          <label for="name">Tên <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.name"
+          [validationMessages]="validationMessages.name"
+        >
+        </app-validation-message>
+      </div>
+      <!-- -------------------------------------------------------=----------------------------- -->
+      <div class="field col-12 md:col-12">
+        <span class="p-float-label">
+          <input
+            id="description"
+            type="text"
+            pInputText
+            formControlName="description"
+            [style]="{ width: '100%' }"
+          />
+          <label for="description">Mô tả <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.description"
+          [validationMessages]="validationMessages.description"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-12">
+        <p-checkbox binary="true" label="Công khai" formControlName="isPublic"></p-checkbox>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-12">
+        <p-checkbox binary="true" label="Mặc định" formControlName="isDefault"></p-checkbox>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+    </div>
+
+    <ng-template pTemplate="footer">
+      <button
+        pButton
+        pRipples
+        type="submit"
+        label="Lưu"
+        class=" p-button-info"
+        icon="pi pi-check"
+        [disabled]="!form.valid || btnDisabled"
+      ></button>
+    </ng-template>
+
+    <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
+      <p-progressSpinner
+        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        strokeWidth="2"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</form>

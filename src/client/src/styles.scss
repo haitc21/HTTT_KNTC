@@ -1,0 +1,113 @@
+$gutter: 1rem; //for primeflex grid system
+@import 'assets/layout/styles/layout/layout.scss';
+
+/* PrimeNG */
+@import '../node_modules/primeng/resources/primeng.min.css';
+@import '../node_modules/primeflex/primeflex.scss';
+@import '../node_modules/primeicons/primeicons.css';
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: #3b82f6;
+  border-color: red;
+  color: #fff;
+}
+#inputPassword {
+  width: 100% !important;
+}
+.search-width {
+  width: 250px;
+}
+.action-column {
+  width: 15%;
+}
+.p-dropdown-panel {
+  width: 100%;
+}
+
+.topmenu {
+  position: fixed;
+  height: 5rem;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 100000 !important;
+
+  .topmenu-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 500;
+    width: 200px;
+    border-radius: 12px;
+    a {
+      padding-left: 20px;
+      color: #fff;
+      font-weight: 800;
+    }
+
+    img {
+      height: 2.5rem;
+      margin-right: 0.5rem;
+    }
+
+    &:focus {
+      @include focused();
+    }
+  }
+
+  .p-menubar,
+  .p-menubar-root-list,
+  .p-menu-list,
+  .p-menuitem,
+  ul,
+  li {
+    background-color: #3b82f6 !important;
+    border: #3b82f6 !important;
+  }
+  .p-menuitem-text,
+  .p-menuitem-icon,
+  .p-submenu-icon {
+    color: #fff !important;
+    font-size: 1rem;
+  }
+  .p-menuitem-icon {
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+  .p-menubar .p-menuitem.p-menuitem-active > .p-menuitem-link {
+    background: #295bac;
+  }
+  .p-menubar .p-menubar-root-list > .p-menuitem.p-menuitem-active > .p-menuitem-link,
+  .p-menubar
+    .p-menubar-root-list
+    > .p-menuitem.p-menuitem-active
+    > .p-menuitem-link:not(.p-disabled):hover {
+    background: #295bac;
+  }
+  .p-menubar .p-menubar-root-list > .p-menuitem > .p-menuitem-link:not(.p-disabled):hover {
+    background: #295bac;
+  }
+  .p-menubar .p-menuitem-link:not(.p-disabled):hover {
+    background: #295bac;
+  }
+}
+
+.p-datatable {
+  tr,
+  th,
+  td {
+    border: solid 1px var(--gray-500) !important;
+  }
+}
+
+.sidebar .p-card-header,
+.p-card-body {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.p-panel-header {
+  font-size: 1.5rem;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-bottom: 1rem !important;
+}

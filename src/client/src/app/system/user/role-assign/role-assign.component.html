@@ -1,0 +1,39 @@
+<p-panel #pnlDetail   [collapsed]="false">
+  <p-pickList
+    [source]="availableRoles"
+    [target]="seletedRoles"
+    sourceHeader="Vai trò khả dụng"
+    targetHeader="Vai trò đã phân"
+    [dragdrop]="true"
+    [responsive]="true"
+    filterBy="name"
+    sourceFilterPlaceholder="Tên vai trò"
+    ariaTargetFilterLabel="Tên vai trò"
+  >
+    <ng-template let-role pTemplate="item">
+      <div> 
+        {{ role.name }}
+      </div>
+    </ng-template>
+  </p-pickList>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipples
+      type="submit"
+      label="Lưu"
+      class=" p-button-info"
+      icon="pi pi-check"
+      (click)="saveChange()"
+    ></button>
+  </ng-template>
+
+  <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
+    <p-progressSpinner
+      [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+      strokeWidth="2"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </p-blockUI>
+</p-panel>

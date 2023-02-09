@@ -1,0 +1,143 @@
+<div class="animated fadeIn">
+  <p-panel #pnl header="Quản lý vai trò">
+    <p-toolbar>
+      <ng-template pTemplate="left">
+        <button
+          *abpPermission="'AbpIdentity.Roles.Create'"
+          pButton
+          pRipple
+          [label]="Actions.CREATE"
+          icon="pi pi-plus"
+          class="p-button-success mr-1"
+          [pTooltip]="Actions.CREATE"
+          tooltipPosition="top"
+          (click)="showAddModal()"
+        ></button>
+        <button
+          *abpPermission="'AbpIdentity.Roles.Delete'"
+          pButton
+          pRipple
+          [label]="Delete"
+          icon="pi pi-trash"
+          class="p-button-danger"
+          [pTooltip]="Actions.DELETE"
+          tooltipPosition="top"
+          (click)="deleteItems()"
+          [disabled]="!selectedItems || !selectedItems.length"
+        ></button>
+      </ng-template>
+
+      <ng-template pTemplate="right">
+        <span class="p-input-icon-left search-width">
+          <i class="pi pi-search"></i>
+          <input
+            pInputText
+            type="text"
+            (keyup.enter)="loadData()"
+            [(ngModel)]="keyword"
+            placeholder="Tên vai trò"
+            class="w-full"
+          />
+        </span>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table
+      #dt
+      [value]="items"
+      [rows]="10"
+      [paginator]="false"
+      [(selection)]="selectedItems"
+      [rowHover]="true"
+      dataKey="id"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th pSortableColumn="name">Tên</th>
+          <th pSortableColumn="isPublic">Công khai</th>
+          <th pSortableColumn="isDefault">Mặc định</th>
+          <th *ngIf="visibleActionColumn" class="action-column"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+          </td>
+          <td>{{ row.name }}</td>
+          <td>
+            <p-tag
+              styleClass="mr-1"
+              [severity]="row.isPublic ? 'info' : 'warning'"
+              [value]="row.isPublic ? 'Có' : 'Không'"
+            >
+            </p-tag>
+          </td>
+          <td>
+            <p-tag
+              styleClass="mr-1"
+              [severity]="row.isDefault ? 'info' : 'warning'"
+              [value]="row.isDefault ? 'Có' : 'Không'"
+            >
+            </p-tag>
+          </td>
+          <td *ngIf="visibleActionColumn">
+            <button
+              *abpPermission="'AbpIdentity.Roles.Update'"
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-info mr-1"
+              [pTooltip]="Actions.UPDATE"
+              tooltipPosition="top"
+              (click)="showEditModal(row)"
+            ></button>
+            <button
+              *abpPermission="'AbpIdentity.Roles.ManagePermissions'"
+              pButton
+              pRipple
+              icon="pi pi-wrench"
+              class="p-button-rounded p-button-help mr-1"
+              [pTooltip]="Actions.MANAGE_PERMISSIONS"
+              tooltipPosition="top"
+              (click)="showPermissionModal(row)"
+            ></button>
+
+            <button
+              *abpPermission="'AbpIdentity.Roles.Delete'"
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-warning"
+              [pTooltip]="Actions.DELETE"
+              tooltipPosition="top"
+              (click)="deleteRow(row)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <p-paginator
+          [rows]="maxResultCount"
+          [totalRecords]="totalCount"
+          [showCurrentPageReport]="true"
+          [showJumpToPageInput]="true"
+          (onPageChange)="pageChanged($event)"
+          currentPageReportTemplate="{totalRecords} bản ghi, {currentPage} trang"
+          [rowsPerPageOptions]="[10, 20, 50, 100]"
+        ></p-paginator>
+      </ng-template>
+    </p-table>
+
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+      <p-progressSpinner
+        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+        strokeWidth="2"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</div>
