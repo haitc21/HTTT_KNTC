@@ -98,6 +98,9 @@ $gutter: 1rem; //for primeflex grid system
   td {
     border: solid 1px var(--gray-500) !important;
   }
+  th {
+    text-align: center !important;
+  }
 }
 
 .sidebar .p-card-header,
