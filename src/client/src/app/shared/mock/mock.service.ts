@@ -43,12 +43,14 @@ export class MockService {
   ];
   typeHoSo = [0, 1];
   FieldsHoSo = [0, 1, 2, 3];
+  loaiHS = ['khiếu nại', 'Tố cáo'];
+  linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
   results = ['đúng', 'sai'];
 
   constructor() {}
   mockData(): HoSo[] {
     let hoSos = [];
-    for (let index = 0; index < 55; index++) {
+    for (let index = 0; index < 200; index++) {
       let item = new HoSo();
       let randomDate = this.randomDates();
       item.code = this.genCode();
@@ -57,7 +59,7 @@ export class MockService {
       item.sentDate = randomDate[0];
       item.typeHoSo = this.randomItemInArr(this.typeHoSo);
       item.fieldType = this.randomItemInArr(this.FieldsHoSo);
-      item.title = `${item.typeHoSo} ${item.fieldType} ở ${item.area}`;
+      item.title = `${this.loaiHS[item.typeHoSo]} ${this.linhVuc[item.fieldType]} ở ${item.area}`;
 
       item.returnDate1 = randomDate[1];
       item.result1 = this.randomItemInArr(this.results);

@@ -1,32 +1,46 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.locatecontrol';
-const iconRetinaUrl = 'assets/images/map//marker-icon-2x.png';
-const iconUrl = 'assets/images/map/marker-icon.png';
-const shadowUrl = 'assets/images/map/marker-shadow.png';
-const iconDefault = L.icon({
-  iconRetinaUrl,
-  iconUrl,
-  shadowUrl,
+import { HoSo, typesHoSo } from '../../mock/HoSo';
+
+const blueIcon = new L.Icon({
+  iconUrl: 'assets/images/map/marker-icon.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  tooltipAnchor: [16, -28],
   shadowSize: [41, 41],
 });
-L.Marker.prototype.options.icon = iconDefault;
+const redIcon = new L.Icon({
+  iconUrl: 'assets/images/map/marker-icon-red.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements AfterViewInit {
+export class MapComponent implements OnInit, OnChanges {
+  @Input() data: HoSo[] = [];
+
   private map;
 
+  loaiHS = ['khiếu nại', 'Tố cáo'];
+  linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
+
   constructor() {}
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.initMap();
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.data && changes.data.currentValue && !changes.data.isFirstChange()) {
+      console.log(this.data);
+
+      this.renderMarkers(changes.data.currentValue);
+    }
   }
 
   initMap() {
@@ -84,6 +98,32 @@ export class MapComponent implements AfterViewInit {
           `<b>Vị trí: </b> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
         )
         .openOn(this.map);
+    });
+  }
+
+  renderMarkers(hosos: HoSo[]) {
+    this.map.eachLayer(layer => {
+      if (!(layer instanceof L.TileLayer)) {
+        this.map.removeLayer(layer);
+      }
+    });
+
+    hosos.forEach(hoSo => {
+      const marker = L.marker([hoSo.latLng[0], hoSo.latLng[1]], {
+        icon: hoSo.typeHoSo === 0 ? blueIcon : redIcon,
+      });
+
+      marker.bindPopup(`
+        <div>
+          <h5>${hoSo.title}</h5>
+          <p>Mã đơn: ${hoSo.code}</p>
+          <p>Người gửi đơn: ${hoSo.sender}</p>
+          <p>Khu vực: ${hoSo.area}</p>
+          <p>Loại đơn: ${this.loaiHS[hoSo.typeHoSo]}</p>
+          <p>Lĩnh vực: ${this.linhVuc[hoSo.fieldType]}</p>
+        </div>
+      `);
+      marker.addTo(this.map);
     });
   }
 }

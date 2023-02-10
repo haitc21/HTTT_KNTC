@@ -15,8 +15,8 @@ export class HomeComponent implements OnInit {
   data: HoSo[] = [];
 
   mockData: HoSo[] = [];
-  typeHoSo = ['khiếu nại', 'Tố cáo'];
-  FieldsHoSo = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
+  loaiHS = ['khiếu nại', 'Tố cáo'];
+  linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
   typesHoSo = typesHoSo;
   fieldsHoSo = fieldsHoSo;
 
