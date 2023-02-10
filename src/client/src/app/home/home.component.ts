@@ -1,8 +1,9 @@
 import { AuthService } from '@abp/ng.core';
 import { Component, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { HoSo } from '../shared/mock/HoSo';
+import { HoSo, fieldsHoSo, typesHoSo } from '../shared/mock/HoSo';
 import { MockService } from '../shared/mock/mock.service';
+import { animate } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,13 @@ import { MockService } from '../shared/mock/mock.service';
 export class HomeComponent implements OnInit {
   blockedPanel = false;
   data: HoSo[] = [];
+
   mockData: HoSo[] = [];
+  typeHoSo = ['khiếu nại', 'Tố cáo'];
+  FieldsHoSo = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
+  typesHoSo = typesHoSo;
+  fieldsHoSo = fieldsHoSo;
+
   public selectedItems: HoSo[] = [];
   //Paging variables
   public skipCount: number = 0;
@@ -45,28 +52,63 @@ export class HomeComponent implements OnInit {
     this.loadData(true);
   }
   loadData(isFirst: boolean = false): void {
-    this.data = this.mockData;
-    // this.data = this.data.filter(x => x.typeHoSo != "Khiếu nại");
-    // console.log(this.mockData);
-    // console.log(this.data);
-    
+    this.data = [];
 
-    // if (this.landComplaint)
-    //   this.data = this.data.filter(x => x.type === 'Khiếu nại' && x.fieldType === 'Đất đai');
-    // else this.data = this.data.filter(x => x.type !== 'Khiếu nại' && x.fieldType !== 'Đất đai');
+    if (this.landComplaint)
+      this.data.push(
+        ...this.mockData.filter(
+          x => x.typeHoSo === typesHoSo.Complaint && x.fieldType === fieldsHoSo.Land
+        )
+      );
 
-    // if (this.enviromentalComplaint)
-    //   this.data = this.data.filter(x => x.type == 'Khiếu nại' && x.fieldType == 'Môi trường');
-    // else this.data = this.data.filter(x => x.type != 'Khiếu nại' && x.fieldType != 'Môi trường');
+    if (this.enviromentalComplaint)
+      this.data.push(
+        ...this.mockData.filter(
+          x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Emviroment
+        )
+      );
 
-    // if (this.waterResourceComplaint)
-    //   this.data = this.data.filter(x => x.type == 'Khiếu nại' && x.fieldType == 'Tài nguyên nước');
-    // else
-    //   this.data = this.data.filter(x => x.type != 'Khiếu nại' && x.fieldType != 'Tài nguyên nước');
+    if (this.waterResourceComplaint)
+      this.data.push(
+        ...this.mockData.filter(
+          x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Water
+        )
+      );
 
-    // if (this.mineralResourceComplaint)
-    //   this.data = this.data.filter(x => x.type == 'Khiếu nại' && x.fieldType == 'Khoáng sản');
-    // else this.data = this.data.filter(x => x.type != 'Khiếu nại' && x.fieldType != 'Khoáng sản');
+    if (this.mineralResourceComplaint)
+      this.data.push(
+        ...this.mockData.filter(
+          x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Mineral
+        )
+      );
+
+    if (this.landAccusation)
+      this.data.push(
+        ...this.mockData.filter(
+          x => x.typeHoSo === typesHoSo.Accusation && x.fieldType === fieldsHoSo.Land
+        )
+      );
+
+    if (this.emviromentalAccusation)
+      this.data.push(
+        ...this.mockData.filter(
+          x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Emviroment
+        )
+      );
+
+    if (this.waterResourceAccusation)
+      this.data.push(
+        ...this.mockData.filter(
+          x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Water
+        )
+      );
+
+    if (this.mineralResourceAccusation)
+      this.data.push(
+        ...this.mockData.filter(
+          x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Mineral
+        )
+      );
   }
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;

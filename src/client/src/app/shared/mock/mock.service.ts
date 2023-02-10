@@ -41,8 +41,8 @@ export class MockService {
     'Thanh Xuân',
     'Nam Từ Liêm',
   ];
-  typeHoSo = ['khiếu nại', 'Tố cáo'];
-  FieldsHoSo = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
+  typeHoSo = [0, 1];
+  FieldsHoSo = [0, 1, 2, 3];
   results = ['đúng', 'sai'];
 
   constructor() {}
@@ -69,7 +69,7 @@ export class MockService {
     return hoSos;
   }
 
-  randomItemInArr(arr: any[]): string {
+  randomItemInArr(arr: any[]) {
     const index = Math.floor(Math.random() * arr.length);
     return arr[index];
   }
