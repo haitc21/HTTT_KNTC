@@ -6,14 +6,14 @@ import { MockService } from '../shared/mock/mock.service';
 import { animate } from '@angular/animations';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+  selector: 'app-search-map',
+  templateUrl: './search-map.component.html',
+  styleUrls: ['./search-map.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class SearchMapComponent implements OnInit {
   blockedPanel = false;
   @ViewChild('map', { static: true }) mapContainer: ElementRef;
-
+  isMapInitialised = false;
   data: HoSo[] = [];
 
   mockData: HoSo[] = [];
@@ -53,6 +53,7 @@ export class HomeComponent implements OnInit {
     this.toggleBlockUI(true);
     this.mockData = this.mockService.mockData();
     this.toggleBlockUI(false);
+    this.isMapInitialised = !!this.mapContainer;
     this.loadData(true);
   }
   loadData(isFirst: boolean = false) {

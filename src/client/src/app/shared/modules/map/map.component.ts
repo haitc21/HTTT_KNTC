@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.locatecontrol';
 import { HoSo, typesHoSo } from '../../mock/HoSo';
@@ -12,7 +21,7 @@ const blueIcon = new L.Icon({
 });
 const redIcon = new L.Icon({
   iconUrl: 'assets/images/map/marker-icon-red.png',
-  iconSize: [25, 41],
+  iconSize: [38, 45],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
@@ -23,37 +32,36 @@ const redIcon = new L.Icon({
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit, OnChanges {
+export class MapComponent implements AfterViewInit, OnChanges {
+  @Input() idMap: string = 'map';
   @Input() data: HoSo[] = [];
+  @Input() heightMap: string = '500px';
+  @Input() zoomLv: number = 13;
 
-  private map;
+  map: L.Map;
 
   loaiHS = ['khiếu nại', 'Tố cáo'];
   linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
 
   constructor() {}
-  ngOnInit(): void {
+  ngAfterViewInit() {
     this.initMap();
+    this.buildLocateBtn();
+    this.buildEventMapClick();
   }
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.data && changes.data.currentValue && !changes.data.isFirstChange()) {
-      console.log(this.data);
-
       this.renderMarkers(changes.data.currentValue);
     }
   }
 
   initMap() {
-    this.map = L.map('map').setView([21.027764, 105.83416], 13);
+    this.map = L.map(this.idMap).setView([21.027764, 105.83416], this.zoomLv);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
       maxZoom: 18,
     }).addTo(this.map);
-
-    // nút định vị
-    this.buildLocateBtn();
-    this.buildEventMapClick();
   }
 
   buildLocateBtn() {

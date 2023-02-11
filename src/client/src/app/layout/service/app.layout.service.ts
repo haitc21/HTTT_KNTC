@@ -52,7 +52,6 @@ export class LayoutService {
     overlayOpen$ = this.overlayOpen.asObservable();
 
     onMenuToggle() {
-        debugger
         if (this.isOverlay()) {
             this.state.overlayMenuActive = !this.state.overlayMenuActive;
             if (this.state.overlayMenuActive) {

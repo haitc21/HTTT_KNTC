@@ -1,6 +1,7 @@
 @media screen and (min-width: 1729px) {
     .layout-main, .landing-wrapper {
-        width: 1504px;
+        // width: 1504px;
+        width: 1729px;
         margin-left: auto !important;
         margin-right: auto !important;
     }
@@ -33,7 +34,7 @@
 
         &.layout-static {
             .layout-main-container {
-                margin-left: 200px;
+                // margin-left: 200px;
             }
 
             &.layout-static-inactive {

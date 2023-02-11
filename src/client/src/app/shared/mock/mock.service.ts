@@ -50,7 +50,7 @@ export class MockService {
   constructor() {}
   mockData(): HoSo[] {
     let hoSos = [];
-    for (let index = 0; index < 200; index++) {
+    for (let index = 0; index < 500; index++) {
       let item = new HoSo();
       let randomDate = this.randomDates();
       item.code = this.genCode();
@@ -87,7 +87,7 @@ export class MockService {
     return [latitude, longitude];
   }
   randomDates(): [string, string, string] {
-    const start = moment('2023-01-01', 'YYYY-MM-DD');
+    const start = moment('2022-01-01', 'YYYY-MM-DD');
     const end = moment('2023-12-31', 'YYYY-MM-DD');
     const randomDate1 = moment(start.valueOf() + Math.random() * (end.valueOf() - start.valueOf()));
     const randomDate2 = moment(

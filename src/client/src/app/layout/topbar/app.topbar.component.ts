@@ -78,7 +78,7 @@ export class AppTopBarComponent implements OnInit {
       {
         label: 'Bản đồ',
         icon: 'pi pi-fw pi-map',
-        routerLink: ['/'],
+        routerLink: ['/map'],
       },
       {
         label: 'Khiếu nại',
