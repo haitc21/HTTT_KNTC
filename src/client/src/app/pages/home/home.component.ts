@@ -1,8 +1,8 @@
 import { AuthService } from '@abp/ng.core';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { HoSo, fieldsHoSo, typesHoSo } from '../shared/mock/HoSo';
-import { MockService } from '../shared/mock/mock.service';
+import { HoSo, fieldsHoSo, typesHoSo } from '../../shared/mock/HoSo';
+import { MockService } from '../../shared/mock/mock.service';
 import { animate } from '@angular/animations';
 
 @Component({

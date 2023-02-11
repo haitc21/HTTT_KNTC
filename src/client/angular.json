@@ -120,6 +120,7 @@
             "scripts": [
               "node_modules/quill/dist/quill.js",
               "node_modules/leaflet/dist/leaflet.js",
+              "node_modules/chart.js/dist/chart.js"
             ]
           },
           "configurations": {

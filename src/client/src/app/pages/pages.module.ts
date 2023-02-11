@@ -28,15 +28,17 @@ import { CoreModule } from '@abp/ng.core';
 import { PasswordModule } from 'primeng/password';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CardModule } from 'primeng/card';
-import { SearchMapRoutingModule } from './search-map-routing.module';
-import { SearchMapComponent } from './search-map.component';
-import {InputSwitchModule} from 'primeng/inputswitch';
-
+import { HomeRoutingModule as PagesRoutingModule } from './pages-routing.module';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { HomeComponent } from './home/home.component';
+import { SearchMapComponent } from './search-map/search-map.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import {ChartModule} from 'primeng/chart';
 
 @NgModule({
-  declarations: [SearchMapComponent],
+  declarations: [HomeComponent, SearchMapComponent,DashboardComponent],
   imports: [
-    SearchMapRoutingModule,
+    PagesRoutingModule,
     CoreModule,
     PanelModule,
     TableModule,
@@ -66,7 +68,8 @@ import {InputSwitchModule} from 'primeng/inputswitch';
     PasswordModule,
     OverlayPanelModule,
     CardModule,
-    InputSwitchModule
+    InputSwitchModule,
+    ChartModule
   ],
 })
-export class SearchMapModule {}
+export class PagesModule {}

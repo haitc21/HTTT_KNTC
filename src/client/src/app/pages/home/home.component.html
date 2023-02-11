@@ -1,0 +1,103 @@
+<div class="animated fadeIn grid">
+  <!-- --------------Sidebar--------------------------------------------------------- -->
+  <div class="col-12 md:col-2 home-sidebar">
+    <p-card>
+      <ng-template pTemplate="header">
+        <h3 class="home-sidebar-header">Lớp bản đồ</h3>
+      </ng-template>
+      <!-- ----------------------------------------------------------------------- -->
+      <div class="grid col-12 md:col-12">
+        <div class="group-header ml-3">
+          <img src="assets/images/map/marker-icon.png" alt="Khiêu nại" />
+          <span>Khiêu nại</span>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Đất đai</span>
+          <p-inputSwitch [(ngModel)]="landComplaint" (onChange)="loadData()"></p-inputSwitch>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Môi trường</span>
+          <p-inputSwitch
+            [(ngModel)]="enviromentalComplaint"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Tài nguyên nước</span>
+          <p-inputSwitch
+            [(ngModel)]="waterResourceComplaint"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Khoáng sản</span>
+          <p-inputSwitch
+            [(ngModel)]="mineralResourceComplaint"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="group-header ml-3 mt-5">
+          <img src="assets/images/map/marker-icon-red.png" class="icon-red" alt="Tố cáo" />
+          <span>Tố Cáo</span>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Đất đai</span>
+          <p-inputSwitch [(ngModel)]="landAccusation" (onChange)="loadData()"></p-inputSwitch>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Môi trường</span>
+          <p-inputSwitch
+            [(ngModel)]="emviromentalAccusation"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Tài nguyên nước</span>
+          <p-inputSwitch
+            [(ngModel)]="waterResourceAccusation"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Khoáng sản</span>
+          <p-inputSwitch
+            [(ngModel)]="mineralResourceAccusation"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+      </div>
+    </p-card>
+  </div>
+  <!-- ----------------------Main------------------------------------------------- -->
+  <div class="col-12 md:col-10">
+    <p-panel #pnl header="Trang chủ">
+      <p-card>
+        <app-map idMap="homeMap" [data]="data" heightMap="80vh" [zoomLv]="12"></app-map>
+      </p-card>
+      <!-- ----------------------------------------------------------------------- -->
+      <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+        <p-progressSpinner
+          [style]="{
+            width: '100px',
+            height: '100px',
+            position: 'absolute',
+            top: '25%',
+            left: '50%'
+          }"
+          strokeWidth="2"
+          animationDuration=".5s"
+        ></p-progressSpinner>
+      </p-blockUI>
+    </p-panel>
+  </div>
+</div>

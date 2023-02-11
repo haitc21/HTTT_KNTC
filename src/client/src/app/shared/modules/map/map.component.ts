@@ -35,7 +35,7 @@ const redIcon = new L.Icon({
 export class MapComponent implements AfterViewInit, OnChanges {
   @Input() idMap: string = 'map';
   @Input() data: HoSo[] = [];
-  @Input() heightMap: string = '500px';
+  @Input() heightMap: string = '600px';
   @Input() zoomLv: number = 13;
 
   map: L.Map;

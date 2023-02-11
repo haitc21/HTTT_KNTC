@@ -25,7 +25,6 @@ export class AppTopBarComponent implements OnInit {
   isAutenticated: boolean = false;
   userName = '';
   userId = '';
-  
 
   constructor(
     public layoutService: LayoutService,
@@ -76,14 +75,18 @@ export class AppTopBarComponent implements OnInit {
         routerLink: ['/'],
       },
       {
+        label: 'Dash Board',
+        icon: 'pi pi-fw pi-calendar',
+        routerLink: ['/pages/dashboard'],
+      },
+      {
         label: 'Bản đồ',
         icon: 'pi pi-fw pi-map',
-        routerLink: ['/map'],
+        routerLink: ['/pages/map'],
       },
       {
         label: 'Khiếu nại',
         icon: 'pi pi-fw pi-envelope',
-        routerLink: ['/'],
         items: [
           {
             label: 'Đất đai',
@@ -107,7 +110,6 @@ export class AppTopBarComponent implements OnInit {
       {
         label: 'Tố cáo',
         icon: 'fa fa-balance-scale',
-        routerLink: ['/'],
         items: [
           {
             label: 'Đất đai',

@@ -6,22 +6,26 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
-    component: AppLayoutComponent
+    loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
+    component: AppLayoutComponent,
+  },
+  {
+    path: 'pages',
+    loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
+    component: AppLayoutComponent,
   },
   {
     path: 'system',
     loadChildren: () => import('./system/system.module').then(m => m.SystemModule),
-    component: AppLayoutComponent
+    component: AppLayoutComponent,
   },
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
   {
-    path: 'map',
-    loadChildren: () => import('./search-map/search-map.module').then(m => m.SearchMapModule),
-    component: AppLayoutComponent
+    path: '**',
+    loadChildren: () => import('./auth/error/error.module').then(m => m.ErrorModule),
   },
 ];
 
