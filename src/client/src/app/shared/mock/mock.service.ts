@@ -86,7 +86,7 @@ export class MockService {
     const longitude = Math.random() * (105.9 - 105.5) + 105.5;
     return [latitude, longitude];
   }
-  randomDates(): [string, string, string] {
+  randomDates(): [Date, Date, Date] {
     const start = moment('2022-01-01', 'YYYY-MM-DD');
     const end = moment('2023-12-31', 'YYYY-MM-DD');
     const randomDate1 = moment(start.valueOf() + Math.random() * (end.valueOf() - start.valueOf()));
@@ -97,9 +97,9 @@ export class MockService {
       randomDate2.valueOf() + Math.random() * (end.valueOf() - randomDate2.valueOf())
     );
     return [
-      randomDate1.format('DD/MM/YYYY'),
-      randomDate2.format('DD/MM/YYYY'),
-      randomDate3.format('DD/MM/YYYY'),
+      randomDate1.toDate(),
+      randomDate2.toDate(),
+      randomDate3.toDate(),
     ];
   }
 }

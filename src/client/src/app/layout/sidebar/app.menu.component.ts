@@ -40,30 +40,60 @@ export class AppMenuComponent implements OnInit {
     // ];
     this.items = [
       {
-        label: 'Trang chủ',
         icon: 'pi pi-fw pi-home',
         routerLink: ['/'],
-        separator: true,
       },
       {
-        label: 'Hệ thống',
+        label: 'Bản đồ',
+        icon: 'pi pi-fw pi-map',
+        routerLink: ['/map'],
+      },
+      {
+        label: 'Khiếu nại',
+        icon: 'pi pi-fw pi-envelope',
+        routerLink: ['/'],
         items: [
           {
-            label: 'Quản lý danh tính',
-            items: [
-              {
-                label: 'Vai trò',
-                icon: 'pi pi-fw pi-user-edit',
-                routerLink: ['/system/role'],
-                visible: this.permissionService.getGrantedPolicy('AbpIdentity.Roles'),
-              },
-              {
-                label: 'Ngời dùng',
-                icon: 'pi pi-fw pi-users',
-                routerLink: ['/system/user'],
-                visible: this.permissionService.getGrantedPolicy('AbpIdentity.Users'),
-              },
-            ],
+            label: 'Đất đai',
+            routerLink: ['/'],
+          },
+          {
+            label: 'Môi trường',
+            routerLink: ['/'],
+          },
+
+          {
+            label: 'Khoáng sản',
+            routerLink: ['/'],
+          },
+          {
+            label: 'Tài nguyên nước',
+            routerLink: ['/'],
+          },
+        ],
+      },
+      {
+        label: 'Tố cáo',
+        icon: 'fa fa-balance-scale',
+        routerLink: ['/'],
+        items: [
+          {
+            label: 'Đất đai',
+            routerLink: ['/'],
+          },
+
+          {
+            label: 'Môi trường',
+            routerLink: ['/'],
+          },
+
+          {
+            label: 'Khoáng sản',
+            routerLink: ['/'],
+          },
+          {
+            label: 'Tài nguyên nước',
+            routerLink: ['/'],
           },
         ],
       },

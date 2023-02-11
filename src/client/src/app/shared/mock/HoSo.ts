@@ -3,12 +3,12 @@ export class HoSo {
     title: string;
     sender: string;
     area: string;
-    sentDate: string;
+    sentDate: Date | "";
     typeHoSo: typesHoSo;
     fieldType: fieldsHoSo;
-    returnDate1: string;
+    returnDate1: Date | "";
     result1: string;
-    returnDate2: string;
+    returnDate2: Date | "";
     result2: string;
     latLng: [number, number];
 }
