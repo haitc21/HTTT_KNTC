@@ -33,10 +33,10 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { HomeComponent } from './home/home.component';
 import { SearchMapComponent } from './search-map/search-map.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import {ChartModule} from 'primeng/chart';
+import { ChartModule } from 'primeng/chart';
 
 @NgModule({
-  declarations: [HomeComponent, SearchMapComponent,DashboardComponent],
+  declarations: [HomeComponent, SearchMapComponent, DashboardComponent],
   imports: [
     PagesRoutingModule,
     CoreModule,
@@ -69,7 +69,8 @@ import {ChartModule} from 'primeng/chart';
     OverlayPanelModule,
     CardModule,
     InputSwitchModule,
-    ChartModule
+    ChartModule,
   ],
+  exports: [HomeComponent],
 })
 export class PagesModule {}

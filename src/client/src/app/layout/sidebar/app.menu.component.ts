@@ -40,6 +40,7 @@ export class AppMenuComponent implements OnInit {
     // ];
     this.items = [
       {
+        label: 'Trang chủ',
         icon: 'pi pi-fw pi-home',
         routerLink: ['/'],
       },

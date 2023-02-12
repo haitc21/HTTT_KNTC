@@ -82,25 +82,29 @@
   <div class="col-12 md:col-10">
     <p-panel #pnl header="Dash Board">
       <div class="grid">
-        <div class="col-6 md:col-6">
-          <div class="col-12 md:col-12">
-            <p-card>
-              <h1>pie</h1>
-              <!-- <p-chart
+        <div class="col-6 md:col-6 flex flex-column justify-content-between">
+          <p-card header="Biểu đồ tình hình khiếu nại, tố cáo" class="flex-1">
+            <div class="flex justify-content-center">
+              <p-chart
                 type="pie"
-                [data]="data"
-                [options]="chartOptions"
-                [style]="{ width: '40%' }"
-              ></p-chart> -->
-            </p-card>
-          </div>
-          <div class="col-12 md:col-12">
-            <h1>bar</h1>
-          </div>
+                [data]="dataPieChart"
+                [options]="pieChartOptions"
+                [style]="{ width: '60%' }"
+              ></p-chart>
+            </div>
+          </p-card>
+          <p-card header="Thống kê tình hình khiếu nại, tố cáo" class="flex-1">
+            <p-chart
+              type="bar"
+              [data]="dataBarChart"
+              [options]="barChartOptions"
+              height="400px"
+            ></p-chart>
+          </p-card>
         </div>
         <div class="col-6 md:col-6">
           <p-card>
-            <app-map idMap="dashboardMap" [data]="data"></app-map>
+            <app-map idMap="dashboardMap" [data]="data" heightMap="910px"></app-map>
           </p-card>
         </div>
       </div>
@@ -147,7 +151,7 @@
           [rows]="10"
           [paginator]="true"
           [globalFilterFields]="['code', 'title']"
-          [tableStyle]="{ 'min-width': '75rem' }"
+          [tableStyle]="{ width: '100%' }"
           [(selection)]="selectedItems"
           [rowHover]="true"
           dataKey="code"

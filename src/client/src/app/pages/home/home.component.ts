@@ -39,6 +39,7 @@ export class HomeComponent implements OnInit {
   waterResourceAccusation = false;
   mineralResourceAccusation = false;
 
+  
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();
   }

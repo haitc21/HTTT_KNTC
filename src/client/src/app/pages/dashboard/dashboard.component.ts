@@ -38,6 +38,12 @@ export class DashboardComponent implements OnInit {
   waterResourceAccusation = false;
   mineralResourceAccusation = false;
 
+  // Chart
+  dataPieChart: any;
+  pieChartOptions: any;
+  dataBarChart: any;
+  barChartOptions: any;
+
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();
   }
@@ -113,7 +119,106 @@ export class DashboardComponent implements OnInit {
           x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Mineral
         )
       );
+
+    this.buildPieChart();
+
+    this.buildBarChart();
   }
+  private buildBarChart() {
+    this.dataBarChart = {
+      labels: [
+        'KN Đất đai',
+        'KN Môi trường',
+        'KN tài nguyên ngước',
+        'KN Khoáng sản',
+        'TC Đất đai',
+        'TC Môi trường',
+        'TC tài nguyên ngước',
+        'TC Khoáng sản',
+      ],
+      datasets: [
+        {
+          label: 'Hồ sơ',
+          backgroundColor: '#2196f3',
+          data: [
+            this.mockData.filter(
+              x => x.typeHoSo === typesHoSo.Complaint && x.fieldType === fieldsHoSo.Land
+            ).length,
+            this.mockData.filter(
+              x => x.typeHoSo === typesHoSo.Complaint && x.fieldType === fieldsHoSo.Emviroment
+            ).length,
+            this.mockData.filter(
+              x => x.typeHoSo === typesHoSo.Complaint && x.fieldType === fieldsHoSo.Water
+            ).length,
+            this.mockData.filter(
+              x => x.typeHoSo === typesHoSo.Complaint && x.fieldType === fieldsHoSo.Mineral
+            ).length,
+
+            this.mockData.filter(
+              x => x.typeHoSo === typesHoSo.Accusation && x.fieldType === fieldsHoSo.Land
+            ).length,
+            this.mockData.filter(
+              x => x.typeHoSo === typesHoSo.Accusation && x.fieldType === fieldsHoSo.Emviroment
+            ).length,
+            this.mockData.filter(
+              x => x.typeHoSo === typesHoSo.Accusation && x.fieldType === fieldsHoSo.Water
+            ).length,
+            this.mockData.filter(
+              x => x.typeHoSo === typesHoSo.Accusation && x.fieldType === fieldsHoSo.Mineral
+            ).length,
+          ],
+        },
+      ],
+    };
+    this.barChartOptions = {
+      plugins: {
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+          labels: {
+            color: '#495057',
+          },
+        },
+      },
+      scales: {
+        x: {
+          ticks: {
+            color: '#495057',
+          },
+          grid: {
+            color: '#ebedef',
+          },
+        },
+        y: {
+          ticks: {
+            color: '#495057',
+          },
+          grid: {
+            color: '#ebedef',
+          },
+        },
+      },
+    };
+  }
+
+  private buildPieChart() {
+    this.dataPieChart = {
+      labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
+      datasets: [
+        {
+          data: [
+            this.mockData.filter(x => x.fieldType === fieldsHoSo.Land).length,
+            this.mockData.filter(x => x.fieldType === fieldsHoSo.Emviroment).length,
+            this.mockData.filter(x => x.fieldType === fieldsHoSo.Water).length,
+            this.mockData.filter(x => x.fieldType === fieldsHoSo.Mineral).length,
+          ],
+          backgroundColor: ['#2196f3', '#fccc55', '#6ebe71', '#f9ae61'],
+          hoverBackgroundColor: ['#1c80cf', '#d5a326', '#419544', '#f79530'],
+        },
+      ],
+    };
+  }
+
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;

@@ -40,10 +40,11 @@ $gutter: 1rem; //for primeflex grid system
 
   .topmenu-logo {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     font-size: 1.5rem;
     font-weight: 500;
-    width: 200px;
+    width: 300px;
     border-radius: 12px;
     a {
       padding-left: 20px;
@@ -129,4 +130,8 @@ li {
 }
 .p-inline-message .p-inline-message-text {
   font-size: 0.75rem;
+}
+
+.p-chart {
+  height: 300px;
 }
