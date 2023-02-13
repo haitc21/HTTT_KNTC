@@ -89,7 +89,7 @@
                 type="pie"
                 [data]="dataPieChart"
                 [options]="pieChartOptions"
-                [style]="{ width: '60%' }"
+                [style]="{ width: '45%' }"
               ></p-chart>
             </div>
           </p-card>
@@ -98,14 +98,12 @@
               type="bar"
               [data]="dataBarChart"
               [options]="barChartOptions"
-              height="400px"
+              height="350px"
             ></p-chart>
           </p-card>
         </div>
         <div class="col-6 md:col-6">
-          <p-card>
-            <app-map idMap="dashboardMap" [data]="data" heightMap="910px"></app-map>
-          </p-card>
+            <app-map idMap="dashboardMap" [data]="data" heightMap="100%"></app-map>
         </div>
       </div>
 
