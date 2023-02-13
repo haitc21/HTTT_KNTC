@@ -1,4 +1,5 @@
 import { AuthService } from '@abp/ng.core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { HoSo, fieldsHoSo, typesHoSo } from '../../shared/mock/HoSo';
@@ -8,6 +9,25 @@ import { MockService } from '../../shared/mock/mock.service';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
+  animations: [
+    trigger('toggleMenu', [
+      state(
+        'visible',
+        style({
+          transform: 'translateX(0)'
+        })
+      ),
+      state(
+        'hidden',
+        style({
+          transform: 'translateX(-100%)',
+          display: 'none',
+        })
+      ),
+      transition('visible => hidden', animate('.3s ease-out')),
+      transition('hidden => visible', animate('.3s ease-in')),
+    ]),
+  ],
 })
 export class DashboardComponent implements OnInit {
   blockedPanel = false;
@@ -43,6 +63,9 @@ export class DashboardComponent implements OnInit {
   pieChartOptions: any;
   dataBarChart: any;
   barChartOptions: any;
+
+  // ẩn hiện menu trái
+  visibleFilterLeff = true;
 
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();

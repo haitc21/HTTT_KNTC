@@ -1,4 +1,5 @@
 import { AuthService } from '@abp/ng.core';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { HoSo, fieldsHoSo, typesHoSo } from '../../shared/mock/HoSo';
@@ -8,6 +9,25 @@ import { MockService } from '../../shared/mock/mock.service';
   selector: 'app-search-map',
   templateUrl: './search-map.component.html',
   styleUrls: ['./search-map.component.scss'],
+  animations: [
+    trigger('toggleMenu', [
+      state(
+        'visible',
+        style({
+          transform: 'translateX(0)',
+        })
+      ),
+      state(
+        'hidden',
+        style({
+          transform: 'translateX(-100%)',
+          display: 'none',
+        })
+      ),
+      transition('visible => hidden', animate('.3s ease-out')),
+      transition('hidden => visible', animate('.3s ease-in')),
+    ]),
+  ],
 })
 export class SearchMapComponent implements OnInit {
   blockedPanel = false;
@@ -37,6 +57,9 @@ export class SearchMapComponent implements OnInit {
   emviromentalAccusation = false;
   waterResourceAccusation = false;
   mineralResourceAccusation = false;
+
+  // ẩn hiện menu trái
+  visibleFilterLeff = true;
 
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();

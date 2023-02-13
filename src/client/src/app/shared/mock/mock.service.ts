@@ -50,7 +50,7 @@ export class MockService {
   constructor() {}
   mockData(): HoSo[] {
     let hoSos = [];
-    for (let index = 0; index < 5000; index++) {
+    for (let index = 0; index < 500; index++) {
       let item = new HoSo();
       let randomDate = this.randomDates();
       item.code = this.genCode();

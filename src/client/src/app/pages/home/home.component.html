@@ -1,6 +1,6 @@
 <div class="animated fadeIn grid">
   <!-- --------------Sidebar--------------------------------------------------------- -->
-  <div class="col-12 md:col-2 home-sidebar">
+  <div [@toggleMenu]="visibleFilterLeff ? 'visible' : 'hidden'" class="col-12 md:col-2 home-sidebar">
     <p-card>
       <ng-template pTemplate="header">
         <h3 class="home-sidebar-header">Lớp bản đồ</h3>
@@ -79,25 +79,50 @@
     </p-card>
   </div>
   <!-- ----------------------Main------------------------------------------------- -->
-  <div class="col-12 md:col-10">
-    <p-panel #pnl header="Trang chủ">
-      <p-card>
-        <app-map idMap="homeMap" [data]="data" heightMap="80vh" [zoomLv]="12"></app-map>
-      </p-card>
-      <!-- ----------------------------------------------------------------------- -->
-      <p-blockUI [target]="pnl" [blocked]="blockedPanel">
-        <p-progressSpinner
-          [style]="{
-            width: '100px',
-            height: '100px',
-            position: 'absolute',
-            top: '25%',
-            left: '50%'
-          }"
-          strokeWidth="2"
-          animationDuration=".5s"
-        ></p-progressSpinner>
-      </p-blockUI>
-    </p-panel>
+  <div [class]="visibleFilterLeff ? 'col-12 md:col-10 grid' : 'col-12 md:col-12 grid'">
+    <div
+      style="height: 90vh; width: 3%"
+      class="flex flex-column justify-content-center align-items-center"
+    >
+      <button
+        *ngIf="visibleFilterLeff"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-angle-left"
+        class="p-button-rounded p-button-info p-button-lg"
+        (click)="visibleFilterLeff = !visibleFilterLeff"
+      ></button>
+      <button
+        *ngIf="!visibleFilterLeff"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-angle-right"
+        class="p-button-rounded p-button-info p-button-lg"
+        (click)="visibleFilterLeff = !visibleFilterLeff"
+      ></button>
+    </div>
+    <div style="width: 97%">
+      <p-panel #pnl header="Trang chủ">
+        <p-card>
+          <app-map idMap="homeMap" [data]="data" heightMap="80vh" [zoomLv]="12"></app-map>
+        </p-card>
+        <!-- ----------------------------------------------------------------------- -->
+        <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+          <p-progressSpinner
+            [style]="{
+              width: '100px',
+              height: '100px',
+              position: 'absolute',
+              top: '25%',
+              left: '50%'
+            }"
+            strokeWidth="2"
+            animationDuration=".5s"
+          ></p-progressSpinner>
+        </p-blockUI>
+      </p-panel>
+    </div>
   </div>
 </div>

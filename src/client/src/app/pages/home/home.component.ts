@@ -3,12 +3,31 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { HoSo, fieldsHoSo, typesHoSo } from '../../shared/mock/HoSo';
 import { MockService } from '../../shared/mock/mock.service';
-import { animate } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  animations: [
+    trigger('toggleMenu', [
+      state(
+        'visible',
+        style({
+          transform: 'translateX(0)'
+        })
+      ),
+      state(
+        'hidden',
+        style({
+          transform: 'translateX(-100%)',
+          display: 'none',
+        })
+      ),
+      transition('visible => hidden', animate('.3s ease-out')),
+      transition('hidden => visible', animate('.3s ease-in')),
+    ]),
+  ],
 })
 export class HomeComponent implements OnInit {
   blockedPanel = false;
@@ -38,8 +57,9 @@ export class HomeComponent implements OnInit {
   emviromentalAccusation = false;
   waterResourceAccusation = false;
   mineralResourceAccusation = false;
+  // ẩn hiện menu trái
+  visibleFilterLeff = true;
 
-  
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();
   }

@@ -1,6 +1,9 @@
 <div class="animated fadeIn grid">
   <!-- --------------Sidebar--------------------------------------------------------- -->
-  <div class="col-12 md:col-2 home-sidebar">
+  <div
+    [@toggleMenu]="visibleFilterLeff ? 'visible' : 'hidden'"
+    class="col-12 md:col-2 home-sidebar"
+  >
     <p-card>
       <ng-template pTemplate="header">
         <h3 class="home-sidebar-header">Lớp bản đồ</h3>
@@ -79,62 +82,86 @@
     </p-card>
   </div>
   <!-- ----------------------Main------------------------------------------------- -->
-  <div class="col-12 md:col-10">
-    <p-panel #pnl header="Dash Board">
-      <div class="grid">
-        <div class="col-6 md:col-6 flex flex-column justify-content-between">
-          <p-card header="Biểu đồ tình hình khiếu nại, tố cáo" class="flex-1">
-            <div class="flex justify-content-center">
+  <div [class]="visibleFilterLeff ? 'col-12 md:col-10 grid' : 'col-12 md:col-12 grid'">
+    <div
+      style="height: 90vh; width: 3%"
+      class="flex flex-column justify-content-center align-items-center"
+    >
+      <button
+        *ngIf="visibleFilterLeff"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-angle-left"
+        class="p-button-rounded p-button-info p-button-lg"
+        (click)="visibleFilterLeff = !visibleFilterLeff"
+      ></button>
+      <button
+        *ngIf="!visibleFilterLeff"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-angle-right"
+        class="p-button-rounded p-button-info p-button-lg"
+        (click)="visibleFilterLeff = !visibleFilterLeff"
+      ></button>
+    </div>
+    <div style="width: 97%">
+      <p-panel #pnl header="Dash Board">
+        <div class="grid">
+          <div class="col-6 md:col-6 flex flex-column justify-content-between">
+            <p-card header="Biểu đồ tình hình khiếu nại, tố cáo" class="flex-1">
+              <div class="flex justify-content-center">
+                <p-chart
+                  type="pie"
+                  [data]="dataPieChart"
+                  [options]="pieChartOptions"
+                  [style]="{ width: '45%' }"
+                ></p-chart>
+              </div>
+            </p-card>
+            <p-card header="Thống kê tình hình khiếu nại, tố cáo" class="flex-1">
               <p-chart
-                type="pie"
-                [data]="dataPieChart"
-                [options]="pieChartOptions"
-                [style]="{ width: '45%' }"
+                type="bar"
+                [data]="dataBarChart"
+                [options]="barChartOptions"
+                height="350px"
               ></p-chart>
-            </div>
-          </p-card>
-          <p-card header="Thống kê tình hình khiếu nại, tố cáo" class="flex-1">
-            <p-chart
-              type="bar"
-              [data]="dataBarChart"
-              [options]="barChartOptions"
-              height="350px"
-            ></p-chart>
-          </p-card>
-        </div>
-        <div class="col-6 md:col-6">
+            </p-card>
+          </div>
+          <div class="col-6 md:col-6">
             <app-map idMap="dashboardMap" [data]="data" heightMap="100%"></app-map>
+          </div>
         </div>
-      </div>
 
-      <!-- ----------------------------------------------------------------------- -->
-      <p-card>
-        <p-toolbar>
-          <ng-template pTemplate="left">
-            <h3 style="color: blue">Kết quả tìm kiếm</h3>
-          </ng-template>
+        <!-- ----------------------------------------------------------------------- -->
+        <p-card>
+          <p-toolbar>
+            <ng-template pTemplate="left">
+              <h3 style="color: blue">Kết quả tìm kiếm</h3>
+            </ng-template>
 
-          <ng-template pTemplate="right">
-            <button
-              type="button"
-              pButton
-              pRipple
-              label="Xuất"
-              icon="pi pi-download"
-              class="p-button-info mr-2"
-            ></button>
-            <button
-              type="button"
-              pButton
-              pRipple
-              label="In"
-              icon="pi pi-print"
-              class="p-button-info"
-            ></button>
-          </ng-template>
-        </p-toolbar>
+            <ng-template pTemplate="right">
+              <button
+                type="button"
+                pButton
+                pRipple
+                label="Xuất"
+                icon="pi pi-download"
+                class="p-button-info mr-2"
+              ></button>
+              <button
+                type="button"
+                pButton
+                pRipple
+                label="In"
+                icon="pi pi-print"
+                class="p-button-info"
+              ></button>
+            </ng-template>
+          </p-toolbar>
 
-        <!-- <p-table
+          <!-- <p-table
           #dt
           [value]="data"
           [rows]="10"
@@ -143,52 +170,52 @@
           [rowHover]="true"
           dataKey="id"
         > -->
-        <p-table
-          #dt
-          [value]="data"
-          [rows]="10"
-          [paginator]="true"
-          [globalFilterFields]="['code', 'title']"
-          [tableStyle]="{ width: '100%' }"
-          [(selection)]="selectedItems"
-          [rowHover]="true"
-          dataKey="code"
-          currentPageReportTemplate="Tổng số: {totalRecords}"
-          [showCurrentPageReport]="true"
-        >
-          <ng-template pTemplate="header">
-            <tr>
-              <th class="row-num-column">STT</th>
-              <th>Mã hồ sơ</th>
-              <th>Nội dung đơn</th>
-              <th>Người gửi đơn</th>
-              <th>Khu vực</th>
-              <th>Ngày nộp đơn</th>
-              <th>Loại khiếu nai/tố cáo</th>
-              <th>Lĩnh vực</th>
-              <th>Ngày hẹn trả KQ lần I</th>
-              <th>KQ GQKN lần I</th>
-              <th>Ngày hẹn trả KQ lần II</th>
-              <th>KQ GQKN lần II</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-            <tr>
-              <td class="row-num-cell">{{ rowIndex + 1 }}</td>
-              <td>{{ row.code }}</td>
-              <td>{{ row.title }}</td>
-              <td>{{ row.sender }}</td>
-              <td>{{ row.area }}</td>
-              <td>{{ row.sentDate.toLocaleDateString('vi-VN') }}</td>
-              <td>{{ loaiHS[row.typeHoSo] }}</td>
-              <td>{{ linhVuc[row.fieldType] }}</td>
-              <td>{{ row.returnDate1.toLocaleDateString('vi-VN') }}</td>
-              <td>{{ row.result1 }}</td>
-              <td>{{ row.returnDate2 ? row.returnDate2.toLocaleDateString('vi-VN') : '' }}</td>
-              <td>{{ row.result2 }}</td>
-            </tr>
-          </ng-template>
-          <!-- <ng-template pTemplate="summary">
+          <p-table
+            #dt
+            [value]="data"
+            [rows]="10"
+            [paginator]="true"
+            [globalFilterFields]="['code', 'title']"
+            [tableStyle]="{ width: '100%' }"
+            [(selection)]="selectedItems"
+            [rowHover]="true"
+            dataKey="code"
+            currentPageReportTemplate="Tổng số: {totalRecords}"
+            [showCurrentPageReport]="true"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th class="row-num-column">STT</th>
+                <th>Mã hồ sơ</th>
+                <th>Nội dung đơn</th>
+                <th>Người gửi đơn</th>
+                <th>Khu vực</th>
+                <th>Ngày nộp đơn</th>
+                <th>Loại khiếu nai/tố cáo</th>
+                <th>Lĩnh vực</th>
+                <th>Ngày hẹn trả KQ lần I</th>
+                <th>KQ GQKN lần I</th>
+                <th>Ngày hẹn trả KQ lần II</th>
+                <th>KQ GQKN lần II</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+              <tr>
+                <td class="row-num-cell">{{ rowIndex + 1 }}</td>
+                <td>{{ row.code }}</td>
+                <td>{{ row.title }}</td>
+                <td>{{ row.sender }}</td>
+                <td>{{ row.area }}</td>
+                <td>{{ row.sentDate.toLocaleDateString('vi-VN') }}</td>
+                <td>{{ loaiHS[row.typeHoSo] }}</td>
+                <td>{{ linhVuc[row.fieldType] }}</td>
+                <td>{{ row.returnDate1.toLocaleDateString('vi-VN') }}</td>
+                <td>{{ row.result1 }}</td>
+                <td>{{ row.returnDate2 ? row.returnDate2.toLocaleDateString('vi-VN') : '' }}</td>
+                <td>{{ row.result2 }}</td>
+              </tr>
+            </ng-template>
+            <!-- <ng-template pTemplate="summary">
             <p-paginator
               [rows]="maxResultCount"
               [totalRecords]="totalCount"
@@ -199,23 +226,24 @@
               [rowsPerPageOptions]="[10, 20, 50, 100]"
             ></p-paginator>
           </ng-template> -->
-        </p-table>
+          </p-table>
+          <!-- ----------------------------------------------------------------------- -->
+        </p-card>
         <!-- ----------------------------------------------------------------------- -->
-      </p-card>
-      <!-- ----------------------------------------------------------------------- -->
-      <p-blockUI [target]="pnl" [blocked]="blockedPanel">
-        <p-progressSpinner
-          [style]="{
-            width: '100px',
-            height: '100px',
-            position: 'absolute',
-            top: '25%',
-            left: '50%'
-          }"
-          strokeWidth="2"
-          animationDuration=".5s"
-        ></p-progressSpinner>
-      </p-blockUI>
-    </p-panel>
+        <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+          <p-progressSpinner
+            [style]="{
+              width: '100px',
+              height: '100px',
+              position: 'absolute',
+              top: '25%',
+              left: '50%'
+            }"
+            strokeWidth="2"
+            animationDuration=".5s"
+          ></p-progressSpinner>
+        </p-blockUI>
+      </p-panel>
+    </div>
   </div>
 </div>
