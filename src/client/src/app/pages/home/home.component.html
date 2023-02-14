@@ -1,7 +1,7 @@
 <div class="animated fadeIn grid">
   <!-- --------------Sidebar--------------------------------------------------------- -->
   <div [@toggleMenu]="visibleFilterLeff ? 'visible' : 'hidden'" class="col-12 md:col-2 home-sidebar">
-    <p-card>
+    <p-card [@toggleMenu]="visibleFilterLeff ? 'visible' : 'hidden'">
       <ng-template pTemplate="header">
         <h3 class="home-sidebar-header">Lớp bản đồ</h3>
       </ng-template>

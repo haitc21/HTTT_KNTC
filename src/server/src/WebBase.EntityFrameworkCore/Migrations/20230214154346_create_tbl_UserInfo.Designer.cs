@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 using WebBase.EntityFrameworkCore;
@@ -12,9 +13,10 @@ using WebBase.EntityFrameworkCore;
 namespace WebBase.Migrations
 {
     [DbContext(typeof(WebBaseDbContext))]
-    partial class WebBaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230214154346_create_tbl_UserInfo")]
+    partial class create_tbl_UserInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -4,6 +4,7 @@ using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using WebBase.Users;
 
 namespace WebBase.EntityFrameworkCore;
 
@@ -52,6 +54,8 @@ public class WebBaseDbContext :
 
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
+    public DbSet<UserInfo> UserInfos { get; set; }
+
     #endregion Entities from the modules
 
     public WebBaseDbContext(DbContextOptions<WebBaseDbContext> options)
@@ -74,13 +78,19 @@ public class WebBaseDbContext :
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
 
-        /* Configure your own tables/entities inside here */
-
-        //builder.Entity<YourEntity>(b =>
-        //{
-        //    b.ToTable(WebBaseConsts.DbTablePrefix + "YourEntities", WebBaseConsts.DbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    //...
-        //});
+        builder.Entity<UserInfo>(b =>
+        {
+            b.ToTable(WebBaseConsts.DbTablePrefix + "UserInfos");
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.Name).IsRequired().HasMaxLength(64);
+            b.Property(x => x.Surname).IsRequired().HasMaxLength(64);
+            b.Property(x => x.UserName).IsRequired().HasMaxLength(256);
+            b.Property(x => x.Email).IsRequired().HasMaxLength(256);
+            b.Property(x => x.PhoneNumber).IsRequired().HasMaxLength(16);
+            b.HasOne<IdentityUser>()
+                .WithOne()
+                .HasForeignKey<UserInfo>(x => x.UserId)
+                .IsRequired();
+        });
     }
 }

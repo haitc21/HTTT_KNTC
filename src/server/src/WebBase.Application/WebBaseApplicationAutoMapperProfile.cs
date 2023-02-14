@@ -24,6 +24,9 @@ public class WebBaseApplicationAutoMapperProfile : Profile
         CreateMap<IdentityRole, RoleLookupDto>();
         //User
         CreateMap<IdentityUser, UserDto>();
-        CreateMap<IdentityUser, UserInListDto>();
+        CreateMap<UserInfo, UserInfoDto>();
+        CreateMap<IdentityUser, UserInfo>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
+
     }
 }

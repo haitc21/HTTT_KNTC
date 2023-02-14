@@ -1,5 +1,7 @@
 ﻿using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.FileSystem;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -8,6 +10,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using WebBase.Localization;
+using WebBase.Users;
 
 namespace WebBase;
 
@@ -19,7 +22,8 @@ namespace WebBase;
     typeof(AbpPermissionManagementApplicationModule),
     typeof(AbpTenantManagementApplicationModule),
     typeof(AbpFeatureManagementApplicationModule),
-    typeof(AbpSettingManagementApplicationModule)
+    typeof(AbpSettingManagementApplicationModule),
+    typeof(AbpBlobStoringFileSystemModule)
     )]
 public class WebBaseApplicationModule : AbpModule
 {
@@ -33,6 +37,16 @@ public class WebBaseApplicationModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("WebBase", typeof(WebBaseResource));
+        });
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.Configure<UserAvatarContainer>(container =>
+            {
+                container.UseFileSystem(fileSys =>
+                {
+                    fileSys.BasePath = "C:\\CongViec\\Avatar";
+                });
+            });
         });
     }
 }

@@ -4,33 +4,44 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
+using Volo.Abp.Users;
+using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 
 namespace WebBase.Users;
 
-public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService
+public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, IUsersAppService
 {
     protected IdentityUserManager UserManager { get; }
     protected IIdentityUserRepository UserRepository { get; }
     protected IIdentityRoleRepository RoleRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
+    protected IBlobContainer<UserAvatarContainer> _fileContainer { get; }
+    protected IRepository<UserInfo> _userInfoRepo { get; }
 
     public UsersAppService(
         IdentityUserManager userManager,
         IIdentityUserRepository userRepository,
         IIdentityRoleRepository roleRepository,
-        IOptions<IdentityOptions> identityOptions)
+        IOptions<IdentityOptions> identityOptions,
+        IBlobContainer<UserAvatarContainer> fileContainer,
+        IRepository<UserInfo> userInfoRepo)
     {
         UserManager = userManager;
         UserRepository = userRepository;
         RoleRepository = roleRepository;
         IdentityOptions = identityOptions;
+        _fileContainer = fileContainer;
+        _userInfoRepo = userInfoRepo;
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
@@ -140,6 +151,9 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService
         await UpdateUserByInput(user, input);
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
+        var userInfo = ObjectMapper.Map<IdentityUser, UserInfo>(user);
+        await _userInfoRepo.InsertAsync(userInfo);
+
         await CurrentUnitOfWork.SaveChangesAsync();
 
         return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
@@ -168,6 +182,12 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService
         }
 
         await CurrentUnitOfWork.SaveChangesAsync();
+
+        var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
+        userInfo.Name = user.Name;
+        userInfo.Surname = user.Surname;
+        userInfo.PhoneNumber= user.PhoneNumber;
+        await _userInfoRepo.UpdateAsync(userInfo);
 
         return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
     }
@@ -243,6 +263,45 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService
         );
     }
 
+    [Authorize]
+    public async Task<UserInfoDto> GetUserInfoAsync(Guid userId)
+    {
+        await hasViewUserInfo(userId);
+        return ObjectMapper.Map<UserInfo, UserInfoDto>(
+            await _userInfoRepo.GetAsync(x => x.UserId == userId)
+        );
+    }
+    [Authorize]
+    public async Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, UpdateUserInfoDto input)
+    {
+        await hasViewUserInfo(userId);
+        var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == userId);
+        userInfo.Name = input.Name;
+        userInfo.Surname = input.Surname;
+        userInfo.PhoneNumber = input.PhoneNumber;
+        userInfo.Dob = input.Dob;
+        await _userInfoRepo.UpdateAsync(userInfo);
+        await UnitOfWorkManager.Current.SaveChangesAsync();
+        if (!string.IsNullOrEmpty(input.Avatar))
+        {
+            await SaveAvatarAsync(input.Avatar);
+        }
+        return ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
+    }
+    private async Task hasViewUserInfo(Guid userId)
+    {
+        var curUserId = CurrentUser.GetId();
+        if (curUserId != userId)
+        {
+            var roles = await UserRepository.GetRolesAsync(curUserId);
+            if (!roles.Any(x => x.Name.Contains("admin")))
+            {
+                throw new AbpException("bạn không có quyền xem thông tin cá nhân của ngời khác");
+            }
+
+        }
+    }
+
     protected virtual async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
     {
         if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
@@ -266,4 +325,14 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService
             (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
         }
     }
+
+    private async Task SaveAvatarAsync(string base64)
+    {
+        Regex regex = new Regex(@"^[\w/\:.-]+;base64,");
+        base64 = regex.Replace(base64, string.Empty);
+        byte[] bytes = Convert.FromBase64String(base64);
+        var blobName = CurrentUser.GetId().ToString();
+        await _fileContainer.SaveAsync(blobName, bytes, overrideExisting: true);
+    }
+
 }
