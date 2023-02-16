@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
+using Volo.Abp.Content;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
@@ -19,13 +22,13 @@ using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 
 namespace WebBase.Users;
 
-public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, IUsersAppService
+public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 {
     protected IdentityUserManager UserManager { get; }
     protected IIdentityUserRepository UserRepository { get; }
     protected IIdentityRoleRepository RoleRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
-    protected IBlobContainer<UserAvatarContainer> _fileContainer { get; }
+    protected IBlobContainer<AvatarContainer> _fileContainer { get; }
     protected IRepository<UserInfo> _userInfoRepo { get; }
 
     public UsersAppService(
@@ -33,7 +36,7 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, 
         IIdentityUserRepository userRepository,
         IIdentityRoleRepository roleRepository,
         IOptions<IdentityOptions> identityOptions,
-        IBlobContainer<UserAvatarContainer> fileContainer,
+        IBlobContainer<AvatarContainer> fileContainer,
         IRepository<UserInfo> userInfoRepo)
     {
         UserManager = userManager;
@@ -148,7 +151,7 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, 
         input.MapExtraPropertiesTo(user);
 
         (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
-        await UpdateUserByInput(user, input);
+        await UpdateUserFromInput(user, input);
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
         var userInfo = ObjectMapper.Map<IdentityUser, UserInfo>(user);
@@ -160,7 +163,7 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, 
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
+    public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, UpdateUserInfoDto input)
     {
         await IdentityOptions.SetAsync();
 
@@ -170,7 +173,7 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, 
 
         (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
 
-        await UpdateUserByInput(user, input);
+        await UpdateUserFromInput(user, input);
         input.MapExtraPropertiesTo(user);
 
         (await UserManager.UpdateAsync(user)).CheckErrors();
@@ -180,16 +183,37 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, 
             (await UserManager.RemovePasswordAsync(user)).CheckErrors();
             (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
         }
-
-        await CurrentUnitOfWork.SaveChangesAsync();
-
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
-        userInfo.Name = user.Name;
-        userInfo.Surname = user.Surname;
-        userInfo.PhoneNumber= user.PhoneNumber;
+        ObjectMapper.Map<IdentityUser, UserInfo>(user, userInfo);
+        userInfo.Dob = input.Dob;
         await _userInfoRepo.UpdateAsync(userInfo);
-
+        await CurrentUnitOfWork.SaveChangesAsync();
         return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+    }
+    [Authorize]
+    public async Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, UpdateUserInfoDto input)
+    {
+        await hasViewUserInfo(userId);
+        var user = await UserManager.GetByIdAsync(userId);
+        user.Name = input.Name;
+        user.Surname = input.Surname;
+        if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
+        {
+            (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+        }
+        input.MapExtraPropertiesTo(user);
+        (await UserManager.UpdateAsync(user)).CheckErrors();
+
+        var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == userId);
+        userInfo.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+
+        userInfo.Name = input.Name;
+        userInfo.Surname = input.Surname;
+        userInfo.PhoneNumber = input.PhoneNumber;
+        userInfo.Dob = input.Dob;
+        await _userInfoRepo.UpdateAsync(userInfo);
+        await UnitOfWorkManager.Current.SaveChangesAsync();
+        return ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
     }
 
     [Authorize(IdentityPermissions.Users.Delete)]
@@ -207,12 +231,26 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, 
         }
 
         (await UserManager.DeleteAsync(user)).CheckErrors();
+        var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == id);
+        if (userInfo != null)
+        {
+            await _userInfoRepo.DeleteAsync(userInfo);
+        }
+        await CurrentUnitOfWork.SaveChangesAsync();
     }
 
     [Authorize(IdentityPermissions.Users.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
         await UserRepository.DeleteManyAsync(ids);
+        foreach (var id in ids)
+        {
+            var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == id);
+            if (userInfo != null)
+            {
+                await _userInfoRepo.DeleteAsync(userInfo);
+            }
+        }
         await UnitOfWorkManager.Current.SaveChangesAsync();
     }
 
@@ -267,27 +305,37 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, 
     public async Task<UserInfoDto> GetUserInfoAsync(Guid userId)
     {
         await hasViewUserInfo(userId);
-        return ObjectMapper.Map<UserInfo, UserInfoDto>(
+        var result = ObjectMapper.Map<UserInfo, UserInfoDto>(
             await _userInfoRepo.GetAsync(x => x.UserId == userId)
         );
+        return result;
+    }
+
+    [Authorize]
+    public async Task<string> UploadAvatarAsync(IRemoteStreamContent avatarStream)
+    {
+        if (avatarStream == null) throw new UserFriendlyException("Vui lòng chộn ảnh đại diện");
+        try
+        {
+            //var blobName = String.Concat(CurrentUser.GetId().ToString(), ".", GetFileExtension(avatarStream.FileName));
+            var blobName = CurrentUser.GetId().ToString();
+            var stream = avatarStream.GetStream();
+            await _fileContainer.SaveAsync(blobName, stream, overrideExisting: true);
+            return blobName;
+        }
+        catch (Exception ex)
+        {
+            throw new UserFriendlyException(ex.Message);
+        }
+
     }
     [Authorize]
-    public async Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, UpdateUserInfoDto input)
+    public async Task<byte[]> GetAvatarAsync()
     {
-        await hasViewUserInfo(userId);
-        var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == userId);
-        userInfo.Name = input.Name;
-        userInfo.Surname = input.Surname;
-        userInfo.PhoneNumber = input.PhoneNumber;
-        userInfo.Dob = input.Dob;
-        await _userInfoRepo.UpdateAsync(userInfo);
-        await UnitOfWorkManager.Current.SaveChangesAsync();
-        if (!string.IsNullOrEmpty(input.Avatar))
-        {
-            await SaveAvatarAsync(input.Avatar);
-        }
-        return ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
+        var userId = CurrentUser.GetId().ToString();
+        return await _fileContainer.GetAllBytesOrNullAsync(userId);
     }
+    #region private method
     private async Task hasViewUserInfo(Guid userId)
     {
         var curUserId = CurrentUser.GetId();
@@ -302,7 +350,7 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, 
         }
     }
 
-    protected virtual async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
+    protected virtual async Task UpdateUserFromInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
     {
         if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
         {
@@ -325,14 +373,20 @@ public class UsersAppService : IdentityAppServiceBase, IIdentityUserAppService, 
             (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
         }
     }
-
-    private async Task SaveAvatarAsync(string base64)
+    private static string GetFileExtension(string fileName)
     {
-        Regex regex = new Regex(@"^[\w/\:.-]+;base64,");
-        base64 = regex.Replace(base64, string.Empty);
-        byte[] bytes = Convert.FromBase64String(base64);
-        var blobName = CurrentUser.GetId().ToString();
-        await _fileContainer.SaveAsync(blobName, bytes, overrideExisting: true);
-    }
+        if (string.IsNullOrEmpty(fileName))
+        {
+            return string.Empty;
+        }
 
+        int lastDotIndex = fileName.LastIndexOf('.');
+        if (lastDotIndex == -1)
+        {
+            return string.Empty;
+        }
+
+        return fileName.Substring(lastDotIndex + 1);
+    }
+    #endregion
 }

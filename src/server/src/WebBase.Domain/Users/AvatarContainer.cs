@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
 
 namespace WebBase.Users;
-[BlobContainerName("user-avatar")]
-public class UserAvatarContainer
+[BlobContainerName("avatar")]
+public class AvatarContainer
 {
 }

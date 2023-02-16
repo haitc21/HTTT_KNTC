@@ -1,13 +1,11 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Content;
+using Volo.Abp.Identity;
 
 namespace WebBase.Users;
 
-public class UpdateUserInfoDto
+public class UpdateUserInfoDto : IdentityUserUpdateDto
 {
-    public string Name { get; set; }
-    public string Surname { get; set; }
-    public string PhoneNumber { get; set; }
     public DateTime Dob { get; set; }
-    public string Avatar { get; set; }
 }

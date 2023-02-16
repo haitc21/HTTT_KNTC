@@ -40,11 +40,11 @@ public class WebBaseApplicationModule : AbpModule
         });
         Configure<AbpBlobStoringOptions>(options =>
         {
-            options.Containers.Configure<UserAvatarContainer>(container =>
+            options.Containers.ConfigureDefault(container =>
             {
                 container.UseFileSystem(fileSys =>
                 {
-                    fileSys.BasePath = "C:\\CongViec\\Avatar";
+                    fileSys.BasePath = "C:\\HTTT_KNTC";
                 });
             });
         });
