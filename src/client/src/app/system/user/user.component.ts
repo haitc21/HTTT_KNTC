@@ -16,6 +16,7 @@ import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { USER_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
 import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
+import { FileService } from 'src/app/shared/services/file.service.spec';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { PermissionGrantComponent } from '../permission-grant/permission-grant.component';
 import { UserDetailComponent } from './detail/user-detail.component';
@@ -65,7 +66,8 @@ export class UserComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
     private permissionService: PermissionService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private fileService: FileService
   ) {}
 
   ngOnDestroy(): void {
@@ -362,9 +364,8 @@ export class UserComponent implements OnInit, OnDestroy {
   }
   myUploader(event) {
     this.toggleBlockUI(true);
-    debugger;
     let fike = event.files[0];
-    this.userService
+    this.fileService
       .uploadAvatar(fike)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -379,7 +380,7 @@ export class UserComponent implements OnInit, OnDestroy {
       });
   }
   getAvatar() {
-    this.userService.getAvatar().subscribe(res => {
+    this.fileService.getAvatar().subscribe(res => {
       let objectURL = 'data:image/png;base64,' + res;
       this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL)
     });
