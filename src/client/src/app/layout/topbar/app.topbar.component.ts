@@ -5,6 +5,8 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { PermissionService } from '@abp/ng.core';
 import { LayoutService } from '../service/app.layout.service';
 import { LOGIN_URL } from 'src/app/shared/constants/urls.const';
+import { DomSanitizer } from '@angular/platform-browser';
+import { UsersService } from '@proxy/users';
 
 @Component({
   selector: 'app-topbar',
@@ -25,12 +27,15 @@ export class AppTopBarComponent implements OnInit {
   isAutenticated: boolean = false;
   userName = '';
   userId = '';
+  avatarUrl: any;
 
   constructor(
     public layoutService: LayoutService,
     private router: Router,
     private oAuthService: OAuthService,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    private userService: UsersService,
+    private sanitizer: DomSanitizer
   ) {}
   ngOnInit(): void {
     this.isAutenticated = this.oAuthService.hasValidAccessToken();
@@ -40,6 +45,7 @@ export class AppTopBarComponent implements OnInit {
       let accessTokenJson = JSON.parse(decodedAccessToken);
       this.userName = accessTokenJson.preferred_username ?? '';
       this.userId = accessTokenJson.sub ?? '';
+      this.getAvatar();
     }
     this.initMenu();
     this.initMenuUser();
@@ -161,5 +167,11 @@ export class AppTopBarComponent implements OnInit {
 
   login() {
     this.router.navigate([LOGIN_URL, this.router.url]);
+  }
+  getAvatar() {
+    this.userService.getAvatar().subscribe(res => {
+      let objectURL = 'data:image/png;base64,' + res;
+      this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL)
+    });
   }
 }

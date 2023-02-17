@@ -39,7 +39,7 @@
         [label]="userName"
         (click)="userMenu.toggle($event)"
       >
-        <img src="assets/images/avatar/anonimous.png" class="avatar" alt="avatar" />
+        <img [src]="avatarUrl ?? 'assets/images/avatar/anonimous.png'" class="avatar" alt="avatar" />
       </button>
 
       <button

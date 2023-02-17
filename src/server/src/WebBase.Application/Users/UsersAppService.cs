@@ -305,6 +305,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         var userId = CurrentUser.GetId().ToString();
         return await _fileContainer.GetAllBytesOrNullAsync(userId);
     }
+
     #region private method
     private async Task hasViewUserInfo(Guid userId)
     {

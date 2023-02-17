@@ -36,6 +36,7 @@ import { PasswordModule } from 'primeng/password';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CardModule } from 'primeng/card';
 import { WebBaseSharedModule } from '../shared/modules/webbase-shared.module';
+import { FileUploadModule } from 'primeng/fileupload';
 
 const COMPONENT = [
   RoleComponent,
@@ -80,6 +81,7 @@ const COMPONENT = [
     PasswordModule,
     OverlayPanelModule,
     CardModule,
+    FileUploadModule,
   ],
   entryComponents: [...COMPONENT],
 })

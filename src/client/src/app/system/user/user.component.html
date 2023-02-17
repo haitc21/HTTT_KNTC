@@ -25,6 +25,14 @@
           (click)="deleteItems()"
           [disabled]="!selectedItems || !selectedItems.length"
         ></button>
+        <p-fileUpload
+          name="file[]"
+          accept="image/*"
+          maxFileSize="1000000"
+          [customUpload]="true"
+          (uploadHandler)="myUploader($event)"
+        ></p-fileUpload>
+
       </ng-template>
 
       <ng-template pTemplate="right">
@@ -66,7 +74,7 @@
           <th pSortableColumn="name">Họ tên</th>
           <th>Email</th>
           <th>Số ĐT</th>
-          <th>Ngày tham gia</th>
+          <th>Ngày sinh</th>
           <th style="width: 150px">Trạng thái</th>
           <th *ngIf="visibleActionColumn" class="action-column"></th>
         </tr>
@@ -80,7 +88,7 @@
           <td>{{ row.surname ? row.surname + ' ' + row.name : row.name }}</td>
           <td>{{ row.email }}</td>
           <td>{{ row.phoneNumber }}</td>
-          <td>{{ row.creationTime | date : 'dd-MM-yyyy hh:mm' }}</td>
+          <td>{{ row.dob | date : 'dd-MM-yyyy' }}</td>
           <td>
             <p-tag
               [severity]="row.isActive ? 'info' : 'warning'"

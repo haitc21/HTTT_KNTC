@@ -41,9 +41,9 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadRoles();
+    this.loadData();
   }
-  loadRoles() {
+  loadData() {
     this.toggleBlockUI(true);
     this.userService
       .getAssignableRoles(this.config.data.id)

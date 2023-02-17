@@ -6,6 +6,7 @@ import {
   IdentityUserUpdateDto,
 } from '@abp/ng.identity/proxy';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { RoleLookupDto, RolesService } from '@proxy/roles';
 import { GetUserListDto, UsersService } from '@proxy/users';
 import { ConfirmationService, MenuItem } from 'primeng/api';
@@ -55,6 +56,7 @@ export class UserComponent implements OnInit, OnDestroy {
   hasPermissionDelete = false;
   hasPermissionManagementPermionsion = false;
   visibleActionColumn = false;
+  avatarUrl: any;
 
   constructor(
     private userService: UsersService,
@@ -62,7 +64,8 @@ export class UserComponent implements OnInit, OnDestroy {
     public dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnDestroy(): void {
@@ -164,7 +167,7 @@ export class UserComponent implements OnInit, OnDestroy {
       maxResultCount: this.maxResultCount,
       email: this.emailSearch,
       phoneNumber: this.phoneNumberSearch,
-      roleId: this.roleIdSearch
+      roleId: this.roleIdSearch,
     };
     this.userService
       .getList(this.filter)
@@ -172,6 +175,8 @@ export class UserComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: PagedResultDto<IdentityUserDto>) => {
           this.items = response.items;
+          console.log("user",this.items);
+          
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
         },
@@ -353,6 +358,30 @@ export class UserComponent implements OnInit, OnDestroy {
         this.actionItem = null;
         this.loadData();
       }
+    });
+  }
+  myUploader(event) {
+    this.toggleBlockUI(true);
+    debugger;
+    let fike = event.files[0];
+    this.userService
+      .uploadAvatar(fike)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: string) => {
+          console.log('upload successed: ' + response);
+
+          this.toggleBlockUI(false);
+        },
+        error: () => {
+          this.toggleBlockUI(false);
+        },
+      });
+  }
+  getAvatar() {
+    this.userService.getAvatar().subscribe(res => {
+      let objectURL = 'data:image/png;base64,' + res;
+      this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL)
     });
   }
 
