@@ -10,6 +10,10 @@ namespace WebBase.Users;
 
 public class UserInfo : FullAuditedAggregateRoot<Guid>
 {
+    public UserInfo(Guid id) : base(id)
+    {
+            
+    }
     public Guid UserId { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }

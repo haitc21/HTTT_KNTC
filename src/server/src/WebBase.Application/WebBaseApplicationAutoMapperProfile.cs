@@ -25,6 +25,8 @@ public class WebBaseApplicationAutoMapperProfile : Profile
         //User
         CreateMap<IdentityUser, UserDto>();
         CreateMap<UserInfo, UserInfoDto>();
+        CreateMap<CrateAndUpdateUserDto, IdentityUser>();
+        CreateMap<CrateAndUpdateUserDto, UserInfo>();
         CreateMap<IdentityUser, UserInfo>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
 

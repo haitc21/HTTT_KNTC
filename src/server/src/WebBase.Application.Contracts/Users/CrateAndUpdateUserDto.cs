@@ -5,7 +5,7 @@ using Volo.Abp.Identity;
 
 namespace WebBase.Users;
 
-public class UpdateUserInfoDto : IdentityUserUpdateDto
+public class CrateAndUpdateUserDto : IdentityUserUpdateDto
 {
     public DateTime Dob { get; set; }
 }

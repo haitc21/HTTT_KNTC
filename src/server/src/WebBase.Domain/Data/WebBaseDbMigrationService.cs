@@ -103,14 +103,12 @@ public class WebBaseDbMigrationService : ITransientDependency
     private async Task SeedDataAsync(Tenant tenant = null)
     {
         Logger.LogInformation($"Executing {(tenant == null ? "host" : tenant.Name + " tenant")} database seed...");
-        var AdminEmailDefaultValue = _configuration.GetSection("UserDefault:AdminEmailDefaultValue").Value;
-        var AdminPasswordDefaultValue = _configuration.GetSection("UserDefault:AdminPasswordDefaultValue").Value;
+        var AdminEmailDefaultValue = _configuration.GetSection("UserDefault:AdminEmailDefaultValue").Value ?? IdentityDataSeedContributor.AdminEmailDefaultValue;
+        var AdminPasswordDefaultValue = _configuration.GetSection("UserDefault:AdminPasswordDefaultValue").Value ?? IdentityDataSeedContributor.AdminPasswordDefaultValue;
         await _dataSeeder.SeedAsync(new DataSeedContext(tenant?.Id)
-            .WithProperty(IdentityDataSeedContributor.AdminEmailPropertyName,
-                                                      AdminEmailDefaultValue ?? IdentityDataSeedContributor.AdminEmailDefaultValue)
-            .WithProperty(IdentityDataSeedContributor.AdminPasswordPropertyName,
-                                                      AdminPasswordDefaultValue ?? IdentityDataSeedContributor.AdminPasswordDefaultValue)
-        );
+            .WithProperty(IdentityDataSeedContributor.AdminEmailPropertyName, AdminEmailDefaultValue)
+            .WithProperty(IdentityDataSeedContributor.AdminPasswordPropertyName, AdminPasswordDefaultValue)
+        ); ;
     }
 
     private bool AddInitialMigrationIfNotExist()

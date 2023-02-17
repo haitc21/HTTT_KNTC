@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.Identity;
 
 namespace WebBase.Users;
@@ -6,4 +7,5 @@ namespace WebBase.Users;
 public class UserDto : IdentityUserDto
 {
     public IList<string> Roles { get; set; }
+    public DateTime Dob { get; set; }
 }

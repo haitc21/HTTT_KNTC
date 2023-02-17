@@ -1,8 +1,8 @@
-import type { GetUserListDto, SetPasswordDto, UserDto } from './models';
+import type { CrateAndUpdateUserDto, GetUserListDto, SetPasswordDto, UserDto, UserInfoDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { GetIdentityUsersInput, IdentityRoleDto, IdentityUserCreateDto, IdentityUserDto, IdentityUserUpdateDto, IdentityUserUpdateRolesDto } from '../volo/abp/identity/models';
+import type { IdentityRoleDto, IdentityUserDto, IdentityUserUpdateRolesDto } from '../volo/abp/identity/models';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class UsersService {
   apiName = 'Default';
   
 
-  create = (input: IdentityUserCreateDto) =>
+  create = (input: CrateAndUpdateUserDto) =>
     this.restService.request<any, IdentityUserDto>({
       method: 'POST',
       url: '/api/app/users',
@@ -37,61 +37,34 @@ export class UsersService {
     { apiName: this.apiName });
   
 
-  findByEmail = (email: string) =>
-    this.restService.request<any, IdentityUserDto>({
-      method: 'POST',
-      url: '/api/app/users/find-by-email',
-      params: { email },
-    },
-    { apiName: this.apiName });
-  
-
-  findByUsername = (userName: string) =>
-    this.restService.request<any, IdentityUserDto>({
-      method: 'POST',
-      url: '/api/app/users/find-by-username',
-      params: { userName },
-    },
-    { apiName: this.apiName });
-  
-
   get = (id: string) =>
-    this.restService.request<any, IdentityUserDto>({
+    this.restService.request<any, UserDto>({
       method: 'GET',
       url: `/api/app/users/${id}`,
     },
     { apiName: this.apiName });
   
 
-  getAssignableRoles = () =>
+  getAssignableRoles = (id: string) =>
     this.restService.request<any, ListResultDto<IdentityRoleDto>>({
       method: 'GET',
-      url: '/api/app/users/assignable-roles',
+      url: `/api/app/users/${id}/assignable-roles`,
     },
     { apiName: this.apiName });
   
 
-  getIncludeRole = (id: string) =>
-    this.restService.request<any, UserDto>({
+  getAvatar = () =>
+    this.restService.request<any, number[]>({
       method: 'GET',
-      url: `/api/app/users/${id}/include-role`,
+      url: '/api/app/users/avatar',
     },
     { apiName: this.apiName });
   
 
-  getList = (input: GetIdentityUsersInput) =>
+  getList = (input: GetUserListDto) =>
     this.restService.request<any, PagedResultDto<IdentityUserDto>>({
       method: 'GET',
       url: '/api/app/users',
-      params: { filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
-    },
-    { apiName: this.apiName });
-  
-
-  getListFilter = (input: GetUserListDto) =>
-    this.restService.request<any, PagedResultDto<IdentityUserDto>>({
-      method: 'GET',
-      url: '/api/app/users/filter',
       params: { email: input.email, phoneNumber: input.phoneNumber, roleId: input.roleId, filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
@@ -105,6 +78,14 @@ export class UsersService {
     { apiName: this.apiName });
   
 
+  getUserInfo = (userId: string) =>
+    this.restService.request<any, UserInfoDto>({
+      method: 'GET',
+      url: `/api/app/users/user-info/${userId}`,
+    },
+    { apiName: this.apiName });
+  
+
   setPassword = (userId: string, input: SetPasswordDto) =>
     this.restService.request<any, void>({
       method: 'POST',
@@ -114,7 +95,7 @@ export class UsersService {
     { apiName: this.apiName });
   
 
-  update = (id: string, input: IdentityUserUpdateDto) =>
+  update = (id: string, input: CrateAndUpdateUserDto) =>
     this.restService.request<any, IdentityUserDto>({
       method: 'PUT',
       url: `/api/app/users/${id}`,
@@ -130,6 +111,24 @@ export class UsersService {
       body: input,
     },
     { apiName: this.apiName });
+  
+
+  updateUserInfo = (userId: string, input: CrateAndUpdateUserDto) =>
+    this.restService.request<any, UserInfoDto>({
+      method: 'PUT',
+      url: `/api/app/users/user-info/${userId}`,
+      body: input,
+    },
+    { apiName: this.apiName });
+  
+
+  // uploadAvatar = (file: IRemoteStreamContent) =>
+  //   this.restService.request<any, string>({
+  //     method: 'POST',
+  //     responseType: 'text',
+  //     url: '/api/app/users/upload-avatar',
+  //   },
+  //   { apiName: this.apiName });
 
   constructor(private restService: RestService) {}
 }

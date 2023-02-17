@@ -167,7 +167,7 @@ export class UserComponent implements OnInit, OnDestroy {
       roleId: this.roleIdSearch
     };
     this.userService
-      .getListFilter(this.filter)
+      .getList(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: PagedResultDto<IdentityUserDto>) => {

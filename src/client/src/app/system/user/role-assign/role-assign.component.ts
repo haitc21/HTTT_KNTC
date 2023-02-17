@@ -1,7 +1,12 @@
+import { PagedResultDto } from '@abp/ng.core';
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { RoleDto, RolesService } from '@proxy/roles';
 import { UserDto, UsersService } from '@proxy/users';
-import { IdentityUserDto, IdentityUserUpdateRolesDto } from '@proxy/volo/abp/identity/models';
+import {
+  IdentityRoleDto,
+  IdentityUserDto,
+  IdentityUserUpdateRolesDto,
+} from '@proxy/volo/abp/identity/models';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 
@@ -16,8 +21,8 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public closeBtnName: string;
-  public availableRoles: RoleDto[] = [];
-  public seletedRoles: RoleDto[] = [];
+  public availableRoles: IdentityRoleDto[] = [];
+  public seletedRoles: IdentityRoleDto[] = [];
   formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -40,34 +45,25 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
   }
   loadRoles() {
     this.toggleBlockUI(true);
-    var roles = this.roleService.getListAll();
-    forkJoin({
-      roles,
-    })
+    this.userService
+      .getAssignableRoles(this.config.data.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (repsonse: any) => {
-          var roles = repsonse.roles as RoleDto[];
-          this.availableRoles = [...roles];
-          this.loadDetail(this.config.data.id);
+        next: (repsonse: PagedResultDto<IdentityRoleDto>) => {
+          this.availableRoles = repsonse.items;
           this.toggleBlockUI(false);
         },
         error: () => {
           this.toggleBlockUI(false);
         },
       });
-  }
-  loadDetail(id: any) {
-    this.toggleBlockUI(true);
-    this.userService
-      .getIncludeRole(id)
+      this.toggleBlockUI(true);
+      this.userService
+      .getRoles(this.config.data.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: UserDto) => {
-          this.seletedRoles = this.availableRoles.filter(x => response.roles.includes(x.name));
-          this.availableRoles = this.availableRoles.filter(
-            x => x.isPublic && !response.roles.includes(x.name)
-          );
+        next: (repsonse: PagedResultDto<IdentityRoleDto>) => {
+          this.seletedRoles = repsonse.items;
           this.toggleBlockUI(false);
         },
         error: () => {
