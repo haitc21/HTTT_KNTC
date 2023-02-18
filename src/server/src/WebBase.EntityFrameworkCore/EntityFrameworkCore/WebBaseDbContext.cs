@@ -68,11 +68,11 @@ public class WebBaseDbContext :
         {
             b.ToTable(WebBaseConsts.DbTablePrefix + "UserInfos");
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(x => x.Name).IsRequired().HasMaxLength(64);
-            b.Property(x => x.Surname).IsRequired().HasMaxLength(64);
-            b.Property(x => x.UserName).IsRequired().HasMaxLength(256);
-            b.Property(x => x.Email).IsRequired().HasMaxLength(256);
-            b.Property(x => x.PhoneNumber).IsRequired().HasMaxLength(16);
+            //b.Property(x => x.Name).IsRequired().HasMaxLength(64);
+            //b.Property(x => x.Surname).IsRequired().HasMaxLength(64);
+            //b.Property(x => x.UserName).IsRequired().HasMaxLength(256);
+            //b.Property(x => x.Email).IsRequired().HasMaxLength(256);
+            //b.Property(x => x.PhoneNumber).IsRequired().HasMaxLength(16);
             b.HasOne<IdentityUser>()
                 .WithOne()
                 .HasForeignKey<UserInfo>(x => x.UserId)

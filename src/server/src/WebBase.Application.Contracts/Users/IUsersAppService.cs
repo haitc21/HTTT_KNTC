@@ -11,10 +11,10 @@ namespace WebBase.Users;
 public interface IUsersAppService
 {
     Task<UserDto> GetAsync(Guid id);
-    Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetUserListDto input);
+    Task<PagedResultDto<UserDto>> GetListAsync(GetUserListDto input);
     Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id);
     Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync(Guid id);
-    Task<UserInfoDto> GetUserInfoAsync(Guid id);
+    Task<UserDto> GetUserInfoAsync(Guid id);
     Task<IdentityUserDto> CreateAsync(CrateAndUpdateUserDto input);
     Task<IdentityUserDto> UpdateAsync(Guid id, CrateAndUpdateUserDto input);
     Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CrateAndUpdateUserDto input);
@@ -23,5 +23,5 @@ public interface IUsersAppService
     Task DeleteMultipleAsync(IEnumerable<Guid> ids);
     Task SetPasswordAsync(Guid userId, SetPasswordDto input);
     Task<string> UploadAvatarAsync(IRemoteStreamContent file);
-    Task<byte[]> GetAvatarAsync();
+    Task<byte[]> GetAvatarAsync(Guid? userID);
 }

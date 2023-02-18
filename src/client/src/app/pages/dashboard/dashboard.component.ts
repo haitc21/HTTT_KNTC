@@ -10,22 +10,39 @@ import { MockService } from '../../shared/mock/mock.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   animations: [
-    trigger('toggleMenu', [
+    trigger('hideColumn', [
       state(
         'visible',
         style({
-          transform: 'translateX(0)'
+          width: '16.6666666667%',
+          opacity: 1,
         })
       ),
       state(
         'hidden',
         style({
-          transform: 'translateX(-100%)',
-          display: 'none',
+          width: 0,
+          opacity: 0,
         })
       ),
-      transition('visible => hidden', animate('.3s ease-out')),
-      transition('hidden => visible', animate('.3s ease-in')),
+      transition('visible => hidden', animate('0.3s')),
+      transition('hidden => visible', animate('0.3s')),
+    ]),
+    trigger('expandColumn', [
+      state(
+        'normal',
+        style({
+          width: '83.3333333333%',
+        })
+      ),
+      state(
+        'expanded',
+        style({
+          width: '100%',
+        })
+      ),
+      transition('normal => expanded', animate('0.3s')),
+      transition('expanded => normal', animate('0.3s')),
     ]),
   ],
 })
@@ -66,6 +83,8 @@ export class DashboardComponent implements OnInit {
 
   // ẩn hiện menu trái
   visibleFilterLeff = true;
+  hideColumnState = 'visible';
+  expandColumnState = 'normal';
 
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();
@@ -246,6 +265,16 @@ export class DashboardComponent implements OnInit {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;
     this.loadData();
+  }
+  toggleMenuLeft() {
+    this.visibleFilterLeff = !this.visibleFilterLeff;
+    if (!this.visibleFilterLeff) {
+      this.hideColumnState = 'hidden';
+      this.expandColumnState = 'expanded';
+    } else {
+      this.hideColumnState = 'visible';
+      this.expandColumnState = 'normal';
+    }
   }
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {

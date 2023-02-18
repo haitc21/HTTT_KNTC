@@ -56,13 +56,13 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
             identityUser
         );
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
-        result.Dob = userInfo.Dob;
+        result.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
         return result;
     }
 
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetUserListDto input)
+    public virtual async Task<PagedResultDto<UserDto>> GetListAsync(GetUserListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -83,11 +83,17 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
                                         null,
                                         input.PhoneNumber,
                                         input.Email);
-
-        return new PagedResultDto<IdentityUserDto>(
+        
+        var result = new PagedResultDto<UserDto>(
             count,
-            ObjectMapper.Map<List<IdentityUser>, List<IdentityUserDto>>(list)
+            ObjectMapper.Map<List<IdentityUser>, List<UserDto>>(list)
         );
+        foreach (var item in result.Items)
+        {
+            var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == item.Id);
+            item.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
+        }
+        return result;
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
@@ -111,12 +117,14 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
             ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles));
     }
     [Authorize]
-    public async Task<UserInfoDto> GetUserInfoAsync(Guid userId)
+    public async Task<UserDto> GetUserInfoAsync(Guid userId)
     {
-        await hasViewUserInfo(userId);
-        var result = ObjectMapper.Map<UserInfo, UserInfoDto>(
-            await _userInfoRepo.GetAsync(x => x.UserId == userId)
+        var identityUser = await UserManager.GetByIdAsync(userId);
+        var result = ObjectMapper.Map<IdentityUser, UserDto>(
+            identityUser
         );
+        var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == userId);
+        result.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
         return result;
     }
     [Authorize(IdentityPermissions.Users.Create)]
@@ -143,12 +151,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         var userInfo = new UserInfo(GuidGenerator.Create())
         {
-            UserId = user.Id,
-            UserName = user.UserName,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            Name = user.Name,
-            Surname = user.Surname
+            UserId = user.Id
         };
         await _userInfoRepo.InsertAsync(userInfo);
 
@@ -190,6 +193,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     {
         await hasViewUserInfo(userId);
         var user = await UserManager.GetByIdAsync(userId);
+        user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         user.Name = input.Name;
         user.Surname = input.Surname;
         if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
@@ -200,11 +204,6 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == userId);
-        userInfo.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
-
-        userInfo.Name = input.Name;
-        userInfo.Surname = input.Surname;
-        userInfo.PhoneNumber = input.PhoneNumber;
         userInfo.Dob = input.Dob;
         await _userInfoRepo.UpdateAsync(userInfo);
         await UnitOfWorkManager.Current.SaveChangesAsync();
@@ -300,10 +299,10 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
     }
     [Authorize]
-    public async Task<byte[]> GetAvatarAsync()
+    public async Task<byte[]> GetAvatarAsync(Guid? userId)
     {
-        var userId = CurrentUser.GetId().ToString();
-        return await _fileContainer.GetAllBytesOrNullAsync(userId);
+        userId = userId ?? CurrentUser.GetId();
+        return await _fileContainer.GetAllBytesOrNullAsync(userId.ToString());
     }
 
     #region private method

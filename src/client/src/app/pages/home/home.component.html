@@ -1,7 +1,7 @@
 <div class="animated fadeIn grid">
   <!-- --------------Sidebar--------------------------------------------------------- -->
-  <div [@toggleMenu]="visibleFilterLeff ? 'visible' : 'hidden'" class="col-12 md:col-2 home-sidebar">
-    <p-card [@toggleMenu]="visibleFilterLeff ? 'visible' : 'hidden'">
+  <div [@hideColumn]="hideColumnState" class="col-12 md:col-2 home-sidebar">
+    <p-card>
       <ng-template pTemplate="header">
         <h3 class="home-sidebar-header">Lớp bản đồ</h3>
       </ng-template>
@@ -79,7 +79,7 @@
     </p-card>
   </div>
   <!-- ----------------------Main------------------------------------------------- -->
-  <div [class]="visibleFilterLeff ? 'col-12 md:col-10 grid' : 'col-12 md:col-12 grid'">
+  <div [@expandColumn]="expandColumnState" class="col-12 md:col-10 grid">
     <div
       style="height: 90vh; width: 3%"
       class="flex flex-column justify-content-center align-items-center"
@@ -91,7 +91,7 @@
         type="button"
         icon="pi pi-angle-left"
         class="p-button-rounded p-button-info p-button-lg"
-        (click)="visibleFilterLeff = !visibleFilterLeff"
+        (click)="toggleMenuLeft()"
       ></button>
       <button
         *ngIf="!visibleFilterLeff"
@@ -100,7 +100,7 @@
         type="button"
         icon="pi pi-angle-right"
         class="p-button-rounded p-button-info p-button-lg"
-        (click)="visibleFilterLeff = !visibleFilterLeff"
+        (click)="toggleMenuLeft()"
       ></button>
     </div>
     <div style="width: 97%">

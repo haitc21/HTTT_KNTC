@@ -7,5 +7,5 @@ namespace WebBase.Users;
 public class UserDto : IdentityUserDto
 {
     public IList<string> Roles { get; set; }
-    public DateTime Dob { get; set; }
+    public UserInfoDto UserInfo { get; set; }
 }

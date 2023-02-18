@@ -6,7 +6,7 @@ import { PermissionService } from '@abp/ng.core';
 import { LayoutService } from '../service/app.layout.service';
 import { LOGIN_URL } from 'src/app/shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
-import { UsersService } from '@proxy/users';
+import { FileService } from 'src/app/shared/services/file.service.spec';
 
 @Component({
   selector: 'app-topbar',
@@ -34,8 +34,7 @@ export class AppTopBarComponent implements OnInit {
     private router: Router,
     private oAuthService: OAuthService,
     private permissionService: PermissionService,
-    private userService: UsersService,
-    private sanitizer: DomSanitizer
+    private fileService: FileService,private sanitizer: DomSanitizer
   ) {}
   ngOnInit(): void {
     this.isAutenticated = this.oAuthService.hasValidAccessToken();
@@ -169,9 +168,10 @@ export class AppTopBarComponent implements OnInit {
     this.router.navigate([LOGIN_URL, this.router.url]);
   }
   getAvatar() {
-    this.userService.getAvatar().subscribe(res => {
+    this.fileService.getAvatar().subscribe(res => {
       let objectURL = 'data:image/png;base64,' + res;
       this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL)
     });
   }
+  
 }

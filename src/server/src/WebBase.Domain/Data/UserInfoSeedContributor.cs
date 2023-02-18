@@ -45,11 +45,6 @@ public class UserInfoSeedContributor : IDataSeedContributor, ITransientDependenc
         var userInfo = new UserInfo(_guidGenerator.Create())
         {
             UserId = user.Id,
-            UserName = user.UserName,
-            Email = user.Email,
-            PhoneNumber = user.PhoneNumber,
-            Name = user.Name,
-            Surname = user.Surname,
             Dob = new DateTime(1990, 1, 1)
         };
         await _userInfoRepo.InsertAsync(userInfo);

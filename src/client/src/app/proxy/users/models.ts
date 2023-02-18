@@ -1,5 +1,5 @@
 import type { GetIdentityUsersInput, IdentityUserDto, IdentityUserUpdateDto } from '../volo/abp/identity/models';
-import type { ExtensibleFullAuditedEntityDto } from '@abp/ng.core';
+import type { EntityDto } from '@abp/ng.core';
 
 export interface CrateAndUpdateUserDto extends IdentityUserUpdateDto {
   dob?: string;
@@ -18,16 +18,10 @@ export interface SetPasswordDto {
 
 export interface UserDto extends IdentityUserDto {
   roles: string[];
-  dob?: string;
+  userInfo: UserInfoDto;
 }
 
-export interface UserInfoDto extends ExtensibleFullAuditedEntityDto<string> {
+export interface UserInfoDto extends EntityDto<string> {
   userId?: string;
-  name?: string;
-  surname?: string;
-  email?: string;
-  userName?: string;
-  phoneNumber?: string;
   dob?: string;
-  concurrencyStamp?: string;
 }
