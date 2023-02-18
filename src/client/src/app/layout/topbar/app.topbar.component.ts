@@ -168,7 +168,7 @@ export class AppTopBarComponent implements OnInit {
     this.router.navigate([LOGIN_URL, this.router.url]);
   }
   getAvatar() {
-    this.fileService.getAvatar().subscribe(res => {
+    this.fileService.getAvatar(this.userId).subscribe(res => {
       let objectURL = 'data:image/png;base64,' + res;
       this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL)
     });

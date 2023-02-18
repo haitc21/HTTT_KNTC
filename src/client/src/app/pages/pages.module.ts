@@ -12,7 +12,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { EditorModule } from 'primeng/editor';
-import { WebBaseSharedModule } from '../shared/modules/webbase-shared.module';
 import { BadgeModule } from 'primeng/badge';
 import { ImageModule } from 'primeng/image';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -34,6 +33,7 @@ import { HomeComponent } from './home/home.component';
 import { SearchMapComponent } from './search-map/search-map.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartModule } from 'primeng/chart';
+import { KNTCSharedModule } from '../shared/modules/shared.module';
 
 @NgModule({
   declarations: [HomeComponent, SearchMapComponent, DashboardComponent],
@@ -53,7 +53,7 @@ import { ChartModule } from 'primeng/chart';
     CheckboxModule,
     InputTextareaModule,
     EditorModule,
-    WebBaseSharedModule,
+    KNTCSharedModule,
     BadgeModule,
     ImageModule,
     ConfirmDialogModule,

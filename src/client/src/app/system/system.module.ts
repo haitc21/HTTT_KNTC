@@ -35,8 +35,8 @@ import { CoreModule } from '@abp/ng.core';
 import { PasswordModule } from 'primeng/password';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CardModule } from 'primeng/card';
-import { WebBaseSharedModule } from '../shared/modules/webbase-shared.module';
 import { FileUploadModule } from 'primeng/fileupload';
+import { KNTCSharedModule } from '../shared/modules/shared.module';
 
 const COMPONENT = [
   RoleComponent,
@@ -65,7 +65,7 @@ const COMPONENT = [
     CheckboxModule,
     InputTextareaModule,
     EditorModule,
-    WebBaseSharedModule,
+    KNTCSharedModule,
     BadgeModule,
     ImageModule,
     ConfirmDialogModule,

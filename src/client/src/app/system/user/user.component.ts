@@ -8,7 +8,7 @@ import {
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RoleLookupDto, RolesService } from '@proxy/roles';
-import { GetUserListDto, UsersService } from '@proxy/users';
+import { GetUserListDto, UserDto, UsersService } from '@proxy/users';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -175,7 +175,7 @@ export class UserComponent implements OnInit, OnDestroy {
       .getList(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: PagedResultDto<IdentityUserDto>) => {
+        next: (response: PagedResultDto<UserDto>) => {
           this.items = response.items;
           console.log("user",this.items);
           
@@ -379,12 +379,7 @@ export class UserComponent implements OnInit, OnDestroy {
         },
       });
   }
-  getAvatar() {
-    this.fileService.getAvatar().subscribe(res => {
-      let objectURL = 'data:image/png;base64,' + res;
-      this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL)
-    });
-  }
+
 
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {

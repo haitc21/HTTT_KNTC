@@ -120,7 +120,6 @@ export class UsersService {
       body: input,
     },
     { apiName: this.apiName });
-  
 
   constructor(private restService: RestService) {}
 }

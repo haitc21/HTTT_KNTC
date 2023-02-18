@@ -11,7 +11,7 @@ import { AuthService, CoreModule } from '@abp/ng.core';
 import { MessageService } from 'primeng/api';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { WebBaseSharedModule } from 'src/app/shared/modules/webbase-shared.module';
+import { KNTCSharedModule } from 'src/app/shared/modules/shared.module';
 
 @NgModule({
   imports: [
@@ -26,7 +26,7 @@ import { WebBaseSharedModule } from 'src/app/shared/modules/webbase-shared.modul
     BlockUIModule,
     ProgressSpinnerModule,
     CoreModule,
-    WebBaseSharedModule,
+    KNTCSharedModule,
   ],
   declarations: [LoginComponent],
   providers: [MessageService],

@@ -6,21 +6,21 @@ export const environment = {
   production: false,
   application: {
     baseUrl,
-    name: 'WebBase',
+    name: 'KNTC',
     logoUrl: '',
   },
   oAuthConfig: {
     issuer: 'https://localhost:5101/',
     // redirectUri: baseUrl,
-    clientId: 'WebBase_App',
+    clientId: 'KNTC_App',
     // responseType: 'code',
-    scope: 'offline_access WebBase',
+    scope: 'offline_access KNTC',
     requireHttps: true,
   },
   apis: {
     default: {
       url: 'https://localhost:5102',
-      rootNamespace: 'WebBase',
+      rootNamespace: 'KNTC',
     },
   },
 } as Environment;

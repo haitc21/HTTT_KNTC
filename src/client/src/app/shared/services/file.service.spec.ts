@@ -6,14 +6,16 @@ import { Injectable } from '@angular/core';
 })
 export class FileService {
   apiName = 'Default';
-  getAvatar = () =>
+
+  getAvatar = (userId: string) =>
     this.restService.request<any, any>(
       {
         method: 'GET',
-        url: '/api/app/users/avatar',
+        url: `/api/app/users/avatar/${userId}`,
       },
       { apiName: this.apiName }
     );
+
   uploadAvatar = (file: File) =>
     this.restService.request<any, string>(
       {
