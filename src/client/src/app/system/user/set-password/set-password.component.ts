@@ -36,14 +36,6 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
     private fb: FormBuilder
   ) {}
 
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.close();
-    }
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
   ngOnInit() {
     this.buildForm();
   }
@@ -58,7 +50,10 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
         message: 'Mật khẩu ít nhất 8 ký tự, ít nhất 1 số, 1 ký tự đặc biệt, và một chữ hoa',
       },
     ],
-    confirmNewPassword: [{ type: 'required', message: 'Xác nhận mật khẩu không đúng' }],
+    confirmNewPassword: [
+      { type: 'required', message: 'Xác nhận mật khẩu không đúng' },
+      { type: 'passwordMismatch', message: 'Xác nhận mật khẩu không đúng' },
+    ],
   };
   get formControls() {
     return this.form.controls;
@@ -81,23 +76,26 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   }
 
   buildForm() {
-    this.form = this.fb.group(
-      {
-        newPassword: new FormControl(
-          null,
-          Validators.compose([
-            Validators.required,
-            Validators.pattern(
-              '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
-            ),
-          ])
+    let password = new FormControl(
+      null,
+      Validators.compose([
+        Validators.required,
+        Validators.pattern(
+          '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
         ),
-        confirmNewPassword: new FormControl(null),
-      },
-      passwordMatchingValidatior
-    );
+      ])
+    )
+    this.form = this.fb.group({
+      newPassword: password,
+      confirmNewPassword: new FormControl(null, [this.matchPasswordValidator(password)]),
+    });
   }
-
+  matchPasswordValidator(otherControl: AbstractControl): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const match = otherControl.value === control.value;
+      return match ? null : { passwordMismatch: true };
+    };
+  }
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.btnDisabled = true;
@@ -109,12 +107,12 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
       }, 300);
     }
   }
-}
-export const passwordMatchingValidatior: ValidatorFn = (
-  control: AbstractControl
-): ValidationErrors | null => {
-  const password = control.get('newPassword');
-  const confirmPassword = control.get('confirmNewPassword');
 
-  return password?.value === confirmPassword?.value ? null : { notmatched: true };
-};
+  ngOnDestroy(): void {
+    if (this.ref) {
+      this.ref.close();
+    }
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+}

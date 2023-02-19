@@ -7,13 +7,13 @@ import { LayoutService } from '../service/app.layout.service';
 import { LOGIN_URL } from 'src/app/shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileService } from 'src/app/shared/services/file.service.spec';
-import { saveAs } from 'file-saver';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ProfileComponent } from 'src/app/system/user/profile/profile.component';
-import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
+import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
 import { UserInfoDto } from '@proxy/users';
 import { DialogService } from 'primeng/dynamicdialog';
+import { SetPasswordComponent } from 'src/app/system/user/set-password/set-password.component';
 
 @Component({
   selector: 'app-topbar',
@@ -75,14 +75,16 @@ export class AppTopBarComponent implements OnInit {
       {
         label: 'Đổi mật khẩu',
         // icon: 'pi pi-key',
-        routerLink: ['/change-password'],
+        command: event => {
+          this.setPassword();
+        },
       },
       {
         label: 'Đăng xuất',
         // icon: 'pi pi-sign-out',
         command: event => {
           this.oAuthService.logOut();
-          this.router.navigate([LOGIN_URL, this.router.url]);
+          this.router.navigate(['/']);
         },
       },
     ];
@@ -207,6 +209,19 @@ export class AppTopBarComponent implements OnInit {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
       }
+    });
+  }
+  setPassword() {
+    if (!this.userId) {
+      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      return;
+    }
+    const ref = this.dialogService.open(SetPasswordComponent, {
+      data: {
+        id: this.userId,
+      },
+      header: `Đặt lại mật khẩu`,
+      width: DIALOG_SM,
     });
   }
 }

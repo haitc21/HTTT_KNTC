@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, FormControl, FormGroup, FormBuilder, ValidatorFn, AbstractControl } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
@@ -50,6 +50,10 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         type: 'pattern',
         message: 'Mật khẩu ít nhất 8 ký tự, ít nhất 1 số, 1 ký tự đặc biệt, và một chữ hoa',
       },
+    ],
+    confirmPassword: [
+      { type: 'required', message: 'Xác nhận mật khẩu không đúng' },
+      { type: 'passwordMismatch', message: 'Xác nhận mật khẩu không đúng' },
     ],
     phoneNumber: [{ type: 'required', message: 'Số ĐT không được để trống' }],
   };
@@ -158,6 +162,15 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
   }
   buildForm() {
+    let password = new FormControl(
+      null,
+      Validators.compose([
+        Validators.required,
+        Validators.pattern(
+          '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
+        ),
+      ])
+    );
     this.form = this.fb.group({
       concurrencyStamp: [null],
       name: [null, [Validators.required]],
@@ -165,17 +178,16 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       userName: [null, [Validators.required]],
       email: [null, [Validators.required]],
       phoneNumber: [null, [Validators.required]],
-      password: [
-        null,
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
-          ),
-        ],
-      ],
+      password: password,
+      confirmPassword: new FormControl(null, [this.matchPasswordValidator(password)]),
       isActive: [true],
       dob: [null],
     });
+  }
+  matchPasswordValidator(otherControl: AbstractControl): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const match = otherControl.value === control.value;
+      return match ? null : { passwordMismatch: true };
+    };
   }
 }

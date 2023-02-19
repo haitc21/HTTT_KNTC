@@ -34,7 +34,7 @@
       <div class="field col-12 md:col-6" *ngIf="mode == 'create'">
         <span class="p-float-label">
           <p-password
-            id="password1"
+            id="password"
             formControlName="password"
             [toggleMask]="true"
             styleClass="w-full"
@@ -45,6 +45,25 @@
         <app-validation-message
           [entityControl]="formControls.password"
           [validationMessages]="validationMessages.password"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6" *ngIf="mode == 'create'">
+        <span class="p-float-label">
+          <p-password
+          appendTo="body"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            [toggleMask]="true"
+            styleClass="w-full"
+            inputId="inputconfirmPassword"
+          ></p-password>
+          <label for="password">Xác nhận khẩu <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.confirmPassword"
+          [validationMessages]="validationMessages.confirmPassword"
         >
         </app-validation-message>
       </div>
