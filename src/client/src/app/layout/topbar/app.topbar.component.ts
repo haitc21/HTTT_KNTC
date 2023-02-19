@@ -8,6 +8,12 @@ import { LOGIN_URL } from 'src/app/shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileService } from 'src/app/shared/services/file.service.spec';
 import { saveAs } from 'file-saver';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { ProfileComponent } from 'src/app/system/user/profile/profile.component';
+import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
+import { UserInfoDto } from '@proxy/users';
+import { DialogService } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-topbar',
@@ -36,6 +42,8 @@ export class AppTopBarComponent implements OnInit {
     private oAuthService: OAuthService,
     private permissionService: PermissionService,
     private fileService: FileService,
+    private notificationService: NotificationService,
+    public dialogService: DialogService,
     private sanitizer: DomSanitizer
   ) {}
   ngOnInit(): void {
@@ -60,7 +68,9 @@ export class AppTopBarComponent implements OnInit {
       {
         label: 'Thông tin cá nhân',
         // icon: 'pi pi-id-card',
-        routerLink: ['/profile'],
+        command: event => {
+          this.profileModal();
+        },
       },
       {
         label: 'Đổi mật khẩu',
@@ -177,6 +187,25 @@ export class AppTopBarComponent implements OnInit {
       if (data) {
         let objectURL = 'data:image/png;base64,' + data;
         this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+      }
+    });
+  }
+  profileModal() {
+    if (!this.userId) {
+      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      return;
+    }
+    const ref = this.dialogService.open(ProfileComponent, {
+      data: {
+        id: this.userId,
+      },
+      header: `Thông tin cá nhân'`,
+      width: DIALOG_MD,
+    });
+
+    ref.onClose.subscribe((data: UserInfoDto) => {
+      if (data) {
+        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
       }
     });
   }

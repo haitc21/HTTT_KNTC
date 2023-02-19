@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
+
 @Injectable()
 export class UtilityService {
   private _router: Router;
@@ -119,5 +121,9 @@ export class UtilityService {
       }
     }
     return data;
+  }
+  convertDateToLocal = (date: Date | string) => { 
+    const localDateTime = moment.utc(date).local().toDate(); // Giá trị ngày và giờ trong múi giờ địa phương
+    return localDateTime;
   }
 }

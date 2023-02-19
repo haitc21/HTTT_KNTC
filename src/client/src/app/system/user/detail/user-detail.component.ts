@@ -3,8 +3,7 @@ import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms'
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
-import { UsersService } from '@proxy/users';
-import { RoleDto, RolesService } from '@proxy/roles';
+import { UserDto, UsersService } from '@proxy/users';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
 
 @Component({
@@ -18,10 +17,9 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public title: string;
   public btnDisabled = false;
-  public roles: any[] = [];
   public countries: any[] = [];
   public provinces: any[] = [];
-  selectedEntity = {} as IdentityUserDto;
+  selectedEntity = {} as UserDto;
   public avatarImage;
   mode: string;
   formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
@@ -29,7 +27,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
-    private roleService: RolesService,
     private userService: UsersService,
     private utilService: UtilityService,
     private fb: FormBuilder
@@ -75,9 +72,12 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: IdentityUserDto) => {
+        next: (response: UserDto) => {
           this.selectedEntity = response;
           this.form.patchValue(this.selectedEntity);
+          this.form
+            .get('dob')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.userInfo.dob));
           this.setMode('update');
           this.toggleBlockUI(false);
         },
@@ -88,7 +88,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
-    this.toggleBlockUI(true);
     this.toggleBlockUI(true);
     if (this.utilService.isEmpty(this.config.data?.id)) {
       this.userService
@@ -176,7 +175,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         ],
       ],
       isActive: [true],
-      dob: [null]
+      dob: [null],
     });
   }
 }

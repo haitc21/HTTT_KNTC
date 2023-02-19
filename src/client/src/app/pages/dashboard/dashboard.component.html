@@ -135,7 +135,7 @@
         <p-card>
           <p-toolbar>
             <ng-template pTemplate="left">
-              <h3 style="color: blue">Kết quả tìm kiếm</h3>
+              <h3 style="color: blue">Danh sách tố cáo, khiếu nại</h3>
             </ng-template>
 
             <ng-template pTemplate="right">
@@ -169,7 +169,7 @@
         > -->
           <p-table
             #dt
-            [value]="data"
+            [value]="mockData"
             [rows]="10"
             [paginator]="true"
             [globalFilterFields]="['code', 'title']"

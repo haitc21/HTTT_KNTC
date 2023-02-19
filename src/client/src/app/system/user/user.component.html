@@ -25,11 +25,6 @@
           (click)="deleteItems()"
           [disabled]="!selectedItems || !selectedItems.length"
         ></button>
-        <!-- <p-fileUpload
-          name="file[]"
-          [customUpload]="true"
-          (uploadHandler)="myUploader($event)"
-        ></p-fileUpload> -->
       </ng-template>
 
       <ng-template pTemplate="right">
@@ -87,7 +82,7 @@
           <td>{{ row.surname ? row.surname + ' ' + row.name : row.name }}</td>
           <td>{{ row.email }}</td>
           <td>{{ row.phoneNumber }}</td>
-          <td>{{ row.userInfo.dob | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ utilService.convertDateToLocal(row.userInfo.dob) | date : 'dd-MM-yyyy' }}</td>
           <td>
             <p-tag
               [severity]="row.isActive ? 'info' : 'warning'"

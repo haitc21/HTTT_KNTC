@@ -18,6 +18,7 @@ import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
 import { FileService } from 'src/app/shared/services/file.service.spec';
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { UtilityService } from 'src/app/shared/services/utility.service';
 import { PermissionGrantComponent } from '../permission-grant/permission-grant.component';
 import { UserDetailComponent } from './detail/user-detail.component';
 import { RoleAssignComponent } from './role-assign/role-assign.component';
@@ -66,6 +67,7 @@ export class UserComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
     private permissionService: PermissionService,
+    private utilService: UtilityService,
     private sanitizer: DomSanitizer,
     private fileService: FileService
   ) {}
@@ -361,25 +363,7 @@ export class UserComponent implements OnInit, OnDestroy {
       }
     });
   }
-  myUploader(event) {
-    this.toggleBlockUI(true);
-    let fike = event.files[0];
-    this.fileService
-      .uploadAvatar(fike)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response: string) => {
-          console.log('upload successed: ' + response);
-
-          this.toggleBlockUI(false);
-        },
-        error: () => {
-          this.toggleBlockUI(false);
-        },
-      });
-  }
-
-
+  
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.blockedPanel = true;

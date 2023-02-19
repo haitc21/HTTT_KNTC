@@ -1,0 +1,152 @@
+<p-panel #pnlDetail [collapsed]="false">
+  <div class="grid">
+    <div class="col-12 md:col-4 flex flex-column justify-content-cente">
+      <div class="flex justify-content-center w-full">
+        <p-image
+          [src]="avatarUrl ?? 'assets/images/avatar/anonimous.png'"
+          alt="Image"
+          preview="true"
+          width="250"
+          height="250"
+        ></p-image>
+      </div>
+
+      <div class="flex justify-content-center w-full">
+        <p-fileUpload
+          name="file[]"
+          [customUpload]="true"
+          invalidFileSizeMessageSummary="{0}: Vượt quá dung lượng cho phép!"
+          chooseLabel="Chọn ảnh"
+          uploadLabel="Tải lên"
+          cancelLabel="Hủy"
+          maxFileSize="100000"
+          (uploadHandler)="myUploader($event)"
+        ></p-fileUpload>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-8">
+      <form
+        class="form-horizontal form-label-left"
+        skipValidation
+        [formGroup]="form"
+        (ngSubmit)="saveChange()"
+      >
+        <div class="formgrid grid">
+          <!-- ---------------------------------------------------------------------------------- -->
+          <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+              <input
+                id="userName"
+                type="text"
+                pInputText
+                formControlName="userName"
+                class="w-full"
+              />
+              <label for="userName">Tài khoản <span class="required">*</span></label>
+            </span>
+            <app-validation-message
+              [entityControl]="formControls.userName"
+              [validationMessages]="validationMessages.userName"
+            >
+            </app-validation-message>
+          </div>
+          <!-- ---------------------------------------------------------------------------------- -->
+          <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+              <input id="email" type="text" pInputText formControlName="email" class="w-full" />
+              <label for="email">Email<span class="required">*</span></label>
+            </span>
+            <app-validation-message
+              [entityControl]="formControls.email"
+              [validationMessages]="validationMessages.email"
+            >
+            </app-validation-message>
+          </div>
+          <!-- ---------------------------------------------------------------------------------- -->
+          <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+              <input id="surname" type="text" pInputText formControlName="surname" class="w-full" />
+              <label for="surname">Họ<span class="required">*</span></label>
+            </span>
+            <app-validation-message
+              [entityControl]="formControls.surname"
+              [validationMessages]="validationMessages.surname"
+            >
+            </app-validation-message>
+          </div>
+          <!-- ---------------------------------------------------------------------------------- -->
+          <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+              <input id="name" type="text" pInputText formControlName="name" class="w-full" />
+              <label for="name" class="block">Tên <span class="required">*</span></label>
+            </span>
+            <app-validation-message
+              [entityControl]="formControls.name"
+              [validationMessages]="validationMessages.name"
+            >
+            </app-validation-message>
+          </div>
+          <!-- ---------------------------------------------------------------------------------- -->
+          <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+              <input
+                id="phoneNumber"
+                type="text"
+                pInputText
+                formControlName="phoneNumber"
+                class="w-full"
+              />
+              <label for="phoneNumber">Số ĐT<span class="required">*</span></label>
+            </span>
+            <app-validation-message
+              [entityControl]="formControls.phoneNumber"
+              [validationMessages]="validationMessages.phoneNumber"
+            >
+            </app-validation-message>
+          </div>
+          <!-- ---------------------------------------------------------------------------------- -->
+          <div class="field col-12 md:col-6">
+            <span class="p-float-label">
+              <p-calendar
+                appendTo="body"
+                formControlName="dob"
+                dateFormat="dd/mm/yy"
+                [showIcon]="true"
+                inputId="dob"
+              ></p-calendar>
+              <label for="dob">Ngày sinh</label>
+            </span>
+          </div>
+          <!-- ---------------------------------------------------------------------------------- -->
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- ---------------------------------------------------------------------------------- -->
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      pRipples
+      type="button"
+      label="Lưu"
+      class="p-button-info"
+      icon="pi pi-check"
+      [disabled]="!form.valid || btnDisabled"
+      (click)="saveChange()"
+    ></button>
+  </ng-template>
+  <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
+    <p-progressSpinner
+      [style]="{
+        width: '100px',
+        height: '100px',
+        position: 'absolute',
+        top: '25%',
+        left: '50%'
+      }"
+      strokeWidth="2"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </p-blockUI>
+</p-panel>

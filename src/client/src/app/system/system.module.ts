@@ -37,6 +37,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CardModule } from 'primeng/card';
 import { FileUploadModule } from 'primeng/fileupload';
 import { KNTCSharedModule } from '../shared/modules/shared.module';
+import { ProfileComponent } from './user/profile/profile.component';
 
 const COMPONENT = [
   RoleComponent,
@@ -46,6 +47,7 @@ const COMPONENT = [
   UserDetailComponent,
   RoleAssignComponent,
   SetPasswordComponent,
+  ProfileComponent
 ];
 
 @NgModule({
@@ -81,7 +83,7 @@ const COMPONENT = [
     PasswordModule,
     OverlayPanelModule,
     CardModule,
-    FileUploadModule,
+    FileUploadModule
   ],
   entryComponents: [...COMPONENT],
 })
