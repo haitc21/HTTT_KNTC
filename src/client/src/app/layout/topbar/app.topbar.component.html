@@ -18,7 +18,7 @@
   </ng-template>
 
   <ng-template pTemplate="end">
-    <span class="p-buttonset">
+    <span class="flex align-items-center">
       <button
         *ngIf="isAutenticated"
         pButton
@@ -30,17 +30,14 @@
         (click)="systemMenu.toggle($event)"
       ></button>
 
-      <button
-        *ngIf="isAutenticated"
-        pButton
-        pRipple
-        type="button"
-        class="p-button-info"
-        [label]="userName"
-        (click)="userMenu.toggle($event)"
-      >
-        <img [src]="avatarUrl ?? 'assets/images/avatar/anonimous.png'" class="avatar" alt="avatar" />
-      </button>
+      <a class="user-profile" *ngIf="isAutenticated" (click)="userMenu.toggle($event)">
+        <img
+          [src]="avatarUrl ?? 'assets/images/avatar/anonimous.png'"
+          alt="User Avatar"
+          class="avatar"
+        />
+        <span class="username">{{ userName }} <i class="pi pi-angle-down"></i></span>
+      </a>
 
       <button
         *ngIf="!isAutenticated"
