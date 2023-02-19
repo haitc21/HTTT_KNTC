@@ -23,7 +23,7 @@ $gutter: 1rem; //for primeflex grid system
 .row-num-column {
   width: 10px !important;
 }
-.row-num-cell  {
+.row-num-cell {
   text-align: center !important;
 }
 .p-dropdown-panel {
@@ -134,4 +134,7 @@ li {
 
 .p-chart {
   height: 300px;
+}
+.p-calendar {
+  width: 100% !important;
 }

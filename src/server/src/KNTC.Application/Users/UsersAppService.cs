@@ -182,7 +182,6 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
             (await UserManager.AddPasswordAsync(user, input.Password)).CheckErrors();
         }
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
-        ObjectMapper.Map<IdentityUser, UserInfo>(user, userInfo);
         userInfo.Dob = input.Dob;
         await _userInfoRepo.UpdateAsync(userInfo);
         await CurrentUnitOfWork.SaveChangesAsync();

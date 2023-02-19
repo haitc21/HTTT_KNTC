@@ -114,6 +114,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
       description: [null, [Validators.required, Validators.maxLength(500)]],
       isPublic: [true],
       isDefault: [false],
+      concurrencyStamp: [null]
     });
   }
 

@@ -160,6 +160,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
   buildForm() {
     this.form = this.fb.group({
+      concurrencyStamp: [null],
       name: [null, [Validators.required]],
       surname: [null, [Validators.required]],
       userName: [null, [Validators.required]],
@@ -175,6 +176,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         ],
       ],
       isActive: [true],
+      dob: [null]
     });
   }
 }

@@ -92,6 +92,19 @@
       </div>
       <!-- ---------------------------------------------------------------------------------- -->
       <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <p-calendar
+            appendTo="body"
+            formControlName="dob"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            inputId="dob"
+          ></p-calendar>
+          <label for="dob">Ngày sinh</label>
+        </span>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
         <p-checkbox binary="true" label="Kích hoạt" formControlName="isActive"></p-checkbox>
       </div>
       <!-- ---------------------------------------------------------------------------------- -->
@@ -104,7 +117,7 @@
         pRipples
         type="submit"
         label="Lưu"
-        class=" p-button-info"
+        class="p-button-info"
         icon="pi pi-check"
         [disabled]="!form.valid || btnDisabled"
       ></button>

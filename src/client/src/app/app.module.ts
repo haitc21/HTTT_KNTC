@@ -1,6 +1,6 @@
 import { CoreModule } from '@abp/ng.core';
 import { registerLocale } from '@abp/ng.core/locale';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogService } from 'primeng/dynamicdialog';
@@ -21,6 +21,8 @@ import { GlobalHttpInterceptorService } from './shared/interceptors/error-handle
 
 import { storeLocaleData } from '@abp/ng.core/locale';
 import(`@/../@angular/common/locales/vi.mjs`).then(m => storeLocaleData(m.default, 'vi'));
+
+import localeVi from '@angular/common/locales/vi';
 
 @NgModule({
   imports: [
@@ -53,6 +55,7 @@ import(`@/../@angular/common/locales/vi.mjs`).then(m => storeLocaleData(m.defaul
     NotificationService,
     UtilityService,
     ConfirmationService,
+    { provide: LOCALE_ID, useValue: 'vi' },
   ],
   bootstrap: [AppComponent],
 })

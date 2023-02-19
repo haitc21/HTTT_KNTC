@@ -177,8 +177,7 @@ export class UserComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: PagedResultDto<UserDto>) => {
           this.items = response.items;
-          console.log("user",this.items);
-          
+          // console.log("user",this.items);
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
         },
