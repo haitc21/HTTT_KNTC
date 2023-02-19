@@ -23,5 +23,5 @@ public interface IUsersAppService
     Task DeleteMultipleAsync(IEnumerable<Guid> ids);
     Task SetPasswordAsync(Guid userId, SetPasswordDto input);
     Task<string> UploadAvatarAsync(IRemoteStreamContent file);
-    Task<byte[]> GetAvatarAsync(Guid? userID);
+    Task<byte[]> GetAvatarAsync(Guid? userId);
 }

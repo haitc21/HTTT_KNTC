@@ -53,7 +53,7 @@ export class UsersService {
     { apiName: this.apiName });
   
 
-  getAvatar = (userId: string) =>
+  getAvatar = (userId?: string) =>
     this.restService.request<any, number[]>({
       method: 'GET',
       url: `/api/app/users/avatar/${userId}`,

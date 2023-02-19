@@ -7,6 +7,7 @@ import { LayoutService } from '../service/app.layout.service';
 import { LOGIN_URL } from 'src/app/shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileService } from 'src/app/shared/services/file.service.spec';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-topbar',
@@ -34,7 +35,8 @@ export class AppTopBarComponent implements OnInit {
     private router: Router,
     private oAuthService: OAuthService,
     private permissionService: PermissionService,
-    private fileService: FileService,private sanitizer: DomSanitizer
+    private fileService: FileService,
+    private sanitizer: DomSanitizer
   ) {}
   ngOnInit(): void {
     this.isAutenticated = this.oAuthService.hasValidAccessToken();
@@ -45,6 +47,9 @@ export class AppTopBarComponent implements OnInit {
       this.userName = accessTokenJson.preferred_username ?? '';
       this.userId = accessTokenJson.sub ?? '';
       this.getAvatar();
+      this.fileService.avatarUrl$.subscribe(url => {
+        if (url) this.avatarUrl = url; // Cập nhật đường dẫn tới avatar của người dùng
+      });
     }
     this.initMenu();
     this.initMenuUser();
@@ -168,10 +173,11 @@ export class AppTopBarComponent implements OnInit {
     this.router.navigate([LOGIN_URL, this.router.url]);
   }
   getAvatar() {
-    this.fileService.getAvatar(this.userId).subscribe(res => {
-      let objectURL = 'data:image/png;base64,' + res;
-      this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL)
+    this.fileService.getAvatar(this.userId).subscribe(data => {
+      if (data) {
+        let objectURL = 'data:image/png;base64,' + data;
+        this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+      }
     });
   }
-  
 }

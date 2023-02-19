@@ -2,20 +2,11 @@
 # yarn lockfile v1
 
 
-"@abp/ng.account.core@~6.0.2", "@abp/ng.account.core@~6.0.3":
+"@abp/ng.account.core@~6.0.2":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@abp/ng.account.core/-/ng.account.core-6.0.3.tgz#0469e760d4ce163e40e82f7a54205b32246c0214"
   integrity sha512-YmjxU1QEuopj50t43lOfIwKBkwS+j6FvNgckC/c/mhMjH9jscAJKNerL453JsZX5URp3thRNc+HHAiq5f+Yklw==
   dependencies:
-    tslib "^2.0.0"
-
-"@abp/ng.account@~6.0.0":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@abp/ng.account/-/ng.account-6.0.3.tgz#a0b6a3c8f4e61f1177b6430268672add6a038cdc"
-  integrity sha512-ovnlxNAxQicRBVpk6JansajpO2VpHMBNuyw4LQWKG867S/IZQodChhDHtBn1PulI4OTACEZevaDgocwaIrEfRA==
-  dependencies:
-    "@abp/ng.account.core" "~6.0.3"
-    "@abp/ng.theme.shared" "~6.0.3"
     tslib "^2.0.0"
 
 "@abp/ng.components@~6.0.0", "@abp/ng.components@~6.0.3":
@@ -4180,6 +4171,11 @@ file-entry-cache@^6.0.1:
   integrity sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==
   dependencies:
     flat-cache "^3.0.4"
+
+file-saver@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/file-saver/-/file-saver-2.0.5.tgz#d61cfe2ce059f414d899e9dd6d4107ee25670c38"
+  integrity sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==
 
 fill-range@^7.0.1:
   version "7.0.1"

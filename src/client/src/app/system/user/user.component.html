@@ -25,13 +25,11 @@
           (click)="deleteItems()"
           [disabled]="!selectedItems || !selectedItems.length"
         ></button>
-        <p-fileUpload
+        <!-- <p-fileUpload
           name="file[]"
-          accept="image/*"
-          maxFileSize="1000000"
           [customUpload]="true"
           (uploadHandler)="myUploader($event)"
-        ></p-fileUpload>
+        ></p-fileUpload> -->
 
       </ng-template>
 
