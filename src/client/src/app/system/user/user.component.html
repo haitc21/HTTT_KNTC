@@ -30,7 +30,6 @@
           [customUpload]="true"
           (uploadHandler)="myUploader($event)"
         ></p-fileUpload> -->
-
       </ng-template>
 
       <ng-template pTemplate="right">
@@ -68,6 +67,7 @@
           <th style="width: 3rem">
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
+          <th class="row-num-column">STT</th>
           <th>Tài khoản</th>
           <th pSortableColumn="name">Họ tên</th>
           <th>Email</th>
@@ -77,11 +77,12 @@
           <th *ngIf="visibleActionColumn" class="action-column"></th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-row>
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
         <tr>
           <td>
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td>
+          <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
           <td>{{ row.userName }}</td>
           <td>{{ row.surname ? row.surname + ' ' + row.name : row.name }}</td>
           <td>{{ row.email }}</td>
