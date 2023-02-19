@@ -7,9 +7,9 @@ export class HoSo {
     typeHoSo: typesHoSo;
     fieldType: fieldsHoSo;
     returnDate1: Date | "";
-    result1: string;
+    result1: boolean;
     returnDate2: Date | "";
-    result2: string;
+    result2: boolean;
     latLng: [number, number];
 }
 export enum typesHoSo {

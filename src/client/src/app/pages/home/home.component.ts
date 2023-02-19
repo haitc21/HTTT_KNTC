@@ -65,15 +65,15 @@ export class HomeComponent implements OnInit {
   public totalCount: number;
 
   // fileter
-  landComplaint = false;
-  enviromentalComplaint = false;
-  waterResourceComplaint = false;
-  mineralResourceComplaint = false;
+  landComplaint = true;
+  enviromentalComplaint = true;
+  waterResourceComplaint = true;
+  mineralResourceComplaint = true;
 
-  landAccusation = false;
-  emviromentalAccusation = false;
-  waterResourceAccusation = false;
-  mineralResourceAccusation = false;
+  landAccusation = true;
+  emviromentalAccusation = true;
+  waterResourceAccusation = true;
+  mineralResourceAccusation = true;
   // ẩn hiện menu trái
   visibleFilterLeff = true;
   hideColumnState = 'visible';

@@ -45,7 +45,7 @@ export class MockService {
   FieldsHoSo = [0, 1, 2, 3];
   loaiHS = ['khiếu nại', 'Tố cáo'];
   linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
-  results = ['đúng', 'sai'];
+  results = [true, false];
 
   constructor() {}
   mockData(): HoSo[] {
@@ -63,8 +63,10 @@ export class MockService {
 
       item.returnDate1 = randomDate[1];
       item.result1 = this.randomItemInArr(this.results);
-      item.returnDate2 = item.result1 == 'đúng' ? '' : randomDate[2];
-      item.result2 = item.result1 == 'đúng' ? '' : this.randomItemInArr(this.results);
+      if (!item.result1) {
+        item.returnDate2 = randomDate[2];
+        item.result2 = this.randomItemInArr(this.results);
+      }
       item.latLng = this.generateCoordinates();
       hoSos.push(item);
     }
@@ -96,10 +98,6 @@ export class MockService {
     const randomDate3 = moment(
       randomDate2.valueOf() + Math.random() * (end.valueOf() - randomDate2.valueOf())
     );
-    return [
-      randomDate1.toDate(),
-      randomDate2.toDate(),
-      randomDate3.toDate(),
-    ];
+    return [randomDate1.toDate(), randomDate2.toDate(), randomDate3.toDate()];
   }
 }

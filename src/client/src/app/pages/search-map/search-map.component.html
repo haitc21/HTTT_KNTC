@@ -106,7 +106,53 @@
     <div style="width: 97%">
       <p-panel #pnl header="Bản đồ">
         <p-toolbar>
- 
+          <div class="formgrid grid col-12">
+            <div class="field col-12 md:col-4">
+              <span class="p-input-icon-left w-full">
+                <i class="pi pi-search"></i>
+                <input
+                  pInputText
+                  type="text"
+                  (keyup.enter)="loadData()"
+                  [(ngModel)]="keyword"
+                  placeholder="Tìm kiếm"
+                  class="w-full"
+                />
+              </span>
+            </div>
+            <!-- --------------------------------------------------------------------------------- -->
+            <div class="field col-12 md:col-4">
+              <span class="p-float-label">
+                <p-dropdown
+                  [options]="lanKNOptions"
+                  [(ngModel)]="lanKNSearch"
+                  optionLabel="text"
+                  optionValue="value"
+                  [showClear]="true"
+                  [autoDisplayFirst]="false"
+                  styleClass="w-full"
+                  (onChange)="loadData()"
+                ></p-dropdown>
+                <label for="phoneNumber">Lần nộp đơn</label>
+              </span>
+            </div>
+            <!-- --------------------------------------------------------------------------------- -->
+            <div class="field col-12 md:col-4">
+              <span class="p-float-label">
+                <p-dropdown
+                  [options]="stageOptions"
+                  [(ngModel)]="stageSearch"
+                  optionLabel="text"
+                  optionValue="value"
+                  [showClear]="true"
+                  [autoDisplayFirst]="false"
+                  styleClass="w-full"
+                  (onChange)="loadData()"
+                ></p-dropdown>
+                <label for="phoneNumber">Tình trạng</label>
+              </span>
+            </div>
+          </div>
         </p-toolbar>
         <p-card>
           <app-map idMap="searchMap" [data]="data"></app-map>
@@ -187,9 +233,9 @@
                 <td>{{ loaiHS[row.typeHoSo] }}</td>
                 <td>{{ linhVuc[row.fieldType] }}</td>
                 <td>{{ row.returnDate1.toLocaleDateString('vi-VN') }}</td>
-                <td>{{ row.result1 }}</td>
+                <td>{{ row.result1 ? 'Đúng' : 'Sai' }}</td>
                 <td>{{ row.returnDate2 ? row.returnDate2.toLocaleDateString('vi-VN') : '' }}</td>
-                <td>{{ row.result2 }}</td>
+                <td>{{ row.result2 ? 'Đúng' : 'Sai' }}</td>
               </tr>
             </ng-template>
             <!-- <ng-template pTemplate="summary">

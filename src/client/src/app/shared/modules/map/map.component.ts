@@ -48,6 +48,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.initMap();
     this.buildLocateBtn();
     this.buildEventMapClick();
+    this.renderMarkers(this.data);
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data && changes.data.currentValue && !changes.data.isFirstChange()) {

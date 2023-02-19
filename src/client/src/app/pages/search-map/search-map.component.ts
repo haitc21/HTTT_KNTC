@@ -48,8 +48,6 @@ import { MockService } from '../../shared/mock/mock.service';
 })
 export class SearchMapComponent implements OnInit {
   blockedPanel = false;
-  @ViewChild('map', { static: true }) mapContainer: ElementRef;
-  isMapInitialised = false;
   data: HoSo[] = [];
 
   mockData: HoSo[] = [];
@@ -65,15 +63,38 @@ export class SearchMapComponent implements OnInit {
   public totalCount: number;
 
   // fileter
-  landComplaint = false;
-  enviromentalComplaint = false;
-  waterResourceComplaint = false;
-  mineralResourceComplaint = false;
+  landComplaint = true;
+  enviromentalComplaint = true;
+  waterResourceComplaint = true;
+  mineralResourceComplaint = true;
 
-  landAccusation = false;
-  emviromentalAccusation = false;
-  waterResourceAccusation = false;
-  mineralResourceAccusation = false;
+  landAccusation = true;
+  emviromentalAccusation = true;
+  waterResourceAccusation = true;
+  mineralResourceAccusation = true;
+
+  keyword = '';
+  lanKNSearch: Number;
+  stageSearch: Number;
+  lanKNOptions = [
+    { value: 0, text: 'Khiếu nại lần I' },
+    { value: 1, text: 'Khiếu nại lần II' },
+  ];
+  stageOptions = [
+    { value: 0, text: 'Đúng' },
+    { value: 1, text: 'Sai' },
+  ];
+
+  // loaiHSOption = [
+  //   { value: 0, text: 'khiếu nại' },
+  //   { value: 1, text: 'Tố cáo' },
+  // ];
+  // linhVucOptions = [
+  //   { value: 0, text: 'Đất đai' },
+  //   { value: 1, text: 'Môi trường' },
+  //   { value: 2, text: 'Tài nguyên nước' },
+  //   { value: 3, text: 'Khoáng sản' },
+  // ];
 
   // ẩn hiện menu trái
   visibleFilterLeff = true;
@@ -94,10 +115,10 @@ export class SearchMapComponent implements OnInit {
     this.toggleBlockUI(true);
     this.mockData = this.mockService.mockData();
     this.toggleBlockUI(false);
-    this.isMapInitialised = !!this.mapContainer;
     this.loadData(true);
   }
   loadData(isFirst: boolean = false) {
+    this.toggleBlockUI(true);
     this.data = [];
 
     if (this.landComplaint)
@@ -155,6 +176,33 @@ export class SearchMapComponent implements OnInit {
           x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Mineral
         )
       );
+    if (this.keyword) {
+      this.data = this.data.filter(
+        x => x.code.includes(this.keyword) || x.title.includes(this.keyword)
+      );
+    }
+    switch (this.lanKNSearch) {
+      case 0:
+        this.data = this.data.filter(x => !x.returnDate2);
+        break;
+      case 1:
+        this.data = this.data.filter(x => x.returnDate2);
+        break;
+      default:
+        this.data = this.data;
+    }
+    switch (this.stageSearch) {
+      case 0:
+        this.data = this.data.filter(x => x.result1 || (x.result1 && x.result2));
+        break;
+      case 1:
+        this.data = this.data.filter(x => !x.result2);
+        break;
+      default:
+        this.data = this.data;
+    }
+
+    this.toggleBlockUI(false);
   }
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;

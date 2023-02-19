@@ -207,9 +207,9 @@
                 <td>{{ loaiHS[row.typeHoSo] }}</td>
                 <td>{{ linhVuc[row.fieldType] }}</td>
                 <td>{{ row.returnDate1.toLocaleDateString('vi-VN') }}</td>
-                <td>{{ row.result1 }}</td>
+                <td>{{ row.result1 ? 'Đúng' : 'Sai' }}</td>
                 <td>{{ row.returnDate2 ? row.returnDate2.toLocaleDateString('vi-VN') : '' }}</td>
-                <td>{{ row.result2 }}</td>
+                <td>{{ row.result2 ? 'Đúng' : 'Sai' }}</td>
               </tr>
             </ng-template>
             <!-- <ng-template pTemplate="summary">
