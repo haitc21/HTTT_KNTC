@@ -34,9 +34,10 @@ import { SearchMapComponent } from './search-map/search-map.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartModule } from 'primeng/chart';
 import { KNTCSharedModule } from '../shared/modules/shared.module';
+import { LandComplaintComponent } from './land-complaint/land-complaint.component';
 
 @NgModule({
-  declarations: [HomeComponent, SearchMapComponent, DashboardComponent],
+  declarations: [HomeComponent, SearchMapComponent, DashboardComponent, LandComplaintComponent],
   imports: [
     PagesRoutingModule,
     CoreModule,

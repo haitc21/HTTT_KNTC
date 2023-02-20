@@ -112,7 +112,7 @@ export class AppTopBarComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: ['/'],
+            routerLink: ['/pages/land-complaint'],
           },
           {
             label: 'Môi trường',

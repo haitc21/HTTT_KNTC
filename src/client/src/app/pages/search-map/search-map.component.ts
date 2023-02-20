@@ -193,10 +193,10 @@ export class SearchMapComponent implements OnInit {
     }
     switch (this.stageSearch) {
       case 0:
-        this.data = this.data.filter(x => x.result1 || (x.result1 && x.result2));
+        this.data = this.data.filter(x => x.result1 || x.result2);
         break;
       case 1:
-        this.data = this.data.filter(x => !x.result2);
+        this.data = this.data.filter(x => x.result2 === false);
         break;
       default:
         this.data = this.data;

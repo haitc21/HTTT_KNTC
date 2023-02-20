@@ -12,7 +12,7 @@ $gutter: 1rem; //for primeflex grid system
   color: #fff;
 }
 #inputPassword {
-  width: 100% !important;
+  width: 94% !important;
 }
 .search-width {
   width: 250px;
@@ -21,7 +21,8 @@ $gutter: 1rem; //for primeflex grid system
   width: 15%;
 }
 .row-num-column {
-  width: 10px !important;
+  width: 50px !important;
+  text-align: center;
 }
 .row-num-cell {
   text-align: center !important;
@@ -135,7 +136,6 @@ li {
 .p-chart {
   height: 300px;
 }
-.p-calendar,
-.p-inputtext {
+.p-calendar {
   width: 100% !important;
 }
