@@ -1,4 +1,4 @@
-<div class="animated fadeIn">
+<div class="animated fadeIn card">
   <p-panel #pnl header="Quản lý vai trò">
     <p-toolbar>
       <ng-template pTemplate="left">
@@ -113,7 +113,7 @@
               pButton
               pRipple
               icon="pi pi-trash"
-              class="p-button-rounded p-button-warning"
+              class="p-button-rounded p-button-danger"
               [pTooltip]="Actions.DELETE"
               tooltipPosition="top"
               (click)="deleteRow(row)"

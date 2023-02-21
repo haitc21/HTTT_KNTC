@@ -1,4 +1,4 @@
-<div class="animated fadeIn grid">
+<div class="animated fadeIn grid card">
   <!-- --------------Sidebar--------------------------------------------------------- -->
   <div [@hideColumn]="hideColumnState" class="col-12 md:col-2 home-sidebar">
     <p-card>
@@ -103,11 +103,9 @@
         (click)="toggleMenuLeft()"
       ></button>
     </div>
-    <div style="width: 97%">
+    <div style="width: 97%" class="card">
       <p-panel #pnl header="Trang chủ">
-        <p-card>
-          <app-map idMap="homeMap" [data]="data" heightMap="80vh" [zoomLv]="12"></app-map>
-        </p-card>
+        <app-map idMap="homeMap" [data]="data" heightMap="80vh" [zoomLv]="12"></app-map>
         <!-- ----------------------------------------------------------------------- -->
         <p-blockUI [target]="pnl" [blocked]="blockedPanel">
           <p-progressSpinner

@@ -35,9 +35,28 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartModule } from 'primeng/chart';
 import { KNTCSharedModule } from '../shared/modules/shared.module';
 import { LandComplaintComponent } from './land-complaint/land-complaint.component';
+import { LandAccusationComponent } from './land-accusation/land-accusation.component';
+import { EnviromentalAccusationComponent } from './enviromental-accusation/enviromental-accusation.component';
+import { MineralResourceAccusationComponent } from './mineral-resource-accusation/mineral-resource-accusation.component';
+import { EnviromentalComplaintComponent } from './enviromental-complaint/enviromental-complaint.component';
+import { MineralResourceComplaintComponent } from './mineral-resource-complaint/mineral-resource-complaint.component';
+import { WaterResourceComplaintComponent } from './water-resource-complaint/water-resource-complaint.component';
+import { WaterResourcAccusationComponent } from './water-resource-accusation/water-resource-accusation.component';
 
 @NgModule({
-  declarations: [HomeComponent, SearchMapComponent, DashboardComponent, LandComplaintComponent],
+  declarations: [
+    HomeComponent,
+    SearchMapComponent,
+    DashboardComponent,
+    LandComplaintComponent,
+    LandAccusationComponent,
+    EnviromentalComplaintComponent,
+    EnviromentalAccusationComponent,
+    MineralResourceComplaintComponent,
+    MineralResourceAccusationComponent,
+    WaterResourceComplaintComponent,
+    WaterResourcAccusationComponent
+  ],
   imports: [
     PagesRoutingModule,
     CoreModule,

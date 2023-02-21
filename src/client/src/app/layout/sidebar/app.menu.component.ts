@@ -64,16 +64,16 @@ export class AppMenuComponent implements OnInit {
           },
           {
             label: 'Môi trường',
-            routerLink: ['/'],
+            routerLink: ['/pages/enviromental-complaint'],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: ['/'],
+            routerLink: ['/pages/mineral-resource-complaint'],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: ['/'],
+            routerLink: ['/pages/water-resource-complaint'],
           },
         ],
       },
@@ -83,21 +83,20 @@ export class AppMenuComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: ['/'],
+            routerLink: ['/pages/land-accusation'],
           },
-
           {
             label: 'Môi trường',
-            routerLink: ['/'],
+            routerLink: ['/pages/enviromental-accusation'],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: ['/'],
+            routerLink: ['/pages/mineral-resource-accusation'],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: ['/'],
+            routerLink: ['/pages/water-resource-accusation'],
           },
         ],
       },

@@ -30,14 +30,6 @@
     ts-toolbelt "6.15.4"
     tslib "^2.0.0"
 
-"@abp/ng.feature-management@~6.0.3":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@abp/ng.feature-management/-/ng.feature-management-6.0.3.tgz#433ffead3bcbc9443fafdde9a77f5340dc1051e2"
-  integrity sha512-JxWRA3Rmnrt1wLiHFU1i+Upv0pRms0IDAUi0bzzMFpzBHQYCSpxQc0e4RQlOCQZzdG6/2yZdnQZKcx817l+o4Q==
-  dependencies:
-    "@abp/ng.theme.shared" "~6.0.3"
-    tslib "^2.0.0"
-
 "@abp/ng.identity@~6.0.0":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@abp/ng.identity/-/ng.identity-6.0.3.tgz#d0e3627df720a36989b5ddc26c32bfd64842345d"
@@ -77,15 +69,6 @@
     "@abp/ng.theme.shared" "~6.0.3"
     tslib "^2.0.0"
 
-"@abp/ng.tenant-management@~6.0.0":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@abp/ng.tenant-management/-/ng.tenant-management-6.0.3.tgz#8c412f106ddf5b6cde0b4632ac44be1b6bc839e2"
-  integrity sha512-s7eEuORpXue7O+kFFMHprNI8akTYcHv+sMdMgLFQD+beuH4p1YjDT9/Sdknq6AympZpbqHXMmtjAViObpQBf9g==
-  dependencies:
-    "@abp/ng.feature-management" "~6.0.3"
-    "@abp/ng.theme.shared" "~6.0.3"
-    tslib "^2.0.0"
-
 "@abp/ng.theme.lepton-x@^1.0.0-rc.7":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@abp/ng.theme.lepton-x/-/ng.theme.lepton-x-1.0.4.tgz#fe6f97d58fd528bd051ca02fdbd0745794415607"
@@ -96,7 +79,7 @@
     "@volo/ngx-lepton-x.lite" "1.0.4"
     tslib "^2.1.0"
 
-"@abp/ng.theme.shared@~6.0.0", "@abp/ng.theme.shared@~6.0.3":
+"@abp/ng.theme.shared@~6.0.3":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@abp/ng.theme.shared/-/ng.theme.shared-6.0.3.tgz#6e2b68e7e68a19396dbaa6d3773d856009200e2b"
   integrity sha512-ZIfjmwdtjhGO0MWQ0CKDY6f37LuU6cVRGGVVLs9pS+VA4zfNwQfuAmgyQY8JV/FAswMK6lR3s4cqI1hNaxcMuQ==

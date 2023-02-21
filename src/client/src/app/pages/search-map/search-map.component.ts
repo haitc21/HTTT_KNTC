@@ -84,18 +84,6 @@ export class SearchMapComponent implements OnInit {
     { value: 0, text: 'Đúng' },
     { value: 1, text: 'Sai' },
   ];
-
-  // loaiHSOption = [
-  //   { value: 0, text: 'khiếu nại' },
-  //   { value: 1, text: 'Tố cáo' },
-  // ];
-  // linhVucOptions = [
-  //   { value: 0, text: 'Đất đai' },
-  //   { value: 1, text: 'Môi trường' },
-  //   { value: 2, text: 'Tài nguyên nước' },
-  //   { value: 3, text: 'Khoáng sản' },
-  // ];
-
   // ẩn hiện menu trái
   visibleFilterLeff = true;
   hideColumnState = 'visible';

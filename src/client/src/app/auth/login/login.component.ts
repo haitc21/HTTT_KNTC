@@ -69,6 +69,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     protected localizationService: LocalizationService
   ) {}
   ngOnInit() {
+    if (this.oAuthService.hasValidAccessToken) {
+      this.router.navigate(['/']);
+    }
     this.redirectUrl = this.route.snapshot.paramMap.get('redirectUrl') ?? '';
     this.buildForm();
   }
