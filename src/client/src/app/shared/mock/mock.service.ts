@@ -53,7 +53,8 @@ export class MockService {
     for (let index = 0; index < 500; index++) {
       let item = new HoSo();
       let randomDate = this.randomDates();
-      item.code = this.genCode();
+      // item.code = this.genCode();
+      item.code = 'HS' + index;
       item.sender = this.randomItemInArr(this.fullNames);
       item.area = this.randomItemInArr(this.districts);
       item.sentDate = randomDate[0];

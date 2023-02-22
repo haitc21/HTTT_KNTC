@@ -37,7 +37,7 @@ $gutter: 1rem; //for primeflex grid system
   left: 0;
   top: 0;
   width: 100%;
-  z-index: 1000 !important;
+  z-index: 10000 !important;
 
   .topmenu-logo {
     display: flex;
@@ -45,8 +45,9 @@ $gutter: 1rem; //for primeflex grid system
     align-items: center;
     font-size: 1.5rem;
     font-weight: 500;
-    width: 300px;
+    width: 385px;
     border-radius: 12px;
+    padding-left: 2rem;
     a {
       padding-left: 20px;
       color: #fff;
