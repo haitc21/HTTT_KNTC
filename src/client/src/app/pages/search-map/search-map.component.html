@@ -1,6 +1,8 @@
 <div class="animated fadeIn grid card">
   <!-- --------------Sidebar--------------------------------------------------------- -->
-  <div [@hideColumn]="hideColumnState" class="col-12 md:col-2 home-sidebar card">
+  <div [@hideColumn]="hideColumnState" class="col-12 md:col-2 home-sidebar">
+    <p-card>
+      
       <ng-template pTemplate="header">
         <h3 class="home-sidebar-header">Lớp bản đồ</h3>
       </ng-template>
@@ -75,6 +77,7 @@
         </div>
         <!-- ----------------------------------------------------------------------- -->
       </div>
+    </p-card>
   </div>
   <!-- ----------------------Main------------------------------------------------- -->
   <div [@expandColumn]="expandColumnState" class="col-12 md:col-10 grid">
