@@ -1,10 +1,9 @@
 import { Component, OnInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { UserDto, UsersService } from '@proxy/users';
-import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { FileService } from 'src/app/shared/services/file.service.spec';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NotificationService } from 'src/app/shared/services/notification.service';
@@ -26,8 +25,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public avatarImage;
   mode: string;
   avatarUrl: any;
-
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
+  avatarContent: File;
 
   // Validate
   validationMessages = {
@@ -89,11 +87,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.toggleBlockUI(true);
-    debugger;
     let user = this.form.value;
     user.userName = this.selectedEntity.userName;
     user.email = this.selectedEntity.email;
-
+    if (this.avatarContent) this.uploadAvatar();
     this.userService
       .updateUserInfo(this.config.data?.id, user)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -108,6 +105,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
       });
   }
 
+  uploadAvatar() {
+    this.toggleBlockUI(true);
+    this.fileService
+      .uploadAvatar(this.avatarContent)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: string) => {
+          this.toggleBlockUI(false);
+        },
+        error: () => {
+          this.toggleBlockUI(false);
+        },
+      });
+  }
   setMode(mode: string) {
     this.mode = mode;
     this.form.controls['userName'].clearValidators();
@@ -126,22 +137,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
       dob: [null],
     });
   }
-  myUploader(event) {
-    this.toggleBlockUI(true);
-    let fike = event.files[0];
-    this.fileService
-      .uploadAvatar(fike)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response: string) => {
-          this.notificationService.showSuccess('Tải lên ảnh đại diện thành công');
-          this.toggleBlockUI(false);
-        },
-        error: () => {
-          this.toggleBlockUI(false);
-        },
-      });
+  choseFile(event) {
+    this.avatarContent = event.files[0];
   }
+  removeFile(event) {
+    this.avatarContent = null;
+  }
+
   getAvatar() {
     this.fileService.getAvatar(this.config.data?.id).subscribe(data => {
       if (data) {

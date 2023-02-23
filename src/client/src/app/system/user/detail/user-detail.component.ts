@@ -1,5 +1,12 @@
 import { Component, OnInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Validators, FormControl, FormGroup, FormBuilder, ValidatorFn, AbstractControl } from '@angular/forms';
+import {
+  Validators,
+  FormControl,
+  FormGroup,
+  FormBuilder,
+  ValidatorFn,
+  AbstractControl,
+} from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
@@ -22,22 +29,6 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   selectedEntity = {} as UserDto;
   public avatarImage;
   mode: string;
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
-
-  constructor(
-    public ref: DynamicDialogRef,
-    public config: DynamicDialogConfig,
-    private userService: UsersService,
-    private utilService: UtilityService,
-    private fb: FormBuilder
-  ) {}
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.close();
-    }
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
   // Validate
   validationMessages = {
     name: [{ type: 'required', message: 'Tên không được để trống' }],
@@ -60,6 +51,15 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   get formControls() {
     return this.form.controls;
   }
+
+  constructor(
+    public ref: DynamicDialogRef,
+    public config: DynamicDialogConfig,
+    private userService: UsersService,
+    private utilService: UtilityService,
+    private fb: FormBuilder
+  ) {}
+
   ngOnInit() {
     //Init form
     this.buildForm();
@@ -189,5 +189,12 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       const match = otherControl.value === control.value;
       return match ? null : { passwordMismatch: true };
     };
+  }
+  ngOnDestroy(): void {
+    if (this.ref) {
+      this.ref.close();
+    }
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

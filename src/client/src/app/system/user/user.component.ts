@@ -72,11 +72,6 @@ export class UserComponent implements OnInit, OnDestroy {
     private fileService: FileService
   ) {}
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
   ngOnInit() {
     this.getPermission();
     this.buildActionMenu();
@@ -363,7 +358,7 @@ export class UserComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
+
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.blockedPanel = true;
@@ -372,5 +367,9 @@ export class UserComponent implements OnInit, OnDestroy {
         this.blockedPanel = false;
       }, 300);
     }
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

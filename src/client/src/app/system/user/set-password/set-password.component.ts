@@ -6,7 +6,6 @@ import {
   FormBuilder,
   ValidatorFn,
   AbstractControl,
-  ValidationErrors,
 } from '@angular/forms';
 import { RoleDto } from '@proxy/roles';
 import { UsersService } from '@proxy/users';
@@ -26,20 +25,6 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   public btnDisabled = false;
   public closeBtnName: string;
   selectedEntity = {} as RoleDto;
-
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
-
-  constructor(
-    public ref: DynamicDialogRef,
-    public config: DynamicDialogConfig,
-    private userService: UsersService,
-    private fb: FormBuilder
-  ) {}
-
-  ngOnInit() {
-    this.buildForm();
-  }
-
   // Validate
   noSpecial: RegExp = /^[^<>*!_~]+$/;
   validationMessages = {
@@ -57,6 +42,17 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   };
   get formControls() {
     return this.form.controls;
+  }
+
+  constructor(
+    public ref: DynamicDialogRef,
+    public config: DynamicDialogConfig,
+    private userService: UsersService,
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit() {
+    this.buildForm();
   }
 
   saveChange() {
@@ -84,7 +80,7 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
           '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
         ),
       ])
-    )
+    );
     this.form = this.fb.group({
       newPassword: password,
       confirmNewPassword: new FormControl(null, [this.matchPasswordValidator(password)]),

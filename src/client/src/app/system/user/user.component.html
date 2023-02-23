@@ -6,6 +6,7 @@
           *abpPermission="'AbpIdentity.Users.Create'"
           pButton
           pRipple
+          type="button"
           [label]="Actions.CREATE"
           icon="pi pi-plus"
           class="p-button-success mr-1"
@@ -17,6 +18,7 @@
           *abpPermission="'AbpIdentity.Users.Delete'"
           pButton
           pRipple
+          type="button"
           [label]="Delete"
           icon="pi pi-trash"
           class="p-button-danger"
@@ -38,6 +40,7 @@
           />
           <button
             pButton
+            type="button"
             icon="pi pi-filter"
             class="p-button-info"
             [pTooltip]="Actions.ADVANCE_SEARCH"
@@ -188,7 +191,6 @@
     </div>
     <ng-template pTemplate="footer">
       <button
-        *abpPermission="'AbpIdentity.Users.Create'"
         pButton
         pRipple
         [label]="Actions.SEARCH"

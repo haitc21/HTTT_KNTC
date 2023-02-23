@@ -19,8 +19,6 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   public closeBtnName: string;
   selectedEntity = {} as RoleDto;
 
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
-
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
@@ -29,13 +27,6 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder
   ) {}
 
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.close();
-    }
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
   ngOnInit() {
     this.buildForm();
     if (this.utilService.isEmpty(this.config.data?.id) == false) {
@@ -114,7 +105,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
       description: [null, [Validators.required, Validators.maxLength(500)]],
       isPublic: [true],
       isDefault: [false],
-      concurrencyStamp: [null]
+      concurrencyStamp: [null],
     });
   }
 
@@ -128,5 +119,12 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
         this.blockedPanelDetail = false;
       }, 300);
     }
+  }
+  ngOnDestroy(): void {
+    if (this.ref) {
+      this.ref.close();
+    }
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

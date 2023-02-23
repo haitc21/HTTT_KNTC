@@ -23,7 +23,6 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
   public closeBtnName: string;
   public availableRoles: IdentityRoleDto[] = [];
   public seletedRoles: IdentityRoleDto[] = [];
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
 
   constructor(
     public ref: DynamicDialogRef,
@@ -31,14 +30,6 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
     private userService: UsersService,
     private roleService: RolesService
   ) {}
-
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.close();
-    }
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   ngOnInit() {
     this.loadData();
@@ -57,8 +48,8 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
           this.toggleBlockUI(false);
         },
       });
-      this.toggleBlockUI(true);
-      this.userService
+    this.toggleBlockUI(true);
+    this.userService
       .getRoles(this.config.data.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -100,5 +91,12 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
         this.blockedPanelDetail = false;
       }, 300);
     }
+  }
+  ngOnDestroy(): void {
+    if (this.ref) {
+      this.ref.close();
+    }
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

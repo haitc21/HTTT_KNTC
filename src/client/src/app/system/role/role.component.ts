@@ -46,20 +46,20 @@ export class RoleComponent implements OnInit, OnDestroy {
     private permissionService: PermissionService
   ) {}
 
-  ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
-
   ngOnInit() {
     this.getPermission();
     this.loadData();
   }
-   getPermission() {
+  getPermission() {
     this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('AbpIdentity.Users.Update');
     this.hasPermissionDelete = this.permissionService.getGrantedPolicy('AbpIdentity.Users.Update');
-    this.hasPermissionManagementPermionsion = this.permissionService.getGrantedPolicy('AbpIdentity.Users.ManagePermissions');
-    this.visibleActionColumn =   this.hasPermissionUpdate || this.hasPermissionDelete || this.hasPermissionManagementPermionsion
+    this.hasPermissionManagementPermionsion = this.permissionService.getGrantedPolicy(
+      'AbpIdentity.Users.ManagePermissions'
+    );
+    this.visibleActionColumn =
+      this.hasPermissionUpdate ||
+      this.hasPermissionDelete ||
+      this.hasPermissionManagementPermionsion;
   }
 
   loadData() {
@@ -216,5 +216,9 @@ export class RoleComponent implements OnInit, OnDestroy {
         this.blockedPanel = false;
       }, 300);
     }
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
