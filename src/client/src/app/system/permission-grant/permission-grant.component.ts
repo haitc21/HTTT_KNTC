@@ -29,7 +29,6 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
   public groups: PermissionGroupDto[] = [];
   public permissions: PermissionGrantInfoDto[] = [];
   public selectedPermissions: string[] = [];
-  formSavedEventEmitter: EventEmitter<any> = new EventEmitter();
 
   groupedPermisssions: SelectItemGroup[] = [];
   pnlHeader: string = '';
@@ -41,14 +40,6 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     protected localizationService: LocalizationService
   ) {}
-
-  ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.close();
-    }
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
 
   ngOnInit() {
     this.loadDetail(this.config.data.providerName, this.config.data.providerKey);
@@ -135,5 +126,14 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
         this.blockedPanelDetail = false;
       }, 300);
     }
+  }
+  
+
+  ngOnDestroy(): void {
+    if (this.ref) {
+      this.ref.close();
+    }
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

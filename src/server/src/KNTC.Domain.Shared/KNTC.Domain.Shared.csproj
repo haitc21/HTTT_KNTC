@@ -21,11 +21,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Localization\KNTC\*.json" />
-    <Content Remove="Localization\KNTC\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Localization\KNTC\vi.json" />
   </ItemGroup>
 
   <ItemGroup>
