@@ -81,11 +81,20 @@
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td>
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-          <td>{{ row.userName }}</td>
+          <td>
+            <div class="flex align-items-center">
+              <img
+                [src]="row.avatarUrl ?? 'assets/images/avatar/anonimous.png'"
+                alt="User Avatar"
+                class="avatar"
+              />
+              <span>{{ row.userName }}</span>
+            </div>
+          </td>
           <td>{{ row.surname ? row.surname + ' ' + row.name : row.name }}</td>
           <td>{{ row.email }}</td>
           <td>{{ row.phoneNumber }}</td>
-          <td>{{ utilService.convertDateToLocal(row.userInfo.dob) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ utilService.convertDateToLocal(row.dob) | date : 'dd-MM-yyyy' }}</td>
           <td>
             <p-tag
               [severity]="row.isActive ? 'info' : 'warning'"

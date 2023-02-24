@@ -11,7 +11,7 @@ namespace KNTC.Users;
 public interface IUsersAppService
 {
     Task<UserDto> GetAsync(Guid id);
-    Task<PagedResultDto<UserDto>> GetListAsync(GetUserListDto input);
+    Task<PagedResultDto<UserListDto>> GetListAsync(GetUserListDto input);
     Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id);
     Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync(Guid id);
     Task<UserDto> GetUserInfoAsync(Guid id);

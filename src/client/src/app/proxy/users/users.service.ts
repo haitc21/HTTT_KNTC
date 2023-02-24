@@ -1,4 +1,4 @@
-import type { CrateAndUpdateUserDto, GetUserListDto, SetPasswordDto, UserDto, UserInfoDto } from './models';
+import type { CrateAndUpdateUserDto, GetUserListDto, SetPasswordDto, UserDto, UserInfoDto, UserListDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -53,7 +53,7 @@ export class UsersService {
     { apiName: this.apiName });
   
 
-  getAvatar = (userId?: string) =>
+  getAvatar = (userId: string) =>
     this.restService.request<any, number[]>({
       method: 'GET',
       url: `/api/app/users/avatar/${userId}`,
@@ -62,7 +62,7 @@ export class UsersService {
   
 
   getList = (input: GetUserListDto) =>
-    this.restService.request<any, PagedResultDto<UserDto>>({
+    this.restService.request<any, PagedResultDto<UserListDto>>({
       method: 'GET',
       url: '/api/app/users',
       params: { email: input.email, phoneNumber: input.phoneNumber, roleId: input.roleId, filter: input.filter, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
@@ -120,6 +120,7 @@ export class UsersService {
       body: input,
     },
     { apiName: this.apiName });
+  
 
   constructor(private restService: RestService) {}
 }

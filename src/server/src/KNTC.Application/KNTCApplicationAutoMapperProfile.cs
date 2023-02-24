@@ -24,6 +24,7 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<IdentityRole, RoleLookupDto>();
         //User
         CreateMap<IdentityUser, UserDto>();
+        CreateMap<IdentityUser, UserListDto>();
         CreateMap<UserInfo, UserInfoDto>();
         CreateMap<CrateAndUpdateUserDto, IdentityUser>();
         CreateMap<CrateAndUpdateUserDto, UserInfo>();

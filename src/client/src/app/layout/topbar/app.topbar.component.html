@@ -20,7 +20,7 @@
 
   <ng-template pTemplate="end">
     <span class="flex align-items-center">
-      <button
+      <!-- <button
         *ngIf="isAutenticated"
         pButton
         pRipple
@@ -29,7 +29,11 @@
         icon="fa fa-cogs"
         class="p-button-lg p-button-info mr-2"
         (click)="systemMenu.toggle($event)"
-      ></button>
+      ></button> -->
+      <a class="user-profile mr-2" *ngIf="isAutenticated" (click)="systemMenu.toggle($event)">
+        <span class="username"><i class="fa fa-cogs"></i> Hệ thống</span>
+      </a>
+
 
       <a class="user-profile" *ngIf="isAutenticated" (click)="userMenu.toggle($event)">
         <img

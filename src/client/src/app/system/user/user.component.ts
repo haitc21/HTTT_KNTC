@@ -1,14 +1,12 @@
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
 import {
-  GetIdentityUsersInput,
   IdentityUserCreateDto,
-  IdentityUserDto,
   IdentityUserUpdateDto,
 } from '@abp/ng.identity/proxy';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RoleLookupDto, RolesService } from '@proxy/roles';
-import { GetUserListDto, UserDto, UsersService } from '@proxy/users';
+import { GetUserListDto, UserListDto, UsersService } from '@proxy/users';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -16,7 +14,6 @@ import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { USER_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
 import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
-import { FileService } from 'src/app/shared/services/file.service.spec';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { PermissionGrantComponent } from '../permission-grant/permission-grant.component';
@@ -41,8 +38,9 @@ export class UserComponent implements OnInit, OnDestroy {
   Actions = Actions;
 
   //Business variables
-  public items: IdentityUserDto[];
-  public selectedItems: IdentityUserDto[] = [];
+  public items: any[];
+  public selectedItems: UserListDto[] = [];
+  actionItem: UserListDto;
   public keyword: string = '';
   filter: GetUserListDto;
   emailSearch: string = '';
@@ -52,7 +50,6 @@ export class UserComponent implements OnInit, OnDestroy {
   roleOptions: RoleLookupDto[] = [];
 
   actionMenu: MenuItem[];
-  actionItem: IdentityUserDto;
 
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
@@ -69,7 +66,6 @@ export class UserComponent implements OnInit, OnDestroy {
     private permissionService: PermissionService,
     private utilService: UtilityService,
     private sanitizer: DomSanitizer,
-    private fileService: FileService
   ) {}
 
   ngOnInit() {
@@ -172,9 +168,14 @@ export class UserComponent implements OnInit, OnDestroy {
       .getList(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: PagedResultDto<UserDto>) => {
+        next: (response: PagedResultDto<UserListDto>) => {
           this.items = response.items;
-          // console.log("user",this.items);
+          this.items.forEach(x => {
+            if (x.avatarContent) {
+              let objectURL = 'data:image/png;base64,' + x.avatarContent;
+              x.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            }
+          });
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
         },
