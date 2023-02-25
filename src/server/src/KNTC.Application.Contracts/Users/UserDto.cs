@@ -8,4 +8,5 @@ public class UserDto : IdentityUserDto
 {
     public IList<string> Roles { get; set; }
     public UserInfoDto UserInfo { get; set; }
+    public byte[] AvatarContent { get; set; }
 }

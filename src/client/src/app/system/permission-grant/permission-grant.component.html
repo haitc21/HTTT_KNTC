@@ -11,8 +11,11 @@
     [listStyle]="{ 'max-height': '250px' }"
   >
     <ng-template let-group pTemplate="group">
-      <div class="p-d-flex p-ai-center">
-        <span>{{ group.label }}</span>
+      <div
+        class="flex justify-content-center align-items-center"
+        style="background-color: #3b82f6; height: 3rem"
+      >
+        <span style="color: #fff; text-align: center">{{ group.label }}</span>
       </div>
     </ng-template>
   </p-listbox>
@@ -22,11 +25,10 @@
       pRipples
       type="submit"
       label="Lưu"
-      class=" p-button-info"
+      class="p-button-info"
       icon="pi pi-check"
       (click)="saveChange()"
-    >
-    </button>
+    ></button>
   </ng-template>
 
   <p-blockUI [target]="pnlPm" [blocked]="blockedPanelDetail">

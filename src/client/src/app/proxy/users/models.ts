@@ -19,9 +19,21 @@ export interface SetPasswordDto {
 export interface UserDto extends IdentityUserDto {
   roles: string[];
   userInfo: UserInfoDto;
+  avatarContent: number[];
 }
 
 export interface UserInfoDto extends EntityDto<string> {
   userId?: string;
   dob?: string;
+}
+
+export interface UserListDto extends EntityDto<string> {
+  userName?: string;
+  name?: string;
+  surname?: string;
+  email?: string;
+  phoneNumber?: string;
+  dob?: string;
+  avatarContent: number[];
+  isActive: boolean;
 }

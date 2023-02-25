@@ -6,6 +6,7 @@
           *abpPermission="'AbpIdentity.Users.Create'"
           pButton
           pRipple
+          type="button"
           [label]="Actions.CREATE"
           icon="pi pi-plus"
           class="p-button-success mr-1"
@@ -17,6 +18,7 @@
           *abpPermission="'AbpIdentity.Users.Delete'"
           pButton
           pRipple
+          type="button"
           [label]="Delete"
           icon="pi pi-trash"
           class="p-button-danger"
@@ -38,6 +40,7 @@
           />
           <button
             pButton
+            type="button"
             icon="pi pi-filter"
             class="p-button-info"
             [pTooltip]="Actions.ADVANCE_SEARCH"
@@ -78,11 +81,20 @@
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td>
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-          <td>{{ row.userName }}</td>
+          <td>
+            <div class="flex align-items-center">
+              <img
+                [src]="row.avatarUrl ?? 'assets/images/avatar/anonimous.png'"
+                alt="User Avatar"
+                class="avatar"
+              />
+              <span>{{ row.userName }}</span>
+            </div>
+          </td>
           <td>{{ row.surname ? row.surname + ' ' + row.name : row.name }}</td>
           <td>{{ row.email }}</td>
           <td>{{ row.phoneNumber }}</td>
-          <td>{{ utilService.convertDateToLocal(row.userInfo.dob) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ utilService.convertDateToLocal(row.dob) | date : 'dd-MM-yyyy' }}</td>
           <td>
             <p-tag
               [severity]="row.isActive ? 'info' : 'warning'"
@@ -188,7 +200,6 @@
     </div>
     <ng-template pTemplate="footer">
       <button
-        *abpPermission="'AbpIdentity.Users.Create'"
         pButton
         pRipple
         [label]="Actions.SEARCH"

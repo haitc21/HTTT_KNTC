@@ -19,6 +19,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectExtending;
 using Volo.Abp.Users;
+using static Volo.Abp.Identity.IdentityPermissions;
 using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 
 namespace KNTC.Users;
@@ -57,12 +58,13 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         );
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
         result.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
+        result.AvatarContent = await _fileContainer.GetAllBytesOrNullAsync(id.ToString());
         return result;
     }
 
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<PagedResultDto<UserDto>> GetListAsync(GetUserListDto input)
+    public virtual async Task<PagedResultDto<UserListDto>> GetListAsync(GetUserListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -84,14 +86,15 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
                                         input.PhoneNumber,
                                         input.Email);
         
-        var result = new PagedResultDto<UserDto>(
+        var result = new PagedResultDto<UserListDto>(
             count,
-            ObjectMapper.Map<List<IdentityUser>, List<UserDto>>(list)
+            ObjectMapper.Map<List<IdentityUser>, List<UserListDto>>(list)
         );
         foreach (var item in result.Items)
         {
             var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == item.Id);
-            item.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
+            item.Dob = userInfo.Dob;
+            item.AvatarContent = await _fileContainer.GetAllBytesOrNullAsync(item.Id.ToString());
         }
         return result;
     }

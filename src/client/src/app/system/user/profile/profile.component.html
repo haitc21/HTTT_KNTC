@@ -20,7 +20,9 @@
           uploadLabel="Tải lên"
           cancelLabel="Hủy"
           maxFileSize="100000"
-          (uploadHandler)="myUploader($event)"
+          [auto]="true"
+          (uploadHandler)="choseFile($event)"
+          (onRemove)="removeFile($event)"
         ></p-fileUpload>
       </div>
     </div>

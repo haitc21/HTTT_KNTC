@@ -4,6 +4,7 @@
       <ng-template pTemplate="left">
         <button
           *abpPermission="'AbpIdentity.Roles.Create'"
+          type="button"
           pButton
           pRipple
           [label]="Actions.CREATE"
@@ -15,6 +16,7 @@
         ></button>
         <button
           *abpPermission="'AbpIdentity.Roles.Delete'"
+          type="button"
           pButton
           pRipple
           [label]="Delete"
@@ -89,6 +91,7 @@
           <td *ngIf="visibleActionColumn">
             <button
               *abpPermission="'AbpIdentity.Roles.Update'"
+              type="button"
               pButton
               pRipple
               icon="pi pi-pencil"
@@ -99,6 +102,7 @@
             ></button>
             <button
               *abpPermission="'AbpIdentity.Roles.ManagePermissions'"
+              type="button"
               pButton
               pRipple
               icon="pi pi-wrench"
@@ -110,6 +114,7 @@
 
             <button
               *abpPermission="'AbpIdentity.Roles.Delete'"
+              type="button"
               pButton
               pRipple
               icon="pi pi-trash"

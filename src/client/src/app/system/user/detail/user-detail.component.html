@@ -5,129 +5,147 @@
   (ngSubmit)="saveChange()"
 >
   <p-panel #pnlDetail [collapsed]="false">
-    <div class="formgrid grid">
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-6">
-        <span class="p-float-label">
-          <input id="userName" type="text" pInputText formControlName="userName" class="w-full" />
-          <label for="userName">Tài khoản <span class="required">*</span></label>
-        </span>
-        <app-validation-message
-          [entityControl]="formControls.userName"
-          [validationMessages]="validationMessages.userName"
-        >
-        </app-validation-message>
+    <div class="grid">
+      <!-- --------------------------------AVATAR-------------------------------------------------- -->
+
+      <div *ngIf="mode == 'update'" class="col-12 md:col-4 flex flex-column justify-content-cente">
+        <div class="flex justify-content-center w-full">
+          <p-image
+            [src]="avatarUrl ?? 'assets/images/avatar/anonimous.png'"
+            alt="Image"
+            preview="true"
+            width="250"
+            height="250"
+          ></p-image>
+        </div>
       </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-6">
-        <span class="p-float-label">
-          <input id="email" type="text" pInputText formControlName="email" class="w-full" />
-          <label for="email">Email<span class="required">*</span></label>
-        </span>
-        <app-validation-message
-          [entityControl]="formControls.email"
-          [validationMessages]="validationMessages.email"
-        >
-        </app-validation-message>
+      <!-- --------------------------------------FORM-------------------------------------------- -->
+
+      <div class="grid" [ngClass]="mode == 'create' ? 'col-12' : 'col-12 md:col-8'">
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-6">
+          <span class="p-float-label">
+            <input id="userName" type="text" pInputText formControlName="userName" class="w-full" />
+            <label for="userName">Tài khoản <span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.userName"
+            [validationMessages]="validationMessages.userName"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-6">
+          <span class="p-float-label">
+            <input id="email" type="text" pInputText formControlName="email" class="w-full" />
+            <label for="email">Email<span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.email"
+            [validationMessages]="validationMessages.email"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-6" *ngIf="mode == 'create'">
+          <span class="p-float-label">
+            <p-password
+              id="password"
+              formControlName="password"
+              [toggleMask]="true"
+              styleClass="w-full"
+              inputId="inputPassword"
+            ></p-password>
+            <label for="password">Mật khẩu <span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.password"
+            [validationMessages]="validationMessages.password"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-6" *ngIf="mode == 'create'">
+          <span class="p-float-label">
+            <p-password
+              appendTo="body"
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              [toggleMask]="true"
+              styleClass="w-full"
+              inputId="inputPassword"
+            ></p-password>
+            <label for="password">Xác nhận khẩu <span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.confirmPassword"
+            [validationMessages]="validationMessages.confirmPassword"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-6">
+          <span class="p-float-label">
+            <input id="surname" type="text" pInputText formControlName="surname" class="w-full" />
+            <label for="surname">Họ<span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.surname"
+            [validationMessages]="validationMessages.surname"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-6">
+          <span class="p-float-label">
+            <input id="name" type="text" pInputText formControlName="name" class="w-full" />
+            <label for="name" class="block">Tên <span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.name"
+            [validationMessages]="validationMessages.name"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-6">
+          <span class="p-float-label">
+            <input
+              id="phoneNumber"
+              type="text"
+              pInputText
+              formControlName="phoneNumber"
+              class="w-full"
+            />
+            <label for="phoneNumber">Số ĐT<span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.phoneNumber"
+            [validationMessages]="validationMessages.phoneNumber"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-6">
+          <span class="p-float-label">
+            <p-calendar
+              appendTo="body"
+              formControlName="dob"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              inputId="dob"
+            ></p-calendar>
+            <label for="dob">Ngày sinh</label>
+          </span>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-6">
+          <p-checkbox binary="true" label="Kích hoạt" formControlName="isActive"></p-checkbox>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
       </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-6" *ngIf="mode == 'create'">
-        <span class="p-float-label">
-          <p-password
-            id="password"
-            formControlName="password"
-            [toggleMask]="true"
-            styleClass="w-full"
-            inputId="inputPassword"
-          ></p-password>
-          <label for="password">Mật khẩu <span class="required">*</span></label>
-        </span>
-        <app-validation-message
-          [entityControl]="formControls.password"
-          [validationMessages]="validationMessages.password"
-        >
-        </app-validation-message>
-      </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-6" *ngIf="mode == 'create'">
-        <span class="p-float-label">
-          <p-password
-          appendTo="body"
-            id="confirmPassword"
-            formControlName="confirmPassword"
-            [toggleMask]="true"
-            styleClass="w-full"
-            inputId="inputconfirmPassword"
-          ></p-password>
-          <label for="password">Xác nhận khẩu <span class="required">*</span></label>
-        </span>
-        <app-validation-message
-          [entityControl]="formControls.confirmPassword"
-          [validationMessages]="validationMessages.confirmPassword"
-        >
-        </app-validation-message>
-      </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-6">
-        <span class="p-float-label">
-          <input id="surname" type="text" pInputText formControlName="surname" class="w-full" />
-          <label for="surname">Họ<span class="required">*</span></label>
-        </span>
-        <app-validation-message
-          [entityControl]="formControls.surname"
-          [validationMessages]="validationMessages.surname"
-        >
-        </app-validation-message>
-      </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-6">
-        <span class="p-float-label">
-          <input id="name" type="text" pInputText formControlName="name" class="w-full" />
-          <label for="name" class="block">Tên <span class="required">*</span></label>
-        </span>
-        <app-validation-message
-          [entityControl]="formControls.name"
-          [validationMessages]="validationMessages.name"
-        >
-        </app-validation-message>
-      </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-6">
-        <span class="p-float-label">
-          <input
-            id="phoneNumber"
-            type="text"
-            pInputText
-            formControlName="phoneNumber"
-            class="w-full"
-          />
-          <label for="phoneNumber">Số ĐT<span class="required">*</span></label>
-        </span>
-        <app-validation-message
-          [entityControl]="formControls.phoneNumber"
-          [validationMessages]="validationMessages.phoneNumber"
-        >
-        </app-validation-message>
-      </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-6">
-        <span class="p-float-label">
-          <p-calendar
-            appendTo="body"
-            formControlName="dob"
-            dateFormat="dd/mm/yy"
-            [showIcon]="true"
-            inputId="dob"
-          ></p-calendar>
-          <label for="dob">Ngày sinh</label>
-        </span>
-      </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-6">
-        <p-checkbox binary="true" label="Kích hoạt" formControlName="isActive"></p-checkbox>
-      </div>
-      <!-- ---------------------------------------------------------------------------------- -->
     </div>
+
     <!-- ---------------------------------------------------------------------------------- -->
 
     <ng-template pTemplate="footer">
