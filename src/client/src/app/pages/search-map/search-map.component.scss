@@ -1,13 +1,14 @@
 .home-sidebar {
   // background-color: var(--gray-500);
   // height: 500px;
-  margin-top: 1rem;
+  //margin-top: 1rem;
 }
 .home-sidebar-header {
   background-color: #0277bd;
   color: #fff;
   text-align: center;
-  height: 3rem;
+  height: 2.5rem;
+  padding-top: 5px;
 }
 .inputgroup {
   display: flex;
@@ -21,12 +22,12 @@
   width: 100%;
   span {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     margin-left: 10px;
   }
   .icon-red {
-    width: 3rem;
+    /*width: 3rem;
     height: 3rem;
-    margin-left: -10px;
+    margin-left: -10px;*/
   }
 }

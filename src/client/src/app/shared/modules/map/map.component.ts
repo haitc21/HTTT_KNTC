@@ -21,7 +21,7 @@ const blueIcon = new L.Icon({
 });
 const redIcon = new L.Icon({
   iconUrl: 'assets/images/map/marker-icon-red.png',
-  iconSize: [38, 45],
+  iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],

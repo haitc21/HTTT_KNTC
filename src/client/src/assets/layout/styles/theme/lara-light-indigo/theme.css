@@ -1914,7 +1914,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: #6c757d;
 }
 .p-button.p-button-text.p-button-plain:enabled:hover {
-  background: #e9ecef;
+  background: #0277bd;
   color: #6c757d;
 }
 .p-button.p-button-text.p-button-plain:enabled:active {
@@ -1953,8 +1953,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   border-radius: 2rem;
 }
 .p-button.p-button-icon-only {
-  width: 3rem;
-  padding: 0.75rem 0;
+  width: 2rem;
+  padding: 0.75rem 2;
 }
 .p-button.p-button-icon-only .p-button-icon-left,
 .p-button.p-button-icon-only .p-button-icon-right {
@@ -1973,7 +1973,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 .p-button.p-button-lg {
   font-size: 1.25rem;
-  padding: 0.9375rem 1.5625rem;
+  /*padding: 0.9375rem 1.5625rem;*/
 }
 .p-button.p-button-lg .p-button-icon {
   font-size: 1.25rem;
@@ -4052,11 +4052,14 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 }
 
 .p-card {
-  background: #ffffff;
-  color: #495057;
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
-  border-radius: 6px;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 0.1875rem;
 }
+
 .p-card .p-card-body {
   padding: 1.25rem;
 }
