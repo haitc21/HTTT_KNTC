@@ -28,7 +28,7 @@ export class AppComponent {
 
   ngOnInit() {
     this.primengConfig.ripple = true;
-    document.documentElement.style.fontSize = '0.8rem';
+    document.documentElement.style.fontSize = '14px';
     this.primengConfig.setTranslation({
       firstDayOfWeek: 0,
       dayNames: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
