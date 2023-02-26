@@ -1851,17 +1851,19 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-button {
   color: #ffffff;
-  background: #6366F1;
-  border: 1px solid #6366F1;
+  background: #1890ff;
+  border: 1px solid #1890ff;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition: all .3s cubic-bezier(.645,.045,.355,1);
   border-radius: 6px;
+  text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
+  box-shadow: 0 2px 0 rgb(0 0 0 / 5%);
 }
 .p-button:enabled:hover {
-  background: #4F46E5;
+  background: #40a9ff;
   color: #ffffff;
-  border-color: #4F46E5;
+  border-color: #40a9ff;
 }
 .p-button:enabled:active {
   background: #4338CA;
@@ -4984,6 +4986,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: #495057;
   border: 1px solid #dee2e6;
   border-radius: 6px;
+  cursor: pointer;
 }
 .p-menubar .p-menuitem-link {
   padding: 0.75rem 1.25rem;
@@ -5539,18 +5542,20 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-tieredmenu {
   padding: 0.25rem 0;
-  background: #ffffff;
   color: #495057;
   border: 1px solid #dee2e6;
-  border-radius: 6px;
   width: 12.5rem;
+  background-color: #fff;
+  background-clip: padding-box;
+  border-radius: 4px;
+  outline: none;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
 }
 .p-tieredmenu .p-menuitem-link {
   padding: 0.75rem 1.25rem;
   color: #495057;
   border-radius: 0;
   transition: box-shadow 0.2s;
-  user-select: none;
 }
 .p-tieredmenu .p-menuitem-link .p-menuitem-text {
   color: #495057;
@@ -5563,7 +5568,7 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   color: #6c757d;
 }
 .p-tieredmenu .p-menuitem-link:not(.p-disabled):hover {
-  background: #e9ecef;
+  background: #29b6f6;
 }
 .p-tieredmenu .p-menuitem-link:not(.p-disabled):hover .p-menuitem-text {
   color: #495057;
@@ -5597,13 +5602,13 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   margin: 0;
 }
 .p-tieredmenu .p-menuitem.p-menuitem-active > .p-menuitem-link {
-  background: #EEF2FF;
+  background: #29b6f6;
 }
 .p-tieredmenu .p-menuitem.p-menuitem-active > .p-menuitem-link .p-menuitem-text {
-  color: #4338CA;
+  color: #FFFFFF;
 }
 .p-tieredmenu .p-menuitem.p-menuitem-active > .p-menuitem-link .p-menuitem-icon, .p-tieredmenu .p-menuitem.p-menuitem-active > .p-menuitem-link .p-submenu-icon {
-  color: #4338CA;
+  color: #FFFFFF;
 }
 .p-tieredmenu .p-menu-separator {
   border-top: 1px solid #dee2e6;

@@ -97,13 +97,8 @@ export class AppTopBarComponent implements OnInit {
         routerLink: ['/'],
       },
       {
-        label: 'Dash Board',
-        icon: 'pi pi-fw pi-calendar',
-        routerLink: ['/pages/dashboard'],
-      },
-      {
         label: 'Bản đồ',
-        icon: 'pi pi-fw pi-map',
+        icon: 'pi pi-fw pi-map-marker',
         routerLink: ['/pages/map'],
       },
       {
@@ -152,6 +147,25 @@ export class AppTopBarComponent implements OnInit {
           },
         ],
       },
+      {
+        label: 'Thống kê',
+        icon: 'fa fa-chart-bar',
+        items: [
+          {
+            label: 'Dashboard',
+            routerLink: ['/pages/dashboard'],
+          },
+          {
+            label: 'Hồ sơ',
+            routerLink: ['/pages/reports'],
+          },
+
+          {
+            label: 'Bảng tổng hợp',
+            routerLink: ['/pages/stats'],
+          }
+        ],
+      },
     ];
   }
 
@@ -162,7 +176,7 @@ export class AppTopBarComponent implements OnInit {
         routerLink: ['/'],
       },
       {
-        label: 'Quản lý ngời dùng',
+        label: 'Quản lý người dùng',
         // icon: 'pi pi-fw pi-users',
         routerLink: ['/system/user'],
         visible: this.permissionService.getGrantedPolicy('AbpIdentity.Users'),
