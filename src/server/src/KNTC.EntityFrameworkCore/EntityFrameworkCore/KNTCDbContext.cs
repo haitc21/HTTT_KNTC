@@ -88,25 +88,25 @@ public class KNTCDbContext :
             b.HasIndex(x => x.MaHoSo);
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(HoSoConsts.MaxCodeLength);
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(HoSoConsts.MaxTieuDeLength);
-            b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi");
+            b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(HoSoConsts.MaxNguoiDeNghiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(HoSoConsts.MaxCccdCmndLength);
             b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
             b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(HoSoConsts.MaxNoiCapCccdCmnd);
             b.Property(x => x.NgaySinh).IsRequired().HasColumnName("ngay_sinh");
             b.Property(x => x.DienThaoi).IsRequired().HasColumnName("dien_thoai").HasMaxLength(HoSoConsts.MaxSDTLength);
-            b.Property(x => x.Email).IsRequired().HasColumnName("email").HasMaxLength(HoSoConsts.MaxEmailLength);
-            b.Property(x => x.DiaChioThuongTru).IsRequired().HasColumnName("dia_chi_thuong_tru").HasMaxLength(HoSoConsts.MaxDiaChiLength);
+            b.Property(x => x.Email).HasColumnName("email").HasMaxLength(HoSoConsts.MaxEmailLength);
+            b.Property(x => x.DiaChiThuongTru).IsRequired().HasColumnName("dia_chi_thuong_tru").HasMaxLength(HoSoConsts.MaxDiaChiLength);
             b.Property(x => x.DiaChiLienHe).IsRequired().HasColumnName("dia_chi_lien_he").HasMaxLength(HoSoConsts.MaxDiaChiLength);
             b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(HoSoConsts.MaxMaDiaDanhLength);
             b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(HoSoConsts.MaxMaDiaDanhLength);
             b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(HoSoConsts.MaxMaDiaDanhLength);
-           
             b.Property(x => x.LoaiVuViec).IsRequired().HasColumnName("loai_vu_viec");
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.NgayTiepNhan).HasColumnName("ngay_tiep_nhan");
             b.Property(x => x.NgayHenTraKQ).HasColumnName("ngay_hen_tra_kq");
+
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");
-            b.Property(x => x.SoThua).HasColumnName("so_thua").HasMaxLength(HoSoConsts.MáoThuaLength);
+            b.Property(x => x.SoThua).HasColumnName("so_thua").HasMaxLength(HoSoConsts.MaxSoThuaLength);
             b.Property(x => x.ToBanDo).HasColumnName("to_ban_do").HasMaxLength(HoSoConsts.MaxToBanDoLength);
             b.Property(x => x.DienTich).HasColumnName("dien_tich").HasMaxLength(HoSoConsts.MaxDienTichLength);
             b.Property(x => x.LoaiDat).HasColumnName("loai_dat").HasMaxLength(HoSoConsts.MaxLoaiDatLength);
@@ -142,8 +142,8 @@ public class KNTCDbContext :
             b.Property(x => x.NgayTraKQ).IsRequired().HasColumnName("ngay_tra_kq");
             b.Property(x => x.ThamQuyen).IsRequired().HasColumnName("tham_quyen").HasMaxLength(HoSoConsts.MaxThamQuyenLength);
             b.Property(x => x.SoQD).IsRequired().HasColumnName("so_qd").HasMaxLength(HoSoConsts.MaxSoQDLength);
-            b.Property(x => x.GhiChu).IsRequired().HasColumnName("ghi_chu").HasMaxLength(HoSoConsts.MaxGhiChuLength);
-            b.Property(x => x.KetQua).HasColumnName("ket_qua");
+            b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(HoSoConsts.MaxGhiChuLength);
+            b.Property(x => x.KetQua).IsRequired().HasColumnName("ket_qua");
         });
 
         builder.Entity<TepDinhKemHoSo>(b =>
@@ -152,10 +152,10 @@ public class KNTCDbContext :
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(x => x.IdHoSo).IsRequired().HasColumnName("id_ho_so");
             b.Property(x => x.TenTaiLieu).IsRequired().HasColumnName("ten_tai_lieu").HasMaxLength(HoSoConsts.MaxTenTaiLieuLength);
-            b.Property(x => x.HinhThuc).IsRequired().HasColumnName("hinh_thuc").HasMaxLength(HoSoConsts.MaxHinhThuc);
+            b.Property(x => x.HinhThuc).IsRequired().HasColumnName("hinh_thuc").HasMaxLength(HoSoConsts.MaxHinhThucLength);
             b.Property(x => x.ThoiGianBanHanh).HasColumnName("thoi_gian_ban_hanh");
             b.Property(x => x.NgayNhan).HasColumnName("ngay_nhan");
-            b.Property(x => x.ThuTuButLuc).HasColumnName("thu_tu_but_luc");
+            b.Property(x => x.ThuTuButLuc).HasColumnName("thu_tu_but_luc").HasMaxLength(HoSoConsts.MaxThuTuButLucLength);
             b.Property(x => x.NoiDungChinh).HasColumnName("noi_dung_chinh");
             b.Property(x => x.ContentType).IsRequired().HasColumnName("content_type").HasMaxLength(HoSoConsts.MaxContenTypeLength);
             b.Property(x => x.ContentLength).IsRequired().HasColumnName("content_length");

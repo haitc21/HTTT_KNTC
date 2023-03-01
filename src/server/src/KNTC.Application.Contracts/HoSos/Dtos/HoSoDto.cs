@@ -1,11 +1,12 @@
-﻿using KNTC.HoSos;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Volo.Abp.Domain.Entities.Auditing;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using Volo.Abp.Application.Dtos;
 
 namespace KNTC.HoSos;
 
-public class HoSo : FullAuditedAggregateRoot<Guid>
+public class HoSoDto : AuditedEntityDto<Guid>
 {
     public string MaHoSo { get; set; }
     public string TieuDe { get; set; }
@@ -38,6 +39,6 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
     public string DuLieuHinhHoc { get; set; }
     public short SoLanTraKQ { get; set; }
     public LoaiKetQua KetQua { get; set; }
-    public virtual ICollection<KQGQHoSo> KQGQHoSos { get; set; }
-    public virtual ICollection<TepDinhKemHoSo> TepDinhKemHoSos { get; set; }
+    public virtual List<KQGQHoSoDto> KQGQHoSos { get; set; }
+    public virtual List<TepDinhKemHoSoDto> TepDinhKemHoSos { get; set; }
 }
