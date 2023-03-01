@@ -46,6 +46,12 @@ public class KNTCDomainSharedModule : AbpModule
                 .Add<KNTCResource>("vi")
                 .AddBaseTypes(typeof(AbpValidationResource))
                 .AddVirtualJson("/Localization/KNTC");
+            options.Resources
+                .Get<KNTCResource>()
+                .AddVirtualJson("/Localization/KNTCPm");
+            options.Resources
+                .Get<KNTCResource>()
+                .AddVirtualJson("/Localization/KNTCEx");
 
             options.DefaultResourceType = typeof(KNTCResource);
         });
