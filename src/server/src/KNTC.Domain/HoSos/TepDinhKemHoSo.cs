@@ -18,6 +18,7 @@ public class TepDinhKemHoSo : FullAuditedEntity<Guid>
     public DateTime NgayNhan { get; set; }
     public short ThuTuButLuc { get; set; }
     public string NoiDungChinh { get; set; }
+    public string FileName { get; }
     public string ContentType { get; }
     public long? ContentLength { get; }
 

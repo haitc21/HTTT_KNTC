@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.HoSos;
@@ -66,7 +67,7 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
         );
     }
 
-    internal NOMStructDataType ChangeMaHoSo([NotNull] string maHoSo)
+    internal HoSo ChangeMaHoSo([NotNull] string maHoSo)
     {
         SetMaHoSo(maHoSo);
         return this;

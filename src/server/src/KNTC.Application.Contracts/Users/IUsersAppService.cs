@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
@@ -22,6 +23,6 @@ public interface IUsersAppService
     Task DeleteAsync(Guid id);
     Task DeleteMultipleAsync(IEnumerable<Guid> ids);
     Task SetPasswordAsync(Guid userId, SetPasswordDto input);
-    Task<string> UploadAvatarAsync(IRemoteStreamContent file);
+    Task<string> UploadAvatarAsync(IFormFile file);
     Task<byte[]> GetAvatarAsync(Guid? userId);
 }

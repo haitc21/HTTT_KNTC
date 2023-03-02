@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -23,4 +24,6 @@ public class CreateAndUpdateTepDinhKemHoSoDto : EntityDto<Guid>
     [MaxLength(HoSoConsts.MaxThuTuButLucLength)]
     public short ThuTuButLuc { get; set; }
     public string NoiDungChinh { get; set; }
+    public IFormFile FileContent { get; set; }
+    public bool IsChangeFile { get; set; }
 }
