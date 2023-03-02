@@ -155,7 +155,7 @@ public class KNTCDbContext :
             b.Property(x => x.HinhThuc).IsRequired().HasColumnName("hinh_thuc").HasMaxLength(HoSoConsts.MaxHinhThucLength);
             b.Property(x => x.ThoiGianBanHanh).HasColumnName("thoi_gian_ban_hanh");
             b.Property(x => x.NgayNhan).HasColumnName("ngay_nhan");
-            b.Property(x => x.ThuTuButLuc).HasColumnName("thu_tu_but_luc").HasMaxLength(HoSoConsts.MaxThuTuButLucLength);
+            b.Property(x => x.ThuTuButLuc).IsRequired().HasColumnName("thu_tu_but_luc").HasMaxLength(HoSoConsts.MaxThuTuButLucLength);
             b.Property(x => x.NoiDungChinh).HasColumnName("noi_dung_chinh");
             b.Property(x => x.FileName).IsRequired().HasColumnName("file_name").HasMaxLength(HoSoConsts.MaxFileNameLength);
             b.Property(x => x.ContentType).IsRequired().HasColumnName("content_type").HasMaxLength(HoSoConsts.MaxContenTypeLength);

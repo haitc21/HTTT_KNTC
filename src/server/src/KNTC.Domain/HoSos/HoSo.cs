@@ -72,5 +72,4 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
         SetMaHoSo(maHoSo);
         return this;
     }
-
 }

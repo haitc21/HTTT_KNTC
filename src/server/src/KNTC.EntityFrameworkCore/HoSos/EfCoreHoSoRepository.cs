@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -57,5 +58,13 @@ public class EfCoreHoSoRepository : EfCoreRepository<KNTCDbContext, HoSo, Guid>,
             .Skip(skipCount)
             .Take(maxResultCount)
             .ToListAsync();
+    }
+
+    public async Task<HoSo> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false)
+    {
+        var dbSet = await GetDbSetAsync();
+        return await dbSet.IncludeIf(includeDetails, a => a.KQGQHoSos)
+                          .IncludeIf(includeDetails, a => a.TepDinhKemHoSos)
+                          .FirstOrDefaultAsync(x => x.MaHoSo == maHoSo);
     }
 }

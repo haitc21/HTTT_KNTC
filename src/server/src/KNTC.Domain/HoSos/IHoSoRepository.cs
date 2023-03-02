@@ -18,4 +18,5 @@ public interface IHoSoRepository : IRepository<HoSo, Guid>
                      LinhVuc? LinhVuc,
                      LoaiKetQua? ketQua,
                      bool includeDetails = false);
+    Task<HoSo> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
 }

@@ -22,7 +22,7 @@ public class CreateAndUpdateTepDinhKemHoSoDto : EntityDto<Guid>
     public DateTime NgayNhan { get; set; }
     [Required]
     [MaxLength(HoSoConsts.MaxThuTuButLucLength)]
-    public short ThuTuButLuc { get; set; }
+    public string ThuTuButLuc { get; set; }
     public string NoiDungChinh { get; set; }
     public IFormFile FileContent { get; set; }
     public bool IsChangeFile { get; set; }

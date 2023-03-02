@@ -11,6 +11,14 @@ namespace KNTC.HoSos;
 
 public class KQGQHoSo : FullAuditedEntity<Guid>
 {
+    public KQGQHoSo()
+    {
+
+    }
+    public KQGQHoSo(Guid id) : base(id)
+    {
+
+    }
     public Guid IdHoSo { get; set; }
     public HoSo HoSo { get; set; }
     public short LanGQ { get; set; }
