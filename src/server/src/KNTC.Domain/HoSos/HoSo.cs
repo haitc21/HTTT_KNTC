@@ -1,12 +1,29 @@
 ﻿using KNTC.HoSos;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.HoSos;
 
 public class HoSo : FullAuditedAggregateRoot<Guid>
 {
+    public HoSo()
+    {
+        KQGQHoSos = new List<KQGQHoSo>();
+        TepDinhKemHoSos = new List<TepDinhKemHoSo>();
+    }
+    public HoSo(Guid id) : base(id)
+    {
+        KQGQHoSos = new List<KQGQHoSo>();
+        TepDinhKemHoSos = new List<TepDinhKemHoSo>();
+    }
+    public HoSo(Guid id, string maHoSo) : base(id)
+    {
+        MaHoSo = maHoSo;
+        KQGQHoSos = new List<KQGQHoSo>();
+        TepDinhKemHoSos = new List<TepDinhKemHoSo>();
+    }
     public string MaHoSo { get; set; }
     public string TieuDe { get; set; }
     public string NguoiDeNghi { get; set; }
@@ -40,4 +57,19 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
     public LoaiKetQua KetQua { get; set; }
     public virtual ICollection<KQGQHoSo> KQGQHoSos { get; set; }
     public virtual ICollection<TepDinhKemHoSo> TepDinhKemHoSos { get; set; }
+    private void SetMaHoSo([NotNull] string maHoSo)
+    {
+        MaHoSo = Check.NotNullOrWhiteSpace(
+            maHoSo,
+            nameof(maHoSo),
+            maxLength: HoSoConsts.MaxCodeLength
+        );
+    }
+
+    internal NOMStructDataType ChangeMaHoSo([NotNull] string maHoSo)
+    {
+        SetMaHoSo(maHoSo);
+        return this;
+    }
+
 }
