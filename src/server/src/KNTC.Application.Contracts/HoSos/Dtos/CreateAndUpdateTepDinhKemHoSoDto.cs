@@ -11,8 +11,6 @@ namespace KNTC.HoSos;
 public class CreateAndUpdateTepDinhKemHoSoDto : EntityDto<Guid>
 {
     [Required]
-    public Guid IdHoSo { get; set; }
-    [Required]
     [MaxLength(HoSoConsts.MaxTenTaiLieuLength)]
     public string TenTaiLieu { get; set; }
     [Required]

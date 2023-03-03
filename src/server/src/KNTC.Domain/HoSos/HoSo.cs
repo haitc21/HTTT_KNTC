@@ -56,8 +56,8 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
     public string DuLieuHinhHoc { get; set; }
     public short SoLanTraKQ { get; set; }
     public LoaiKetQua KetQua { get; set; }
-    public virtual ICollection<KQGQHoSo> KQGQHoSos { get; set; }
-    public virtual ICollection<TepDinhKemHoSo> TepDinhKemHoSos { get; set; }
+    public virtual List<KQGQHoSo> KQGQHoSos { get; set; }
+    public virtual List<TepDinhKemHoSo> TepDinhKemHoSos { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)
     {
         MaHoSo = Check.NotNullOrWhiteSpace(

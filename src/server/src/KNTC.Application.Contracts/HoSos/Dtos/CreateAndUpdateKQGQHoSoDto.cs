@@ -10,8 +10,6 @@ namespace KNTC.HoSos;
 public class CreateAndUpdateKQGQHoSoDto : EntityDto<Guid>
 {
     [Required]
-    public Guid IdHoSo { get; set; }
-    [Required]
     public short LanGQ { get; set; }
     [Required]
     public DateTime NgayTraKQ { get; set; }
