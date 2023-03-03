@@ -2,7 +2,7 @@
 
 namespace KNTC;
 
-public class BaseListFilterDto : PagedResultRequestDto
+public class BaseListFilterDto : PagedAndSortedResultRequestDto
 {
     public string Keyword { get; set; }
 }

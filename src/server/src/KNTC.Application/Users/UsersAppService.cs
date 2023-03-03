@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
@@ -283,14 +284,14 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize]
-    public async Task<string> UploadAvatarAsync(IRemoteStreamContent file)
+    public async Task<string> UploadAvatarAsync(IFormFile file)
     {
         if (file == null) throw new UserFriendlyException("Vui lòng chộn ảnh đại diện");
         try
         {
             //var blobName = String.Concat(CurrentUser.GetId().ToString(), ".", GetFileExtension(avatarStream.FileName));
             var blobName = CurrentUser.GetId().ToString();
-            var stream = file.GetStream();
+            var stream = file.OpenReadStream();
             await _fileContainer.SaveAsync(blobName, stream, overrideExisting: true);
             return blobName;
         }

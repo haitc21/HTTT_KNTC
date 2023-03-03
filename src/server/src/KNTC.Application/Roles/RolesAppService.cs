@@ -146,7 +146,10 @@ public class RolesAppService : CrudAppService<
             result.EntityDisplayName = identityUser.UserName;
         }
 
-        foreach (var group in PermissionDefinitionManager.GetGroups().Where(x => x.Name.StartsWith("AbpIdentity") || x.Name.StartsWith("KNTC")))
+        foreach (var group in PermissionDefinitionManager.GetGroups()
+            .Where(x => !x.Name.Contains("FeatureManagement") 
+                     && !x.Name.Contains("SettingManagement")
+                     && !x.Name.Contains("TenantManagement")))
         {
             var groupDto = CreatePermissionGroupDto(group);
 

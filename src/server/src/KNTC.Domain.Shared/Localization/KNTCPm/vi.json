@@ -1,0 +1,25 @@
+{
+  "culture": "vi",
+  "texts": {
+    // Roles
+    "Permission:AbpIdentity.Roles": "Quản lý vai trò",
+    "Permission:AbpIdentity.Roles.Create": "Tạo vai trò",
+    "Permission:AbpIdentity.Roles.Update": "Sửa vai trò",
+    "Permission:AbpIdentity.Roles.Delete": "Xóa vai trò",
+    "Permission:AbpIdentity.Roles.ManagePermissions": "Phân quyền cho vai trò",
+    // Users
+    "Permission:AbpIdentity.Users": "Quản lý người dùng",
+    "Permission:AbpIdentity.Users.Create": "Tạo người dùng",
+    "Permission:AbpIdentity.Users.Update": "Sửa người dùng",
+    "Permission:AbpIdentity.Users.Delete": "Xóa người dùng",
+    "Permission:AbpIdentity.Users.ManagePermissions": "Phân quyền cho người dùng",
+    // Ho so
+    "Permission:HoSos": "Quản lý hồ sơ",
+    "Permission:HoSos.Create": "Tạo hồ sơ",
+    "Permission:HoSos.Edit": "Sửa hồ sơ",
+    "Permission:HoSos.Delete": "Xóa hồ sơ",
+    "Permission:HoSos.AddAttachment": "Thêm tệp đính kèm hồ sơ",
+    "Permission:HoSos.UpdateAttachment": "Sửa thông tin tệp đính kèm hồ sơ",
+    "Permission:HoSos.DeleteAttachment": "Xóa tệp đính kèm hồ sơ"
+  }
+}

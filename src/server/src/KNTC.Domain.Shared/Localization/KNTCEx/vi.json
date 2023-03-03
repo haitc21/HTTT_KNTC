@@ -1,0 +1,10 @@
+{
+  "culture": "vi",
+  "texts": {
+    "KNTCEx:00001": "Mã hồ sơ '{maHoSo}'' đã tồn tại",
+    "KNTCEx:00002": "Lần giải quyết hồ sơ đã tồn tại",
+    "KNTCEx:00003": "Kết quả giải quyết hồ sơ không tồn tại",
+    "KNTCEx:00004": "Tên tài liệu '{tenTaiLieu}' đã tồn tại trong hồ sơ '{maHoSo}'",
+    "KNTCEx:00005": "Tệp đính kèm hồ sơ không tồn tại",
+  }
+}
