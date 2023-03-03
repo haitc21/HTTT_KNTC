@@ -2,6 +2,7 @@ import type { CrateAndUpdateUserDto, GetUserListDto, SetPasswordDto, UserDto, Us
 import { RestService } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
+import type { IFormFile } from '../microsoft/asp-net-core/http/models';
 import type { IdentityRoleDto, IdentityUserDto, IdentityUserUpdateRolesDto } from '../volo/abp/identity/models';
 
 @Injectable({
@@ -121,6 +122,14 @@ export class UsersService {
     },
     { apiName: this.apiName });
   
+
+  uploadAvatar = (file: IFormFile) =>
+    this.restService.request<any, string>({
+      method: 'POST',
+      responseType: 'text',
+      url: '/api/app/users/upload-avatar',
+    },
+    { apiName: this.apiName });
 
   constructor(private restService: RestService) {}
 }
