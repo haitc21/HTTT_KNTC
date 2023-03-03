@@ -182,7 +182,7 @@ export class AppTopBarComponent implements OnInit {
         visible: this.permissionService.getGrantedPolicy('AbpIdentity.Users'),
       },
       {
-        label: 'Quản lý vai trò',
+        label: 'Quản trị phân quyền',
         // icon: 'pi pi-fw pi-user-edit',
         routerLink: ['/system/role'],
         visible: this.permissionService.getGrantedPolicy('AbpIdentity.Roles'),
