@@ -21,11 +21,11 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
     }
     public HoSo(Guid id, string maHoSo) : base(id)
     {
-        MaHoSo = maHoSo;
+        SetMaHoSo(maHoSo);
         KQGQHoSos = new List<KQGQHoSo>();
         TepDinhKemHoSos = new List<TepDinhKemHoSo>();
     }
-    public string MaHoSo { get; set; }
+    public string MaHoSo { get; private set; }
     public string TieuDe { get; set; }
     public string NguoiDeNghi { get; set; }
     public string CccdCmnd { get; set; }

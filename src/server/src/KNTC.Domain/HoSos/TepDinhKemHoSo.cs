@@ -23,11 +23,11 @@ public class TepDinhKemHoSo : FullAuditedEntity<Guid>
     }
     public TepDinhKemHoSo(Guid id, string tenTaiLieu) : base(id)
     {
-        TenTaiLieu= tenTaiLieu;
+        SetTenTaiLieu(tenTaiLieu);
     }
     public Guid IdHoSo { get; set; }
     public HoSo HoSo { get; set; }
-    public string TenTaiLieu { get; set; }
+    public string TenTaiLieu { get; private set; }
     public string HinhThuc { get; set; }
     public DateTime ThoiGianBanHanh { get; set; }
     public DateTime NgayNhan { get; set; }
