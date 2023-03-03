@@ -324,9 +324,9 @@ public class HoSoManager : DomainService
                                                 DateTime ngayNhan,
                                                 [NotNull] string thuTuButLuc,
                                                 [NotNull] string noiDungChinh,
-                                                [NotNull] string fileName,
-                                                [NotNull] string contentType,
-                                                              [NotNull] long contentLength)
+                                                string fileName,
+                                                string contentType,
+                                                long contentLength)
     {
         Check.NotNull(hoSo, nameof(hoSo));
         Check.NotNull(tepDinhKem, nameof(tepDinhKem));
@@ -358,8 +358,11 @@ public class HoSoManager : DomainService
         tepDinhKem.NgayNhan = ngayNhan;
         tepDinhKem.ThuTuButLuc = thuTuButLuc;
         tepDinhKem.NoiDungChinh = noiDungChinh;
-        tepDinhKem.FileName = fileName;
-        tepDinhKem.ContentType = contentType;
-        tepDinhKem.ContentLength = contentLength;
+        if(!!string.IsNullOrEmpty(fileName))
+        {
+            tepDinhKem.FileName = fileName;
+            tepDinhKem.ContentType = contentType;
+            tepDinhKem.ContentLength = contentLength;
+        }
     }
 }

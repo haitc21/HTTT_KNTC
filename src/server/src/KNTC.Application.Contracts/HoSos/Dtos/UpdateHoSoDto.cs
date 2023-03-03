@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace KNTC.HoSos;
 
-public class UpdateHoSoDto : EntityDto<Guid>
+public class UpdateHoSoDto : EntityDto<Guid>, IHasConcurrencyStamp
 {
     [Required]
     [MaxLength(HoSoConsts.MaxCodeLength)]
@@ -89,4 +90,5 @@ public class UpdateHoSoDto : EntityDto<Guid>
     public IReadOnlyList<CreateAndUpdateKQGQHoSoDto> KQGQHoSos { get; set; }
     public IReadOnlyList<Guid> ListTepDinhKemHoSosDeleted { get; set; }
     public IReadOnlyList<CreateAndUpdateTepDinhKemHoSoDto> TepDinhKemHoSos { get; set; }
+    public string ConcurrencyStamp { get; set; }
 }

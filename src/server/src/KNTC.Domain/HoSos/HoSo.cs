@@ -55,7 +55,7 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
     public short SoLanTraKQ { get; set; }
-    public LoaiKetQua KetQua { get; set; }
+    public LoaiKetQua? KetQua { get; set; }
     public virtual List<KQGQHoSo> KQGQHoSos { get; set; }
     public virtual List<TepDinhKemHoSo> TepDinhKemHoSos { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)

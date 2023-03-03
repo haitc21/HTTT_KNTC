@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
@@ -14,4 +15,6 @@ public interface IHoSoAppService :
             CreateHoSoDto,
             UpdateHoSoDto>
 {
+    Task DeleteMultipleAsync(IEnumerable<Guid> ids);
+    Task<byte[]> DowloadAsync(string idTepDinhKem);
 }

@@ -23,5 +23,4 @@ public class CreateAndUpdateTepDinhKemHoSoDto : EntityDto<Guid>
     public string ThuTuButLuc { get; set; }
     public string NoiDungChinh { get; set; }
     public IFormFile FileContent { get; set; }
-    public bool IsChangeFile { get; set; }
 }
