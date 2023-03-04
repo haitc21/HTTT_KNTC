@@ -124,6 +124,7 @@ public class HoSoAppService : CrudAppService<
             {
                 var kqgq = await _hoSoManager.CreateKQGQHoSoAsync(hoSo: hoSo,
                                                                   lanGQ: item.LanGQ,
+                                                                  ngayKhieuNai: item.ngayKhieuNai,
                                                                   ngayTraKQ: item.NgayTraKQ,
                                                                   thamQuyen: item.ThamQuyen,
                                                                   soQD: item.SoQD,
@@ -188,6 +189,7 @@ public class HoSoAppService : CrudAppService<
                 {
                     var kqgq = await _hoSoManager.CreateKQGQHoSoAsync(hoSo: hoSo,
                                                   lanGQ: item.LanGQ,
+                                                  ngayKhieuNai: item.ngayKhieuNai,
                                                   ngayTraKQ: item.NgayTraKQ,
                                                   thamQuyen: item.ThamQuyen,
                                                   soQD: item.SoQD,
@@ -201,6 +203,7 @@ public class HoSoAppService : CrudAppService<
                     await _hoSoManager.UpdateeKQGQHoSoAsync(hoSo: hoSo,
                                                             kqgqHoSo: kqgqHoSo,
                                                             lanGQ: item.LanGQ,
+                                                            ngayKhieuNai: item.ngayKhieuNai,
                                                             ngayTraKQ: item.NgayTraKQ,
                                                             thamQuyen: item.ThamQuyen,
                                                             soQD: item.SoQD,

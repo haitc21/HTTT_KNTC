@@ -10,8 +10,8 @@ export class UtilityService {
     this._router = router;
   }
 
-  isEmpty(input){
-    if(input == undefined || input == null || input == ''){
+  isEmpty(input) {
+    if (input == undefined || input == null || input == '') {
       return true;
     }
     return false;
@@ -31,10 +31,10 @@ export class UtilityService {
     let node = {
       data: {
         Id: '',
-        ParentId: ''
+        ParentId: '',
       },
       expanded: true,
-      children: []
+      children: [],
     };
     for (let index = 0; index < arr.length; index += 1) {
       map[arr[index].Id] = index; // initialize the map
@@ -50,7 +50,7 @@ export class UtilityService {
       }
     }
     return roots;
-  }
+  };
   UnFlatForLeftMenu = (arr: any[]): any[] => {
     let map = {};
     let roots: any[] = [];
@@ -64,10 +64,9 @@ export class UtilityService {
       } else {
         roots.push(node);
       }
-
     }
     return roots;
-  }
+  };
 
   MakeSeoTitle(input: string) {
     if (input == undefined || input == '') {
@@ -85,9 +84,12 @@ export class UtilityService {
     slug = slug.replace(/ý|ỳ|ỷ|ỹ|ỵ/gi, 'y');
     slug = slug.replace(/đ/gi, 'd');
     //Xóa các ký tự đặt biệt
-    slug = slug.replace(/\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi, '');
+    slug = slug.replace(
+      /\`|\~|\!|\@|\#|\||\$|\%|\^|\&|\*|\(|\)|\+|\=|\,|\.|\/|\?|\>|\<|\'|\"|\:|\;|_/gi,
+      ''
+    );
     //Đổi khoảng trắng thành ký tự gạch ngang
-    slug = slug.replace(/ /gi, "-");
+    slug = slug.replace(/ /gi, '-');
     //Đổi nhiều ký tự gạch ngang liên tiếp thành 1 ký tự gạch ngang
     //Phòng trường hợp người nhập vào quá nhiều ký tự trắng
     slug = slug.replace(/\-\-\-\-\-/gi, '-');
@@ -104,8 +106,8 @@ export class UtilityService {
     let y = x.getFullYear().toString();
     let m = (x.getMonth() + 1).toString();
     let d = x.getDate().toString();
-    (d.length == 1) && (d = '0' + d);
-    (m.length == 1) && (m = '0' + m);
+    d.length == 1 && (d = '0' + d);
+    m.length == 1 && (m = '0' + m);
     let yyyymmdd = y + m + d;
     return yyyymmdd;
   }
@@ -121,9 +123,37 @@ export class UtilityService {
       }
     }
     return data;
-  }
-  convertDateToLocal = (date: Date | string) => { 
+  };
+  convertDateToLocal = (date: Date | string) => {
     const localDateTime = moment.utc(date).local().toDate(); // Giá trị ngày và giờ trong múi giờ địa phương
     return localDateTime;
+  };
+  convertToRomanNumeral(number: number): string {
+    const romanMap = [
+      { value: 1000, symbol: 'M' },
+      { value: 900, symbol: 'CM' },
+      { value: 500, symbol: 'D' },
+      { value: 400, symbol: 'CD' },
+      { value: 100, symbol: 'C' },
+      { value: 90, symbol: 'XC' },
+      { value: 50, symbol: 'L' },
+      { value: 40, symbol: 'XL' },
+      { value: 10, symbol: 'X' },
+      { value: 9, symbol: 'IX' },
+      { value: 5, symbol: 'V' },
+      { value: 4, symbol: 'IV' },
+      { value: 1, symbol: 'I' },
+    ];
+
+    let roman = '';
+
+    for (const r of romanMap) {
+      while (number >= r.value) {
+        roman += r.symbol;
+        number -= r.value;
+      }
+    }
+
+    return roman;
   }
 }

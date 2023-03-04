@@ -6,7 +6,7 @@ namespace KNTC.HoSos;
 
 public class HoSoConsts
 {
-    public const int MaxCodeLength = 50;
+    public const int MaxMaHoSoLength = 50;
     public const int MaxTieuDeLength = 100;
     public const int MaxNguoiDeNghiLength = 100;
     public const int MaxCccdCmndLength = 50;

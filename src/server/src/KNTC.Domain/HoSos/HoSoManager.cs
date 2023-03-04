@@ -214,6 +214,7 @@ public class HoSoManager : DomainService
     }
     public async Task<KQGQHoSo> CreateKQGQHoSoAsync([NotNull] HoSo hoSo,
                                                     [NotNull] short lanGQ,
+                                                    [NotNull] DateTime ngayKhieuNai,
                                                     [NotNull] DateTime ngayTraKQ,
                                                     [NotNull] string thamQuyen,
                                                     [NotNull] string soQD,
@@ -222,6 +223,7 @@ public class HoSoManager : DomainService
     {
         Check.NotNull(hoSo, nameof(hoSo));
         Check.NotNull(lanGQ, nameof(lanGQ));
+        Check.NotNull(ngayKhieuNai, nameof(ngayKhieuNai));
         Check.NotNull(ngayTraKQ, nameof(ngayTraKQ));
         Check.NotNullOrWhiteSpace(thamQuyen, nameof(thamQuyen));
         Check.NotNullOrWhiteSpace(soQD, nameof(soQD));
@@ -236,6 +238,7 @@ public class HoSoManager : DomainService
         {
             IdHoSo = hoSo.Id,
             LanGQ = lanGQ,
+            ngayKhieuNai= ngayKhieuNai,
             NgayTraKQ = ngayTraKQ,
             ThamQuyen = thamQuyen,
             SoQD = soQD,
@@ -246,6 +249,7 @@ public class HoSoManager : DomainService
     public async Task UpdateeKQGQHoSoAsync([NotNull] HoSo hoSo,
                                                  [NotNull] KQGQHoSo kqgqHoSo,
                                                  [NotNull] short lanGQ,
+                                                 [NotNull] DateTime ngayKhieuNai,
                                                  [NotNull] DateTime ngayTraKQ,
                                                  [NotNull] string thamQuyen,
                                                  [NotNull] string soQD,
@@ -255,6 +259,7 @@ public class HoSoManager : DomainService
         Check.NotNull(hoSo, nameof(hoSo));
         Check.NotNull(kqgqHoSo, nameof(kqgqHoSo));
         Check.NotNull(lanGQ, nameof(lanGQ));
+        Check.NotNull(ngayKhieuNai, nameof(ngayKhieuNai));
         Check.NotNull(ngayTraKQ, nameof(ngayTraKQ));
         Check.NotNullOrWhiteSpace(thamQuyen, nameof(thamQuyen));
         Check.NotNullOrWhiteSpace(soQD, nameof(soQD));
@@ -271,6 +276,7 @@ public class HoSoManager : DomainService
             throw new BusinessException(KNTCDomainErrorCodes.LanGQAlreadyExist);
         }
         kqgqHoSo.LanGQ = lanGQ;
+        kqgqHoSo.ngayKhieuNai = ngayKhieuNai;
         kqgqHoSo.NgayTraKQ = ngayTraKQ;
         kqgqHoSo.ThamQuyen = thamQuyen;
         kqgqHoSo.SoQD = soQD;

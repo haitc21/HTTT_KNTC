@@ -22,6 +22,7 @@ public class KQGQHoSo : FullAuditedEntity<Guid>
     public Guid IdHoSo { get; set; }
     public HoSo HoSo { get; set; }
     public short LanGQ { get; set; }
+    public DateTime ngayKhieuNai { get; set; }
     public DateTime NgayTraKQ { get; set; }
     public string ThamQuyen { get; set; }
     public string SoQD { get; set; }

@@ -10,7 +10,7 @@ namespace KNTC.HoSos;
 public class UpdateHoSoDto : EntityDto<Guid>, IHasConcurrencyStamp
 {
     [Required]
-    [MaxLength(HoSoConsts.MaxCodeLength)]
+    [MaxLength(HoSoConsts.MaxMaHoSoLength)]
     public string MaHoSo { get; set; }
     [Required]
     [MaxLength(HoSoConsts.MaxTieuDeLength)]
@@ -54,7 +54,9 @@ public class UpdateHoSoDto : EntityDto<Guid>, IHasConcurrencyStamp
     public LoaiVuViec LoaiVuViec { get; set; }
     [Required]
     public LinhVuc LinhVuc { get; set; }
+    [Required]
     public DateTime NgayTiepNhan { get; set; }
+    [Required]
     public DateTime NgayHenTraKQ { get; set; }
     [Required]
     public string NoiDungVuViec { get; set; }

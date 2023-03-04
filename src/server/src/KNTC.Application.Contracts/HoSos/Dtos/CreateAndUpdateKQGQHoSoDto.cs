@@ -12,6 +12,8 @@ public class CreateAndUpdateKQGQHoSoDto : EntityDto<Guid>
     [Required]
     public short LanGQ { get; set; }
     [Required]
+    public DateTime ngayKhieuNai { get; set; }
+    [Required]
     public DateTime NgayTraKQ { get; set; }
     [Required]
     [MaxLength(HoSoConsts.MaxThamQuyenLength)]

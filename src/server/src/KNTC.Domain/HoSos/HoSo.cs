@@ -63,7 +63,7 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
         MaHoSo = Check.NotNullOrWhiteSpace(
             maHoSo,
             nameof(maHoSo),
-            maxLength: HoSoConsts.MaxCodeLength
+            maxLength: HoSoConsts.MaxMaHoSoLength
         );
     }
 
