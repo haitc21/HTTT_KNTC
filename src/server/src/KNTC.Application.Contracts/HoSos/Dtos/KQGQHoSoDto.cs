@@ -1,25 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.Application.Dtos;
+using static KNTC.Permissions.KNTCPermissions;
 
-namespace KNTC.Complain;
+namespace KNTC.HoSos;
 
-public class KQGQHoSo : FullAuditedEntity<Guid>
+public class KQGQHoSoDto : AuditedEntityDto<Guid>
 {
-    public KQGQHoSo()
-    {
-
-    }
-    public KQGQHoSo(Guid id) : base(id)
-    {
-
-    }
     public Guid IdHoSo { get; set; }
-    public HoSo HoSo { get; set; }
     public short LanGQ { get; set; }
     public DateTime ngayKhieuNai { get; set; }
     public DateTime NgayTraKQ { get; set; }
@@ -28,4 +17,3 @@ public class KQGQHoSo : FullAuditedEntity<Guid>
     public string GhiChu { get; set; }
     public LoaiKetQua KetQua { get; set; }
 }
-    

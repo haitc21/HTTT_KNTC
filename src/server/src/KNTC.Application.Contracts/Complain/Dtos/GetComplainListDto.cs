@@ -7,7 +7,7 @@ namespace KNTC.Complain.Dtos;
 
 public class GetComplainListDto : BaseListFilterDto
 {
-    public LoaiVuViec LoaiVuViec { get; set; }
-    public LinhVuc LinhVuc { get; set; }
-    public LoaiKetQua KetQua { get; set; }
+    public LoaiVuViec? LoaiVuViec { get; set; }
+    public LinhVuc? LinhVuc { get; set; }
+    public LoaiKetQua? KetQua { get; set; }
 }

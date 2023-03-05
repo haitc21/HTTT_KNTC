@@ -1,5 +1,5 @@
-import type { PagedResultRequestDto } from '@abp/ng.core';
+import type { PagedAndSortedResultRequestDto } from '@abp/ng.core';
 
-export interface BaseListFilterDto extends PagedResultRequestDto {
+export interface BaseListFilterDto extends PagedAndSortedResultRequestDto {
   keyword?: string;
 }

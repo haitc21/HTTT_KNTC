@@ -4,6 +4,7 @@ using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230304124044_add_ngaykhieunai_to_kqgqHoSo")]
+    partial class add_ngaykhieunai_to_kqgqHoSo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,7 +26,7 @@ namespace KNTC.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("KNTC.Complain.HoSo", b =>
+            modelBuilder.Entity("KNTC.HoSos.HoSo", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -242,7 +244,7 @@ namespace KNTC.Migrations
                     b.ToTable("ho_so", "KNTC");
                 });
 
-            modelBuilder.Entity("KNTC.Complain.KQGQHoSo", b =>
+            modelBuilder.Entity("KNTC.HoSos.KQGQHoSo", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -321,7 +323,7 @@ namespace KNTC.Migrations
                     b.ToTable("kqgq_ho_so", "KNTC");
                 });
 
-            modelBuilder.Entity("KNTC.Complain.TepDinhKemHoSo", b =>
+            modelBuilder.Entity("KNTC.HoSos.TepDinhKemHoSo", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -1874,9 +1876,9 @@ namespace KNTC.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
-            modelBuilder.Entity("KNTC.Complain.KQGQHoSo", b =>
+            modelBuilder.Entity("KNTC.HoSos.KQGQHoSo", b =>
                 {
-                    b.HasOne("KNTC.Complain.HoSo", "HoSo")
+                    b.HasOne("KNTC.HoSos.HoSo", "HoSo")
                         .WithMany("KQGQHoSos")
                         .HasForeignKey("IdHoSo")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1885,9 +1887,9 @@ namespace KNTC.Migrations
                     b.Navigation("HoSo");
                 });
 
-            modelBuilder.Entity("KNTC.Complain.TepDinhKemHoSo", b =>
+            modelBuilder.Entity("KNTC.HoSos.TepDinhKemHoSo", b =>
                 {
-                    b.HasOne("KNTC.Complain.HoSo", "HoSo")
+                    b.HasOne("KNTC.HoSos.HoSo", "HoSo")
                         .WithMany("TepDinhKemHoSos")
                         .HasForeignKey("IdHoSo")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2047,7 +2049,7 @@ namespace KNTC.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("KNTC.Complain.HoSo", b =>
+            modelBuilder.Entity("KNTC.HoSos.HoSo", b =>
                 {
                     b.Navigation("KQGQHoSos");
 

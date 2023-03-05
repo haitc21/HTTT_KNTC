@@ -86,7 +86,7 @@ public class KNTCDbContext :
             b.ToTable("ho_so", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasIndex(x => x.MaHoSo);
-            b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(HoSoConsts.MaxCodeLength);
+            b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(HoSoConsts.MaxMaHoSoLength);
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(HoSoConsts.MaxTieuDeLength);
             b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(HoSoConsts.MaxNguoiDeNghiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(HoSoConsts.MaxCccdCmndLength);
@@ -102,16 +102,16 @@ public class KNTCDbContext :
             b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(HoSoConsts.MaxMaDiaDanhLength);
             b.Property(x => x.LoaiVuViec).IsRequired().HasColumnName("loai_vu_viec");
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
-            b.Property(x => x.NgayTiepNhan).HasColumnName("ngay_tiep_nhan");
-            b.Property(x => x.NgayHenTraKQ).HasColumnName("ngay_hen_tra_kq");
+            b.Property(x => x.NgayTiepNhan).IsRequired().HasColumnName("ngay_tiep_nhan");
+            b.Property(x => x.NgayHenTraKQ).IsRequired().HasColumnName("ngay_hen_tra_kq");
 
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");
-            b.Property(x => x.SoThua).HasColumnName("so_thua").HasMaxLength(HoSoConsts.MaxSoThuaLength);
-            b.Property(x => x.ToBanDo).HasColumnName("to_ban_do").HasMaxLength(HoSoConsts.MaxToBanDoLength);
-            b.Property(x => x.DienTich).HasColumnName("dien_tich").HasMaxLength(HoSoConsts.MaxDienTichLength);
-            b.Property(x => x.LoaiDat).HasColumnName("loai_dat").HasMaxLength(HoSoConsts.MaxLoaiDatLength);
+            b.Property(x => x.SoThua).IsRequired().HasColumnName("so_thua").HasMaxLength(HoSoConsts.MaxSoThuaLength);
+            b.Property(x => x.ToBanDo).IsRequired().HasColumnName("to_ban_do").HasMaxLength(HoSoConsts.MaxToBanDoLength);
+            b.Property(x => x.DienTich).IsRequired().HasColumnName("dien_tich").HasMaxLength(HoSoConsts.MaxDienTichLength);
+            b.Property(x => x.LoaiDat).IsRequired().HasColumnName("loai_dat").HasMaxLength(HoSoConsts.MaxLoaiDatLength);
             b.Property(x => x.DiaChiThuaDat).IsRequired().HasColumnName("dia_chi_thua_dat").HasMaxLength(HoSoConsts.MaxDiaChiLength);
-            b.Property(x => x.TinhThuaDat).IsRequired().HasColumnName("tinh_thua_dat").HasMaxLength(HoSoConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.TinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat").HasMaxLength(HoSoConsts.MaxMaDiaDanhLength);
             b.Property(x => x.HuyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat").HasMaxLength(HoSoConsts.MaxMaDiaDanhLength);
             b.Property(x => x.XaThuaDat).IsRequired().HasColumnName("xa_thua_dat").HasMaxLength(HoSoConsts.MaxMaDiaDanhLength);
 
@@ -139,6 +139,7 @@ public class KNTCDbContext :
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(x => x.IdHoSo).IsRequired().HasColumnName("id_ho_so");
             b.Property(x => x.LanGQ).IsRequired().HasColumnName("lan_gq");
+            b.Property(x => x.ngayKhieuNai).IsRequired().HasColumnName("ngay_khieu_nai");
             b.Property(x => x.NgayTraKQ).IsRequired().HasColumnName("ngay_tra_kq");
             b.Property(x => x.ThamQuyen).IsRequired().HasColumnName("tham_quyen").HasMaxLength(HoSoConsts.MaxThamQuyenLength);
             b.Property(x => x.SoQD).IsRequired().HasColumnName("so_qd").HasMaxLength(HoSoConsts.MaxSoQDLength);

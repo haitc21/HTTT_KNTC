@@ -4,13 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using KNTC.Complain;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace KNTC.Complain.Dtos;
 
+<<<<<<< HEAD:src/server/src/KNTC.Application.Contracts/Complain/Dtos/UpdateComplainDto.cs
 public class UpdateComplainDto : EntityDto<Guid>
+=======
+public class UpdateHoSoDto : EntityDto<Guid>, IHasConcurrencyStamp
+>>>>>>> c8c1cddf08291543f707abfdc559233f78423afe:src/server/src/KNTC.Application.Contracts/HoSos/Dtos/UpdateHoSoDto.cs
 {
     [Required]
-    [MaxLength(HoSoConsts.MaxCodeLength)]
+    [MaxLength(HoSoConsts.MaxMaHoSoLength)]
     public string MaHoSo { get; set; }
     [Required]
     [MaxLength(HoSoConsts.MaxTieuDeLength)]
@@ -54,7 +59,9 @@ public class UpdateComplainDto : EntityDto<Guid>
     public LoaiVuViec LoaiVuViec { get; set; }
     [Required]
     public LinhVuc LinhVuc { get; set; }
+    [Required]
     public DateTime NgayTiepNhan { get; set; }
+    [Required]
     public DateTime NgayHenTraKQ { get; set; }
     [Required]
     public string NoiDungVuViec { get; set; }
@@ -90,4 +97,5 @@ public class UpdateComplainDto : EntityDto<Guid>
     //public IReadOnlyList<CreateAndUpdateKQGQHoSoDto> KQGQHoSos { get; set; }
     public IReadOnlyList<Guid> ListTepDinhKemHoSosDeleted { get; set; }
     public IReadOnlyList<CreateAndUpdateTepDinhKemHoSoDto> TepDinhKemHoSos { get; set; }
+    public string ConcurrencyStamp { get; set; }
 }

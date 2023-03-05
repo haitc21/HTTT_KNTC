@@ -31,9 +31,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
   validationMessages = {
     name: [{ type: 'required', message: 'Tên không được để trống' }],
     surname: [{ type: 'required', message: 'Họ không được để trống' }],
-    email: [{ type: 'required', message: 'Email không được để trống' }],
+    email: [
+      { type: 'required', message: 'Email không được để trống' },
+      { type: 'email', message: 'Địa chỉ email không chính xác' },
+    ],
     userName: [{ type: 'required', message: 'Tên tài khoản không được để trống' }],
-    phoneNumber: [{ type: 'required', message: 'Số ĐT không được để trống' }],
+    phoneNumber: [
+      { type: 'required', message: 'Số ĐT không được để trống' },
+      { type: 'pattern', message: 'Số ĐT không chính xác' },
+    ],
   };
 
   get formControls() {
@@ -132,8 +138,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
       name: [null, [Validators.required]],
       surname: [null, [Validators.required]],
       userName: [null, [Validators.required]],
-      email: [null, [Validators.required]],
-      phoneNumber: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+      phoneNumber: [null, [Validators.required, Validators.pattern('^(0[0-9]{9}|\\+84[0-9]{9})$')]],
       dob: [null],
     });
   }

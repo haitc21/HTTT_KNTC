@@ -31,7 +31,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     protected IIdentityUserRepository UserRepository { get; }
     protected IRepository<IdentityRole,Guid> RoleRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
-    protected IBlobContainer<AvatarContainer> _fileContainer { get; }
+    protected IBlobContainer<AvatarContainer> _blobContainer { get; }
     protected IRepository<UserInfo> _userInfoRepo { get; }
 
     public UsersAppService(
@@ -39,14 +39,14 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         IIdentityUserRepository userRepository,
         IRepository<IdentityRole, Guid> roleRepository,
         IOptions<IdentityOptions> identityOptions,
-        IBlobContainer<AvatarContainer> fileContainer,
+        IBlobContainer<AvatarContainer> blobContainer,
         IRepository<UserInfo> userInfoRepo)
     {
         UserManager = userManager;
         UserRepository = userRepository;
         RoleRepository = roleRepository;
         IdentityOptions = identityOptions;
-        _fileContainer = fileContainer;
+        _blobContainer = blobContainer;
         _userInfoRepo = userInfoRepo;
     }
 
@@ -59,7 +59,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         );
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
         result.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
-        result.AvatarContent = await _fileContainer.GetAllBytesOrNullAsync(id.ToString());
+        result.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(id.ToString());
         return result;
     }
 
@@ -95,7 +95,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         {
             var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == item.Id);
             item.Dob = userInfo.Dob;
-            item.AvatarContent = await _fileContainer.GetAllBytesOrNullAsync(item.Id.ToString());
+            item.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(item.Id.ToString());
         }
         return result;
     }
@@ -292,7 +292,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
             //var blobName = String.Concat(CurrentUser.GetId().ToString(), ".", GetFileExtension(avatarStream.FileName));
             var blobName = CurrentUser.GetId().ToString();
             var stream = file.OpenReadStream();
-            await _fileContainer.SaveAsync(blobName, stream, overrideExisting: true);
+            await _blobContainer.SaveAsync(blobName, stream, overrideExisting: true);
             return blobName;
         }
         catch (Exception ex)
@@ -305,7 +305,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     public async Task<byte[]> GetAvatarAsync(Guid? userId)
     {
         userId = userId ?? CurrentUser.GetId();
-        return await _fileContainer.GetAllBytesOrNullAsync(userId.ToString());
+        return await _blobContainer.GetAllBytesOrNullAsync(userId.ToString());
     }
 
     #region private method

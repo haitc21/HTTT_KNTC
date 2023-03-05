@@ -11,8 +11,6 @@ namespace KNTC.Complain.Dtos;
 public class CreateAndUpdateTepDinhKemHoSoDto : EntityDto<Guid>
 {
     [Required]
-    public Guid IdHoSo { get; set; }
-    [Required]
     [MaxLength(HoSoConsts.MaxTenTaiLieuLength)]
     public string TenTaiLieu { get; set; }
     [Required]
@@ -25,5 +23,4 @@ public class CreateAndUpdateTepDinhKemHoSoDto : EntityDto<Guid>
     public string ThuTuButLuc { get; set; }
     public string NoiDungChinh { get; set; }
     public IFormFile FileContent { get; set; }
-    public bool IsChangeFile { get; set; }
 }

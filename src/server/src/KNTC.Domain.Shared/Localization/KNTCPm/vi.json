@@ -17,9 +17,6 @@
     "Permission:HoSos": "Quản lý hồ sơ",
     "Permission:HoSos.Create": "Tạo hồ sơ",
     "Permission:HoSos.Edit": "Sửa hồ sơ",
-    "Permission:HoSos.Delete": "Xóa hồ sơ",
-    "Permission:HoSos.AddAttachment": "Thêm tệp đính kèm hồ sơ",
-    "Permission:HoSos.UpdateAttachment": "Sửa thông tin tệp đính kèm hồ sơ",
-    "Permission:HoSos.DeleteAttachment": "Xóa tệp đính kèm hồ sơ"
+    "Permission:HoSos.Delete": "Xóa hồ sơ"
   }
 }

@@ -10,7 +10,7 @@ namespace KNTC.Complain.Dtos;
 public class CreateComplainDto
 {
     [Required]
-    [MaxLength(HoSoConsts.MaxCodeLength)]
+    [MaxLength(HoSoConsts.MaxMaHoSoLength)]
     public string MaHoSo { get; set; }
     [Required]
     [MaxLength(HoSoConsts.MaxTieuDeLength)]
@@ -54,7 +54,9 @@ public class CreateComplainDto
     public LoaiVuViec LoaiVuViec { get; set; }
     [Required]
     public LinhVuc LinhVuc { get; set; }
+    [Required]
     public DateTime NgayTiepNhan { get; set; }
+    [Required]
     public DateTime NgayHenTraKQ { get; set; }
     [Required]
     public string NoiDungVuViec { get; set; }
