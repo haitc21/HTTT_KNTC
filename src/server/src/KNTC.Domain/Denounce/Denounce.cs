@@ -51,16 +51,16 @@ public class Denounce : FullAuditedAggregateRoot<Guid>
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }
-    public DateTime? ngayKhieuNaiI { get; set; }
-    public DateTime? NgayTraKQI { get; set; }
-    public string ThamQuyenI { get; set; }
-    public string SoQDI { get; set; }
-    public LoaiKetQua? KetQuaI { get; set; }
-    public DateTime? ngayKhieuNaiII { get; set; }
-    public DateTime? NgayTraKQII { get; set; }
-    public string ThamQuyenII { get; set; }
-    public string SoQDII { get; set; }
-    public LoaiKetQua? KetQuaII { get; set; }
+    public DateTime? ngayKhieuNai1 { get; set; }
+    public DateTime? NgayTraKQ1 { get; set; }
+    public string ThamQuyen1 { get; set; }
+    public string SoQD1 { get; set; }
+    public LoaiKetQua? KetQua1 { get; set; }
+    public DateTime? ngayKhieuNai2 { get; set; }
+    public DateTime? NgayTraKQ2 { get; set; }
+    public string ThamQuyen2 { get; set; }
+    public string SoQD2 { get; set; }
+    public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public virtual List<FileAttachment> FileAttachments { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)

@@ -1,8 +1,8 @@
 import { mapEnumToOptions } from '@abp/ng.core';
 
 export enum LoaiVuViec {
-  KhieuNai = 0,
-  ToCao = 1,
+  KhieuNai = 1,
+  ToCao = 2,
 }
 
 export const loaiVuViecOptions = mapEnumToOptions(LoaiVuViec);

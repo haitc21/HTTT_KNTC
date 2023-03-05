@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KNTC.Complains.Dtos;
+namespace KNTC.Complains;
 
 public class GetComplainListDto : BaseListFilterDto
 {

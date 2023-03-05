@@ -118,17 +118,17 @@ public class KNTCDbContext :
             b.Property(x => x.XaThuaDat).IsRequired().HasColumnName("xa_thua_dat").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
 
 
-            b.Property(x => x.ngayKhieuNaiI).HasColumnName("ngay_khieu_nai_I");
-            b.Property(x => x.NgayTraKQI).HasColumnName("ngay_tra_kq_I");
-            b.Property(x => x.ThamQuyenI).HasColumnName("tham_quyen_I").HasMaxLength(ComplainConsts.MaxThamQuyenLength);
-            b.Property(x => x.SoQDI).HasColumnName("so_qd_I").HasMaxLength(ComplainConsts.MaxSoQDLength);
-            b.Property(x => x.KetQuaI).HasColumnName("ket_qua_I");
+            b.Property(x => x.ngayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
+            b.Property(x => x.NgayTraKQ1).HasColumnName("ngay_tra_kq_1");
+            b.Property(x => x.ThamQuyen1).HasColumnName("tham_quyen_1").HasMaxLength(ComplainConsts.MaxThamQuyenLength);
+            b.Property(x => x.SoQD1).HasColumnName("so_qd_1").HasMaxLength(ComplainConsts.MaxSoQDLength);
+            b.Property(x => x.KetQua1).HasColumnName("ket_qua_1");
 
-            b.Property(x => x.ngayKhieuNaiII).HasColumnName("ngay_khieu_nai_II");
-            b.Property(x => x.NgayTraKQII).HasColumnName("ngay_tra_kq_II");
-            b.Property(x => x.ThamQuyenII).HasColumnName("tham_quyen_II").HasMaxLength(ComplainConsts.MaxThamQuyenLength);
-            b.Property(x => x.SoQDII).HasColumnName("so_qd_II").HasMaxLength(ComplainConsts.MaxSoQDLength);
-            b.Property(x => x.KetQuaII).HasColumnName("ket_qua_II");
+            b.Property(x => x.ngayKhieuNai2).HasColumnName("ngay_khieu_nai_2");
+            b.Property(x => x.NgayTraKQ2).HasColumnName("ngay_tra_kq_2");
+            b.Property(x => x.ThamQuyen2).HasColumnName("tham_quyen_2").HasMaxLength(ComplainConsts.MaxThamQuyenLength);
+            b.Property(x => x.SoQD2).HasColumnName("so_qd_2").HasMaxLength(ComplainConsts.MaxSoQDLength);
+            b.Property(x => x.KetQua2).HasColumnName("ket_qua_2");
 
             b.Property(x => x.DuLieuToaDo).HasColumnName("du_lieu_toa_do").HasMaxLength(ComplainConsts.MaxToaDoLength);
             b.Property(x => x.DuLieuHinhHoc).HasColumnName("du_lieu_hinh_hoc").HasMaxLength(ComplainConsts.MaxHinhHocLength);
@@ -178,17 +178,17 @@ public class KNTCDbContext :
             b.Property(x => x.XaThuaDat).IsRequired().HasColumnName("xa_thua_dat").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
 
 
-            b.Property(x => x.ngayKhieuNaiI).HasColumnName("ngay_khieu_nai_I");
-            b.Property(x => x.NgayTraKQI).HasColumnName("ngay_tra_kq_I");
-            b.Property(x => x.ThamQuyenI).HasColumnName("tham_quyen_I").HasMaxLength(DenounceConsts.MaxThamQuyenLength);
-            b.Property(x => x.SoQDI).HasColumnName("so_qd_I").HasMaxLength(DenounceConsts.MaxSoQDLength);
-            b.Property(x => x.KetQuaI).HasColumnName("ket_qua_I");
+            b.Property(x => x.ngayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
+            b.Property(x => x.NgayTraKQ1).HasColumnName("ngay_tra_kq_1");
+            b.Property(x => x.ThamQuyen1).HasColumnName("tham_quyen_1").HasMaxLength(DenounceConsts.MaxThamQuyenLength);
+            b.Property(x => x.SoQD1).HasColumnName("so_qd_1").HasMaxLength(DenounceConsts.MaxSoQDLength);
+            b.Property(x => x.KetQua1).HasColumnName("ket_qua_1");
 
-            b.Property(x => x.ngayKhieuNaiII).HasColumnName("ngay_khieu_nai_II");
-            b.Property(x => x.NgayTraKQII).HasColumnName("ngay_tra_kq_II");
-            b.Property(x => x.ThamQuyenII).HasColumnName("tham_quyen_II").HasMaxLength(DenounceConsts.MaxThamQuyenLength);
-            b.Property(x => x.SoQDII).HasColumnName("so_qd_II").HasMaxLength(DenounceConsts.MaxSoQDLength);
-            b.Property(x => x.KetQuaII).HasColumnName("ket_qua_II");
+            b.Property(x => x.ngayKhieuNai2).HasColumnName("ngay_khieu_nai_2");
+            b.Property(x => x.NgayTraKQ2).HasColumnName("ngay_tra_kq_2");
+            b.Property(x => x.ThamQuyen2).HasColumnName("tham_quyen_2").HasMaxLength(DenounceConsts.MaxThamQuyenLength);
+            b.Property(x => x.SoQD2).HasColumnName("so_qd_2").HasMaxLength(DenounceConsts.MaxSoQDLength);
+            b.Property(x => x.KetQua2).HasColumnName("ket_qua_2");
 
             b.Property(x => x.DuLieuToaDo).HasColumnName("du_lieu_toa_do").HasMaxLength(DenounceConsts.MaxToaDoLength);
             b.Property(x => x.DuLieuHinhHoc).HasColumnName("du_lieu_hinh_hoc").HasMaxLength(DenounceConsts.MaxHinhHocLength);

@@ -3,6 +3,9 @@ using Volo.Abp.Identity;
 using KNTC.Roles;
 using KNTC.Users;
 using Volo.Abp.AutoMapper;
+using KNTC.Complains;
+using KNTC.FileAttachments;
+using KNTC.Denounces;
 
 namespace KNTC;
 
@@ -33,11 +36,18 @@ public class KNTCApplicationAutoMapperProfile : Profile
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
 
 
-        //CreateMap<HoSo, HoSoDto>();
-        //CreateMap<KQGQHoSo, KQGQHoSoDto>();
-        //CreateMap<CreateAndUpdateKQGQHoSoDto, KQGQHoSo>();
-        //CreateMap<TepDinhKemHoSo, TepDinhKemHoSoDto>();
-        //CreateMap<CreateAndUpdateTepDinhKemHoSoDto, TepDinhKemHoSo>();
+        CreateMap<Complain, ComplainDto>();
+        CreateMap<Complain, ComplainListDto>();
+        CreateMap<CreateComplainDto, Complain>();
+        CreateMap<UpdateComplainDto, Complain>();
+
+        CreateMap<Denounce, DenounceDto>();
+        CreateMap<Denounce, DenounceListDto>();
+        CreateMap<CreateDenounceDto, Denounce>();
+        CreateMap<UpdateDenounceDto, Denounce>();
+
+        CreateMap<FileAttachment, FileAttachmentDto>();
+        CreateMap<CreateAndUpdateFileAttachmentDto, FileAttachment>();
 
     }
 }

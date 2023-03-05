@@ -7,9 +7,9 @@ using System.Text;
 using Volo.Abp.Application.Dtos;
 using static KNTC.Permissions.KNTCPermissions;
 
-namespace KNTC.Complains.Dtos;
+namespace KNTC.FileAttachments;
 
-public class CreateAndUpdateTepDinhKemHoSoDto : EntityDto<Guid>
+public class CreateAndUpdateFileAttachmentDto : EntityDto<Guid>
 {
     [Required]
     [MaxLength(FileAttachmentConsts.MaxTenTaiLieuLength)]

@@ -1,7 +1,12 @@
-import * as HoSos from './ho-sos';
+import * as Complains from './complains';
+import * as Denounces from './denounces';
+import * as FileAttachments from './file-attachments';
 import * as Microsoft from './microsoft';
 import * as Roles from './roles';
 import * as Users from './users';
 import * as Volo from './volo';
+export * from './linh-vuc.enum';
+export * from './loai-ket-qua.enum';
+export * from './loai-vu-viec.enum';
 export * from './models';
-export { HoSos, Microsoft, Roles, Users, Volo };
+export { Complains, Denounces, FileAttachments, Microsoft, Roles, Users, Volo };

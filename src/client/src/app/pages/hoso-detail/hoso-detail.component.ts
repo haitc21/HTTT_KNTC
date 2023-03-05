@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { CreateHoSoDto, HoSoDto, HoSoService, LoaiVuViec,LinhVuc, UpdateHoSoDto } from '@proxy/ho-sos';
+import { LinhVuc, LoaiVuViec } from '@proxy';
+import { ComplainDto, ComplainService } from '@proxy/complains';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { HoSoConsts } from 'src/app/shared/constants/ho-so.const';
@@ -18,7 +19,7 @@ export class HoSoDetailComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public closeBtnName: string;
-  selectedEntity: HoSoDto;
+  selectedEntity: ComplainDto;
 
   loaiVuViec: LoaiVuViec;
   linhVuc: LinhVuc;
@@ -182,7 +183,7 @@ export class HoSoDetailComponent implements OnInit, OnDestroy {
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
-    private hoSoService: HoSoService,
+    private complainService: ComplainService,
     private utilService: UtilityService,
     private fb: FormBuilder
   ) {}
@@ -198,11 +199,11 @@ export class HoSoDetailComponent implements OnInit, OnDestroy {
 
   loadDetail(id: any) {
     this.toggleBlockUI(true);
-    this.hoSoService
+    this.complainService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: HoSoDto) => {
+        next: (response: ComplainDto) => {
           this.selectedEntity = response;
           this.form.patchValue(this.selectedEntity);
           this.toggleBlockUI(false);
@@ -216,7 +217,7 @@ export class HoSoDetailComponent implements OnInit, OnDestroy {
   saveChange() {
     this.toggleBlockUI(true);
     if (this.utilService.isEmpty(this.config.data?.id)) {
-      this.hoSoService
+      this.complainService
         .create(this.form.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
@@ -229,7 +230,7 @@ export class HoSoDetailComponent implements OnInit, OnDestroy {
           }
         );
     } else {
-      this.hoSoService
+      this.complainService
         .update(this.config.data.id, this.form.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(

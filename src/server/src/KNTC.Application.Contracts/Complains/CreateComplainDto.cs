@@ -1,17 +1,20 @@
-﻿using System;
+﻿using KNTC.Complains;
+using KNTC.FileAttachments;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Domain.Entities;
 
 namespace KNTC.Complains;
 
-public class UpdateComplainDto : EntityDto<Guid>
+public class CreateComplainDto
 {
     [Required]
     [MaxLength(ComplainConsts.MaxMaHoSoLength)]
     public string MaHoSo { get; set; }
+    [Required]
+    public LoaiVuViec LoaiVuViec { get; set; }
     [Required]
     [MaxLength(ComplainConsts.MaxTieuDeLength)]
     public string TieuDe { get; set; }
@@ -51,10 +54,6 @@ public class UpdateComplainDto : EntityDto<Guid>
     [MaxLength(ComplainConsts.MaxMaDiaDanhLength)]
     public string MaXaPhuongTT { get; set; }
     [Required]
-    public LoaiVuViec LoaiVuViec { get; set; }
-    [Required]
-    public LinhVuc LinhVuc { get; set; }
-    [Required]
     public DateTime NgayTiepNhan { get; set; }
     [Required]
     public DateTime NgayHenTraKQ { get; set; }
@@ -88,9 +87,21 @@ public class UpdateComplainDto : EntityDto<Guid>
     public string DuLieuToaDo { get; set; }
     [MaxLength(ComplainConsts.MaxHinhHocLength)]
     public string DuLieuHinhHoc { get; set; }
-    public IReadOnlyList<Guid> ListKQGQHoSoDeleted { get; set; }
-    //public IReadOnlyList<CreateAndUpdateKQGQHoSoDto> KQGQHoSos { get; set; }
-    public IReadOnlyList<Guid> ListTepDinhKemHoSosDeleted { get; set; }
-    //public IReadOnlyList<CreateAndUpdateTepDinhKemHoSoDto> TepDinhKemHoSos { get; set; }
-    public string ConcurrencyStamp { get; set; }
+    public string GhiChu { get; set; }
+    public DateTime? ngayKhieuNai1 { get; set; }
+    public DateTime? NgayTraKQ1 { get; set; }
+    [MaxLength(ComplainConsts.MaxThamQuyenLength)]
+    public string ThamQuyen1 { get; set; }
+    [MaxLength(ComplainConsts.MaxSoQDLength)]
+    public string SoQD1 { get; set; }
+    public LoaiKetQua? KetQua1 { get; set; }
+    public DateTime? ngayKhieuNai2 { get; set; }
+    public DateTime? NgayTraKQ2 { get; set; }
+    [MaxLength(ComplainConsts.MaxThamQuyenLength)]
+    public string ThamQuyen2 { get; set; }
+
+    [MaxLength(ComplainConsts.MaxSoQDLength)]
+    public string SoQD2 { get; set; }
+    public LoaiKetQua? KetQua2 { get; set; }
+    public virtual List<CreateAndUpdateFileAttachmentDto> FileAttachments { get; set; }
 }

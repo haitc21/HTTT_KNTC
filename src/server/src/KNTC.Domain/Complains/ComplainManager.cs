@@ -47,16 +47,16 @@ public class ComplainManager : DomainService
                                               string duLieuToaDo,
                                               string duLieuHinhHoc,
                                               string GhiChu,
-                                              DateTime ngayKhieuNaiI,
-                                              DateTime NgayTraKQI,
-                                              string ThamQuyenI,
-                                              string SoQDI,
-                                              DateTime ngayKhieuNaiII,
-                                              DateTime NgayTraKQII,
-                                              string ThamQuyenII,
-                                              string SoQDII,
-                                              LoaiKetQua? KetQuaI = null,
-                                              LoaiKetQua? KetQuaII = null
+                                              DateTime? ngayKhieuNai1,
+                                              DateTime? NgayTraKQ1,
+                                              string ThamQuyen1,
+                                              string SoQD1,
+                                              DateTime? ngayKhieuNai2,
+                                              DateTime? NgayTraKQ2,
+                                              string ThamQuyen2,
+                                              string SoQD2,
+                                              LoaiKetQua? KetQua1 = null,
+                                              LoaiKetQua? KetQua2 = null
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
@@ -118,17 +118,17 @@ public class ComplainManager : DomainService
             DuLieuToaDo = duLieuToaDo,
             DuLieuHinhHoc = duLieuHinhHoc,
             GhiChu = GhiChu,
-            ngayKhieuNaiI = ngayKhieuNaiI,
-            NgayTraKQI = NgayTraKQI,
-            ThamQuyenI = ThamQuyenI,
-            SoQDI = SoQDI,
-            KetQuaI = KetQuaI,
-            ngayKhieuNaiII = ngayKhieuNaiII,
-            NgayTraKQII = NgayTraKQII,
-            ThamQuyenII = ThamQuyenII,
-            SoQDII = SoQDII,
-            KetQuaII = KetQuaII,
-            KetQua = KetQuaII ?? KetQuaI
+            ngayKhieuNai1 = ngayKhieuNai1,
+            NgayTraKQ1 = NgayTraKQ1,
+            ThamQuyen1 = ThamQuyen1,
+            SoQD1 = SoQD1,
+            KetQua1 = KetQua1,
+            ngayKhieuNai2 = ngayKhieuNai2,
+            NgayTraKQ2 = NgayTraKQ2,
+            ThamQuyen2 = ThamQuyen2,
+            SoQD2 = SoQD2,
+            KetQua2 = KetQua2,
+            KetQua = KetQua2 ?? KetQua1
         };
     }
     public async Task ChangeMaHoSoAsync([NotNull] Complain hoSo, [NotNull] string maHoSo)
@@ -142,7 +142,7 @@ public class ComplainManager : DomainService
         }
         hoSo.ChangeMaHoSo(maHoSo);
     }
-    public async Task UpdateAsync([NotNull] Complain hoSo,
+    public async Task UpdateAsync([NotNull] Complain complain,
                                   [NotNull] string maHoSo,
                                   [NotNull] LoaiVuViec loaiVuViec,
                                    [NotNull] string tieuDe,
@@ -172,19 +172,19 @@ public class ComplainManager : DomainService
                                    string duLieuToaDo,
                                    string duLieuHinhHoc,
                                    string GhiChu,
-                                   DateTime ngayKhieuNaiI,
-                                   DateTime NgayTraKQI,
-                                   string ThamQuyenI,
-                                   string SoQDI,
-                                   DateTime ngayKhieuNaiII,
-                                   DateTime NgayTraKQII,
-                                   string ThamQuyenII,
-                                   string SoQDII,
-                                   LoaiKetQua? KetQuaI = null,
-                                   LoaiKetQua? KetQuaII = null
+                                   DateTime? ngayKhieuNai1,
+                                   DateTime? NgayTraKQ1,
+                                   string ThamQuyen1,
+                                   string SoQD1,
+                                   DateTime? ngayKhieuNai2,
+                                   DateTime? NgayTraKQ2,
+                                   string ThamQuyen2,
+                                   string SoQD2,
+                                   LoaiKetQua? KetQua1 = null,
+                                   LoaiKetQua? KetQua2 = null
       )
     {
-        Check.NotNull(hoSo, nameof(hoSo));
+        Check.NotNull(complain, nameof(complain));
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
         Check.NotNull(loaiVuViec, nameof(loaiVuViec));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
@@ -209,51 +209,51 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNullOrWhiteSpace(xaThuaDat, nameof(xaThuaDat));
 
-        if (hoSo.MaHoSo != maHoSo)
+        if (complain.MaHoSo != maHoSo)
         {
-            await ChangeMaHoSoAsync(hoSo, maHoSo);
+            await ChangeMaHoSoAsync(complain, maHoSo);
         }
-        hoSo.TieuDe = tieuDe;
-        hoSo.LoaiVuViec = loaiVuViec;
-        hoSo.NguoiDeNghi = nguoiDeNghi;
-        hoSo.CccdCmnd = cccdCmnd;
-        hoSo.NgayCapCccdCmnd = ngayCapCccdCmnd;
-        hoSo.NoiCapCccdCmnd = noiCapCccdCmnd;
-        hoSo.NgaySinh = ngaySinh;
-        hoSo.DienThaoi = dienThaoi;
-        hoSo.Email = email;
-        hoSo.DiaChiThuongTru = diaChiThuongTru;
-        hoSo.DiaChiLienHe = diaChiLienHe;
-        hoSo.MaTinhTP = maTinhTP;
-        hoSo.MaQuanHuyen = maQuanHuyen;
-        hoSo.MaXaPhuongTT = maXaPhuongTT;
-        hoSo.NgayTiepNhan = ngayTiepNhan;
-        hoSo.NgayHenTraKQ = ngayHenTraKQ;
-        hoSo.NoiDungVuViec = noiDungVuViec;
-        hoSo.SoThua = soThua;
-        hoSo.ToBanDo = toBanDo;
-        hoSo.DienTich = dienTich;
-        hoSo.LoaiDat = loaiDat;
-        hoSo.DiaChiThuaDat = diaChiThuaDat;
-        hoSo.TinhThuaDat = tinhThuaDat;
-        hoSo.HuyenThuaDat = huyenThuaDat;
-        hoSo.XaThuaDat = xaThuaDat;
-        hoSo.DuLieuToaDo = duLieuToaDo;
-        hoSo.DuLieuHinhHoc = duLieuHinhHoc;
-        hoSo.GhiChu = GhiChu;
-        hoSo.ngayKhieuNaiI = ngayKhieuNaiI;
-        hoSo.NgayTraKQI = NgayTraKQI;
-        hoSo.ThamQuyenI = ThamQuyenI;
-        hoSo.SoQDI = SoQDI;
-        hoSo.KetQuaI = KetQuaI;
-        hoSo.ngayKhieuNaiII = ngayKhieuNaiII;
-        hoSo.NgayTraKQII = NgayTraKQII;
-        hoSo.ThamQuyenII= ThamQuyenII;
-        hoSo.SoQDII= SoQDII;
-        hoSo.KetQuaII= KetQuaII;
-        hoSo.KetQua = KetQuaII ?? KetQuaI;
+        complain.TieuDe = tieuDe;
+        complain.LoaiVuViec = loaiVuViec;
+        complain.NguoiDeNghi = nguoiDeNghi;
+        complain.CccdCmnd = cccdCmnd;
+        complain.NgayCapCccdCmnd = ngayCapCccdCmnd;
+        complain.NoiCapCccdCmnd = noiCapCccdCmnd;
+        complain.NgaySinh = ngaySinh;
+        complain.DienThaoi = dienThaoi;
+        complain.Email = email;
+        complain.DiaChiThuongTru = diaChiThuongTru;
+        complain.DiaChiLienHe = diaChiLienHe;
+        complain.MaTinhTP = maTinhTP;
+        complain.MaQuanHuyen = maQuanHuyen;
+        complain.MaXaPhuongTT = maXaPhuongTT;
+        complain.NgayTiepNhan = ngayTiepNhan;
+        complain.NgayHenTraKQ = ngayHenTraKQ;
+        complain.NoiDungVuViec = noiDungVuViec;
+        complain.SoThua = soThua;
+        complain.ToBanDo = toBanDo;
+        complain.DienTich = dienTich;
+        complain.LoaiDat = loaiDat;
+        complain.DiaChiThuaDat = diaChiThuaDat;
+        complain.TinhThuaDat = tinhThuaDat;
+        complain.HuyenThuaDat = huyenThuaDat;
+        complain.XaThuaDat = xaThuaDat;
+        complain.DuLieuToaDo = duLieuToaDo;
+        complain.DuLieuHinhHoc = duLieuHinhHoc;
+        complain.GhiChu = GhiChu;
+        complain.ngayKhieuNai1 = ngayKhieuNai1;
+        complain.NgayTraKQ1 = NgayTraKQ1;
+        complain.ThamQuyen1 = ThamQuyen1;
+        complain.SoQD1 = SoQD1;
+        complain.KetQua1 = KetQua1;
+        complain.ngayKhieuNai2 = ngayKhieuNai2;
+        complain.NgayTraKQ2 = NgayTraKQ2;
+        complain.ThamQuyen2= ThamQuyen2;
+        complain.SoQD2= SoQD2;
+        complain.KetQua2= KetQua2;
+        complain.KetQua = KetQua2 ?? KetQua1;
     }
-    public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Complain hoSo,
+    public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Complain complain,
                                                                 [NotNull] string tenTaiLieu,
                                                                 [NotNull] string hinhThuc,
                                                                 DateTime thoiGianBanHanh,
@@ -264,7 +264,7 @@ public class ComplainManager : DomainService
                                                                 [NotNull] string contentType,
                                                                 [NotNull] long contentLength)
     {
-        Check.NotNull(hoSo, nameof(hoSo));
+        Check.NotNull(complain, nameof(complain));
         Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
         Check.NotNullOrWhiteSpace(hinhThuc, nameof(hinhThuc));
         Check.NotNullOrWhiteSpace(thuTuButLuc, nameof(thuTuButLuc));
@@ -272,16 +272,16 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
-        var existTepDinhKem = hoSo.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu);
+        var existTepDinhKem = complain.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu);
         if (existTepDinhKem != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
-                .WithData("maHoSo", hoSo.MaHoSo)
-                .WithData("maHoSo", hoSo.MaHoSo);
+                .WithData("maHoSo", complain.MaHoSo)
+                .WithData("maHoSo", complain.MaHoSo);
         }
         return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
         {
-            IdHoSo = hoSo.Id,
+            IdHoSo = complain.Id,
             HinhThuc = hinhThuc,
             ThoiGianBanHanh = thoiGianBanHanh,
             NgayNhan = ngayNhan,
@@ -292,7 +292,7 @@ public class ComplainManager : DomainService
             ContentLength = contentLength
         };
     }
-    public async Task UpdateFileAttachmentAsync([NotNull] Complain hoSo,
+    public async Task UpdateFileAttachmentAsync([NotNull] Complain complain,
                                                 [NotNull] FileAttachment tepDinhKem,
                                                 [NotNull] string tenTaiLieu,
                                                 [NotNull] string hinhThuc,
@@ -304,7 +304,7 @@ public class ComplainManager : DomainService
                                                 string contentType,
                                                 long contentLength)
     {
-        Check.NotNull(hoSo, nameof(hoSo));
+        Check.NotNull(complain, nameof(complain));
         Check.NotNull(tepDinhKem, nameof(tepDinhKem));
         Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
         Check.NotNullOrWhiteSpace(hinhThuc, nameof(hinhThuc));
@@ -313,17 +313,17 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
-        var tep = hoSo.FileAttachments.FirstOrDefault(x => x.Id == tepDinhKem.Id);
+        var tep = complain.FileAttachments.FirstOrDefault(x => x.Id == tepDinhKem.Id);
         if (tep == null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.KTepDinhKemMotExist);
         }
-        var existTepDinhKem = hoSo.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu && x.Id != tepDinhKem.Id);
+        var existTepDinhKem = complain.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu && x.Id != tepDinhKem.Id);
         if (existTepDinhKem != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
-                .WithData("maHoSo", hoSo.MaHoSo)
-                .WithData("maHoSo", hoSo.MaHoSo);
+                .WithData("maHoSo", complain.MaHoSo)
+                .WithData("maHoSo", complain.MaHoSo);
         }
         if (tepDinhKem.TenTaiLieu != tenTaiLieu)
         {

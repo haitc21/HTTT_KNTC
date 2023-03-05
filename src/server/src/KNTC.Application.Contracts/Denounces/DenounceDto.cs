@@ -1,27 +1,14 @@
-﻿using System;
+﻿using KNTC.FileAttachments;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using Volo.Abp;
-using Volo.Abp.Domain.Entities.Auditing;
-using KNTC.FileAttachments;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using Volo.Abp.Application.Dtos;
 
-namespace KNTC.Complains;
+namespace KNTC.Denounces;
 
-public class Complain : FullAuditedAggregateRoot<Guid>
+public class DenounceDto : AuditedEntityDto<Guid>
 {
-    public Complain()
-    {
-        FileAttachments = new List<FileAttachment>();
-    }
-    public Complain(Guid id) : base(id)
-    {
-        FileAttachments = new List<FileAttachment>();
-    }
-    public Complain(Guid id, string maHoSo) : base(id)
-    {
-        SetMaHoSo(maHoSo);
-        FileAttachments = new List<FileAttachment>();
-    }
     public string MaHoSo { get; private set; }
     public LoaiVuViec LoaiVuViec { get; set; }
     public string TieuDe { get; set; }
@@ -59,22 +46,8 @@ public class Complain : FullAuditedAggregateRoot<Guid>
     public DateTime? ngayKhieuNai2 { get; set; }
     public DateTime? NgayTraKQ2 { get; set; }
     public string ThamQuyen2 { get; set; }
-    public string SoQD2 { get; set; }
+    public string SoQDII { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
-    public virtual List<FileAttachment> FileAttachments { get; set; }
-    private void SetMaHoSo([NotNull] string maHoSo)
-    {
-        MaHoSo = Check.NotNullOrWhiteSpace(
-            maHoSo,
-            nameof(maHoSo),
-            maxLength: ComplainConsts.MaxMaHoSoLength
-        );
-    }
-
-    internal Complain ChangeMaHoSo([NotNull] string maHoSo)
-    {
-        SetMaHoSo(maHoSo);
-        return this;
-    }
+    public virtual List<FileAttachmentDto> FileAttachments { get; set; }
 }

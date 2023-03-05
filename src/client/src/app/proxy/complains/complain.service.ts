@@ -1,4 +1,4 @@
-import type { CreateHoSoDto, GetHoSoListDto, HoSoDto, UpdateHoSoDto } from './models';
+import type { ComplainDto, CreateComplainDto, GetComplainListDto, UpdateComplainDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -6,14 +6,14 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class HoSoService {
+export class ComplainService {
   apiName = 'Default';
   
 
-  create = (input: CreateHoSoDto) =>
-    this.restService.request<any, HoSoDto>({
+  create = (input: CreateComplainDto) =>
+    this.restService.request<any, ComplainDto>({
       method: 'POST',
-      url: '/api/app/ho-so',
+      url: '/api/app/complain',
       body: input,
     },
     { apiName: this.apiName });
@@ -22,7 +22,7 @@ export class HoSoService {
   delete = (id: string) =>
     this.restService.request<any, void>({
       method: 'DELETE',
-      url: `/api/app/ho-so/${id}`,
+      url: `/api/app/complain/${id}`,
     },
     { apiName: this.apiName });
   
@@ -30,7 +30,7 @@ export class HoSoService {
   deleteMultiple = (ids: string[]) =>
     this.restService.request<any, void>({
       method: 'DELETE',
-      url: '/api/app/ho-so/multiple',
+      url: '/api/app/complain/multiple',
       params: { ids },
     },
     { apiName: this.apiName });
@@ -39,33 +39,33 @@ export class HoSoService {
   dowload = (idTepDinhKem: string) =>
     this.restService.request<any, number[]>({
       method: 'POST',
-      url: '/api/app/ho-so/dowload',
+      url: '/api/app/complain/dowload',
       params: { idTepDinhKem },
     },
     { apiName: this.apiName });
   
 
   get = (id: string) =>
-    this.restService.request<any, HoSoDto>({
+    this.restService.request<any, ComplainDto>({
       method: 'GET',
-      url: `/api/app/ho-so/${id}`,
+      url: `/api/app/complain/${id}`,
     },
     { apiName: this.apiName });
   
 
-  getList = (input: GetHoSoListDto) =>
-    this.restService.request<any, PagedResultDto<HoSoDto>>({
+  getList = (input: GetComplainListDto) =>
+    this.restService.request<any, PagedResultDto<ComplainDto>>({
       method: 'GET',
-      url: '/api/app/ho-so',
+      url: '/api/app/complain',
       params: { loaiVuViec: input.loaiVuViec, linhVuc: input.linhVuc, ketQua: input.ketQua, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
   
 
-  update = (id: string, input: UpdateHoSoDto) =>
-    this.restService.request<any, HoSoDto>({
+  update = (id: string, input: UpdateComplainDto) =>
+    this.restService.request<any, ComplainDto>({
       method: 'PUT',
-      url: `/api/app/ho-so/${id}`,
+      url: `/api/app/complain/${id}`,
       body: input,
     },
     { apiName: this.apiName });

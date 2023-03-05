@@ -13,10 +13,15 @@
     "Permission:AbpIdentity.Users.Update": "Sửa người dùng",
     "Permission:AbpIdentity.Users.Delete": "Xóa người dùng",
     "Permission:AbpIdentity.Users.ManagePermissions": "Phân quyền cho người dùng",
-    // Ho so
-    "Permission:HoSos": "Quản lý hồ sơ",
-    "Permission:HoSos.Create": "Tạo hồ sơ",
-    "Permission:HoSos.Edit": "Sửa hồ sơ",
-    "Permission:HoSos.Delete": "Xóa hồ sơ"
+    // khiếu nại
+    "Permission:Complains": "Quản lý khiếu nại",
+    "Permission:Complains.Create": "Tạo khiếu nại",
+    "Permission:Complains.Edit": "Sửa khiếu nại",
+    "Permission:Complains.Delete": "Xóa khiếu nại",
+    // tố cáo
+    "Permission:Denounces": "Quản lý tố cáo",
+    "Permission:Denounces.Create": "Tạo tố cáo",
+    "Permission:Denounces.Edit": "Sửa tố cáo",
+    "Permission:Denounces.Delete": "Xóa tố cáo"
   }
 }

@@ -1,10 +1,10 @@
 import { mapEnumToOptions } from '@abp/ng.core';
 
 export enum LinhVuc {
-  DataDai = 0,
-  MoiTruong = 1,
-  TaiNguyenNuoc = 2,
-  Khoángan = 3,
+  DataDai = 1,
+  MoiTruong = 2,
+  TaiNguyenNuoc = 3,
+  KhoangSan = 4,
 }
 
 export const linhVucOptions = mapEnumToOptions(LinhVuc);
