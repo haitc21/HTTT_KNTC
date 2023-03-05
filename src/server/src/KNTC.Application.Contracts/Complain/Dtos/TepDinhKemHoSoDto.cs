@@ -4,11 +4,12 @@ using System.Text;
 using Volo.Abp.Application.Dtos;
 using static KNTC.Permissions.KNTCPermissions;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain.Dtos;
 
 public class TepDinhKemHoSoDto : AuditedEntityDto<Guid>
 {
     public Guid IdHoSo { get; set; }
+    public int GiaiDoan { get; set; }
     public string TenTaiLieu { get; set; }
     public string HinhThuc { get; set; }
     public DateTime ThoiGianBanHanh { get; set; }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-import { HoSo } from './HoSo';
+import { Complain } from './Complain';
 
 @Injectable({
   providedIn: 'root',
@@ -48,10 +48,10 @@ export class MockService {
   results = [true, false];
 
   constructor() {}
-  mockData(): HoSo[] {
+  mockData(): Complain[] {
     let hoSos = [];
     for (let index = 0; index < 500; index++) {
-      let item = new HoSo();
+      let item = new Complain();
       let randomDate = this.randomDates();
       // item.code = this.genCode();
       item.code = 'HS' + index;

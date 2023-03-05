@@ -34,7 +34,7 @@ import { SearchMapComponent } from './search-map/search-map.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartModule } from 'primeng/chart';
 import { KNTCSharedModule } from '../shared/modules/shared.module';
-import { LandComplaintComponent } from './land-complaint/land-complaint.component';
+import { LandComplainComponent } from './land-complain/land-complain.component';
 import { LandAccusationComponent } from './land-accusation/land-accusation.component';
 import { EnviromentalAccusationComponent } from './enviromental-accusation/enviromental-accusation.component';
 import { MineralResourceAccusationComponent } from './mineral-resource-accusation/mineral-resource-accusation.component';
@@ -48,7 +48,7 @@ import { WaterResourcAccusationComponent } from './water-resource-accusation/wat
     HomeComponent,
     SearchMapComponent,
     DashboardComponent,
-    LandComplaintComponent,
+    LandComplainComponent,
     LandAccusationComponent,
     EnviromentalComplaintComponent,
     EnviromentalAccusationComponent,

@@ -1,14 +1,31 @@
-﻿using System;
+﻿using KNTC.Complain;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using Volo.Abp.Application.Dtos;
+using System.Diagnostics.CodeAnalysis;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities.Auditing;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain;
 
-public class HoSoDto : AuditedEntityDto<Guid>
+public class HoSo : FullAuditedAggregateRoot<Guid>
 {
-    public string MaHoSo { get; set; }
+    public HoSo()
+    {
+        KQGQHoSos = new List<KQGQHoSo>();
+        TepDinhKemHoSos = new List<TepDinhKemHoSo>();
+    }
+    public HoSo(Guid id) : base(id)
+    {
+        KQGQHoSos = new List<KQGQHoSo>();
+        TepDinhKemHoSos = new List<TepDinhKemHoSo>();
+    }
+    public HoSo(Guid id, string maHoSo) : base(id)
+    {
+        SetMaHoSo(maHoSo);
+        KQGQHoSos = new List<KQGQHoSo>();
+        TepDinhKemHoSos = new List<TepDinhKemHoSo>();
+    }
+    public string MaHoSo { get; private set; }
     public string TieuDe { get; set; }
     public string NguoiDeNghi { get; set; }
     public string CccdCmnd { get; set; }
@@ -39,6 +56,20 @@ public class HoSoDto : AuditedEntityDto<Guid>
     public string DuLieuHinhHoc { get; set; }
     public short SoLanTraKQ { get; set; }
     public LoaiKetQua KetQua { get; set; }
-    public virtual List<KQGQHoSoDto> KQGQHoSos { get; set; }
-    public virtual List<TepDinhKemHoSoDto> TepDinhKemHoSos { get; set; }
+    public virtual ICollection<KQGQHoSo> KQGQHoSos { get; set; }
+    public virtual ICollection<TepDinhKemHoSo> TepDinhKemHoSos { get; set; }
+    private void SetMaHoSo([NotNull] string maHoSo)
+    {
+        MaHoSo = Check.NotNullOrWhiteSpace(
+            maHoSo,
+            nameof(maHoSo),
+            maxLength: HoSoConsts.MaxCodeLength
+        );
+    }
+
+    internal HoSo ChangeMaHoSo([NotNull] string maHoSo)
+    {
+        SetMaHoSo(maHoSo);
+        return this;
+    }
 }

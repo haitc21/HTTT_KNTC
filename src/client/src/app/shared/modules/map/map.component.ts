@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.locatecontrol';
-import { HoSo, typesHoSo } from '../../mock/HoSo';
+import { Complain, typesHoSo } from '../../mock/Complain';
 
 const blueIcon = new L.Icon({
   iconUrl: 'assets/images/map/marker-icon.png',
@@ -34,7 +34,7 @@ const redIcon = new L.Icon({
 })
 export class MapComponent implements AfterViewInit, OnChanges {
   @Input() idMap: string = 'map';
-  @Input() data: HoSo[] = [];
+  @Input() data: Complain[] = [];
   @Input() heightMap: string = '600px';
   @Input() zoomLv: number = 13;
 
@@ -110,7 +110,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     });
   }
 
-  renderMarkers(hosos: HoSo[]) {
+  renderMarkers(hosos: Complain[]) {
     this.map.eachLayer(layer => {
       if (!(layer instanceof L.TileLayer)) {
         this.map.removeLayer(layer);

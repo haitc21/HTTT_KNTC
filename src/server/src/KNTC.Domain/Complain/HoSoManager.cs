@@ -8,7 +8,7 @@ using System.Xml;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain;
 
 public class HoSoManager : DomainService
 {

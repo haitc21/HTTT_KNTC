@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KNTC.Complain;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -9,7 +10,7 @@ using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain;
 
 public class TepDinhKemHoSo : FullAuditedEntity<Guid>
 {

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using KNTC.Complain;
 using Volo.Abp.Application.Dtos;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain.Dtos;
 
-public class HoSoListDto : AuditedEntityDto<Guid>
+public class ComplainListDto : AuditedEntityDto<Guid>
 {
     public string MaHoSo { get; set; }
     public string TieuDe { get; set; }

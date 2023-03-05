@@ -10,7 +10,7 @@ using System.Xml.Linq;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain;
 
 public class EfCoreHoSoRepository : EfCoreRepository<KNTCDbContext, HoSo, Guid>, IHoSoRepository
 {

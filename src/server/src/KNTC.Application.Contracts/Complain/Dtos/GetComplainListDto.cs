@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using KNTC.Complain;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain.Dtos;
 
-public class GetHoSoListDto : BaseListFilterDto
+public class GetComplainListDto : BaseListFilterDto
 {
     public LoaiVuViec LoaiVuViec { get; set; }
     public LinhVuc LinhVuc { get; set; }

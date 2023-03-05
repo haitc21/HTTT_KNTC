@@ -14,9 +14,9 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using KNTC.Users;
-using KNTC.HoSos;
 using Newtonsoft.Json.Linq;
 using System.Reflection.Emit;
+using KNTC.Complain;
 
 namespace KNTC.EntityFrameworkCore;
 

@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KNTC.Domain\KNTC.Domain.csproj" />
-    <ProjectReference Include="..\KNTC.Application.Contracts\KNTC.Application.Contracts.csproj" />
+    <ProjectReference Include="..\KNTC.Application.Contracts\KNTC.Application.Dtos.csproj" />
   </ItemGroup>
 
   <ItemGroup>

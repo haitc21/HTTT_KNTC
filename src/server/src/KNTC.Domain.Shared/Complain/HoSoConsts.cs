@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain;
 
 public class HoSoConsts
 {

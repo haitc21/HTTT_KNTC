@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CA9AC87F-097
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNTC.Application", "src\KNTC.Application\KNTC.Application.csproj", "{A607D50F-88BD-430A-92F4-F6E0DF1C0804}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNTC.Application.Contracts", "src\KNTC.Application.Contracts\KNTC.Application.Contracts.csproj", "{5B30AA57-AD5E-4EB3-8A43-593DC788CC75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNTC.Application.Dtos", "src\KNTC.Application.Contracts\KNTC.Application.Dtos.csproj", "{5B30AA57-AD5E-4EB3-8A43-593DC788CC75}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KNTC.AuthServer", "src\KNTC.AuthServer\KNTC.AuthServer.csproj", "{3E63EEC1-62D5-4D44-8FD9-19C4691EC6DC}"
 EndProject

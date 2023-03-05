@@ -24,7 +24,7 @@ namespace KNTC.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("KNTC.HoSos.HoSo", b =>
+            modelBuilder.Entity("KNTC.Complain.HoSo", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -238,7 +238,7 @@ namespace KNTC.Migrations
                     b.ToTable("ho_so", "KNTC");
                 });
 
-            modelBuilder.Entity("KNTC.HoSos.KQGQHoSo", b =>
+            modelBuilder.Entity("KNTC.Complain.KQGQHoSo", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -313,7 +313,7 @@ namespace KNTC.Migrations
                     b.ToTable("kqgq_ho_so", "KNTC");
                 });
 
-            modelBuilder.Entity("KNTC.HoSos.TepDinhKemHoSo", b =>
+            modelBuilder.Entity("KNTC.Complain.TepDinhKemHoSo", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -1866,9 +1866,9 @@ namespace KNTC.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
-            modelBuilder.Entity("KNTC.HoSos.KQGQHoSo", b =>
+            modelBuilder.Entity("KNTC.Complain.KQGQHoSo", b =>
                 {
-                    b.HasOne("KNTC.HoSos.HoSo", "HoSo")
+                    b.HasOne("KNTC.Complain.HoSo", "HoSo")
                         .WithMany("KQGQHoSos")
                         .HasForeignKey("IdHoSo")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1877,9 +1877,9 @@ namespace KNTC.Migrations
                     b.Navigation("HoSo");
                 });
 
-            modelBuilder.Entity("KNTC.HoSos.TepDinhKemHoSo", b =>
+            modelBuilder.Entity("KNTC.Complain.TepDinhKemHoSo", b =>
                 {
-                    b.HasOne("KNTC.HoSos.HoSo", "HoSo")
+                    b.HasOne("KNTC.Complain.HoSo", "HoSo")
                         .WithMany("TepDinhKemHoSos")
                         .HasForeignKey("IdHoSo")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -2039,7 +2039,7 @@ namespace KNTC.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("KNTC.HoSos.HoSo", b =>
+            modelBuilder.Entity("KNTC.Complain.HoSo", b =>
                 {
                     b.Navigation("KQGQHoSos");
 

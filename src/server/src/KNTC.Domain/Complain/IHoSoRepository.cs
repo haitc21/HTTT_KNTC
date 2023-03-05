@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain;
 
 public interface IHoSoRepository : IRepository<HoSo, Guid>
 {

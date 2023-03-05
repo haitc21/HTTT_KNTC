@@ -6,7 +6,7 @@ using System.Text;
 using Volo.Abp.Application.Dtos;
 using static KNTC.Permissions.KNTCPermissions;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain.Dtos;
 
 public class CreateAndUpdateTepDinhKemHoSoDto : EntityDto<Guid>
 {

@@ -5,7 +5,7 @@ import { EnviromentalAccusationComponent } from './enviromental-accusation/envir
 import { EnviromentalComplaintComponent } from './enviromental-complaint/enviromental-complaint.component';
 import { HomeComponent } from './home/home.component';
 import { LandAccusationComponent } from './land-accusation/land-accusation.component';
-import { LandComplaintComponent } from './land-complaint/land-complaint.component';
+import { LandComplainComponent } from './land-complain/land-complain.component';
 import { MineralResourceAccusationComponent } from './mineral-resource-accusation/mineral-resource-accusation.component';
 import { MineralResourceComplaintComponent } from './mineral-resource-complaint/mineral-resource-complaint.component';
 import { SearchMapComponent } from './search-map/search-map.component';
@@ -17,7 +17,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'map', component: SearchMapComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'land-complaint', component: LandComplaintComponent },
+  { path: 'land-complain', component: LandComplainComponent },
   { path: 'land-accusation', component: LandAccusationComponent },
   { path: 'enviromental-complaint', component: EnviromentalComplaintComponent },
   { path: 'enviromental-accusation', component: EnviromentalAccusationComponent },

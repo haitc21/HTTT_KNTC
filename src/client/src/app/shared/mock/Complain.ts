@@ -1,4 +1,4 @@
-export class HoSo {
+export class Complain {
     code: string;
     title: string;
     sender: string;

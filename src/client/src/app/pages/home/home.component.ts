@@ -1,7 +1,7 @@
 import { AuthService } from '@abp/ng.core';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { HoSo, fieldsHoSo, typesHoSo } from '../../shared/mock/HoSo';
+import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
 import { MockService } from '../../shared/mock/mock.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
@@ -50,15 +50,15 @@ export class HomeComponent implements OnInit {
   blockedPanel = false;
   @ViewChild('map', { static: true }) mapContainer: ElementRef;
 
-  data: HoSo[] = [];
+  data: Complain[] = [];
 
-  mockData: HoSo[] = [];
+  mockData: Complain[] = [];
   loaiHS = ['khiếu nại', 'Tố cáo'];
   linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
   typesHoSo = typesHoSo;
   fieldsHoSo = fieldsHoSo;
 
-  public selectedItems: HoSo[] = [];
+  public selectedItems: Complain[] = [];
   //Paging variables
   public skipCount: number = 0;
   public maxResultCount: number = 10;

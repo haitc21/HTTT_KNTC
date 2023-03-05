@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using KNTC.Complain;
 using Volo.Abp.Application.Dtos;
 
-namespace KNTC.HoSos;
+namespace KNTC.Complain.Dtos;
 
-public class UpdateHoSoDto : EntityDto<Guid>
+public class UpdateComplainDto : EntityDto<Guid>
 {
     [Required]
     [MaxLength(HoSoConsts.MaxCodeLength)]
@@ -86,7 +87,7 @@ public class UpdateHoSoDto : EntityDto<Guid>
     [MaxLength(HoSoConsts.MaxHinhHocLength)]
     public string DuLieuHinhHoc { get; set; }
     public IReadOnlyList<Guid> ListKQGQHoSoDeleted { get; set; }
-    public IReadOnlyList<CreateAndUpdateKQGQHoSoDto> KQGQHoSos { get; set; }
+    //public IReadOnlyList<CreateAndUpdateKQGQHoSoDto> KQGQHoSos { get; set; }
     public IReadOnlyList<Guid> ListTepDinhKemHoSosDeleted { get; set; }
     public IReadOnlyList<CreateAndUpdateTepDinhKemHoSoDto> TepDinhKemHoSos { get; set; }
 }
