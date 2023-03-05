@@ -4,6 +4,7 @@ using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230305153220_create_complain_denounce_fileacttachment")]
+    partial class create_complain_denounce_fileacttachment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,15 +125,15 @@ namespace KNTC.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("IsDeleted");
 
-                    b.Property<short?>("KetQua")
+                    b.Property<short>("KetQua")
                         .HasColumnType("smallint")
                         .HasColumnName("ket_qua");
 
-                    b.Property<short?>("KetQuaI")
+                    b.Property<short>("KetQuaI")
                         .HasColumnType("smallint")
                         .HasColumnName("ket_qua_I");
 
-                    b.Property<short?>("KetQuaII")
+                    b.Property<short>("KetQuaII")
                         .HasColumnType("smallint")
                         .HasColumnName("ket_qua_II");
 
@@ -193,11 +195,11 @@ namespace KNTC.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_tiep_nhan");
 
-                    b.Property<DateTime?>("NgayTraKQI")
+                    b.Property<DateTime>("NgayTraKQI")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_tra_kq_I");
 
-                    b.Property<DateTime?>("NgayTraKQII")
+                    b.Property<DateTime>("NgayTraKQII")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_tra_kq_II");
 
@@ -268,11 +270,11 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("xa_thua_dat");
 
-                    b.Property<DateTime?>("ngayKhieuNaiI")
+                    b.Property<DateTime>("ngayKhieuNaiI")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_khieu_nai_I");
 
-                    b.Property<DateTime?>("ngayKhieuNaiII")
+                    b.Property<DateTime>("ngayKhieuNaiII")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_khieu_nai_II");
 
@@ -384,15 +386,15 @@ namespace KNTC.Migrations
                         .HasDefaultValue(false)
                         .HasColumnName("IsDeleted");
 
-                    b.Property<short?>("KetQua")
+                    b.Property<short>("KetQua")
                         .HasColumnType("smallint")
                         .HasColumnName("ket_qua");
 
-                    b.Property<short?>("KetQuaI")
+                    b.Property<short>("KetQuaI")
                         .HasColumnType("smallint")
                         .HasColumnName("ket_qua_I");
 
-                    b.Property<short?>("KetQuaII")
+                    b.Property<short>("KetQuaII")
                         .HasColumnType("smallint")
                         .HasColumnName("ket_qua_II");
 
@@ -454,11 +456,11 @@ namespace KNTC.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_tiep_nhan");
 
-                    b.Property<DateTime?>("NgayTraKQI")
+                    b.Property<DateTime>("NgayTraKQI")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_tra_kq_I");
 
-                    b.Property<DateTime?>("NgayTraKQII")
+                    b.Property<DateTime>("NgayTraKQII")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_tra_kq_II");
 
@@ -529,11 +531,11 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("xa_thua_dat");
 
-                    b.Property<DateTime?>("ngayKhieuNaiI")
+                    b.Property<DateTime>("ngayKhieuNaiI")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_khieu_nai_I");
 
-                    b.Property<DateTime?>("ngayKhieuNaiII")
+                    b.Property<DateTime>("ngayKhieuNaiII")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_khieu_nai_II");
 

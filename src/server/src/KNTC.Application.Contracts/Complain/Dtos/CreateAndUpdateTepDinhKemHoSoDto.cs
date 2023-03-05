@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KNTC.FileAttachments;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,20 +7,20 @@ using System.Text;
 using Volo.Abp.Application.Dtos;
 using static KNTC.Permissions.KNTCPermissions;
 
-namespace KNTC.Complain.Dtos;
+namespace KNTC.Complains.Dtos;
 
 public class CreateAndUpdateTepDinhKemHoSoDto : EntityDto<Guid>
 {
     [Required]
-    [MaxLength(HoSoConsts.MaxTenTaiLieuLength)]
+    [MaxLength(FileAttachmentConsts.MaxTenTaiLieuLength)]
     public string TenTaiLieu { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxHinhThucLength)]
+    [MaxLength(FileAttachmentConsts.MaxHinhThucLength)]
     public string HinhThuc { get; set; }
     public DateTime ThoiGianBanHanh { get; set; }
     public DateTime NgayNhan { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxThuTuButLucLength)]
+    [MaxLength(FileAttachmentConsts.MaxThuTuButLucLength)]
     public string ThuTuButLuc { get; set; }
     public string NoiDungChinh { get; set; }
     public IFormFile FileContent { get; set; }

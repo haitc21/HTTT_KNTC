@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KNTC.FileAttachments;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -8,48 +9,59 @@ using System.Xml;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 
-namespace KNTC.Complain;
+namespace KNTC.Complains;
 
-public class HoSoManager : DomainService
+public class ComplainManager : DomainService
 {
-    private readonly IHoSoRepository _hoSoRepo;
-    public HoSoManager(IHoSoRepository hoSoRepo)
+    private readonly IComplainRepository _hoSoRepo;
+    public ComplainManager(IComplainRepository hoSoRepo)
     {
         _hoSoRepo = hoSoRepo;
     }
-    public async Task<HoSo> CreateAsync([NotNull] string maHoSo,
-                                        [NotNull] string yieuDe,
-                                        [NotNull] string nguoiDeNghi,
-                                        [NotNull] string cccdCmnd,
-                                        [NotNull] DateTime ngayCapCccdCmnd,
-                                        [NotNull] string noiCapCccdCmnd,
-                                        [NotNull] DateTime ngaySinh,
-                                        [NotNull] string dienThaoi,
-                                        string email,
-                                        [NotNull] string diaChiThuongTru,
-                                        [NotNull] string diaChiLienHe,
-                                        [NotNull] string maTinhTP,
-                                        [NotNull] string maQuanHuyen,
-                                        [NotNull] string maXaPhuongTT,
-                                        [NotNull] LoaiVuViec loaiVuViec,
-                                        [NotNull] LinhVuc linhVuc,
-                                        [NotNull] DateTime ngayTiepNhan,
-                                        [NotNull] DateTime ngayHenTraKQ,
-                                        [NotNull] string noiDungVuViec,
-                                        [NotNull] string soThua,
-                                        [NotNull] string toBanDo,
-                                        [NotNull] string dienTich,
-                                        [NotNull] string loaiDat,
-                                        [NotNull] string diaChiThuaDat,
-                                        [NotNull] string tinhThuaDat,
-                                        [NotNull] string huyenThuaDat,
-                                        [NotNull] string xaThuaDat,
-                                        string duLieuToaDo,
-                                        string duLieuHinhHoc
+    public async Task<Complain> CreateAsync([NotNull] string maHoSo,
+                                              [NotNull] LoaiVuViec loaiVuViec,
+                                              [NotNull] string tieuDe,
+                                              [NotNull] string nguoiDeNghi,
+                                              [NotNull] string cccdCmnd,
+                                              [NotNull] DateTime ngayCapCccdCmnd,
+                                              [NotNull] string noiCapCccdCmnd,
+                                              [NotNull] DateTime ngaySinh,
+                                              [NotNull] string dienThaoi,
+                                              string email,
+                                              [NotNull] string diaChiThuongTru,
+                                              [NotNull] string diaChiLienHe,
+                                              [NotNull] string maTinhTP,
+                                              [NotNull] string maQuanHuyen,
+                                              [NotNull] string maXaPhuongTT,
+                                              [NotNull] DateTime ngayTiepNhan,
+                                              [NotNull] DateTime ngayHenTraKQ,
+                                              [NotNull] string noiDungVuViec,
+                                              [NotNull] string soThua,
+                                              [NotNull] string toBanDo,
+                                              [NotNull] string dienTich,
+                                              [NotNull] string loaiDat,
+                                              [NotNull] string diaChiThuaDat,
+                                              [NotNull] string tinhThuaDat,
+                                              [NotNull] string huyenThuaDat,
+                                              [NotNull] string xaThuaDat,
+                                              string duLieuToaDo,
+                                              string duLieuHinhHoc,
+                                              string GhiChu,
+                                              DateTime ngayKhieuNaiI,
+                                              DateTime NgayTraKQI,
+                                              string ThamQuyenI,
+                                              string SoQDI,
+                                              DateTime ngayKhieuNaiII,
+                                              DateTime NgayTraKQII,
+                                              string ThamQuyenII,
+                                              string SoQDII,
+                                              LoaiKetQua? KetQuaI = null,
+                                              LoaiKetQua? KetQuaII = null
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
-        Check.NotNullOrWhiteSpace(yieuDe, nameof(yieuDe));
+        Check.NotNull(loaiVuViec, nameof(loaiVuViec));
+        Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
         Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
         Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
@@ -61,8 +73,6 @@ public class HoSoManager : DomainService
         Check.NotNullOrWhiteSpace(maTinhTP, nameof(maTinhTP));
         Check.NotNullOrWhiteSpace(maQuanHuyen, nameof(maQuanHuyen));
         Check.NotNullOrWhiteSpace(maXaPhuongTT, nameof(maXaPhuongTT));
-        Check.NotNull(loaiVuViec, nameof(loaiVuViec));
-        Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(noiDungVuViec, nameof(noiDungVuViec));
         Check.NotNullOrWhiteSpace(soThua, nameof(soThua));
         Check.NotNullOrWhiteSpace(toBanDo, nameof(toBanDo));
@@ -78,9 +88,10 @@ public class HoSoManager : DomainService
         {
             throw new BusinessException(KNTCDomainErrorCodes.HoSoAlreadyExist).WithData("maHoSo", maHoSo);
         }
-        return new HoSo(GuidGenerator.Create(), maHoSo)
+        return new Complain(GuidGenerator.Create(), maHoSo)
         {
-            TieuDe = yieuDe,
+            TieuDe = tieuDe,
+            LoaiVuViec = loaiVuViec,
             NguoiDeNghi = nguoiDeNghi,
             CccdCmnd = cccdCmnd,
             NgayCapCccdCmnd = ngayCapCccdCmnd,
@@ -93,8 +104,6 @@ public class HoSoManager : DomainService
             MaTinhTP = maTinhTP,
             MaQuanHuyen = maQuanHuyen,
             MaXaPhuongTT = maXaPhuongTT,
-            LoaiVuViec = loaiVuViec,
-            LinhVuc = linhVuc,
             NgayTiepNhan = ngayTiepNhan,
             NgayHenTraKQ = ngayHenTraKQ,
             NoiDungVuViec = noiDungVuViec,
@@ -107,10 +116,22 @@ public class HoSoManager : DomainService
             HuyenThuaDat = huyenThuaDat,
             XaThuaDat = xaThuaDat,
             DuLieuToaDo = duLieuToaDo,
-            DuLieuHinhHoc = duLieuHinhHoc
+            DuLieuHinhHoc = duLieuHinhHoc,
+            GhiChu = GhiChu,
+            ngayKhieuNaiI = ngayKhieuNaiI,
+            NgayTraKQI = NgayTraKQI,
+            ThamQuyenI = ThamQuyenI,
+            SoQDI = SoQDI,
+            KetQuaI = KetQuaI,
+            ngayKhieuNaiII = ngayKhieuNaiII,
+            NgayTraKQII = NgayTraKQII,
+            ThamQuyenII = ThamQuyenII,
+            SoQDII = SoQDII,
+            KetQuaII = KetQuaII,
+            KetQua = KetQuaII ?? KetQuaI
         };
     }
-    public async Task ChangeMaHoSoAsync([NotNull] HoSo hoSo, [NotNull] string maHoSo)
+    public async Task ChangeMaHoSoAsync([NotNull] Complain hoSo, [NotNull] string maHoSo)
     {
         Check.NotNull(hoSo, nameof(hoSo));
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
@@ -121,41 +142,52 @@ public class HoSoManager : DomainService
         }
         hoSo.ChangeMaHoSo(maHoSo);
     }
-    public async Task UpdateAsync([NotNull] HoSo hoSo,
+    public async Task UpdateAsync([NotNull] Complain hoSo,
                                   [NotNull] string maHoSo,
-                                  [NotNull] string yieuDe,
-                                  [NotNull] string nguoiDeNghi,
-                                  [NotNull] string cccdCmnd,
-                                  [NotNull] DateTime ngayCapCccdCmnd,
-                                  [NotNull] string noiCapCccdCmnd,
-                                  [NotNull] DateTime ngaySinh,
-                                  [NotNull] string dienThaoi,
-                                  string email,
-                                  [NotNull] string diaChiThuongTru,
-                                  [NotNull] string diaChiLienHe,
-                                  [NotNull] string maTinhTP,
-                                  [NotNull] string maQuanHuyen,
-                                  [NotNull] string maXaPhuongTT,
                                   [NotNull] LoaiVuViec loaiVuViec,
-                                  [NotNull] LinhVuc linhVuc,
-                                  [NotNull] DateTime ngayTiepNhan,
-                                  [NotNull] DateTime ngayHenTraKQ,
-                                  [NotNull] string noiDungVuViec,
-                                  [NotNull] string soThua,
-                                  [NotNull] string toBanDo,
-                                  [NotNull] string dienTich,
-                                  [NotNull] string loaiDat,
-                                  [NotNull] string diaChiThuaDat,
-                                  [NotNull] string tinhThuaDat,
-                                  [NotNull] string huyenThuaDat,
-                                  [NotNull] string xaThuaDat,
-                                  string duLieuToaDo,
-                                  string duLieuHinhHoc
+                                   [NotNull] string tieuDe,
+                                   [NotNull] string nguoiDeNghi,
+                                   [NotNull] string cccdCmnd,
+                                   [NotNull] DateTime ngayCapCccdCmnd,
+                                   [NotNull] string noiCapCccdCmnd,
+                                   [NotNull] DateTime ngaySinh,
+                                   [NotNull] string dienThaoi,
+                                   string email,
+                                   [NotNull] string diaChiThuongTru,
+                                   [NotNull] string diaChiLienHe,
+                                   [NotNull] string maTinhTP,
+                                   [NotNull] string maQuanHuyen,
+                                   [NotNull] string maXaPhuongTT,
+                                   [NotNull] DateTime ngayTiepNhan,
+                                   [NotNull] DateTime ngayHenTraKQ,
+                                   [NotNull] string noiDungVuViec,
+                                   [NotNull] string soThua,
+                                   [NotNull] string toBanDo,
+                                   [NotNull] string dienTich,
+                                   [NotNull] string loaiDat,
+                                   [NotNull] string diaChiThuaDat,
+                                   [NotNull] string tinhThuaDat,
+                                   [NotNull] string huyenThuaDat,
+                                   [NotNull] string xaThuaDat,
+                                   string duLieuToaDo,
+                                   string duLieuHinhHoc,
+                                   string GhiChu,
+                                   DateTime ngayKhieuNaiI,
+                                   DateTime NgayTraKQI,
+                                   string ThamQuyenI,
+                                   string SoQDI,
+                                   DateTime ngayKhieuNaiII,
+                                   DateTime NgayTraKQII,
+                                   string ThamQuyenII,
+                                   string SoQDII,
+                                   LoaiKetQua? KetQuaI = null,
+                                   LoaiKetQua? KetQuaII = null
       )
     {
         Check.NotNull(hoSo, nameof(hoSo));
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
-        Check.NotNullOrWhiteSpace(yieuDe, nameof(yieuDe));
+        Check.NotNull(loaiVuViec, nameof(loaiVuViec));
+        Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
         Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
         Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
@@ -167,8 +199,6 @@ public class HoSoManager : DomainService
         Check.NotNullOrWhiteSpace(maTinhTP, nameof(maTinhTP));
         Check.NotNullOrWhiteSpace(maQuanHuyen, nameof(maQuanHuyen));
         Check.NotNullOrWhiteSpace(maXaPhuongTT, nameof(maXaPhuongTT));
-        Check.NotNull(loaiVuViec, nameof(loaiVuViec));
-        Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(noiDungVuViec, nameof(noiDungVuViec));
         Check.NotNullOrWhiteSpace(soThua, nameof(soThua));
         Check.NotNullOrWhiteSpace(toBanDo, nameof(toBanDo));
@@ -183,7 +213,8 @@ public class HoSoManager : DomainService
         {
             await ChangeMaHoSoAsync(hoSo, maHoSo);
         }
-        hoSo.TieuDe = yieuDe;
+        hoSo.TieuDe = tieuDe;
+        hoSo.LoaiVuViec = loaiVuViec;
         hoSo.NguoiDeNghi = nguoiDeNghi;
         hoSo.CccdCmnd = cccdCmnd;
         hoSo.NgayCapCccdCmnd = ngayCapCccdCmnd;
@@ -196,8 +227,6 @@ public class HoSoManager : DomainService
         hoSo.MaTinhTP = maTinhTP;
         hoSo.MaQuanHuyen = maQuanHuyen;
         hoSo.MaXaPhuongTT = maXaPhuongTT;
-        hoSo.LoaiVuViec = loaiVuViec;
-        hoSo.LinhVuc = linhVuc;
         hoSo.NgayTiepNhan = ngayTiepNhan;
         hoSo.NgayHenTraKQ = ngayHenTraKQ;
         hoSo.NoiDungVuViec = noiDungVuViec;
@@ -211,79 +240,20 @@ public class HoSoManager : DomainService
         hoSo.XaThuaDat = xaThuaDat;
         hoSo.DuLieuToaDo = duLieuToaDo;
         hoSo.DuLieuHinhHoc = duLieuHinhHoc;
+        hoSo.GhiChu = GhiChu;
+        hoSo.ngayKhieuNaiI = ngayKhieuNaiI;
+        hoSo.NgayTraKQI = NgayTraKQI;
+        hoSo.ThamQuyenI = ThamQuyenI;
+        hoSo.SoQDI = SoQDI;
+        hoSo.KetQuaI = KetQuaI;
+        hoSo.ngayKhieuNaiII = ngayKhieuNaiII;
+        hoSo.NgayTraKQII = NgayTraKQII;
+        hoSo.ThamQuyenII= ThamQuyenII;
+        hoSo.SoQDII= SoQDII;
+        hoSo.KetQuaII= KetQuaII;
+        hoSo.KetQua = KetQuaII ?? KetQuaI;
     }
-    public async Task<KQGQHoSo> CreateKQGQHoSoAsync([NotNull] HoSo hoSo,
-                                                    [NotNull] short lanGQ,
-                                                    [NotNull] DateTime ngayKhieuNai,
-                                                    [NotNull] DateTime ngayTraKQ,
-                                                    [NotNull] string thamQuyen,
-                                                    [NotNull] string soQD,
-                                                    [NotNull] string ghiChu,
-                                                    [NotNull] LoaiKetQua ketQua)
-    {
-        Check.NotNull(hoSo, nameof(hoSo));
-        Check.NotNull(lanGQ, nameof(lanGQ));
-        Check.NotNull(ngayKhieuNai, nameof(ngayKhieuNai));
-        Check.NotNull(ngayTraKQ, nameof(ngayTraKQ));
-        Check.NotNullOrWhiteSpace(thamQuyen, nameof(thamQuyen));
-        Check.NotNullOrWhiteSpace(soQD, nameof(soQD));
-        Check.NotNullOrWhiteSpace(ghiChu, nameof(ghiChu));
-        Check.NotNull(ketQua, nameof(ketQua));
-        var existLanGQ = hoSo.KQGQHoSos.FirstOrDefault(x => x.LanGQ == lanGQ);
-        if (existLanGQ != null)
-        {
-            throw new BusinessException(KNTCDomainErrorCodes.LanGQAlreadyExist);
-        }
-        return new KQGQHoSo(GuidGenerator.Create())
-        {
-            IdHoSo = hoSo.Id,
-            LanGQ = lanGQ,
-            ngayKhieuNai= ngayKhieuNai,
-            NgayTraKQ = ngayTraKQ,
-            ThamQuyen = thamQuyen,
-            SoQD = soQD,
-            GhiChu = ghiChu,
-            KetQua = ketQua
-        };
-    }
-    public async Task UpdateeKQGQHoSoAsync([NotNull] HoSo hoSo,
-                                                 [NotNull] KQGQHoSo kqgqHoSo,
-                                                 [NotNull] short lanGQ,
-                                                 [NotNull] DateTime ngayKhieuNai,
-                                                 [NotNull] DateTime ngayTraKQ,
-                                                 [NotNull] string thamQuyen,
-                                                 [NotNull] string soQD,
-                                                 [NotNull] string ghiChu,
-                                                 [NotNull] LoaiKetQua ketQua)
-    {
-        Check.NotNull(hoSo, nameof(hoSo));
-        Check.NotNull(kqgqHoSo, nameof(kqgqHoSo));
-        Check.NotNull(lanGQ, nameof(lanGQ));
-        Check.NotNull(ngayKhieuNai, nameof(ngayKhieuNai));
-        Check.NotNull(ngayTraKQ, nameof(ngayTraKQ));
-        Check.NotNullOrWhiteSpace(thamQuyen, nameof(thamQuyen));
-        Check.NotNullOrWhiteSpace(soQD, nameof(soQD));
-        Check.NotNullOrWhiteSpace(ghiChu, nameof(ghiChu));
-        Check.NotNull(ketQua, nameof(ketQua));
-        var kqgq = hoSo.KQGQHoSos.FirstOrDefault(x => x.Id == kqgqHoSo.Id);
-        if (kqgq == null)
-        {
-            throw new BusinessException(KNTCDomainErrorCodes.KQGQHoSoNotExist);
-        }
-        var existLanGQ = hoSo.KQGQHoSos.FirstOrDefault(x => x.LanGQ == lanGQ);
-        if (existLanGQ != null)
-        {
-            throw new BusinessException(KNTCDomainErrorCodes.LanGQAlreadyExist);
-        }
-        kqgqHoSo.LanGQ = lanGQ;
-        kqgqHoSo.ngayKhieuNai = ngayKhieuNai;
-        kqgqHoSo.NgayTraKQ = ngayTraKQ;
-        kqgqHoSo.ThamQuyen = thamQuyen;
-        kqgqHoSo.SoQD = soQD;
-        kqgqHoSo.GhiChu = ghiChu;
-        kqgqHoSo.KetQua = ketQua;
-    }
-    public async Task<TepDinhKemHoSo> CreateTepDinhKemHoSoAsync([NotNull] HoSo hoSo,
+    public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Complain hoSo,
                                                                 [NotNull] string tenTaiLieu,
                                                                 [NotNull] string hinhThuc,
                                                                 DateTime thoiGianBanHanh,
@@ -302,14 +272,14 @@ public class HoSoManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
-        var existTepDinhKem = hoSo.TepDinhKemHoSos.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu);
+        var existTepDinhKem = hoSo.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu);
         if (existTepDinhKem != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
                 .WithData("maHoSo", hoSo.MaHoSo)
                 .WithData("maHoSo", hoSo.MaHoSo);
         }
-        return new TepDinhKemHoSo(GuidGenerator.Create(), tenTaiLieu)
+        return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
         {
             IdHoSo = hoSo.Id,
             HinhThuc = hinhThuc,
@@ -322,8 +292,8 @@ public class HoSoManager : DomainService
             ContentLength = contentLength
         };
     }
-    public async Task UpdateTepDinhKemHoSoAsync([NotNull] HoSo hoSo,
-                                                [NotNull] TepDinhKemHoSo tepDinhKem,
+    public async Task UpdateFileAttachmentAsync([NotNull] Complain hoSo,
+                                                [NotNull] FileAttachment tepDinhKem,
                                                 [NotNull] string tenTaiLieu,
                                                 [NotNull] string hinhThuc,
                                                 DateTime thoiGianBanHanh,
@@ -343,12 +313,12 @@ public class HoSoManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
-        var tep = hoSo.TepDinhKemHoSos.FirstOrDefault(x => x.Id == tepDinhKem.Id);
+        var tep = hoSo.FileAttachments.FirstOrDefault(x => x.Id == tepDinhKem.Id);
         if (tep == null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.KTepDinhKemMotExist);
         }
-        var existTepDinhKem = hoSo.TepDinhKemHoSos.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu && x.Id != tepDinhKem.Id);
+        var existTepDinhKem = hoSo.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu && x.Id != tepDinhKem.Id);
         if (existTepDinhKem != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
@@ -364,7 +334,7 @@ public class HoSoManager : DomainService
         tepDinhKem.NgayNhan = ngayNhan;
         tepDinhKem.ThuTuButLuc = thuTuButLuc;
         tepDinhKem.NoiDungChinh = noiDungChinh;
-        if(!!string.IsNullOrEmpty(fileName))
+        if (!!string.IsNullOrEmpty(fileName))
         {
             tepDinhKem.FileName = fileName;
             tepDinhKem.ContentType = contentType;

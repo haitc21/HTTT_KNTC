@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KNTC.Complain;
+namespace KNTC.Denounces;
 
-public class HoSoConsts
+public class DenounceConsts
 {
     public const int MaxMaHoSoLength = 50;
     public const int MaxTieuDeLength = 100;
@@ -24,10 +24,4 @@ public class HoSoConsts
     public const int MaxThamQuyenLength = 250;
     public const int MaxSoQDLength = 100;
     public const int MaxGhiChuLength = 250;
-    public const int MaxTenTaiLieuLength = 250;
-    public const int MaxHinhThucLength = 50;
-    public const int MaxThuTuButLucLength = 50;
-    public const int MaxFileNameLength = 258;
-    public const int MaxContenTypeLength = 100;
-
 }

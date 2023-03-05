@@ -1,4 +1,5 @@
-﻿using KNTC.Complain;
+﻿using KNTC.Complains;
+using KNTC.Denounces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -10,24 +11,23 @@ using Volo.Abp;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace KNTC.Complain;
+namespace KNTC.FileAttachments;
 
-public class TepDinhKemHoSo : FullAuditedEntity<Guid>
+public class FileAttachment : FullAuditedEntity<Guid>
 {
-    public TepDinhKemHoSo()
+    public FileAttachment()
     {
 
     }
-    public TepDinhKemHoSo(Guid id) : base(id)
+    public FileAttachment(Guid id) : base(id)
     {
 
     }
-    public TepDinhKemHoSo(Guid id, string tenTaiLieu) : base(id)
+    public FileAttachment(Guid id, string tenTaiLieu) : base(id)
     {
         SetTenTaiLieu(tenTaiLieu);
     }
     public Guid IdHoSo { get; set; }
-    public HoSo HoSo { get; set; }
     public string TenTaiLieu { get; private set; }
     public string HinhThuc { get; set; }
     public DateTime ThoiGianBanHanh { get; set; }
@@ -37,16 +37,18 @@ public class TepDinhKemHoSo : FullAuditedEntity<Guid>
     public string FileName { get; set; }
     public string ContentType { get; set; }
     public long ContentLength { get; set; }
+    public Complain Complain { get; set; }
+    public Denounce Denounce { get; set; }
     private void SetTenTaiLieu([NotNull] string tenTaiLieu)
     {
         TenTaiLieu = Check.NotNullOrWhiteSpace(
             tenTaiLieu,
             nameof(tenTaiLieu),
-            maxLength: HoSoConsts.MaxTenTaiLieuLength
+            maxLength: FileAttachmentConsts.MaxTenTaiLieuLength
         );
     }
 
-    internal TepDinhKemHoSo ChangeTenTaiLieu([NotNull] string tenTaiLieu)
+    internal FileAttachment ChangeTenTaiLieu([NotNull] string tenTaiLieu)
     {
         SetTenTaiLieu(tenTaiLieu);
         return this;

@@ -2,58 +2,53 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using KNTC.Complain;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
-namespace KNTC.Complain.Dtos;
+namespace KNTC.Complains;
 
-<<<<<<< HEAD:src/server/src/KNTC.Application.Contracts/Complain/Dtos/UpdateComplainDto.cs
 public class UpdateComplainDto : EntityDto<Guid>
-=======
-public class UpdateHoSoDto : EntityDto<Guid>, IHasConcurrencyStamp
->>>>>>> c8c1cddf08291543f707abfdc559233f78423afe:src/server/src/KNTC.Application.Contracts/HoSos/Dtos/UpdateHoSoDto.cs
 {
     [Required]
-    [MaxLength(HoSoConsts.MaxMaHoSoLength)]
+    [MaxLength(ComplainConsts.MaxMaHoSoLength)]
     public string MaHoSo { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxTieuDeLength)]
+    [MaxLength(ComplainConsts.MaxTieuDeLength)]
     public string TieuDe { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxNguoiDeNghiLength)]
+    [MaxLength(ComplainConsts.MaxNguoiDeNghiLength)]
     public string NguoiDeNghi { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxCccdCmndLength)]
+    [MaxLength(ComplainConsts.MaxCccdCmndLength)]
     public string CccdCmnd { get; set; }
     [Required]
     public DateTime NgayCapCccdCmnd { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxNoiCapCccdCmnd)]
+    [MaxLength(ComplainConsts.MaxNoiCapCccdCmnd)]
     public string NoiCapCccdCmnd { get; set; }
     [Required]
     public DateTime NgaySinh { get; set; }
     [Required]
     [Phone]
-    [MaxLength(HoSoConsts.MaxSDTLength)]
+    [MaxLength(ComplainConsts.MaxSDTLength)]
     public string DienThaoi { get; set; }
     [EmailAddress]
-    [MaxLength(HoSoConsts.MaxEmailLength)]
+    [MaxLength(ComplainConsts.MaxEmailLength)]
     public string Email { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxDiaChiLength)]
+    [MaxLength(ComplainConsts.MaxDiaChiLength)]
     public string DiaChiThuongTru { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxDiaChiLength)]
+    [MaxLength(ComplainConsts.MaxDiaChiLength)]
     public string DiaChiLienHe { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxMaDiaDanhLength)]
+    [MaxLength(ComplainConsts.MaxMaDiaDanhLength)]
     public string MaTinhTP { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxMaDiaDanhLength)]
+    [MaxLength(ComplainConsts.MaxMaDiaDanhLength)]
     public string MaQuanHuyen { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxMaDiaDanhLength)]
+    [MaxLength(ComplainConsts.MaxMaDiaDanhLength)]
     public string MaXaPhuongTT { get; set; }
     [Required]
     public LoaiVuViec LoaiVuViec { get; set; }
@@ -66,36 +61,36 @@ public class UpdateHoSoDto : EntityDto<Guid>, IHasConcurrencyStamp
     [Required]
     public string NoiDungVuViec { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxSoThuaLength)]
+    [MaxLength(ComplainConsts.MaxSoThuaLength)]
     public string SoThua { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxToBanDoLength)]
+    [MaxLength(ComplainConsts.MaxToBanDoLength)]
     public string ToBanDo { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxDienTichLength)]
+    [MaxLength(ComplainConsts.MaxDienTichLength)]
     public string DienTich { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxLoaiDatLength)]
+    [MaxLength(ComplainConsts.MaxLoaiDatLength)]
     public string LoaiDat { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxDiaChiLength)]
+    [MaxLength(ComplainConsts.MaxDiaChiLength)]
     public string DiaChiThuaDat { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxMaDiaDanhLength)]
+    [MaxLength(ComplainConsts.MaxMaDiaDanhLength)]
     public string TinhThuaDat { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxMaDiaDanhLength)]
+    [MaxLength(ComplainConsts.MaxMaDiaDanhLength)]
     public string HuyenThuaDat { get; set; }
     [Required]
-    [MaxLength(HoSoConsts.MaxMaDiaDanhLength)]
+    [MaxLength(ComplainConsts.MaxMaDiaDanhLength)]
     public string XaThuaDat { get; set; }
-    [MaxLength(HoSoConsts.MaxToaDoLength)]
+    [MaxLength(ComplainConsts.MaxToaDoLength)]
     public string DuLieuToaDo { get; set; }
-    [MaxLength(HoSoConsts.MaxHinhHocLength)]
+    [MaxLength(ComplainConsts.MaxHinhHocLength)]
     public string DuLieuHinhHoc { get; set; }
     public IReadOnlyList<Guid> ListKQGQHoSoDeleted { get; set; }
     //public IReadOnlyList<CreateAndUpdateKQGQHoSoDto> KQGQHoSos { get; set; }
     public IReadOnlyList<Guid> ListTepDinhKemHoSosDeleted { get; set; }
-    public IReadOnlyList<CreateAndUpdateTepDinhKemHoSoDto> TepDinhKemHoSos { get; set; }
+    //public IReadOnlyList<CreateAndUpdateTepDinhKemHoSoDto> TepDinhKemHoSos { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

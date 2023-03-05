@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.BlobStoring;
 
-namespace KNTC.HoSos;
-[BlobContainerName("avatar")]
-public class TepDinhKemHoSorContainer
+namespace KNTC.FileAttachments;
+[BlobContainerName("FileAttachment")]
+public class FileAttachmentContainer
 {
 }

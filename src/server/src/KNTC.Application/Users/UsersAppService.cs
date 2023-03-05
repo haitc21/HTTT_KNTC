@@ -29,7 +29,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 {
     protected IdentityUserManager UserManager { get; }
     protected IIdentityUserRepository UserRepository { get; }
-    protected IRepository<IdentityRole,Guid> RoleRepository { get; }
+    protected IRepository<IdentityRole, Guid> RoleRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected IBlobContainer<AvatarContainer> _blobContainer { get; }
     protected IRepository<UserInfo> _userInfoRepo { get; }
@@ -86,7 +86,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
                                         null,
                                         input.PhoneNumber,
                                         input.Email);
-        
+
         var result = new PagedResultDto<UserListDto>(
             count,
             ObjectMapper.Map<List<IdentityUser>, List<UserListDto>>(list)

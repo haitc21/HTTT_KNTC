@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using KNTC.Complain;
 using Volo.Abp.Application.Dtos;
 
-namespace KNTC.Complain.Dtos;
+namespace KNTC.Complains.Dtos;
 
 public class ComplainDto : AuditedEntityDto<Guid>
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace KNTC.Complain;
+namespace KNTC;
 public enum LoaiVuViec : short
 {
     KhieuNai = 1,

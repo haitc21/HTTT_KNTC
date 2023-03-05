@@ -4,7 +4,7 @@ using System.Text;
 using Volo.Abp.Application.Dtos;
 using static KNTC.Permissions.KNTCPermissions;
 
-namespace KNTC.Complain.Dtos;
+namespace KNTC.Complains.Dtos;
 
 public class TepDinhKemHoSoDto : AuditedEntityDto<Guid>
 {

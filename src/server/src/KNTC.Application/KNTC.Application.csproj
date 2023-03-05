@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KNTC.Domain\KNTC.Domain.csproj" />
-    <ProjectReference Include="..\KNTC.Application.Contracts\KNTC.Application.Dtos.csproj" />
+    <ProjectReference Include="..\KNTC.Application.Contracts\KNTC.Application.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,18 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
-namespace KNTC.Complain;
+namespace KNTC.Denounces;
 
-public interface IHoSoRepository : IRepository<HoSo, Guid>
+public interface IDenounceRepository : IRepository<Denounce, Guid>
 {
-    Task<List<HoSo>> GetListAsync(
+    Task<List<Denounce>> GetListAsync(
                      int skipCount,
                      int maxResultCount,
                      string sorting,
                      string keyword,
                      LoaiVuViec? LoaiVuViec,
-                     LinhVuc? LinhVuc,
                      LoaiKetQua? ketQua,
                      bool includeDetails = false);
-    Task<HoSo> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
+    Task<Denounce> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
 }

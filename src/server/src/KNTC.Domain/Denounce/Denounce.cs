@@ -1,31 +1,29 @@
-﻿using KNTC.Complain;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using KNTC.FileAttachments;
 
-namespace KNTC.Complain;
+namespace KNTC.Denounces;
 
-public class HoSo : FullAuditedAggregateRoot<Guid>
+public class Denounce : FullAuditedAggregateRoot<Guid>
 {
-    public HoSo()
+    public Denounce()
     {
-        KQGQHoSos = new List<KQGQHoSo>();
-        TepDinhKemHoSos = new List<TepDinhKemHoSo>();
+        FileAttachments = new List<FileAttachment>();
     }
-    public HoSo(Guid id) : base(id)
+    public Denounce(Guid id) : base(id)
     {
-        KQGQHoSos = new List<KQGQHoSo>();
-        TepDinhKemHoSos = new List<TepDinhKemHoSo>();
+        FileAttachments = new List<FileAttachment>();
     }
-    public HoSo(Guid id, string maHoSo) : base(id)
+    public Denounce(Guid id, string maHoSo) : base(id)
     {
         SetMaHoSo(maHoSo);
-        KQGQHoSos = new List<KQGQHoSo>();
-        TepDinhKemHoSos = new List<TepDinhKemHoSo>();
+        FileAttachments = new List<FileAttachment>();
     }
     public string MaHoSo { get; private set; }
+    public LoaiVuViec LoaiVuViec { get; set; }
     public string TieuDe { get; set; }
     public string NguoiDeNghi { get; set; }
     public string CccdCmnd { get; set; }
@@ -39,8 +37,6 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
     public string MaTinhTP { get; set; }
     public string MaQuanHuyen { get; set; }
     public string MaXaPhuongTT { get; set; }
-    public LoaiVuViec LoaiVuViec { get; set; }
-    public LinhVuc LinhVuc { get; set; }
     public DateTime NgayTiepNhan { get; set; }
     public DateTime NgayHenTraKQ { get; set; }
     public string NoiDungVuViec { get; set; }
@@ -54,20 +50,29 @@ public class HoSo : FullAuditedAggregateRoot<Guid>
     public string XaThuaDat { get; set; }
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
-    public short SoLanTraKQ { get; set; }
+    public string GhiChu { get; set; }
+    public DateTime? ngayKhieuNaiI { get; set; }
+    public DateTime? NgayTraKQI { get; set; }
+    public string ThamQuyenI { get; set; }
+    public string SoQDI { get; set; }
+    public LoaiKetQua? KetQuaI { get; set; }
+    public DateTime? ngayKhieuNaiII { get; set; }
+    public DateTime? NgayTraKQII { get; set; }
+    public string ThamQuyenII { get; set; }
+    public string SoQDII { get; set; }
+    public LoaiKetQua? KetQuaII { get; set; }
     public LoaiKetQua? KetQua { get; set; }
-    public virtual List<KQGQHoSo> KQGQHoSos { get; set; }
-    public virtual List<TepDinhKemHoSo> TepDinhKemHoSos { get; set; }
+    public virtual List<FileAttachment> FileAttachments { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)
     {
         MaHoSo = Check.NotNullOrWhiteSpace(
             maHoSo,
             nameof(maHoSo),
-            maxLength: HoSoConsts.MaxMaHoSoLength
+            maxLength: DenounceConsts.MaxMaHoSoLength
         );
     }
 
-    internal HoSo ChangeMaHoSo([NotNull] string maHoSo)
+    internal Denounce ChangeMaHoSo([NotNull] string maHoSo)
     {
         SetMaHoSo(maHoSo);
         return this;
