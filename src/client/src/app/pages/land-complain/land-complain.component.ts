@@ -2,7 +2,6 @@ import { AuthService } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { ComplainListDto, SearchComplainDto } from 'src/app/shared/modules/complain/models';
 import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
 import { MockService } from '../../shared/mock/mock.service';
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
@@ -37,8 +36,8 @@ export class LandComplainComponent implements OnInit {
   filter: GetComplainListDto;
   public keyword: string = '';
   public items: any[];
-  public selectedItems: ComplainListDto[] = [];
-  actionItem: ComplainListDto;
+  public selectedItems: ComplainDto[] = [];
+  actionItem: ComplainDto;
   //emailSearch: string = '';
   //phoneNumberSearch: string = '';
   //Paging variables
