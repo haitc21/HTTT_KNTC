@@ -61,7 +61,7 @@ Dùng công cụ AnotherRedisDesktopManager
 ![Admin-preview](image/DeketeRedusCache.png)
 
 # Generate proxy Frontend
-'''
+```
 cd scr/client
 abp generate-proxy -t ng
-'''
+```

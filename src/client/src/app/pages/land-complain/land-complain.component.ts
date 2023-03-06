@@ -5,7 +5,6 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { ComplainListDto, SearchComplainDto } from 'src/app/shared/modules/complain/models';
 import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
 import { MockService } from '../../shared/mock/mock.service';
-import { ComplainService} from '../../shared/modules/complain/complain.service';
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Actions } from 'src/app/shared/enums/actions.enum';
 import { ConfirmationService, MenuItem } from 'primeng/api';
@@ -14,6 +13,7 @@ import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ComplainDto, ComplainService, GetComplainListDto } from '@proxy/complains';
 
 @Component({
   selector: 'app-land-complain',
@@ -34,7 +34,7 @@ export class LandComplainComponent implements OnInit {
   fieldsHoSo = fieldsHoSo;
 
   //public selectedItems: Complain[] = [];
-  filter: SearchComplainDto;
+  filter: GetComplainListDto;
   public keyword: string = '';
   public items: any[];
   public selectedItems: ComplainListDto[] = [];
@@ -119,22 +119,22 @@ export class LandComplainComponent implements OnInit {
     */
     debugger;
     this.filter = {
-      filter: this.keyword,
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
-      keyword: this.keyword,
-      MaTinh: this.MaTinh,
-      MaHuyen: this.MaHuyen,
-      MaPhuong: this.MaPhuong,
-      ThoiGianNop: this.ThoiGianNop,
-      GiaiDoan: this.GiaiDoan,
-      TinhTrang: this.TinhTrang
-    };
+      keyword: this.keyword
+      // MaTinh: this.MaTinh,
+      // MaHuyen: this.MaHuyen,
+      // MaPhuong: this.MaPhuong,
+      // ThoiGianNop: this.ThoiGianNop,
+      // GiaiDoan: this.GiaiDoan,
+      // TinhTrang: this.TinhTrang
+    } as GetComplainListDto;
     debugger;
     //this.data 
-    this.complainService.getList(this.filter).pipe(takeUntil(this.ngUnsubscribe))
+    this.complainService.getList(this.filter)
+    .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe({
-      next: (response: PagedResultDto<ComplainListDto>) => {
+      next: (response: PagedResultDto<ComplainDto>) => {
         this.items = response.items;
         /*
         this.items.forEach(x => {
