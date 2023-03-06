@@ -58,7 +58,7 @@ public class ComplainAppService : CrudAppService<
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
-        {
+        //{
             input.Sorting = nameof(Complain.MaHoSo);
         }
 
