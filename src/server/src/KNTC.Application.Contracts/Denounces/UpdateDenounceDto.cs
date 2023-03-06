@@ -30,8 +30,8 @@ public class UpdateDenounceDto : EntityDto<Guid>
     public DateTime NgayCapCccdCmnd { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxNoiCapCccdCmnd)]
-    public string NoiCapCccdCmnd { get; set; }
     */
+    public string NoiCapCccdCmnd { get; set; }
     [Required]
     public DateTime NgaySinh { get; set; }
     [Required]
@@ -57,13 +57,15 @@ public class UpdateDenounceDto : EntityDto<Guid>
     [MaxLength(DenounceConsts.MaxMaDiaDanhLength)]
     public int maXaPhuongTT { get; set; }
     [Required]
-    public DateTime NgayTiepNhan { get; set; }
+    public DateTime ThoiGianTiepNhan { get; set; }
     [Required]
-    public DateTime NgayHenTraKQ { get; set; }
+    public DateTime ThoiGianHenTraKQ { get; set; }
     [Required]
     public string NoiDungVuViec { get; set; }
     [Required]
+    [MaxLength(DenounceConsts.MaxBoPhanXLLength)]
     public string boPhanDangXL { get; set; }
+
     [Required]
     [MaxLength(DenounceConsts.MaxSoThuaLength)]
     public string SoThua { get; set; }
@@ -71,8 +73,7 @@ public class UpdateDenounceDto : EntityDto<Guid>
     [MaxLength(DenounceConsts.MaxToBanDoLength)]
     public string ToBanDo { get; set; }
     [Required]
-    [MaxLength(DenounceConsts.MaxDienTichLength)]
-    public string DienTich { get; set; }
+    public decimal DienTich { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxLoaiDatLength)]
     public string LoaiDat { get; set; }

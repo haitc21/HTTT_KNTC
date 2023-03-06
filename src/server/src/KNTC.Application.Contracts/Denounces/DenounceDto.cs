@@ -24,13 +24,13 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public int maTinhTP { get; set; }
     public int maQuanHuyen { get; set; }
     public string maXaPhuongTT { get; set; }
-    public DateTime NgayTiepNhan { get; set; }
-    public DateTime NgayHenTraKQ { get; set; }
+    public DateTime ThoiGianTiepNhan { get; set; }
+    public DateTime ThoiGianHenTraKQ { get; set; }
     public string NoiDungVuViec { get; set; }
     public string boPhanDangXL { get; set; }
     public string SoThua { get; set; }
     public string ToBanDo { get; set; }
-    public string DienTich { get; set; }
+    public decimal DienTich { get; set; }
     public string LoaiDat { get; set; }
     public string DiaChiThuaDat { get; set; }
     public int tinhThuaDat { get; set; }

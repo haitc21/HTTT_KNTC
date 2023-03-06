@@ -99,8 +99,8 @@ public class DenounceAppService : CrudAppService<
                                                   maTinhTP: input.maTinhTP,
                                                   maQuanHuyen: input.maQuanHuyen,
                                                   maXaPhuongTT: input.maXaPhuongTT,
-                                                  ngayTiepNhan: input.NgayTiepNhan,
-                                                  ngayHenTraKQ: input.NgayHenTraKQ,
+                                                  thoiGianTiepNhan: input.ThoiGianTiepNhan,
+                                                  thoiGianHenTraKQ: input.ThoiGianTraKQ,
                                                   noiDungVuViec: input.NoiDungVuViec,
                                                   boPhanDangXL: input.boPhanDangXL,
                                                   soThua: input.SoThua,
@@ -131,7 +131,7 @@ public class DenounceAppService : CrudAppService<
             foreach (var item in input.FileAttachments)
             {
                 var fileAttach = await _denounceManager.CreateFileAttachmentAsync(denounce: denounce,
-                                                                        giaiDoan: item.giaiDoan,
+                                                                        giaiDoan: item.GiaiDoan,
                                                                         tenTaiLieu: item.TenTaiLieu,
                                                                         hinhThuc: item.HinhThuc,
                                                                         thoiGianBanHanh: item.ThoiGianBanHanh,
@@ -169,7 +169,7 @@ public class DenounceAppService : CrudAppService<
                 if (fileAttach.Id == null)
                 {
                     var tepDinhKem = await _denounceManager.CreateFileAttachmentAsync(denounce: denounce,
-                                                        giaiDoan: fileAttach.giaiDoan,
+                                                        giaiDoan: fileAttach.GiaiDoan,
                                                         tenTaiLieu: fileAttach.TenTaiLieu,
                                                         hinhThuc: fileAttach.HinhThuc,
                                                         thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
@@ -187,7 +187,7 @@ public class DenounceAppService : CrudAppService<
                 {
                     var tepDinhKem = await _fileAttachmentRepo.GetAsync(fileAttach.Id);
                     await _denounceManager.UpdateFileAttachmentAsync(denounce: denounce,
-                                                        giaiDoan: fileAttach.giaiDoan,
+                                                        giaiDoan: fileAttach.GiaiDoan,
                                                         tepDinhKem: tepDinhKem,
                                                         tenTaiLieu: fileAttach.TenTaiLieu,
                                                         hinhThuc: fileAttach.HinhThuc,
@@ -225,8 +225,8 @@ public class DenounceAppService : CrudAppService<
                                                   maTinhTP: input.maTinhTP,
                                                   maQuanHuyen: input.maQuanHuyen,
                                                   maXaPhuongTT: input.maXaPhuongTT,
-                                                  ngayTiepNhan: input.NgayTiepNhan,
-                                                  ngayHenTraKQ: input.NgayHenTraKQ,
+                                                  thoiGianTiepNhan: input.ThoiGianTiepNhan,
+                                                  thoiGianHenTraKQ: input.ThoiGianHenTraKQ,
                                                   noiDungVuViec: input.NoiDungVuViec,
                                                   boPhanDangXL: input.boPhanDangXL,
                                                   soThua: input.SoThua,

@@ -57,12 +57,13 @@ public class CreateComplainDto
     [MaxLength(ComplainConsts.MaxMaDiaDanhLength)]
     public int maXaPhuongTT { get; set; }
     [Required]
-    public DateTime NgayTiepNhan { get; set; }
+    public DateTime ThoiGianTiepNhan { get; set; }
     [Required]
-    public DateTime NgayHenTraKQ { get; set; }
+    public DateTime ThoiGianHenTraKQ { get; set; }
     [Required]
     public string NoiDungVuViec { get; set; }
     [Required]
+    [MaxLength(ComplainConsts.MaxBoPhanXLLength)]
     public string boPhanDangXL { get; set; }
     [Required]
     [MaxLength(ComplainConsts.MaxSoThuaLength)]
@@ -71,8 +72,7 @@ public class CreateComplainDto
     [MaxLength(ComplainConsts.MaxToBanDoLength)]
     public string ToBanDo { get; set; }
     [Required]
-    [MaxLength(ComplainConsts.MaxDienTichLength)]
-    public Decimal DienTich { get; set; }
+    public decimal DienTich { get; set; }
     [Required]
     [MaxLength(ComplainConsts.MaxLoaiDatLength)]
     public string LoaiDat { get; set; }
@@ -93,7 +93,7 @@ public class CreateComplainDto
     [MaxLength(ComplainConsts.MaxHinhHocLength)]
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }
-    public int loaiKhieuNai1 { get; set; }
+    public LoaiKhieuNai? loaiKhieuNai1 { get; set; }
     public DateTime? ngayKhieuNai1 { get; set; }
     public DateTime? NgayTraKQ1 { get; set; }
     [MaxLength(ComplainConsts.MaxThamQuyenLength)]
@@ -101,7 +101,7 @@ public class CreateComplainDto
     [MaxLength(ComplainConsts.MaxSoQDLength)]
     public string SoQD1 { get; set; }
     public LoaiKetQua? KetQua1 { get; set; }
-    public int loaiKhieuNai2 { get; set; }
+    public LoaiKhieuNai? loaiKhieuNai2 { get; set; }
     public DateTime? ngayKhieuNai2 { get; set; }
     public DateTime? NgayTraKQ2 { get; set; }
     [MaxLength(ComplainConsts.MaxThamQuyenLength)]

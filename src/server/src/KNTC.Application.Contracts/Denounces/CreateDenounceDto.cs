@@ -56,12 +56,13 @@ public class CreateDenounceDto
     [MaxLength(DenounceConsts.MaxMaDiaDanhLength)]
     public int maXaPhuongTT { get; set; }
     [Required]
-    public DateTime NgayTiepNhan { get; set; }
+    public DateTime ThoiGianTiepNhan { get; set; }
     [Required]
-    public DateTime NgayHenTraKQ { get; set; }
+    public DateTime ThoiGianTraKQ { get; set; }
     [Required]
     public string NoiDungVuViec { get; set; }
     [Required]
+    [MaxLength(DenounceConsts.MaxBoPhanXLLength)]
     public string boPhanDangXL { get; set; }
     
     [Required]
@@ -71,8 +72,7 @@ public class CreateDenounceDto
     [MaxLength(DenounceConsts.MaxToBanDoLength)]
     public string ToBanDo { get; set; }
     [Required]
-    [MaxLength(DenounceConsts.MaxDienTichLength)]
-    public string DienTich { get; set; }
+    public decimal DienTich { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxLoaiDatLength)]
     public string LoaiDat { get; set; }

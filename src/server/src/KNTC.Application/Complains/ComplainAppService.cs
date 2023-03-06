@@ -58,7 +58,7 @@ public class ComplainAppService : CrudAppService<
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
-        //{
+        {
             input.Sorting = nameof(Complain.MaHoSo);
         }
 
@@ -99,8 +99,8 @@ public class ComplainAppService : CrudAppService<
                                                   maTinhTP: input.maTinhTP,
                                                   maQuanHuyen: input.maQuanHuyen,
                                                   maXaPhuongTT: input.maXaPhuongTT,
-                                                  ngayTiepNhan: input.NgayTiepNhan,
-                                                  ngayHenTraKQ: input.NgayHenTraKQ,
+                                                  thoiGianTiepNhan: input.ThoiGianTiepNhan,
+                                                  thoiGianyHenTraKQ: input.ThoiGianHenTraKQ,
                                                   noiDungVuViec: input.NoiDungVuViec,
                                                   boPhanDangXL: input.boPhanDangXL,
                                                   soThua: input.SoThua,
@@ -131,7 +131,7 @@ public class ComplainAppService : CrudAppService<
             foreach (var item in input.FileAttachments)
             {
                 var fileAttach = await _complainManager.CreateFileAttachmentAsync(complain: complain,
-                                                                        giaiDoan: item.giaiDoan,
+                                                                        giaiDoan: item.GiaiDoan,
                                                                         tenTaiLieu: item.TenTaiLieu,
                                                                         hinhThuc: item.HinhThuc,
                                                                         thoiGianBanHanh: item.ThoiGianBanHanh,
@@ -169,7 +169,7 @@ public class ComplainAppService : CrudAppService<
                 if (fileAttach.Id == null)
                 {
                     var tepDinhKem = await _complainManager.CreateFileAttachmentAsync(complain: complain,
-                                                        giaiDoan: fileAttach.giaiDoan,
+                                                        giaiDoan: fileAttach.GiaiDoan,
                                                         tenTaiLieu: fileAttach.TenTaiLieu,
                                                         hinhThuc: fileAttach.HinhThuc,
                                                         thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
@@ -188,7 +188,7 @@ public class ComplainAppService : CrudAppService<
                     var tepDinhKem = await _fileAttachmentRepo.GetAsync(fileAttach.Id);
                     await _complainManager.UpdateFileAttachmentAsync(complain: complain,
                                                         tepDinhKem: tepDinhKem,
-                                                        giaiDoan: fileAttach.giaiDoan,
+                                                        giaiDoan: fileAttach.GiaiDoan,
                                                         tenTaiLieu: fileAttach.TenTaiLieu,
                                                         hinhThuc: fileAttach.HinhThuc,
                                                         thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
@@ -225,8 +225,8 @@ public class ComplainAppService : CrudAppService<
                                                   maTinhTP: input.maTinhTP,
                                                   maQuanHuyen: input.maQuanHuyen,
                                                   maXaPhuongTT: input.maXaPhuongTT,
-                                                  ngayTiepNhan: input.NgayTiepNhan,
-                                                  ngayHenTraKQ: input.NgayHenTraKQ,
+                                                  thoiGianTiepNhan: input.ThoiGianTiepNhan,
+                                                  thoiGianyHenTraKQ: input.ThoiGianHenTraKQ,
                                                   noiDungVuViec: input.NoiDungVuViec,
                                                   boPhanDangXL: input.boPhanDangXL,
                                                   soThua: input.SoThua,

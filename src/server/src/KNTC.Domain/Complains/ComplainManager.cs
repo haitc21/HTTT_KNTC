@@ -33,13 +33,13 @@ public class ComplainManager : DomainService
                                               [NotNull] int maTinhTP,
                                               [NotNull] int maQuanHuyen,
                                               [NotNull] int maXaPhuongTT,
-                                              [NotNull] DateTime ngayTiepNhan,
-                                              [NotNull] DateTime ngayHenTraKQ,
+                                              [NotNull] DateTime thoiGianTiepNhan,
+                                              [NotNull] DateTime thoiGianyHenTraKQ,
                                               [NotNull] string noiDungVuViec,
                                               [NotNull] string boPhanDangXL,
                                               [NotNull] string soThua,
                                               [NotNull] string toBanDo,
-                                              [NotNull] Decimal dienTich,
+                                              [NotNull] decimal dienTich,
                                               [NotNull] string loaiDat,
                                               [NotNull] string diaChiThuaDat,
                                               [NotNull] int tinhThuaDat,
@@ -48,12 +48,12 @@ public class ComplainManager : DomainService
                                               string duLieuToaDo,
                                               string duLieuHinhHoc,
                                               string GhiChu,
-                                              int? loaiKhieuNai1,
+                                              LoaiKhieuNai? loaiKhieuNai1,
                                               DateTime? ngayKhieuNai1,
                                               DateTime? NgayTraKQ1,
                                               string ThamQuyen1,
                                               string SoQD1,
-                                              int? loaiKhieuNai2,
+                                              LoaiKhieuNai? loaiKhieuNai2,
                                               DateTime? ngayKhieuNai2,
                                               DateTime? NgayTraKQ2,
                                               string ThamQuyen2,
@@ -108,8 +108,8 @@ public class ComplainManager : DomainService
             maTinhTP = maTinhTP,
             maQuanHuyen = maQuanHuyen,
             maXaPhuongTT = maXaPhuongTT,
-            NgayTiepNhan = ngayTiepNhan,
-            NgayHenTraKQ = ngayHenTraKQ,
+            ThoiGianTiepNhan = thoiGianTiepNhan,
+            ThoiGianHenTraKQ = thoiGianyHenTraKQ,
             NoiDungVuViec = noiDungVuViec,
             SoThua = soThua,
             ToBanDo = toBanDo,
@@ -164,13 +164,13 @@ public class ComplainManager : DomainService
                                    [NotNull] int maTinhTP,
                                    [NotNull] int maQuanHuyen,
                                    [NotNull] int maXaPhuongTT,
-                                   [NotNull] DateTime ngayTiepNhan,
-                                   [NotNull] DateTime ngayHenTraKQ,
+                                   [NotNull] DateTime thoiGianTiepNhan,
+                                   [NotNull] DateTime thoiGianyHenTraKQ,
                                    [NotNull] string noiDungVuViec,
                                    [NotNull] string boPhanDangXL,
                                    [NotNull] string soThua,
                                    [NotNull] string toBanDo,
-                                   [NotNull] Decimal dienTich,
+                                   [NotNull] decimal dienTich,
                                    [NotNull] string loaiDat,
                                    [NotNull] string diaChiThuaDat,
                                    [NotNull] int tinhThuaDat,
@@ -179,12 +179,12 @@ public class ComplainManager : DomainService
                                    string duLieuToaDo,
                                    string duLieuHinhHoc,
                                    string GhiChu,
-                                   int? loaiKhieuNai1,
+                                   LoaiKhieuNai? loaiKhieuNai1,
                                    DateTime? ngayKhieuNai1,
                                    DateTime? NgayTraKQ1,
                                    string ThamQuyen1,
                                    string SoQD1,
-                                   int? loaiKhieuNai2,
+                                   LoaiKhieuNai? loaiKhieuNai2,
                                    DateTime? ngayKhieuNai2,
                                    DateTime? NgayTraKQ2,
                                    string ThamQuyen2,
@@ -212,7 +212,7 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(boPhanDangXL, nameof(boPhanDangXL));
         Check.NotNullOrWhiteSpace(soThua, nameof(soThua));
         Check.NotNullOrWhiteSpace(toBanDo, nameof(toBanDo));
-        Check.NotNullOrWhiteSpace(DienThoai, nameof(dienTich));
+        Check.NotNull(dienTich, nameof(dienTich));
         Check.NotNullOrWhiteSpace(loaiDat, nameof(loaiDat));
         Check.NotNullOrWhiteSpace(diaChiThuaDat, nameof(diaChiThuaDat));
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
@@ -237,8 +237,8 @@ public class ComplainManager : DomainService
         complain.maTinhTP = maTinhTP;
         complain.maQuanHuyen = maQuanHuyen;
         complain.maXaPhuongTT = maXaPhuongTT;
-        complain.NgayTiepNhan = ngayTiepNhan;
-        complain.NgayHenTraKQ = ngayHenTraKQ;
+        complain.ThoiGianTiepNhan = thoiGianTiepNhan;
+        complain.ThoiGianHenTraKQ = thoiGianyHenTraKQ;
         complain.NoiDungVuViec = noiDungVuViec;
         complain.boPhanDangXL = boPhanDangXL;        
         complain.SoThua = soThua;
@@ -267,9 +267,9 @@ public class ComplainManager : DomainService
         complain.KetQua = KetQua2 ?? KetQua1;
     }
     public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Complain complain,
-                                                                [NotNull] int giaiDoan,
+                                                                [NotNull] short giaiDoan,
                                                                 [NotNull] string tenTaiLieu,
-                                                                [NotNull] string hinhThuc,
+                                                                [NotNull] int hinhThuc,
                                                                 DateTime thoiGianBanHanh,
                                                                 DateTime ngayNhan,
                                                                 [NotNull] string thuTuButLuc,
@@ -281,7 +281,7 @@ public class ComplainManager : DomainService
         Check.NotNull(complain, nameof(complain));
         Check.NotNull(giaiDoan, nameof(giaiDoan));
         Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
-        Check.NotNullOrWhiteSpace(hinhThuc, nameof(hinhThuc));
+        Check.NotNull(hinhThuc, nameof(hinhThuc));
         Check.NotNullOrWhiteSpace(thuTuButLuc, nameof(thuTuButLuc));
         Check.NotNullOrWhiteSpace(noiDungChinh, nameof(noiDungChinh));
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
@@ -297,7 +297,7 @@ public class ComplainManager : DomainService
         return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
         {
             IdHoSo = complain.Id,
-            giaiDoan = giaiDoan,
+            GiaiDoan = giaiDoan,
             HinhThuc = hinhThuc,
             ThoiGianBanHanh = thoiGianBanHanh,
             NgayNhan = ngayNhan,
@@ -310,9 +310,9 @@ public class ComplainManager : DomainService
     }
     public async Task UpdateFileAttachmentAsync([NotNull] Complain complain,
                                                 [NotNull] FileAttachment tepDinhKem,
-                                                [NotNull] int giaiDoan,
+                                                [NotNull] short giaiDoan,
                                                 [NotNull] string tenTaiLieu,
-                                                [NotNull] string hinhThuc,
+                                                [NotNull] int hinhThuc,
                                                 DateTime thoiGianBanHanh,
                                                 DateTime ngayNhan,
                                                 [NotNull] string thuTuButLuc,
@@ -325,7 +325,7 @@ public class ComplainManager : DomainService
         Check.NotNull(giaiDoan, nameof(giaiDoan));
         Check.NotNull(tepDinhKem, nameof(tepDinhKem));
         Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
-        Check.NotNullOrWhiteSpace(hinhThuc, nameof(hinhThuc));
+        Check.NotNull(hinhThuc, nameof(hinhThuc));
         Check.NotNullOrWhiteSpace(thuTuButLuc, nameof(thuTuButLuc));
         Check.NotNullOrWhiteSpace(noiDungChinh, nameof(noiDungChinh));
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
@@ -347,7 +347,7 @@ public class ComplainManager : DomainService
         {
             tepDinhKem.ChangeTenTaiLieu(tenTaiLieu);
         }
-        tepDinhKem.giaiDoan = giaiDoan;
+        tepDinhKem.GiaiDoan = giaiDoan;
         tepDinhKem.HinhThuc = hinhThuc;
         tepDinhKem.ThoiGianBanHanh = thoiGianBanHanh;
         tepDinhKem.NgayNhan = ngayNhan;

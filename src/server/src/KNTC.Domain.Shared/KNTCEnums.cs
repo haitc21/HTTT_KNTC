@@ -19,7 +19,7 @@ public enum LoaiKetQua : short
 {
     Dung = 1,
     Sai = -1,
-    CoDungCoSai = 3,
+    CoDungCoSai = 2,
 }
 
 public enum LoaiKhieuNai : short
