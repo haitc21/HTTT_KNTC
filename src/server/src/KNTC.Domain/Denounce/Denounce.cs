@@ -27,27 +27,29 @@ public class Denounce : FullAuditedAggregateRoot<Guid>
     public string TieuDe { get; set; }
     public string NguoiDeNghi { get; set; }
     public string CccdCmnd { get; set; }
-    public DateTime NgayCapCccdCmnd { get; set; }
-    public string NoiCapCccdCmnd { get; set; }
+    //public DateTime NgayCapCccdCmnd { get; set; }
+    //public string NoiCapCccdCmnd { get; set; }
     public DateTime NgaySinh { get; set; }
-    public string DienThaoi { get; set; }
+    public string DienThoai { get; set; }
     public string Email { get; set; }
     public string DiaChiThuongTru { get; set; }
     public string DiaChiLienHe { get; set; }
-    public string MaTinhTP { get; set; }
-    public string MaQuanHuyen { get; set; }
-    public string MaXaPhuongTT { get; set; }
+    public int maTinhTP { get; set; }
+    public int maQuanHuyen { get; set; }
+    public int maXaPhuongTT { get; set; }
     public DateTime NgayTiepNhan { get; set; }
     public DateTime NgayHenTraKQ { get; set; }
     public string NoiDungVuViec { get; set; }
+    public string boPhanDangXL { get; set; }
+    
     public string SoThua { get; set; }
     public string ToBanDo { get; set; }
     public string DienTich { get; set; }
     public string LoaiDat { get; set; }
     public string DiaChiThuaDat { get; set; }
-    public string TinhThuaDat { get; set; }
-    public string HuyenThuaDat { get; set; }
-    public string XaThuaDat { get; set; }
+    public int tinhThuaDat { get; set; }
+    public int huyenThuaDat { get; set; }
+    public int xaThuaDat { get; set; }
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }

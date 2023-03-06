@@ -94,28 +94,29 @@ public class KNTCDbContext :
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(ComplainConsts.MaxTieuDeLength);
             b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(ComplainConsts.MaxNguoiDeNghiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(ComplainConsts.MaxCccdCmndLength);
-            b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
-            b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(ComplainConsts.MaxNoiCapCccdCmnd);
+            //b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
+            //b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(ComplainConsts.MaxNoiCapCccdCmnd);
             b.Property(x => x.NgaySinh).IsRequired().HasColumnName("ngay_sinh");
-            b.Property(x => x.DienThaoi).IsRequired().HasColumnName("dien_thoai").HasMaxLength(ComplainConsts.MaxSDTLength);
+            b.Property(x => x.DienThoai).IsRequired().HasColumnName("dien_thoai").HasMaxLength(ComplainConsts.MaxSDTLength);
             b.Property(x => x.Email).HasColumnName("email").HasMaxLength(ComplainConsts.MaxEmailLength);
             b.Property(x => x.DiaChiThuongTru).IsRequired().HasColumnName("dia_chi_thuong_tru").HasMaxLength(ComplainConsts.MaxDiaChiLength);
             b.Property(x => x.DiaChiLienHe).IsRequired().HasColumnName("dia_chi_lien_he").HasMaxLength(ComplainConsts.MaxDiaChiLength);
-            b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.maTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.maQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.maXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
             b.Property(x => x.NgayTiepNhan).IsRequired().HasColumnName("ngay_tiep_nhan");
             b.Property(x => x.NgayHenTraKQ).IsRequired().HasColumnName("ngay_hen_tra_kq");
 
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");
+            b.Property(x => x.boPhanDangXL).IsRequired().HasColumnName("bo_phan_dang_xl");
             b.Property(x => x.SoThua).IsRequired().HasColumnName("so_thua").HasMaxLength(ComplainConsts.MaxSoThuaLength);
             b.Property(x => x.ToBanDo).IsRequired().HasColumnName("to_ban_do").HasMaxLength(ComplainConsts.MaxToBanDoLength);
             b.Property(x => x.DienTich).IsRequired().HasColumnName("dien_tich").HasMaxLength(ComplainConsts.MaxDienTichLength);
             b.Property(x => x.LoaiDat).IsRequired().HasColumnName("loai_dat").HasMaxLength(ComplainConsts.MaxLoaiDatLength);
             b.Property(x => x.DiaChiThuaDat).IsRequired().HasColumnName("dia_chi_thua_dat").HasMaxLength(ComplainConsts.MaxDiaChiLength);
-            b.Property(x => x.TinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.HuyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.XaThuaDat).IsRequired().HasColumnName("xa_thua_dat").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.tinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.huyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat").HasMaxLength(ComplainConsts.MaxMaDiaDanhLength);
 
 
             b.Property(x => x.ngayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
@@ -154,28 +155,29 @@ public class KNTCDbContext :
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(DenounceConsts.MaxTieuDeLength);
             b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(DenounceConsts.MaxNguoiDeNghiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(DenounceConsts.MaxCccdCmndLength);
-            b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
-            b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(DenounceConsts.MaxNoiCapCccdCmnd);
+            //b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
+            //b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(DenounceConsts.MaxNoiCapCccdCmnd);
             b.Property(x => x.NgaySinh).IsRequired().HasColumnName("ngay_sinh");
-            b.Property(x => x.DienThaoi).IsRequired().HasColumnName("dien_thoai").HasMaxLength(DenounceConsts.MaxSDTLength);
+            b.Property(x => x.DienThoai).IsRequired().HasColumnName("dien_thoai").HasMaxLength(DenounceConsts.MaxSDTLength);
             b.Property(x => x.Email).HasColumnName("email").HasMaxLength(DenounceConsts.MaxEmailLength);
             b.Property(x => x.DiaChiThuongTru).IsRequired().HasColumnName("dia_chi_thuong_tru").HasMaxLength(DenounceConsts.MaxDiaChiLength);
             b.Property(x => x.DiaChiLienHe).IsRequired().HasColumnName("dia_chi_lien_he").HasMaxLength(DenounceConsts.MaxDiaChiLength);
-            b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.maTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.maQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.maXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
             b.Property(x => x.NgayTiepNhan).IsRequired().HasColumnName("ngay_tiep_nhan");
             b.Property(x => x.NgayHenTraKQ).IsRequired().HasColumnName("ngay_hen_tra_kq");
 
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");
+            b.Property(x => x.boPhanDangXL).IsRequired().HasColumnName("bo_phan_dang_xl");
             b.Property(x => x.SoThua).IsRequired().HasColumnName("so_thua").HasMaxLength(DenounceConsts.MaxSoThuaLength);
             b.Property(x => x.ToBanDo).IsRequired().HasColumnName("to_ban_do").HasMaxLength(DenounceConsts.MaxToBanDoLength);
             b.Property(x => x.DienTich).IsRequired().HasColumnName("dien_tich").HasMaxLength(DenounceConsts.MaxDienTichLength);
             b.Property(x => x.LoaiDat).IsRequired().HasColumnName("loai_dat").HasMaxLength(DenounceConsts.MaxLoaiDatLength);
             b.Property(x => x.DiaChiThuaDat).IsRequired().HasColumnName("dia_chi_thua_dat").HasMaxLength(DenounceConsts.MaxDiaChiLength);
-            b.Property(x => x.TinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.HuyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.XaThuaDat).IsRequired().HasColumnName("xa_thua_dat").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.tinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.huyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat").HasMaxLength(DenounceConsts.MaxMaDiaDanhLength);
 
 
             b.Property(x => x.ngayKhieuNai1).HasColumnName("ngay_khieu_nai_1");

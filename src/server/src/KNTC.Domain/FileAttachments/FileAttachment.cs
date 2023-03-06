@@ -28,6 +28,7 @@ public class FileAttachment : FullAuditedEntity<Guid>
         SetTenTaiLieu(tenTaiLieu);
     }
     public Guid IdHoSo { get; set; }
+    public int giaiDoan { get; set; }
     public string TenTaiLieu { get; private set; }
     public string HinhThuc { get; set; }
     public DateTime ThoiGianBanHanh { get; set; }

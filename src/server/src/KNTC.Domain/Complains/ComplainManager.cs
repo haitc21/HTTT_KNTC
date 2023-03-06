@@ -23,34 +23,37 @@ public class ComplainManager : DomainService
                                               [NotNull] string tieuDe,
                                               [NotNull] string nguoiDeNghi,
                                               [NotNull] string cccdCmnd,
-                                              [NotNull] DateTime ngayCapCccdCmnd,
-                                              [NotNull] string noiCapCccdCmnd,
+                                              //[NotNull] DateTime ngayCapCccdCmnd,
+                                              //[NotNull] string noiCapCccdCmnd,
                                               [NotNull] DateTime ngaySinh,
-                                              [NotNull] string dienThaoi,
+                                              [NotNull] string DienThoai,
                                               string email,
                                               [NotNull] string diaChiThuongTru,
                                               [NotNull] string diaChiLienHe,
-                                              [NotNull] string maTinhTP,
-                                              [NotNull] string maQuanHuyen,
-                                              [NotNull] string maXaPhuongTT,
+                                              [NotNull] int maTinhTP,
+                                              [NotNull] int maQuanHuyen,
+                                              [NotNull] int maXaPhuongTT,
                                               [NotNull] DateTime ngayTiepNhan,
                                               [NotNull] DateTime ngayHenTraKQ,
                                               [NotNull] string noiDungVuViec,
+                                              [NotNull] string boPhanDangXL,
                                               [NotNull] string soThua,
                                               [NotNull] string toBanDo,
-                                              [NotNull] string dienTich,
+                                              [NotNull] Decimal dienTich,
                                               [NotNull] string loaiDat,
                                               [NotNull] string diaChiThuaDat,
-                                              [NotNull] string tinhThuaDat,
-                                              [NotNull] string huyenThuaDat,
-                                              [NotNull] string xaThuaDat,
+                                              [NotNull] int tinhThuaDat,
+                                              [NotNull] int huyenThuaDat,
+                                              [NotNull] int xaThuaDat,
                                               string duLieuToaDo,
                                               string duLieuHinhHoc,
                                               string GhiChu,
+                                              int? loaiKhieuNai1,
                                               DateTime? ngayKhieuNai1,
                                               DateTime? NgayTraKQ1,
                                               string ThamQuyen1,
                                               string SoQD1,
+                                              int? loaiKhieuNai2,
                                               DateTime? ngayKhieuNai2,
                                               DateTime? NgayTraKQ2,
                                               string ThamQuyen2,
@@ -64,24 +67,25 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
         Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
-        Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
-        Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
+        //Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
+        //Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
         Check.NotNull(ngaySinh, nameof(ngaySinh));
-        Check.NotNullOrWhiteSpace(dienThaoi, nameof(dienThaoi));
+        Check.NotNullOrWhiteSpace(DienThoai, nameof(DienThoai));
         Check.NotNullOrWhiteSpace(diaChiThuongTru, nameof(diaChiThuongTru));
         Check.NotNullOrWhiteSpace(diaChiLienHe, nameof(diaChiLienHe));
-        Check.NotNullOrWhiteSpace(maTinhTP, nameof(maTinhTP));
-        Check.NotNullOrWhiteSpace(maQuanHuyen, nameof(maQuanHuyen));
-        Check.NotNullOrWhiteSpace(maXaPhuongTT, nameof(maXaPhuongTT));
+        Check.NotNull(maTinhTP, nameof(maTinhTP));
+        Check.NotNull(maQuanHuyen, nameof(maQuanHuyen));
+        Check.NotNull(maXaPhuongTT, nameof(maXaPhuongTT));
         Check.NotNullOrWhiteSpace(noiDungVuViec, nameof(noiDungVuViec));
+        Check.NotNullOrWhiteSpace(noiDungVuViec, nameof(boPhanDangXL));
         Check.NotNullOrWhiteSpace(soThua, nameof(soThua));
         Check.NotNullOrWhiteSpace(toBanDo, nameof(toBanDo));
-        Check.NotNullOrWhiteSpace(dienThaoi, nameof(dienTich));
+        Check.NotNull(dienTich, nameof(dienTich));
         Check.NotNullOrWhiteSpace(loaiDat, nameof(loaiDat));
         Check.NotNullOrWhiteSpace(diaChiThuaDat, nameof(diaChiThuaDat));
-        Check.NotNullOrWhiteSpace(tinhThuaDat, nameof(tinhThuaDat));
-        Check.NotNullOrWhiteSpace(huyenThuaDat, nameof(huyenThuaDat));
-        Check.NotNullOrWhiteSpace(xaThuaDat, nameof(xaThuaDat));
+        Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
+        Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
+        Check.NotNull(xaThuaDat, nameof(xaThuaDat));
 
         var existedHoSo = await _hoSoRepo.FindByMaHoSoAsync(maHoSo, false);
         if (existedHoSo != null)
@@ -94,16 +98,16 @@ public class ComplainManager : DomainService
             LoaiVuViec = loaiVuViec,
             NguoiDeNghi = nguoiDeNghi,
             CccdCmnd = cccdCmnd,
-            NgayCapCccdCmnd = ngayCapCccdCmnd,
-            NoiCapCccdCmnd = noiCapCccdCmnd,
+            //NgayCapCccdCmnd = ngayCapCccdCmnd,
+            //NoiCapCccdCmnd = noiCapCccdCmnd,
             NgaySinh = ngaySinh,
-            DienThaoi = dienThaoi,
+            DienThoai = DienThoai,
             Email = email,
             DiaChiThuongTru = diaChiThuongTru,
             DiaChiLienHe = diaChiLienHe,
-            MaTinhTP = maTinhTP,
-            MaQuanHuyen = maQuanHuyen,
-            MaXaPhuongTT = maXaPhuongTT,
+            maTinhTP = maTinhTP,
+            maQuanHuyen = maQuanHuyen,
+            maXaPhuongTT = maXaPhuongTT,
             NgayTiepNhan = ngayTiepNhan,
             NgayHenTraKQ = ngayHenTraKQ,
             NoiDungVuViec = noiDungVuViec,
@@ -112,17 +116,19 @@ public class ComplainManager : DomainService
             DienTich = dienTich,
             LoaiDat = loaiDat,
             DiaChiThuaDat = diaChiThuaDat,
-            TinhThuaDat = tinhThuaDat,
-            HuyenThuaDat = huyenThuaDat,
-            XaThuaDat = xaThuaDat,
+            tinhThuaDat = tinhThuaDat,
+            huyenThuaDat = huyenThuaDat,
+            xaThuaDat = xaThuaDat,
             DuLieuToaDo = duLieuToaDo,
             DuLieuHinhHoc = duLieuHinhHoc,
             GhiChu = GhiChu,
+            loaiKhieuNai1 = loaiKhieuNai1,
             ngayKhieuNai1 = ngayKhieuNai1,
             NgayTraKQ1 = NgayTraKQ1,
             ThamQuyen1 = ThamQuyen1,
             SoQD1 = SoQD1,
             KetQua1 = KetQua1,
+            loaiKhieuNai2 = loaiKhieuNai2,
             ngayKhieuNai2 = ngayKhieuNai2,
             NgayTraKQ2 = NgayTraKQ2,
             ThamQuyen2 = ThamQuyen2,
@@ -148,34 +154,37 @@ public class ComplainManager : DomainService
                                    [NotNull] string tieuDe,
                                    [NotNull] string nguoiDeNghi,
                                    [NotNull] string cccdCmnd,
-                                   [NotNull] DateTime ngayCapCccdCmnd,
-                                   [NotNull] string noiCapCccdCmnd,
+                                   //[NotNull] DateTime ngayCapCccdCmnd,
+                                   //[NotNull] string noiCapCccdCmnd,
                                    [NotNull] DateTime ngaySinh,
-                                   [NotNull] string dienThaoi,
+                                   [NotNull] string DienThoai,
                                    string email,
                                    [NotNull] string diaChiThuongTru,
                                    [NotNull] string diaChiLienHe,
-                                   [NotNull] string maTinhTP,
-                                   [NotNull] string maQuanHuyen,
-                                   [NotNull] string maXaPhuongTT,
+                                   [NotNull] int maTinhTP,
+                                   [NotNull] int maQuanHuyen,
+                                   [NotNull] int maXaPhuongTT,
                                    [NotNull] DateTime ngayTiepNhan,
                                    [NotNull] DateTime ngayHenTraKQ,
                                    [NotNull] string noiDungVuViec,
+                                   [NotNull] string boPhanDangXL,
                                    [NotNull] string soThua,
                                    [NotNull] string toBanDo,
-                                   [NotNull] string dienTich,
+                                   [NotNull] Decimal dienTich,
                                    [NotNull] string loaiDat,
                                    [NotNull] string diaChiThuaDat,
-                                   [NotNull] string tinhThuaDat,
-                                   [NotNull] string huyenThuaDat,
-                                   [NotNull] string xaThuaDat,
+                                   [NotNull] int tinhThuaDat,
+                                   [NotNull] int huyenThuaDat,
+                                   [NotNull] int xaThuaDat,
                                    string duLieuToaDo,
                                    string duLieuHinhHoc,
                                    string GhiChu,
+                                   int? loaiKhieuNai1,
                                    DateTime? ngayKhieuNai1,
                                    DateTime? NgayTraKQ1,
                                    string ThamQuyen1,
                                    string SoQD1,
+                                   int? loaiKhieuNai2,
                                    DateTime? ngayKhieuNai2,
                                    DateTime? NgayTraKQ2,
                                    string ThamQuyen2,
@@ -190,24 +199,25 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
         Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
-        Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
-        Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
+        //Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
+        //Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
         Check.NotNull(ngaySinh, nameof(ngaySinh));
-        Check.NotNullOrWhiteSpace(dienThaoi, nameof(dienThaoi));
+        Check.NotNullOrWhiteSpace(DienThoai, nameof(DienThoai));
         Check.NotNullOrWhiteSpace(diaChiThuongTru, nameof(diaChiThuongTru));
         Check.NotNullOrWhiteSpace(diaChiLienHe, nameof(diaChiLienHe));
-        Check.NotNullOrWhiteSpace(maTinhTP, nameof(maTinhTP));
-        Check.NotNullOrWhiteSpace(maQuanHuyen, nameof(maQuanHuyen));
-        Check.NotNullOrWhiteSpace(maXaPhuongTT, nameof(maXaPhuongTT));
+        Check.NotNull(maTinhTP, nameof(maTinhTP));
+        Check.NotNull(maQuanHuyen, nameof(maQuanHuyen));
+        Check.NotNull(maXaPhuongTT, nameof(maXaPhuongTT));
         Check.NotNullOrWhiteSpace(noiDungVuViec, nameof(noiDungVuViec));
+        Check.NotNullOrWhiteSpace(boPhanDangXL, nameof(boPhanDangXL));
         Check.NotNullOrWhiteSpace(soThua, nameof(soThua));
         Check.NotNullOrWhiteSpace(toBanDo, nameof(toBanDo));
-        Check.NotNullOrWhiteSpace(dienThaoi, nameof(dienTich));
+        Check.NotNullOrWhiteSpace(DienThoai, nameof(dienTich));
         Check.NotNullOrWhiteSpace(loaiDat, nameof(loaiDat));
         Check.NotNullOrWhiteSpace(diaChiThuaDat, nameof(diaChiThuaDat));
-        Check.NotNullOrWhiteSpace(tinhThuaDat, nameof(tinhThuaDat));
-        Check.NotNullOrWhiteSpace(huyenThuaDat, nameof(huyenThuaDat));
-        Check.NotNullOrWhiteSpace(xaThuaDat, nameof(xaThuaDat));
+        Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
+        Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
+        Check.NotNull(xaThuaDat, nameof(xaThuaDat));
 
         if (complain.MaHoSo != maHoSo)
         {
@@ -217,35 +227,38 @@ public class ComplainManager : DomainService
         complain.LoaiVuViec = loaiVuViec;
         complain.NguoiDeNghi = nguoiDeNghi;
         complain.CccdCmnd = cccdCmnd;
-        complain.NgayCapCccdCmnd = ngayCapCccdCmnd;
-        complain.NoiCapCccdCmnd = noiCapCccdCmnd;
+        //complain.NgayCapCccdCmnd = ngayCapCccdCmnd;
+        //complain.NoiCapCccdCmnd = noiCapCccdCmnd;
         complain.NgaySinh = ngaySinh;
-        complain.DienThaoi = dienThaoi;
+        complain.DienThoai = DienThoai;
         complain.Email = email;
         complain.DiaChiThuongTru = diaChiThuongTru;
         complain.DiaChiLienHe = diaChiLienHe;
-        complain.MaTinhTP = maTinhTP;
-        complain.MaQuanHuyen = maQuanHuyen;
-        complain.MaXaPhuongTT = maXaPhuongTT;
+        complain.maTinhTP = maTinhTP;
+        complain.maQuanHuyen = maQuanHuyen;
+        complain.maXaPhuongTT = maXaPhuongTT;
         complain.NgayTiepNhan = ngayTiepNhan;
         complain.NgayHenTraKQ = ngayHenTraKQ;
         complain.NoiDungVuViec = noiDungVuViec;
+        complain.boPhanDangXL = boPhanDangXL;        
         complain.SoThua = soThua;
         complain.ToBanDo = toBanDo;
         complain.DienTich = dienTich;
         complain.LoaiDat = loaiDat;
         complain.DiaChiThuaDat = diaChiThuaDat;
-        complain.TinhThuaDat = tinhThuaDat;
-        complain.HuyenThuaDat = huyenThuaDat;
-        complain.XaThuaDat = xaThuaDat;
+        complain.tinhThuaDat = tinhThuaDat;
+        complain.huyenThuaDat = huyenThuaDat;
+        complain.xaThuaDat = xaThuaDat;
         complain.DuLieuToaDo = duLieuToaDo;
         complain.DuLieuHinhHoc = duLieuHinhHoc;
         complain.GhiChu = GhiChu;
+        complain.loaiKhieuNai1 = loaiKhieuNai1;
         complain.ngayKhieuNai1 = ngayKhieuNai1;
         complain.NgayTraKQ1 = NgayTraKQ1;
         complain.ThamQuyen1 = ThamQuyen1;
         complain.SoQD1 = SoQD1;
         complain.KetQua1 = KetQua1;
+        complain.loaiKhieuNai2 = loaiKhieuNai2;
         complain.ngayKhieuNai2 = ngayKhieuNai2;
         complain.NgayTraKQ2 = NgayTraKQ2;
         complain.ThamQuyen2= ThamQuyen2;
@@ -254,6 +267,7 @@ public class ComplainManager : DomainService
         complain.KetQua = KetQua2 ?? KetQua1;
     }
     public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Complain complain,
+                                                                [NotNull] int giaiDoan,
                                                                 [NotNull] string tenTaiLieu,
                                                                 [NotNull] string hinhThuc,
                                                                 DateTime thoiGianBanHanh,
@@ -265,6 +279,7 @@ public class ComplainManager : DomainService
                                                                 [NotNull] long contentLength)
     {
         Check.NotNull(complain, nameof(complain));
+        Check.NotNull(giaiDoan, nameof(giaiDoan));
         Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
         Check.NotNullOrWhiteSpace(hinhThuc, nameof(hinhThuc));
         Check.NotNullOrWhiteSpace(thuTuButLuc, nameof(thuTuButLuc));
@@ -282,6 +297,7 @@ public class ComplainManager : DomainService
         return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
         {
             IdHoSo = complain.Id,
+            giaiDoan = giaiDoan,
             HinhThuc = hinhThuc,
             ThoiGianBanHanh = thoiGianBanHanh,
             NgayNhan = ngayNhan,
@@ -294,6 +310,7 @@ public class ComplainManager : DomainService
     }
     public async Task UpdateFileAttachmentAsync([NotNull] Complain complain,
                                                 [NotNull] FileAttachment tepDinhKem,
+                                                [NotNull] int giaiDoan,
                                                 [NotNull] string tenTaiLieu,
                                                 [NotNull] string hinhThuc,
                                                 DateTime thoiGianBanHanh,
@@ -305,6 +322,7 @@ public class ComplainManager : DomainService
                                                 long contentLength)
     {
         Check.NotNull(complain, nameof(complain));
+        Check.NotNull(giaiDoan, nameof(giaiDoan));
         Check.NotNull(tepDinhKem, nameof(tepDinhKem));
         Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
         Check.NotNullOrWhiteSpace(hinhThuc, nameof(hinhThuc));
@@ -329,6 +347,7 @@ public class ComplainManager : DomainService
         {
             tepDinhKem.ChangeTenTaiLieu(tenTaiLieu);
         }
+        tepDinhKem.giaiDoan = giaiDoan;
         tepDinhKem.HinhThuc = hinhThuc;
         tepDinhKem.ThoiGianBanHanh = thoiGianBanHanh;
         tepDinhKem.NgayNhan = ngayNhan;

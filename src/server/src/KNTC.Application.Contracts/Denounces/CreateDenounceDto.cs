@@ -24,17 +24,19 @@ public class CreateDenounceDto
     [Required]
     [MaxLength(DenounceConsts.MaxCccdCmndLength)]
     public string CccdCmnd { get; set; }
+    /*
     [Required]
     public DateTime NgayCapCccdCmnd { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxNoiCapCccdCmnd)]
+    */
     public string NoiCapCccdCmnd { get; set; }
     [Required]
     public DateTime NgaySinh { get; set; }
     [Required]
     [Phone]
     [MaxLength(DenounceConsts.MaxSDTLength)]
-    public string DienThaoi { get; set; }
+    public string DienThoai { get; set; }
     [EmailAddress]
     [MaxLength(DenounceConsts.MaxEmailLength)]
     public string Email { get; set; }
@@ -46,19 +48,22 @@ public class CreateDenounceDto
     public string DiaChiLienHe { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxMaDiaDanhLength)]
-    public string MaTinhTP { get; set; }
+    public int maTinhTP { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxMaDiaDanhLength)]
-    public string MaQuanHuyen { get; set; }
+    public int maQuanHuyen { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxMaDiaDanhLength)]
-    public string MaXaPhuongTT { get; set; }
+    public int maXaPhuongTT { get; set; }
     [Required]
     public DateTime NgayTiepNhan { get; set; }
     [Required]
     public DateTime NgayHenTraKQ { get; set; }
     [Required]
     public string NoiDungVuViec { get; set; }
+    [Required]
+    public string boPhanDangXL { get; set; }
+    
     [Required]
     [MaxLength(DenounceConsts.MaxSoThuaLength)]
     public string SoThua { get; set; }
@@ -76,13 +81,13 @@ public class CreateDenounceDto
     public string DiaChiThuaDat { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxMaDiaDanhLength)]
-    public string TinhThuaDat { get; set; }
+    public int tinhThuaDat { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxMaDiaDanhLength)]
-    public string HuyenThuaDat { get; set; }
+    public int huyenThuaDat { get; set; }
     [Required]
     [MaxLength(DenounceConsts.MaxMaDiaDanhLength)]
-    public string XaThuaDat { get; set; }
+    public int xaThuaDat { get; set; }
     [MaxLength(DenounceConsts.MaxToaDoLength)]
     public string DuLieuToaDo { get; set; }
     [MaxLength(DenounceConsts.MaxHinhHocLength)]

@@ -77,7 +77,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasColumnName("dia_chi_thuong_tru");
 
-                    b.Property<string>("DienThaoi")
+                    b.Property<string>("DienThoai")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -113,7 +113,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasColumnName("ghi_chu");
 
-                    b.Property<string>("HuyenThuaDat")
+                    b.Property<string>("huyenThuaDat")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -161,19 +161,19 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_ho_so");
 
-                    b.Property<string>("MaQuanHuyen")
+                    b.Property<string>("maQuanHuyen")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_quan_huyen");
 
-                    b.Property<string>("MaTinhTP")
+                    b.Property<string>("maTinhTP")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_tinh_tp");
 
-                    b.Property<string>("MaXaPhuongTT")
+                    b.Property<string>("maXaPhuongTT")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -252,7 +252,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("tieu_de");
 
-                    b.Property<string>("TinhThuaDat")
+                    b.Property<string>("tinhThuaDat")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -264,7 +264,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("to_ban_do");
 
-                    b.Property<string>("XaThuaDat")
+                    b.Property<string>("xaThuaDat")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -338,7 +338,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasColumnName("dia_chi_thuong_tru");
 
-                    b.Property<string>("DienThaoi")
+                    b.Property<string>("DienThoai")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -374,7 +374,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasColumnName("ghi_chu");
 
-                    b.Property<string>("HuyenThuaDat")
+                    b.Property<string>("huyenThuaDat")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -422,19 +422,19 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_ho_so");
 
-                    b.Property<string>("MaQuanHuyen")
+                    b.Property<string>("maQuanHuyen")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_quan_huyen");
 
-                    b.Property<string>("MaTinhTP")
+                    b.Property<string>("maTinhTP")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_tinh_tp");
 
-                    b.Property<string>("MaXaPhuongTT")
+                    b.Property<string>("maXaPhuongTT")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -513,7 +513,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("tieu_de");
 
-                    b.Property<string>("TinhThuaDat")
+                    b.Property<string>("tinhThuaDat")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
@@ -525,7 +525,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("to_ban_do");
 
-                    b.Property<string>("XaThuaDat")
+                    b.Property<string>("xaThuaDat")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
