@@ -13,7 +13,7 @@ public class CreateAndUpdateFileAttachmentDto : EntityDto<Guid>
 {
     [Required]
     [MaxLength(FileAttachmentConsts.MaxTenTaiLieuLength)]
-    public short GiaiDoan { get; set; }
+    public int GiaiDoan { get; set; }
     public string TenTaiLieu { get; set; }
     [Required]
     [MaxLength(FileAttachmentConsts.MaxHinhThucLength)]

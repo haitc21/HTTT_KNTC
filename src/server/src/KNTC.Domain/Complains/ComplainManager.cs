@@ -267,7 +267,7 @@ public class ComplainManager : DomainService
         complain.KetQua = KetQua2 ?? KetQua1;
     }
     public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Complain complain,
-                                                                [NotNull] short giaiDoan,
+                                                                [NotNull] int giaiDoan,
                                                                 [NotNull] string tenTaiLieu,
                                                                 [NotNull] int hinhThuc,
                                                                 DateTime thoiGianBanHanh,
@@ -310,7 +310,7 @@ public class ComplainManager : DomainService
     }
     public async Task UpdateFileAttachmentAsync([NotNull] Complain complain,
                                                 [NotNull] FileAttachment tepDinhKem,
-                                                [NotNull] short giaiDoan,
+                                                [NotNull] int giaiDoan,
                                                 [NotNull] string tenTaiLieu,
                                                 [NotNull] int hinhThuc,
                                                 DateTime thoiGianBanHanh,

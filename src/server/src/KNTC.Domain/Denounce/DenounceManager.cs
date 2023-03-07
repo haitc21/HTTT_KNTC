@@ -262,7 +262,7 @@ public class DenounceManager : DomainService
         denounce.KetQua = KetQua2 ?? KetQua1;
     }
     public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Denounce denounce,
-                                                                [NotNull] short giaiDoan,
+                                                                [NotNull] int giaiDoan,
                                                                 [NotNull] string tenTaiLieu,
                                                                 [NotNull] int hinhThuc,
                                                                 DateTime thoiGianBanHanh,
@@ -305,7 +305,7 @@ public class DenounceManager : DomainService
     }
     public async Task UpdateFileAttachmentAsync([NotNull] Denounce denounce,
                                                 [NotNull] FileAttachment tepDinhKem,
-                                                [NotNull] short giaiDoan,
+                                                [NotNull] int giaiDoan,
                                                 [NotNull] string tenTaiLieu,
                                                 [NotNull] int hinhThuc,
                                                 DateTime thoiGianBanHanh,
