@@ -9,7 +9,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace KNTC.Denounces;
 
-public class UpdateDenounceDto : EntityDto<Guid>
+public class UpdateUnitTypeDto : EntityDto<Guid>
 {
     [Required]
     [MaxLength(DenounceConsts.MaxMaHoSoLength)]

@@ -6,7 +6,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace KNTC.Denounces;
 
-public class DenounceListDto : AuditedEntityDto<Guid>
+public class UnitTypeListDto : AuditedEntityDto<Guid>
 {
     public string MaHoSo { get; set; }
     public string TieuDe { get; set; }

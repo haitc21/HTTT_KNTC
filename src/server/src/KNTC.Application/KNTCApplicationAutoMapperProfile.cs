@@ -42,9 +42,9 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<UpdateComplainDto, Complain>();
 
         CreateMap<Denounce, DenounceDto>();
-        CreateMap<Denounce, DenounceListDto>();
-        CreateMap<CreateDenounceDto, Denounce>();
-        CreateMap<UpdateDenounceDto, Denounce>();
+        CreateMap<Denounce, UnitTypeListDto>();
+        CreateMap<CreateUnitTypeDto, Denounce>();
+        CreateMap<UpdateUnitTypeDto, Denounce>();
 
         CreateMap<FileAttachment, FileAttachmentDto>();
         CreateMap<CreateAndUpdateFileAttachmentDto, FileAttachment>();

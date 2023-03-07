@@ -8,7 +8,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace KNTC.Denounces;
 
-public class CreateDenounceDto
+public class CreateUnitTypeDto
 {
     [Required]
     [MaxLength(DenounceConsts.MaxMaHoSoLength)]
