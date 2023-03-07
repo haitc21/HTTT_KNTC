@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using KNTC.FileAttachments;
+using KNTC.LandTypes;
 
 namespace KNTC.Complains;
 
@@ -44,7 +45,7 @@ public class Complain : FullAuditedAggregateRoot<Guid>
     public string SoThua { get; set; }
     public string ToBanDo { get; set; }
     public decimal DienTich { get; set; }
-    public string LoaiDat { get; set; }
+    public int LoaiDat { get; set; }
     public string DiaChiThuaDat { get; set; }
     public int tinhThuaDat { get; set; }
     public int huyenThuaDat { get; set; }
@@ -66,12 +67,13 @@ public class Complain : FullAuditedAggregateRoot<Guid>
     public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public virtual List<FileAttachment> FileAttachments { get; set; }
+    public LandType LandType { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)
     {
         MaHoSo = Check.NotNullOrWhiteSpace(
             maHoSo,
             nameof(maHoSo),
-            maxLength: ComplainConsts.MaxMaHoSoLength
+            maxLength: KNTCValidatorConsts.MaxMaHoSoLength
         );
     }
 

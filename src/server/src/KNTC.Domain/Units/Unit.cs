@@ -1,9 +1,10 @@
-﻿using System;
-using Volo.Abp.Application.Dtos;
+﻿using KNTC.UnitTypes;
+using System;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.Units;
 
-public class UnitDto : FullAuditedEntityDto<int>
+public class Unit : FullAuditedEntity<Guid>
 {
     public string UnitCode { get; set; }
     public string UnitName { get; set; }
@@ -12,7 +13,7 @@ public class UnitDto : FullAuditedEntityDto<int>
     public int ParentId { get; set; }
     public string Description { get; set; }
     public int OrderIndex { get; set; }
-    public Status Status { get; set; }
-    public string ConcurrencyStamp { get; set; }
+    public int Status { get; set; }
+    public UnitType UnitType { get; set; }
 
 }

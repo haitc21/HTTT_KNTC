@@ -6,6 +6,9 @@ using Volo.Abp.AutoMapper;
 using KNTC.Complains;
 using KNTC.FileAttachments;
 using KNTC.Denounces;
+using KNTC.DocumentTypes;
+using KNTC.LandTypes;
+using KNTC.Units;
 
 namespace KNTC;
 
@@ -43,11 +46,21 @@ public class KNTCApplicationAutoMapperProfile : Profile
 
         CreateMap<Denounce, DenounceDto>();
         CreateMap<Denounce, UnitTypeListDto>();
-        CreateMap<CreateUnitTypeDto, Denounce>();
-        CreateMap<UpdateUnitTypeDto, Denounce>();
+        CreateMap<CreateDenounceDto, Denounce>();
+        CreateMap<UpdateDenounceDto, Denounce>();
 
         CreateMap<FileAttachment, FileAttachmentDto>();
         CreateMap<CreateAndUpdateFileAttachmentDto, FileAttachment>();
+
+        CreateMap<DocumentType, DocumentTypeDto>();
+        CreateMap<CreateAndUpdateDocumentTypeDto, DocumentType>();
+
+        CreateMap<LandType, LandTypeDto>();
+        CreateMap<CreateAndUpdateLandTypeDto, LandType>();
+
+        CreateMap<Unit, UnitDto>();
+        CreateMap<CreateAndUpdateUnitDto, Unit>();
+
 
     }
 }

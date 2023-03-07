@@ -4,6 +4,7 @@ using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230307171511_create_fk_denounce_landtype")]
+    partial class create_fk_denounce_landtype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,8 +273,6 @@ namespace KNTC.Migrations
                         .HasColumnName("xa_thua_dat");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LoaiDat");
 
                     b.HasIndex("LoaiVuViec");
 
@@ -560,13 +560,13 @@ namespace KNTC.Migrations
 
                     b.Property<string>("DocumentTypeCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("DocumentTypeName")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -728,13 +728,13 @@ namespace KNTC.Migrations
 
                     b.Property<string>("LandTypeCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("LandTypeName")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2")
@@ -804,8 +804,8 @@ namespace KNTC.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ShortName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
@@ -814,13 +814,13 @@ namespace KNTC.Migrations
 
                     b.Property<string>("UnitCode")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("UnitName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("UnitTypeId")
                         .HasColumnType("int");
@@ -884,13 +884,13 @@ namespace KNTC.Migrations
 
                     b.Property<string>("UnitTypeCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UnitTypeName")
                         .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("Id");
 
@@ -2358,23 +2358,12 @@ namespace KNTC.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
-            modelBuilder.Entity("KNTC.Complains.Complain", b =>
-                {
-                    b.HasOne("KNTC.LandTypes.LandType", "LandType")
-                        .WithMany("Complains")
-                        .HasForeignKey("LoaiDat")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("LandType");
-                });
-
             modelBuilder.Entity("KNTC.Denounces.Denounce", b =>
                 {
                     b.HasOne("KNTC.LandTypes.LandType", "LandType")
                         .WithMany("Denounces")
                         .HasForeignKey("LoaiDat")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("LandType");
@@ -2385,19 +2374,19 @@ namespace KNTC.Migrations
                     b.HasOne("KNTC.DocumentTypes.DocumentType", "DocumentType")
                         .WithMany("FileAttachments")
                         .HasForeignKey("HinhThuc")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("KNTC.Complains.Complain", "Complain")
                         .WithMany("FileAttachments")
                         .HasForeignKey("IdHoSo")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("KNTC.Denounces.Denounce", "Denounce")
                         .WithMany("FileAttachments")
                         .HasForeignKey("IdHoSo")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Complain");
@@ -2412,7 +2401,7 @@ namespace KNTC.Migrations
                     b.HasOne("KNTC.UnitTypes.UnitType", "UnitType")
                         .WithMany("Units")
                         .HasForeignKey("UnitTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("UnitType");
@@ -2586,8 +2575,6 @@ namespace KNTC.Migrations
 
             modelBuilder.Entity("KNTC.LandTypes.LandType", b =>
                 {
-                    b.Navigation("Complains");
-
                     b.Navigation("Denounces");
                 });
 

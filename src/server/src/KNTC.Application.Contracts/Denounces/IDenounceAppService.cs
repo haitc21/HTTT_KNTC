@@ -13,8 +13,8 @@ public interface IDenounceAppService :
             DenounceDto,
             Guid,
             GetDenounceListDto,
-            CreateUnitTypeDto,
-            UpdateUnitTypeDto>
+            CreateDenounceDto,
+            UpdateDenounceDto>
 {
     Task DeleteMultipleAsync(IEnumerable<Guid> ids);
     Task<byte[]> DowloadAsync(string idTepDinhKem);

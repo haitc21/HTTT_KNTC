@@ -40,7 +40,7 @@ public class DenounceManager : DomainService
                                               [NotNull] string soThua,
                                               [NotNull] string toBanDo,
                                               [NotNull] decimal dienTich,
-                                              [NotNull] string loaiDat,
+                                              [NotNull] int loaiDat,
                                               [NotNull] string diaChiThuaDat,
                                               [NotNull] int tinhThuaDat,
                                               [NotNull] int huyenThuaDat,
@@ -79,7 +79,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(soThua, nameof(soThua));
         Check.NotNullOrWhiteSpace(toBanDo, nameof(toBanDo));
         Check.NotNull(dienTich, nameof(dienTich));
-        Check.NotNullOrWhiteSpace(loaiDat, nameof(loaiDat));
+        Check.NotNull(loaiDat, nameof(loaiDat));
         Check.NotNullOrWhiteSpace(diaChiThuaDat, nameof(diaChiThuaDat));
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
@@ -168,7 +168,7 @@ public class DenounceManager : DomainService
                                    [NotNull] string soThua,
                                    [NotNull] string toBanDo,
                                    [NotNull] decimal dienTich,
-                                   [NotNull] string loaiDat,
+                                   [NotNull] int loaiDat,
                                    [NotNull] string diaChiThuaDat,
                                    [NotNull] int tinhThuaDat,
                                    [NotNull] int huyenThuaDat,
@@ -209,7 +209,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(soThua, nameof(soThua));
         Check.NotNullOrWhiteSpace(toBanDo, nameof(toBanDo));
         Check.NotNull(dienTich, nameof(dienTich));
-        Check.NotNullOrWhiteSpace(loaiDat, nameof(loaiDat));
+        Check.NotNull(loaiDat, nameof(loaiDat));
         Check.NotNullOrWhiteSpace(diaChiThuaDat, nameof(diaChiThuaDat));
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));

@@ -1,5 +1,6 @@
 ﻿using KNTC.Complains;
 using KNTC.Denounces;
+using KNTC.DocumentTypes;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -40,12 +41,13 @@ public class FileAttachment : FullAuditedEntity<Guid>
     public long ContentLength { get; set; }
     public Complain Complain { get; set; }
     public Denounce Denounce { get; set; }
+    public DocumentType DocumentType { get; set; }
     private void SetTenTaiLieu([NotNull] string tenTaiLieu)
     {
         TenTaiLieu = Check.NotNullOrWhiteSpace(
             tenTaiLieu,
             nameof(tenTaiLieu),
-            maxLength: FileAttachmentConsts.MaxTenTaiLieuLength
+            maxLength: KNTCValidatorConsts.MaxTenTaiLieuLength
         );
     }
 

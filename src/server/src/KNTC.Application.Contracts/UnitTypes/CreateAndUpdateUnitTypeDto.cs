@@ -1,24 +1,22 @@
-﻿using KNTC.Complains;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace KNTC.UnitTypes;
 
-public class UpdateUnitTypeDto : EntityDto<Guid>
+public class CreateAndUpdateUnitTypeDto : EntityDto<int>, IHasConcurrencyStamp
 {
     [Required]
-    [MaxLength(UnitTypeConsts.MaxUnitTypeCodeLength)]
+    [MaxLength(KNTCValidatorConsts.MaxCodeLength)]
     public string UnitTypeCode { get; set; }
     [Required]
-    [MaxLength(UnitTypeConsts.MaxUnitTypeNameLength)]
+    [MaxLength(KNTCValidatorConsts.MaxNameLength)]
     public string UnitTypeName { get; set; }
-    [MaxLength(UnitTypeConsts.MaxDescriptionLength)]
+    [MaxLength(KNTCValidatorConsts.MaxDescriptionLength)]
     public string Description { get; set; }
-
-    public string OrderIndex { get; set; }
-
+    public int OrderIndex { get; set; }
     public int Status { get; set; }
-
     public string ConcurrencyStamp { get; set; }
+
 }

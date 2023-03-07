@@ -2,12 +2,13 @@
 
 namespace KNTC.UnitTypes;
 
-public class UnitTypeDto : EntityDto<int>
+public class UnitTypeDto : FullAuditedEntityDto<int>
 {
     public string UnitTypeCode { get; set; }
     public string UnitTypeName { get; set; }
     public string Description { get; set; }
     public int OrderIndex { get; set; }
-    public int Status { get; set; }
+    public Status Status { get; set; }
+    public string ConcurrencyStamp { get; set; }
 
 }

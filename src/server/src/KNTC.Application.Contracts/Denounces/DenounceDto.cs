@@ -31,7 +31,7 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public string SoThua { get; set; }
     public string ToBanDo { get; set; }
     public decimal DienTich { get; set; }
-    public string LoaiDat { get; set; }
+    public int LoaiDat { get; set; }
     public string DiaChiThuaDat { get; set; }
     public int tinhThuaDat { get; set; }
     public int huyenThuaDat { get; set; }
@@ -51,4 +51,5 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public virtual List<FileAttachmentDto> FileAttachments { get; set; }
+    public string ConcurrencyStamp { get; set; }
 }

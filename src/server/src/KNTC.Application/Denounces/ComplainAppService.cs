@@ -31,8 +31,8 @@ public class DenounceAppService : CrudAppService<
             DenounceDto,
             Guid,
             GetDenounceListDto,
-            CreateUnitTypeDto,
-            UpdateUnitTypeDto>, IDenounceAppService
+            CreateDenounceDto,
+            UpdateDenounceDto>, IDenounceAppService
 {
     private readonly IDenounceRepository _denounceRepo;
     private readonly DenounceManager _denounceManager;
@@ -82,7 +82,7 @@ public class DenounceAppService : CrudAppService<
         );
     }
     [Authorize(KNTCPermissions.Denounces.Create)]
-    public override async Task<DenounceDto> CreateAsync(CreateUnitTypeDto input)
+    public override async Task<DenounceDto> CreateAsync(CreateDenounceDto input)
     {
         var denounce = await _denounceManager.CreateAsync(maHoSo: input.MaHoSo,
                                                   loaiVuViec: input.LoaiVuViec,
@@ -150,7 +150,7 @@ public class DenounceAppService : CrudAppService<
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }
     [Authorize(KNTCPermissions.Denounces.Default)]
-    public override async Task<DenounceDto> UpdateAsync(Guid id, UpdateUnitTypeDto input)
+    public override async Task<DenounceDto> UpdateAsync(Guid id, UpdateDenounceDto input)
     {
         var denounce = await _denounceRepo.GetAsync(id, false);
         denounce.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
