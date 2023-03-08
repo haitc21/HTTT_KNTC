@@ -9,6 +9,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KNTC.UnitTypes;
 
@@ -68,6 +69,7 @@ public class UnitTypeAppService : CrudAppService<
             ObjectMapper.Map<List<UnitType>, List<UnitTypeLookupDto>>(unitTypes)
         );
     }
+    [Authorize(KNTCPermissions.UnitType.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);

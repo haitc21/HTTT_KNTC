@@ -67,6 +67,7 @@ public class LandTypeAppService : CrudAppService<
             ObjectMapper.Map<List<LandType>, List<LandTypeLookupDto>>(landTypes)
         );
     }
+    [Authorize(KNTCPermissions.LandType.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);

@@ -67,6 +67,7 @@ public class UnitAppService : CrudAppService<
             ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(units)
         );
     }
+    [Authorize(KNTCPermissions.Unit.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);

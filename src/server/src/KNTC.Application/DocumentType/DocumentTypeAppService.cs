@@ -69,6 +69,7 @@ public class DocumentTypeAppService : CrudAppService<
             ObjectMapper.Map<List<DocumentType>, List<DocumentTypeLookupDto>>(documentTypes)
         );
     }
+    [Authorize(KNTCPermissions.DocumentType.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);
