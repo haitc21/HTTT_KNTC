@@ -265,7 +265,7 @@ public class DenounceAppService : CrudAppService<
         await _denounceRepo.DeleteAsync(id);
     }
 
-    //[Authorize(KNTCPermissions.Denounces.Delete)]
+    [Authorize(KNTCPermissions.Denounces.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
         var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Contains(x.IdHoSo))).Select(x => x.Id);
