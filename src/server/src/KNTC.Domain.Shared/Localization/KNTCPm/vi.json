@@ -2,26 +2,46 @@
   "culture": "vi",
   "texts": {
     // Roles
-    "Permission:AbpIdentity.Roles": "Quản lý vai trò",
+    "Permission:AbpIdentity.Roles": " Xem DS vai trò",
     "Permission:AbpIdentity.Roles.Create": "Tạo vai trò",
     "Permission:AbpIdentity.Roles.Update": "Sửa vai trò",
     "Permission:AbpIdentity.Roles.Delete": "Xóa vai trò",
     "Permission:AbpIdentity.Roles.ManagePermissions": "Phân quyền cho vai trò",
     // Users
-    "Permission:AbpIdentity.Users": "Quản lý người dùng",
+    "Permission:AbpIdentity.Users": " Xem DS người dùng",
     "Permission:AbpIdentity.Users.Create": "Tạo người dùng",
     "Permission:AbpIdentity.Users.Update": "Sửa người dùng",
     "Permission:AbpIdentity.Users.Delete": "Xóa người dùng",
     "Permission:AbpIdentity.Users.ManagePermissions": "Phân quyền cho người dùng",
     // khiếu nại
-    "Permission:Complains": "Quản lý khiếu nại",
+    "Permission:Complains": " Xem DS khiếu nại",
     "Permission:Complains.Create": "Tạo khiếu nại",
     "Permission:Complains.Edit": "Sửa khiếu nại",
     "Permission:Complains.Delete": "Xóa khiếu nại",
     // tố cáo
-    "Permission:Denounces": "Quản lý tố cáo",
+    "Permission:Denounces": " Xem DS tố cáo",
     "Permission:Denounces.Create": "Tạo tố cáo",
     "Permission:Denounces.Edit": "Sửa tố cáo",
-    "Permission:Denounces.Delete": "Xóa tố cáo"
+    "Permission:Denounces.Delete": "Xóa tố cáo",
+    // DocumentType
+    "Permission:DocumentType": " Xem DS loại hình thức tệp gắn kèmm",
+    "Permission:DocumentType.Create": "Tạo loại hình thức tệp gắn kèm",
+    "Permission:DocumentType.Edit": "Sửal oại hình thức tệp gắn kèm",
+    "Permission:DocumentType.Delete": "Xóa loại hình thức tệp gắn kèm",
+    // LandType
+    "Permission:LandType": " Xem DS loại đất",
+    "Permission:LandType.Create": "Tạo loại đất",
+    "Permission:LandType.Edit": "Sửa loại đất",
+    "Permission:LandType.Delete": "Xóa loại đất",
+    // Unit
+    "Permission:Unit": " Xem DS địa danh",
+    "Permission:Unit.Create": "Tạo địa danh",
+    "Permission:Unit.Edit": "Sửa địa danh",
+    "Permission:Unit.Delete": "Xóa địa danh",
+    // UnitType
+    "Permission:UnitType": " Xem DS loại địa danh",
+    "Permission:UnitType.Create": "Tạo loại địa danh",
+    "Permission:UnitType.Edit": "Sửa loại địa danh",
+    "Permission:UnitType.Delete": "Xóa loại địa danh"
   }
 }

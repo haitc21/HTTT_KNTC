@@ -24,8 +24,6 @@ using static KNTC.Permissions.KNTCPermissions;
 using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 
 namespace KNTC.Denounces;
-
-[Authorize(KNTCPermissions.Denounces.Default)]
 public class DenounceAppService : CrudAppService<
             Denounce,
             DenounceDto,
@@ -46,7 +44,6 @@ public class DenounceAppService : CrudAppService<
         IBlobContainer<FileAttachmentContainer> blobContainer) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
-        GetPolicyName = KNTCPermissions.Denounces.Default;
 
         _denounceRepo = denounceRepo;
         _fileAttachmentRepo = fileAttachmentRepo;
@@ -54,14 +51,14 @@ public class DenounceAppService : CrudAppService<
         _blobContainer = blobContainer;
     }
 
-    [Authorize(KNTCPermissions.Denounces.Default)]
+    [AllowAnonymous]
     public override async Task<PagedResultDto<DenounceDto>> GetListAsync(GetDenounceListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = nameof(Denounce.MaHoSo);
         }
-
+        input.Keyword = input.Keyword.ToUpper();
         var denounces = await _denounceRepo.GetListAsync(
             input.SkipCount,
             input.MaxResultCount,
@@ -71,10 +68,12 @@ public class DenounceAppService : CrudAppService<
             input.KetQua
         );
 
-        var totalCount = input.Keyword == null
-            ? await _denounceRepo.CountAsync()
-            : await _denounceRepo.CountAsync(
-                x => x.MaHoSo.Contains(input.Keyword) || x.TieuDe.Contains(input.Keyword));
+        var totalCount = await _denounceRepo.CountAsync(
+                x => (input.Keyword.IsNullOrEmpty() 
+                    ||  (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
+                && (!input.LoaiVuViec.HasValue || x.LoaiVuViec == input.LoaiVuViec)
+                && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
+                );
 
         return new PagedResultDto<DenounceDto>(
         totalCount,
@@ -293,7 +292,7 @@ public class DenounceAppService : CrudAppService<
 
     }
 
-    [Authorize(KNTCPermissions.Denounces.Default)]
+    [AllowAnonymous]
     public async Task<byte[]> DowloadAsync(string idTepDinhKem)
     {
         return await _blobContainer.GetAllBytesOrNullAsync(idTepDinhKem);

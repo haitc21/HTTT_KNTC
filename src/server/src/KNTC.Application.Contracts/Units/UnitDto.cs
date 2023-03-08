@@ -1,9 +1,10 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace KNTC.Units;
 
-public class UnitDto : FullAuditedEntityDto<int>
+public class UnitDto : FullAuditedEntityDto<int>, IHasConcurrencyStamp
 {
     public string UnitCode { get; set; }
     public string UnitName { get; set; }

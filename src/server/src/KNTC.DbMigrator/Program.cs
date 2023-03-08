@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KNTC.DbMigrator;
 
-internal class Program
+public class Program
 {
     private static async Task Main(string[] args)
     {

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace KNTC.DocumentTypes;
 
-internal class GetDocumentTypesListDto : BaseListFilterDto
+public class GetDocumentTypesListDto : BaseListFilterDto
 {
-    public Status Status { get; set; }
+    public Status? Status { get; set; }
 }

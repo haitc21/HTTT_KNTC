@@ -1,9 +1,10 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace KNTC.LandTypes;
 
-public class LandTypeDto : FullAuditedEntityDto<Guid>
+public class LandTypeDto : FullAuditedEntityDto<int>, IHasConcurrencyStamp
 {
     public string LandTypeCode { get; set; }
     public string LandTypeName { get; set; }

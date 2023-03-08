@@ -9,6 +9,7 @@ using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.LandTypes;
 using KNTC.Units;
+using KNTC.UnitTypes;
 
 namespace KNTC;
 
@@ -53,13 +54,20 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<CreateAndUpdateFileAttachmentDto, FileAttachment>();
 
         CreateMap<DocumentType, DocumentTypeDto>();
+        CreateMap<DocumentType, DocumentTypeLookupDto>();
         CreateMap<CreateAndUpdateDocumentTypeDto, DocumentType>();
 
         CreateMap<LandType, LandTypeDto>();
+        CreateMap<LandType, LandTypeLookupDto>();
         CreateMap<CreateAndUpdateLandTypeDto, LandType>();
 
         CreateMap<Unit, UnitDto>();
+        CreateMap<Unit, UnitLookupDto>();
         CreateMap<CreateAndUpdateUnitDto, Unit>();
+
+        CreateMap<UnitType, UnitTypeDto>();
+        CreateMap<UnitType, UnitTypeLookupDto>();
+        CreateMap<CreateAndUpdateUnitTypeDto, UnitType>();
 
 
     }

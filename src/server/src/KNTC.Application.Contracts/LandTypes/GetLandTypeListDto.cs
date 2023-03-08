@@ -4,7 +4,7 @@ using System.Text;
 
 namespace KNTC.LandTypes;
 
-internal class GetLandTypeListDto : BaseListFilterDto
+public class GetLandTypeListDto : BaseListFilterDto
 {
-    public Status Status { get; set; }
+    public Status? Status { get; set; }
 }

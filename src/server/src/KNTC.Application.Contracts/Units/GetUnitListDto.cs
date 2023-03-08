@@ -1,9 +1,9 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 
-namespace KNTC.UnitTypes;
+namespace KNTC.Units;
 
 public class GetUnitListDto : BaseListFilterDto
 {
-    public Status Status { get; set; }
+    public Status? Status { get; set; }
 }

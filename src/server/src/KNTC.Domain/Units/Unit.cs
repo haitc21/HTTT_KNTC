@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.Units;
 
-public class Unit : FullAuditedEntity<Guid>
+public class Unit : FullAuditedEntity<int>
 {
     public string UnitCode { get; set; }
     public string UnitName { get; set; }
@@ -13,7 +13,7 @@ public class Unit : FullAuditedEntity<Guid>
     public int ParentId { get; set; }
     public string Description { get; set; }
     public int OrderIndex { get; set; }
-    public int Status { get; set; }
+    public Status Status { get; set; }
     public UnitType UnitType { get; set; }
 
 }

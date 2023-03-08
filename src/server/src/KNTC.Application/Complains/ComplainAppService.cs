@@ -25,7 +25,6 @@ using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 
 namespace KNTC.Complains;
 
-[Authorize(KNTCPermissions.Complains.Default)]
 public class ComplainAppService : CrudAppService<
             Complain,
             ComplainDto,
@@ -46,7 +45,6 @@ public class ComplainAppService : CrudAppService<
         IBlobContainer<FileAttachmentContainer> blobContainer) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
-        GetPolicyName = KNTCPermissions.Complains.Default;
 
         _complainRepo = complainRepo;
         _fileAttachmentRepo = fileAttachmentRepo;
@@ -54,14 +52,14 @@ public class ComplainAppService : CrudAppService<
         _blobContainer = blobContainer;
     }
 
-    [Authorize(KNTCPermissions.Complains.Default)]
+    [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = nameof(Complain.MaHoSo);
         }
-
+        input.Keyword = input.Keyword.ToUpper();
         var complains = await _complainRepo.GetListAsync(
             input.SkipCount,
             input.MaxResultCount,
@@ -71,10 +69,12 @@ public class ComplainAppService : CrudAppService<
             input.KetQua
         );
 
-        var totalCount = input.Keyword == null
-            ? await _complainRepo.CountAsync()
-            : await _complainRepo.CountAsync(
-                x => x.MaHoSo.Contains(input.Keyword) || x.TieuDe.Contains(input.Keyword));
+        var totalCount = await _complainRepo.CountAsync(
+                x => (input.Keyword.IsNullOrEmpty()
+                    || (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
+                && (!input.LoaiVuViec.HasValue || x.LoaiVuViec == input.LoaiVuViec)
+                && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
+                );
 
         return new PagedResultDto<ComplainDto>(
         totalCount,
@@ -155,7 +155,7 @@ public class ComplainAppService : CrudAppService<
         var complain = await _complainRepo.GetAsync(id, false);
         complain.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
-        if(input.ListTepDinhKemHoSosDeleted.Count > 0)
+        if (input.ListTepDinhKemHoSosDeleted.Count > 0)
         {
             foreach (var idFileAttach in input.ListTepDinhKemHoSosDeleted)
             {
@@ -295,7 +295,7 @@ public class ComplainAppService : CrudAppService<
 
     }
 
-    [Authorize(KNTCPermissions.Complains.Default)]
+    [AllowAnonymous]
     public async Task<byte[]> DowloadAsync(string idTepDinhKem)
     {
         return await _blobContainer.GetAllBytesOrNullAsync(idTepDinhKem);
