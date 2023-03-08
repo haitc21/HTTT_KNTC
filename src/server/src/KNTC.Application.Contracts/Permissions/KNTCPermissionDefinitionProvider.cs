@@ -23,14 +23,14 @@ public class KNTCPermissionDefinitionProvider : PermissionDefinitionProvider
         denouncesPermission.AddChild(KNTCPermissions.Denounces.Delete, L("Permission:Denounces.Delete"));
 
 
-        var documentTypeGroup = context.AddGroup(KNTCPermissions.DenounceGroupName, L("Permission:DocumentType"));
+        var documentTypeGroup = context.AddGroup(KNTCPermissions.DocumentTypeGroupName, L("Permission:DocumentType"));
 
         var documentTypePermission = documentTypeGroup.AddPermission(KNTCPermissions.DocumentType.Default, L("Permission:DocumentType"));
         documentTypePermission.AddChild(KNTCPermissions.DocumentType.Create, L("Permission:DocumentType.Create"));
         documentTypePermission.AddChild(KNTCPermissions.DocumentType.Edit, L("Permission:DocumentType.Edit"));
         documentTypePermission.AddChild(KNTCPermissions.DocumentType.Delete, L("Permission:DocumentType.Delete"));
 
-        var landTypeGroup = context.AddGroup(KNTCPermissions.DenounceGroupName, L("Permission:LandType"));
+        var landTypeGroup = context.AddGroup(KNTCPermissions.LandTypeGroupName, L("Permission:LandType"));
 
         var landTypePermission = landTypeGroup.AddPermission(KNTCPermissions.LandType.Default, L("Permission:LandType"));
         landTypePermission.AddChild(KNTCPermissions.LandType.Create, L("Permission:LandType.Create"));
@@ -38,14 +38,14 @@ public class KNTCPermissionDefinitionProvider : PermissionDefinitionProvider
         landTypePermission.AddChild(KNTCPermissions.LandType.Delete, L("Permission:LandType.Delete"));
 
 
-        var unitGroup = context.AddGroup(KNTCPermissions.DenounceGroupName, L("Permission:Unit"));
+        var unitGroup = context.AddGroup(KNTCPermissions.UnitGroupName, L("Permission:Unit"));
 
         var unitPermission = unitGroup.AddPermission(KNTCPermissions.Unit.Default, L("Permission:Unit"));
         unitPermission.AddChild(KNTCPermissions.Unit.Create, L("Permission:Unit.Create"));
         unitPermission.AddChild(KNTCPermissions.Unit.Edit, L("Permission:Unit.Edit"));
         unitPermission.AddChild(KNTCPermissions.Unit.Delete, L("Permission:Unit.Delete"));
 
-        var unitTypeGroup = context.AddGroup(KNTCPermissions.DenounceGroupName, L("Permission:UnitType"));
+        var unitTypeGroup = context.AddGroup(KNTCPermissions.UnitTypeGroupName, L("Permission:UnitType"));
 
         var unitTypePermission = unitTypeGroup.AddPermission(KNTCPermissions.UnitType.Default, L("Permission:UnitType"));
         unitTypePermission.AddChild(KNTCPermissions.UnitType.Create, L("Permission:UnitType.Create"));

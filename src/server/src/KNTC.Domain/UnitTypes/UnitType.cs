@@ -7,6 +7,14 @@ namespace KNTC.UnitTypes;
 
 public class UnitType : FullAuditedEntity<int>
 {
+    public UnitType()
+    {
+
+    }
+    public UnitType(int id) : base(id)
+    {
+
+    }
     public string UnitTypeCode { get; set; }
     public string UnitTypeName { get; set; }
     public string Description { get; set; }

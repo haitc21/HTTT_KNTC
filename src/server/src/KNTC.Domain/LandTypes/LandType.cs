@@ -9,6 +9,14 @@ namespace KNTC.LandTypes;
 
 public class LandType : FullAuditedEntity<int>
 {
+    public LandType()
+    {
+
+    }
+    public LandType(int id) : base(id)
+    {
+
+    }
     public string LandTypeCode { get; set; }
     public string LandTypeName { get; set; }
     public string Description { get; set; }

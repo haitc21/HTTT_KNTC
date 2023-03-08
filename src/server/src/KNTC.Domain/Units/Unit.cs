@@ -6,6 +6,14 @@ namespace KNTC.Units;
 
 public class Unit : FullAuditedEntity<int>
 {
+    public Unit()
+    {
+
+    }
+    public Unit(int id) : base(id)
+    {
+
+    }
     public string UnitCode { get; set; }
     public string UnitName { get; set; }
     public string ShortName { get; set; }

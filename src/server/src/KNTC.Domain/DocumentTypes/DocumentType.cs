@@ -7,6 +7,14 @@ namespace KNTC.DocumentTypes;
 
 public class DocumentType : FullAuditedEntity<int>
 {
+    public DocumentType()
+    {
+
+    }
+    public DocumentType(int id) : base(id)
+    {
+
+    }
     public string DocumentTypeCode { get; set; }
     public string DocumentTypeName { get; set; }
     public string Description { get; set; }
