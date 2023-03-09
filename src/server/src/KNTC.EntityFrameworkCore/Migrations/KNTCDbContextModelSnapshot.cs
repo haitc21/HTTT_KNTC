@@ -582,7 +582,7 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<int>("OrderIndex")
+                    b.Property<int?>("OrderIndex")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -744,7 +744,7 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<int>("OrderIndex")
+                    b.Property<int?>("OrderIndex")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -799,10 +799,10 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<int>("OrderIndex")
+                    b.Property<int?>("OrderIndex")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParentId")
+                    b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
                     b.Property<string>("ShortName")
@@ -876,7 +876,7 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<int>("OrderIndex")
+                    b.Property<int?>("OrderIndex")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")

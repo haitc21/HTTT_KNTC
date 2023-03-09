@@ -67,7 +67,7 @@ export class RolesService {
     this.restService.request<any, PagedResultDto<RoleDto>>({
       method: 'GET',
       url: '/api/app/roles/filter',
-      params: { keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      params: { sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount, keyword: input.keyword },
     },
     { apiName: this.apiName });
   

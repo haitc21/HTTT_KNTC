@@ -34,7 +34,8 @@ public class UnitTypeAppService : CrudAppService<
         {
             input.Sorting = nameof(UnitType.OrderIndex);
         }
-        var filter = input.Keyword.ToUpper();
+
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable

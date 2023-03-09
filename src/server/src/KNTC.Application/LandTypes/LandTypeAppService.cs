@@ -33,7 +33,8 @@ public class LandTypeAppService : CrudAppService<
         {
             input.Sorting = nameof(LandType.OrderIndex);
         }
-        var filter = input.Keyword.ToUpper();
+
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable

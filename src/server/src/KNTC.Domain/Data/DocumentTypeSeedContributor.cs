@@ -31,7 +31,7 @@ public class DocumentTypeSeedContributor : IDataSeedContributor, ITransientDepen
     public async Task SeedAsync(DataSeedContext context)
     {
 
-        Logger.LogInformation($"Seeding unit type start...");
+        Logger.LogInformation($"Seeding document type start...");
         if (await _DocumentTypeRepo.GetCountAsync() > 0)
         {
             return;
@@ -63,6 +63,6 @@ public class DocumentTypeSeedContributor : IDataSeedContributor, ITransientDepen
 
         await _DocumentTypeRepo.InsertManyAsync(DocumentTypes);
 
-        Logger.LogInformation($"Seeding unit type success!");
+        Logger.LogInformation($"Seeding document type success!");
     }
 }

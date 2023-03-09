@@ -31,63 +31,46 @@ public class LandTypeSeedContributor : IDataSeedContributor, ITransientDependenc
     public async Task SeedAsync(DataSeedContext context)
     {
 
-        Logger.LogInformation($"Seeding unit type start...");
+        Logger.LogInformation($"Seeding land type start...");
         if (await _LandTypeRepo.GetCountAsync() > 0)
         {
             return;
         }
         List<LandType> LandTypes = new List<LandType>();
-        var lt1 = new LandType(1);
+        var lt1 = new LandType();
         lt1.LandTypeCode = "NNP";
         lt1.LandTypeName = "Đất nông nghiệp";
         lt1.Description = "";
         lt1.OrderIndex = 1;
         lt1.Status = Status.Active;
+        LandTypes.Add(lt1);
 
-        var lt2 = new LandType();
-        lt2.LandTypeCode = "NTT";
-        lt2.LandTypeName = "Đất nông thôn";
+        var lt2= new LandType();
+        lt2.LandTypeCode = "PNN";
+        lt2.LandTypeName = "Đất phi nông nghiệp";
         lt2.Description = "";
         lt2.OrderIndex = 2;
         lt2.Status = Status.Active;
+        LandTypes.Add(lt2);
 
         var lt3 = new LandType();
-        lt3.LandTypeCode = "DTTP";
-        lt3.LandTypeName = "Đất thổ cư phía sau lưng tòa nhà";
+        lt3.LandTypeCode = "CSD";
+        lt3.LandTypeName = "Nhóm đất chưa sử dụng";
         lt3.Description = "";
         lt3.OrderIndex = 3;
         lt3.Status = Status.Active;
+        LandTypes.Add(lt3);
 
         var lt4 = new LandType();
-        lt4.LandTypeCode = "DTCN";
-        lt4.LandTypeName = "Đất thổ cư ngoài trung tâm";
+        lt4.LandTypeCode = "MVB";
+        lt4.LandTypeName = "Đất có mặt nước ven biển";
         lt4.Description = "";
         lt4.OrderIndex = 4;
         lt4.Status = Status.Active;
-
-        var lt5 = new LandType();
-        lt5.LandTypeCode = "DTCT";
-        lt5.LandTypeName = "Đất thổ cư trung tâm";
-        lt5.Description = "";
-        lt5.OrderIndex = 5;
-        lt5.Status = Status.Active;
-
-        var lt6 = new LandType();
-        lt6.LandTypeCode = "TMDV";
-        lt6.LandTypeName = "Đất thương mại dịch vụ";
-        lt6.Description = "";
-        lt6.OrderIndex = 6;
-        lt6.Status = Status.Active;
-
-        var lt7 = new LandType();
-        lt7.LandTypeCode = "CCXD";
-        lt7.LandTypeName = "Đất chức năng xây dựng";
-        lt7.Description = "";
-        lt7.OrderIndex = 7;
-        lt7.Status = Status.Active;
+        LandTypes.Add(lt4);
 
         await _LandTypeRepo.InsertManyAsync(LandTypes);
 
-        Logger.LogInformation($"Seeding unit type success!");
+        Logger.LogInformation($"Seeding land type success!");
     }
 }
