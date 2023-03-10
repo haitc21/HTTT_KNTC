@@ -37,33 +37,25 @@ public class UnitTypeSeedContributor : IDataSeedContributor, ITransientDependenc
             return;
         }
         List<UnitType> unitTypes = new List<UnitType>();
-        var u1 = new UnitType();
-        u1.UnitTypeCode = "1";
-        u1.UnitTypeName = "Tỉnh / Thành phố";
+        var u1 = new UnitType("1", "Tỉnh / Thành phố");
         u1.Description = "";
         u1.OrderIndex = 0;
         u1.Status = Status.Active;
         unitTypes.Add(u1);
 
-        var u2 = new UnitType();
-        u2.UnitTypeCode = "2";
-        u2.UnitTypeName = "Quận / Huyện";
+        var u2 = new UnitType("2", "Quận / Huyện");
         u2.Description = "";
         u2.OrderIndex = 1;
         u1.Status = Status.Active;
         unitTypes.Add(u2);
 
-        var u3 = new UnitType();
-        u3.UnitTypeCode = "2";
-        u3.UnitTypeName = "Phường / Xã";
+        var u3 = new UnitType("3", "Phường / Xã");
         u3.Description = "";
         u3.OrderIndex = 2;
         u3.Status = Status.Active;
         unitTypes.Add(u3);
 
-        var u4 = new UnitType();
-        u4.UnitTypeCode = "2";
-        u4.UnitTypeName = "Đường Phố";
+        var u4 = new UnitType("4", "Đường / Phố");
         u4.Description = "";
         u4.OrderIndex = 3;
         u4.Status = Status.Active;

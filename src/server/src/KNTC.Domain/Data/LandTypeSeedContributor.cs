@@ -37,33 +37,25 @@ public class LandTypeSeedContributor : IDataSeedContributor, ITransientDependenc
             return;
         }
         List<LandType> LandTypes = new List<LandType>();
-        var lt1 = new LandType();
-        lt1.LandTypeCode = "NNP";
-        lt1.LandTypeName = "Đất nông nghiệp";
+        var lt1 = new LandType("NNP", "Đất nông nghiệp");
         lt1.Description = "";
         lt1.OrderIndex = 1;
         lt1.Status = Status.Active;
         LandTypes.Add(lt1);
 
-        var lt2= new LandType();
-        lt2.LandTypeCode = "PNN";
-        lt2.LandTypeName = "Đất phi nông nghiệp";
+        var lt2 = new LandType("PNN", "Đất phi nông nghiệp");
         lt2.Description = "";
         lt2.OrderIndex = 2;
         lt2.Status = Status.Active;
         LandTypes.Add(lt2);
 
-        var lt3 = new LandType();
-        lt3.LandTypeCode = "CSD";
-        lt3.LandTypeName = "Nhóm đất chưa sử dụng";
+        var lt3 = new LandType("CSD", "Nhóm đất chưa sử dụng");
         lt3.Description = "";
         lt3.OrderIndex = 3;
         lt3.Status = Status.Active;
         LandTypes.Add(lt3);
 
-        var lt4 = new LandType();
-        lt4.LandTypeCode = "MVB";
-        lt4.LandTypeName = "Đất có mặt nước ven biển";
+        var lt4 = new LandType("MVB", "Đất có mặt nước ven biển");
         lt4.Description = "";
         lt4.OrderIndex = 4;
         lt4.Status = Status.Active;

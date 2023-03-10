@@ -13,6 +13,6 @@ public interface IUnitAppService :
         GetUnitListDto,
         CreateAndUpdateUnitDto>
 {
-    Task<ListResultDto<UnitLookupDto>> GetLookupAsync();
+    Task<ListResultDto<UnitLookupDto>> GetLookupAsync(int unitTypeId, int? parentId);
     Task DeleteMultipleAsync(IEnumerable<int> ids);
 }

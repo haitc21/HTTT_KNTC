@@ -6,5 +6,7 @@
     "KNTCEx:00003": "Kết quả giải quyết hồ sơ không tồn tại",
     "KNTCEx:00004": "Tên tài liệu '{tenTaiLieu}' đã tồn tại trong hồ sơ '{maHoSo}'",
     "KNTCEx:00005": "Tệp đính kèm hồ sơ không tồn tại",
+    "KNTCEx:00006": "Mã '{code}'' đã tồn tại",
+    "KNTCEx:00007": "Tên'{name}'' đã tồn tại"
   }
 }

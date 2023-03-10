@@ -60,12 +60,18 @@ public class UnitAppService : CrudAppService<
             ObjectMapper.Map<List<Unit>, List<UnitDto>>(queryResult)
         );
     }
-    public async Task<ListResultDto<UnitLookupDto>> GetLookupAsync()
+    public async Task<ListResultDto<UnitLookupDto>> GetLookupAsync(int unitTypeId, int? parentId)
     {
-        var units = await Repository.GetListAsync();
+        var queryable = await Repository.GetQueryableAsync();
+
+        queryable = queryable
+                    .Where(x => x.UnitTypeId == unitTypeId)
+                    .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
+                    .OrderBy(nameof(UnitLookupDto.UnitName));
+        var queryResult = await AsyncExecuter.ToListAsync(queryable);
 
         return new ListResultDto<UnitLookupDto>(
-            ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(units)
+            ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(queryResult)
         );
     }
     [Authorize(KNTCPermissions.Unit.Delete)]

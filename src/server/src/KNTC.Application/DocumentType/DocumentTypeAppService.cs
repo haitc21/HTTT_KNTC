@@ -10,6 +10,8 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using System.Linq.Dynamic.Core;
 using Microsoft.AspNetCore.Authorization;
+using Volo.Abp;
+using Volo.Abp.Data;
 
 namespace KNTC.DocumentTypes;
 
@@ -20,12 +22,14 @@ public class DocumentTypeAppService : CrudAppService<
             GetDocumentTypesListDto,
             CreateAndUpdateDocumentTypeDto>, IDocumentTypeAppService
 {
-    public DocumentTypeAppService(IRepository<DocumentType, int> repository) : base(repository)
+    private readonly DocumentTypeManager _documentTypeManager;
+    public DocumentTypeAppService(IRepository<DocumentType, int> repository, DocumentTypeManager documentTypeManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.DocumentType.Create;
         UpdatePolicyName = KNTCPermissions.DocumentType.Edit;
         DeletePolicyName = KNTCPermissions.DocumentType.Create;
+        _documentTypeManager = documentTypeManager;
     }
 
     public async override Task<PagedResultDto<DocumentTypeDto>> GetListAsync(GetDocumentTypesListDto input)
@@ -70,6 +74,32 @@ public class DocumentTypeAppService : CrudAppService<
             ObjectMapper.Map<List<DocumentType>, List<DocumentTypeLookupDto>>(documentTypes)
         );
     }
+
+    public async override Task<DocumentTypeDto> CreateAsync(CreateAndUpdateDocumentTypeDto input)
+    {
+        var entity = await _documentTypeManager.CreateAsync(input.DocumentTypeCode,
+                                                            input.DocumentTypeName,
+                                                            input.Description,
+                                                            input.OrderIndex);
+        await Repository.InsertAsync(entity);
+        return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
+
+    }
+
+    public async override Task<DocumentTypeDto> UpdateAsync(int id, CreateAndUpdateDocumentTypeDto input)
+    {
+        var entity = await Repository.GetAsync(id, false);
+        entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        await _documentTypeManager.UpdateAsync(entity,
+                                              input.DocumentTypeCode,
+                                              input.DocumentTypeName,
+                                              input.Description,
+                                              input.OrderIndex);
+        await Repository.UpdateAsync(entity);
+        return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
+    }
+
+
     [Authorize(KNTCPermissions.DocumentType.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {

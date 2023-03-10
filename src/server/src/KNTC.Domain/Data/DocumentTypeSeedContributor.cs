@@ -37,25 +37,19 @@ public class DocumentTypeSeedContributor : IDataSeedContributor, ITransientDepen
             return;
         }
         List<DocumentType> DocumentTypes = new List<DocumentType>();
-        var d1 = new DocumentType();
-        d1.DocumentTypeCode = "1";
-        d1.DocumentTypeName = "Bản gốc";
+        var d1 = new DocumentType("1", "Bản gốc");
         d1.Description = "";
         d1.OrderIndex = 0;
         d1.Status = Status.Active;
         DocumentTypes.Add(d1);
 
-        var d2 = new DocumentType();
-        d2.DocumentTypeCode = "2";
-        d2.DocumentTypeName = "Bản chính";
+        var d2 = new DocumentType("2", "Bản chính");
         d2.Description = "";
         d2.OrderIndex = 1;
         d1.Status = Status.Active;
         DocumentTypes.Add(d2);
 
-        var d3 = new DocumentType();
-        d3.DocumentTypeCode = "2";
-        d3.DocumentTypeName = "Bản phô tô";
+        var d3 = new DocumentType("2", "Bản phô tô");
         d3.Description = "";
         d3.OrderIndex = 2;
         d3.Status = Status.Active;
