@@ -1,5 +1,5 @@
-﻿using Volo.Abp.Application.Services;
-using KNTC.Localization;
+﻿using KNTC.Localization;
+using Volo.Abp.Application.Services;
 
 namespace KNTC;
 

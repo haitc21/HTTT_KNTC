@@ -1,7 +1,7 @@
-﻿using Volo.Abp.Autofac;
+﻿using KNTC.EntityFrameworkCore;
+using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Modularity;
-using KNTC.EntityFrameworkCore;
 
 namespace KNTC.DbMigrator;
 

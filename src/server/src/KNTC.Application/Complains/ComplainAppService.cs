@@ -1,27 +1,18 @@
 ﻿using KNTC.FileAttachments;
 using KNTC.Localization;
 using KNTC.Permissions;
-using KNTC.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.ObjectMapping;
-using Volo.Abp.Threading;
-using Volo.Abp.Users;
-using static KNTC.Permissions.KNTCPermissions;
-using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 
 namespace KNTC.Complains;
 
@@ -169,17 +160,17 @@ public class ComplainAppService : CrudAppService<
                 if (fileAttach.Id == null)
                 {
                     var tepDinhKem = await _complainManager.CreateFileAttachmentAsync(complain: complain,
-                                                        giaiDoan: fileAttach.GiaiDoan,
-                                                        tenTaiLieu: fileAttach.TenTaiLieu,
-                                                        hinhThuc: fileAttach.HinhThuc,
-                                                        thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
-                                                        ngayNhan: fileAttach.NgayNhan,
-                                                        thuTuButLuc: fileAttach.ThuTuButLuc,
-                                                        noiDungChinh: fileAttach.NoiDungChinh,
-                                                        fileName: fileAttach.FileContent.FileName,
-                                                        contentType: fileAttach.FileContent.ContentType,
-                                                        contentLength: fileAttach.FileContent.Length
-                                                        );
+                                                                                      giaiDoan: fileAttach.GiaiDoan,
+                                                                                      tenTaiLieu: fileAttach.TenTaiLieu,
+                                                                                      hinhThuc: fileAttach.HinhThuc,
+                                                                                      thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
+                                                                                      ngayNhan: fileAttach.NgayNhan,
+                                                                                      thuTuButLuc: fileAttach.ThuTuButLuc,
+                                                                                      noiDungChinh: fileAttach.NoiDungChinh,
+                                                                                      fileName: fileAttach.FileContent.FileName,
+                                                                                      contentType: fileAttach.FileContent.ContentType,
+                                                                                      contentLength: fileAttach.FileContent.Length
+                                                                                      );
                     await _fileAttachmentRepo.InsertAsync(tepDinhKem);
                     await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
                 }
@@ -187,18 +178,18 @@ public class ComplainAppService : CrudAppService<
                 {
                     var tepDinhKem = await _fileAttachmentRepo.GetAsync(fileAttach.Id);
                     await _complainManager.UpdateFileAttachmentAsync(complain: complain,
-                                                        tepDinhKem: tepDinhKem,
-                                                        giaiDoan: fileAttach.GiaiDoan,
-                                                        tenTaiLieu: fileAttach.TenTaiLieu,
-                                                        hinhThuc: fileAttach.HinhThuc,
-                                                        thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
-                                                        ngayNhan: fileAttach.NgayNhan,
-                                                        thuTuButLuc: fileAttach.ThuTuButLuc,
-                                                        noiDungChinh: fileAttach.NoiDungChinh,
-                                                        fileName: fileAttach.FileContent != null ? fileAttach.FileContent.FileName : string.Empty,
-                                                        contentType: fileAttach.FileContent != null ? fileAttach.FileContent.ContentType : string.Empty,
-                                                        contentLength: fileAttach.FileContent != null ? fileAttach.FileContent.Length : 0
-                                                        );
+                                                                     tepDinhKem: tepDinhKem,
+                                                                     giaiDoan: fileAttach.GiaiDoan,
+                                                                     tenTaiLieu: fileAttach.TenTaiLieu,
+                                                                     hinhThuc: fileAttach.HinhThuc,
+                                                                     thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
+                                                                     ngayNhan: fileAttach.NgayNhan,
+                                                                     thuTuButLuc: fileAttach.ThuTuButLuc,
+                                                                     noiDungChinh: fileAttach.NoiDungChinh,
+                                                                     fileName: fileAttach.FileContent != null ? fileAttach.FileContent.FileName : string.Empty,
+                                                                     contentType: fileAttach.FileContent != null ? fileAttach.FileContent.ContentType : string.Empty,
+                                                                     contentLength: fileAttach.FileContent != null ? fileAttach.FileContent.Length : 0
+                                                                     );
                     await _fileAttachmentRepo.UpdateAsync(tepDinhKem);
                     // FileContent == null => Chỉ thay đổi thông tin không thay đổi file
                     if (fileAttach.FileContent != null)
@@ -212,46 +203,46 @@ public class ComplainAppService : CrudAppService<
         await _complainManager.UpdateAsync(complain: complain,
                                            maHoSo: input.MaHoSo,
                                           loaiVuViec: input.LoaiVuViec,
-                                                  tieuDe: input.TieuDe,
-                                                  nguoiDeNghi: input.NguoiDeNghi,
-                                                  cccdCmnd: input.CccdCmnd,
-                                                  //ngayCapCccdCmnd: input.NgayCapCccdCmnd,
-                                                  //noiCapCccdCmnd: input.NoiCapCccdCmnd,
-                                                  ngaySinh: input.NgaySinh,
-                                                  DienThoai: input.DienThoai,
-                                                  email: input.Email,
-                                                  diaChiThuongTru: input.DiaChiThuongTru,
-                                                  diaChiLienHe: input.DiaChiLienHe,
-                                                  maTinhTP: input.maTinhTP,
-                                                  maQuanHuyen: input.maQuanHuyen,
-                                                  maXaPhuongTT: input.maXaPhuongTT,
-                                                  thoiGianTiepNhan: input.ThoiGianTiepNhan,
-                                                  thoiGianyHenTraKQ: input.ThoiGianHenTraKQ,
-                                                  noiDungVuViec: input.NoiDungVuViec,
-                                                  boPhanDangXL: input.boPhanDangXL,
-                                                  soThua: input.SoThua,
-                                                  toBanDo: input.ToBanDo,
-                                                  dienTich: input.DienTich,
-                                                  loaiDat: input.LoaiDat,
-                                                  diaChiThuaDat: input.DiaChiThuaDat,
-                                                  tinhThuaDat: input.tinhThuaDat,
-                                                  huyenThuaDat: input.huyenThuaDat,
-                                                  xaThuaDat: input.xaThuaDat,
-                                                  duLieuToaDo: input.DuLieuToaDo,
-                                                  duLieuHinhHoc: input.DuLieuHinhHoc,
-                                                  GhiChu: input.GhiChu,
-                                                  loaiKhieuNai1: input.loaiKhieuNai1,
-                                                  ngayKhieuNai1: input.ngayKhieuNai1,
-                                                  NgayTraKQ1: input.NgayTraKQ1,
-                                                  ThamQuyen1: input.ThamQuyen1,
-                                                  SoQD1: input.SoQD1,
-                                                  loaiKhieuNai2: input.loaiKhieuNai2,
-                                                  ngayKhieuNai2: input.ngayKhieuNai2,
-                                                  NgayTraKQ2: input.NgayTraKQ2,
-                                                  ThamQuyen2: input.ThamQuyen2,
-                                                  SoQD2: input.SoQD2,
-                                                  KetQua1: input.KetQua1,
-                                                  KetQua2: input.KetQua2);
+                                          tieuDe: input.TieuDe,
+                                          nguoiDeNghi: input.NguoiDeNghi,
+                                          cccdCmnd: input.CccdCmnd,
+                                          //ngayCapCccdCmnd: input.NgayCapCccdCmnd,
+                                          //noiCapCccdCmnd: input.NoiCapCccdCmnd,
+                                          ngaySinh: input.NgaySinh,
+                                          DienThoai: input.DienThoai,
+                                          email: input.Email,
+                                          diaChiThuongTru: input.DiaChiThuongTru,
+                                          diaChiLienHe: input.DiaChiLienHe,
+                                          maTinhTP: input.maTinhTP,
+                                          maQuanHuyen: input.maQuanHuyen,
+                                          maXaPhuongTT: input.maXaPhuongTT,
+                                          thoiGianTiepNhan: input.ThoiGianTiepNhan,
+                                          thoiGianyHenTraKQ: input.ThoiGianHenTraKQ,
+                                          noiDungVuViec: input.NoiDungVuViec,
+                                          boPhanDangXL: input.boPhanDangXL,
+                                          soThua: input.SoThua,
+                                          toBanDo: input.ToBanDo,
+                                          dienTich: input.DienTich,
+                                          loaiDat: input.LoaiDat,
+                                          diaChiThuaDat: input.DiaChiThuaDat,
+                                          tinhThuaDat: input.tinhThuaDat,
+                                          huyenThuaDat: input.huyenThuaDat,
+                                          xaThuaDat: input.xaThuaDat,
+                                          duLieuToaDo: input.DuLieuToaDo,
+                                          duLieuHinhHoc: input.DuLieuHinhHoc,
+                                          GhiChu: input.GhiChu,
+                                          loaiKhieuNai1: input.loaiKhieuNai1,
+                                          ngayKhieuNai1: input.ngayKhieuNai1,
+                                          NgayTraKQ1: input.NgayTraKQ1,
+                                          ThamQuyen1: input.ThamQuyen1,
+                                          SoQD1: input.SoQD1,
+                                          loaiKhieuNai2: input.loaiKhieuNai2,
+                                          ngayKhieuNai2: input.ngayKhieuNai2,
+                                          NgayTraKQ2: input.NgayTraKQ2,
+                                          ThamQuyen2: input.ThamQuyen2,
+                                          SoQD2: input.SoQD2,
+                                          KetQua1: input.KetQua1,
+                                          KetQua2: input.KetQua2);
         await _complainRepo.UpdateAsync(complain);
         return ObjectMapper.Map<Complain, ComplainDto>(complain);
     }

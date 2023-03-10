@@ -1,11 +1,8 @@
 ﻿using KNTC.FileAttachments;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 
@@ -240,7 +237,7 @@ public class ComplainManager : DomainService
         complain.ThoiGianTiepNhan = thoiGianTiepNhan;
         complain.ThoiGianHenTraKQ = thoiGianyHenTraKQ;
         complain.NoiDungVuViec = noiDungVuViec;
-        complain.boPhanDangXL = boPhanDangXL;        
+        complain.boPhanDangXL = boPhanDangXL;
         complain.SoThua = soThua;
         complain.ToBanDo = toBanDo;
         complain.DienTich = dienTich;
@@ -261,9 +258,9 @@ public class ComplainManager : DomainService
         complain.loaiKhieuNai2 = loaiKhieuNai2;
         complain.ngayKhieuNai2 = ngayKhieuNai2;
         complain.NgayTraKQ2 = NgayTraKQ2;
-        complain.ThamQuyen2= ThamQuyen2;
-        complain.SoQD2= SoQD2;
-        complain.KetQua2= KetQua2;
+        complain.ThamQuyen2 = ThamQuyen2;
+        complain.SoQD2 = SoQD2;
+        complain.KetQua2 = KetQua2;
         complain.KetQua = KetQua2 ?? KetQua1;
     }
     public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Complain complain,

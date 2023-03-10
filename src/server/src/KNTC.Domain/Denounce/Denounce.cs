@@ -1,10 +1,10 @@
-﻿using System;
+﻿using KNTC.FileAttachments;
+using KNTC.LandTypes;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
-using KNTC.FileAttachments;
-using KNTC.LandTypes;
 
 namespace KNTC.Denounces;
 
@@ -42,7 +42,7 @@ public class Denounce : FullAuditedAggregateRoot<Guid>
     public DateTime ThoiGianHenTraKQ { get; set; }
     public string NoiDungVuViec { get; set; }
     public string boPhanDangXL { get; set; }
-    
+
     public string SoThua { get; set; }
     public string ToBanDo { get; set; }
     public decimal DienTich { get; set; }

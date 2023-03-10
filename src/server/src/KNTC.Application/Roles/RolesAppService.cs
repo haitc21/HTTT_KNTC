@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using KNTC.Localization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
@@ -13,10 +14,8 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
-using Volo.Abp.ObjectMapping;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SimpleStateChecking;
-using KNTC.Localization;
 
 namespace KNTC.Roles;
 
@@ -147,7 +146,7 @@ public class RolesAppService : CrudAppService<
         }
 
         foreach (var group in PermissionDefinitionManager.GetGroups()
-            .Where(x => !x.Name.Contains("FeatureManagement") 
+            .Where(x => !x.Name.Contains("FeatureManagement")
                      && !x.Name.Contains("SettingManagement")
                      && !x.Name.Contains("TenantManagement")))
         {

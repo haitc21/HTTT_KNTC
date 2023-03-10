@@ -1,4 +1,5 @@
-﻿using Localization.Resources.AbpUi;
+﻿using KNTC.Localization;
+using Localization.Resources.AbpUi;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -7,7 +8,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
-using KNTC.Localization;
 
 namespace KNTC;
 

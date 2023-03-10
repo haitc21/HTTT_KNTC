@@ -1,15 +1,15 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using System.Linq.Dynamic.Core;
-using Microsoft.AspNetCore.Authorization;
 
 namespace KNTC.LandTypes;
 
@@ -20,12 +20,14 @@ public class LandTypeAppService : CrudAppService<
             GetLandTypeListDto,
             CreateAndUpdateLandTypeDto>, ILandTypeAppService
 {
-    public LandTypeAppService(IRepository<LandType, int> repository) : base(repository)
+    private readonly LandTypeManager _landTypeManager;
+    public LandTypeAppService(IRepository<LandType, int> repository, LandTypeManager landTypeManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.LandType.Create;
         UpdatePolicyName = KNTCPermissions.LandType.Edit;
-        DeletePolicyName = KNTCPermissions.LandType.Create;
+        DeletePolicyName = KNTCPermissions.LandType.Delete;
+        _landTypeManager = landTypeManager;
     }
     public async override Task<PagedResultDto<LandTypeDto>> GetListAsync(GetLandTypeListDto input)
     {
@@ -69,6 +71,30 @@ public class LandTypeAppService : CrudAppService<
             ObjectMapper.Map<List<LandType>, List<LandTypeLookupDto>>(landTypes)
         );
     }
+
+    public async override Task<LandTypeDto> CreateAsync(CreateAndUpdateLandTypeDto input)
+    {
+        var entity = await _landTypeManager.CreateAsync(input.LandTypeCode,
+                                                          input.LandTypeName,
+                                                          input.Description,
+                                                          input.OrderIndex);
+        await Repository.InsertAsync(entity);
+        return ObjectMapper.Map<LandType, LandTypeDto>(entity);
+    }
+
+    public async override Task<LandTypeDto> UpdateAsync(int id, CreateAndUpdateLandTypeDto input)
+    {
+        var entity = await Repository.GetAsync(id, false);
+        entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        await _landTypeManager.UpdateAsync(entity,
+                                              input.LandTypeCode,
+                                              input.LandTypeName,
+                                              input.Description,
+                                              input.OrderIndex);
+        await Repository.UpdateAsync(entity);
+        return ObjectMapper.Map<LandType, LandTypeDto>(entity);
+    }
+
     [Authorize(KNTCPermissions.LandType.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {

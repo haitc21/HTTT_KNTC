@@ -1,6 +1,6 @@
-﻿using Volo.Abp.Authorization.Permissions;
+﻿using KNTC.Localization;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
-using KNTC.Localization;
 
 namespace KNTC.Permissions;
 

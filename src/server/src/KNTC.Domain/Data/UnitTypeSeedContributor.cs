@@ -1,20 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using KNTC.UnitTypes;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Guids;
-using Volo.Abp.Identity;
-using Volo.Abp.Users;
-using KNTC.Users;
-using KNTC.UnitTypes;
 
 namespace KNTC.Data;
 

@@ -1,17 +1,15 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.Domain.Repositories;
-using System.Linq.Dynamic.Core;
-using Microsoft.AspNetCore.Authorization;
-using Volo.Abp;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Repositories;
 
 namespace KNTC.DocumentTypes;
 
@@ -28,7 +26,7 @@ public class DocumentTypeAppService : CrudAppService<
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.DocumentType.Create;
         UpdatePolicyName = KNTCPermissions.DocumentType.Edit;
-        DeletePolicyName = KNTCPermissions.DocumentType.Create;
+        DeletePolicyName = KNTCPermissions.DocumentType.Delete;
         _documentTypeManager = documentTypeManager;
     }
 

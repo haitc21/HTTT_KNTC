@@ -1,10 +1,7 @@
-﻿using KNTC.Denounces;
-using KNTC.FileAttachments;
+﻿using KNTC.FileAttachments;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
-using Volo.Abp.Application.Dtos;
 
 namespace KNTC.Denounces;
 
@@ -64,7 +61,7 @@ public class CreateDenounceDto
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxBoPhanXLLength)]
     public string boPhanDangXL { get; set; }
-    
+
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxSoThuaLength)]
     public string SoThua { get; set; }

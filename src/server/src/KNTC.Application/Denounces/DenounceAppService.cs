@@ -1,27 +1,18 @@
 ﻿using KNTC.FileAttachments;
 using KNTC.Localization;
 using KNTC.Permissions;
-using KNTC.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.ObjectMapping;
-using Volo.Abp.Threading;
-using Volo.Abp.Users;
-using static KNTC.Permissions.KNTCPermissions;
-using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 
 namespace KNTC.Denounces;
 public class DenounceAppService : CrudAppService<
@@ -69,8 +60,8 @@ public class DenounceAppService : CrudAppService<
         );
 
         var totalCount = await _denounceRepo.CountAsync(
-                x => (input.Keyword.IsNullOrEmpty() 
-                    ||  (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
+                x => (input.Keyword.IsNullOrEmpty()
+                    || (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
                 && (!input.LoaiVuViec.HasValue || x.LoaiVuViec == input.LoaiVuViec)
                 && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
                 );
@@ -113,12 +104,12 @@ public class DenounceAppService : CrudAppService<
                                                   duLieuToaDo: input.DuLieuToaDo,
                                                   duLieuHinhHoc: input.DuLieuHinhHoc,
                                                   GhiChu: input.GhiChu,
-      
+
                                                   ngayKhieuNai1: input.ngayKhieuNai1,
                                                   NgayTraKQ1: input.NgayTraKQ1,
                                                   ThamQuyen1: input.ThamQuyen1,
                                                   SoQD1: input.SoQD1,
-        
+
                                                   ngayKhieuNai2: input.ngayKhieuNai2,
                                                   NgayTraKQ2: input.NgayTraKQ2,
                                                   ThamQuyen2: input.ThamQuyen2,

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace KNTC.Units;
 
-public interface IUnitAppService : 
+public interface IUnitAppService :
     ICrudAppService<UnitDto,
         int,
         GetUnitListDto,

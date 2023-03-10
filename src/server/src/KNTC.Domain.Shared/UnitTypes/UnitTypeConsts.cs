@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KNTC.UnitTypes;
+﻿namespace KNTC.UnitTypes;
 
 public class UnitTypeConsts
 {

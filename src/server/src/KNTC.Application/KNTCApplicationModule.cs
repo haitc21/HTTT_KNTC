@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Account;
+﻿using KNTC.Localization;
+using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
@@ -9,8 +10,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
-using KNTC.Localization;
-using KNTC.Users;
 
 namespace KNTC;
 

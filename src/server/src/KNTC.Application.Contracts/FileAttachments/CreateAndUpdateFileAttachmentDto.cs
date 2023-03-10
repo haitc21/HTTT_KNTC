@@ -1,11 +1,7 @@
-﻿using KNTC.FileAttachments;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using Volo.Abp.Application.Dtos;
-using static KNTC.Permissions.KNTCPermissions;
 
 namespace KNTC.FileAttachments;
 

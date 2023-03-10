@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
@@ -43,7 +39,7 @@ public class DocumentTypeManager : DomainService
         Check.NotNull(documentType, nameof(documentType));
         Check.NotNullOrWhiteSpace(code, nameof(code));
         Check.NotNullOrWhiteSpace(name, nameof(name));
-        if(documentType.DocumentTypeCode != code)
+        if (documentType.DocumentTypeCode != code)
         {
             await ChangeCode(documentType, code);
         }

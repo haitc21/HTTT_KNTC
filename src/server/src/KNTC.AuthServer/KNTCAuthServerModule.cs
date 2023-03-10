@@ -1,3 +1,6 @@
+using KNTC.EntityFrameworkCore;
+using KNTC.Localization;
+using KNTC.MultiTenancy;
 using Localization.Resources.AbpUi;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -31,9 +34,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using KNTC.EntityFrameworkCore;
-using KNTC.Localization;
-using KNTC.MultiTenancy;
 
 namespace KNTC;
 

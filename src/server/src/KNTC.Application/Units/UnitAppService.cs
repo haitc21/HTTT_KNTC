@@ -1,15 +1,15 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using System.Linq.Dynamic.Core;
-using Microsoft.AspNetCore.Authorization;
 
 namespace KNTC.Units;
 
@@ -20,12 +20,14 @@ public class UnitAppService : CrudAppService<
             GetUnitListDto,
             CreateAndUpdateUnitDto>, IUnitAppService
 {
-    public UnitAppService(IRepository<Unit, int> repository) : base(repository)
+    private readonly UnitManager _unitManager;
+    public UnitAppService(IRepository<Unit, int> repository, UnitManager unitManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.Unit.Create;
         UpdatePolicyName = KNTCPermissions.Unit.Edit;
-        DeletePolicyName = KNTCPermissions.Unit.Create;
+        DeletePolicyName = KNTCPermissions.Unit.Delete;
+        _unitManager = unitManager;
     }
     public async override Task<PagedResultDto<UnitDto>> GetListAsync(GetUnitListDto input)
     {
@@ -74,6 +76,34 @@ public class UnitAppService : CrudAppService<
             ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(queryResult)
         );
     }
+
+    public async override Task<UnitDto> CreateAsync(CreateAndUpdateUnitDto input)
+    {
+        var entity = await _unitManager.CreateAsync(input.UnitCode,
+                                                   input.UnitName,
+                                                   input.ShortName,
+                                                   input.UnitTypeId,
+                                                   input.Description,
+                                                   input.OrderIndex);
+        await Repository.InsertAsync(entity);
+        return ObjectMapper.Map<Unit, UnitDto>(entity);
+    }
+
+    public async override Task<UnitDto> UpdateAsync(int id, CreateAndUpdateUnitDto input)
+    {
+        var entity = await Repository.GetAsync(id, false);
+        entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        await _unitManager.UpdateAsync(entity,
+                                       input.UnitCode,
+                                       input.UnitName,
+                                       input.ShortName,
+                                       input.UnitTypeId,
+                                       input.Description,
+                                              input.OrderIndex);
+        await Repository.UpdateAsync(entity);
+        return ObjectMapper.Map<Unit, UnitDto>(entity);
+    }
+
     [Authorize(KNTCPermissions.Unit.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {

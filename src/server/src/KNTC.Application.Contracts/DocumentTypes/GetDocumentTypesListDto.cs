@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KNTC.DocumentTypes;
+﻿namespace KNTC.DocumentTypes;
 
 public class GetDocumentTypesListDto : BaseListFilterDto
 {

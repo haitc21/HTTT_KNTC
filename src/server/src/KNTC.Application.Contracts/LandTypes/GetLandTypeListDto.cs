@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KNTC.LandTypes;
+﻿namespace KNTC.LandTypes;
 
 public class GetLandTypeListDto : BaseListFilterDto
 {

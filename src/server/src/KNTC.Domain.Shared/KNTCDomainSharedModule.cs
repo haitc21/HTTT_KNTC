@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AuditLogging;
+﻿using KNTC.Localization;
+using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -11,7 +12,6 @@ using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
-using KNTC.Localization;
 
 namespace KNTC;
 
@@ -58,7 +58,7 @@ public class KNTCDomainSharedModule : AbpModule
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.MapCodeNamespace("KNTC", typeof(KNTCResource));
+            options.MapCodeNamespace("KNTCEx", typeof(KNTCResource));
         });
     }
 }

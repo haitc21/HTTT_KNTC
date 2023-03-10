@@ -1,5 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc;
-using KNTC.Localization;
+﻿using KNTC.Localization;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace KNTC.Controllers;
 

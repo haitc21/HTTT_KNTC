@@ -1,11 +1,8 @@
 ﻿using KNTC.FileAttachments;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
 
@@ -36,7 +33,7 @@ public class DenounceManager : DomainService
                                               [NotNull] DateTime thoiGianTiepNhan,
                                               [NotNull] DateTime thoiGianHenTraKQ,
                                               [NotNull] string noiDungVuViec,
-                                              [NotNull] string boPhanDangXL,                                              
+                                              [NotNull] string boPhanDangXL,
                                               [NotNull] string soThua,
                                               [NotNull] string toBanDo,
                                               [NotNull] decimal dienTich,
@@ -75,7 +72,7 @@ public class DenounceManager : DomainService
         Check.NotNull(maQuanHuyen, nameof(maQuanHuyen));
         Check.NotNull(maXaPhuongTT, nameof(maXaPhuongTT));
         Check.NotNullOrWhiteSpace(noiDungVuViec, nameof(noiDungVuViec));
-        Check.NotNullOrWhiteSpace(boPhanDangXL, nameof(boPhanDangXL));        
+        Check.NotNullOrWhiteSpace(boPhanDangXL, nameof(boPhanDangXL));
         Check.NotNullOrWhiteSpace(soThua, nameof(soThua));
         Check.NotNullOrWhiteSpace(toBanDo, nameof(toBanDo));
         Check.NotNull(dienTich, nameof(dienTich));
@@ -164,7 +161,7 @@ public class DenounceManager : DomainService
                                    [NotNull] DateTime thoiGianTiepNhan,
                                    [NotNull] DateTime thoiGianHenTraKQ,
                                    [NotNull] string noiDungVuViec,
-                                   [NotNull] string boPhanDangXL,                                   
+                                   [NotNull] string boPhanDangXL,
                                    [NotNull] string soThua,
                                    [NotNull] string toBanDo,
                                    [NotNull] decimal dienTich,
@@ -205,7 +202,7 @@ public class DenounceManager : DomainService
         Check.NotNull(maXaPhuongTT, nameof(maXaPhuongTT));
         Check.NotNullOrWhiteSpace(noiDungVuViec, nameof(noiDungVuViec));
         Check.NotNullOrWhiteSpace(noiDungVuViec, nameof(boPhanDangXL));
-        
+
         Check.NotNullOrWhiteSpace(soThua, nameof(soThua));
         Check.NotNullOrWhiteSpace(toBanDo, nameof(toBanDo));
         Check.NotNull(dienTich, nameof(dienTich));
@@ -237,7 +234,7 @@ public class DenounceManager : DomainService
         denounce.ThoiGianHenTraKQ = thoiGianHenTraKQ;
         denounce.NoiDungVuViec = noiDungVuViec;
         denounce.boPhanDangXL = boPhanDangXL;
-        
+
         denounce.SoThua = soThua;
         denounce.ToBanDo = toBanDo;
         denounce.DienTich = dienTich;

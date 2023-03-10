@@ -1,4 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KNTC.Complains;
+using KNTC.Denounces;
+using KNTC.DocumentTypes;
+using KNTC.FileAttachments;
+using KNTC.LandTypes;
+using KNTC.Units;
+using KNTC.UnitTypes;
+using KNTC.Users;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -13,16 +21,6 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
-using KNTC.Users;
-using Newtonsoft.Json.Linq;
-using System.Reflection.Emit;
-using KNTC.Complains;
-using KNTC.FileAttachments;
-using KNTC.Denounces;
-using KNTC.DocumentTypes;
-using KNTC.LandTypes;
-using KNTC.Units;
-using KNTC.UnitTypes;
 
 namespace KNTC.EntityFrameworkCore;
 

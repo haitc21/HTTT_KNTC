@@ -1,3 +1,5 @@
+using KNTC.EntityFrameworkCore;
+using KNTC.MultiTenancy;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,8 +30,6 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.VirtualFileSystem;
-using KNTC.EntityFrameworkCore;
-using KNTC.MultiTenancy;
 
 namespace KNTC;
 

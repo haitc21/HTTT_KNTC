@@ -1,7 +1,4 @@
-﻿using System;
-using Volo.Abp.Application.Dtos;
-
-namespace KNTC.UnitTypes;
+﻿namespace KNTC.UnitTypes;
 
 public class GetUnitTypeListDto : BaseListFilterDto
 {
