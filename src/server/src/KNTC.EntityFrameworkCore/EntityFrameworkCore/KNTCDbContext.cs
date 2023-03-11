@@ -277,6 +277,9 @@ public class KNTCDbContext :
             b.Property(x => x.ShortName).HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
             b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
+
+            b.HasIndex(x => x.UnitTypeId);
+            b.HasIndex(u => new { u.UnitTypeId, u.ParentId });
         });
 
         builder.Entity<UnitType>(b =>
