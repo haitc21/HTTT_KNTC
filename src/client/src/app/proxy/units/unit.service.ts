@@ -53,7 +53,7 @@ export class UnitService {
     { apiName: this.apiName });
   
 
-  getLookup = (unitTypeId: number, parentId: number) =>
+  getLookup = (unitTypeId: number, parentId?: number) =>
     this.restService.request<any, ListResultDto<UnitLookupDto>>({
       method: 'GET',
       url: '/api/app/unit/lookup',

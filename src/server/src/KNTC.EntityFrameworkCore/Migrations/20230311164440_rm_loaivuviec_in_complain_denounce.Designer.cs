@@ -4,6 +4,7 @@ using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230311164440_rm_loaivuviec_in_complain_denounce")]
+    partial class rm_loaivuviec_in_complain_denounce
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,10 +136,6 @@ namespace KNTC.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
-
-                    b.Property<int>("LinhVuc")
-                        .HasColumnType("int")
-                        .HasColumnName("linh_vuc");
 
                     b.Property<int>("LoaiDat")
                         .HasColumnType("int")
@@ -272,8 +270,6 @@ namespace KNTC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LinhVuc");
-
                     b.HasIndex("LoaiDat");
 
                     b.HasIndex("MaHoSo");
@@ -391,10 +387,6 @@ namespace KNTC.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
-
-                    b.Property<int>("LinhVuc")
-                        .HasColumnType("int")
-                        .HasColumnName("linh_vuc");
 
                     b.Property<int>("LoaiDat")
                         .HasColumnType("int")
@@ -520,8 +512,6 @@ namespace KNTC.Migrations
                         .HasColumnName("xa_thua_dat");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LinhVuc");
 
                     b.HasIndex("LoaiDat");
 

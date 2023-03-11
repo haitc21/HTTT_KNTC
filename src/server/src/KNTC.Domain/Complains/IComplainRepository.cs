@@ -12,8 +12,14 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                      int maxResultCount,
                      string sorting,
                      string keyword,
-                     LoaiVuViec? LoaiVuViec,
+                     LinhVuc? linhVuc,
                      LoaiKetQua? ketQua,
+                     int? maTinhTp,
+                     int? maQuanHuyen,
+                     int? maXaPhuongTT,
+                     int? giaiDoan,
+                     DateTime? FromDate,
+                     DateTime? ToDate,
                      bool includeDetails = false);
     Task<Complain> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
 }

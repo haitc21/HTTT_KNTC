@@ -1,9 +1,9 @@
 ﻿namespace KNTC;
-public enum LoaiVuViec
-{
-    KhieuNai = 1,
-    ToCao = 2
-}
+//public enum LoaiVuViec
+//{
+//    KhieuNai = 1,
+//    ToCao = 2
+//}
 public enum LinhVuc
 {
     DataDai = 1,

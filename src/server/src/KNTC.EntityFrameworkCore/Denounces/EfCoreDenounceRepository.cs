@@ -25,8 +25,14 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                int maxResultCount,
                                                string sorting,
                                                string keyword,
-                                               LoaiVuViec? LoaiVuViec,
+                                               LinhVuc? linhVuc,
                                                LoaiKetQua? ketQua,
+                                               int? maTinhTp,
+                                               int? maQuanHuyen,
+                                               int? maXaPhuongTT,
+                                               int? giaiDoan,
+                                               DateTime? fromDate,
+                                               DateTime? toDate,
                                                bool includeDetails = false)
     {
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
@@ -39,12 +45,36 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                 || x.TieuDe.ToUpper().Contains(filter)
              )
             .WhereIf(
-                LoaiVuViec.HasValue,
-                x => x.LoaiVuViec == LoaiVuViec
+                linhVuc.HasValue,
+                x => x.LinhVuc == linhVuc
              )
              .WhereIf(
                 ketQua.HasValue,
-                table => table.KetQua == ketQua
+                x => x.KetQua == ketQua
+             )
+             .WhereIf(
+                maTinhTp.HasValue,
+                x => x.MaTinhTP == maTinhTp
+             )
+             .WhereIf(
+                maQuanHuyen.HasValue,
+                x => x.MaQuanHuyen == maQuanHuyen
+             )
+             .WhereIf(
+                maXaPhuongTT.HasValue,
+                x => x.MaXaPhuongTT == maXaPhuongTT
+             )
+             .WhereIf(
+                giaiDoan.HasValue,
+                x => (giaiDoan == 1 && x.ngayKhieuNai2 == null) || (giaiDoan == 1 && x.ngayKhieuNai2 != null)
+             )
+             .WhereIf(
+                fromDate.HasValue,
+                x => x.ThoiGianTiepNhan >= fromDate
+             )
+             .WhereIf(
+                toDate.HasValue,
+                x => x.ThoiGianTiepNhan <= toDate
              )
             .OrderBy(sorting)
             .Skip(skipCount)

@@ -16,7 +16,7 @@ public class DenounceManager : DomainService
         _hoSoRepo = hoSoRepo;
     }
     public async Task<Denounce> CreateAsync([NotNull] string maHoSo,
-                                              [NotNull] LoaiVuViec loaiVuViec,
+                                              [NotNull] LinhVuc linhVuc,
                                               [NotNull] string tieuDe,
                                               [NotNull] string nguoiDeNghi,
                                               [NotNull] string cccdCmnd,
@@ -58,7 +58,7 @@ public class DenounceManager : DomainService
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
-        Check.NotNull(loaiVuViec, nameof(loaiVuViec));
+        Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
         Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
@@ -90,7 +90,7 @@ public class DenounceManager : DomainService
         return new Denounce(GuidGenerator.Create(), maHoSo)
         {
             TieuDe = tieuDe,
-            LoaiVuViec = loaiVuViec,
+            LinhVuc = linhVuc,
             NguoiDeNghi = nguoiDeNghi,
             CccdCmnd = cccdCmnd,
             //NgayCapCccdCmnd = ngayCapCccdCmnd,
@@ -100,9 +100,9 @@ public class DenounceManager : DomainService
             Email = email,
             DiaChiThuongTru = diaChiThuongTru,
             DiaChiLienHe = diaChiLienHe,
-            maTinhTP = maTinhTP,
-            maQuanHuyen = maQuanHuyen,
-            maXaPhuongTT = maXaPhuongTT,
+            MaTinhTP = maTinhTP,
+            MaQuanHuyen = maQuanHuyen,
+            MaXaPhuongTT = maXaPhuongTT,
             ThoiGianTiepNhan = thoiGianTiepNhan,
             ThoiGianHenTraKQ = thoiGianHenTraKQ,
             NoiDungVuViec = noiDungVuViec,
@@ -144,7 +144,7 @@ public class DenounceManager : DomainService
     }
     public async Task UpdateAsync([NotNull] Denounce denounce,
                                   [NotNull] string maHoSo,
-                                  [NotNull] LoaiVuViec loaiVuViec,
+                                  [NotNull] LinhVuc linhVuc,
                                    [NotNull] string tieuDe,
                                    [NotNull] string nguoiDeNghi,
                                    [NotNull] string cccdCmnd,
@@ -187,7 +187,7 @@ public class DenounceManager : DomainService
     {
         Check.NotNull(denounce, nameof(denounce));
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
-        Check.NotNull(loaiVuViec, nameof(loaiVuViec));
+        Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
         Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
@@ -217,7 +217,7 @@ public class DenounceManager : DomainService
             await ChangeMaHoSoAsync(denounce, maHoSo);
         }
         denounce.TieuDe = tieuDe;
-        denounce.LoaiVuViec = loaiVuViec;
+        //denounce.LinhVuc = linhVuc;
         denounce.NguoiDeNghi = nguoiDeNghi;
         denounce.CccdCmnd = cccdCmnd;
         //denounce.NgayCapCccdCmnd = ngayCapCccdCmnd;
@@ -227,9 +227,9 @@ public class DenounceManager : DomainService
         denounce.Email = email;
         denounce.DiaChiThuongTru = diaChiThuongTru;
         denounce.DiaChiLienHe = diaChiLienHe;
-        denounce.maTinhTP = maTinhTP;
-        denounce.maQuanHuyen = maQuanHuyen;
-        denounce.maXaPhuongTT = maXaPhuongTT;
+        denounce.MaTinhTP = maTinhTP;
+        denounce.MaQuanHuyen = maQuanHuyen;
+        denounce.MaXaPhuongTT = maXaPhuongTT;
         denounce.ThoiGianTiepNhan = thoiGianTiepNhan;
         denounce.ThoiGianHenTraKQ = thoiGianHenTraKQ;
         denounce.NoiDungVuViec = noiDungVuViec;
