@@ -11,6 +11,7 @@ export class Complain {
     returnDate2: Date | "";
     result2: boolean;
     latLng: [number, number];
+    
 }
 export enum typesHoSo {
     Complaint,

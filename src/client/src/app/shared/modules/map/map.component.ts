@@ -32,6 +32,7 @@ const redIcon = new L.Icon({
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
+
 export class MapComponent implements AfterViewInit, OnChanges {
   @Input() idMap: string = 'map';
   @Input() data: Complain[] = [];
@@ -50,6 +51,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.buildEventMapClick();
     this.renderMarkers(this.data);
   }
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data && changes.data.currentValue && !changes.data.isFirstChange()) {
       this.renderMarkers(changes.data.currentValue);
@@ -99,6 +101,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       })
       .addTo(this.map);
   }
+  
   buildEventMapClick() {
     this.map.on('click', e => {
       L.popup()

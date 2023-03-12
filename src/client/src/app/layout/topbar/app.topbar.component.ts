@@ -173,7 +173,8 @@ export class AppTopBarComponent implements OnInit {
     this.systemMenuItems = [
       {
         label: 'Cấu hình hệ thống',
-        routerLink: ['/'],
+        routerLink: ['/system/config'],
+        //visible: this.permissionService.getGrantedPolicy('AbpIdentity.Config'),
       },
       {
         label: 'Quản lý người dùng',
@@ -189,7 +190,8 @@ export class AppTopBarComponent implements OnInit {
       },
       {
         label: 'Danh mục',
-        routerLink: ['/'],
+        routerLink: ['/system/common-list'],
+        //visible: this.permissionService.getGrantedPolicy('AbpIdentity.List'),
       },
     ];
   }

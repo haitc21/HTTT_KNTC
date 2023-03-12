@@ -95,6 +95,7 @@ export class HomeComponent implements OnInit {
     this.toggleBlockUI(false);
     this.loadData(true);
   }
+
   loadData(isFirst: boolean = false) {
     this.data = [];
 
@@ -154,11 +155,13 @@ export class HomeComponent implements OnInit {
         )
       );
   }
+
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;
     this.loadData();
   }
+
   toggleMenuLeft() {
     this.visibleFilterLeff = !this.visibleFilterLeff;
     if (!this.visibleFilterLeff) {
@@ -169,6 +172,7 @@ export class HomeComponent implements OnInit {
       this.expandColumnState = 'normal';
     }
   }
+  
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.blockedPanel = true;

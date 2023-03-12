@@ -54,6 +54,7 @@ export class LandAccusationComponent implements OnInit {
     this.toggleBlockUI(false);
     this.loadData(true);
   }
+  
   loadData(isFirst: boolean = false) {
     this.toggleBlockUI(true);
     this.data = [];

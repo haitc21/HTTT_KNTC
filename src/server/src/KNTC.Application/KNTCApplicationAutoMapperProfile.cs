@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KNTC.Complains;
+using KNTC.Configs;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
@@ -67,6 +68,10 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<UnitType, UnitTypeDto>();
         CreateMap<UnitType, UnitTypeLookupDto>();
         CreateMap<CreateAndUpdateUnitTypeDto, UnitType>();
+
+        CreateMap<Config, ConfigDto>();
+        CreateMap<Config, ConfigLookupDto>();
+        CreateMap<CreateAndUpdateConfigDto, Config>();
 
 
     }

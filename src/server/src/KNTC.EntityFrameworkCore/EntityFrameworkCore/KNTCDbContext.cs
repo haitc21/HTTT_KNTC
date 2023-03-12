@@ -1,4 +1,5 @@
-﻿using KNTC.Complains;
+﻿using KNTC.Configs;
+using KNTC.Complains;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
@@ -7,6 +8,7 @@ using KNTC.Units;
 using KNTC.UnitTypes;
 using KNTC.Users;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Linq;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -77,6 +79,20 @@ public class KNTCDbContext :
         builder.ConfigureOpenIddict();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
+
+        builder.Entity<Config>(b =>
+        {
+            b.ToTable("Configs", KNTCConsts.KNTCDbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(x => x.OrganizationCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
+            b.Property(x => x.OrganizationName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
+            b.Property(x => x.ToaDo);
+            b.Property(x => x.Tel);
+            b.Property(x => x.Address).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
+            b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
+            b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
+        });
 
         builder.Entity<UserInfo>(b =>
         {
