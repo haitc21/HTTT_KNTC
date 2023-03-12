@@ -8,11 +8,9 @@ namespace KNTC.FileAttachments;
 public class CreateAndUpdateFileAttachmentDto : EntityDto<Guid>
 {
     [Required]
-    [MaxLength(KNTCValidatorConsts.MaxTenTaiLieuLength)]
     public int GiaiDoan { get; set; }
     public string TenTaiLieu { get; set; }
     [Required]
-    [MaxLength(KNTCValidatorConsts.MaxHinhThucLength)]
     public int HinhThuc { get; set; }
     public DateTime ThoiGianBanHanh { get; set; }
     public DateTime NgayNhan { get; set; }
@@ -20,5 +18,8 @@ public class CreateAndUpdateFileAttachmentDto : EntityDto<Guid>
     [MaxLength(KNTCValidatorConsts.MaxThuTuButLucLength)]
     public string ThuTuButLuc { get; set; }
     public string NoiDungChinh { get; set; }
-    public IFormFile FileContent { get; set; }
+    public string FileName { get; set; }
+    public string ContentType { get; set; }
+    public long ContentLength { get; set; }
+    //public IFormFile FileContent { get; set; }
 }

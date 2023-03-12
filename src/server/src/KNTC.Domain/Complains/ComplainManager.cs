@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 
 namespace KNTC.Complains;
@@ -11,9 +12,11 @@ namespace KNTC.Complains;
 public class ComplainManager : DomainService
 {
     private readonly IComplainRepository _hoSoRepo;
-    public ComplainManager(IComplainRepository hoSoRepo)
+    private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
+    public ComplainManager(IComplainRepository hoSoRepo, IRepository<FileAttachment, Guid> fileAttachmentRepo)
     {
         _hoSoRepo = hoSoRepo;
+        _fileAttachmentRepo = fileAttachmentRepo;
     }
     public async Task<Complain> CreateAsync([NotNull] string maHoSo,
                                               [NotNull] LinhVuc linhVuc,
@@ -108,6 +111,7 @@ public class ComplainManager : DomainService
             ThoiGianTiepNhan = thoiGianTiepNhan,
             ThoiGianHenTraKQ = thoiGianyHenTraKQ,
             NoiDungVuViec = noiDungVuViec,
+            boPhanDangXL = boPhanDangXL,
             SoThua = soThua,
             ToBanDo = toBanDo,
             DienTich = dienTich,
@@ -284,16 +288,17 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
-        var existTepDinhKem = complain.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu);
+        var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
+                                                     && x.ComplainId == complain.Id);
         if (existTepDinhKem != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
-                .WithData("maHoSo", complain.MaHoSo)
+                .WithData("tenTaiLieu", tenTaiLieu)
                 .WithData("maHoSo", complain.MaHoSo);
         }
         return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
         {
-            IdHoSo = complain.Id,
+            ComplainId = complain.Id,
             GiaiDoan = giaiDoan,
             HinhThuc = hinhThuc,
             ThoiGianBanHanh = thoiGianBanHanh,
@@ -328,20 +333,17 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
-        var tep = complain.FileAttachments.FirstOrDefault(x => x.Id == tepDinhKem.Id);
-        if (tep == null)
-        {
-            throw new BusinessException(KNTCDomainErrorCodes.KTepDinhKemMotExist);
-        }
-        var existTepDinhKem = complain.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu && x.Id != tepDinhKem.Id);
-        if (existTepDinhKem != null)
-        {
-            throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
-                .WithData("maHoSo", complain.MaHoSo)
-                .WithData("maHoSo", complain.MaHoSo);
-        }
         if (tepDinhKem.TenTaiLieu != tenTaiLieu)
         {
+            var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
+                                                         && x.Id != tepDinhKem.Id
+                                                         && x.ComplainId == complain.Id);
+            if (existTepDinhKem != null)
+            {
+                throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
+                    .WithData("tenTaiLieu", tenTaiLieu)
+                    .WithData("maHoSo", complain.MaHoSo);
+            }
             tepDinhKem.ChangeTenTaiLieu(tenTaiLieu);
         }
         tepDinhKem.GiaiDoan = giaiDoan;

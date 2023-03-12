@@ -1,9 +1,11 @@
-﻿using KNTC.FileAttachments;
+﻿using KNTC.Complains;
+using KNTC.FileAttachments;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 
 namespace KNTC.Denounces;
@@ -11,9 +13,11 @@ namespace KNTC.Denounces;
 public class DenounceManager : DomainService
 {
     private readonly IDenounceRepository _hoSoRepo;
-    public DenounceManager(IDenounceRepository hoSoRepo)
+    private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
+    public DenounceManager(IDenounceRepository hoSoRepo, IRepository<FileAttachment, Guid> fileAttachmentRepo)
     {
         _hoSoRepo = hoSoRepo;
+        _fileAttachmentRepo = fileAttachmentRepo;
     }
     public async Task<Denounce> CreateAsync([NotNull] string maHoSo,
                                               [NotNull] LinhVuc linhVuc,
@@ -107,6 +111,7 @@ public class DenounceManager : DomainService
             ThoiGianHenTraKQ = thoiGianHenTraKQ,
             NoiDungVuViec = noiDungVuViec,
             boPhanDangXL = boPhanDangXL,
+            GhiChu = GhiChu,
             SoThua = soThua,
             ToBanDo = toBanDo,
             DienTich = dienTich,
@@ -117,7 +122,6 @@ public class DenounceManager : DomainService
             xaThuaDat = xaThuaDat,
             DuLieuToaDo = duLieuToaDo,
             DuLieuHinhHoc = duLieuHinhHoc,
-            GhiChu = GhiChu,
             ngayKhieuNai1 = ngayKhieuNai1,
             NgayTraKQ1 = NgayTraKQ1,
             ThamQuyen1 = ThamQuyen1,
@@ -234,6 +238,7 @@ public class DenounceManager : DomainService
         denounce.ThoiGianHenTraKQ = thoiGianHenTraKQ;
         denounce.NoiDungVuViec = noiDungVuViec;
         denounce.boPhanDangXL = boPhanDangXL;
+        denounce.GhiChu = GhiChu;
 
         denounce.SoThua = soThua;
         denounce.ToBanDo = toBanDo;
@@ -245,7 +250,6 @@ public class DenounceManager : DomainService
         denounce.xaThuaDat = xaThuaDat;
         denounce.DuLieuToaDo = duLieuToaDo;
         denounce.DuLieuHinhHoc = duLieuHinhHoc;
-        denounce.GhiChu = GhiChu;
         denounce.ngayKhieuNai1 = ngayKhieuNai1;
         denounce.NgayTraKQ1 = NgayTraKQ1;
         denounce.ThamQuyen1 = ThamQuyen1;
@@ -279,16 +283,17 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
-        var existTepDinhKem = denounce.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu);
+        var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
+                                                     && x.DenounceId == denounce.Id);
         if (existTepDinhKem != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
-                .WithData("maHoSo", denounce.MaHoSo)
+                .WithData("tenTaiLieu", tenTaiLieu)
                 .WithData("maHoSo", denounce.MaHoSo);
         }
         return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
         {
-            IdHoSo = denounce.Id,
+            DeleterId = denounce.Id,
             GiaiDoan = giaiDoan,
             HinhThuc = hinhThuc,
             ThoiGianBanHanh = thoiGianBanHanh,
@@ -323,20 +328,17 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
-        var tep = denounce.FileAttachments.FirstOrDefault(x => x.Id == tepDinhKem.Id);
-        if (tep == null)
-        {
-            throw new BusinessException(KNTCDomainErrorCodes.KTepDinhKemMotExist);
-        }
-        var existTepDinhKem = denounce.FileAttachments.FirstOrDefault(x => x.TenTaiLieu == tenTaiLieu && x.Id != tepDinhKem.Id);
-        if (existTepDinhKem != null)
-        {
-            throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
-                .WithData("maHoSo", denounce.MaHoSo)
-                .WithData("maHoSo", denounce.MaHoSo);
-        }
         if (tepDinhKem.TenTaiLieu != tenTaiLieu)
         {
+            var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
+                                                         && x.Id != tepDinhKem.Id
+                                                         && x.DenounceId == denounce.Id);
+            if (existTepDinhKem != null)
+            {
+                throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
+                    .WithData("tenTaiLieu", tenTaiLieu)
+                    .WithData("maHoSo", denounce.MaHoSo);
+            }
             tepDinhKem.ChangeTenTaiLieu(tenTaiLieu);
         }
         tepDinhKem.GiaiDoan = giaiDoan;

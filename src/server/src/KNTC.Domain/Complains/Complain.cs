@@ -12,16 +12,13 @@ public class Complain : FullAuditedAggregateRoot<Guid>
 {
     public Complain()
     {
-        FileAttachments = new List<FileAttachment>();
     }
     public Complain(Guid id) : base(id)
     {
-        FileAttachments = new List<FileAttachment>();
     }
     public Complain(Guid id, string maHoSo) : base(id)
     {
         SetMaHoSo(maHoSo);
-        FileAttachments = new List<FileAttachment>();
     }
     public string MaHoSo { get; private set; }
     public LinhVuc LinhVuc { get; set; }
@@ -66,7 +63,6 @@ public class Complain : FullAuditedAggregateRoot<Guid>
     public string SoQD2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
-    public virtual List<FileAttachment> FileAttachments { get; set; }
     public LandType LandType { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)
     {

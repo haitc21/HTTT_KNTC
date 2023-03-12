@@ -60,7 +60,7 @@ public class KNTCDbContext :
     public DbSet<LandType> LandTypes { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<UnitType> UnitTypes { get; set; }
-    public DbSet<SpatialData> SpatialDatas { get; set; }
+    //public DbSet<SpatialData> SpatialDatas { get; set; }
 
     public KNTCDbContext(DbContextOptions<KNTCDbContext> options)
         : base(options)
@@ -124,9 +124,9 @@ public class KNTCDbContext :
             b.Property(x => x.Email).HasColumnName("email").HasMaxLength(KNTCValidatorConsts.MaxEmailLength);
             b.Property(x => x.DiaChiThuongTru).IsRequired().HasColumnName("dia_chi_thuong_tru").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
             b.Property(x => x.DiaChiLienHe).IsRequired().HasColumnName("dia_chi_lien_he").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
-            b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp");
+            b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen");
+            b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt");
             b.Property(x => x.ThoiGianTiepNhan).IsRequired().HasColumnName("thoi_gian_tiep_nhan");
             b.Property(x => x.ThoiGianHenTraKQ).IsRequired().HasColumnName("thoi_gian_hen_tra_kq");
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");
@@ -137,9 +137,9 @@ public class KNTCDbContext :
             b.Property(x => x.DienTich).IsRequired().HasColumnName("dien_tich");
             b.Property(x => x.LoaiDat).IsRequired().HasColumnName("loai_dat");
             b.Property(x => x.DiaChiThuaDat).IsRequired().HasColumnName("dia_chi_thua_dat").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
-            b.Property(x => x.tinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.huyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.tinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat");
+            b.Property(x => x.huyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat");
+            b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat");
 
             b.Property(x => x.loaiKhieuNai1).HasColumnName("loai_khieu_nai_1");
             b.Property(x => x.ngayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
@@ -162,10 +162,10 @@ public class KNTCDbContext :
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
 
 
-            b.HasMany(h => h.FileAttachments)
-             .WithOne(k => k.Complain)
-             .HasForeignKey(k => k.IdHoSo)
-             .OnDelete(DeleteBehavior.Restrict);
+            //b.HasMany(h => h.FileAttachments)
+            // .WithOne(k => k.Complain)
+            // .HasForeignKey(k => k.ComplainId)
+            // .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<Denounce>(b =>
@@ -186,9 +186,9 @@ public class KNTCDbContext :
             b.Property(x => x.Email).HasColumnName("email").HasMaxLength(KNTCValidatorConsts.MaxEmailLength);
             b.Property(x => x.DiaChiThuongTru).IsRequired().HasColumnName("dia_chi_thuong_tru").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
             b.Property(x => x.DiaChiLienHe).IsRequired().HasColumnName("dia_chi_lien_he").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
-            b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp");
+            b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen");
+            b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt");
             b.Property(x => x.ThoiGianTiepNhan).IsRequired().HasColumnName("thoi_gian_tiep_nhan");
             b.Property(x => x.ThoiGianHenTraKQ).IsRequired().HasColumnName("thoi_gian_hen_tra_kq");
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");
@@ -199,9 +199,9 @@ public class KNTCDbContext :
             b.Property(x => x.DienTich).IsRequired().HasColumnName("dien_tich");
             b.Property(x => x.LoaiDat).IsRequired().HasColumnName("loai_dat");
             b.Property(x => x.DiaChiThuaDat).IsRequired().HasColumnName("dia_chi_thua_dat").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
-            b.Property(x => x.tinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.huyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.tinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat");
+            b.Property(x => x.huyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat");
+            b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat");
 
 
             b.Property(x => x.ngayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
@@ -223,18 +223,18 @@ public class KNTCDbContext :
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
 
 
-            b.HasMany(h => h.FileAttachments)
-             .WithOne(k => k.Denounce)
-             .HasForeignKey(k => k.IdHoSo)
-             .OnDelete(DeleteBehavior.Restrict);
+            //b.HasMany(h => h.FileAttachments)
+            // .WithOne(k => k.Denounce)
+            // .HasForeignKey(k => k.DenounceId)
+            // .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<FileAttachment>(b =>
         {
             b.ToTable("FileAttachments", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.HasIndex(x => x.IdHoSo);
-            b.Property(x => x.IdHoSo).IsRequired().HasColumnName("id_ho_so");
+            b.HasIndex(x => x.ComplainId);
+            b.HasIndex(x => x.DenounceId);
             b.Property(x => x.GiaiDoan).IsRequired().HasColumnName("giai_doan");
             b.Property(x => x.TenTaiLieu).IsRequired().HasColumnName("ten_tai_lieu").HasMaxLength(KNTCValidatorConsts.MaxTenTaiLieuLength);
             b.Property(x => x.HinhThuc).IsRequired().HasColumnName("hinh_thuc").HasMaxLength(KNTCValidatorConsts.MaxHinhThucLength);
@@ -316,13 +316,13 @@ public class KNTCDbContext :
              .OnDelete(DeleteBehavior.Restrict);
         });
 
-        builder.Entity<SpatialData>(b =>
-        {
-            b.ToTable("SpatialData", KNTCConsts.KNTCDbSchema);
-            b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
-            b.Property(x => x.geometry);
+        //builder.Entity<SpatialData>(b =>
+        //{
+        //    b.ToTable("SpatialData", KNTCConsts.KNTCDbSchema);
+        //    b.ConfigureByConvention(); //auto configure for the base class props
+        //    b.Property(p => p.Id).ValueGeneratedOnAdd();
+        //    b.Property(x => x.geometry);
 
-        });
+        //});
     }
 }

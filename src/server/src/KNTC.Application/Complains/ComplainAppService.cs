@@ -74,10 +74,10 @@ public class ComplainAppService : CrudAppService<
                 && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
                 && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
                 && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
-                && (!input.GiaiDoan.HasValue || (input.GiaiDoan ==  1 && x.ngayKhieuNai2 == null) || (input.GiaiDoan == 2 && x.ngayKhieuNai2 != null))
+                && (!input.GiaiDoan.HasValue || (input.GiaiDoan == 1 && x.ngayKhieuNai2 == null) || (input.GiaiDoan == 2 && x.ngayKhieuNai2 != null))
                 && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                 && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
-                ); 
+                );
 
         return new PagedResultDto<ComplainDto>(
         totalCount,
@@ -129,6 +129,8 @@ public class ComplainAppService : CrudAppService<
                                                   SoQD2: input.SoQD2,
                                                   KetQua1: input.KetQua1,
                                                   KetQua2: input.KetQua2);
+        await _complainRepo.InsertAsync(complain);
+
         if (input.FileAttachments.Count > 0)
         {
             foreach (var item in input.FileAttachments)
@@ -141,15 +143,14 @@ public class ComplainAppService : CrudAppService<
                                                                         ngayNhan: item.NgayNhan,
                                                                         thuTuButLuc: item.ThuTuButLuc,
                                                                         noiDungChinh: item.NoiDungChinh,
-                                                                        fileName: item.FileContent.FileName,
-                                                                        contentType: item.FileContent.ContentType,
-                                                                        contentLength: item.FileContent.Length
+                                                                        fileName: item.FileName,
+                                                                        contentType: item.ContentType,
+                                                                        contentLength: item.ContentLength
                                                                         );
-                complain.FileAttachments.Add(fileAttach);
-                await UploadAsync(fileAttach.Id.ToString(), item.FileContent);
+                await _fileAttachmentRepo.InsertAsync(fileAttach);
+                //await UploadAsync(fileAttach.Id.ToString(), item.FileContent);
             }
         }
-        await _complainRepo.InsertAsync(complain);
         return ObjectMapper.Map<Complain, ComplainDto>(complain);
     }
     [Authorize(KNTCPermissions.Complains.Default)]
@@ -179,12 +180,12 @@ public class ComplainAppService : CrudAppService<
                                                                                       ngayNhan: fileAttach.NgayNhan,
                                                                                       thuTuButLuc: fileAttach.ThuTuButLuc,
                                                                                       noiDungChinh: fileAttach.NoiDungChinh,
-                                                                                      fileName: fileAttach.FileContent.FileName,
-                                                                                      contentType: fileAttach.FileContent.ContentType,
-                                                                                      contentLength: fileAttach.FileContent.Length
+                                                                                      fileName: fileAttach.FileName,
+                                                                                      contentType: fileAttach.ContentType,
+                                                                                      contentLength: fileAttach.ContentLength
                                                                                       );
                     await _fileAttachmentRepo.InsertAsync(tepDinhKem);
-                    await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
+                    //await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
                 }
                 else
                 {
@@ -198,16 +199,16 @@ public class ComplainAppService : CrudAppService<
                                                                      ngayNhan: fileAttach.NgayNhan,
                                                                      thuTuButLuc: fileAttach.ThuTuButLuc,
                                                                      noiDungChinh: fileAttach.NoiDungChinh,
-                                                                     fileName: fileAttach.FileContent != null ? fileAttach.FileContent.FileName : string.Empty,
-                                                                     contentType: fileAttach.FileContent != null ? fileAttach.FileContent.ContentType : string.Empty,
-                                                                     contentLength: fileAttach.FileContent != null ? fileAttach.FileContent.Length : 0
+                                                                     fileName: fileAttach.FileName,
+                                                                     contentType: fileAttach.ContentType,
+                                                                     contentLength: fileAttach.ContentLength
                                                                      );
                     await _fileAttachmentRepo.UpdateAsync(tepDinhKem);
                     // FileContent == null => Chỉ thay đổi thông tin không thay đổi file
-                    if (fileAttach.FileContent != null)
-                    {
-                        await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
-                    }
+                    //if (fileAttach.FileContent != null)
+                    //{
+                    //    await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
+                    //}
                 }
 
             }
@@ -262,28 +263,28 @@ public class ComplainAppService : CrudAppService<
     [Authorize(KNTCPermissions.Complains.Delete)]
     public override async Task DeleteAsync(Guid id)
     {
-        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.IdHoSo)).Select(x => x.Id);
-        await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
-        foreach (var item in idFileAttachs)
-        {
-            await _blobContainer.DeleteAsync(item.ToString());
-        }
+        //var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.IdHoSo)).Select(x => x.Id);
+        //await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
+        //foreach (var item in idFileAttachs)
+        //{
+        //    await _blobContainer.DeleteAsync(item.ToString());
+        //}
         await _complainRepo.DeleteAsync(id);
     }
 
     [Authorize(KNTCPermissions.Complains.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
-        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Contains(x.IdHoSo))).Select(x => x.Id);
-        await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
-        foreach (var item in idFileAttachs)
-        {
-            await _blobContainer.DeleteAsync(item.ToString());
-        }
+        //var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Contains(x.IdHoSo))).Select(x => x.Id);
+        //await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
+        //foreach (var item in idFileAttachs)
+        //{
+        //    await _blobContainer.DeleteAsync(item.ToString());
+        //}
         await _complainRepo.DeleteManyAsync(ids);
     }
 
-    private async Task UploadAsync(string idTepDinhKem, IFormFile file)
+    public async Task UploadAsync(string idTepDinhKem, IFormFile file)
     {
         if (file == null) throw new UserFriendlyException("Vui lòng chọn tệp đính kèm cho hồ sơ");
         try

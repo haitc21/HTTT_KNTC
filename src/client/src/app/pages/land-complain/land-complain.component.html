@@ -105,7 +105,7 @@
         <div class="field col-12 md:col-3">
           <span class="p-float-label">
             <p-dropdown
-              [options]="stageOptions"
+              [options]="loaiKQ"
               [(ngModel)]="tinhTrang"
               optionLabel="text"
               optionValue="value"
@@ -127,6 +127,7 @@
 
       <ng-template pTemplate="right">
         <button
+          *abpPermission="'Complains.Create'"
           type="button"
           pButton
           pRipple
@@ -153,40 +154,29 @@
       </ng-template>
     </p-toolbar>
 
-    <!-- <p-table
-          #dt
-          [value]="data"
-          [rows]="10"
-          [paginator]="false"
-          [(selection)]="selectedItems"
-          [rowHover]="true"
-          dataKey="id"
-        > -->
     <p-table
       #dt
-      [value]="data"
+      [value]="items"
       [rows]="10"
-      [paginator]="true"
-      [globalFilterFields]="['code', 'title']"
-      [tableStyle]="{ width: '100%' }"
+      [paginator]="false"
       [(selection)]="selectedItems"
       [rowHover]="true"
-      dataKey="code"
-      currentPageReportTemplate="Tổng số: {totalRecords}"
-      [showCurrentPageReport]="true"
+      dataKey="id"
     >
       <ng-template pTemplate="header">
         <tr>
           <th class="row-num-column">STT</th>
           <th>Mã hồ sơ</th>
-          <th>Nội dung đơn</th>
-          <th>Người gửi đơn</th>
-          <th>Khu vực</th>
-          <th>Ngày nộp đơn</th>
-          <th>Lĩnh vực</th>
-          <th>Ngày hẹn trả KQ lần I</th>
+          <th>Người đề nghị</th>
+          <th>Địa chỉ</th>
+          <th>Số ĐT</th>
+          <th>Nội dung KN/KK</th>
+          <th>Thời gian nộp</th>
+          <th>Bộ phận đang XL</th>
+          <th>Ngày hẹn trả KQ</th>
+          <th>Ngày trả KQ lần I</th>
           <th>KQ GQKN lần I</th>
-          <th>Ngày hẹn trả KQ lần II</th>
+          <th>Ngày trả KQ lần II</th>
           <th>KQ GQKN lần II</th>
           <th style="width: 150px">Trạng thái</th>
           <th *ngIf="visibleActionColumn" class="action-column"></th>
@@ -194,27 +184,27 @@
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
         <tr>
-          <td>
+          <!-- <td>
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
-          </td>
+          </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-          <td>{{ row.code }}</td>
-          <td>{{ row.title }}</td>
-          <td>{{ row.sender }}</td>
-          <td>{{ row.area }}</td>
-          <td>{{ row.sentDate.toLocaleDateString('vi-VN') }}</td>
-          <td>{{ linhVuc[row.fieldType] }}</td>
-          <td>{{ row.returnDate1.toLocaleDateString('vi-VN') }}</td>
-          <td>{{ row.result1 ? 'Đúng' : 'Sai' }}</td>
-          <td>{{ row.returnDate2 ? row.returnDate2.toLocaleDateString('vi-VN') : '' }}</td>
-          <td>{{ row.result2 === true ? 'Đúng' : row.result2 === false ? 'Sai' : '' }}</td>
+          <td>{{ row.maHoSo }}</td>
+          <td>{{ row.nguoiDeNghi }}</td>
+          <td>{{ row.diaChiThuongTru }}</td>
+          <td>{{ row.dienThoai }}</td>
+          <td>{{ row.tieuDe }}</td>
           <td>
-            <p-tag
-              [severity]="row.isActive ? 'info' : 'warning'"
-              [value]="row.isActive ? 'Đang xử lý' : 'Đóng'"
-            >
-            </p-tag>
+            {{ utilService.convertDateToLocal(row?.thoiGianTiepNhan) | date : 'dd-MM-yyyy hh:mm' }}
           </td>
+          <td>{{ row.boPhanDangXL }}</td>
+          <td>
+            {{ utilService.convertDateToLocal(row?.thoiGianHenTraKQ) | date : 'dd-MM-yyyy hh:mm' }}
+          </td>
+          <td>{{ utilService.convertDateToLocal(row?.ngayTraKQ1) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ getLoaiKetQua(row?.ketQua1) }}</td>
+          <td>{{ utilService.convertDateToLocal(row?.ngayTraKQ2) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ getLoaiKetQua(row?.ketQua2) }}</td>
+          <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
           <td *ngIf="visibleActionColumn">
             <p-tieredMenu
               [showTransitionOptions]="'300ms'"

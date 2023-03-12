@@ -140,12 +140,13 @@ public class DenounceAppService : CrudAppService<
                                                                         ngayNhan: item.NgayNhan,
                                                                         thuTuButLuc: item.ThuTuButLuc,
                                                                         noiDungChinh: item.NoiDungChinh,
-                                                                        fileName: item.FileContent.FileName,
-                                                                        contentType: item.FileContent.ContentType,
-                                                                        contentLength: item.FileContent.Length
+                                                                        fileName: item.FileName,
+                                                                        contentType: item.ContentType,
+                                                                        contentLength: item.ContentLength
                                                                         );
-                denounce.FileAttachments.Add(fileAttach);
-                await UploadAsync(fileAttach.Id.ToString(), item.FileContent);
+
+                await _fileAttachmentRepo.InsertAsync(fileAttach);
+                //await UploadAsync(fileAttach.Id.ToString(), item.FileContent);
             }
         }
         await _denounceRepo.InsertAsync(denounce);
@@ -178,12 +179,12 @@ public class DenounceAppService : CrudAppService<
                                                         ngayNhan: fileAttach.NgayNhan,
                                                         thuTuButLuc: fileAttach.ThuTuButLuc,
                                                         noiDungChinh: fileAttach.NoiDungChinh,
-                                                        fileName: fileAttach.FileContent.FileName,
-                                                        contentType: fileAttach.FileContent.ContentType,
-                                                        contentLength: fileAttach.FileContent.Length
+                                                        fileName: fileAttach.FileName,
+                                                        contentType: fileAttach.ContentType,
+                                                        contentLength: fileAttach.ContentLength
                                                         );
                     await _fileAttachmentRepo.InsertAsync(tepDinhKem);
-                    await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
+                    //await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
                 }
                 else
                 {
@@ -197,16 +198,16 @@ public class DenounceAppService : CrudAppService<
                                                         ngayNhan: fileAttach.NgayNhan,
                                                         thuTuButLuc: fileAttach.ThuTuButLuc,
                                                         noiDungChinh: fileAttach.NoiDungChinh,
-                                                        fileName: fileAttach.FileContent != null ? fileAttach.FileContent.FileName : string.Empty,
-                                                        contentType: fileAttach.FileContent != null ? fileAttach.FileContent.ContentType : string.Empty,
-                                                        contentLength: fileAttach.FileContent != null ? fileAttach.FileContent.Length : 0
+                                                        fileName: fileAttach.FileName,
+                                                        contentType: fileAttach.ContentType, 
+                                                        contentLength: fileAttach.ContentLength
                                                         );
                     await _fileAttachmentRepo.UpdateAsync(tepDinhKem);
                     // FileContent == null => Chỉ thay đổi thông tin không thay đổi file
-                    if (fileAttach.FileContent != null)
-                    {
-                        await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
-                    }
+                    //if (fileAttach.FileContent != null)
+                    //{
+                    //    await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
+                    //}
                 }
 
             }
@@ -259,24 +260,24 @@ public class DenounceAppService : CrudAppService<
     [Authorize(KNTCPermissions.Denounces.Delete)]
     public override async Task DeleteAsync(Guid id)
     {
-        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.IdHoSo)).Select(x => x.Id);
-        await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
-        foreach (var item in idFileAttachs)
-        {
-            await _blobContainer.DeleteAsync(item.ToString());
-        }
+        //var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.IdHoSo)).Select(x => x.Id);
+        //await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
+        //foreach (var item in idFileAttachs)
+        //{
+        //    await _blobContainer.DeleteAsync(item.ToString());
+        //}
         await _denounceRepo.DeleteAsync(id);
     }
 
     [Authorize(KNTCPermissions.Denounces.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
-        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Contains(x.IdHoSo))).Select(x => x.Id);
-        await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
-        foreach (var item in idFileAttachs)
-        {
-            await _blobContainer.DeleteAsync(item.ToString());
-        }
+        //var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Contains(x.IdHoSo))).Select(x => x.Id);
+        //await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
+        //foreach (var item in idFileAttachs)
+        //{
+        //    await _blobContainer.DeleteAsync(item.ToString());
+        //}
         await _denounceRepo.DeleteManyAsync(ids);
     }
 

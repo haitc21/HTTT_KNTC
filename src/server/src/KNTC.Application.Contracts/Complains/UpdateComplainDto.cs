@@ -47,13 +47,10 @@ public class UpdateComplainDto : EntityDto<Guid>, IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxDiaChiLength)]
     public string DiaChiLienHe { get; set; }
     [Required]
-    [MaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength)]
     public int maTinhTP { get; set; }
     [Required]
-    [MaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength)]
     public int maQuanHuyen { get; set; }
     [Required]
-    [MaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength)]
     public int maXaPhuongTT { get; set; }
     [Required]
     public DateTime ThoiGianTiepNhan { get; set; }
@@ -78,13 +75,9 @@ public class UpdateComplainDto : EntityDto<Guid>, IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxDiaChiLength)]
     public string DiaChiThuaDat { get; set; }
     [Required]
-    [MaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength)]
     public int tinhThuaDat { get; set; }
     [Required]
-    [MaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength)]
     public int huyenThuaDat { get; set; }
-    [Required]
-    [MaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength)]
     public int xaThuaDat { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxToaDoLength)]
     public string DuLieuToaDo { get; set; }

@@ -17,10 +17,6 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
        : base(dbContextProvider)
     {
     }
-    public override async Task<IQueryable<Denounce>> WithDetailsAsync()
-    {
-        return (await GetQueryableAsync()).Include(nameof(Denounce.FileAttachments));
-    }
     public async Task<List<Denounce>> GetListAsync(int skipCount,
                                                int maxResultCount,
                                                string sorting,
@@ -38,7 +34,6 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
         var dbSet = await GetDbSetAsync();
         return await dbSet
-            .IncludeIf(includeDetails, a => a.FileAttachments)
             .WhereIf(
                 !filter.IsNullOrWhiteSpace(),
                 x => x.MaHoSo.ToUpper().Contains(filter)
@@ -85,7 +80,6 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
     public async Task<Denounce> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false)
     {
         var dbSet = await GetDbSetAsync();
-        return await dbSet.IncludeIf(includeDetails, a => a.FileAttachments)
-                          .FirstOrDefaultAsync(x => x.MaHoSo == maHoSo);
+        return await dbSet.FirstOrDefaultAsync(x => x.MaHoSo == maHoSo);
     }
 }

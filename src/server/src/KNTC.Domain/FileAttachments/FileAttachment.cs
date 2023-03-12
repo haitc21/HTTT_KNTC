@@ -22,7 +22,8 @@ public class FileAttachment : FullAuditedEntity<Guid>
     {
         SetTenTaiLieu(tenTaiLieu);
     }
-    public Guid IdHoSo { get; set; }
+    public Guid? ComplainId { get; set; }
+    public Guid? DenounceId { get; set; }
     public int GiaiDoan { get; set; }
     public string TenTaiLieu { get; private set; }
     public int HinhThuc { get; set; }
@@ -33,8 +34,6 @@ public class FileAttachment : FullAuditedEntity<Guid>
     public string FileName { get; set; }
     public string ContentType { get; set; }
     public long ContentLength { get; set; }
-    public Complain Complain { get; set; }
-    public Denounce Denounce { get; set; }
     public DocumentType DocumentType { get; set; }
     private void SetTenTaiLieu([NotNull] string tenTaiLieu)
     {
