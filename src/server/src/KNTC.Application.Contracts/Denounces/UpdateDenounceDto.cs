@@ -13,7 +13,7 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxMaHoSoLength)]
     public string MaHoSo { get; set; }
     [Required]
-    public LoaiVuViec LoaiVuViec { get; set; }
+    public LinhVuc LinhVuc { get; set; }
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxTieuDeLength)]
     public string TieuDe { get; set; }

@@ -29,7 +29,7 @@ export class EnviromentalComplaintComponent implements OnInit {
   keyword = '';
   lanKNSearch: Number;
   stageSearch: Number;
-  lanKNOptions = [
+  giaiDoanOptions = [
     { value: 0, text: 'Khiếu nại lần I' },
     { value: 1, text: 'Khiếu nại lần II' },
   ];

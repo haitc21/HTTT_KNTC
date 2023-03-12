@@ -1,13 +1,12 @@
-import type { LoaiVuViec } from '../loai-vu-viec.enum';
+import type { LinhVuc } from '../linh-vuc.enum';
 import type { LoaiKetQua } from '../loai-ket-qua.enum';
 import type { CreateAndUpdateFileAttachmentDto, FileAttachmentDto } from '../file-attachments/models';
 import type { AuditedEntityDto, EntityDto } from '@abp/ng.core';
 import type { BaseListFilterDto } from '../models';
-import type { LinhVuc } from '../linh-vuc.enum';
 
 export interface CreateDenounceDto {
   maHoSo: string;
-  loaiVuViec: LoaiVuViec;
+  linhVuc: LinhVuc;
   tieuDe: string;
   nguoiDeNghi: string;
   cccdCmnd: string;
@@ -50,7 +49,7 @@ export interface CreateDenounceDto {
 
 export interface DenounceDto extends AuditedEntityDto<string> {
   maHoSo?: string;
-  loaiVuViec: LoaiVuViec;
+  linhVuc: LinhVuc;
   tieuDe?: string;
   nguoiDeNghi?: string;
   cccdCmnd?: string;
@@ -95,14 +94,19 @@ export interface DenounceDto extends AuditedEntityDto<string> {
 }
 
 export interface GetDenounceListDto extends BaseListFilterDto {
-  loaiVuViec?: LoaiVuViec;
+  maTinhTP?: number;
+  maQuanHuyen?: number;
+  maXaPhuongTT?: number;
+  fromDate?: string;
+  toDate?: string;
   linhVuc?: LinhVuc;
   ketQua?: LoaiKetQua;
+  giaiDoan?: number;
 }
 
 export interface UpdateDenounceDto extends EntityDto<string> {
   maHoSo: string;
-  loaiVuViec: LoaiVuViec;
+  linhVuc: LinhVuc;
   tieuDe: string;
   nguoiDeNghi: string;
   cccdCmnd: string;

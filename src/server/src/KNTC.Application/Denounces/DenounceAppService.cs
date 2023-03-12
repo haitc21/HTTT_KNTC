@@ -49,22 +49,34 @@ public class DenounceAppService : CrudAppService<
         {
             input.Sorting = nameof(Denounce.MaHoSo);
         }
-        input.Keyword = input.Keyword.ToUpper();
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var denounces = await _denounceRepo.GetListAsync(
             input.SkipCount,
             input.MaxResultCount,
             input.Sorting,
             input.Keyword,
-            input.LoaiVuViec,
-            input.KetQua
+            input.LinhVuc,
+            input.KetQua,
+            input.maTinhTP,
+            input.maQuanHuyen,
+            input.maXaPhuongTT,
+            input.GiaiDoan,
+            input.FromDate,
+            input.ToDate
         );
 
         var totalCount = await _denounceRepo.CountAsync(
-                x => (input.Keyword.IsNullOrEmpty()
-                    || (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
-                && (!input.LoaiVuViec.HasValue || x.LoaiVuViec == input.LoaiVuViec)
-                && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
-                );
+                       x => (input.Keyword.IsNullOrEmpty()
+                           || (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
+                       && (!input.LinhVuc.HasValue || x.LinhVuc == input.LinhVuc)
+                       && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
+                       && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
+                       && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
+                       && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
+                       && (!input.GiaiDoan.HasValue || (input.GiaiDoan == 1 && x.ngayKhieuNai2 == null) || (input.GiaiDoan == 2 && x.ngayKhieuNai2 != null))
+                       && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
+                       && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
+                       );
 
         return new PagedResultDto<DenounceDto>(
         totalCount,
@@ -75,7 +87,7 @@ public class DenounceAppService : CrudAppService<
     public override async Task<DenounceDto> CreateAsync(CreateDenounceDto input)
     {
         var denounce = await _denounceManager.CreateAsync(maHoSo: input.MaHoSo,
-                                                  loaiVuViec: input.LoaiVuViec,
+                                                  linhVuc: input.LinhVuc,
                                                   tieuDe: input.TieuDe,
                                                   nguoiDeNghi: input.NguoiDeNghi,
                                                   cccdCmnd: input.CccdCmnd,
@@ -201,7 +213,7 @@ public class DenounceAppService : CrudAppService<
         }
         await _denounceManager.UpdateAsync(denounce: denounce,
                                            maHoSo: input.MaHoSo,
-                                          loaiVuViec: input.LoaiVuViec,
+                                          linhVuc: input.LinhVuc,
                                                   tieuDe: input.TieuDe,
                                                   nguoiDeNghi: input.NguoiDeNghi,
                                                   cccdCmnd: input.CccdCmnd,

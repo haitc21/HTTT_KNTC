@@ -1,14 +1,13 @@
 import type { AuditedEntityDto, EntityDto } from '@abp/ng.core';
-import type { LoaiVuViec } from '../loai-vu-viec.enum';
+import type { LinhVuc } from '../linh-vuc.enum';
 import type { LoaiKhieuNai } from '../loai-khieu-nai.enum';
 import type { LoaiKetQua } from '../loai-ket-qua.enum';
 import type { CreateAndUpdateFileAttachmentDto, FileAttachmentDto } from '../file-attachments/models';
 import type { BaseListFilterDto } from '../models';
-import type { LinhVuc } from '../linh-vuc.enum';
 
 export interface ComplainDto extends AuditedEntityDto<string> {
   maHoSo?: string;
-  loaiVuViec: LoaiVuViec;
+  linhVuc: LinhVuc;
   tieuDe?: string;
   nguoiDeNghi?: string;
   cccdCmnd?: string;
@@ -54,7 +53,7 @@ export interface ComplainDto extends AuditedEntityDto<string> {
 
 export interface CreateComplainDto {
   maHoSo: string;
-  loaiVuViec: LoaiVuViec;
+  linhVuc: LinhVuc;
   tieuDe: string;
   nguoiDeNghi: string;
   cccdCmnd: string;
@@ -100,15 +99,16 @@ export interface GetComplainListDto extends BaseListFilterDto {
   maTinhTP?: number;
   maQuanHuyen?: number;
   maXaPhuongTT?: number;
-  ngayTiepNhan?: string;
-  loaiVuViec?: LoaiVuViec;
+  fromDate?: string;
+  toDate?: string;
   linhVuc?: LinhVuc;
   ketQua?: LoaiKetQua;
+  giaiDoan?: number;
 }
 
 export interface UpdateComplainDto extends EntityDto<string> {
   maHoSo: string;
-  loaiVuViec: LoaiVuViec;
+  linhVuc: LinhVuc;
   tieuDe: string;
   nguoiDeNghi: string;
   cccdCmnd: string;

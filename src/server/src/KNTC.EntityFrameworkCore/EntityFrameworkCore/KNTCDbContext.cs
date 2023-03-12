@@ -109,9 +109,9 @@ public class KNTCDbContext :
             b.ToTable("Complains", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasIndex(x => x.MaHoSo);
-            b.HasIndex(x => x.LoaiVuViec);
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
-            b.Property(x => x.LoaiVuViec).IsRequired().HasColumnName("loai_vu_viec");
+            b.HasIndex(x => x.LinhVuc);
+            b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
             b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(KNTCValidatorConsts.MaxNguoiDeNghiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxCccdCmndLength);
@@ -122,9 +122,9 @@ public class KNTCDbContext :
             b.Property(x => x.Email).HasColumnName("email").HasMaxLength(KNTCValidatorConsts.MaxEmailLength);
             b.Property(x => x.DiaChiThuongTru).IsRequired().HasColumnName("dia_chi_thuong_tru").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
             b.Property(x => x.DiaChiLienHe).IsRequired().HasColumnName("dia_chi_lien_he").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
-            b.Property(x => x.maTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.maQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.maXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
             b.Property(x => x.ThoiGianTiepNhan).IsRequired().HasColumnName("thoi_gian_tiep_nhan");
             b.Property(x => x.ThoiGianHenTraKQ).IsRequired().HasColumnName("thoi_gian_hen_tra_kq");
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");
@@ -171,9 +171,9 @@ public class KNTCDbContext :
             b.ToTable("Denounces", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasIndex(x => x.MaHoSo);
-            b.HasIndex(x => x.LoaiVuViec);
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
-            b.Property(x => x.LoaiVuViec).IsRequired().HasColumnName("loai_vu_viec");
+            b.HasIndex(x => x.LinhVuc);
+            b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
             b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(KNTCValidatorConsts.MaxNguoiDeNghiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxCccdCmndLength);
@@ -184,9 +184,9 @@ public class KNTCDbContext :
             b.Property(x => x.Email).HasColumnName("email").HasMaxLength(KNTCValidatorConsts.MaxEmailLength);
             b.Property(x => x.DiaChiThuongTru).IsRequired().HasColumnName("dia_chi_thuong_tru").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
             b.Property(x => x.DiaChiLienHe).IsRequired().HasColumnName("dia_chi_lien_he").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
-            b.Property(x => x.maTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.maQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
-            b.Property(x => x.maXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
+            b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt").HasMaxLength(KNTCValidatorConsts.MaxMaDiaDanhLength);
             b.Property(x => x.ThoiGianTiepNhan).IsRequired().HasColumnName("thoi_gian_tiep_nhan");
             b.Property(x => x.ThoiGianHenTraKQ).IsRequired().HasColumnName("thoi_gian_hen_tra_kq");
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");

@@ -8,7 +8,7 @@ namespace KNTC.Denounces;
 public class DenounceDto : AuditedEntityDto<Guid>
 {
     public string MaHoSo { get; private set; }
-    public LoaiVuViec LoaiVuViec { get; set; }
+    public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
     public string NguoiDeNghi { get; set; }
     public string CccdCmnd { get; set; }

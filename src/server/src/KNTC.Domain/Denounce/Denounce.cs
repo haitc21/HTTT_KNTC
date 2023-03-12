@@ -24,7 +24,7 @@ public class Denounce : FullAuditedAggregateRoot<Guid>
         FileAttachments = new List<FileAttachment>();
     }
     public string MaHoSo { get; private set; }
-    public LoaiVuViec LoaiVuViec { get; set; }
+    public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
     public string NguoiDeNghi { get; set; }
     public string CccdCmnd { get; set; }
@@ -35,9 +35,9 @@ public class Denounce : FullAuditedAggregateRoot<Guid>
     public string Email { get; set; }
     public string DiaChiThuongTru { get; set; }
     public string DiaChiLienHe { get; set; }
-    public int maTinhTP { get; set; }
-    public int maQuanHuyen { get; set; }
-    public int maXaPhuongTT { get; set; }
+    public int MaTinhTP { get; set; }
+    public int MaQuanHuyen { get; set; }
+    public int MaXaPhuongTT { get; set; }
     public DateTime ThoiGianTiepNhan { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
     public string NoiDungVuViec { get; set; }

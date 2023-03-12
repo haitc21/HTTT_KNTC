@@ -31,10 +31,13 @@ export class AppTopBarComponent implements OnInit {
 
   @ViewChild('topbarmenu') menu!: ElementRef;
 
-  isAutenticated: boolean = false;
   userName = '';
   userId = '';
   avatarUrl: any;
+
+get isAutenticated() {
+  return this.oAuthService.hasValidAccessToken();
+}
 
   constructor(
     public layoutService: LayoutService,
@@ -47,7 +50,6 @@ export class AppTopBarComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
   ngOnInit(): void {
-    this.isAutenticated = this.oAuthService.hasValidAccessToken();
     if (this.isAutenticated) {
       const accessToken = this.oAuthService.getAccessToken();
       let decodedAccessToken = atob(accessToken.split('.')[1]);

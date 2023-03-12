@@ -16,7 +16,7 @@ public class ComplainManager : DomainService
         _hoSoRepo = hoSoRepo;
     }
     public async Task<Complain> CreateAsync([NotNull] string maHoSo,
-                                              [NotNull] LoaiVuViec loaiVuViec,
+                                              [NotNull] LinhVuc linhVuc,
                                               [NotNull] string tieuDe,
                                               [NotNull] string nguoiDeNghi,
                                               [NotNull] string cccdCmnd,
@@ -60,7 +60,7 @@ public class ComplainManager : DomainService
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
-        Check.NotNull(loaiVuViec, nameof(loaiVuViec));
+        Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
         Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
@@ -92,7 +92,7 @@ public class ComplainManager : DomainService
         return new Complain(GuidGenerator.Create(), maHoSo)
         {
             TieuDe = tieuDe,
-            LoaiVuViec = loaiVuViec,
+            LinhVuc = linhVuc,
             NguoiDeNghi = nguoiDeNghi,
             CccdCmnd = cccdCmnd,
             //NgayCapCccdCmnd = ngayCapCccdCmnd,
@@ -102,9 +102,9 @@ public class ComplainManager : DomainService
             Email = email,
             DiaChiThuongTru = diaChiThuongTru,
             DiaChiLienHe = diaChiLienHe,
-            maTinhTP = maTinhTP,
-            maQuanHuyen = maQuanHuyen,
-            maXaPhuongTT = maXaPhuongTT,
+            MaTinhTP = maTinhTP,
+            MaQuanHuyen = maQuanHuyen,
+            MaXaPhuongTT = maXaPhuongTT,
             ThoiGianTiepNhan = thoiGianTiepNhan,
             ThoiGianHenTraKQ = thoiGianyHenTraKQ,
             NoiDungVuViec = noiDungVuViec,
@@ -147,7 +147,7 @@ public class ComplainManager : DomainService
     }
     public async Task UpdateAsync([NotNull] Complain complain,
                                   [NotNull] string maHoSo,
-                                  [NotNull] LoaiVuViec loaiVuViec,
+                                  [NotNull] LinhVuc linhVuc,
                                    [NotNull] string tieuDe,
                                    [NotNull] string nguoiDeNghi,
                                    [NotNull] string cccdCmnd,
@@ -192,7 +192,7 @@ public class ComplainManager : DomainService
     {
         Check.NotNull(complain, nameof(complain));
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
-        Check.NotNull(loaiVuViec, nameof(loaiVuViec));
+        Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
         Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
@@ -221,7 +221,7 @@ public class ComplainManager : DomainService
             await ChangeMaHoSoAsync(complain, maHoSo);
         }
         complain.TieuDe = tieuDe;
-        complain.LoaiVuViec = loaiVuViec;
+        //complain.LinhVuc = linhVuc;
         complain.NguoiDeNghi = nguoiDeNghi;
         complain.CccdCmnd = cccdCmnd;
         //complain.NgayCapCccdCmnd = ngayCapCccdCmnd;
@@ -231,9 +231,9 @@ public class ComplainManager : DomainService
         complain.Email = email;
         complain.DiaChiThuongTru = diaChiThuongTru;
         complain.DiaChiLienHe = diaChiLienHe;
-        complain.maTinhTP = maTinhTP;
-        complain.maQuanHuyen = maQuanHuyen;
-        complain.maXaPhuongTT = maXaPhuongTT;
+        complain.MaTinhTP = maTinhTP;
+        complain.MaQuanHuyen = maQuanHuyen;
+        complain.MaXaPhuongTT = maXaPhuongTT;
         complain.ThoiGianTiepNhan = thoiGianTiepNhan;
         complain.ThoiGianHenTraKQ = thoiGianyHenTraKQ;
         complain.NoiDungVuViec = noiDungVuViec;

@@ -50,22 +50,34 @@ public class ComplainAppService : CrudAppService<
         {
             input.Sorting = nameof(Complain.MaHoSo);
         }
-        input.Keyword = input.Keyword.ToUpper();
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var complains = await _complainRepo.GetListAsync(
             input.SkipCount,
             input.MaxResultCount,
             input.Sorting,
             input.Keyword,
-            input.LoaiVuViec,
-            input.KetQua
+            input.LinhVuc,
+            input.KetQua,
+            input.maTinhTP,
+            input.maQuanHuyen,
+            input.maXaPhuongTT,
+            input.GiaiDoan,
+            input.FromDate,
+            input.ToDate
         );
 
         var totalCount = await _complainRepo.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
-                && (!input.LoaiVuViec.HasValue || x.LoaiVuViec == input.LoaiVuViec)
+                && (!input.LinhVuc.HasValue || x.LinhVuc == input.LinhVuc)
                 && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
-                );
+                && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
+                && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
+                && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
+                && (!input.GiaiDoan.HasValue || (input.GiaiDoan ==  1 && x.ngayKhieuNai2 == null) || (input.GiaiDoan == 2 && x.ngayKhieuNai2 != null))
+                && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
+                && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
+                ); 
 
         return new PagedResultDto<ComplainDto>(
         totalCount,
@@ -76,7 +88,7 @@ public class ComplainAppService : CrudAppService<
     public override async Task<ComplainDto> CreateAsync(CreateComplainDto input)
     {
         var complain = await _complainManager.CreateAsync(maHoSo: input.MaHoSo,
-                                                  loaiVuViec: input.LoaiVuViec,
+                                                  linhVuc: input.LinhVuc,
                                                   tieuDe: input.TieuDe,
                                                   nguoiDeNghi: input.NguoiDeNghi,
                                                   cccdCmnd: input.CccdCmnd,
@@ -202,7 +214,7 @@ public class ComplainAppService : CrudAppService<
         }
         await _complainManager.UpdateAsync(complain: complain,
                                            maHoSo: input.MaHoSo,
-                                          loaiVuViec: input.LoaiVuViec,
+                                          linhVuc: input.LinhVuc,
                                           tieuDe: input.TieuDe,
                                           nguoiDeNghi: input.NguoiDeNghi,
                                           cccdCmnd: input.CccdCmnd,

@@ -62,7 +62,7 @@ public class UnitAppService : CrudAppService<
             ObjectMapper.Map<List<Unit>, List<UnitDto>>(queryResult)
         );
     }
-    public async Task<ListResultDto<UnitLookupDto>> GetLookupAsync(int unitTypeId, int? parentId)
+    public async Task<ListResultDto<UnitLookupDto>> GetLookupAsync(int unitTypeId, int? parentId = null)
     {
         var queryable = await Repository.GetQueryableAsync();
 
