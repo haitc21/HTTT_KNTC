@@ -2,6 +2,16 @@
 
 public static class KNTCPermissions
 {
+    public const string ConfigGroupName = "Configs";
+
+    public static class Configs
+    {
+        public const string Default = ConfigGroupName;
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+
     public const string ComplainGroupName = "Complains";
 
     public static class Complains
@@ -58,6 +68,16 @@ public static class KNTCPermissions
     public static class UnitType
     {
         public const string Default = UnitTypeGroupName;
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public const string SpatialDataGroupName = "SpatialDatas";
+
+    public static class SpatialDatas
+    {
+        public const string Default = SpatialDataGroupName;
         public const string Create = Default + ".Create";
         public const string Edit = Default + ".Edit";
         public const string Delete = Default + ".Delete";

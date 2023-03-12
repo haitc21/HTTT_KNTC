@@ -36,10 +36,14 @@ const redIcon = new L.Icon({
 export class MapComponent implements AfterViewInit, OnChanges {
   @Input() idMap: string = 'map';
   @Input() data: Complain[] = [];
+  @Input() spatialData: [];
   @Input() heightMap: string = '600px';
   @Input() zoomLv: number = 13;
 
   map: L.Map;
+
+  vitri: any;
+  khonggian: any;
 
   loaiHS = ['khiếu nại', 'Tố cáo'];
   linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
@@ -50,21 +54,51 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.buildLocateBtn();
     this.buildEventMapClick();
     this.renderMarkers(this.data);
+    this.renderSpatialData(this.spatialData);
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data && changes.data.currentValue && !changes.data.isFirstChange()) {
       this.renderMarkers(changes.data.currentValue);
     }
+
+    if (changes.spatialData && changes.spatialData.currentValue && !changes.spatialData.isFirstChange()) {
+      this.renderSpatialData(changes.spatialData.currentValue);
+    }
   }
 
   initMap() {
     this.map = L.map(this.idMap).setView([21.027764, 105.83416], this.zoomLv);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    this.vitri = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
       maxZoom: 18,
     }).addTo(this.map);
+ 
+    /*
+    this.vitri = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution:
+        'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+      maxZoom: 18,
+    })
+    */
+    this.khonggian = L.geoJSON();
+    var myStyle = {
+      "color": "#ff7800",
+      "weight": 1,
+      "opacity": 0.65
+    };
+    this.khonggian = L.geoJSON(this.spatialData, {
+      style: myStyle
+    }).addTo(this.map);
+    //this.map = L.map(this.idMap).setView([21.027764, 105.83416], this.zoomLv, layers: [this.vitri, this.hinhhoc]);
+    /*
+    this.map = L.map(this.idMap, {
+      center: [21.027764, 105.83416],
+      zoom: this.zoomLv,
+      layers: [this.vitri, this.khonggian]
+    });
+    */
   }
 
   buildLocateBtn() {
@@ -101,7 +135,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       })
       .addTo(this.map);
   }
-  
+
   buildEventMapClick() {
     this.map.on('click', e => {
       L.popup()
@@ -120,6 +154,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       }
     });
 
+    //Add markers
     hosos.forEach(hoSo => {
       const marker = L.marker([hoSo.latLng[0], hoSo.latLng[1]], {
         icon: hoSo.typeHoSo === 0 ? blueIcon : redIcon,
@@ -136,6 +171,13 @@ export class MapComponent implements AfterViewInit, OnChanges {
         </div>
       `);
       marker.addTo(this.map);
-    });
+    });    
+  }
+
+  renderSpatialData(khonggian: []) {
+    //Add polygons
+    //this.spatialData 
+
+    this.khonggian = L.geoJSON(this.spatialData).addTo(this.map);
   }
 }

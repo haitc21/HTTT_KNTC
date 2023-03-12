@@ -7,6 +7,7 @@ using KNTC.LandTypes;
 using KNTC.Units;
 using KNTC.UnitTypes;
 using KNTC.Users;
+using KNTC.SpatialDatas;
 using Microsoft.EntityFrameworkCore;
 using System.Xml.Linq;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
@@ -59,6 +60,7 @@ public class KNTCDbContext :
     public DbSet<LandType> LandTypes { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<UnitType> UnitTypes { get; set; }
+    public DbSet<SpatialData> SpatialDatas { get; set; }
 
     public KNTCDbContext(DbContextOptions<KNTCDbContext> options)
         : base(options)
@@ -312,6 +314,15 @@ public class KNTCDbContext :
              .WithOne(k => k.UnitType)
              .HasForeignKey(k => k.UnitTypeId)
              .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<SpatialData>(b =>
+        {
+            b.ToTable("SpatialData", KNTCConsts.KNTCDbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(x => x.geometry);
+
         });
     }
 }

@@ -1,10 +1,11 @@
-import { AuthService } from '@abp/ng.core';
+import { AuthService, ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
 import { MockService } from '../../shared/mock/mock.service';
-
+import { SpatialDataDto, SpatialDataLookupDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-search-map',
   templateUrl: './search-map.component.html',
@@ -46,9 +47,14 @@ import { MockService } from '../../shared/mock/mock.service';
     ]),
   ],
 })
+
 export class SearchMapComponent implements OnInit {
+  //System variables
+  private ngUnsubscribe = new Subject<void>();
+  
   blockedPanel = false;
   data: Complain[] = [];
+  spatialData: [];
 
   mockData: Complain[] = [];
   loaiHS = ['khiếu nại', 'Tố cáo'];
@@ -62,7 +68,9 @@ export class SearchMapComponent implements OnInit {
   public maxResultCount: number = 10;
   public totalCount: number;
 
-  // fileter
+  // filter
+  geo = false;
+
   landComplaint = true;
   enviromentalComplaint = true;
   waterResourceComplaint = true;
@@ -96,6 +104,7 @@ export class SearchMapComponent implements OnInit {
   constructor(
     private oAuthService: OAuthService,
     private authService: AuthService,
+    private spatialDataService: SpatialDataService,
     private mockService: MockService
   ) {}
 
@@ -105,9 +114,30 @@ export class SearchMapComponent implements OnInit {
     this.toggleBlockUI(false);
     this.loadData(true);
   }
+
   loadData(isFirst: boolean = false) {
     this.toggleBlockUI(true);
     this.data = [];
+
+    //spatialData
+    if (this.geo){
+      debugger;
+       //this.spatialData
+       this.spatialDataService
+      .getLookup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<SpatialDataLookupDto>) => {
+
+          //this.spatialData
+          let t = res.items;
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
+    }
 
     if (this.landComplaint)
       this.data.push(
@@ -164,11 +194,13 @@ export class SearchMapComponent implements OnInit {
           x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Mineral
         )
       );
+
     if (this.keyword) {
       this.data = this.data.filter(
         x => x.code.includes(this.keyword) || x.title.includes(this.keyword)
       );
     }
+
     switch (this.lanKNSearch) {
       case 0:
         this.data = this.data.filter(x => !x.returnDate2);
@@ -192,11 +224,13 @@ export class SearchMapComponent implements OnInit {
 
     this.toggleBlockUI(false);
   }
+
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;
     this.loadData();
   }
+
   toggleMenuLeft() {
     this.visibleFilterLeff = !this.visibleFilterLeff;
     if (!this.visibleFilterLeff) {
@@ -207,6 +241,7 @@ export class SearchMapComponent implements OnInit {
       this.expandColumnState = 'normal';
     }
   }
+  
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.blockedPanel = true;
