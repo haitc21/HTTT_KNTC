@@ -1,4 +1,5 @@
 ﻿using Microsoft.SqlServer.Types;
+using NetTopologySuite.Geometries;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Volo.Abp;
@@ -16,17 +17,17 @@ public class SpatialData : FullAuditedAggregateRoot<int>
     {
 
     }
-    public SpatialData(SqlGeometry geometry)
+    public SpatialData(Geometry geometry)
     {
         ChangeGeometry(geometry);
     }
-    public SpatialData(int ID, SqlGeometry geometry) : base(ID)
+    public SpatialData(int ID, Geometry geometry) : base(ID)
     {
         ChangeGeometry(geometry);
     }
-    public SqlGeometry geometry { get; set; }
+    public Geometry Geometry { get; set; }
     public string geoJson { get; set; }
-    private void SetGeometry([NotNull] SqlGeometry geometry)
+    private void SetGeometry([NotNull] Geometry geometry)
     {
         geometry = Check.NotNull(
             geometry,
@@ -34,7 +35,7 @@ public class SpatialData : FullAuditedAggregateRoot<int>
         );
     }
 
-    internal SpatialData ChangeGeometry([NotNull] SqlGeometry geometry)
+    internal SpatialData ChangeGeometry([NotNull] Geometry geometry)
     {
         SetGeometry(geometry);
         return this;

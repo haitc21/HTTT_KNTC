@@ -24,6 +24,8 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Microsoft.SqlServer.Types;
+
 
 namespace KNTC.EntityFrameworkCore;
 
@@ -60,7 +62,8 @@ public class KNTCDbContext :
     public DbSet<LandType> LandTypes { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<UnitType> UnitTypes { get; set; }
-    //public DbSet<SpatialData> SpatialDatas { get; set; }
+    public DbSet<Config> Configs { get; set; }
+    public DbSet<SpatialData> SpatialDatas { get; set; }
 
     public KNTCDbContext(DbContextOptions<KNTCDbContext> options)
         : base(options)
@@ -81,20 +84,6 @@ public class KNTCDbContext :
         builder.ConfigureOpenIddict();
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
-
-        builder.Entity<Config>(b =>
-        {
-            b.ToTable("Configs", KNTCConsts.KNTCDbSchema);
-            b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
-            b.Property(x => x.OrganizationCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
-            b.Property(x => x.OrganizationName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
-            b.Property(x => x.ToaDo);
-            b.Property(x => x.Tel);
-            b.Property(x => x.Address).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
-            b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
-            b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
-        });
 
         builder.Entity<UserInfo>(b =>
         {
@@ -316,13 +305,33 @@ public class KNTCDbContext :
              .OnDelete(DeleteBehavior.Restrict);
         });
 
-        //builder.Entity<SpatialData>(b =>
-        //{
-        //    b.ToTable("SpatialData", KNTCConsts.KNTCDbSchema);
-        //    b.ConfigureByConvention(); //auto configure for the base class props
-        //    b.Property(p => p.Id).ValueGeneratedOnAdd();
-        //    b.Property(x => x.geometry);
 
-        //});
+
+        builder.Entity<Config>(b =>
+        {
+            b.ToTable("Configs", KNTCConsts.KNTCDbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(x => x.OrganizationCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
+            b.Property(x => x.OrganizationName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
+            b.Property(x => x.ToaDo);
+            b.Property(x => x.Tel);
+            b.Property(x => x.Address).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
+            b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
+            b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
+
+            b.HasMany(h => h.Units)
+             .WithOne(k => k.Config)
+             .HasForeignKey(k => k.ConfigId)
+             .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<SpatialData>(b =>
+        {
+            b.ToTable("SpatialData", KNTCConsts.KNTCDbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(p => p.Id).ValueGeneratedOnAdd();
+
+        });
     }
 }

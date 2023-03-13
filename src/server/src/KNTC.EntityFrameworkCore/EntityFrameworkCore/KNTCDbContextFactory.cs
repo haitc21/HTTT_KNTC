@@ -17,7 +17,10 @@ public class KNTCDbContextFactory : IDesignTimeDbContextFactory<KNTCDbContext>
         var configuration = BuildConfiguration();
 
         var builder = new DbContextOptionsBuilder<KNTCDbContext>()
-            .UseSqlServer(configuration.GetConnectionString("Default"));
+            .UseSqlServer(configuration.GetConnectionString("Default"), x =>
+            {
+                x.UseNetTopologySuite();
+            });
 
         return new KNTCDbContext(builder.Options);
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.SqlServer.Types;
+using NetTopologySuite.Geometries;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -15,30 +16,30 @@ public class SpatialDataManager : DomainService
     {
         _spatialDataRepo = spatialDataRepo;
     }
-    public async Task<SpatialData> CreateAsync([NotNull] SqlGeometry _geometry)
+    public async Task<SpatialData> CreateAsync([NotNull] Geometry _geometry)
     {
 
         Check.NotNull(_geometry, nameof(_geometry));
        
         return new SpatialData(_geometry)
         {
-            geometry = _geometry
+            Geometry = _geometry
         };
     }
     public async Task UpdateAsync([NotNull] SpatialData spatialData,
-                                                 [NotNull] SqlGeometry geometry)
+                                                 [NotNull] Geometry geometry)
     {
         Check.NotNull(spatialData, nameof(spatialData));
         Check.NotNull(geometry, nameof(geometry));
 
-        if (spatialData.geometry != geometry)
+        if (spatialData.Geometry != geometry)
         {
             await ChangeGeometry(spatialData, geometry);
         }
 
-        spatialData.geometry = geometry;
+        spatialData.Geometry = geometry;
     }
-    private async Task ChangeGeometry(SpatialData spatialData, SqlGeometry geometry)
+    private async Task ChangeGeometry(SpatialData spatialData, Geometry geometry)
     {
         spatialData.ChangeGeometry(geometry);
     }
