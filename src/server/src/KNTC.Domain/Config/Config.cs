@@ -34,7 +34,7 @@ public class Config : FullAuditedAggregateRoot<int>
     public string Address { get; set; }
     public string Description { get; set; }
     public Status Status { get; set; }
-    public virtual List<Unit> Units { get; set; }
+    //public virtual List<Unit> Units { get; set; }
     private void SetCode([NotNull] string code)
     {
         OrganizationCode = Check.NotNullOrWhiteSpace(

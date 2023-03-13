@@ -36,7 +36,7 @@ public class Unit : FullAuditedAggregateRoot<int>
     public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public UnitType UnitType { get; set; }
-    public Config Config { get; set; }
+    //public Config Config { get; set; }
     private void SetCode([NotNull] string code)
     {
         UnitCode = Check.NotNullOrWhiteSpace(

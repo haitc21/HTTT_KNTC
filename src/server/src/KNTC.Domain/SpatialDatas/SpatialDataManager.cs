@@ -16,18 +16,17 @@ public class SpatialDataManager : DomainService
     {
         _spatialDataRepo = spatialDataRepo;
     }
-    public async Task<SpatialData> CreateAsync([NotNull] Geometry _geometry)
+    public async Task<SpatialData> CreateAsync([NotNull] Geometry _geometry, string geoJson)
     {
 
         Check.NotNull(_geometry, nameof(_geometry));
        
         return new SpatialData(_geometry)
         {
-            Geometry = _geometry
+            GeoJson = geoJson
         };
     }
-    public async Task UpdateAsync([NotNull] SpatialData spatialData,
-                                                 [NotNull] Geometry geometry)
+    public async Task UpdateAsync([NotNull] SpatialData spatialData, [NotNull] Geometry geometry, string geoJson)
     {
         Check.NotNull(spatialData, nameof(spatialData));
         Check.NotNull(geometry, nameof(geometry));
@@ -37,7 +36,7 @@ public class SpatialDataManager : DomainService
             await ChangeGeometry(spatialData, geometry);
         }
 
-        spatialData.Geometry = geometry;
+        spatialData.GeoJson = geoJson;
     }
     private async Task ChangeGeometry(SpatialData spatialData, Geometry geometry)
     {

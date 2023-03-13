@@ -320,10 +320,10 @@ public class KNTCDbContext :
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
             b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
 
-            b.HasMany(h => h.Units)
-             .WithOne(k => k.Config)
-             .HasForeignKey(k => k.ConfigId)
-             .OnDelete(DeleteBehavior.Restrict);
+            //b.HasMany(h => h.Units)
+            // .WithOne(k => k.Config)
+            // .HasForeignKey(k => k.ConfigId)
+            // .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<SpatialData>(b =>
