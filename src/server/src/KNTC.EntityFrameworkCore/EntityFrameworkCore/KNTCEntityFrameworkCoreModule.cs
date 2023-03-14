@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -45,7 +46,7 @@ public class KNTCEntityFrameworkCoreModule : AbpModule
         {
             /* The main point to change your DBMS.
              * See also KNTCMigrationsDbContextFactory for EF Core tooling. */
-            options.UseSqlServer();
+            options.UseSqlServer(x => x.UseNetTopologySuite());
         });
     }
 }

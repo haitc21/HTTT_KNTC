@@ -1,8 +1,7 @@
-import type { CreateAndUpdateConfigDto, GetConfigListDto, ConfigDto, ConfigLookupDto } from './models';
+import type { ConfigDto, ConfigLookupDto, CreateAndUpdateConfigDto, GetConfigListDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import { BaseListFilterDto } from '@proxy/models';
 
 @Injectable({
   providedIn: 'root',
@@ -53,14 +52,7 @@ export class ConfigService {
     },
     { apiName: this.apiName });
   
-  getListFilter = (input: BaseListFilterDto) =>
-    this.restService.request<any, PagedResultDto<ConfigDto>>({
-      method: 'GET',
-      url: '/api/app/config/filter',
-      params: { sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount, keyword: input.keyword },
-    },
-    { apiName: this.apiName });
-  
+
   getLookup = () =>
     this.restService.request<any, ListResultDto<ConfigLookupDto>>({
       method: 'GET',

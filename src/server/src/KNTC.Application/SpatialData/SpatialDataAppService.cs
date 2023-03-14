@@ -62,7 +62,7 @@ public class SpatialDataAppService : CrudAppService<
 
     public async override Task<SpatialDataDto> CreateAsync(CreateAndUpdateSpatialDataDto input)
     {
-        var entity = await _spatialDataManager.CreateAsync(input.geometry, input.geoJson);
+        var entity = await _spatialDataManager.CreateAsync(input.geoJson);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<SpatialData, SpatialDataDto>(entity);
     }
@@ -71,7 +71,7 @@ public class SpatialDataAppService : CrudAppService<
     {
         var entity = await Repository.GetAsync(id, false);
         //entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
-        await _spatialDataManager.UpdateAsync(entity,input.geometry, input.geoJson);
+        await _spatialDataManager.UpdateAsync(entity, input.geoJson);
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<SpatialData, SpatialDataDto>(entity);
     }

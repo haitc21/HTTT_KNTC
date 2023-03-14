@@ -7,7 +7,7 @@ namespace KNTC.SpatialDatas;
 
 public class CreateAndUpdateSpatialDataDto : EntityDto<int>
 {
-    [Required]
-    public Geometry geometry { get; set; }
+    //[Required]
+    //public Geometry geometry { get; set; }
     public string geoJson { get; }
 }

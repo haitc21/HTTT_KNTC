@@ -6,6 +6,6 @@ namespace KNTC.SpatialDatas;
 
 public class SpatialDataDto : FullAuditedEntityDto<int>
 {
-    public SqlGeometry geometry { get; set; }
+    //public SqlGeometry geometry { get; set; }
     public string geoJson { get; }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.SqlServer.Types;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -16,30 +15,21 @@ public class SpatialDataManager : DomainService
     {
         _spatialDataRepo = spatialDataRepo;
     }
-    public async Task<SpatialData> CreateAsync([NotNull] Geometry _geometry, string geoJson)
+    public async Task<SpatialData> CreateAsync([NotNull]string geoJson)
     {
-
-        Check.NotNull(_geometry, nameof(_geometry));
-       
-        return new SpatialData(_geometry)
+        Check.NotNullOrWhiteSpace(geoJson, nameof(geoJson));
+        return new SpatialData()
         {
             GeoJson = geoJson
+            // suy geometry tu geo json
         };
     }
-    public async Task UpdateAsync([NotNull] SpatialData spatialData, [NotNull] Geometry geometry, string geoJson)
+
+    public async Task UpdateAsync([NotNull] SpatialData spatialData, string geoJson)
     {
         Check.NotNull(spatialData, nameof(spatialData));
-        Check.NotNull(geometry, nameof(geometry));
-
-        if (spatialData.Geometry != geometry)
-        {
-            await ChangeGeometry(spatialData, geometry);
-        }
 
         spatialData.GeoJson = geoJson;
-    }
-    private async Task ChangeGeometry(SpatialData spatialData, Geometry geometry)
-    {
-        spatialData.ChangeGeometry(geometry);
+        // suy geometry tu geo json
     }
 }

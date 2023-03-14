@@ -2,6 +2,7 @@ import type { ComplainDto, CreateComplainDto, GetComplainListDto, UpdateComplain
 import { RestService } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
+import type { IFormFile } from '../microsoft/asp-net-core/http/models';
 
 @Injectable({
   providedIn: 'root',
@@ -67,6 +68,15 @@ export class ComplainService {
       method: 'PUT',
       url: `/api/app/complain/${id}`,
       body: input,
+    },
+    { apiName: this.apiName });
+  
+
+  upload = (idTepDinhKem: string, file: IFormFile) =>
+    this.restService.request<any, void>({
+      method: 'POST',
+      url: '/api/app/complain/upload',
+      params: { idTepDinhKem },
     },
     { apiName: this.apiName });
 

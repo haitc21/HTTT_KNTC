@@ -1,10 +1,12 @@
 import * as Complains from './complains';
+import * as Configs from './configs';
 import * as Denounces from './denounces';
 import * as DocumentTypes from './document-types';
 import * as FileAttachments from './file-attachments';
 import * as LandTypes from './land-types';
 import * as Microsoft from './microsoft';
 import * as Roles from './roles';
+import * as SpatialDatas from './spatial-datas';
 import * as UnitTypes from './unit-types';
 import * as Units from './units';
 import * as Users from './users';
@@ -15,4 +17,4 @@ export * from './loai-khieu-nai.enum';
 export * from './loai-vu-viec.enum';
 export * from './models';
 export * from './status.enum';
-export { Complains, Denounces, DocumentTypes, FileAttachments, LandTypes, Microsoft, Roles, UnitTypes, Units, Users, Volo };
+export { Complains, Configs, Denounces, DocumentTypes, FileAttachments, LandTypes, Microsoft, Roles, SpatialDatas, UnitTypes, Units, Users, Volo };
