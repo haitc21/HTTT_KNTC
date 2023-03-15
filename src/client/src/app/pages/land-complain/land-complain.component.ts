@@ -54,22 +54,24 @@ export class LandComplainComponent implements OnInit {
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
 
-  hasPermissionUpdate = false;
-  hasPermissionDelete = false;
-  visibleActionColumn = false;
-
-  Actions = Actions;
-  actionMenu: MenuItem[];
-
   giaiDoanOptions = [
-    { value: 0, text: 'Khiếu nại lần I' },
-    { value: 1, text: 'Khiếu nại lần II' },
+    { value: 1, text: 'Khiếu nại lần I' },
+    { value: 2, text: 'Khiếu nại lần II' },
   ];
   loaiKQ = [
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
   ];
+
+  // Permissions
+  hasPermissionUpdate = false;
+  hasPermissionDelete = false;
+  visibleActionColumn = false;
+
+  // Thao tac
+  Actions = Actions;
+  actionMenu: MenuItem[];
 
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();
@@ -88,7 +90,6 @@ export class LandComplainComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.toggleBlockUI(true);
     this.getPermission();
     this.buildActionMenu();
     this.loadOptions();
@@ -126,7 +127,7 @@ export class LandComplainComponent implements OnInit {
             this.toggleBlockUI(false);
           }
         );
-    }
+    } else this.huyenOptions = [];
   }
   huyenChange(event) {
     this.loadData();
@@ -144,7 +145,7 @@ export class LandComplainComponent implements OnInit {
             this.toggleBlockUI(false);
           }
         );
-    }
+    } else this.xaOptions = [];
   }
 
   loadData(isFirst: boolean = false) {
@@ -177,7 +178,7 @@ export class LandComplainComponent implements OnInit {
           console.log(this.items[0].ketQua1);
           console.log(this.items[0].ketQua2);
           console.log(this.items[0].ketQua);
-          
+
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
         },

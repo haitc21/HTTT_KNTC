@@ -84,7 +84,7 @@ public class CreateComplainDto
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }
     public LoaiKhieuNai? loaiKhieuNai1 { get; set; }
-    public DateTime? ngayKhieuNai1 { get; set; }
+    public DateTime? NgayKhieuNai1 { get; set; }
     public DateTime? NgayTraKQ1 { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxThamQuyenLength)]
     public string ThamQuyen1 { get; set; }
@@ -92,7 +92,7 @@ public class CreateComplainDto
     public string SoQD1 { get; set; }
     public LoaiKetQua? KetQua1 { get; set; }
     public LoaiKhieuNai? loaiKhieuNai2 { get; set; }
-    public DateTime? ngayKhieuNai2 { get; set; }
+    public DateTime? NgayKhieuNai2 { get; set; }
     public DateTime? NgayTraKQ2 { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxThamQuyenLength)]
     public string ThamQuyen2 { get; set; }

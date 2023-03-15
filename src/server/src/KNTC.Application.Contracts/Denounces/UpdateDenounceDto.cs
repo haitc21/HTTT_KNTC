@@ -83,14 +83,14 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxHinhHocLength)]
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }
-    public DateTime? ngayKhieuNai1 { get; set; }
+    public DateTime? NgayKhieuNai1 { get; set; }
     public DateTime? NgayTraKQ1 { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxThamQuyenLength)]
     public string ThamQuyen1 { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
     public string SoQD1 { get; set; }
     public LoaiKetQua? KetQua1 { get; set; }
-    public DateTime? ngayKhieuNai2 { get; set; }
+    public DateTime? NgayKhieuNai2 { get; set; }
     public DateTime? NgayTraKQ2 { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxThamQuyenLength)]
     public string ThamQuyen2 { get; set; }
@@ -99,6 +99,6 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
     public string SoQD2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
     public virtual List<CreateAndUpdateFileAttachmentDto> FileAttachments { get; set; }
-    public IReadOnlyList<Guid> ListTepDinhKemHoSosDeleted { get; set; }
+    public IReadOnlyList<Guid> ListFileDeleted { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

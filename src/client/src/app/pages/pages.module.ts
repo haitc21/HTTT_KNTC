@@ -43,6 +43,7 @@ import { MineralResourceComplaintComponent } from './mineral-resource-complaint/
 import { WaterResourceComplaintComponent } from './water-resource-complaint/water-resource-complaint.component';
 import { WaterResourcAccusationComponent } from './water-resource-accusation/water-resource-accusation.component';
 import {FieldsetModule} from 'primeng/fieldset';
+import { LandComplainDetailComponent } from './land-complain/detail/land-complain-detail.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {FieldsetModule} from 'primeng/fieldset';
     MineralResourceComplaintComponent,
     MineralResourceAccusationComponent,
     WaterResourceComplaintComponent,
-    WaterResourcAccusationComponent
+    WaterResourcAccusationComponent,
+    LandComplainDetailComponent
   ],
   imports: [
     PagesRoutingModule,

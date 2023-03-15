@@ -1,7 +1,11 @@
+import { ListResultDto } from '@abp/ng.core';
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { LinhVuc, LoaiVuViec } from '@proxy';
+import { LinhVuc, LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
 import { ComplainDto, ComplainService } from '@proxy/complains';
+import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
+import { LandTypeLookupDto, LandTypeService } from '@proxy/land-types';
+import { UnitLookupDto, UnitService } from '@proxy/units';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
@@ -19,6 +23,29 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   selectedEntity: ComplainDto;
+
+  // option
+  tinhOptions: UnitLookupDto[] = [];
+  huyenOptions: UnitLookupDto[] = [];
+  xaOptions: UnitLookupDto[] = [];
+  huyenThuaDateOptions: UnitLookupDto[] = [];
+  xaThuaDatOptions: UnitLookupDto[] = [];
+  landTypeOptions: LandTypeLookupDto[];
+  documentTypeOptions: DocumentTypeLookupDto[];
+
+  giaiDoanOptions = [
+    { value: 1, text: 'Khiếu nại lần I' },
+    { value: 2, text: 'Khiếu nại lần II' },
+  ];
+  loaiKQOPtions = [
+    { value: LoaiKetQua.Dung, text: 'Đúng' },
+    { value: LoaiKetQua.Sai, text: 'Sai' },
+    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
+  ];
+  loaiKhieuNaiOptions = [
+    { value: LoaiKhieuNai.KhieuNai, text: 'Khiếu nại' },
+    { value: LoaiKhieuNai.KhieuKien, text: 'Khiếu kiện' },
+  ];
 
   // Validate
   validationMessages = {
@@ -118,30 +145,24 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     huyenThuaDat: [{ type: 'required', message: 'Quận/Huyện thửa đất không được để trống' }],
     xaThuaDat: [{ type: 'required', message: 'Xã/Phường/TT  thửa đất không được để trống' }],
     duLieuToaDo: [
-      { type: 'required', message: 'Dữ liệu tọa độ không được để trống' },
       {
         type: 'maxLength',
         message: `Dữ liệu tọa độ không vượt quá ${KNTCValidatorConsts.MaxToaDoLength} kí tự`,
       },
     ],
     duLieuHinhHoc: [
-      { type: 'required', message: 'Dữ liệu hình học không được để trống' },
       {
         type: 'maxLength',
         message: `Dữ liệu hình học không vượt quá ${KNTCValidatorConsts.MaxHinhHocLength} kí tự`,
       },
     ],
-
-    ngayTraKQ: [{ type: 'required', message: 'Ngày trả kết quả không được để trống' }],
     thamQuyen: [
-      { type: 'required', message: 'Thẩm quyền không được để trống' },
       {
         type: 'maxlength',
         message: `Thẩm quyền không vượt quá ${KNTCValidatorConsts.MaxThamQuyenLength} kí tự`,
       },
     ],
     soQD: [
-      { type: 'required', message: 'Số QĐ không được để trống' },
       {
         type: 'maxlength',
         message: `Số QĐ không vượt quá ${KNTCValidatorConsts.MaxSoQDLength} kí tự`,
@@ -153,20 +174,12 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
         message: `Ghi chú không vượt quá ${KNTCValidatorConsts.MaxGhiChuLength} kí tự`,
       },
     ],
-    ketQua: [{ type: 'required', message: 'Kết quả không được để trống' }],
 
     tenTaiLieu: [
       { type: 'required', message: 'Tên tài liệu không được để trống' },
       {
         type: 'maxlength',
         message: `Tên tài liệu tối đa ${KNTCValidatorConsts.MaxTenTaiLieuLength} ký tự`,
-      },
-    ],
-    hinhThuc: [
-      { type: 'required', message: 'Hình thức không được để trống' },
-      {
-        type: 'maxlength',
-        message: `Hình thức tối đa ${KNTCValidatorConsts.MaxHinhThucLength} ký tự`,
       },
     ],
     thuTuButLuc: [
@@ -181,28 +194,149 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
   get formControls() {
     return this.form.controls;
   }
-  get kqgqHoSos(): FormArray {
-    return this.form.get('kqgqHoSos') as FormArray;
-  }
 
-  get tepDinhKemHoSos(): FormArray {
-    return this.form.get('tepDinhKemHoSos') as FormArray;
-  }
+  // get fileAttachments(): FormArray {
+  //   return this.form.get('fileAttachments') as FormArray;
+  // }
 
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private complainService: ComplainService,
     private utilService: UtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private unitService: UnitService,
+    private landTypeService: LandTypeService,
+    private documentTypeService: DocumentTypeService
   ) {}
 
   ngOnInit() {
+    this.loadOptions();
     this.buildForm();
     if (this.utilService.isEmpty(this.config.data?.id) == false) {
       this.loadDetail(this.config.data.id);
     }
   }
+
+  //#region load options
+  loadOptions() {
+    this.toggleBlockUI(true);
+    this.unitService
+      .getLookup(1)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<UnitLookupDto>) => {
+          this.tinhOptions = res.items;
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
+    this.toggleBlockUI(true);
+    this.landTypeService
+      .getLookup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<LandTypeLookupDto>) => {
+          this.landTypeOptions = res.items;
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
+    this.toggleBlockUI(true);
+    this.documentTypeService
+      .getLookup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<DocumentTypeLookupDto>) => {
+          this.documentTypeOptions = res.items;
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
+  }
+
+  inhChange(event) {
+    if (event.value) {
+      this.toggleBlockUI(true);
+      this.unitService
+        .getLookup(2, event.value)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<UnitLookupDto>) => {
+            this.huyenOptions = res.items;
+            this.form.get('maQuanHuyen').reset();
+            this.form.get('maXaPhuongTT').reset();
+            this.toggleBlockUI(false);
+          },
+          () => {
+            this.toggleBlockUI(false);
+          }
+        );
+    } else this.huyenOptions = [];
+  }
+  huyenChange(event) {
+    if (event.value) {
+      this.toggleBlockUI(true);
+      this.unitService
+        .getLookup(3, event.value)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<UnitLookupDto>) => {
+            this.xaOptions = res.items;
+            this.form.get('maXaPhuongTT').reset();
+            this.toggleBlockUI(false);
+          },
+          () => {
+            this.toggleBlockUI(false);
+          }
+        );
+    } else this.xaOptions = [];
+  }
+
+  inhThuaDatChange(event) {
+    if (event.value) {
+      this.toggleBlockUI(true);
+      this.unitService
+        .getLookup(2, event.value)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<UnitLookupDto>) => {
+            this.huyenThuaDateOptions = res.items;
+            this.form.get('huyenThuaDat').reset();
+            this.form.get('xaThuaDat').reset();
+            this.toggleBlockUI(false);
+          },
+          () => {
+            this.toggleBlockUI(false);
+          }
+        );
+    } else this.huyenThuaDateOptions = [];
+  }
+  huyenThuaDatChange(event) {
+    if (event.value) {
+      this.toggleBlockUI(true);
+      this.unitService
+        .getLookup(3, event.value)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<UnitLookupDto>) => {
+            this.xaThuaDatOptions = res.items;
+            this.form.get('xaThuaDat').reset();
+            this.toggleBlockUI(false);
+          },
+          () => {
+            this.toggleBlockUI(false);
+          }
+        );
+    } else this.xaThuaDatOptions = [];
+  }
+  //#endregion
 
   loadDetail(id: any) {
     this.toggleBlockUI(true);
@@ -286,9 +420,9 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
         '',
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxDiaChiLength)],
       ],
-      maTinhTP: ['', [Validators.required]],
-      maQuanHuyen: ['', [Validators.required]],
-      maXaPhuongTT: ['', [Validators.required]],
+      maTinhTP: [null, [Validators.required]],
+      maQuanHuyen: [null, [Validators.required]],
+      maXaPhuongTT: [null, [Validators.required]],
       linhVuc: [LinhVuc.DataDai],
       thoiGianTiepNhan: [null, [Validators.required]],
       thoiGianHenTraKQ: [null, [Validators.required]],
@@ -311,62 +445,59 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
         '',
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxDiaChiLength)],
       ],
-      tinhThuaDat: ['', [Validators.required]],
-      huyenThuaDat: ['', [Validators.required]],
-      xaThuaDat: ['', [Validators.required]],
+      tinhThuaDat: [null, [Validators.required]],
+      huyenThuaDat: [null, [Validators.required]],
+      xaThuaDat: [null, [Validators.required]],
 
       duLieuToaDo: ['', [Validators.maxLength(KNTCValidatorConsts.MaxToaDoLength)]],
       duLieuHinhHoc: ['', [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
+      ghiChu: ['', Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
 
-      listKQGQHoSoDeleted: [null],
-      listTepDinhKemHoSosDeleted: [null],
-      concurrencyStamp: [null],
-      kqgqHoSos: this.fb.array([]),
-      tepDinhKemHoSos: this.fb.array([]),
-    });
-  }
-
-  addKQGQHoSo(): void {
-    const kqgqHoSoFormGroup = this.fb.group({
-      lanGQ: [''],
-      ngayTraKQ: ['', Validators.required],
-      thamQuyen: [
+      loaiKhieuNai1: [null],
+      ngayKhieuNai1: [null],
+      bgayTraKQ1: [null],
+      thamQuyen1: [
         '',
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)],
       ],
-      soQD: ['', [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
-      ghiChu: ['', Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
-      ketQua: ['', Validators.required],
+      soQD1: ['', [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      ketQua1: ['', Validators.required],
+
+      loaiKhieuNai2: [null],
+      ngayKhieuNai2: [null],
+      bgayTraKQ2: [null],
+      thamQuyen2: [
+        '',
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)],
+      ],
+      soQD2: ['', [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      ketQua2: ['', Validators.required],
+
+      listFileDeleted: [null],
+      concurrencyStamp: [null],
+      // fileAttachments: this.fb.array([]),
     });
-
-    this.kqgqHoSos.push(kqgqHoSoFormGroup);
   }
 
-  removeKQGQHoSo(index: number): void {
-    this.kqgqHoSos.removeAt(index);
-  }
+  // addTepDinhKemHoSo(): void {
+  //   const tepDinhKemHoSoFormGroup = this.fb.group({
+  //     giaiDoan: ['', Validators.required],
+  //     tenTaiLieu: [
+  //       '',
+  //       [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenTaiLieuLength)],
+  //     ],
+  //     hinhThuc: [null],
+  //     thoiGianBanHanh: [null],
+  //     ngayNhan: [null],
+  //     thuTuButLuc: [
+  //       '',
+  //       [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThuTuButLucLength)],
+  //     ],
+  //     noiDungChinh: [''],
+  //   });
 
-  addTepDinhKemHoSo(): void {
-    const tepDinhKemHoSoFormGroup = this.fb.group({
-      tenTaiLieu: [
-        '',
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenTaiLieuLength)],
-      ],
-      hinhThuc: [
-        '',
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxHinhThucLength)],
-      ],
-      thoiGianBanHanh: [null],
-      ngayNhan: [null],
-      thuTuButLuc: [
-        '',
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThuTuButLucLength)],
-      ],
-      noiDungChinh: [''],
-    });
-
-    this.tepDinhKemHoSos.push(tepDinhKemHoSoFormGroup);
-  }
+  //   this.fileAttachments.push(tepDinhKemHoSoFormGroup);
+  // }
 
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {

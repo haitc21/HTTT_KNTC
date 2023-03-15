@@ -74,7 +74,7 @@ public class ComplainAppService : CrudAppService<
                 && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
                 && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
                 && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
-                && (!input.GiaiDoan.HasValue || (input.GiaiDoan == 1 && x.ngayKhieuNai2 == null) || (input.GiaiDoan == 2 && x.ngayKhieuNai2 != null))
+                && (!input.GiaiDoan.HasValue || (input.GiaiDoan == 1 && x.NgayKhieuNai2 == null) || (input.GiaiDoan == 2 && x.NgayKhieuNai2 != null))
                 && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                 && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
                 );
@@ -118,12 +118,12 @@ public class ComplainAppService : CrudAppService<
                                                   duLieuHinhHoc: input.DuLieuHinhHoc,
                                                   GhiChu: input.GhiChu,
                                                   loaiKhieuNai1: input.loaiKhieuNai1,
-                                                  ngayKhieuNai1: input.ngayKhieuNai1,
+                                                  ngayKhieuNai1: input.NgayKhieuNai1,
                                                   NgayTraKQ1: input.NgayTraKQ1,
                                                   ThamQuyen1: input.ThamQuyen1,
                                                   SoQD1: input.SoQD1,
                                                   loaiKhieuNai2: input.loaiKhieuNai2,
-                                                  ngayKhieuNai2: input.ngayKhieuNai2,
+                                                  ngayKhieuNai2: input.NgayKhieuNai2,
                                                   NgayTraKQ2: input.NgayTraKQ2,
                                                   ThamQuyen2: input.ThamQuyen2,
                                                   SoQD2: input.SoQD2,
@@ -159,9 +159,9 @@ public class ComplainAppService : CrudAppService<
         var complain = await _complainRepo.GetAsync(id, false);
         complain.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
-        if (input.ListTepDinhKemHoSosDeleted.Count > 0)
+        if (input.ListFileDeleted.Count > 0)
         {
-            foreach (var idFileAttach in input.ListTepDinhKemHoSosDeleted)
+            foreach (var idFileAttach in input.ListFileDeleted)
             {
                 await _blobContainer.DeleteAsync(idFileAttach.ToString());
             }
@@ -245,12 +245,12 @@ public class ComplainAppService : CrudAppService<
                                           duLieuHinhHoc: input.DuLieuHinhHoc,
                                           GhiChu: input.GhiChu,
                                           loaiKhieuNai1: input.loaiKhieuNai1,
-                                          ngayKhieuNai1: input.ngayKhieuNai1,
+                                          ngayKhieuNai1: input.NgayKhieuNai1,
                                           NgayTraKQ1: input.NgayTraKQ1,
                                           ThamQuyen1: input.ThamQuyen1,
                                           SoQD1: input.SoQD1,
                                           loaiKhieuNai2: input.loaiKhieuNai2,
-                                          ngayKhieuNai2: input.ngayKhieuNai2,
+                                          ngayKhieuNai2: input.NgayKhieuNai2,
                                           NgayTraKQ2: input.NgayTraKQ2,
                                           ThamQuyen2: input.ThamQuyen2,
                                           SoQD2: input.SoQD2,

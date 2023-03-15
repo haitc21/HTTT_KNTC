@@ -130,14 +130,14 @@ public class KNTCDbContext :
             b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat");
 
             b.Property(x => x.loaiKhieuNai1).HasColumnName("loai_khieu_nai_1");
-            b.Property(x => x.ngayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
+            b.Property(x => x.NgayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
             b.Property(x => x.NgayTraKQ1).HasColumnName("ngay_tra_kq_1");
             b.Property(x => x.ThamQuyen1).HasColumnName("tham_quyen_1").HasMaxLength(KNTCValidatorConsts.MaxThamQuyenLength);
             b.Property(x => x.SoQD1).HasColumnName("so_qd_1").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
             b.Property(x => x.KetQua1).HasColumnName("ket_qua_1");
 
             b.Property(x => x.loaiKhieuNai2).HasColumnName("loai_khieu_nai_2");
-            b.Property(x => x.ngayKhieuNai2).HasColumnName("ngay_khieu_nai_2");
+            b.Property(x => x.NgayKhieuNai2).HasColumnName("ngay_khieu_nai_2");
             b.Property(x => x.NgayTraKQ2).HasColumnName("ngay_tra_kq_2");
             b.Property(x => x.ThamQuyen2).HasColumnName("tham_quyen_2").HasMaxLength(KNTCValidatorConsts.MaxThamQuyenLength);
             b.Property(x => x.SoQD2).HasColumnName("so_qd_2").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
@@ -192,13 +192,13 @@ public class KNTCDbContext :
             b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat");
 
 
-            b.Property(x => x.ngayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
+            b.Property(x => x.NgayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
             b.Property(x => x.NgayTraKQ1).HasColumnName("ngay_tra_kq_1");
             b.Property(x => x.ThamQuyen1).HasColumnName("tham_quyen_1").HasMaxLength(KNTCValidatorConsts.MaxThamQuyenLength);
             b.Property(x => x.SoQD1).HasColumnName("so_qd_1").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
             b.Property(x => x.KetQua1).HasColumnName("ket_qua_1");
 
-            b.Property(x => x.ngayKhieuNai2).HasColumnName("ngay_khieu_nai_2");
+            b.Property(x => x.NgayKhieuNai2).HasColumnName("ngay_khieu_nai_2");
             b.Property(x => x.NgayTraKQ2).HasColumnName("ngay_tra_kq_2");
             b.Property(x => x.ThamQuyen2).HasColumnName("tham_quyen_2").HasMaxLength(KNTCValidatorConsts.MaxThamQuyenLength);
             b.Property(x => x.SoQD2).HasColumnName("so_qd_2").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
