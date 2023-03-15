@@ -98,43 +98,6 @@
           >
           </app-validation-message>
         </div>
-        <!-- ---------------------------------ngayCapCccdCmnd------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-calendar
-              id="ngayCapCccdCmnd"
-              appendTo="body"
-              formControlName="ngayCapCccdCmnd"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-              inputId="dob"
-            ></p-calendar>
-            <label for="dob">Ngày cấp <span class="required">*</span></label>
-            <app-validation-message
-              [entityControl]="formControls.ngayCapCccdCmnd"
-              [validationMessages]="validationMessages.ngayCapCccdCmnd"
-            >
-            </app-validation-message>
-          </span>
-        </div>
-        <!-- ----------------------------noiCapCccdCmnd---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="noiCapCccdCmnd"
-              type="text"
-              pInputText
-              formControlName="noiCapCccdCmnd"
-              [style]="{ width: '100%' }"
-            />
-            <label for="description">Nơi cấp <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.noiCapCccdCmnd"
-            [validationMessages]="validationMessages.noiCapCccdCmnd"
-          >
-          </app-validation-message>
-        </div>
         <!-- ---------------------------------ngaySinh------------------------------------------------- -->
         <div class="field col-12 md:col-6">
           <span class="p-float-label">
@@ -274,13 +237,13 @@
           >
           </app-validation-message>
         </div>
-        <!-- ---------------------------------ngayTiepNhan------------------------------------------------- -->
+        <!-- ---------------------------------thoiGianTiepNhan------------------------------------------------- -->
         <div class="field col-12 md:col-6">
           <span class="p-float-label">
             <p-calendar
-              id="ngayTiepNhan"
+              id="thoiGianTiepNhan"
               appendTo="body"
-              formControlName="ngayTiepNhan"
+              formControlName="thoiGianTiepNhan"
               dateFormat="dd/mm/yy"
               [showIcon]="true"
               inputId="dob"
@@ -288,13 +251,13 @@
             <label for="dob">Ngày tiếp nhận</label>
           </span>
         </div>
-        <!-- ---------------------------------ngayHenTraKQ------------------------------------------------- -->
+        <!-- ---------------------------------thoiGianHenTraKQ------------------------------------------------- -->
         <div class="field col-12 md:col-6">
           <span class="p-float-label">
             <p-calendar
-              id="ngayHenTraKQ"
+              id="thoiGianHenTraKQ"
               appendTo="body"
-              formControlName="ngayHenTraKQ"
+              formControlName="thoiGianHenTraKQ"
               dateFormat="dd/mm/yy"
               [showIcon]="true"
               inputId="dob"

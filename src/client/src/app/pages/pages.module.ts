@@ -42,7 +42,6 @@ import { EnviromentalComplaintComponent } from './enviromental-complaint/envirom
 import { MineralResourceComplaintComponent } from './mineral-resource-complaint/mineral-resource-complaint.component';
 import { WaterResourceComplaintComponent } from './water-resource-complaint/water-resource-complaint.component';
 import { WaterResourcAccusationComponent } from './water-resource-accusation/water-resource-accusation.component';
-import { HoSoDetailComponent } from './hoso-detail/hoso-detail.component';
 import {FieldsetModule} from 'primeng/fieldset';
 
 @NgModule({
@@ -57,8 +56,7 @@ import {FieldsetModule} from 'primeng/fieldset';
     MineralResourceComplaintComponent,
     MineralResourceAccusationComponent,
     WaterResourceComplaintComponent,
-    WaterResourcAccusationComponent,
-    HoSoDetailComponent
+    WaterResourcAccusationComponent
   ],
   imports: [
     PagesRoutingModule,

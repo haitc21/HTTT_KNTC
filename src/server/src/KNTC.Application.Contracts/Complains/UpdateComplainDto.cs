@@ -60,7 +60,7 @@ public class UpdateComplainDto : EntityDto<Guid>, IHasConcurrencyStamp
     public string NoiDungVuViec { get; set; }
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxBoPhanXLLength)]
-    public string boPhanDangXL { get; set; }
+    public string BoPhanDangXL { get; set; }
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxSoThuaLength)]
     public string SoThua { get; set; }

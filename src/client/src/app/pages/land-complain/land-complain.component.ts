@@ -45,7 +45,7 @@ export class LandComplainComponent implements OnInit {
   maTinh: number;
   maHuyen: number;
   maXa: number;
-  NgayTiepNhanRange: Date[];
+  thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
   tinhTrang: number;
 
@@ -149,7 +149,7 @@ export class LandComplainComponent implements OnInit {
 
   loadData(isFirst: boolean = false) {
     this.toggleBlockUI(true);
-    console.log(this.NgayTiepNhanRange);
+    console.log(this.thoiGianTiepNhanRange);
 
     this.filter = {
       skipCount: this.skipCount,
@@ -158,10 +158,10 @@ export class LandComplainComponent implements OnInit {
       maTinhTP: this.maTinh,
       maQuanHuyen: this.maHuyen,
       maXaPhuongTT: this.maXa,
-      fromDate: this.NgayTiepNhanRange ? this.NgayTiepNhanRange[0].toUTCString() : null,
+      fromDate: this.thoiGianTiepNhanRange ? this.thoiGianTiepNhanRange[0].toUTCString() : null,
       toDate:
-        this.NgayTiepNhanRange && this.NgayTiepNhanRange[1]
-          ? this.NgayTiepNhanRange[1].toUTCString()
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+          ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
       linhVuc: LinhVuc.DataDai,
       ketQua: this.tinhTrang,

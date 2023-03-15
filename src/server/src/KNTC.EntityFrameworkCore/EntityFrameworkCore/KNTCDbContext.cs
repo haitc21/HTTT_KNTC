@@ -118,7 +118,7 @@ public class KNTCDbContext :
             b.Property(x => x.ThoiGianTiepNhan).IsRequired().HasColumnName("thoi_gian_tiep_nhan");
             b.Property(x => x.ThoiGianHenTraKQ).IsRequired().HasColumnName("thoi_gian_hen_tra_kq");
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");
-            b.Property(x => x.boPhanDangXL).IsRequired().HasColumnName("bo_phan_dang_xl").HasMaxLength(KNTCValidatorConsts.MaxBoPhanXLLength);
+            b.Property(x => x.BoPhanDangXL).IsRequired().HasColumnName("bo_phan_dang_xl").HasMaxLength(KNTCValidatorConsts.MaxBoPhanXLLength);
 
             b.Property(x => x.SoThua).IsRequired().HasColumnName("so_thua").HasMaxLength(KNTCValidatorConsts.MaxSoThuaLength);
             b.Property(x => x.ToBanDo).IsRequired().HasColumnName("to_ban_do").HasMaxLength(KNTCValidatorConsts.MaxToBanDoLength);
@@ -180,7 +180,7 @@ public class KNTCDbContext :
             b.Property(x => x.ThoiGianTiepNhan).IsRequired().HasColumnName("thoi_gian_tiep_nhan");
             b.Property(x => x.ThoiGianHenTraKQ).IsRequired().HasColumnName("thoi_gian_hen_tra_kq");
             b.Property(x => x.NoiDungVuViec).IsRequired().HasColumnName("noi_dung_vu_viec");
-            b.Property(x => x.boPhanDangXL).IsRequired().HasColumnName("bo_phan_dang_xl").HasMaxLength(KNTCValidatorConsts.MaxBoPhanXLLength);
+            b.Property(x => x.BoPhanDangXL).IsRequired().HasColumnName("bo_phan_dang_xl").HasMaxLength(KNTCValidatorConsts.MaxBoPhanXLLength);
 
             b.Property(x => x.SoThua).IsRequired().HasColumnName("so_thua").HasMaxLength(KNTCValidatorConsts.MaxSoThuaLength);
             b.Property(x => x.ToBanDo).IsRequired().HasColumnName("to_ban_do").HasMaxLength(KNTCValidatorConsts.MaxToBanDoLength);

@@ -1,5 +1,5 @@
-<div class="animated fadeIn grid card">
-  <p-panel #pnl header="Khiếu nại đất đai">
+<div class="animated fadeIn grid card col-12">
+  <p-panel #pnl header="Khiếu nại đất đai" class="col-12">
     <p-toolbar>
       <div class="formgrid grid col-12">
         <div class="field col-12 md:col-3">
@@ -74,12 +74,12 @@
           <span class="p-float-label">
             <p-calendar
               appendTo="body"
-              [(ngModel)]="NgayTiepNhanRange"
+              [(ngModel)]="thoiGianTiepNhanRange"
               selectionMode="range"
               dateFormat="dd/mm/yy"
               [showIcon]="true"
               [showClear]="true"
-              inputId="NgayTiepNhanRange"
+              inputId="thoiGianTiepNhanRange"
               (onSelect)="loadData()"
             ></p-calendar>
             <label for="phoneNumber">Thời gian tiếp nhận</label>

@@ -25,7 +25,7 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public DateTime ThoiGianTiepNhan { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
     public string NoiDungVuViec { get; set; }
-    public string boPhanDangXL { get; set; }
+    public string BoPhanDangXL { get; set; }
     public string SoThua { get; set; }
     public string ToBanDo { get; set; }
     public decimal DienTich { get; set; }

@@ -17,8 +17,6 @@ public class SpatialData : FullAuditedAggregateRoot<int>
     {
 
     }
-    // NotMapped khi chạy DbMigrator
-    //[NotMapped]
     public Geometry Geometry { get; set; }
     public string GeoJson { get; set; }
 }

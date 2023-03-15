@@ -110,7 +110,7 @@ public class DenounceManager : DomainService
             ThoiGianTiepNhan = thoiGianTiepNhan,
             ThoiGianHenTraKQ = thoiGianHenTraKQ,
             NoiDungVuViec = noiDungVuViec,
-            boPhanDangXL = boPhanDangXL,
+            BoPhanDangXL = boPhanDangXL,
             GhiChu = GhiChu,
             SoThua = soThua,
             ToBanDo = toBanDo,
@@ -237,7 +237,7 @@ public class DenounceManager : DomainService
         denounce.ThoiGianTiepNhan = thoiGianTiepNhan;
         denounce.ThoiGianHenTraKQ = thoiGianHenTraKQ;
         denounce.NoiDungVuViec = noiDungVuViec;
-        denounce.boPhanDangXL = boPhanDangXL;
+        denounce.BoPhanDangXL = boPhanDangXL;
         denounce.GhiChu = GhiChu;
 
         denounce.SoThua = soThua;

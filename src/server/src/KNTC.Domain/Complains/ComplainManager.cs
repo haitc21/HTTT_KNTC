@@ -111,7 +111,7 @@ public class ComplainManager : DomainService
             ThoiGianTiepNhan = thoiGianTiepNhan,
             ThoiGianHenTraKQ = thoiGianyHenTraKQ,
             NoiDungVuViec = noiDungVuViec,
-            boPhanDangXL = boPhanDangXL,
+            BoPhanDangXL = boPhanDangXL,
             SoThua = soThua,
             ToBanDo = toBanDo,
             DienTich = dienTich,
@@ -241,7 +241,7 @@ public class ComplainManager : DomainService
         complain.ThoiGianTiepNhan = thoiGianTiepNhan;
         complain.ThoiGianHenTraKQ = thoiGianyHenTraKQ;
         complain.NoiDungVuViec = noiDungVuViec;
-        complain.boPhanDangXL = boPhanDangXL;
+        complain.BoPhanDangXL = boPhanDangXL;
         complain.SoThua = soThua;
         complain.ToBanDo = toBanDo;
         complain.DienTich = dienTich;
