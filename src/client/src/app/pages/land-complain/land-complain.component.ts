@@ -17,6 +17,8 @@ import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
 import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
 import { UtilityService } from 'src/app/shared/services/utility.service';
+import { LandComplainDetailComponent } from './detail/land-complain-detail.component';
+import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
 
 @Component({
   selector: 'app-land-complain',
@@ -58,7 +60,7 @@ export class LandComplainComponent implements OnInit {
     { value: 1, text: 'Khiếu nại lần I' },
     { value: 2, text: 'Khiếu nại lần II' },
   ];
-  loaiKQ = [
+  loaiKQOptions = [
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
@@ -80,13 +82,13 @@ export class LandComplainComponent implements OnInit {
   constructor(
     private oAuthService: OAuthService,
     private authService: AuthService,
-    dialogService: DialogService,
+    private  dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
     private permissionService: PermissionService,
     private complainService: ComplainService,
     private utilService: UtilityService,
-    private unitService: UnitService
+    private unitService: UnitService,
   ) {}
 
   ngOnInit(): void {
@@ -175,10 +177,8 @@ export class LandComplainComponent implements OnInit {
       .subscribe({
         next: (response: PagedResultDto<ComplainDto>) => {
           this.items = response.items;
-          console.log(this.items[0].ketQua1);
-          console.log(this.items[0].ketQua2);
-          console.log(this.items[0].ketQua);
-
+          console.log(this.items);
+          
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
         },
@@ -268,7 +268,20 @@ export class LandComplainComponent implements OnInit {
   setActionItem(item) {
     this.actionItem = item;
   }
+  showAddModal() {
+    const ref = this.dialogService.open(LandComplainDetailComponent, {
+      header: 'Thêm khiếu nại/khiếu kiện',
+      width: DIALOG_BG,
+    });
 
+    ref.onClose.subscribe((data: ComplainDto) => {
+      if (data) {
+        this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
+        this.selectedItems = [];
+        this.loadData();
+      }
+    });
+  }
   showEditModal(row) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
@@ -313,7 +326,7 @@ export class LandComplainComponent implements OnInit {
 
   getLoaiKetQua(kq: any): string {
     if (!kq) return '';
-    return this.loaiKQ.find(x => x.value == kq).text;
+    return this.loaiKQOptions.find(x => x.value == kq).text;
   }
 
   deleteItemsConfirm(ids: any[]) {

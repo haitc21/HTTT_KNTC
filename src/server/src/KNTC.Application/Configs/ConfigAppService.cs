@@ -95,7 +95,6 @@ public class ConfigAppService : CrudAppService<
         return ObjectMapper.Map<Config, ConfigDto>(entity);
     }
 
-    [Authorize(KNTCPermissions.UnitType.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);

@@ -86,7 +86,7 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   showAddModal() {
     const ref = this.dialogService.open(RoleDetailComponent, {
-      header: 'Tạo vai trò',
+      header: 'Thêm vai trò',
       width: DIALOG_SM,
     });
 

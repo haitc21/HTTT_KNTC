@@ -44,6 +44,7 @@ import { WaterResourceComplaintComponent } from './water-resource-complaint/wate
 import { WaterResourcAccusationComponent } from './water-resource-accusation/water-resource-accusation.component';
 import {FieldsetModule} from 'primeng/fieldset';
 import { LandComplainDetailComponent } from './land-complain/detail/land-complain-detail.component';
+import {TabViewModule} from 'primeng/tabview';
 
 @NgModule({
   declarations: [
@@ -94,6 +95,7 @@ import { LandComplainDetailComponent } from './land-complain/detail/land-complai
     InputSwitchModule,
     ChartModule,
     FieldsetModule,
+    TabViewModule
   ],
   exports: [HomeComponent],
 })

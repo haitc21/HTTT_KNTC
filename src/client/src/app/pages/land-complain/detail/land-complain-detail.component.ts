@@ -13,6 +13,7 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
   templateUrl: './land-complain-detail.component.html',
+  styleUrls: ['./land-complain-detail.component.scss'],
 })
 export class LandComplainDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
@@ -86,7 +87,7 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     //   },
     // ],
     ngaySinh: [{ type: 'required', message: 'Ngày sinh không được để trống' }],
-    dienThaoi: [
+    dienThoai: [
       { type: 'required', message: 'Số điện thoại không được để trống' },
       { type: 'pattern', message: 'Số điện thoại không chính xác' },
     ],
@@ -357,67 +358,52 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.toggleBlockUI(true);
-    if (this.utilService.isEmpty(this.config.data?.id)) {
-      this.complainService
-        .create(this.form.value)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          data => {
-            this.ref.close(data);
-            this.toggleBlockUI(false);
-          },
-          err => {
-            this.toggleBlockUI(false);
-          }
-        );
-    } else {
-      this.complainService
-        .update(this.config.data.id, this.form.value)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          data => {
-            this.toggleBlockUI(false);
-            this.ref.close(data);
-          },
-          err => {
-            this.toggleBlockUI(false);
-          }
-        );
-    }
+    let obs$ = this.utilService.isEmpty(this.config.data?.id)
+      ? this.complainService.create(this.form.value)
+      : this.complainService.update(this.config.data.id, this.form.value);
+    obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+      data => {
+        this.toggleBlockUI(false);
+        this.ref.close(data);
+      },
+      err => {
+        this.toggleBlockUI(false);
+      }
+    );
   }
 
   buildForm() {
     this.form = this.fb.group({
       maHoSo: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxMaHoSoLength)],
       ],
       tieuDe: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTieuDeLength)],
       ],
       nguoiDeNghi: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxNguoiDeNghiLength)],
       ],
       cccdCmnd: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxCccdCmndLength)],
       ],
-      // ngayCapCccdCmnd: ['', [Validators.required]],
+      // ngayCapCccdCmnd: [null, [Validators.required]],
       // noiCapCccdCmnd: [
-      //   '',
+      //   null,
       //   [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxNoiCapCccdCmnd)],
       // ],
-      ngaySinh: ['', [Validators.required]],
-      dienThaoi: [null, [Validators.required, Validators.pattern('^(0[0-9]{9}|\\+84[0-9]{9})$')]],
+      ngaySinh: [null, [Validators.required]],
+      dienThoai: [null, [Validators.required, Validators.pattern('^(0[0-9]{9}|\\+84[0-9]{9})$')]],
       email: [null, [Validators.email]],
       diaChiThuongTru: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxDiaChiLength)],
       ],
       diaChiLienHe: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxDiaChiLength)],
       ],
       maTinhTP: [null, [Validators.required]],
@@ -426,74 +412,74 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       linhVuc: [LinhVuc.DataDai],
       thoiGianTiepNhan: [null, [Validators.required]],
       thoiGianHenTraKQ: [null, [Validators.required]],
-      noiDungVuViec: ['', [Validators.required]],
+      noiDungVuViec: [null, [Validators.required]],
       boPhanDangXL: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxBoPhanXLLength)],
       ],
       soThua: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoThuaLength)],
       ],
       toBanDo: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxToBanDoLength)],
       ],
       dienTich: [null, [Validators.required]],
       loaiDat: [null, [Validators.required]],
       diaChiThuaDat: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxDiaChiLength)],
       ],
       tinhThuaDat: [null, [Validators.required]],
       huyenThuaDat: [null, [Validators.required]],
       xaThuaDat: [null, [Validators.required]],
 
-      duLieuToaDo: ['', [Validators.maxLength(KNTCValidatorConsts.MaxToaDoLength)]],
-      duLieuHinhHoc: ['', [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
-      ghiChu: ['', Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
+      duLieuToaDo: [null, [Validators.maxLength(KNTCValidatorConsts.MaxToaDoLength)]],
+      duLieuHinhHoc: [null, [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
+      ghiChu: [null, Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
 
-      loaiKhieuNai1: [null],
-      ngayKhieuNai1: [null],
-      bgayTraKQ1: [null],
+      loaiKhieuNai1: [],
+      ngayKhieuNai1: [],
+      ngayTraKQ1: [],
       thamQuyen1: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)],
       ],
-      soQD1: ['', [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
-      ketQua1: ['', Validators.required],
+      soQD1: [null, [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      ketQua1: [],
 
-      loaiKhieuNai2: [null],
-      ngayKhieuNai2: [null],
-      bgayTraKQ2: [null],
+      loaiKhieuNai2: [],
+      ngayKhieuNai2: [],
+      ngayTraKQ2: [],
       thamQuyen2: [
-        '',
+        null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)],
       ],
-      soQD2: ['', [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
-      ketQua2: ['', Validators.required],
+      soQD2: [null, [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      ketQua2: [],
 
-      listFileDeleted: [null],
-      concurrencyStamp: [null],
+      listFileDeleted: [],
+      concurrencyStamp: [],
       // fileAttachments: this.fb.array([]),
     });
   }
 
   // addTepDinhKemHoSo(): void {
   //   const tepDinhKemHoSoFormGroup = this.fb.group({
-  //     giaiDoan: ['', Validators.required],
+  //     giaiDoan: [null, Validators.required],
   //     tenTaiLieu: [
-  //       '',
+  //       null,
   //       [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenTaiLieuLength)],
   //     ],
-  //     hinhThuc: [null],
-  //     thoiGianBanHanh: [null],
-  //     ngayNhan: [null],
+  //     hinhThuc: [],
+  //     thoiGianBanHanh: [],
+  //     ngayNhan: [],
   //     thuTuButLuc: [
-  //       '',
+  //       null,
   //       [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThuTuButLucLength)],
   //     ],
-  //     noiDungChinh: [''],
+  //     noiDungChinh: [],
   //   });
 
   //   this.fileAttachments.push(tepDinhKemHoSoFormGroup);
