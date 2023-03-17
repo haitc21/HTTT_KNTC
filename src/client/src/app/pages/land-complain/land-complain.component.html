@@ -77,10 +77,10 @@
               [(ngModel)]="thoiGianTiepNhanRange"
               selectionMode="range"
               dateFormat="dd/mm/yy"
-              [showIcon]="true"
               [showClear]="true"
               inputId="thoiGianTiepNhanRange"
-              (onSelect)="loadData()"
+              (onSelect)="thoiGiantiepNhanChange()"
+              (onClear)="thoiGiantiepNhanChange()"
             ></p-calendar>
             <label for="phoneNumber">Thời gian tiếp nhận</label>
           </span>
@@ -105,7 +105,7 @@
         <div class="field col-12 md:col-3">
           <span class="p-float-label">
             <p-dropdown
-              [options]="loaiKQ"
+              [options]="loaiKQOptions"
               [(ngModel)]="tinhTrang"
               optionLabel="text"
               optionValue="value"
@@ -131,9 +131,10 @@
           type="button"
           pButton
           pRipple
-          label="Thêm hồ sơ"
+          label="Thêm"
           icon="pi pi-file"
           class="p-button-info mr-2"
+          (click)="showAddModal()"
         ></button>
         <button
           type="button"

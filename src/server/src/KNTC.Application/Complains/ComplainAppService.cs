@@ -131,7 +131,7 @@ public class ComplainAppService : CrudAppService<
                                                   KetQua2: input.KetQua2);
         await _complainRepo.InsertAsync(complain);
 
-        if (input.FileAttachments.Count > 0)
+        if (input.FileAttachments != null && input.FileAttachments.Count > 0)
         {
             foreach (var item in input.FileAttachments)
             {
@@ -166,7 +166,7 @@ public class ComplainAppService : CrudAppService<
                 await _blobContainer.DeleteAsync(idFileAttach.ToString());
             }
         }
-        if (input.FileAttachments.Count > 0)
+        if (input.FileAttachments != null && input.FileAttachments.Count > 0)
         {
             foreach (var fileAttach in input.FileAttachments)
             {

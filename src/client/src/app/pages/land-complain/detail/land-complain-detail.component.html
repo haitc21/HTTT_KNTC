@@ -5,696 +5,742 @@
   (ngSubmit)="saveChange()"
 >
   <p-panel #pnlDetail [collapsed]="false">
-    <div class="formgrid grid">
-      <!-- -------------------------------Thông tin khiếu nại/khiếu kiện--------------------------------------------------- -->
-      <p-fieldset legend="Thông tin khiếu nại/khiếu kiện" [toggleable]="true">
-        <!-- -------------------------------maHoSo--------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="maHoSo"
-              formControlName="maHoSo"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="name">Mã hồ sơ <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.maHoSo"
-            [validationMessages]="validationMessages.maHoSo"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------tieuDe---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="tieuDe"
-              formControlName="tieuDe"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="description">Tiêu đề <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.tieuDe"
-            [validationMessages]="validationMessages.tieuDe"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------nguoiDeNghi---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="nguoiDeNghi"
-              formControlName="nguoiDeNghi"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="description">Người đề nghị <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.tieuDe"
-            [validationMessages]="validationMessages.tieuDe"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------cccdCmnd---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="cccdCmnd"
-              formControlName="cccdCmnd"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="description">CCCD/CMND <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.cccdCmnd"
-            [validationMessages]="validationMessages.cccdCmnd"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ---------------------------------ngaySinh------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-calendar
-              id="ngaySinh"
-              formControlName="ngaySinh"
-              appendTo="body"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-              inputId="dob"
-            ></p-calendar>
-            <label for="dob">Ngày sinh <span class="required">*</span></label>
-            <app-validation-message
-              [entityControl]="formControls.ngaySinh"
-              [validationMessages]="validationMessages.ngaySinh"
-            >
-            </app-validation-message>
-          </span>
-        </div>
-        <!-- ------------------------------dienThaoi---------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="dienThaoi"
-              formControlName="dienThaoi"
-              type="text"
-              dienThaoi
-              class="w-full"
-            />
-            <label for="phoneNumber">Số ĐT<span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.dienThaoi"
-            [validationMessages]="validationMessages.dienThaoi"
-          >
-          </app-validation-message>
-        </div>
-        <!-- -----------------------------email----------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input id="email" formControlName="email" type="text" pInputText class="w-full" />
-            <label for="email">Email</label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.email"
-            [validationMessages]="validationMessages.email"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------maTinhTP---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="maTinhTP"
-              formControlName="maTinhTP"
-              [options]="tinhOptions"
-              optionLabel="unitName"
-              optionValue="id"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="unitName"
-              styleClass="w-full"
-              (onChange)="inhChange($event)"
-            ></p-dropdown>
-            <label for="description">Tỉnh/TP <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.maTinhTP"
-            [validationMessages]="validationMessages.maTinhTP"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------maQuanHuyen---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="maQuanHuyen"
-              formControlName="maQuanHuyen"
-              [options]="huyenOptions"
-              optionLabel="unitName"
-              optionValue="id"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="unitName"
-              styleClass="w-full"
-              (onChange)="huyenChange($event)"
-            ></p-dropdown>
-            <label for="description">Quận/Huyện <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.maQuanHuyen"
-            [validationMessages]="validationMessages.maQuanHuyen"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------maXaPhuongTT---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="maXaPhuongTT"
-              formControlName="maXaPhuongTT"
-              [options]="xaOptions"
-              optionLabel="unitName"
-              optionValue="id"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="unitName"
-              styleClass="w-full"
-            ></p-dropdown>
-            <label for="description">Xã/Phường/TT <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.maXaPhuongTT"
-            [validationMessages]="validationMessages.maXaPhuongTT"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------diaChiThuongTru---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <textarea
-              id="diaChiThuongTru"
-              formControlName="diaChiThuongTru"
-              [rows]="10"
-              pInputTextarea
-            ></textarea>
-            <label for="description">Địau chỉ thường trú <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.diaChiThuongTru"
-            [validationMessages]="validationMessages.diaChiThuongTru"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------diaChiLienHe---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <textarea
-              id="diaChiLienHe"
-              formControlName="diaChiLienHe"
-              [rows]="10"
-              pInputTextarea
-            ></textarea>
-            <label for="description">Địau chỉ liên hệ <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.diaChiLienHe"
-            [validationMessages]="validationMessages.diaChiLienHe"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ---------------------------------thoiGianTiepNhan------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-calendar
-              id="thoiGianTiepNhan"
-              formControlName="thoiGianTiepNhan"
-              appendTo="body"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-              showTime="true"
-              [hourFormat]="24"
-            ></p-calendar>
-            <label for="dob">Ngày tiếp nhận</label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.thoiGianTiepNhan"
-            [validationMessages]="validationMessages.thoiGianTiepNhan"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ---------------------------------thoiGianHenTraKQ------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-calendar
-              id="thoiGianHenTraKQ"
-              formControlName="thoiGianHenTraKQ"
-              appendTo="body"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-              showTime="true"
-              [hourFormat]="24"
-            ></p-calendar>
-            <label for="dob">Ngày hẹn trả kết quả</label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.thoiGianHenTraKQ"
-            [validationMessages]="validationMessages.thoiGianHenTraKQ"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------boPhanDangXL---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="boPhanDangXL"
-              formControlName="boPhanDangXL"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="description">Bộ phận đang XL <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.boPhanDangXL"
-            [validationMessages]="validationMessages.boPhanDangXL"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-12">
-          <span class="p-float-label">
-            <textarea
-              id="description"
-              formControlName="noiDungVuViec"
-              [rows]="10"
-              pInputTextarea
-            ></textarea>
-            <label for="description">Nội dung KN?KK <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.noiDungVuViec"
-            [validationMessages]="validationMessages.noiDungVuViec"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-12">
-          <span class="p-float-label">
-            <textarea id="ghiChu" formControlName="ghiChu" [rows]="10" pInputTextarea></textarea>
-            <label for="description">Ghi chú</label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.ghiChu"
-            [validationMessages]="validationMessages.ghiChu"
-          >
-          </app-validation-message>
-        </div>
-      </p-fieldset>
-      <!-- -------------------------------Thông tin thửa đất--------------------------------------------------- -->
-      <p-fieldset legend="Thông tin khiếu nại/khiếu kiện" [toggleable]="true">
-        <!-- ----------------------------soThua---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="soThua"
-              formControlName="soThua"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="description">Số thửa <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.soThua"
-            [validationMessages]="validationMessages.soThua"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------toBanDo---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="toBanDo"
-              formControlName="toBanDo"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="description">Tờ bản đồ <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.toBanDo"
-            [validationMessages]="validationMessages.toBanDo"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------dienTich---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="dienTich"
-              formControlName="dienTich"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="description">Diện tích <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.dienTich"
-            [validationMessages]="validationMessages.dienTich"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------loaiDat---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="loaiDat"
-              formControlName="loaiDat"
-              [options]="landTypeOptions"
-              optionLabel="landTypeName"
-              optionValue="id"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="landTypeName"
-              styleClass="w-full"
-            ></p-dropdown>
-            <label for="description">loại đất <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.loaiDat"
-            [validationMessages]="validationMessages.loaiDat"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------tinhThuaDat---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="tinhThuaDat"
-              formControlName="tinhThuaDat"
-              [options]="tinhOptions"
-              optionLabel="unitName"
-              optionValue="id"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="unitName"
-              styleClass="w-full"
-              (onChange)="inhThuaDatChange($event)"
-            ></p-dropdown>
-            <label for="description">Tỉnh/TP <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.tinhThuaDat"
-            [validationMessages]="validationMessages.tinhThuaDat"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------huyenThuaDat---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="huyenThuaDat"
-              formControlName="huyenThuaDat"
-              [options]="huyenThuaDateOptions"
-              optionLabel="unitName"
-              optionValue="id"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="unitName"
-              styleClass="w-full"
-              (onChange)="huyenThuaDatChange($event)"
-            ></p-dropdown>
-            <label for="description">Quận/Huyện <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.huyenThuaDat"
-            [validationMessages]="validationMessages.huyenThuaDat"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------xaThuaDat---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="xaThuaDat"
-              formControlName="xaThuaDat"
-              [options]="xaThuaDatOptions"
-              optionLabel="unitName"
-              optionValue="id"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="unitName"
-              styleClass="w-full"
-            ></p-dropdown>
-            <label for="description">Xã/Phường/TT<span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.xaThuaDat"
-            [validationMessages]="validationMessages.xaThuaDat"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------diaChiThuaDat---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-12">
-          <span class="p-float-label">
-            <textarea
-              id="diaChiThuaDat"
-              formControlName="diaChiThuaDat"
-              [rows]="10"
-              pInputTextarea
-            ></textarea>
-            <label for="description">Địa chỉ thửa đất <span class="required">*</span></label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.diaChiThuaDat"
-            [validationMessages]="validationMessages.diaChiThuaDat"
-          >
-          </app-validation-message>
-        </div>
-      </p-fieldset>
+    <div class="card">
+      <p-tabView styleClass="tabview-custom">
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <i class="pi pi-fw pi-envelope mr-2"></i>
+            <span>Hồ sơ khiếu nại</span>
+          </ng-template>
+          <div class="formgrid grid">
+            <!-- -------------------------------Thông tin khiếu nại/khiếu kiện--------------------------------------------------- -->
+            <p-fieldset legend="Thông tin khiếu nại/khiếu kiện" [toggleable]="true" class="w-full">
+              <div class="grid">
+                <!-- -------------------------------maHoSo--------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="maHoSo"
+                      formControlName="maHoSo"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="name">Mã hồ sơ <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.maHoSo"
+                    [validationMessages]="validationMessages.maHoSo"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------tieuDe---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="tieuDe"
+                      formControlName="tieuDe"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="description">Tiêu đề <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.tieuDe"
+                    [validationMessages]="validationMessages.tieuDe"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------nguoiDeNghi---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="nguoiDeNghi"
+                      formControlName="nguoiDeNghi"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="description">Người đề nghị <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.tieuDe"
+                    [validationMessages]="validationMessages.tieuDe"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------cccdCmnd---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="cccdCmnd"
+                      formControlName="cccdCmnd"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="description">CCCD/CMND <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.cccdCmnd"
+                    [validationMessages]="validationMessages.cccdCmnd"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ---------------------------------ngaySinh------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-calendar
+                      id="ngaySinh"
+                      formControlName="ngaySinh"
+                      appendTo="body"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                      inputId="dob"
+                    ></p-calendar>
+                    <label for="dob">Ngày sinh <span class="required">*</span></label>
+                    <app-validation-message
+                      [entityControl]="formControls.ngaySinh"
+                      [validationMessages]="validationMessages.ngaySinh"
+                    >
+                    </app-validation-message>
+                  </span>
+                </div>
+                <!-- ------------------------------dienThoai---------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="dienThoai"
+                      formControlName="dienThoai"
+                      type="text"
+                      pInputText
+                      class="w-full"
+                    />
+                    <label for="phoneNumber">Số ĐT<span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.dienThoai"
+                    [validationMessages]="validationMessages.dienThoai"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- -----------------------------email----------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="email"
+                      formControlName="email"
+                      type="text"
+                      pInputText
+                      class="w-full"
+                    />
+                    <label for="email">Email</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.email"
+                    [validationMessages]="validationMessages.email"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------maTinhTP---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="maTinhTP"
+                      formControlName="maTinhTP"
+                      [options]="tinhOptions"
+                      optionLabel="unitName"
+                      optionValue="id"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      [filter]="true"
+                      filterBy="unitName"
+                      styleClass="w-full"
+                      (onChange)="inhChange($event)"
+                    ></p-dropdown>
+                    <label for="description">Tỉnh/TP <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.maTinhTP"
+                    [validationMessages]="validationMessages.maTinhTP"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------maQuanHuyen---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="maQuanHuyen"
+                      formControlName="maQuanHuyen"
+                      [options]="huyenOptions"
+                      optionLabel="unitName"
+                      optionValue="id"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      [filter]="true"
+                      filterBy="unitName"
+                      styleClass="w-full"
+                      (onChange)="huyenChange($event)"
+                    ></p-dropdown>
+                    <label for="description">Quận/Huyện <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.maQuanHuyen"
+                    [validationMessages]="validationMessages.maQuanHuyen"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------maXaPhuongTT---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="maXaPhuongTT"
+                      formControlName="maXaPhuongTT"
+                      [options]="xaOptions"
+                      optionLabel="unitName"
+                      optionValue="id"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      [filter]="true"
+                      filterBy="unitName"
+                      styleClass="w-full"
+                    ></p-dropdown>
+                    <label for="description">Xã/Phường/TT <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.maXaPhuongTT"
+                    [validationMessages]="validationMessages.maXaPhuongTT"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------diaChiThuongTru---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-12">
+                  <span class="p-float-label">
+                    <textarea
+                      id="diaChiThuongTru"
+                      formControlName="diaChiThuongTru"
+                      [rows]="5"
+                      pInputTextarea
+                      class="w-full"
+                    ></textarea>
+                    <label for="description"
+                      >Địau chỉ thường trú <span class="required">*</span></label
+                    >
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.diaChiThuongTru"
+                    [validationMessages]="validationMessages.diaChiThuongTru"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------diaChiLienHe---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-">
+                  <span class="p-float-label">
+                    <textarea
+                      id="diaChiLienHe"
+                      formControlName="diaChiLienHe"
+                      [rows]="5"
+                      pInputTextarea
+                      class="w-full"
+                    ></textarea>
+                    <label for="description"
+                      >Địau chỉ liên hệ <span class="required">*</span></label
+                    >
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.diaChiLienHe"
+                    [validationMessages]="validationMessages.diaChiLienHe"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ---------------------------------thoiGianTiepNhan------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-calendar
+                      id="thoiGianTiepNhan"
+                      formControlName="thoiGianTiepNhan"
+                      appendTo="body"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                      showTime="true"
+                      [hourFormat]="24"
+                    ></p-calendar>
+                    <label for="dob">Thời gian tiếp nhận</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.thoiGianTiepNhan"
+                    [validationMessages]="validationMessages.thoiGianTiepNhan"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ---------------------------------thoiGianHenTraKQ------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-calendar
+                      id="thoiGianHenTraKQ"
+                      formControlName="thoiGianHenTraKQ"
+                      appendTo="body"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                      showTime="true"
+                      [hourFormat]="24"
+                    ></p-calendar>
+                    <label for="dob">Thời gian hẹn trả kết quả</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.thoiGianHenTraKQ"
+                    [validationMessages]="validationMessages.thoiGianHenTraKQ"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------boPhanDangXL---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="boPhanDangXL"
+                      formControlName="boPhanDangXL"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="description">Bộ phận đang XL <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.boPhanDangXL"
+                    [validationMessages]="validationMessages.boPhanDangXL"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-12">
+                  <span class="p-float-label">
+                    <textarea
+                      id="description"
+                      formControlName="noiDungVuViec"
+                      [rows]="5"
+                      pInputTextarea
+                      class="w-full"
+                    ></textarea>
+                    <label for="description">Nội dung KN?KK <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.noiDungVuViec"
+                    [validationMessages]="validationMessages.noiDungVuViec"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-12">
+                  <span class="p-float-label">
+                    <textarea
+                      id="ghiChu"
+                      formControlName="ghiChu"
+                      [rows]="5"
+                      pInputTextarea
+                      class="w-full"
+                    ></textarea>
+                    <label for="description">Ghi chú</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.ghiChu"
+                    [validationMessages]="validationMessages.ghiChu"
+                  >
+                  </app-validation-message>
+                </div>
+              </div>
+            </p-fieldset>
+            <!-- -------------------------------Thông tin thửa đất--------------------------------------------------- -->
+            <p-fieldset legend="Thông tin khiếu nại/khiếu kiện" [toggleable]="true" class="w-full">
+              <div class="grid">
+                <!-- ----------------------------soThua---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="soThua"
+                      formControlName="soThua"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="description">Số thửa <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.soThua"
+                    [validationMessages]="validationMessages.soThua"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------toBanDo---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="toBanDo"
+                      formControlName="toBanDo"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="description">Tờ bản đồ <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.toBanDo"
+                    [validationMessages]="validationMessages.toBanDo"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------dienTich---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="dienTich"
+                      formControlName="dienTich"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="description">Diện tích <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.dienTich"
+                    [validationMessages]="validationMessages.dienTich"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------loaiDat---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="loaiDat"
+                      formControlName="loaiDat"
+                      [options]="landTypeOptions"
+                      optionLabel="landTypeName"
+                      optionValue="id"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      [filter]="true"
+                      filterBy="landTypeName"
+                      styleClass="w-full"
+                    ></p-dropdown>
+                    <label for="description">loại đất <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.loaiDat"
+                    [validationMessages]="validationMessages.loaiDat"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------tinhThuaDat---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="tinhThuaDat"
+                      formControlName="tinhThuaDat"
+                      [options]="tinhOptions"
+                      optionLabel="unitName"
+                      optionValue="id"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      [filter]="true"
+                      filterBy="unitName"
+                      styleClass="w-full"
+                      (onChange)="inhThuaDatChange($event)"
+                    ></p-dropdown>
+                    <label for="description">Tỉnh/TP <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.tinhThuaDat"
+                    [validationMessages]="validationMessages.tinhThuaDat"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------huyenThuaDat---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="huyenThuaDat"
+                      formControlName="huyenThuaDat"
+                      [options]="huyenThuaDateOptions"
+                      optionLabel="unitName"
+                      optionValue="id"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      [filter]="true"
+                      filterBy="unitName"
+                      styleClass="w-full"
+                      (onChange)="huyenThuaDatChange($event)"
+                    ></p-dropdown>
+                    <label for="description">Quận/Huyện <span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.huyenThuaDat"
+                    [validationMessages]="validationMessages.huyenThuaDat"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------xaThuaDat---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="xaThuaDat"
+                      formControlName="xaThuaDat"
+                      [options]="xaThuaDatOptions"
+                      optionLabel="unitName"
+                      optionValue="id"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      [filter]="true"
+                      filterBy="unitName"
+                      styleClass="w-full"
+                    ></p-dropdown>
+                    <label for="description">Xã/Phường/TT<span class="required">*</span></label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.xaThuaDat"
+                    [validationMessages]="validationMessages.xaThuaDat"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------diaChiThuaDat---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-12">
+                  <span class="p-float-label">
+                    <textarea
+                      id="diaChiThuaDat"
+                      formControlName="diaChiThuaDat"
+                      [rows]="5"
+                      pInputTextarea
+                      class="w-full"
+                    ></textarea>
+                    <label for="description"
+                      >Địa chỉ thửa đất <span class="required">*</span></label
+                    >
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.diaChiThuaDat"
+                    [validationMessages]="validationMessages.diaChiThuaDat"
+                  >
+                  </app-validation-message>
+                </div>
+              </div>
+            </p-fieldset>
 
-      <!-- -------------------------------Thông tin giải quyết lần I--------------------------------------------------- -->
-      <p-fieldset legend="Thông tin giải quyết lần I" [toggleable]="true">
-        <!-- ----------------------------loaiKhieuNai1---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="loaiKhieuNai1"
-              formControlName="loaiKhieuNai1"
-              [options]="loaiKhieuNaiOptions"
-              optionLabel="text"
-              optionValue="value"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="text"
-              styleClass="w-full"
-            ></p-dropdown>
-            <label for="description">Khiếu nại/Khiếu kiện</label>
-          </span>
-        </div>
-        <!-- ---------------------------------ngayKhieuNai1------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-calendar
-              id="ngayKhieuNai1"
-              formControlName="ngayKhieuNai1"
-              appendTo="body"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-            ></p-calendar>
-            <label for="dob">Ngày QĐ GQKN</label>
-          </span>
-        </div>
-        <!-- ---------------------------------bgayTraKQ1------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-calendar
-              id="bgayTraKQ1"
-              formControlName="bgayTraKQ1"
-              appendTo="body"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-            ></p-calendar>
-            <label for="dob">Ngày trả kết quả</label>
-          </span>
-        </div>
-        <!-- -------------------------------thamQuyen1--------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="thamQuyen1"
-              formControlName="thamQuyen1"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="name">Thẩm quyền GQKN</label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.thamQuyen1"
-            [validationMessages]="validationMessages.thamQuyen"
-          >
-          </app-validation-message>
-        </div>
-        <!-- -------------------------------soQD1--------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="soQD1"
-              formControlName="soQD1"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="name">Số QĐ GQKN</label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.soQD1"
-            [validationMessages]="validationMessages.soQD"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------ketQua1---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="ketQua1"
-              formControlName="ketQua1"
-              [options]="loaiKQOPtions"
-              optionLabel="text"
-              optionValue="value"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="text"
-              styleClass="w-full"
-            ></p-dropdown>
-            <label for="description">Kết quả GQKN</label>
-          </span>
-        </div>
-      </p-fieldset>
+            <!-- -------------------------------Thông tin giải quyết lần I--------------------------------------------------- -->
+            <p-fieldset legend="Thông tin giải quyết lần I" [toggleable]="true" class="w-full">
+              <div class="grid">
+                <!-- ----------------------------loaiKhieuNai1---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="loaiKhieuNai1"
+                      formControlName="loaiKhieuNai1"
+                      [options]="loaiKhieuNaiOptions"
+                      optionLabel="text"
+                      optionValue="value"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      styleClass="w-full"
+                    ></p-dropdown>
+                    <label for="description">Khiếu nại/Khiếu kiện</label>
+                  </span>
+                </div>
+                <!-- ---------------------------------ngayKhieuNai1------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-calendar
+                      id="ngayKhieuNai1"
+                      formControlName="ngayKhieuNai1"
+                      appendTo="body"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                    ></p-calendar>
+                    <label for="dob">Ngày QĐ GQKN</label>
+                  </span>
+                </div>
+                <!-- ---------------------------------ngayTraKQ1------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-calendar
+                      id="ngayTraKQ1"
+                      formControlName="ngayTraKQ1"
+                      appendTo="body"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                    ></p-calendar>
+                    <label for="dob">Ngày trả kết quả</label>
+                  </span>
+                </div>
+                <!-- -------------------------------thamQuyen1--------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="thamQuyen1"
+                      formControlName="thamQuyen1"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="name">Thẩm quyền GQKN</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.thamQuyen1"
+                    [validationMessages]="validationMessages.thamQuyen"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- -------------------------------soQD1--------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="soQD1"
+                      formControlName="soQD1"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="name">Số QĐ GQKN</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.soQD1"
+                    [validationMessages]="validationMessages.soQD"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------ketQua1---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="ketQua1"
+                      formControlName="ketQua1"
+                      [options]="loaiKQOPtions"
+                      optionLabel="text"
+                      optionValue="value"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      styleClass="w-full"
+                    ></p-dropdown>
+                    <label for="description">Kết quả GQKN</label>
+                  </span>
+                </div>
+              </div>
+            </p-fieldset>
 
-      <!-- -------------------------------Thông tin giải quyết lần II--------------------------------------------------- -->
-      <p-fieldset legend="Thông tin giải quyết lần II" [toggleable]="true">
-        <!-- ----------------------------loaiKhieuNai2---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="loaiKhieuNai2"
-              formControlName="loaiKhieuNai2"
-              [options]="loaiKhieuNaiOptions"
-              optionLabel="text"
-              optionValue="value"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="text"
-              styleClass="w-full"
-            ></p-dropdown>
-            <label for="description">Khiếu nại/Khiếu kiện</label>
-          </span>
-        </div>
-        <!-- ---------------------------------ngayKhieuNai2------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-calendar
-              id="ngayKhieuNai2"
-              formControlName="ngayKhieuNai2"
-              appendTo="body"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-            ></p-calendar>
-            <label for="dob">Ngày QĐ GQKN</label>
-          </span>
-        </div>
-        <!-- ---------------------------------bgayTraKQ2------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-calendar
-              id="bgayTraKQ2"
-              formControlName="bgayTraKQ2"
-              appendTo="body"
-              dateFormat="dd/mm/yy"
-              [showIcon]="true"
-            ></p-calendar>
-            <label for="dob">Ngày trả kết quả</label>
-          </span>
-        </div>
-        <!-- -------------------------------thamQuyen2--------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="thamQuyen2"
-              formControlName="thamQuyen2"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="name">Thẩm quyền GQKN</label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.thamQuyen2"
-            [validationMessages]="validationMessages.thamQuyen"
-          >
-          </app-validation-message>
-        </div>
-        <!-- -------------------------------soQD2--------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <input
-              id="soQD2"
-              formControlName="soQD2"
-              type="text"
-              pInputText
-              [style]="{ width: '100%' }"
-            />
-            <label for="name">Số QĐ GQKN</label>
-          </span>
-          <app-validation-message
-            [entityControl]="formControls.soQD2"
-            [validationMessages]="validationMessages.soQD"
-          >
-          </app-validation-message>
-        </div>
-        <!-- ----------------------------ketQua2---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-6">
-          <span class="p-float-label">
-            <p-dropdown
-              id="ketQua2"
-              formControlName="ketQua2"
-              [options]="loaiKQOPtions"
-              optionLabel="text"
-              optionValue="value"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="text"
-              styleClass="w-full"
-            ></p-dropdown>
-            <label for="description">Kết quả GQKN</label>
-          </span>
-        </div>
-      </p-fieldset>
-      <!-- ---------------------------------------------------------------------------------- -->
+            <!-- -------------------------------Thông tin giải quyết lần II--------------------------------------------------- -->
+            <p-fieldset legend="Thông tin giải quyết lần II" [toggleable]="true" class="w-full">
+              <div class="grid">
+                <!-- ----------------------------loaiKhieuNai2---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="loaiKhieuNai2"
+                      formControlName="loaiKhieuNai2"
+                      [options]="loaiKhieuNaiOptions"
+                      optionLabel="text"
+                      optionValue="value"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      styleClass="w-full"
+                    ></p-dropdown>
+                    <label for="description">Khiếu nại/Khiếu kiện</label>
+                  </span>
+                </div>
+                <!-- ---------------------------------ngayKhieuNai2------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-calendar
+                      id="ngayKhieuNai2"
+                      formControlName="ngayKhieuNai2"
+                      appendTo="body"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                    ></p-calendar>
+                    <label for="dob">Ngày QĐ GQKN</label>
+                  </span>
+                </div>
+                <!-- ---------------------------------ngayTraKQ2------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-calendar
+                      id="ngayTraKQ2"
+                      formControlName="ngayTraKQ2"
+                      appendTo="body"
+                      dateFormat="dd/mm/yy"
+                      [showIcon]="true"
+                    ></p-calendar>
+                    <label for="dob">Ngày trả kết quả</label>
+                  </span>
+                </div>
+                <!-- -------------------------------thamQuyen2--------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="thamQuyen2"
+                      formControlName="thamQuyen2"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="name">Thẩm quyền GQKN</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.thamQuyen2"
+                    [validationMessages]="validationMessages.thamQuyen"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- -------------------------------soQD2--------------------------------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="soQD2"
+                      formControlName="soQD2"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="name">Số QĐ GQKN</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.soQD2"
+                    [validationMessages]="validationMessages.soQD"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- ----------------------------ketQua2---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="ketQua2"
+                      formControlName="ketQua2"
+                      [options]="loaiKQOPtions"
+                      optionLabel="text"
+                      optionValue="value"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      styleClass="w-full"
+                    ></p-dropdown>
+                    <label for="description">Kết quả GQKN</label>
+                  </span>
+                </div>
+              </div>
+            </p-fieldset>
+            <!-- ---------------------------------------------------------------------------------- -->
+          </div>
+        </p-tabPanel>
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <i class="pi pi-folder mr-2"></i>
+            <span>Tệp gắn kèm</span>
+          </ng-template>
+          <app-file-attachment></app-file-attachment>
+        </p-tabPanel>
+        <p-tabPanel>
+          <ng-template pTemplate="header">
+            <i class="pi pi-fw pi-map-marker mr-2"></i>
+            <span>Bản đồ</span>
+          </ng-template>
+          <h1>Ban do</h1>
+        </p-tabPanel>
+      </p-tabView>
     </div>
 
     <ng-template pTemplate="footer">

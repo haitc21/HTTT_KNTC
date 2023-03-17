@@ -1,6 +1,6 @@
 import { AuthService, ListResultDto } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
 import { MockService } from '../../shared/mock/mock.service';
@@ -17,13 +17,15 @@ import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
 import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
 import { UtilityService } from 'src/app/shared/services/utility.service';
+import { LandComplainDetailComponent } from './detail/land-complain-detail.component';
+import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
 
 @Component({
   selector: 'app-land-complain',
   templateUrl: './land-complain.component.html',
   styleUrls: ['./land-complain.component.scss'],
 })
-export class LandComplainComponent implements OnInit {
+export class LandComplainComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
 
@@ -58,7 +60,7 @@ export class LandComplainComponent implements OnInit {
     { value: 1, text: 'Khiếu nại lần I' },
     { value: 2, text: 'Khiếu nại lần II' },
   ];
-  loaiKQ = [
+  loaiKQOptions = [
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
@@ -80,7 +82,7 @@ export class LandComplainComponent implements OnInit {
   constructor(
     private oAuthService: OAuthService,
     private authService: AuthService,
-    dialogService: DialogService,
+    private dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
     private permissionService: PermissionService,
@@ -150,8 +152,6 @@ export class LandComplainComponent implements OnInit {
 
   loadData(isFirst: boolean = false) {
     this.toggleBlockUI(true);
-    console.log(this.thoiGianTiepNhanRange);
-
     this.filter = {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
@@ -175,9 +175,6 @@ export class LandComplainComponent implements OnInit {
       .subscribe({
         next: (response: PagedResultDto<ComplainDto>) => {
           this.items = response.items;
-          console.log(this.items[0].ketQua1);
-          console.log(this.items[0].ketQua2);
-          console.log(this.items[0].ketQua);
 
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
@@ -193,16 +190,6 @@ export class LandComplainComponent implements OnInit {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;
     this.loadData();
-  }
-
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
   }
 
   getPermission() {
@@ -268,7 +255,20 @@ export class LandComplainComponent implements OnInit {
   setActionItem(item) {
     this.actionItem = item;
   }
+  showAddModal() {
+    const ref = this.dialogService.open(LandComplainDetailComponent, {
+      header: 'Thêm khiếu nại/khiếu kiện',
+      width: DIALOG_BG,
+    });
 
+    ref.onClose.subscribe((data: ComplainDto) => {
+      if (data) {
+        this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
+        this.selectedItems = [];
+        this.loadData();
+      }
+    });
+  }
   showEditModal(row) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
@@ -313,7 +313,7 @@ export class LandComplainComponent implements OnInit {
 
   getLoaiKetQua(kq: any): string {
     if (!kq) return '';
-    return this.loaiKQ.find(x => x.value == kq).text;
+    return this.loaiKQOptions.find(x => x.value == kq).text;
   }
 
   deleteItemsConfirm(ids: any[]) {
@@ -329,5 +329,25 @@ export class LandComplainComponent implements OnInit {
         this.toggleBlockUI(false);
       },
     });
+  }
+
+  thoiGiantiepNhanChange() {
+    if (this.thoiGianTiepNhanRange == null || this.thoiGianTiepNhanRange[1]) {
+      this.loadData();
+    }
+  }
+
+  private toggleBlockUI(enabled: boolean) {
+    if (enabled == true) {
+      this.blockedPanel = true;
+    } else {
+      setTimeout(() => {
+        this.blockedPanel = false;
+      }, 300);
+    }
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

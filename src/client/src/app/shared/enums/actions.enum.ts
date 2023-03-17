@@ -1,5 +1,5 @@
 export enum Actions {
-  CREATE = 'Tạo',
+  CREATE = 'Thêm',
   UPDATE = 'Sửa',
   DELETE = 'Xóa',
   APPROVE = 'Phê duyệt',
