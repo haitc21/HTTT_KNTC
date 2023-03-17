@@ -45,6 +45,7 @@ import { WaterResourcAccusationComponent } from './water-resource-accusation/wat
 import {FieldsetModule} from 'primeng/fieldset';
 import { LandComplainDetailComponent } from './land-complain/detail/land-complain-detail.component';
 import {TabViewModule} from 'primeng/tabview';
+import { FileAttachmentComponent } from './land-complain/file-attachment/file-attachment.component';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import {TabViewModule} from 'primeng/tabview';
     MineralResourceAccusationComponent,
     WaterResourceComplaintComponent,
     WaterResourcAccusationComponent,
-    LandComplainDetailComponent
+    LandComplainDetailComponent,
+    FileAttachmentComponent
   ],
   imports: [
     PagesRoutingModule,

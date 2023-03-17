@@ -1,6 +1,6 @@
 import { AuthService, ListResultDto } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
 import { MockService } from '../../shared/mock/mock.service';
@@ -25,7 +25,7 @@ import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
   templateUrl: './land-complain.component.html',
   styleUrls: ['./land-complain.component.scss'],
 })
-export class LandComplainComponent implements OnInit {
+export class LandComplainComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
 
@@ -82,13 +82,13 @@ export class LandComplainComponent implements OnInit {
   constructor(
     private oAuthService: OAuthService,
     private authService: AuthService,
-    private  dialogService: DialogService,
+    private dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
     private permissionService: PermissionService,
     private complainService: ComplainService,
     private utilService: UtilityService,
-    private unitService: UnitService,
+    private unitService: UnitService
   ) {}
 
   ngOnInit(): void {
@@ -152,8 +152,6 @@ export class LandComplainComponent implements OnInit {
 
   loadData(isFirst: boolean = false) {
     this.toggleBlockUI(true);
-    console.log(this.thoiGianTiepNhanRange);
-
     this.filter = {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
@@ -177,8 +175,7 @@ export class LandComplainComponent implements OnInit {
       .subscribe({
         next: (response: PagedResultDto<ComplainDto>) => {
           this.items = response.items;
-          console.log(this.items);
-          
+
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
         },
@@ -193,16 +190,6 @@ export class LandComplainComponent implements OnInit {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;
     this.loadData();
-  }
-
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
   }
 
   getPermission() {
@@ -342,5 +329,25 @@ export class LandComplainComponent implements OnInit {
         this.toggleBlockUI(false);
       },
     });
+  }
+
+  thoiGiantiepNhanChange() {
+    if (this.thoiGianTiepNhanRange == null || this.thoiGianTiepNhanRange[1]) {
+      this.loadData();
+    }
+  }
+
+  private toggleBlockUI(enabled: boolean) {
+    if (enabled == true) {
+      this.blockedPanel = true;
+    } else {
+      setTimeout(() => {
+        this.blockedPanel = false;
+      }, 300);
+    }
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

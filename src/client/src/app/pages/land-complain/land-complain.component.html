@@ -77,10 +77,10 @@
               [(ngModel)]="thoiGianTiepNhanRange"
               selectionMode="range"
               dateFormat="dd/mm/yy"
-              [showIcon]="true"
               [showClear]="true"
               inputId="thoiGianTiepNhanRange"
-              (onSelect)="loadData()"
+              (onSelect)="thoiGiantiepNhanChange()"
+              (onClear)="thoiGiantiepNhanChange()"
             ></p-calendar>
             <label for="phoneNumber">Thời gian tiếp nhận</label>
           </span>
