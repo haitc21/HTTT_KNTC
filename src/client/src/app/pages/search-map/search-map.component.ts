@@ -70,6 +70,7 @@ export class SearchMapComponent implements OnInit {
 
   // filter
   geo = false;
+  filter: GetSpatialDataListDto;
 
   landComplaint = true;
   enviromentalComplaint = true;
@@ -118,13 +119,18 @@ export class SearchMapComponent implements OnInit {
   loadData(isFirst: boolean = false) {
     this.toggleBlockUI(true);
     this.data = [];
-
+    
     //spatialData
     if (this.geo){
       debugger;
+      this.filter = {
+        skipCount: this.skipCount,
+        maxResultCount: this.maxResultCount,
+        keyword: this.keyword,
+      } as GetSpatialDataListDto;
        //this.spatialData
-       this.spatialDataService
-      .getLookup()
+       this.spatialDataService.getList(this.filter)
+      //.getLookup()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<SpatialDataLookupDto>) => {

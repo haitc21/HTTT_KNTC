@@ -32,11 +32,19 @@ public class SpatialDataAppService : CrudAppService<
 
     public async override Task<PagedResultDto<SpatialDataDto>> GetListAsync(GetSpatialDataListDto input)
     {
+
+        if (input.Sorting.IsNullOrWhiteSpace())
+        {
+            input.Sorting = nameof(SpatialData.Id);
+        }
+
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
-                    //.WhereIf(!filter.IsNullOrEmpty())
+                    .WhereIf(!filter.IsNullOrEmpty(),
+                             x => x.GeoJson.ToUpper().Contains(filter)                  
+                             )
                     .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
                     .Take(input.MaxResultCount);
