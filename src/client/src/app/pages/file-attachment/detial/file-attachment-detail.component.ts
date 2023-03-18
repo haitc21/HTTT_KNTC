@@ -18,7 +18,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public title: string;
   public btnDisabled = false;
-  fileContent: File;
+  file: File;
 
   documentTypeOptions: DocumentTypeLookupDto[];
   giaiDoanOptions = [
@@ -104,13 +104,14 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThuTuButLucLength)],
       ],
       noiDungChinh: [null, Validators.required],
+      fileContent: []
     });
   }
   choseFile(event) {
-    this.fileContent = event.files[0];
+    this.file = event.files[0];
   }
   removeFile(event) {
-    this.fileContent = null;
+    this.file = null;
   }
 
   private toggleBlockUI(enabled: boolean) {
