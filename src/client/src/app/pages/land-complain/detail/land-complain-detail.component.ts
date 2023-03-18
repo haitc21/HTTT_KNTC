@@ -32,12 +32,6 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
   huyenThuaDateOptions: UnitLookupDto[] = [];
   xaThuaDatOptions: UnitLookupDto[] = [];
   landTypeOptions: LandTypeLookupDto[];
-  documentTypeOptions: DocumentTypeLookupDto[];
-
-  giaiDoanOptions = [
-    { value: 1, text: 'Khiếu nại lần I' },
-    { value: 2, text: 'Khiếu nại lần II' },
-  ];
   loaiKQOPtions = [
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
@@ -207,8 +201,7 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     private utilService: UtilityService,
     private fb: FormBuilder,
     private unitService: UnitService,
-    private landTypeService: LandTypeService,
-    private documentTypeService: DocumentTypeService
+    private landTypeService: LandTypeService
   ) {}
 
   ngOnInit() {
@@ -241,19 +234,6 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       .subscribe(
         (res: ListResultDto<LandTypeLookupDto>) => {
           this.landTypeOptions = res.items;
-          this.toggleBlockUI(false);
-        },
-        () => {
-          this.toggleBlockUI(false);
-        }
-      );
-    this.toggleBlockUI(true);
-    this.documentTypeService
-      .getLookup()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        (res: ListResultDto<DocumentTypeLookupDto>) => {
-          this.documentTypeOptions = res.items;
           this.toggleBlockUI(false);
         },
         () => {

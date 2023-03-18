@@ -145,6 +145,6 @@ export interface UpdateDenounceDto extends EntityDto<string> {
   soQD2?: string;
   ketQua2?: LoaiKetQua;
   fileAttachments: CreateAndUpdateFileAttachmentDto[];
-  listTepDinhKemHoSosDeleted: string[];
+  listFileDeleted: string[];
   concurrencyStamp?: string;
 }

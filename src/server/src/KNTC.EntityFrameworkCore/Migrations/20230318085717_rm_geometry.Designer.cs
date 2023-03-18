@@ -4,8 +4,8 @@ using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NetTopologySuite.Geometries;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
@@ -13,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230318085717_rm_geometry")]
+    partial class rm_geometry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -888,9 +889,6 @@ namespace KNTC.Migrations
 
                     b.Property<string>("GeoJson")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Geometry>("Geometry")
-                        .HasColumnType("geometry");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()

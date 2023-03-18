@@ -7,9 +7,9 @@ namespace KNTC.FileAttachments;
 
 public class CreateAndUpdateFileAttachmentDto : EntityDto<Guid>
 {
+    public string TenTaiLieu { get; set; }
     [Required]
     public int GiaiDoan { get; set; }
-    public string TenTaiLieu { get; set; }
     [Required]
     public int HinhThuc { get; set; }
     public DateTime ThoiGianBanHanh { get; set; }
@@ -21,5 +21,5 @@ public class CreateAndUpdateFileAttachmentDto : EntityDto<Guid>
     public string FileName { get; set; }
     public string ContentType { get; set; }
     public long ContentLength { get; set; }
-    //public IFormFile FileContent { get; set; }
+    public IFormFile FileContent { get; set; }
 }

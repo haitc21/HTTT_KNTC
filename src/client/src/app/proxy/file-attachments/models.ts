@@ -1,4 +1,5 @@
 import type { AuditedEntityDto, EntityDto } from '@abp/ng.core';
+import type { IFormFile } from '../microsoft/asp-net-core/http/models';
 
 export interface CreateAndUpdateFileAttachmentDto extends EntityDto<string> {
   giaiDoan: number;
@@ -11,6 +12,7 @@ export interface CreateAndUpdateFileAttachmentDto extends EntityDto<string> {
   fileName?: string;
   contentType?: string;
   contentLength: number;
+  fileContent: IFormFile;
 }
 
 export interface FileAttachmentDto extends AuditedEntityDto<string> {

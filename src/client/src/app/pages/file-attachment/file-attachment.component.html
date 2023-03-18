@@ -1,0 +1,106 @@
+<div class="animated fadeIn grid card">
+  <p-panel #pnl>
+    <p-table
+      #dt
+      [value]="items"
+      [rows]="10"
+      [paginator]="items"
+      [globalFilterFields]="['tenTaiLieu']"
+      [tableStyle]="{ width: '100%' }"
+      [rowHover]="true"
+      dataKey="id"
+      currentPageReportTemplate="Tổng số: {totalRecords}"
+      [showCurrentPageReport]="true"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between">
+          <div class="grid flex-start col-8">
+            <span class="p-input-icon-left flex-1">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                class="w-full"
+                (input)="dt.filterGlobal($event.target.value, 'contains')"
+                placeholder="Tìm kiếm"
+              />
+            </span>
+            <span class="p-float-label flex-1">
+              <p-dropdown
+                [options]="giaiDoanOptions"
+                [(ngModel)]="giaiDoan"
+                optionLabel="text"
+                optionValue="value"
+                [showClear]="true"
+                [autoDisplayFirst]="false"
+                styleClass="w-full"
+              ></p-dropdown>
+              <label for="phoneNumber">Giai đoạn</label>
+            </span>
+            <span class="p-float-label flex-1">
+              <p-dropdown
+                [options]="documentTypeOptions"
+                [(ngModel)]="hinhThuc"
+                optionLabel="documentTypeName"
+                optionValue="id"
+                [showClear]="true"
+                [autoDisplayFirst]="false"
+                styleClass="w-full"
+              ></p-dropdown>
+              <label for="phoneNumber">Hình thức tài liệu</label>
+            </span>
+          </div>
+          <div class="grid flex-end flex-row-reverse col-4">
+            <div class="flex-end">
+              <button
+                pButton
+                pRipple
+                label="Thêm"
+                icon="pi pi-plus"
+                class="p-button-info mr-2"
+                (click)="openNew()"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="row-num-column">STT</th>
+          <th>File gắn kèm</th>
+          <th>Tên tài liệu</th>
+          <th>Hình thức</th>
+          <th>Ngày nhận</th>
+          <th>Thời gian ban hành</th>
+          <th>Thứ tự bút lục</th>
+        </tr></ng-template
+      >
+
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+        <tr>
+          <td class="row-num-cell">{{ rowIndex + 1 }}</td>
+          <td>{{ row.fileName }}</td>
+          <td>{{ row.tenTaiLieu }}</td>
+          <td>{{ row.hinhThuc }}</td>
+          <td>{{ utilService.convertDateToLocal(row?.ngayNhan) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ utilService.convertDateToLocal(row?.thoiGianBanHanh) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row.thuTuButLuc }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <!-- ----------------------------------------------------------------------- -->
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+      <p-progressSpinner
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%'
+        }"
+        strokeWidth="2"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</div>
