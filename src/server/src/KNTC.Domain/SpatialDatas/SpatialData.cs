@@ -18,6 +18,10 @@ public class SpatialData : Entity<int>
     {
 
     }
+    public Double OBJECTID { get; set; }
+    public string? TenToChuc { get; set; }
+    public Single? Quyen { get; set; }
+    public string? So_to_BD { get; set; }
     public Geometry Geometry { get; set; }
     public string GeoJson { get; set; }
 }

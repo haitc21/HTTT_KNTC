@@ -4,8 +4,12 @@ using Volo.Abp.Application.Dtos;
 
 namespace KNTC.SpatialDatas;
 
-public class SpatialDataDto : FullAuditedEntityDto<int>
+public class SpatialDataDto : EntityDto<int>
 {
+    public Double OBJECTID { get; }
+    public string? TenToChuc { get; }
+    public Single? Quyen { get; }
+    public string? So_to_BD { get; }
     //public SqlGeometry geometry { get; set; }
     public string geoJson { get; }
 }
