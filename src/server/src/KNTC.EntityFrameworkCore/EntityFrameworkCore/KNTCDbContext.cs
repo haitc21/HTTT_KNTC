@@ -330,8 +330,8 @@ public class KNTCDbContext :
             b.ToTable("SpatialData", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(p => p.Id).ValueGeneratedOnAdd();
-            b.Property(p => p.Geometry).HasColumnType("geometry");
-
+            b.Property(p => p.Geometry).HasColumnType("geometry").HasColumnName("Geometry");
+            b.Property(p => p.GeoJson).HasColumnName("GeoJson");
         });
     }
 }
