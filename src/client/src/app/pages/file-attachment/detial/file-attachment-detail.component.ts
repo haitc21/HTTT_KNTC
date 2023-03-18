@@ -4,6 +4,8 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
+import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
+import { ListResultDto } from '@abp/ng.core';
 
 @Component({
   templateUrl: './file-attachment-detail.component.html',
@@ -17,6 +19,13 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   fileContent: File;
+
+  documentTypeOptions: DocumentTypeLookupDto[];
+  giaiDoanOptions = [
+    { value: 0, text: 'Tất cả' },
+    { value: 1, text: 'Khiếu nại lần I' },
+    { value: 2, text: 'Khiếu nại lần II' },
+  ];
 
   // Validate
   validationMessages = {
@@ -47,7 +56,8 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private utilService: UtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private documentTypeService: DocumentTypeService
   ) {}
 
   ngOnInit() {
@@ -59,6 +69,21 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     }
   }
   loadFormDetails(id: string) {}
+  getOptions() {
+    this.toggleBlockUI(true);
+    this.documentTypeService
+      .getLookup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<DocumentTypeLookupDto>) => {
+          this.documentTypeOptions = res.items;
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
+  }
 
   saveChange() {
     this.ref.close(this.form.value);

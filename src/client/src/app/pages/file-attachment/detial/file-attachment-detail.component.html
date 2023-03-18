@@ -1,10 +1,5 @@
-<form
-  class="form-horizontal form-label-left"
-  skipValidation
-  [formGroup]="form"
-  
->
-  <p-panel #pnlDetail   [collapsed]="false">
+<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
+  <p-panel #pnlDetail [collapsed]="false">
     <div class="formgrid grid">
       <!-- -----------------------------------tenTaiLieu----------------------------------------------- -->
       <div class="field col-12 md:col-12">
@@ -21,6 +16,26 @@
         <app-validation-message
           [entityControl]="formControls.tenTaiLieu"
           [validationMessages]="validationMessages.tenTaiLieu"
+        >
+        </app-validation-message>
+      </div>
+      <!-- --------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-12">
+        <span class="p-float-label">
+          <p-dropdown
+            formControlName="giaiDoan"
+            [options]="giaiDoanOptions"
+            optionLabel="text"
+            optionValue="value"
+            [showClear]="true"
+            [autoDisplayFirst]="false"
+            styleClass="w-full"
+          ></p-dropdown>
+          <label for="phoneNumber">Giai đoạn <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.giaiDoan"
+          [validationMessages]="validationMessages.giaiDoan"
         >
         </app-validation-message>
       </div>
@@ -51,7 +66,7 @@
         pRipples
         type="submit"
         label="Lưu"
-        class=" p-button-info"
+        class="p-button-info"
         icon="pi pi-check"
         [disabled]="!form.valid || btnDisabled"
       ></button>
