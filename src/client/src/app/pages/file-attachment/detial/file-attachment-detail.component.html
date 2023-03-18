@@ -2,7 +2,7 @@
   <p-panel #pnlDetail [collapsed]="false">
     <div class="formgrid grid">
       <!-- -----------------------------------tenTaiLieu----------------------------------------------- -->
-      <div class="field col-12 md:col-12">
+      <div class="field col-12 md:col-6">
         <span class="p-float-label">
           <input
             id="tenTaiLieu"
@@ -19,8 +19,8 @@
         >
         </app-validation-message>
       </div>
-      <!-- --------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-12">
+      <!-- -----------------------------------------giaiDoan---------------------------------------- -->
+      <div class="field col-12 md:col-6">
         <span class="p-float-label">
           <p-dropdown
             formControlName="giaiDoan"
@@ -39,8 +39,60 @@
         >
         </app-validation-message>
       </div>
+      <!-- -----------------------------------------hinhThuc---------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <p-dropdown
+            formControlName="hinhThuc"
+            [options]="documentTypeOptions"
+            optionLabel="documentTypeName"
+            optionValue="id"
+            [showClear]="true"
+            [autoDisplayFirst]="false"
+            [filter]="true"
+            filterBy="documentTypeName"
+            styleClass="w-full"
+          ></p-dropdown>
+          <label for="phoneNumber">Hình thức <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.hinhThuc"
+          [validationMessages]="validationMessages.hinhThuc"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------thoiGianBanHanh------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <p-calendar
+            id="thoiGianBanHanh"
+            formControlName="thoiGianBanHanh"
+            appendTo="body"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            showTime="true"
+            [hourFormat]="24"
+          ></p-calendar>
+          <label for="dob">Thời gian ban hành</label>
+        </span>
+      </div>
+      <!-- ---------------------------------ngayNhan------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <p-calendar
+            id="ngayNhan"
+            formControlName="ngayNhan"
+            appendTo="body"
+            dateFormat="dd/mm/yy"
+            [showIcon]="true"
+            showTime="true"
+            [hourFormat]="24"
+          ></p-calendar>
+          <label for="dob">Ngày nhận</label>
+        </span>
+      </div>
       <!-- ---------------------------------thuTuButLuc----------------------=----------------------------- -->
-      <div class="field col-12 md:col-12">
+      <div class="field col-12 md:col-6">
         <span class="p-float-label">
           <input
             id="thuTuButLuc"
@@ -56,6 +108,40 @@
           [validationMessages]="validationMessages.thuTuButLuc"
         >
         </app-validation-message>
+      </div>
+      <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
+      <div class="field col-12 md:col-12">
+        <span class="p-float-label">
+          <textarea
+            id="noiDungChinh"
+            formControlName="noiDungChinh"
+            [rows]="5"
+            pInputTextarea
+            class="w-full"
+          ></textarea>
+          <label for="description">Nội dung chính <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.noiDungChinh"
+          [validationMessages]="validationMessages.noiDungChinh"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
+      <div class="field col-12 md:col-12">
+        <div class="flex justify-content-center w-full">
+          <p-fileUpload
+            name="file[]"
+            [customUpload]="true"
+            invalidFileSizeMessageSummary="{0}: Vượt quá dung lượng cho phép!"
+            chooseLabel="Chọn tệp"
+            uploadLabel="Tải lên"
+            cancelLabel="Hủy"
+            [auto]="true"
+            (uploadHandler)="choseFile($event)"
+            (onRemove)="removeFile($event)"
+          ></p-fileUpload>
+        </div>
       </div>
       <!-- ---------------------------------------------------------------------------------- -->
     </div>

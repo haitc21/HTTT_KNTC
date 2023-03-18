@@ -1,5 +1,6 @@
 ﻿using Microsoft.SqlServer.Types;
 using NetTopologySuite.Geometries;
+using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
 
@@ -7,7 +8,12 @@ namespace KNTC.SpatialDatas;
 
 public class CreateAndUpdateSpatialDataDto : EntityDto<int>
 {
-    //[Required]
-    //public Geometry geometry { get; set; }
-    public string geoJson { get; }
+    public Double ObjectId { get; }
+    [MaxLength(KNTCValidatorConsts.MaxTenToChucLength)]
+    public string? TenToChuc { get; }
+    public Single? Quyen { get; }
+    [MaxLength(KNTCValidatorConsts.MaxToBanDoLength)]
+    public string SoToBD { get; }
+    public SqlGeometry? Geometry { get; set; }
+    public string GeoJson { get; }
 }

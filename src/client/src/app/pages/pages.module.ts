@@ -47,6 +47,7 @@ import { LandComplainDetailComponent } from './land-complain/detail/land-complai
 import {TabViewModule} from 'primeng/tabview';
 import { FileAttachmentComponent } from './file-attachment/file-attachment.component';
 import { FileAttachmentDetailComponent } from './file-attachment/detial/file-attachment-detail.component';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
@@ -99,7 +100,8 @@ import { FileAttachmentDetailComponent } from './file-attachment/detial/file-att
     InputSwitchModule,
     ChartModule,
     FieldsetModule,
-    TabViewModule
+    TabViewModule,
+    FileUploadModule
   ],
   exports: [HomeComponent],
 })

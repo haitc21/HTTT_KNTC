@@ -6,6 +6,7 @@ using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
 using KNTC.LandTypes;
 using KNTC.Roles;
+using KNTC.SpatialDatas;
 using KNTC.Units;
 using KNTC.UnitTypes;
 using KNTC.Users;
@@ -72,6 +73,10 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<Config, ConfigDto>();
         CreateMap<Config, ConfigLookupDto>();
         CreateMap<CreateAndUpdateConfigDto, Config>();
+
+        CreateMap<SpatialData, SpatialDataDto>();
+        CreateMap<SpatialData, SpatialDataLookupDto>();
+        CreateMap<CreateAndUpdateSpatialDataDto, SpatialData>();
 
 
     }
