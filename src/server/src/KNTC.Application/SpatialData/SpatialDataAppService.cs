@@ -42,13 +42,10 @@ public class SpatialDataAppService : CrudAppService<
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
-<<<<<<< HEAD
                     //.WhereIf(!filter.IsNullOrEmpty(), x => x.GeoJson.ToUpper().Contains(filter))
-=======
                     .WhereIf(!filter.IsNullOrEmpty(),
                              x => x.GeoJson.ToUpper().Contains(filter)                  
                              )
->>>>>>> parent of a792e53 (fix)
                     .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
                     .Take(input.MaxResultCount);

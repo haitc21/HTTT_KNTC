@@ -169,30 +169,12 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
         message: `Ghi chú không vượt quá ${KNTCValidatorConsts.MaxGhiChuLength} kí tự`,
       },
     ],
-
-    tenTaiLieu: [
-      { type: 'required', message: 'Tên tài liệu không được để trống' },
-      {
-        type: 'maxlength',
-        message: `Tên tài liệu tối đa ${KNTCValidatorConsts.MaxTenTaiLieuLength} ký tự`,
-      },
-    ],
-    thuTuButLuc: [
-      { type: 'required', message: 'Thứ tự bút lục không được để trống' },
-      {
-        type: 'maxlength',
-        message: `Thứ tự bút lục tối đa ${KNTCValidatorConsts.MaxThuTuButLucLength} ký tự`,
-      },
-    ],
   };
 
   get formControls() {
     return this.form.controls;
   }
 
-  // get fileAttachments(): FormArray {
-  //   return this.form.get('fileAttachments') as FormArray;
-  // }
 
   constructor(
     public ref: DynamicDialogRef,
@@ -444,26 +426,6 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       // fileAttachments: this.fb.array([]),
     });
   }
-
-  // addTepDinhKemHoSo(): void {
-  //   const tepDinhKemHoSoFormGroup = this.fb.group({
-  //     giaiDoan: [null, Validators.required],
-  //     tenTaiLieu: [
-  //       null,
-  //       [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenTaiLieuLength)],
-  //     ],
-  //     hinhThuc: [],
-  //     thoiGianBanHanh: [],
-  //     ngayNhan: [],
-  //     thuTuButLuc: [
-  //       null,
-  //       [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThuTuButLucLength)],
-  //     ],
-  //     noiDungChinh: [],
-  //   });
-
-  //   this.fileAttachments.push(tepDinhKemHoSoFormGroup);
-  // }
 
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {

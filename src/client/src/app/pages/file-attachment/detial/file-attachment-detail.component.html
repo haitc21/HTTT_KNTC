@@ -6,49 +6,41 @@
 >
   <p-panel #pnlDetail   [collapsed]="false">
     <div class="formgrid grid">
-      <!-- ---------------------------------------------------------------------------------- -->
+      <!-- -----------------------------------tenTaiLieu----------------------------------------------- -->
       <div class="field col-12 md:col-12">
         <span class="p-float-label">
           <input
-            id="name"
+            id="tenTaiLieu"
+            formControlName="tenTaiLieu"
             type="text"
             pInputText
-            formControlName="name"
             [style]="{ width: '100%' }"
           />
-          <label for="name">Tên <span class="required">*</span></label>
+          <label for="name">Tên tài liệu <span class="required">*</span></label>
         </span>
         <app-validation-message
-          [entityControl]="formControls.name"
-          [validationMessages]="validationMessages.name"
+          [entityControl]="formControls.tenTaiLieu"
+          [validationMessages]="validationMessages.tenTaiLieu"
         >
         </app-validation-message>
       </div>
-      <!-- -------------------------------------------------------=----------------------------- -->
+      <!-- ---------------------------------thuTuButLuc----------------------=----------------------------- -->
       <div class="field col-12 md:col-12">
         <span class="p-float-label">
           <input
-            id="description"
+            id="thuTuButLuc"
             type="text"
             pInputText
-            formControlName="description"
+            formControlName="thuTuButLuc"
             [style]="{ width: '100%' }"
           />
-          <label for="description">Mô tả <span class="required">*</span></label>
+          <label for="description">Thứ tự bút lục <span class="required">*</span></label>
         </span>
         <app-validation-message
-          [entityControl]="formControls.description"
-          [validationMessages]="validationMessages.description"
+          [entityControl]="formControls.thuTuButLuc"
+          [validationMessages]="validationMessages.thuTuButLuc"
         >
         </app-validation-message>
-      </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-12">
-        <p-checkbox binary="true" label="Công khai" formControlName="isPublic"></p-checkbox>
-      </div>
-      <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-12">
-        <p-checkbox binary="true" label="Mặc định" formControlName="isDefault"></p-checkbox>
       </div>
       <!-- ---------------------------------------------------------------------------------- -->
     </div>
