@@ -274,16 +274,16 @@ export class LandComplainComponent implements OnInit, OnDestroy {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    /*
-    const ref = this.dialogService.open(ComplainComponent, {
+
+    const ref = this.dialogService.open(LandComplainDetailComponent, {
       data: {
         id: row.id,
       },
-      header: `Cập nhật người dùng '${row.userName}'`,
-      width: DIALOG_MD,
+      header: `Cập nhật khiếu nại/khiếu kiện '${row.tieuDe}'`,
+      width: DIALOG_BG,
     });
 
-    ref.onClose.subscribe((data: IdentityUserUpdateDto) => {
+    ref.onClose.subscribe((data: ComplainDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -291,7 +291,6 @@ export class LandComplainComponent implements OnInit, OnDestroy {
         this.loadData();
       }
     });
-    */
   }
 
   deleteItems() {

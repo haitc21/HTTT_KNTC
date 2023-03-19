@@ -227,17 +227,19 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       );
   }
 
-  inhChange(event) {
-    if (event.value) {
+  tinhChange(id: number, isFirst: boolean = false) {
+    if (id) {
       this.toggleBlockUI(true);
       this.unitService
-        .getLookup(2, event.value)
+        .getLookup(2, id)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.huyenOptions = res.items;
-            this.form.get('maQuanHuyen').reset();
-            this.form.get('maXaPhuongTT').reset();
+            if (!isFirst) {
+              this.form.get('maQuanHuyen').reset();
+              this.form.get('maXaPhuongTT').reset();
+            }
             this.toggleBlockUI(false);
           },
           () => {
@@ -246,16 +248,18 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
         );
     } else this.huyenOptions = [];
   }
-  huyenChange(event) {
-    if (event.value) {
+  huyenChange(id: number, isFirst: boolean = false) {
+    if (id) {
       this.toggleBlockUI(true);
       this.unitService
-        .getLookup(3, event.value)
+        .getLookup(3, id)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.xaOptions = res.items;
-            this.form.get('maXaPhuongTT').reset();
+            if (!isFirst) {
+              this.form.get('maXaPhuongTT').reset();
+            }
             this.toggleBlockUI(false);
           },
           () => {
@@ -265,17 +269,19 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     } else this.xaOptions = [];
   }
 
-  inhThuaDatChange(event) {
-    if (event.value) {
+  tinhThuaDatChange(id: number, isFirst: boolean = false) {
+    if (id) {
       this.toggleBlockUI(true);
       this.unitService
-        .getLookup(2, event.value)
+        .getLookup(2, id)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.huyenThuaDateOptions = res.items;
-            this.form.get('huyenThuaDat').reset();
-            this.form.get('xaThuaDat').reset();
+            if (!isFirst) {
+              this.form.get('huyenThuaDat').reset();
+              this.form.get('xaThuaDat').reset();
+            }
             this.toggleBlockUI(false);
           },
           () => {
@@ -284,16 +290,18 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
         );
     } else this.huyenThuaDateOptions = [];
   }
-  huyenThuaDatChange(event) {
-    if (event.value) {
+  huyenThuaDatChange(id: number, isFirst: boolean = false) {
+    if (id) {
       this.toggleBlockUI(true);
       this.unitService
-        .getLookup(3, event.value)
+        .getLookup(3, id)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.xaThuaDatOptions = res.items;
-            this.form.get('xaThuaDat').reset();
+            if (!isFirst) {
+              this.form.get('xaThuaDat').reset();
+            }
             this.toggleBlockUI(false);
           },
           () => {
@@ -312,7 +320,19 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: ComplainDto) => {
           this.selectedEntity = response;
+          this.tinhChange(this.selectedEntity.maTinhTP, true);
+          this.huyenChange(this.selectedEntity.maQuanHuyen, true);
+          this.tinhThuaDatChange(this.selectedEntity.tinhThuaDat, true);
+          this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
+
           this.form.patchValue(this.selectedEntity);
+          // this.form.get('maTinhTP').setValue(String(this.selectedEntity.maTinhTP));
+          // this.form.get('maQuanHuyen').setValue(String(this.selectedEntity.maQuanHuyen));
+          // this.form.get('maXaPhuongTT').setValue(String(this.selectedEntity.maXaPhuongTT));
+          // this.form.get('tinhThuaDat').setValue(String(this.selectedEntity.tinhThuaDat));
+          // this.form.get('huyenThuaDat').setValue(String(this.selectedEntity.huyenThuaDat));
+          // this.form.get('xaThuaDat').setValue(String(this.selectedEntity.xaThuaDat));
+
           this.toggleBlockUI(false);
         },
         error: () => {
