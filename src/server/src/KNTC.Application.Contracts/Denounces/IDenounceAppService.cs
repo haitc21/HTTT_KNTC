@@ -14,5 +14,4 @@ public interface IDenounceAppService :
             UpdateDenounceDto>
 {
     Task DeleteMultipleAsync(IEnumerable<Guid> ids);
-    Task<byte[]> DowloadAsync(string idTepDinhKem);
 }

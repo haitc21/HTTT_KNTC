@@ -10,5 +10,6 @@ export enum Actions {
   ASSIGN_ROLE = "Quản lý vai trò",
   SEARCH = "Tìm kiếm",
   ADVANCE_SEARCH = "Tìm kiếm nâng cao",
-  ACTION = "Thao tác"
+  ACTION = "Thao tác",
+  DOWNLOAD = "Tải xuống"
 }

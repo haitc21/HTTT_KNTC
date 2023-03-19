@@ -5,6 +5,8 @@ namespace KNTC.FileAttachments;
 
 public class FileAttachmentDto : AuditedEntityDto<Guid>
 {
+    public Guid? ComplainId { get; set; }
+    public Guid? DenounceId { get; set; }
     public string TenTaiLieu { get; private set; }
     public short GiaiDoan { get; set; }
     public int HinhThuc { get; set; }

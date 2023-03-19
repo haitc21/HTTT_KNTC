@@ -14,6 +14,6 @@ public class CreateAndUpdateSpatialDataDto : EntityDto<int>
     public Single? Quyen { get; }
     [MaxLength(KNTCValidatorConsts.MaxToBanDoLength)]
     public string SoToBD { get; }
-    public SqlGeometry? Geometry { get; set; }
+    //public SqlGeometry? Geometry { get; set; }
     public string GeoJson { get; }
 }

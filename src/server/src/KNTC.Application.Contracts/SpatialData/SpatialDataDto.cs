@@ -10,6 +10,6 @@ public class SpatialDataDto : EntityDto<int>
     public string? TenToChuc { get; }
     public Single? Quyen { get; }
     public string SoToBD { get; }
-    public SqlGeometry? Geometry { get; set; }
+    //public SqlGeometry? Geometry { get; set; }
     public string GeoJson { get; }
 }

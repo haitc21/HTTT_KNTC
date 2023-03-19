@@ -101,7 +101,5 @@ public class UpdateComplainDto : EntityDto<Guid>, IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
     public string SoQD2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
-    public virtual List<CreateAndUpdateFileAttachmentDto> FileAttachments { get; set; }
-    public IReadOnlyList<Guid> ListFileDeleted { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

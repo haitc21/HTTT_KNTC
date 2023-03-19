@@ -58,7 +58,7 @@
                 label="Thêm"
                 icon="pi pi-plus"
                 class="p-button-info mr-2"
-                (click)="openNew()"
+                (click)="showAddModal()"
               ></button>
             </div>
           </div>
@@ -69,22 +69,57 @@
           <th class="row-num-column">STT</th>
           <th>File gắn kèm</th>
           <th>Tên tài liệu</th>
+          <th>Giai đoạn</th>
           <th>Hình thức</th>
           <th>Ngày nhận</th>
           <th>Thời gian ban hành</th>
           <th>Thứ tự bút lục</th>
-        </tr></ng-template
-      >
+          <th class="action-column"></th>
+        </tr>
+      </ng-template>
 
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
         <tr>
           <td class="row-num-cell">{{ rowIndex + 1 }}</td>
           <td>{{ row.fileName }}</td>
           <td>{{ row.tenTaiLieu }}</td>
-          <td>{{ row.hinhThuc }}</td>
+          <td>{{ getGiaiDoan(row.giaiDoan) }}</td>
+          <td>{{ getHinhThuc(row.hinhThuc) }}</td>
           <td>{{ utilService.convertDateToLocal(row?.ngayNhan) | date : 'dd-MM-yyyy' }}</td>
           <td>{{ utilService.convertDateToLocal(row?.thoiGianBanHanh) | date : 'dd-MM-yyyy' }}</td>
           <td>{{ row.thuTuButLuc }}</td>
+          <td>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-info mr-1"
+              [pTooltip]="Actions.UPDATE"
+              tooltipPosition="top"
+              (click)="showEditModal(row)"
+            ></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-download"
+              class="p-button-rounded p-button-help mr-1"
+              [pTooltip]="Actions.DOWNLOAD"
+              tooltipPosition="top"
+            ></button>
+
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+              [pTooltip]="Actions.DELETE"
+              tooltipPosition="top"
+              (click)="deleteRow(row)"
+            ></button>
+          </td>
         </tr>
       </ng-template>
     </p-table>

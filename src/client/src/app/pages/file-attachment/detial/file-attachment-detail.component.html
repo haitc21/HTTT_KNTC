@@ -127,9 +127,27 @@
         >
         </app-validation-message>
       </div>
-      <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
-      <div class="field col-12 md:col-12">
-        <div class="flex justify-content-center w-full">
+            <!-- -----------------------------------fileName----------------------------------------------- -->
+            <div class="field col-12 md:col-6">
+              <span class="p-float-label">
+                <input
+                  id="fileName"
+                  formControlName="fileName"
+                  type="text"
+                  pInputText
+                  [style]="{ width: '100%' }"
+                />
+                <label for="name">Tên File <span class="required">*</span></label>
+              </span>
+              <app-validation-message
+                [entityControl]="formControls.fileName"
+                [validationMessages]="validationMessages.fileName"
+              >
+              </app-validation-message>
+            </div>
+      <!-- ----------------------------file---------------------------=----------------------------- -->
+      <div class="field col-12 md:col-6">
+        <div class="flex w-full">
           <p-fileUpload
             name="file[]"
             [customUpload]="true"
@@ -151,6 +169,7 @@
         pButton
         pRipples
         type="submit"
+        (click)="saveChange()"
         label="Lưu"
         class="p-button-info"
         icon="pi pi-check"

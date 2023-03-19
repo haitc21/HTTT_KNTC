@@ -128,6 +128,9 @@ public class DenounceAppService : CrudAppService<
                                                   SoQD2: input.SoQD2,
                                                   KetQua1: input.KetQua1,
                                                   KetQua2: input.KetQua2);
+
+        await _denounceRepo.InsertAsync(denounce);
+        var result = ObjectMapper.Map<Denounce, DenounceDto>(denounce);
         if (input.FileAttachments.Count > 0)
         {
             foreach (var item in input.FileAttachments)
@@ -146,72 +149,16 @@ public class DenounceAppService : CrudAppService<
                                                                         );
 
                 await _fileAttachmentRepo.InsertAsync(fileAttach);
-                //await UploadAsync(fileAttach.Id.ToString(), item.FileContent);
+                result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
         }
-        await _denounceRepo.InsertAsync(denounce);
-        return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
+        return result;
     }
     [Authorize(KNTCPermissions.Denounces.Default)]
     public override async Task<DenounceDto> UpdateAsync(Guid id, UpdateDenounceDto input)
     {
         var denounce = await _denounceRepo.GetAsync(id, false);
         denounce.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
-
-        if (input.ListFileDeleted.Count > 0)
-        {
-            foreach (var idFileAttach in input.ListFileDeleted)
-            {
-                await _blobContainer.DeleteAsync(idFileAttach.ToString());
-            }
-        }
-        if (input.FileAttachments.Count > 0)
-        {
-            foreach (var fileAttach in input.FileAttachments)
-            {
-                if (fileAttach.Id == null)
-                {
-                    var tepDinhKem = await _denounceManager.CreateFileAttachmentAsync(denounce: denounce,
-                                                        giaiDoan: fileAttach.GiaiDoan,
-                                                        tenTaiLieu: fileAttach.TenTaiLieu,
-                                                        hinhThuc: fileAttach.HinhThuc,
-                                                        thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
-                                                        ngayNhan: fileAttach.NgayNhan,
-                                                        thuTuButLuc: fileAttach.ThuTuButLuc,
-                                                        noiDungChinh: fileAttach.NoiDungChinh,
-                                                        fileName: fileAttach.FileName,
-                                                        contentType: fileAttach.ContentType,
-                                                        contentLength: fileAttach.ContentLength
-                                                        );
-                    await _fileAttachmentRepo.InsertAsync(tepDinhKem);
-                    //await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
-                }
-                else
-                {
-                    var tepDinhKem = await _fileAttachmentRepo.GetAsync(fileAttach.Id);
-                    await _denounceManager.UpdateFileAttachmentAsync(denounce: denounce,
-                                                        giaiDoan: fileAttach.GiaiDoan,
-                                                        tepDinhKem: tepDinhKem,
-                                                        tenTaiLieu: fileAttach.TenTaiLieu,
-                                                        hinhThuc: fileAttach.HinhThuc,
-                                                        thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
-                                                        ngayNhan: fileAttach.NgayNhan,
-                                                        thuTuButLuc: fileAttach.ThuTuButLuc,
-                                                        noiDungChinh: fileAttach.NoiDungChinh,
-                                                        fileName: fileAttach.FileName,
-                                                        contentType: fileAttach.ContentType, 
-                                                        contentLength: fileAttach.ContentLength
-                                                        );
-                    await _fileAttachmentRepo.UpdateAsync(tepDinhKem);
-                    // FileContent == null => Chỉ thay đổi thông tin không thay đổi file
-                    //if (fileAttach.FileContent != null)
-                    //{
-                    //    await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
-                    //}
-                }
-
-            }
-        }
         await _denounceManager.UpdateAsync(denounce: denounce,
                                            maHoSo: input.MaHoSo,
                                           linhVuc: input.LinhVuc,
@@ -260,45 +207,24 @@ public class DenounceAppService : CrudAppService<
     [Authorize(KNTCPermissions.Denounces.Delete)]
     public override async Task DeleteAsync(Guid id)
     {
-        //var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.IdHoSo)).Select(x => x.Id);
-        //await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
-        //foreach (var item in idFileAttachs)
-        //{
-        //    await _blobContainer.DeleteAsync(item.ToString());
-        //}
+        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.DenounceId)).Select(x => x.Id);
+        await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
+        foreach (var item in idFileAttachs)
+        {
+            await _blobContainer.DeleteAsync(item.ToString());
+        }
         await _denounceRepo.DeleteAsync(id);
     }
 
     [Authorize(KNTCPermissions.Denounces.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
-        //var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Contains(x.IdHoSo))).Select(x => x.Id);
-        //await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
-        //foreach (var item in idFileAttachs)
-        //{
-        //    await _blobContainer.DeleteAsync(item.ToString());
-        //}
+        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Any(i => i == x.DenounceId))).Select(x => x.Id);
+        await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
+        foreach (var item in idFileAttachs)
+        {
+            await _blobContainer.DeleteAsync(item.ToString());
+        }
         await _denounceRepo.DeleteManyAsync(ids);
-    }
-
-    private async Task UploadAsync(string idTepDinhKem, IFormFile file)
-    {
-        if (file == null) throw new UserFriendlyException("Vui lòng chọn tệp đính kèm cho hồ sơ");
-        try
-        {
-            var stream = file.OpenReadStream();
-            await _blobContainer.SaveAsync(idTepDinhKem, stream, overrideExisting: true);
-        }
-        catch (Exception ex)
-        {
-            throw new UserFriendlyException(ex.Message);
-        }
-
-    }
-
-    [AllowAnonymous]
-    public async Task<byte[]> DowloadAsync(string idTepDinhKem)
-    {
-        return await _blobContainer.GetAllBytesOrNullAsync(idTepDinhKem);
     }
 }

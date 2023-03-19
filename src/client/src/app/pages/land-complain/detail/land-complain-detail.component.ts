@@ -1,5 +1,5 @@
 import { ListResultDto } from '@abp/ng.core';
-import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, OnInit, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { LinhVuc, LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
 import { ComplainDto, ComplainService } from '@proxy/complains';
@@ -10,6 +10,8 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
 import { UtilityService } from 'src/app/shared/services/utility.service';
+import { FileAttachmentDetailComponent } from '../../file-attachment/detial/file-attachment-detail.component';
+import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
 
 @Component({
   templateUrl: './land-complain-detail.component.html',
@@ -17,6 +19,8 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 })
 export class LandComplainDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
+  @ViewChild(FileAttachmentComponent)
+  fileAttachmentComponent: FileAttachmentComponent;
 
   // Default
   public blockedPanelDetail: boolean = false;
@@ -175,7 +179,6 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
-
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
@@ -320,9 +323,14 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.toggleBlockUI(true);
+    debugger;
+    let value = this.form.value;
+    if (this.fileAttachmentComponent) {
+      value.fileAttachments = this.fileAttachmentComponent.listNewFile;
+    }
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
-      ? this.complainService.create(this.form.value)
-      : this.complainService.update(this.config.data.id, this.form.value);
+      ? this.complainService.create(value)
+      : this.complainService.update(this.config.data.id, value);
     obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       data => {
         this.toggleBlockUI(false);
@@ -441,6 +449,7 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();
+      this.ref.destroy();
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
