@@ -31,12 +31,13 @@ export interface FileAttachmentDto extends AuditedEntityDto<string> {
   thuTuButLuc?: string;
   noiDungChinh?: string;
   fileName?: string;
+  contentType?: string;
+  contentLength: number;
 }
 
 export interface GetFileAttachmentListDto extends BaseListFilterDto {
   complainId?: string;
   denounceId?: string;
-  tenTaiLieu?: string;
   giaiDoan?: number;
   hinhThuc?: number;
 }

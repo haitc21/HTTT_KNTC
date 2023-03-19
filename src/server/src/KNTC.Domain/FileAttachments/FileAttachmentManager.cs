@@ -32,8 +32,8 @@ public class FileAttachmentManager : DomainService
                                                    [NotNull] int giaiDoan,
                                                    [NotNull] string tenTaiLieu,
                                                    [NotNull] int hinhThuc,
-                                                   DateTime thoiGianBanHanh,
-                                                   DateTime ngayNhan,
+                                                   [NotNull] DateTime thoiGianBanHanh,
+                                                   [NotNull ]DateTime ngayNhan,
                                                    [NotNull] string thuTuButLuc,
                                                    [NotNull] string noiDungChinh,
                                                    [NotNull] string fileName,
@@ -44,6 +44,8 @@ public class FileAttachmentManager : DomainService
         Check.NotNull(giaiDoan, nameof(giaiDoan));
         Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
         Check.NotNull(hinhThuc, nameof(hinhThuc));
+        Check.NotNull(thoiGianBanHanh, nameof(thoiGianBanHanh));
+        Check.NotNull(ngayNhan, nameof(ngayNhan));
         Check.NotNullOrWhiteSpace(thuTuButLuc, nameof(thuTuButLuc));
         Check.NotNullOrWhiteSpace(noiDungChinh, nameof(noiDungChinh));
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
@@ -91,8 +93,8 @@ public class FileAttachmentManager : DomainService
                                    [NotNull] int giaiDoan,
                                    [NotNull] string tenTaiLieu,
                                    [NotNull] int hinhThuc,
-                                   DateTime thoiGianBanHanh,
-                                   DateTime ngayNhan,
+                                   [NotNull] DateTime thoiGianBanHanh,
+                                   [NotNull] DateTime ngayNhan,
                                    [NotNull] string thuTuButLuc,
                                    [NotNull] string noiDungChinh,
                                    string fileName,
@@ -104,6 +106,8 @@ public class FileAttachmentManager : DomainService
         Check.NotNull(fileAttachment, nameof(fileAttachment));
         Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
         Check.NotNull(hinhThuc, nameof(hinhThuc));
+        Check.NotNull(thoiGianBanHanh, nameof(thoiGianBanHanh));
+        Check.NotNull(ngayNhan, nameof(ngayNhan));
         Check.NotNullOrWhiteSpace(thuTuButLuc, nameof(thuTuButLuc));
         Check.NotNullOrWhiteSpace(noiDungChinh, nameof(noiDungChinh));
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));

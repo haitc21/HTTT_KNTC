@@ -2,13 +2,22 @@ import { ListResultDto } from '@abp/ng.core';
 import { Component, OnInit, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { LinhVuc, LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
-import { ComplainDto, ComplainService } from '@proxy/complains';
+import {
+  ComplainDto,
+  ComplainService,
+  CreateComplainDto,
+  UpdateComplainDto,
+} from '@proxy/complains';
 import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
+import { CreateAndUpdateFileAttachmentDto } from '@proxy/file-attachments';
 import { LandTypeLookupDto, LandTypeService } from '@proxy/land-types';
 import { UnitLookupDto, UnitService } from '@proxy/units';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
+import { FileService } from 'src/app/shared/services/file.service.spec';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentDetailComponent } from '../../file-attachment/detial/file-attachment-detail.component';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
@@ -21,6 +30,10 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   @ViewChild(FileAttachmentComponent)
   fileAttachmentComponent: FileAttachmentComponent;
+
+  complainId: string;
+  mode: 'create' | 'update' = 'create';
+  loaiVuViec = LoaiVuViec.KhieuNai;
 
   // Default
   public blockedPanelDetail: boolean = false;
@@ -186,14 +199,18 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     private utilService: UtilityService,
     private fb: FormBuilder,
     private unitService: UnitService,
-    private landTypeService: LandTypeService
+    private landTypeService: LandTypeService,
+    private notificationService: NotificationService,
+    private fileService: FileService
   ) {}
 
   ngOnInit() {
     this.loadOptions();
     this.buildForm();
     if (this.utilService.isEmpty(this.config.data?.id) == false) {
-      this.loadDetail(this.config.data.id);
+      this.complainId = this.config.data?.id;
+      this.mode = 'update';
+      this.loadDetail(this.complainId);
     }
   }
 
@@ -326,13 +343,6 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
           this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
 
           this.form.patchValue(this.selectedEntity);
-          // this.form.get('maTinhTP').setValue(String(this.selectedEntity.maTinhTP));
-          // this.form.get('maQuanHuyen').setValue(String(this.selectedEntity.maQuanHuyen));
-          // this.form.get('maXaPhuongTT').setValue(String(this.selectedEntity.maXaPhuongTT));
-          // this.form.get('tinhThuaDat').setValue(String(this.selectedEntity.tinhThuaDat));
-          // this.form.get('huyenThuaDat').setValue(String(this.selectedEntity.huyenThuaDat));
-          // this.form.get('xaThuaDat').setValue(String(this.selectedEntity.xaThuaDat));
-
           this.toggleBlockUI(false);
         },
         error: () => {
@@ -343,23 +353,70 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.toggleBlockUI(true);
-    debugger;
-    let value = this.form.value;
-    if (this.fileAttachmentComponent) {
-      value.fileAttachments = this.fileAttachmentComponent.listNewFile;
+    if (this.utilService.isEmpty(this.complainId)) {
+      let value = this.form.value as CreateComplainDto;
+      let fileAttachmentDtos = this.fileAttachmentComponent.data;
+      let files = this.fileAttachmentComponent.files;
+
+      value.fileAttachments = fileAttachmentDtos.map(x => {
+        return {
+          loaiVuViec: LoaiVuViec.KhieuNai,
+          complainId: x.complainId,
+          tenTaiLieu: x.tenTaiLieu,
+          giaiDoan: x.giaiDoan,
+          hinhThuc: x.hinhThuc,
+          thoiGianBanHanh: x.thoiGianBanHanh,
+          ngayNhan: x.ngayNhan,
+          thuTuButLuc: x.thuTuButLuc,
+          noiDungChinh: x.noiDungChinh,
+          fileName: x.fileName,
+          contentType: x.contentType,
+          contentLength: x.contentLength,
+        } as CreateAndUpdateFileAttachmentDto;
+      });
+      this.complainService
+        .create(value)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ComplainDto) => {
+            res.fileAttachments.forEach(fmDto => {
+              let file = files.find(f => f.name === fmDto.fileName);
+              if (file) {
+                this.fileService
+                  .uploadFilAttachment(res.id, file)
+                  .pipe(takeUntil(this.ngUnsubscribe))
+                  .subscribe(
+                    res => {
+                      this.notificationService.showSuccess(MessageConstants.UPLOAD_OK_MSG = `${fmDto.tenTaiLieu}'`);
+                    },
+                    () => {
+                      this.toggleBlockUI(false);
+                    }
+                  );
+              }
+            });
+            this.toggleBlockUI(false);
+            this.ref.close(res);
+          },
+          () => {
+            this.toggleBlockUI(false);
+          }
+        );
+    } else {
+      let value = this.form.value as UpdateComplainDto;
+      this.complainService
+        .update(this.config.data.id, value)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          data => {
+            this.toggleBlockUI(false);
+            this.ref.close(data);
+          },
+          err => {
+            this.toggleBlockUI(false);
+          }
+        );
     }
-    let obs$ = this.utilService.isEmpty(this.config.data?.id)
-      ? this.complainService.create(value)
-      : this.complainService.update(this.config.data.id, value);
-    obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
-      data => {
-        this.toggleBlockUI(false);
-        this.ref.close(data);
-      },
-      err => {
-        this.toggleBlockUI(false);
-      }
-    );
   }
 
   buildForm() {

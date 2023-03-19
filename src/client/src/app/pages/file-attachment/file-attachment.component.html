@@ -1,11 +1,13 @@
 <div class="animated fadeIn grid card">
   <p-panel #pnl>
+    <!-- -------------------------------------CREATE------------------------------------------------------ -->
     <p-table
+      *ngIf="mode == 'create'"
       #dt
       [value]="items"
       [rows]="10"
       [paginator]="items"
-      [globalFilterFields]="['tenTaiLieu']"
+      [globalFilterFields]="['fileName', 'tenTaiLieu']"
       [tableStyle]="{ width: '100%' }"
       [rowHover]="true"
       dataKey="id"
@@ -123,6 +125,143 @@
         </tr>
       </ng-template>
     </p-table>
+
+    <!-- ------------------------------------UPDATE----------------------------------- -->
+    <p-table
+      *ngIf="mode == 'update'"
+      #dt
+      [value]="items"
+      [rows]="10"
+      [paginator]="false"
+      [rowHover]="true"
+      dataKey="id"
+      [tableStyle]="{ width: '100%' }"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between">
+          <div class="grid flex-start col-8">
+            <span class="p-input-icon-left flex-1">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (keyup.enter)="loadData()"
+                [(ngModel)]="keyword"
+                placeholder="Tên vai trò"
+                class="w-full"
+              />
+            </span>
+            <span class="p-float-label flex-1">
+              <p-dropdown
+                [options]="giaiDoanOptions"
+                [(ngModel)]="giaiDoan"
+                optionLabel="text"
+                optionValue="value"
+                [showClear]="true"
+                [autoDisplayFirst]="false"
+                styleClass="w-full"
+                (onChange)="loadData()"
+              ></p-dropdown>
+              <label for="phoneNumber">Giai đoạn</label>
+            </span>
+            <span class="p-float-label flex-1">
+              <p-dropdown
+                [options]="documentTypeOptions"
+                [(ngModel)]="hinhThuc"
+                optionLabel="documentTypeName"
+                optionValue="id"
+                [showClear]="true"
+                [autoDisplayFirst]="false"
+                styleClass="w-full"
+                (onChange)="loadData()"
+              ></p-dropdown>
+              <label for="phoneNumber">Hình thức tài liệu</label>
+            </span>
+          </div>
+          <div class="grid flex-end flex-row-reverse col-4">
+            <div class="flex-end">
+              <button
+                pButton
+                pRipple
+                label="Thêm"
+                icon="pi pi-plus"
+                class="p-button-info mr-2"
+                (click)="showAddModal()"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="row-num-column">STT</th>
+          <th>File gắn kèm</th>
+          <th>Tên tài liệu</th>
+          <th>Giai đoạn</th>
+          <th>Hình thức</th>
+          <th>Ngày nhận</th>
+          <th>Thời gian ban hành</th>
+          <th>Thứ tự bút lục</th>
+          <th class="action-column"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+        <tr>
+          <td class="row-num-cell">{{ rowIndex + 1 }}</td>
+          <td>{{ row.fileName }}</td>
+          <td>{{ row.tenTaiLieu }}</td>
+          <td>{{ getGiaiDoan(row.giaiDoan) }}</td>
+          <td>{{ getHinhThuc(row.hinhThuc) }}</td>
+          <td>{{ utilService.convertDateToLocal(row?.ngayNhan) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ utilService.convertDateToLocal(row?.thoiGianBanHanh) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row.thuTuButLuc }}</td>
+          <td>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-info mr-1"
+              [pTooltip]="Actions.UPDATE"
+              tooltipPosition="top"
+              (click)="showEditModal(row)"
+            ></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-download"
+              class="p-button-rounded p-button-help mr-1"
+              [pTooltip]="Actions.DOWNLOAD"
+              tooltipPosition="top"
+            ></button>
+
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+              [pTooltip]="Actions.DELETE"
+              tooltipPosition="top"
+              (click)="deleteRow(row)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <p-paginator
+          [rows]="maxResultCount"
+          [totalRecords]="totalCount"
+          [showCurrentPageReport]="true"
+          [showJumpToPageInput]="true"
+          (onPageChange)="pageChanged($event)"
+          currentPageReportTemplate="{totalRecords} bản ghi, {currentPage} trang"
+          [rowsPerPageOptions]="[10, 20, 50, 100]"
+        ></p-paginator>
+      </ng-template>
+    </p-table>
+
     <!-- ----------------------------------------------------------------------- -->
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
       <p-progressSpinner

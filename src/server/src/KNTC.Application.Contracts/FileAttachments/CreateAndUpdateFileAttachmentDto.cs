@@ -18,7 +18,9 @@ public class CreateAndUpdateFileAttachmentDto : IHasConcurrencyStamp
     public int GiaiDoan { get; set; }
     [Required]
     public int HinhThuc { get; set; }
+    [Required]
     public DateTime ThoiGianBanHanh { get; set; }
+    [Required]
     public DateTime NgayNhan { get; set; }
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxThuTuButLucLength)]

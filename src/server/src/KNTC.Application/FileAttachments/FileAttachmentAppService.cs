@@ -43,6 +43,8 @@ public class FileAttachmentAppService : CrudAppService<
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
+                    .WhereIf(input.ComplainId.HasValue, x => x.ComplainId == input.ComplainId)
+                    .WhereIf(input.DenounceId.HasValue, x => x.DenounceId == input.DenounceId)
                     .WhereIf(!filter.IsNullOrEmpty(),
                              x => x.TenTaiLieu.ToUpper().Contains(filter)
                                  || x.FileName.ToUpper().Contains(filter)

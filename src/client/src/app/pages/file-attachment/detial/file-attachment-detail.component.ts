@@ -45,8 +45,10 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
         message: `Thứ tự bút lục tối đa ${KNTCValidatorConsts.MaxThuTuButLucLength} ký tự`,
       },
     ],
-    noiDungChinh: [{ type: 'required', message: 'Hình thức không được để trống' }],
-    fileName: [{ type: 'required', message: 'Hình thức không được để trống' }],
+    noiDungChinh: [{ type: 'required', message: 'Nội dung chính không được để trống' }],
+    fileName: [{ type: 'required', message: 'Vui lòng chọn tệp' }],
+    thoiGianBanHanh: [{ type: 'required', message: 'Thời gian ban hành không được để trống' }],
+    ngayNhan: [{ type: 'required', message: 'Ngày nhận không được để trống' }],
   };
 
   get formControls() {
@@ -66,11 +68,11 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     //Init form
     this.buildForm();
 
-    if (this.utilService.isEmpty(this.config.data?.id) == false) {
-      this.loadFormDetails(this.config.data?.id);
+    if (this.utilService.isEmpty(this.config.data?.item) == false) {
+      this.form.patchValue(this.config.data?.item);
     }
   }
-  loadFormDetails(id: string) {}
+
   getOptions() {
     this.toggleBlockUI(true);
     this.documentTypeService
@@ -88,21 +90,30 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
-    let fileAttachment = this.form.value as CreateAndUpdateFileAttachmentDto;
+    let dto = this.form.value as CreateAndUpdateFileAttachmentDto;
+    if (this.file) {
+      dto.contentLength = this.file.size;
+      dto.contentType = this.file.type;
+      dto.fileName = this.file.name;
+    }
+    let fileAttachment = {
+      ...dto,
+      file: this.file,
+    };
     this.ref.close(fileAttachment);
   }
 
   buildForm() {
     this.form = this.fb.group({
-      ID: [],
+      Id: [],
       tenTaiLieu: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenTaiLieuLength)],
       ],
       giaiDoan: [null, Validators.required],
       hinhThuc: [null, Validators.required],
-      thoiGianBanHanh: [],
-      ngayNhan: [],
+      thoiGianBanHanh: [null, Validators.required],
+      ngayNhan: [null, Validators.required],
       thuTuButLuc: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThuTuButLucLength)],
@@ -112,6 +123,9 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
       fileContent: [],
       contentType: [],
       contentLength: [],
+      loaiVuViec: [this.config.data?.loaiVuViec],
+      complainId: [],
+      denounceId: [],
     });
   }
 
