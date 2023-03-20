@@ -91,25 +91,25 @@
           <td>{{ utilService.convertDateToLocal(row?.thoiGianBanHanh) | date : 'dd-MM-yyyy' }}</td>
           <td>{{ row.thuTuButLuc }}</td>
           <td>
+            <p-tieredMenu
+              [showTransitionOptions]="'300ms'"
+              [hideTransitionOptions]="'300ms'"
+              #menu1
+              [model]="actionMenu"
+              [popup]="true"
+              appendTo="body"
+            ></p-tieredMenu>
             <button
-              type="button"
+              #btn
               pButton
               pRipple
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-info mr-1"
-              [pTooltip]="Actions.UPDATE"
-              tooltipPosition="top"
-              (click)="showEditModal(row)"
-            ></button>
-            <button
               type="button"
               pButton
-              pRipple
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-danger"
-              [pTooltip]="Actions.DELETE"
+              icon="p-button-sm pi pi-fw pi-cog"
+              [label]="Actions.ACTION"
+              [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
-              (click)="deleteRow(row)"
+              (click)="menu1.toggle($event); setActionItem(row)"
             ></button>
           </td>
         </tr>
@@ -197,7 +197,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
         <tr>
-          <td class="row-num-cell">{{ rowIndex + 1 }}</td>
+          <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
           <td>{{ row.fileName }}</td>
           <td>{{ row.tenTaiLieu }}</td>
           <td>{{ getGiaiDoan(row.giaiDoan) }}</td>
@@ -206,35 +206,25 @@
           <td>{{ utilService.convertDateToLocal(row?.thoiGianBanHanh) | date : 'dd-MM-yyyy' }}</td>
           <td>{{ row.thuTuButLuc }}</td>
           <td>
+            <p-tieredMenu
+              [showTransitionOptions]="'300ms'"
+              [hideTransitionOptions]="'300ms'"
+              #menu
+              [model]="actionMenu"
+              [popup]="true"
+              appendTo="body"
+            ></p-tieredMenu>
             <button
-              type="button"
+              #btn
               pButton
               pRipple
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-info mr-1"
-              [pTooltip]="Actions.UPDATE"
-              tooltipPosition="top"
-              (click)="showEditModal(row)"
-            ></button>
-            <button
               type="button"
               pButton
-              pRipple
-              icon="pi pi-download"
-              class="p-button-rounded p-button-help mr-1"
-              [pTooltip]="Actions.DOWNLOAD"
+              icon="p-button-sm pi pi-fw pi-cog"
+              [label]="Actions.ACTION"
+              [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
-              (click)="dowload(row)"
-            ></button>
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-danger"
-              [pTooltip]="Actions.DELETE"
-              tooltipPosition="top"
-              (click)="deleteRow(row)"
+              (click)="menu.toggle($event); setActionItem(row)"
             ></button>
           </td>
         </tr>

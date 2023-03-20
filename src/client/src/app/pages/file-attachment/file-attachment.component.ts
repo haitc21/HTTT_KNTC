@@ -7,7 +7,7 @@ import {
   FileAttachmentDto,
   FileAttachmentService,
 } from '@proxy/file-attachments';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
@@ -35,6 +35,8 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   items: FileAttachmentDto[] = [];
   data: FileAttachmentDto[] = [];
   files: File[] = [];
+  actionItem: FileAttachmentDto;
+  actionMenu: MenuItem[];
 
   documentTypeOptions: DocumentTypeLookupDto[] = [];
   giaiDoanOptions = [
@@ -64,6 +66,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.buildActionMenu();
     this.getOptions();
     this.loadData();
   }
@@ -196,7 +199,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       },
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((dto: any) => {
+    let modalEditClose$ = ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((dto: any) => {
       if (dto) {
         if (this.mode == 'create') {
           let fileAttachment = {
@@ -269,7 +272,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           const blob = new Blob([JSON.stringify(data)], { type: item.contentType });
           console.log(item.fileName);
           console.log(item.contentType);
-          
+
           // Tạo URL cho blob dữ liệu
           const url = URL.createObjectURL(blob);
 
@@ -342,6 +345,39 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;
     this.loadData();
+  }
+
+  buildActionMenu() {
+    this.actionMenu = [
+      {
+        label: this.Actions.UPDATE,
+        icon: 'pi pi-fw pi-pencil',
+        command: event => {
+          this.showEditModal(this.actionItem);
+          this.actionItem = null;
+        },
+      },
+      {
+        label: this.Actions.DOWNLOAD,
+        icon: 'pi pi-fw pi-download',
+        command: event => {
+          this.dowload(this.actionItem);
+          this.actionItem = null;
+        },
+        visible: this.mode == 'update',
+      },
+      {
+        label: this.Actions.DELETE,
+        icon: 'pi pi-fw pi-trash',
+        command: event => {
+          this.deleteRow(this.actionItem);
+          this.actionItem = null;
+        },
+      },
+    ];
+  }
+  setActionItem(item) {
+    this.actionItem = item;
   }
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
