@@ -117,7 +117,7 @@ public class FileAttachmentAppService : CrudAppService<
     }
     public async Task<Guid> UploadAsync(Guid fileAttachmentId, IFormFile file)
     {
-        if (file == null) throw new UserFriendlyException("Vui lòng chọn tệp đính kèm cho hồ sơ");
+        if (file == null) throw new UserFriendlyException("Vui lòng chọn tệp");
         try
         {
             using (var stream = new MemoryStream())
@@ -130,12 +130,14 @@ public class FileAttachmentAppService : CrudAppService<
         }
         catch (Exception ex)
         {
-            throw new UserFriendlyException(ex.Message);
+            var entity = await Repository.GetAsync(fileAttachmentId);
+            await Repository.DeleteAsync(fileAttachmentId);
+            throw new UserFriendlyException($"Đã xảy ra lỗi khi tải tệp {entity.FileName}" + ex.Message);
         }
     }
 
     [AllowAnonymous]
-    public async Task<byte[]> DowloadAsync(Guid fileAttachmentId)
+    public async Task<byte[]> DownloadAsync(Guid fileAttachmentId)
     {
         return await _blobContainer.GetAllBytesOrNullAsync(fileAttachmentId.ToString());
     }

@@ -64,11 +64,11 @@ export class FileService {
     );
   }
 
-  dowloadFileAttachment = (fileAttachmentId: string) =>
+  downloadFileAttachment = (fileAttachmentId: string) =>
     this.restService.request<any, any>(
       {
         method: 'POST',
-        url: `/api/app/file-attachment/dowload/${fileAttachmentId}`,
+        url: `/api/app/file-attachment/download/${fileAttachmentId}`,
       },
       { apiName: this.apiName }
     );

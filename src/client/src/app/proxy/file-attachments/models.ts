@@ -10,8 +10,8 @@ export interface CreateAndUpdateFileAttachmentDto {
   tenTaiLieu: string;
   giaiDoan: number;
   hinhThuc: number;
-  thoiGianBanHanh?: string;
-  ngayNhan?: string;
+  thoiGianBanHanh: string;
+  ngayNhan: string;
   thuTuButLuc: string;
   noiDungChinh?: string;
   fileName?: string;

@@ -15,5 +15,5 @@ public interface IFileAttachmentAppService : ICrudAppService<FileAttachmentDto,
         CreateAndUpdateFileAttachmentDto>
 {
     Task<Guid> UploadAsync(Guid fileAttachmentId, IFormFile file);
-    Task<byte[]> DowloadAsync(Guid fileAttachmentId);
+    Task<byte[]> DownloadAsync(Guid fileAttachmentId);
 }

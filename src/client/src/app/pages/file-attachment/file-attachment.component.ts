@@ -13,7 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
-import { FileService } from 'src/app/shared/services/file.service.spec';
+import { FileService } from 'src/app/shared/services/file.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.component';
@@ -257,7 +257,37 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       }
     });
   }
+  dowload(item: FileAttachmentDto) {
+    this.toggleBlockUI(true);
+    this.fileService
+      .downloadFileAttachment(item.id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        data => {
+          this.toggleBlockUI(false);
 
+          const blob = new Blob([JSON.stringify(data)], { type: item.contentType });
+          console.log(item.fileName);
+          console.log(item.contentType);
+          
+          // Tạo URL cho blob dữ liệu
+          const url = URL.createObjectURL(blob);
+
+          // Tạo thẻ a để tải xuống tệp
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = item.fileName;
+
+          // Thêm thẻ a vào body và kích hoạt click
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
+  }
   deleteRow(item) {
     if (!item) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);

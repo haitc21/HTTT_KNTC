@@ -1,6 +1,6 @@
 import { ListResultDto } from '@abp/ng.core';
-import { Component, OnInit, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
-import { Validators, FormControl, FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { LinhVuc, LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
 import {
   ComplainDto,
@@ -8,18 +8,15 @@ import {
   CreateComplainDto,
   UpdateComplainDto,
 } from '@proxy/complains';
-import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
 import { CreateAndUpdateFileAttachmentDto } from '@proxy/file-attachments';
 import { LandTypeLookupDto, LandTypeService } from '@proxy/land-types';
 import { UnitLookupDto, UnitService } from '@proxy/units';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
-import { FileService } from 'src/app/shared/services/file.service.spec';
+import { EileUploadDto } from 'src/app/shared/models/file-upload.class';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
-import { FileAttachmentDetailComponent } from '../../file-attachment/detial/file-attachment-detail.component';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
 
 @Component({
@@ -34,7 +31,7 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
   complainId: string;
   mode: 'create' | 'update' = 'create';
   loaiVuViec = LoaiVuViec.KhieuNai;
-
+  fileUploads: EileUploadDto[] = [];
   // Default
   public blockedPanelDetail: boolean = false;
   public form: FormGroup;
@@ -200,8 +197,7 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private unitService: UnitService,
     private landTypeService: LandTypeService,
-    private notificationService: NotificationService,
-    private fileService: FileService
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -382,21 +378,16 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
             res.fileAttachments.forEach(fmDto => {
               let file = files.find(f => f.name === fmDto.fileName);
               if (file) {
-                this.fileService
-                  .uploadFilAttachment(res.id, file)
-                  .pipe(takeUntil(this.ngUnsubscribe))
-                  .subscribe(
-                    res => {
-                      this.notificationService.showSuccess(MessageConstants.UPLOAD_OK_MSG = `${fmDto.tenTaiLieu}'`);
-                    },
-                    () => {
-                      this.toggleBlockUI(false);
-                    }
-                  );
+                this.fileUploads.push({
+                  id: fmDto.id,
+                  name: fmDto.tenTaiLieu,
+                  file: file,
+                });
               }
             });
             this.toggleBlockUI(false);
-            this.ref.close(res);
+            if (this.fileUploads.length > 0) this.ref.close(this.fileUploads);
+            else this.ref.close(res);
           },
           () => {
             this.toggleBlockUI(false);
@@ -489,26 +480,19 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       loaiKhieuNai1: [],
       ngayKhieuNai1: [],
       ngayTraKQ1: [],
-      thamQuyen1: [
-        null,
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)],
-      ],
-      soQD1: [null, [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      thamQuyen1: [null, [Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)]],
+      soQD1: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
       ketQua1: [],
 
       loaiKhieuNai2: [],
       ngayKhieuNai2: [],
       ngayTraKQ2: [],
-      thamQuyen2: [
-        null,
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)],
-      ],
-      soQD2: [null, [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      thamQuyen2: [null, [Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)]],
+      soQD2: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
       ketQua2: [],
 
       listFileDeleted: [],
       concurrencyStamp: [],
-      // fileAttachments: this.fb.array([]),
     });
   }
 

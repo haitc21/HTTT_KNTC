@@ -28,10 +28,10 @@ export class FileAttachmentService {
     { apiName: this.apiName });
   
 
-  dowload = (fileAttachmentId: string) =>
+  download = (fileAttachmentId: string) =>
     this.restService.request<any, number[]>({
       method: 'POST',
-      url: `/api/app/file-attachment/dowload/${fileAttachmentId}`,
+      url: `/api/app/file-attachment/download/${fileAttachmentId}`,
     },
     { apiName: this.apiName });
   

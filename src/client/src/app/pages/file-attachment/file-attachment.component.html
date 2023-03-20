@@ -105,16 +105,6 @@
               type="button"
               pButton
               pRipple
-              icon="pi pi-download"
-              class="p-button-rounded p-button-help mr-1"
-              [pTooltip]="Actions.DOWNLOAD"
-              tooltipPosition="top"
-            ></button>
-
-            <button
-              type="button"
-              pButton
-              pRipple
               icon="pi pi-trash"
               class="p-button-rounded p-button-danger"
               [pTooltip]="Actions.DELETE"
@@ -234,8 +224,8 @@
               class="p-button-rounded p-button-help mr-1"
               [pTooltip]="Actions.DOWNLOAD"
               tooltipPosition="top"
+              (click)="dowload(row)"
             ></button>
-
             <button
               type="button"
               pButton
