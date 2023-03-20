@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -119,9 +120,13 @@ public class FileAttachmentAppService : CrudAppService<
         if (file == null) throw new UserFriendlyException("Vui lòng chọn tệp đính kèm cho hồ sơ");
         try
         {
-            var stream = file.OpenReadStream();
-            await _blobContainer.SaveAsync(fileAttachmentId.ToString(), stream, overrideExisting: true);
+            using (var stream = new MemoryStream())
+            {
+                await file.CopyToAsync(stream); // sao chép dữ liệu từ IFormFile vào MemoryStream
+                await _blobContainer.SaveAsync(fileAttachmentId.ToString(), stream, overrideExisting: true);
+            }
             return fileAttachmentId;
+
         }
         catch (Exception ex)
         {

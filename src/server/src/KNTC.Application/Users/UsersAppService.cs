@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -284,8 +285,11 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         {
             //var blobName = String.Concat(CurrentUser.GetId().ToString(), ".", GetFileExtension(avatarStream.FileName));
             var blobName = CurrentUser.GetId().ToString();
-            var stream = file.OpenReadStream();
-            await _blobContainer.SaveAsync(blobName, stream, overrideExisting: true);
+            using (var stream = new MemoryStream())
+            {
+                await file.CopyToAsync(stream); // sao chép dữ liệu từ IFormFile vào MemoryStream
+                await _blobContainer.SaveAsync(blobName, stream, overrideExisting: true);
+            }
             return blobName;
         }
         catch (Exception ex)
