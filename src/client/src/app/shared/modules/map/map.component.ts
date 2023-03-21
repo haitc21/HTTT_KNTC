@@ -36,14 +36,15 @@ const redIcon = new L.Icon({
 export class MapComponent implements AfterViewInit, OnChanges {
   @Input() idMap: string = 'map';
   @Input() data: Complain[] = [];
-  @Input() spatialData: [];
+  @Input() spatialData: any[];
   @Input() heightMap: string = '600px';
   @Input() zoomLv: number = 13;
 
   map: L.Map;
 
-  vitri: any;
-  khonggian: any;
+  khieunai: any;
+  tocao: any;
+  quyhoach: any;
 
   loaiHS = ['khiếu nại', 'Tố cáo'];
   linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
@@ -67,14 +68,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  initMap() {
+  initMap() {    
+    /*
     this.map = L.map(this.idMap).setView([21.027764, 105.83416], this.zoomLv);
     this.vitri = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
       maxZoom: 18,
     }).addTo(this.map);
- 
+    */
+
     /*
     this.vitri = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
@@ -82,12 +85,73 @@ export class MapComponent implements AfterViewInit, OnChanges {
       maxZoom: 18,
     })
     */
+    this.khieunai = L.layerGroup();
+    this.tocao = L.layerGroup();
+
+    const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+    const mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+   
+    const streets = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+  
+    const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    });
+  
+    this.map = L.map(this.idMap, {
+      center: [21.027764, 105.83416],
+      zoom: 10,
+      layers: [osm, this.khieunai]
+    });
+  
+    const baseLayers = {
+      'OpenStreetMap': osm,
+      'Streets': streets
+    };
+  
+    const overlays = {
+      'Khiếu nại': this.khieunai,
+      'Tố cáo': this.tocao
+    };
+  
+    const layerControl = L.control.layers(baseLayers, overlays).addTo(this.map);
+
+    var geojsonFeature = {
+      "type": "Feature",
+      "properties": {
+          "name": "Dữ liệu quy hoạch",
+          "amenity": "Thái Nguyên",
+          "popupContent": "Xem dữ liệu quy hoạch!"
+      },
+      "geometry": this.spatialData
+    };
+    var myStyle = {
+      fillColor: "#ff7800",
+      weight: 2,
+      opacity: 1,
+      color: 'white',
+      dashArray: '3',
+      fillOpacity: 0.7
+    };
+
+    this.quyhoach = L.geoJSON(geojsonFeature,
+      {style: myStyle
+      }).addTo(this.map);
+    
+    const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+    layerControl.addBaseLayer(satellite, 'Satellite');
+    layerControl.addOverlay(this.quyhoach, 'Quy hoạch');
+
+    /*
+    //
     this.khonggian = L.geoJSON();
     var myStyle = {
       "color": "#ff7800",
       "weight": 1,
       "opacity": 0.65
     };
+    
+    
     this.khonggian = L.geoJSON(this.spatialData, {
       style: myStyle
     }).addTo(this.map);
@@ -153,7 +217,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
         this.map.removeLayer(layer);
       }
     });
-
+    debugger;
     //Add markers
     hosos.forEach(hoSo => {
       const marker = L.marker([hoSo.latLng[0], hoSo.latLng[1]], {
@@ -170,14 +234,25 @@ export class MapComponent implements AfterViewInit, OnChanges {
           <p>Lĩnh vực: ${this.linhVuc[hoSo.fieldType]}</p>
         </div>
       `);
-      marker.addTo(this.map);
+      //marker.addTo(this.map);
+      if (hoSo.typeHoSo==typesHoSo.Complaint)
+        marker.addTo(this.khieunai);
+      else if (hoSo.typeHoSo==typesHoSo.Accusation)
+        marker.addTo(this.tocao);
     });    
   }
 
-  renderSpatialData(khonggian: []) {
+  renderSpatialData(khonggian: any[]) {
     //Add polygons
     //this.spatialData 
-
-    this.khonggian = L.geoJSON(this.spatialData).addTo(this.map);
+    debugger;
+    /*
+    var myStyle = {
+      "color": "#ff7800",
+      "weight": 5,
+      "opacity": 0.65
+    };
+    */
+    
   }
 }

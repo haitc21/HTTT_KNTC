@@ -20,7 +20,7 @@ public class SpatialDataManager : DomainService
         Check.NotNullOrWhiteSpace(geoJson, nameof(geoJson));
         return new SpatialData()
         {
-            GeoJson = geoJson
+            //GeoJson = geoJson
             // suy geometry tu geo json
         };
     }
@@ -29,7 +29,7 @@ public class SpatialDataManager : DomainService
     {
         Check.NotNull(spatialData, nameof(spatialData));
 
-        spatialData.GeoJson = geoJson;
+        //spatialData.GeoJson = geoJson;
         // suy geometry tu geo json
     }
 }

@@ -13,4 +13,5 @@ export interface SpatialDataDto extends FullAuditedEntityDto<number> {
 }
 
 export interface SpatialDataLookupDto extends EntityDto<number> {
+  
 }

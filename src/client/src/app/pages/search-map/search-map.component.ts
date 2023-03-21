@@ -6,6 +6,7 @@ import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
 import { MockService } from '../../shared/mock/mock.service';
 import { SpatialDataDto, SpatialDataLookupDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
 import { Subject, takeUntil } from 'rxjs';
+import { each } from 'chart.js/dist/helpers/helpers.core';
 @Component({
   selector: 'app-search-map',
   templateUrl: './search-map.component.html',
@@ -54,7 +55,7 @@ export class SearchMapComponent implements OnInit {
   
   blockedPanel = false;
   data: Complain[] = [];
-  spatialData: [];
+  spatialData: any[];
 
   mockData: Complain[] = [];
   loaiHS = ['khiếu nại', 'Tố cáo'];
@@ -130,13 +131,12 @@ export class SearchMapComponent implements OnInit {
       } as GetSpatialDataListDto;
        //this.spatialData
        this.spatialDataService.getList(this.filter)
-      //.getLookup()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
-        (res: ListResultDto<SpatialDataLookupDto>) => {
+        (res: ListResultDto<SpatialDataDto>) => {
 
-          //this.spatialData
-          let t = res.items;
+          this.spatialData = res.items.map(item => item.geoJson);
+          
           this.toggleBlockUI(false);
         },
         () => {

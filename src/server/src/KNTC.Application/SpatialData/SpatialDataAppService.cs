@@ -1,4 +1,5 @@
-﻿using KNTC.Localization;
+﻿using AutoMapper;
+using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -8,8 +9,10 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace KNTC.SpatialDatas;
 
@@ -44,7 +47,7 @@ public class SpatialDataAppService : CrudAppService<
         queryable = queryable
                     //.WhereIf(!filter.IsNullOrEmpty(), x => x.GeoJson.ToUpper().Contains(filter))
                     .WhereIf(!filter.IsNullOrEmpty(),
-                             x => x.GeoJson.ToUpper().Contains(filter)                  
+                             x => x.TenToChuc.ToUpper().Contains(filter)                  
                              )
                     .OrderBy(input.Sorting) 
                     .Skip(input.SkipCount)
@@ -54,10 +57,13 @@ public class SpatialDataAppService : CrudAppService<
 
         var totalCount = await Repository.CountAsync();
 
-        return new PagedResultDto<SpatialDataDto>(
+        var result = new PagedResultDto<SpatialDataDto>(
             totalCount,
             ObjectMapper.Map<List<SpatialData>, List<SpatialDataDto>>(queryResult)
         );
+        
+        return result;
+
     }
     public async Task<ListResultDto<SpatialDataLookupDto>> GetLookupAsync()
     {
@@ -90,4 +96,3 @@ public class SpatialDataAppService : CrudAppService<
         await Repository.DeleteManyAsync(ids);
     }
 }
-

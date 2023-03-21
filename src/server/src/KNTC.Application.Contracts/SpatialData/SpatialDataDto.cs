@@ -6,10 +6,10 @@ namespace KNTC.SpatialDatas;
 
 public class SpatialDataDto : EntityDto<int>
 {
-    public Double ObjectId { get; }
-    public string? TenToChuc { get; }
-    public Single? Quyen { get; }
-    public string SoToBD { get; }
-    public SqlGeometry? Geometry { get; set; }
-    public string GeoJson { get; }
+    public Double ObjectId { get; set; }
+    public string? TenToChuc { get; set; }
+    public Single? Quyen { get; set; }
+    public string? SoToBD { get; set; }
+    //public SqlGeometry Geometry { get;  set; }
+    public string GeoJson { get; set; }
 }
