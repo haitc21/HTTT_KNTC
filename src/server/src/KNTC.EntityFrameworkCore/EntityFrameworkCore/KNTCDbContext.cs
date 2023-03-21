@@ -226,8 +226,8 @@ public class KNTCDbContext :
             b.Property(x => x.GiaiDoan).IsRequired().HasColumnName("giai_doan");
             b.Property(x => x.TenTaiLieu).IsRequired().HasColumnName("ten_tai_lieu").HasMaxLength(KNTCValidatorConsts.MaxTenTaiLieuLength);
             b.Property(x => x.HinhThuc).IsRequired().HasColumnName("hinh_thuc").HasMaxLength(KNTCValidatorConsts.MaxHinhThucLength);
-            b.Property(x => x.ThoiGianBanHanh).HasColumnName("thoi_gian_ban_hanh");
-            b.Property(x => x.NgayNhan).HasColumnName("ngay_nhan");
+            b.Property(x => x.ThoiGianBanHanh).IsRequired().HasColumnName("thoi_gian_ban_hanh");
+            b.Property(x => x.NgayNhan).IsRequired().HasColumnName("ngay_nhan");
             b.Property(x => x.ThuTuButLuc).IsRequired().HasColumnName("thu_tu_but_luc").HasMaxLength(KNTCValidatorConsts.MaxThuTuButLucLength);
             b.Property(x => x.NoiDungChinh).HasColumnName("noi_dung_chinh");
             b.Property(x => x.FileName).IsRequired().HasColumnName("file_name").HasMaxLength(KNTCValidatorConsts.MaxFileNameLength);

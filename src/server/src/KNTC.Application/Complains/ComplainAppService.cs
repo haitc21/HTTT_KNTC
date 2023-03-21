@@ -13,6 +13,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using static KNTC.Permissions.KNTCPermissions;
 
 namespace KNTC.Complains;
 
@@ -42,7 +43,6 @@ public class ComplainAppService : CrudAppService<
         _complainManager = complainManager;
         _blobContainer = blobContainer;
     }
-
     [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
     {
@@ -130,7 +130,7 @@ public class ComplainAppService : CrudAppService<
                                                   KetQua1: input.KetQua1,
                                                   KetQua2: input.KetQua2);
         await _complainRepo.InsertAsync(complain);
-
+        var result = ObjectMapper.Map<Complain, ComplainDto>(complain);
         if (input.FileAttachments != null && input.FileAttachments.Count > 0)
         {
             foreach (var item in input.FileAttachments)
@@ -148,71 +148,16 @@ public class ComplainAppService : CrudAppService<
                                                                         contentLength: item.ContentLength
                                                                         );
                 await _fileAttachmentRepo.InsertAsync(fileAttach);
-                //await UploadAsync(fileAttach.Id.ToString(), item.FileContent);
+                result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
         }
-        return ObjectMapper.Map<Complain, ComplainDto>(complain);
+        return result;
     }
     [Authorize(KNTCPermissions.Complains.Default)]
     public override async Task<ComplainDto> UpdateAsync(Guid id, UpdateComplainDto input)
     {
         var complain = await _complainRepo.GetAsync(id, false);
         complain.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
-
-        if (input.ListFileDeleted.Count > 0)
-        {
-            foreach (var idFileAttach in input.ListFileDeleted)
-            {
-                await _blobContainer.DeleteAsync(idFileAttach.ToString());
-            }
-        }
-        if (input.FileAttachments != null && input.FileAttachments.Count > 0)
-        {
-            foreach (var fileAttach in input.FileAttachments)
-            {
-                if (fileAttach.Id == null)
-                {
-                    var tepDinhKem = await _complainManager.CreateFileAttachmentAsync(complain: complain,
-                                                                                      giaiDoan: fileAttach.GiaiDoan,
-                                                                                      tenTaiLieu: fileAttach.TenTaiLieu,
-                                                                                      hinhThuc: fileAttach.HinhThuc,
-                                                                                      thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
-                                                                                      ngayNhan: fileAttach.NgayNhan,
-                                                                                      thuTuButLuc: fileAttach.ThuTuButLuc,
-                                                                                      noiDungChinh: fileAttach.NoiDungChinh,
-                                                                                      fileName: fileAttach.FileName,
-                                                                                      contentType: fileAttach.ContentType,
-                                                                                      contentLength: fileAttach.ContentLength
-                                                                                      );
-                    await _fileAttachmentRepo.InsertAsync(tepDinhKem);
-                    //await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
-                }
-                else
-                {
-                    var tepDinhKem = await _fileAttachmentRepo.GetAsync(fileAttach.Id);
-                    await _complainManager.UpdateFileAttachmentAsync(complain: complain,
-                                                                     tepDinhKem: tepDinhKem,
-                                                                     giaiDoan: fileAttach.GiaiDoan,
-                                                                     tenTaiLieu: fileAttach.TenTaiLieu,
-                                                                     hinhThuc: fileAttach.HinhThuc,
-                                                                     thoiGianBanHanh: fileAttach.ThoiGianBanHanh,
-                                                                     ngayNhan: fileAttach.NgayNhan,
-                                                                     thuTuButLuc: fileAttach.ThuTuButLuc,
-                                                                     noiDungChinh: fileAttach.NoiDungChinh,
-                                                                     fileName: fileAttach.FileName,
-                                                                     contentType: fileAttach.ContentType,
-                                                                     contentLength: fileAttach.ContentLength
-                                                                     );
-                    await _fileAttachmentRepo.UpdateAsync(tepDinhKem);
-                    // FileContent == null => Chỉ thay đổi thông tin không thay đổi file
-                    //if (fileAttach.FileContent != null)
-                    //{
-                    //    await UploadAsync(tepDinhKem.Id.ToString(), fileAttach.FileContent);
-                    //}
-                }
-
-            }
-        }
         await _complainManager.UpdateAsync(complain: complain,
                                            maHoSo: input.MaHoSo,
                                           linhVuc: input.LinhVuc,
@@ -263,45 +208,24 @@ public class ComplainAppService : CrudAppService<
     [Authorize(KNTCPermissions.Complains.Delete)]
     public override async Task DeleteAsync(Guid id)
     {
-        //var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.IdHoSo)).Select(x => x.Id);
-        //await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
-        //foreach (var item in idFileAttachs)
-        //{
-        //    await _blobContainer.DeleteAsync(item.ToString());
-        //}
+        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.ComplainId)).Select(x => x.Id);
+        await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
+        foreach (var item in idFileAttachs)
+        {
+            await _blobContainer.DeleteAsync(item.ToString());
+        }
         await _complainRepo.DeleteAsync(id);
     }
 
     [Authorize(KNTCPermissions.Complains.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
-        //var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Contains(x.IdHoSo))).Select(x => x.Id);
-        //await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
-        //foreach (var item in idFileAttachs)
-        //{
-        //    await _blobContainer.DeleteAsync(item.ToString());
-        //}
+        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Any(i => i == x.ComplainId))).Select(x => x.Id);
+        await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
+        foreach (var item in idFileAttachs)
+        {
+            await _blobContainer.DeleteAsync(item.ToString());
+        }
         await _complainRepo.DeleteManyAsync(ids);
-    }
-
-    public async Task UploadAsync(string idTepDinhKem, IFormFile file)
-    {
-        if (file == null) throw new UserFriendlyException("Vui lòng chọn tệp đính kèm cho hồ sơ");
-        try
-        {
-            var stream = file.OpenReadStream();
-            await _blobContainer.SaveAsync(idTepDinhKem, stream, overrideExisting: true);
-        }
-        catch (Exception ex)
-        {
-            throw new UserFriendlyException(ex.Message);
-        }
-
-    }
-
-    [AllowAnonymous]
-    public async Task<byte[]> DowloadAsync(string idTepDinhKem)
-    {
-        return await _blobContainer.GetAllBytesOrNullAsync(idTepDinhKem);
     }
 }

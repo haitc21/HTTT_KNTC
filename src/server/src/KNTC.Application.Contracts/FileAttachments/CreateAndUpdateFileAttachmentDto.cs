@@ -2,17 +2,25 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace KNTC.FileAttachments;
 
-public class CreateAndUpdateFileAttachmentDto : EntityDto<Guid>
+public class CreateAndUpdateFileAttachmentDto : IHasConcurrencyStamp
 {
+    public Guid? Id { get; set; }
+    public LoaiVuViec LoaiVuViec { get; set; }
+    public Guid? ComplainId { get; set; }
+    public Guid? DenounceId { get; set; }
+    [Required]
     public string TenTaiLieu { get; set; }
     [Required]
     public int GiaiDoan { get; set; }
     [Required]
     public int HinhThuc { get; set; }
+    [Required]
     public DateTime ThoiGianBanHanh { get; set; }
+    [Required]
     public DateTime NgayNhan { get; set; }
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxThuTuButLucLength)]
@@ -21,5 +29,5 @@ public class CreateAndUpdateFileAttachmentDto : EntityDto<Guid>
     public string FileName { get; set; }
     public string ContentType { get; set; }
     public long ContentLength { get; set; }
-    public IFormFile FileContent { get; set; }
+    public string ConcurrencyStamp { get; set; }
 }

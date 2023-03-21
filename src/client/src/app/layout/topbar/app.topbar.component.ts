@@ -6,7 +6,7 @@ import { PermissionService } from '@abp/ng.core';
 import { LayoutService } from '../service/app.layout.service';
 import { LOGIN_URL } from 'src/app/shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FileService } from 'src/app/shared/services/file.service.spec';
+import { FileService } from 'src/app/shared/services/file.service';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { ProfileComponent } from 'src/app/system/user/profile/profile.component';

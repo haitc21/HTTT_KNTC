@@ -1,9 +1,4 @@
-<form
-  class="form-horizontal form-label-left"
-  skipValidation
-  [formGroup]="form"
-  
->
+<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
   <p-panel #pnlDetail [collapsed]="false">
     <div class="card">
       <p-tabView styleClass="tabview-custom">
@@ -65,8 +60,8 @@
                     <label for="description">Người đề nghị <span class="required">*</span></label>
                   </span>
                   <app-validation-message
-                    [entityControl]="formControls.tieuDe"
-                    [validationMessages]="validationMessages.tieuDe"
+                    [entityControl]="formControls.nguoiDeNghi"
+                    [validationMessages]="validationMessages.nguoiDeNghi"
                   >
                   </app-validation-message>
                 </div>
@@ -157,7 +152,7 @@
                       [filter]="true"
                       filterBy="unitName"
                       styleClass="w-full"
-                      (onChange)="inhChange($event)"
+                      (onChange)="tinhChange($event?.value)"
                     ></p-dropdown>
                     <label for="description">Tỉnh/TP <span class="required">*</span></label>
                   </span>
@@ -181,7 +176,7 @@
                       [filter]="true"
                       filterBy="unitName"
                       styleClass="w-full"
-                      (onChange)="huyenChange($event)"
+                      (onChange)="huyenChange($event?.value)"
                     ></p-dropdown>
                     <label for="description">Quận/Huyện <span class="required">*</span></label>
                   </span>
@@ -444,7 +439,7 @@
                       [filter]="true"
                       filterBy="unitName"
                       styleClass="w-full"
-                      (onChange)="inhThuaDatChange($event)"
+                      (onChange)="tinhThuaDatChange($event?.value)"
                     ></p-dropdown>
                     <label for="description">Tỉnh/TP <span class="required">*</span></label>
                   </span>
@@ -468,7 +463,7 @@
                       [filter]="true"
                       filterBy="unitName"
                       styleClass="w-full"
-                      (onChange)="huyenThuaDatChange($event)"
+                      (onChange)="huyenThuaDatChange($event?.value)"
                     ></p-dropdown>
                     <label for="description">Quận/Huyện <span class="required">*</span></label>
                   </span>
@@ -731,7 +726,11 @@
             <i class="pi pi-folder mr-2"></i>
             <span>Tệp gắn kèm</span>
           </ng-template>
-          <app-file-attachment></app-file-attachment>
+          <app-file-attachment
+            [loaiVuViec]="loaiVuViec"
+            [mode]="mode"
+            [complainId]="complainId"
+          ></app-file-attachment>
         </p-tabPanel>
         <p-tabPanel>
           <ng-template pTemplate="header">
@@ -748,6 +747,7 @@
         pButton
         pRipples
         type="submit"
+        (click)="saveChange()"
         label="Lưu"
         class="p-button-info"
         icon="pi pi-check"

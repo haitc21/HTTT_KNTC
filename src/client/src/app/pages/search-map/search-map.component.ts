@@ -123,7 +123,7 @@ export class SearchMapComponent implements OnInit {
     
     //spatialData
     if (this.geo){
-      debugger;
+      
       this.filter = {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,

@@ -293,7 +293,7 @@ public class DenounceManager : DomainService
         }
         return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
         {
-            DeleterId = denounce.Id,
+            DenounceId = denounce.Id,
             GiaiDoan = giaiDoan,
             HinhThuc = hinhThuc,
             ThoiGianBanHanh = thoiGianBanHanh,
@@ -304,54 +304,5 @@ public class DenounceManager : DomainService
             ContentType = contentType,
             ContentLength = contentLength
         };
-    }
-    public async Task UpdateFileAttachmentAsync([NotNull] Denounce denounce,
-                                                [NotNull] FileAttachment tepDinhKem,
-                                                [NotNull] int giaiDoan,
-                                                [NotNull] string tenTaiLieu,
-                                                [NotNull] int hinhThuc,
-                                                DateTime thoiGianBanHanh,
-                                                DateTime ngayNhan,
-                                                [NotNull] string thuTuButLuc,
-                                                [NotNull] string noiDungChinh,
-                                                string fileName,
-                                                string contentType,
-                                                long contentLength)
-    {
-        Check.NotNull(denounce, nameof(denounce));
-        Check.NotNull(denounce, nameof(giaiDoan));
-        Check.NotNull(tepDinhKem, nameof(tepDinhKem));
-        Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
-        Check.NotNull(hinhThuc, nameof(hinhThuc));
-        Check.NotNullOrWhiteSpace(thuTuButLuc, nameof(thuTuButLuc));
-        Check.NotNullOrWhiteSpace(noiDungChinh, nameof(noiDungChinh));
-        Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
-        Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
-        Check.NotNull(contentLength, nameof(contentLength));
-        if (tepDinhKem.TenTaiLieu != tenTaiLieu)
-        {
-            var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
-                                                         && x.Id != tepDinhKem.Id
-                                                         && x.DenounceId == denounce.Id);
-            if (existTepDinhKem != null)
-            {
-                throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
-                    .WithData("tenTaiLieu", tenTaiLieu)
-                    .WithData("maHoSo", denounce.MaHoSo);
-            }
-            tepDinhKem.ChangeTenTaiLieu(tenTaiLieu);
-        }
-        tepDinhKem.GiaiDoan = giaiDoan;
-        tepDinhKem.HinhThuc = hinhThuc;
-        tepDinhKem.ThoiGianBanHanh = thoiGianBanHanh;
-        tepDinhKem.NgayNhan = ngayNhan;
-        tepDinhKem.ThuTuButLuc = thuTuButLuc;
-        tepDinhKem.NoiDungChinh = noiDungChinh;
-        if (!!string.IsNullOrEmpty(fileName))
-        {
-            tepDinhKem.FileName = fileName;
-            tepDinhKem.ContentType = contentType;
-            tepDinhKem.ContentLength = contentLength;
-        }
     }
 }

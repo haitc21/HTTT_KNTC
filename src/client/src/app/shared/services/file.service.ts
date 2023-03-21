@@ -37,17 +37,40 @@ export class FileService {
       )
       .pipe(
         tap(result => {
-            if (result)
-              this.getAvatar(result).subscribe(data => {
-                if (data) {
-                  let objectURL = 'data:image/png;base64,' + data;
-                  let avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-                  this.avatarUrlSubject.next(avatarUrl); // Emit giá trị mới vào BehaviorSubject
-                }
-              });
+          if (result)
+            this.getAvatar(result).subscribe(data => {
+              if (data) {
+                let objectURL = 'data:image/png;base64,' + data;
+                let avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+                this.avatarUrlSubject.next(avatarUrl); // Emit giá trị mới vào BehaviorSubject
+              }
+            });
         })
       );
   }
 
+  uploadFilAttachment(fileAttachmentId: string, file: File) {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    return this.restService.request<any, string>(
+      {
+        method: 'POST',
+        responseType: 'text',
+        url: `/api/app/file-attachment/upload/${fileAttachmentId}`,
+        body: formData,
+      },
+      { apiName: this.apiName }
+    );
+  }
+
+  downloadFileAttachment = (fileAttachmentId: string) =>
+    this.restService.request<any, any>(
+      {
+        method: 'POST',
+        url: `/api/app/file-attachment/download/${fileAttachmentId}`,
+      },
+      { apiName: this.apiName }
+    );
   constructor(private restService: RestService, private sanitizer: DomSanitizer) {}
 }

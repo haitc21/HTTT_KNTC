@@ -107,6 +107,7 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();
+      this.ref.destroy();
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

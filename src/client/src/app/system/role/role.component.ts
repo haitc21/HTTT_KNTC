@@ -90,7 +90,7 @@ export class RoleComponent implements OnInit, OnDestroy {
       width: DIALOG_SM,
     });
 
-    ref.onClose.subscribe((data: RoleDto) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: RoleDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.selectedItems = [];
@@ -118,7 +118,7 @@ export class RoleComponent implements OnInit, OnDestroy {
       width: DIALOG_SM,
     });
 
-    ref.onClose.subscribe((data: RoleDto) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: RoleDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -140,7 +140,7 @@ export class RoleComponent implements OnInit, OnDestroy {
       width: DIALOG_SM,
     });
 
-    ref.onClose.subscribe((data: any) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: any) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -167,17 +167,20 @@ export class RoleComponent implements OnInit, OnDestroy {
   deleteItemsConfirm(ids: any[]) {
     this.toggleBlockUI(true);
 
-    this.roleService.deleteMultiple(ids).subscribe({
-      next: () => {
-        this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
-        this.loadData();
-        this.selectedItems = [];
-        this.toggleBlockUI(false);
-      },
-      error: () => {
-        this.toggleBlockUI(false);
-      },
-    });
+    this.roleService
+      .deleteMultiple(ids)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+          this.loadData();
+          this.selectedItems = [];
+          this.toggleBlockUI(false);
+        },
+        error: () => {
+          this.toggleBlockUI(false);
+        },
+      });
   }
 
   deleteRow(item) {
@@ -195,17 +198,20 @@ export class RoleComponent implements OnInit, OnDestroy {
   deleteRowConfirm(id) {
     this.toggleBlockUI(true);
 
-    this.roleService.delete(id).subscribe({
-      next: () => {
-        this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
-        this.loadData();
-        this.selectedItems = [];
-        this.toggleBlockUI(false);
-      },
-      error: () => {
-        this.toggleBlockUI(false);
-      },
-    });
+    this.roleService
+      .delete(id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+          this.loadData();
+          this.selectedItems = [];
+          this.toggleBlockUI(false);
+        },
+        error: () => {
+          this.toggleBlockUI(false);
+        },
+      });
   }
 
   private toggleBlockUI(enabled: boolean) {

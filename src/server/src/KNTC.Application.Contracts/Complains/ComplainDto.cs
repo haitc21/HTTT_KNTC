@@ -7,6 +7,10 @@ namespace KNTC.Complains;
 
 public class ComplainDto : AuditedEntityDto<Guid>
 {
+    public ComplainDto()
+    {
+        FileAttachments = new List<FileAttachmentDto>();
+    }
     public string MaHoSo { get; private set; }
     public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }

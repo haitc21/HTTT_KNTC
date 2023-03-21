@@ -10,7 +10,7 @@ import { ConfirmationService, MenuItem } from 'primeng/api';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { DialogService } from 'primeng/dynamicdialog';
-import { Subject, takeUntil } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ComplainDto, ComplainService, GetComplainListDto } from '@proxy/complains';
 import { UnitService } from '@proxy/units';
@@ -19,6 +19,8 @@ import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { LandComplainDetailComponent } from './detail/land-complain-detail.component';
 import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
+import { EileUploadDto as FileUploadDto } from 'src/app/shared/models/file-upload.class';
+import { FileService } from 'src/app/shared/services/file.service';
 
 @Component({
   selector: 'app-land-complain',
@@ -88,7 +90,8 @@ export class LandComplainComponent implements OnInit, OnDestroy {
     private permissionService: PermissionService,
     private complainService: ComplainService,
     private utilService: UtilityService,
-    private unitService: UnitService
+    private unitService: UnitService,
+    private fileService: FileService
   ) {}
 
   ngOnInit(): void {
@@ -261,11 +264,35 @@ export class LandComplainComponent implements OnInit, OnDestroy {
       width: DIALOG_BG,
     });
 
-    ref.onClose.subscribe((data: ComplainDto) => {
+    ref.onClose.subscribe((data: ComplainDto | FileUploadDto[]) => {
       if (data) {
-        this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
-        this.selectedItems = [];
-        this.loadData();
+        if (data instanceof Array) {
+          this.toggleBlockUI(true);
+          const uploadObservables = data.map(f => {
+            return this.fileService
+              .uploadFilAttachment(f.id, f.file)
+              .pipe(takeUntil(this.ngUnsubscribe));
+          });
+
+          forkJoin(uploadObservables).subscribe(
+            results => {
+              results.forEach(res => {
+                this.notificationService.showSuccess(`${res}`);
+              });
+              this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
+              this.toggleBlockUI(false);
+              this.selectedItems = [];
+              this.loadData();
+            },
+            () => {
+              this.toggleBlockUI(false);
+            }
+          );
+        } else {
+          this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
+          this.selectedItems = [];
+          this.loadData();
+        }
       }
     });
   }
@@ -274,16 +301,16 @@ export class LandComplainComponent implements OnInit, OnDestroy {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    /*
-    const ref = this.dialogService.open(ComplainComponent, {
+
+    const ref = this.dialogService.open(LandComplainDetailComponent, {
       data: {
         id: row.id,
       },
-      header: `Cập nhật người dùng '${row.userName}'`,
-      width: DIALOG_MD,
+      header: `Cập nhật khiếu nại/khiếu kiện '${row.tieuDe}'`,
+      width: DIALOG_BG,
     });
 
-    ref.onClose.subscribe((data: IdentityUserUpdateDto) => {
+    ref.onClose.subscribe((data: ComplainDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -291,7 +318,6 @@ export class LandComplainComponent implements OnInit, OnDestroy {
         this.loadData();
       }
     });
-    */
   }
 
   deleteItems() {

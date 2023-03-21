@@ -4,7 +4,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { UserDto, UsersService } from '@proxy/users';
-import { FileService } from 'src/app/shared/services/file.service.spec';
+import { FileService } from 'src/app/shared/services/file.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 
@@ -172,6 +172,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();
+      this.ref.destroy();
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

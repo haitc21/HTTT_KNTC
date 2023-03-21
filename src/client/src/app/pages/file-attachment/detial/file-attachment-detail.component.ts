@@ -6,6 +6,7 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
 import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
 import { ListResultDto } from '@abp/ng.core';
+import { CreateAndUpdateFileAttachmentDto } from '@proxy/file-attachments';
 
 @Component({
   templateUrl: './file-attachment-detail.component.html',
@@ -22,7 +23,6 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
 
   documentTypeOptions: DocumentTypeLookupDto[];
   giaiDoanOptions = [
-    { value: 0, text: 'Tất cả' },
     { value: 1, text: 'Khiếu nại lần I' },
     { value: 2, text: 'Khiếu nại lần II' },
   ];
@@ -45,7 +45,10 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
         message: `Thứ tự bút lục tối đa ${KNTCValidatorConsts.MaxThuTuButLucLength} ký tự`,
       },
     ],
-    noiDungChinh: [{ type: 'required', message: 'Hình thức không được để trống' }],
+    noiDungChinh: [{ type: 'required', message: 'Nội dung chính không được để trống' }],
+    fileName: [{ type: 'required', message: 'Vui lòng chọn tệp' }],
+    thoiGianBanHanh: [{ type: 'required', message: 'Thời gian ban hành không được để trống' }],
+    ngayNhan: [{ type: 'required', message: 'Ngày nhận không được để trống' }],
   };
 
   get formControls() {
@@ -61,14 +64,15 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.getOptions();
     //Init form
     this.buildForm();
 
-    if (this.utilService.isEmpty(this.config.data?.id) == false) {
-      this.loadFormDetails(this.config.data?.id);
+    if (this.utilService.isEmpty(this.config.data?.item) == false) {
+      this.form.patchValue(this.config.data?.item);
     }
   }
-  loadFormDetails(id: string) {}
+
   getOptions() {
     this.toggleBlockUI(true);
     this.documentTypeService
@@ -86,32 +90,53 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
-    this.ref.close(this.form.value);
+    let dto = this.form.value as CreateAndUpdateFileAttachmentDto;
+    
+    if (this.file) {
+      dto.contentLength = this.file.size;
+      dto.contentType = this.file.type;
+      dto.fileName = this.file.name;
+    }
+    let fileAttachment = {
+      ...dto,
+      file: this.file,
+    };
+    this.ref.close(fileAttachment);
   }
 
   buildForm() {
     this.form = this.fb.group({
+      Id: [],
       tenTaiLieu: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenTaiLieuLength)],
       ],
       giaiDoan: [null, Validators.required],
       hinhThuc: [null, Validators.required],
-      thoiGianBanHanh: [],
-      ngayNhan: [],
+      thoiGianBanHanh: [null, Validators.required],
+      ngayNhan: [null, Validators.required],
       thuTuButLuc: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThuTuButLucLength)],
       ],
       noiDungChinh: [null, Validators.required],
-      fileContent: []
+      fileName: [null, [Validators.required]],
+      fileContent: [],
+      contentType: [],
+      contentLength: [],
+      loaiVuViec: [this.config.data?.loaiVuViec],
+      complainId: [''],
+      denounceId: [''],
     });
   }
+
   choseFile(event) {
     this.file = event.files[0];
+    this.form.get('fileName').setValue(this.file.name);
   }
   removeFile(event) {
     this.file = null;
+    this.form.get('fileName').reset();
   }
 
   private toggleBlockUI(enabled: boolean) {
@@ -128,6 +153,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();
+      this.ref.destroy();
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

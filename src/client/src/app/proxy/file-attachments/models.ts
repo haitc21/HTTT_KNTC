@@ -1,22 +1,28 @@
-import type { AuditedEntityDto, EntityDto } from '@abp/ng.core';
-import type { IFormFile } from '../microsoft/asp-net-core/http/models';
+import type { LoaiVuViec } from '../loai-vu-viec.enum';
+import type { AuditedEntityDto } from '@abp/ng.core';
+import type { BaseListFilterDto } from '../models';
 
-export interface CreateAndUpdateFileAttachmentDto extends EntityDto<string> {
+export interface CreateAndUpdateFileAttachmentDto {
+  id?: string;
+  loaiVuViec: LoaiVuViec;
+  complainId?: string;
+  denounceId?: string;
+  tenTaiLieu: string;
   giaiDoan: number;
-  tenTaiLieu?: string;
   hinhThuc: number;
-  thoiGianBanHanh?: string;
-  ngayNhan?: string;
+  thoiGianBanHanh: string;
+  ngayNhan: string;
   thuTuButLuc: string;
   noiDungChinh?: string;
   fileName?: string;
   contentType?: string;
   contentLength: number;
-  fileContent: IFormFile;
+  concurrencyStamp?: string;
 }
 
 export interface FileAttachmentDto extends AuditedEntityDto<string> {
-  idHoSo?: string;
+  complainId?: string;
+  denounceId?: string;
   tenTaiLieu?: string;
   giaiDoan: number;
   hinhThuc: number;
@@ -25,4 +31,13 @@ export interface FileAttachmentDto extends AuditedEntityDto<string> {
   thuTuButLuc?: string;
   noiDungChinh?: string;
   fileName?: string;
+  contentType?: string;
+  contentLength: number;
+}
+
+export interface GetFileAttachmentListDto extends BaseListFilterDto {
+  complainId?: string;
+  denounceId?: string;
+  giaiDoan?: number;
+  hinhThuc?: number;
 }

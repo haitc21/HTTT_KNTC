@@ -147,7 +147,5 @@ export interface UpdateComplainDto extends EntityDto<string> {
   thamQuyen2?: string;
   soQD2?: string;
   ketQua2?: LoaiKetQua;
-  fileAttachments: CreateAndUpdateFileAttachmentDto[];
-  listFileDeleted: string[];
   concurrencyStamp?: string;
 }

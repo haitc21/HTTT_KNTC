@@ -123,6 +123,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();
+      this.ref.close();
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

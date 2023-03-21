@@ -36,15 +36,6 @@ export class DenounceService {
     { apiName: this.apiName });
   
 
-  dowload = (idTepDinhKem: string) =>
-    this.restService.request<any, number[]>({
-      method: 'POST',
-      url: '/api/app/denounce/dowload',
-      params: { idTepDinhKem },
-    },
-    { apiName: this.apiName });
-  
-
   get = (id: string) =>
     this.restService.request<any, DenounceDto>({
       method: 'GET',

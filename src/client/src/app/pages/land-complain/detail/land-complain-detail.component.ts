@@ -1,15 +1,23 @@
 import { ListResultDto } from '@abp/ng.core';
-import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
-import { Validators, FormControl, FormGroup, FormBuilder, FormArray } from '@angular/forms';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { LinhVuc, LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
-import { ComplainDto, ComplainService } from '@proxy/complains';
-import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
+import {
+  ComplainDto,
+  ComplainService,
+  CreateComplainDto,
+  UpdateComplainDto,
+} from '@proxy/complains';
+import { CreateAndUpdateFileAttachmentDto } from '@proxy/file-attachments';
 import { LandTypeLookupDto, LandTypeService } from '@proxy/land-types';
 import { UnitLookupDto, UnitService } from '@proxy/units';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
+import { EileUploadDto } from 'src/app/shared/models/file-upload.class';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
+import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
 
 @Component({
   templateUrl: './land-complain-detail.component.html',
@@ -17,7 +25,13 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 })
 export class LandComplainDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
+  @ViewChild(FileAttachmentComponent)
+  fileAttachmentComponent: FileAttachmentComponent;
 
+  complainId: string;
+  mode: 'create' | 'update' = 'create';
+  loaiVuViec = LoaiVuViec.KhieuNai;
+  fileUploads: EileUploadDto[] = [];
   // Default
   public blockedPanelDetail: boolean = false;
   public form: FormGroup;
@@ -175,7 +189,6 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     return this.form.controls;
   }
 
-
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
@@ -183,14 +196,17 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     private utilService: UtilityService,
     private fb: FormBuilder,
     private unitService: UnitService,
-    private landTypeService: LandTypeService
+    private landTypeService: LandTypeService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
     this.loadOptions();
     this.buildForm();
     if (this.utilService.isEmpty(this.config.data?.id) == false) {
-      this.loadDetail(this.config.data.id);
+      this.complainId = this.config.data?.id;
+      this.mode = 'update';
+      this.loadDetail(this.complainId);
     }
   }
 
@@ -224,17 +240,19 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       );
   }
 
-  inhChange(event) {
-    if (event.value) {
+  tinhChange(id: number, isFirst: boolean = false) {
+    if (id) {
       this.toggleBlockUI(true);
       this.unitService
-        .getLookup(2, event.value)
+        .getLookup(2, id)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.huyenOptions = res.items;
-            this.form.get('maQuanHuyen').reset();
-            this.form.get('maXaPhuongTT').reset();
+            if (!isFirst) {
+              this.form.get('maQuanHuyen').reset();
+              this.form.get('maXaPhuongTT').reset();
+            }
             this.toggleBlockUI(false);
           },
           () => {
@@ -243,16 +261,18 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
         );
     } else this.huyenOptions = [];
   }
-  huyenChange(event) {
-    if (event.value) {
+  huyenChange(id: number, isFirst: boolean = false) {
+    if (id) {
       this.toggleBlockUI(true);
       this.unitService
-        .getLookup(3, event.value)
+        .getLookup(3, id)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.xaOptions = res.items;
-            this.form.get('maXaPhuongTT').reset();
+            if (!isFirst) {
+              this.form.get('maXaPhuongTT').reset();
+            }
             this.toggleBlockUI(false);
           },
           () => {
@@ -262,17 +282,19 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
     } else this.xaOptions = [];
   }
 
-  inhThuaDatChange(event) {
-    if (event.value) {
+  tinhThuaDatChange(id: number, isFirst: boolean = false) {
+    if (id) {
       this.toggleBlockUI(true);
       this.unitService
-        .getLookup(2, event.value)
+        .getLookup(2, id)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.huyenThuaDateOptions = res.items;
-            this.form.get('huyenThuaDat').reset();
-            this.form.get('xaThuaDat').reset();
+            if (!isFirst) {
+              this.form.get('huyenThuaDat').reset();
+              this.form.get('xaThuaDat').reset();
+            }
             this.toggleBlockUI(false);
           },
           () => {
@@ -281,16 +303,18 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
         );
     } else this.huyenThuaDateOptions = [];
   }
-  huyenThuaDatChange(event) {
-    if (event.value) {
+  huyenThuaDatChange(id: number, isFirst: boolean = false) {
+    if (id) {
       this.toggleBlockUI(true);
       this.unitService
-        .getLookup(3, event.value)
+        .getLookup(3, id)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.xaThuaDatOptions = res.items;
-            this.form.get('xaThuaDat').reset();
+            if (!isFirst) {
+              this.form.get('xaThuaDat').reset();
+            }
             this.toggleBlockUI(false);
           },
           () => {
@@ -309,6 +333,11 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: ComplainDto) => {
           this.selectedEntity = response;
+          this.tinhChange(this.selectedEntity.maTinhTP, true);
+          this.huyenChange(this.selectedEntity.maQuanHuyen, true);
+          this.tinhThuaDatChange(this.selectedEntity.tinhThuaDat, true);
+          this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
+
           this.form.patchValue(this.selectedEntity);
           this.toggleBlockUI(false);
         },
@@ -320,18 +349,65 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.toggleBlockUI(true);
-    let obs$ = this.utilService.isEmpty(this.config.data?.id)
-      ? this.complainService.create(this.form.value)
-      : this.complainService.update(this.config.data.id, this.form.value);
-    obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
-      data => {
-        this.toggleBlockUI(false);
-        this.ref.close(data);
-      },
-      err => {
-        this.toggleBlockUI(false);
-      }
-    );
+    if (this.utilService.isEmpty(this.complainId)) {
+      let value = this.form.value as CreateComplainDto;
+      let fileAttachmentDtos = this.fileAttachmentComponent.data;
+      let files = this.fileAttachmentComponent.files;
+
+      value.fileAttachments = fileAttachmentDtos.map(x => {
+        return {
+          loaiVuViec: LoaiVuViec.KhieuNai,
+          complainId: x.complainId,
+          tenTaiLieu: x.tenTaiLieu,
+          giaiDoan: x.giaiDoan,
+          hinhThuc: x.hinhThuc,
+          thoiGianBanHanh: x.thoiGianBanHanh,
+          ngayNhan: x.ngayNhan,
+          thuTuButLuc: x.thuTuButLuc,
+          noiDungChinh: x.noiDungChinh,
+          fileName: x.fileName,
+          contentType: x.contentType,
+          contentLength: x.contentLength,
+        } as CreateAndUpdateFileAttachmentDto;
+      });
+      this.complainService
+        .create(value)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ComplainDto) => {
+            res.fileAttachments.forEach(fmDto => {
+              let file = files.find(f => f.name === fmDto.fileName);
+              if (file) {
+                this.fileUploads.push({
+                  id: fmDto.id,
+                  name: fmDto.tenTaiLieu,
+                  file: file,
+                });
+              }
+            });
+            this.toggleBlockUI(false);
+            if (this.fileUploads.length > 0) this.ref.close(this.fileUploads);
+            else this.ref.close(res);
+          },
+          () => {
+            this.toggleBlockUI(false);
+          }
+        );
+    } else {
+      let value = this.form.value as UpdateComplainDto;
+      this.complainService
+        .update(this.config.data.id, value)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          data => {
+            this.toggleBlockUI(false);
+            this.ref.close(data);
+          },
+          err => {
+            this.toggleBlockUI(false);
+          }
+        );
+    }
   }
 
   buildForm() {
@@ -404,26 +480,19 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       loaiKhieuNai1: [],
       ngayKhieuNai1: [],
       ngayTraKQ1: [],
-      thamQuyen1: [
-        null,
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)],
-      ],
-      soQD1: [null, [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      thamQuyen1: [null, [Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)]],
+      soQD1: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
       ketQua1: [],
 
       loaiKhieuNai2: [],
       ngayKhieuNai2: [],
       ngayTraKQ2: [],
-      thamQuyen2: [
-        null,
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)],
-      ],
-      soQD2: [null, [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      thamQuyen2: [null, [Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)]],
+      soQD2: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
       ketQua2: [],
 
       listFileDeleted: [],
       concurrencyStamp: [],
-      // fileAttachments: this.fb.array([]),
     });
   }
 
@@ -441,6 +510,7 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();
+      this.ref.destroy();
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
