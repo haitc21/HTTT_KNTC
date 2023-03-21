@@ -261,7 +261,7 @@ export class LandComplainComponent implements OnInit, OnDestroy {
   showAddModal() {
     const ref = this.dialogService.open(LandComplainDetailComponent, {
       header: 'Thêm khiếu nại/khiếu kiện',
-      width: DIALOG_BG,
+      width: DIALOG_BG
     });
 
     ref.onClose.subscribe((data: ComplainDto | FileUploadDto[]) => {
@@ -276,9 +276,9 @@ export class LandComplainComponent implements OnInit, OnDestroy {
 
           forkJoin(uploadObservables).subscribe(
             results => {
-              results.forEach(res => {
-                this.notificationService.showSuccess(`${res}`);
-              });
+              // results.forEach(res => {
+              //   this.notificationService.showSuccess(`${res}`);
+              // });
               this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
               this.toggleBlockUI(false);
               this.selectedItems = [];

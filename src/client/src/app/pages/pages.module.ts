@@ -42,12 +42,13 @@ import { EnviromentalComplaintComponent } from './enviromental-complaint/envirom
 import { MineralResourceComplaintComponent } from './mineral-resource-complaint/mineral-resource-complaint.component';
 import { WaterResourceComplaintComponent } from './water-resource-complaint/water-resource-complaint.component';
 import { WaterResourcAccusationComponent } from './water-resource-accusation/water-resource-accusation.component';
-import {FieldsetModule} from 'primeng/fieldset';
+import { FieldsetModule } from 'primeng/fieldset';
 import { LandComplainDetailComponent } from './land-complain/detail/land-complain-detail.component';
-import {TabViewModule} from 'primeng/tabview';
+import { TabViewModule } from 'primeng/tabview';
 import { FileAttachmentComponent } from './file-attachment/file-attachment.component';
 import { FileAttachmentDetailComponent } from './file-attachment/detial/file-attachment-detail.component';
 import { FileUploadModule } from 'primeng/fileupload';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     WaterResourcAccusationComponent,
     LandComplainDetailComponent,
     FileAttachmentComponent,
-    FileAttachmentDetailComponent
+    FileAttachmentDetailComponent,
   ],
   imports: [
     PagesRoutingModule,
@@ -101,7 +102,8 @@ import { FileUploadModule } from 'primeng/fileupload';
     ChartModule,
     FieldsetModule,
     TabViewModule,
-    FileUploadModule
+    FileUploadModule,
+    DialogModule
   ],
   exports: [HomeComponent],
 })

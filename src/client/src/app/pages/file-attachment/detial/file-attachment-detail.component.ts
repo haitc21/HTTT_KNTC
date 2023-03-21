@@ -1,4 +1,12 @@
-import { Component, OnInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  OnDestroy,
+  ChangeDetectorRef,
+  Input,
+  Output,
+} from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -6,13 +14,20 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
 import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
 import { ListResultDto } from '@abp/ng.core';
-import { CreateAndUpdateFileAttachmentDto } from '@proxy/file-attachments';
+import { CreateAndUpdateFileAttachmentDto, FileAttachmentDto } from '@proxy/file-attachments';
+import { LoaiVuViec } from '@proxy';
 
 @Component({
+  selector: 'app-file-attachment-detail',
   templateUrl: './file-attachment-detail.component.html',
 })
 export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
+
+  @Input() loaiVuViec: LoaiVuViec;
+  @Input() item: FileAttachmentDto;
+  @Output() save: EventEmitter<any> = new EventEmitter();
+  @Output() close: EventEmitter<any> = new EventEmitter();
 
   // Default
   public blockedPanelDetail: boolean = false;
@@ -56,8 +71,6 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    public ref: DynamicDialogRef,
-    public config: DynamicDialogConfig,
     private utilService: UtilityService,
     private fb: FormBuilder,
     private documentTypeService: DocumentTypeService
@@ -65,12 +78,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getOptions();
-    //Init form
     this.buildForm();
-
-    if (this.utilService.isEmpty(this.config.data?.item) == false) {
-      this.form.patchValue(this.config.data?.item);
-    }
   }
 
   getOptions() {
@@ -91,7 +99,6 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     let dto = this.form.value as CreateAndUpdateFileAttachmentDto;
-    
     if (this.file) {
       dto.contentLength = this.file.size;
       dto.contentType = this.file.type;
@@ -101,7 +108,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
       ...dto,
       file: this.file,
     };
-    this.ref.close(fileAttachment);
+    this.save.emit(fileAttachment);
   }
 
   buildForm() {
@@ -124,10 +131,13 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
       fileContent: [],
       contentType: [],
       contentLength: [],
-      loaiVuViec: [this.config.data?.loaiVuViec],
-      complainId: [''],
-      denounceId: [''],
+      loaiVuViec: [this.loaiVuViec],
+      complainId: [],
+      denounceId: [],
     });
+    if (this.item) {
+      this.form.patchValue(this.item);
+    }
   }
 
   choseFile(event) {
@@ -151,10 +161,6 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(): void {
-    if (this.ref) {
-      this.ref.close();
-      this.ref.destroy();
-    }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

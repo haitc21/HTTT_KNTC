@@ -105,7 +105,7 @@
               pRipple
               type="button"
               pButton
-              icon="p-button-sm pi pi-fw pi-cog"
+              icon="pi pi-fw pi-cog"
               [label]="Actions.ACTION"
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
@@ -220,7 +220,7 @@
               pRipple
               type="button"
               pButton
-              icon="p-button-sm pi pi-fw pi-cog"
+              icon="pi pi-fw pi-cog"
               [label]="Actions.ACTION"
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
@@ -258,3 +258,41 @@
     </p-blockUI>
   </p-panel>
 </div>
+
+<!-- -----------------------------------ADD MODAL--------------------------------------------- -->
+<ng-container *ngIf="visibleAddModal">
+  <p-dialog
+    [draggable]="false"
+    [resizable]="false"
+    [(visible)]="visibleAddModal"
+    [header]="headerModal"
+    modal="true"
+    (onHide)="closeMAddodal()"
+    [style]="{ width: DIALOG_MD }"
+  >
+    <app-file-attachment-detail
+      [loaiVuViec]="loaiVuViec"
+      (save)="submitUpdate($event)"
+      (close)="closeMAddodal()"
+    ></app-file-attachment-detail>
+  </p-dialog>
+</ng-container>
+<!-- -----------------------------------update MODAL--------------------------------------------- -->
+<ng-container *ngIf="visibleUpdateModal">
+  <p-dialog
+    [draggable]="false"
+    [resizable]="false"
+    [(visible)]="visibleUpdateModal"
+    [header]="headerModal"
+    modal="true"
+    (onHide)="closeUpdateModal()"
+    [style]="{ width: DIALOG_MD }"
+  >
+    <app-file-attachment-detail
+      [loaiVuViec]="loaiVuViec"
+      [item]="selectedItem"
+      (save)="submitUpdate($event)"
+      (close)="closeUpdateModal()"
+    ></app-file-attachment-detail>
+  </p-dialog>
+</ng-container>
