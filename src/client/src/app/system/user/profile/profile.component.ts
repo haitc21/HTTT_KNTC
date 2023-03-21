@@ -169,10 +169,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }, 300);
     }
   }
+  close() {
+    if (this.ref) {
+      this.ref.close();
+    }
+  }
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();
-
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

@@ -199,10 +199,14 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       return match ? null : { passwordMismatch: true };
     };
   }
+  close() {
+    if (this.ref) {
+      this.ref.close();
+    }
+  }
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();
-
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

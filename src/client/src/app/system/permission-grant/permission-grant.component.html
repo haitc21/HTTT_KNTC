@@ -20,16 +20,26 @@
     </ng-template>
   </p-listbox>
   <ng-template pTemplate="footer">
-    <button
-      pButton
-      pRipples
-      type="submit"
+    <div class="flex justify-content-end">
+      <button
+        pButton
+        pRipples
+        type="submit"
+        label="Lưu"
+        class="p-button-info mr-2"
         (click)="saveChange()"
-      label="Lưu"
-      class="p-button-info"
-      icon="pi pi-check"
-      (click)="saveChange()"
-    ></button>
+        icon="pi pi-check"
+      ></button>
+      <button
+        pButton
+        pRipples
+        type="button"
+        (click)="close()"
+        label="Đóng"
+        class="p-button-danger"
+        icon="pi pi-times"
+      ></button>
+    </div>
   </ng-template>
 
   <p-blockUI [target]="pnlPm" [blocked]="blockedPanelDetail">

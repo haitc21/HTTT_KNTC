@@ -148,7 +148,9 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     this.file = null;
     this.form.get('fileName').reset();
   }
-
+  closeModal() {
+    this.close.emit();
+  }
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.btnDisabled = true;

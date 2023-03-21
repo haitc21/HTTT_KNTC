@@ -129,10 +129,14 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
   }
   
 
+  close() {
+    if (this.ref) {
+      this.ref.close();
+    }
+  }
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();
-
     }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

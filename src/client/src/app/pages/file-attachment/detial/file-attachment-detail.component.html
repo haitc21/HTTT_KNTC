@@ -69,7 +69,7 @@
             formControlName="thoiGianBanHanh"
             appendTo="body"
             dateFormat="dd/mm/yy"
-            [showIcon]="true"
+            [showClear]="true"
             showTime="true"
             [hourFormat]="24"
           ></p-calendar>
@@ -89,7 +89,7 @@
             formControlName="ngayNhan"
             appendTo="body"
             dateFormat="dd/mm/yy"
-            [showIcon]="true"
+            [showClear]="true"
             showTime="true"
             [hourFormat]="24"
           ></p-calendar>
@@ -176,16 +176,27 @@
     </div>
 
     <ng-template pTemplate="footer">
-      <button
-        pButton
-        pRipples
-        type="submit"
-        (click)="saveChange()"
-        label="Lưu"
-        class="p-button-info"
-        icon="pi pi-check"
-        [disabled]="!form.valid || btnDisabled"
-      ></button>
+      <div class="flex justify-content-end">
+        <button
+          pButton
+          pRipples
+          type="submit"
+          (click)="saveChange()"
+          label="Lưu"
+          class="p-button-info mr-2"
+          icon="pi pi-check"
+          [disabled]="!form.valid || btnDisabled"
+        ></button>
+        <button
+          pButton
+          pRipples
+          type="button"
+          (click)="closeModal()"
+          label="Đóng"
+          class="p-button-danger"
+          icon="pi pi-times"
+        ></button>
+      </div>
     </ng-template>
 
     <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
