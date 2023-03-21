@@ -91,6 +91,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     let dto = this.form.value as CreateAndUpdateFileAttachmentDto;
+    
     if (this.file) {
       dto.contentLength = this.file.size;
       dto.contentType = this.file.type;
@@ -124,8 +125,8 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
       contentType: [],
       contentLength: [],
       loaiVuViec: [this.config.data?.loaiVuViec],
-      complainId: [],
-      denounceId: [],
+      complainId: [''],
+      denounceId: [''],
     });
   }
 
@@ -150,10 +151,10 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     }
   }
   ngOnDestroy(): void {
-    // if (this.ref) {
-    //   this.ref.close();
-    //   this.ref.destroy();
-    // }
+    if (this.ref) {
+      this.ref.close();
+      this.ref.destroy();
+    }
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

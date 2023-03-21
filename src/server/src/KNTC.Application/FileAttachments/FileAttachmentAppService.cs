@@ -139,7 +139,8 @@ public class FileAttachmentAppService : CrudAppService<
     [AllowAnonymous]
     public async Task<byte[]> DownloadAsync(Guid fileAttachmentId)
     {
-        return await _blobContainer.GetAllBytesOrNullAsync(fileAttachmentId.ToString());
+        var result = await _blobContainer.GetAllBytesOrNullAsync(fileAttachmentId.ToString());
+        return result;
     }
 }
 

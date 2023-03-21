@@ -17,6 +17,7 @@ import { FileService } from 'src/app/shared/services/file.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.component';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-file-attachment',
@@ -28,8 +29,8 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
   @Input() loaiVuViec!: LoaiVuViec;
   @Input() mode: 'create' | 'update';
-  @Input() complainId: string = '';
-  @Input() denounceId: string = '';
+  @Input() complainId: string | null = null;
+  @Input() denounceId: string | null = null;
 
   blockedPanel = false;
   items: FileAttachmentDto[] = [];
@@ -266,25 +267,11 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       .downloadFileAttachment(item.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
-        data => {
+        (data: any) => {
+          const uint8Array = this.utilService.base64ToArrayBuffer(data);
+          const blob = new Blob([uint8Array], { type: item.contentType });
+          saveAs(blob, item.fileName);
           this.toggleBlockUI(false);
-
-          const blob = new Blob([JSON.stringify(data)], { type: item.contentType });
-          console.log(item.fileName);
-          console.log(item.contentType);
-
-          // Tạo URL cho blob dữ liệu
-          const url = URL.createObjectURL(blob);
-
-          // Tạo thẻ a để tải xuống tệp
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = item.fileName;
-
-          // Thêm thẻ a vào body và kích hoạt click
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
         },
         () => {
           this.toggleBlockUI(false);
