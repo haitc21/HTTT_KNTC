@@ -1,6 +1,6 @@
 using KNTC.EntityFrameworkCore;
 using KNTC.Localization;
-using KNTC.MultiTenancy;
+//using KNTC.MultiTenancy;
 using Localization.Resources.AbpUi;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -199,10 +199,10 @@ public class KNTCAuthServerModule : AbpModule
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
 
-        if (MultiTenancyConsts.IsEnabled)
-        {
-            app.UseMultiTenancy();
-        }
+        //if (MultiTenancyConsts.IsEnabled)
+        //{
+        //    app.UseMultiTenancy();
+        //}
 
         app.UseUnitOfWork();
         app.UseAuthorization();

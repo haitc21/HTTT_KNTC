@@ -1,5 +1,5 @@
 using KNTC.EntityFrameworkCore;
-using KNTC.MultiTenancy;
+//using KNTC.MultiTenancy;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,7 +20,7 @@ using System.IO;
 using System.Linq;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
+//using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
@@ -38,7 +38,7 @@ namespace KNTC;
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
-    typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
+    //typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(KNTCApplicationModule),
     typeof(KNTCEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule),
@@ -217,10 +217,10 @@ public class KNTCHttpApiHostModule : AbpModule
         app.UseCors();
         app.UseAuthentication();
 
-        if (MultiTenancyConsts.IsEnabled)
-        {
-            app.UseMultiTenancy();
-        }
+        //if (MultiTenancyConsts.IsEnabled)
+        //{
+        //    app.UseMultiTenancy();
+        //}
 
         app.UseAuthorization();
 

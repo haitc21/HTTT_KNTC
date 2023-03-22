@@ -22,19 +22,19 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
+//using Volo.Abp.TenantManagement;
+//using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 
 namespace KNTC.EntityFrameworkCore;
 
 [ReplaceDbContext(typeof(IIdentityDbContext))]
-[ReplaceDbContext(typeof(ITenantManagementDbContext))]
+//[ReplaceDbContext(typeof(ITenantManagementDbContext))]
 [ConnectionStringName("Default")]
 public class KNTCDbContext :
     AbpDbContext<KNTCDbContext>,
-    IIdentityDbContext,
-    ITenantManagementDbContext
+    IIdentityDbContext
+    //ITenantManagementDbContext
 {
 
     #region Entities from the modules
@@ -47,9 +47,9 @@ public class KNTCDbContext :
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }
 
     // Tenant Management
-    public DbSet<Tenant> Tenants { get; set; }
+    //public DbSet<Tenant> Tenants { get; set; }
 
-    public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
+    //public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
     #endregion Entities from the modules
 
@@ -82,7 +82,7 @@ public class KNTCDbContext :
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();
         builder.ConfigureFeatureManagement();
-        builder.ConfigureTenantManagement();
+        //builder.ConfigureTenantManagement();
 
         builder.Entity<UserInfo>(b =>
         {
