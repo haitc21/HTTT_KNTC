@@ -4,6 +4,7 @@ using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230322162324_remove_col_denounce")]
+    partial class remove_col_denounce
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -380,12 +382,6 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<bool>("CongKhaiKLGQTC")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("cong_khai_KL_QDTC");
-
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreationTime");
@@ -454,14 +450,6 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasColumnName("ghi_chu");
 
-                    b.Property<DateTime>("GiaHanGQTC1")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("gia_han_GQTC_1");
-
-                    b.Property<DateTime>("GiaHanGQTC2")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("gia_han_GQTC_2");
-
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -506,27 +494,9 @@ namespace KNTC.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ma_xa_phuong_tt");
 
-                    b.Property<DateTime>("NgayGQTC")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_GQTC");
-
-                    b.Property<DateTime>("NgayNhanTBKQXLKLTC")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_nhan_TB_KQXLKLTC");
-
-                    b.Property<DateTime>("NgayQDGQTC")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_QDGQTC");
-
                     b.Property<DateTime>("NgaySinh")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_sinh");
-
-                    b.Property<string>("NguoiBiToCao")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("nguoi_bi_to_cao");
 
                     b.Property<string>("NguoiDeNghi")
                         .IsRequired()
@@ -534,40 +504,16 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("nguoi_de_nghi");
 
-                    b.Property<string>("NguoiGQTC")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("nguoi_GQTC");
-
                     b.Property<string>("NoiDungVuViec")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("noi_dung_vu_viec");
-
-                    b.Property<string>("QuyerDinhThuLyGQTC")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("quyet_dinh_thu_ly_GQTC");
-
-                    b.Property<string>("QuyetDinhDinhChiGQTC")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("quyet_dinh_dinh_chi_GQTC");
 
                     b.Property<string>("SoThua")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("so_thua");
-
-                    b.Property<string>("SoVBKLNDTC")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
-                        .HasColumnName("so_VB_KL_NDTC");
 
                     b.Property<DateTime>("ThoiGianHenTraKQ")
                         .HasColumnType("datetime2")

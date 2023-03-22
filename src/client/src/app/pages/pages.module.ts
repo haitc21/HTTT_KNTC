@@ -42,6 +42,8 @@ import { FileAttachmentDetailComponent } from './file-attachment/detial/file-att
 import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { ComplainComponent } from './complain/complain.component';
+import { DenounceComponent } from './denounce/denounce.component';
+import { DenounceDetailComponent } from './denounce/detail/denounce-detail.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import { ComplainComponent } from './complain/complain.component';
     DashboardComponent,
     ComplainComponent,
     ComplainDetailComponent,
+    DenounceComponent,
+    DenounceDetailComponent,
     FileAttachmentComponent,
     FileAttachmentDetailComponent,
   ],

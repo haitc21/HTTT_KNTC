@@ -1,7 +1,7 @@
 export class KNTCValidatorConsts {
   public static MaxMaHoSoLength = 50;
   public static MaxTieuDeLength = 100;
-  public static MaxNguoiDeNghiLength = 100;
+  public static MaxTenNguoiLength = 100;
   public static MaxCccdCmndLength = 50;
   public static MaxNoiCapCccdCmnd = 50;
   public static MaxSDTLength = 50;

@@ -18,7 +18,7 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxTieuDeLength)]
     public string TieuDe { get; set; }
     [Required]
-    [MaxLength(KNTCValidatorConsts.MaxNguoiDeNghiLength)]
+    [MaxLength(KNTCValidatorConsts.MaxTenNguoiLength)]
     public string NguoiDeNghi { get; set; }
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxCccdCmndLength)]

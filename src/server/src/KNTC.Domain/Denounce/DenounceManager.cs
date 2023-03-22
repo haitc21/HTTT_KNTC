@@ -122,16 +122,6 @@ public class DenounceManager : DomainService
             xaThuaDat = xaThuaDat,
             DuLieuToaDo = duLieuToaDo,
             DuLieuHinhHoc = duLieuHinhHoc,
-            NgayKhieuNai1 = ngayKhieuNai1,
-            NgayTraKQ1 = NgayTraKQ1,
-            ThamQuyen1 = ThamQuyen1,
-            SoQD1 = SoQD1,
-            KetQua1 = KetQua1,
-            NgayKhieuNai2 = ngayKhieuNai2,
-            NgayTraKQ2 = NgayTraKQ2,
-            ThamQuyen2 = ThamQuyen2,
-            SoQD2 = SoQD2,
-            KetQua2 = KetQua2,
             KetQua = KetQua2 ?? KetQua1
         };
     }
@@ -250,17 +240,7 @@ public class DenounceManager : DomainService
         denounce.xaThuaDat = xaThuaDat;
         denounce.DuLieuToaDo = duLieuToaDo;
         denounce.DuLieuHinhHoc = duLieuHinhHoc;
-        denounce.NgayKhieuNai1 = ngayKhieuNai1;
-        denounce.NgayTraKQ1 = NgayTraKQ1;
-        denounce.ThamQuyen1 = ThamQuyen1;
-        denounce.SoQD1 = SoQD1;
-        denounce.KetQua1 = KetQua1;
-        denounce.NgayKhieuNai2 = ngayKhieuNai2;
-        denounce.NgayTraKQ2 = NgayTraKQ2;
-        denounce.ThamQuyen2 = ThamQuyen2;
-        denounce.SoQD2 = SoQD2;
-        denounce.KetQua2 = KetQua2;
-        denounce.KetQua = KetQua2 ?? KetQua1;
+        denounce.KetQua = KetQua2;
     }
     public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Denounce denounce,
                                                                 [NotNull] int giaiDoan,

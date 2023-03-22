@@ -4,7 +4,7 @@ public static class KNTCValidatorConsts
 {
     public const int MaxMaHoSoLength = 50;
     public const int MaxTieuDeLength = 100;
-    public const int MaxNguoiDeNghiLength = 100;
+    public const int MaxTenNguoiLength = 100;
     public const int MaxCccdCmndLength = 50;
     public const int MaxNoiCapCccdCmnd = 50;
     public const int MaxSDTLength = 50;

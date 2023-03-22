@@ -1,0 +1,265 @@
+<div class="animated fadeIn grid card col-12">
+  <p-panel #pnl [header]="header" class="col-12">
+    <p-toolbar>
+      <div class="formgrid grid col-12">
+        <div class="field col-12 md:col-3">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (keyup.enter)="loadData()"
+              [(ngModel)]="keyword"
+              placeholder="Tìm kiếm"
+              class="w-full"
+            />
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="tinhOptions"
+              [(ngModel)]="maTinh"
+              optionLabel="unitName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitName"
+              styleClass="w-full"
+              (onChange)="inhChange($event)"
+            ></p-dropdown>
+            <label>Tỉnh/TP</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="huyenOptions"
+              [(ngModel)]="maHuyen"
+              optionLabel="unitName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitName"
+              styleClass="w-full"
+              (onChange)="huyenChange($event)"
+            ></p-dropdown>
+            <label>Quận/Huyện</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="xaOptions"
+              [(ngModel)]="maXa"
+              optionLabel="unitName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitName"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label for="phoneNumber">Phường/Xã</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-calendar
+              appendTo="body"
+              [(ngModel)]="thoiGianTiepNhanRange"
+              selectionMode="range"
+              dateFormat="dd/mm/yy"
+              [showClear]="true"
+              inputId="thoiGianTiepNhanRange"
+              (onSelect)="thoiGiantiepNhanChange()"
+              (onClear)="thoiGiantiepNhanChange()"
+            ></p-calendar>
+            <label for="phoneNumber">Thời gian tiếp nhận</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="giaiDoanOptions"
+              [(ngModel)]="giaiDoan"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label for="phoneNumber">Giai đoạn</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="loaiKQOptions"
+              [(ngModel)]="tinhTrang"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label for="phoneNumber">Tình trạng</label>
+          </span>
+        </div>
+      </div>
+    </p-toolbar>
+    <!-- ----------------------------------------------------------------------- -->
+    <p-toolbar>
+      <ng-template pTemplate="left">
+        <!-- <h3 style="color: blue">Kết quả tìm kiếm</h3> -->
+      </ng-template>
+
+      <ng-template pTemplate="right">
+        <button
+          *abpPermission="'Denounces.Create'"
+          type="button"
+          pButton
+          pRipple
+          label="Thêm"
+          icon="pi pi-plus"
+          class="p-button-info mr-2"
+          (click)="showAddModal()"
+        ></button>
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="Xuất exel"
+          icon="pi pi-download"
+          class="p-button-info mr-2"
+        ></button>
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="In"
+          icon="pi pi-print"
+          class="p-button-info"
+        ></button>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table
+      #dt
+      [value]="items"
+      [rows]="10"
+      [paginator]="false"
+      [(selection)]="selectedItems"
+      [rowHover]="true"
+      dataKey="id"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="row-num-column">STT</th>
+          <th>Mã hồ sơ</th>
+          <th>Người đề nghị</th>
+          <th>Địa chỉ</th>
+          <th>Số ĐT</th>
+          <th>Nội dung KN/KK</th>
+          <th>Thời gian nộp</th>
+          <th>Bộ phận đang XL</th>
+          <th>Ngày hẹn trả KQ</th>
+          <th>Ngày trả KQ lần I</th>
+          <th>KQ GQKN lần I</th>
+          <th>Ngày trả KQ lần II</th>
+          <th>KQ GQKN lần II</th>
+          <th style="width: 150px">Trạng thái</th>
+          <th *ngIf="visibleActionColumn" class="action-column"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+        <tr>
+          <!-- <td>
+            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+          </td> -->
+          <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
+          <td>{{ row.maHoSo }}</td>
+          <td>{{ row.nguoiDeNghi }}</td>
+          <td>{{ row.diaChiThuongTru }}</td>
+          <td>{{ row.dienThoai }}</td>
+          <td>{{ row.tieuDe }}</td>
+          <td>
+            {{ utilService.convertDateToLocal(row?.thoiGianTiepNhan) | date : 'dd-MM-yyyy hh:mm' }}
+          </td>
+          <td>{{ row.boPhanDangXL }}</td>
+          <td>
+            {{ utilService.convertDateToLocal(row?.thoiGianHenTraKQ) | date : 'dd-MM-yyyy hh:mm' }}
+          </td>
+          <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
+            {{ utilService.convertDateToLocal(row?.ngayTraKQ1) | date : 'dd-MM-yyyy' }}
+          </td>
+          <td>{{ getLoaiKetQua(row?.ketQua1) }}</td>
+          <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
+            {{ utilService.convertDateToLocal(row?.ngayTraKQ2) | date : 'dd-MM-yyyy' }}
+          </td>
+          <td>{{ getLoaiKetQua(row?.ketQua2) }}</td>
+          <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
+          <td *ngIf="visibleActionColumn">
+            <p-tieredMenu
+              [showTransitionOptions]="'300ms'"
+              [hideTransitionOptions]="'300ms'"
+              #menu
+              [model]="actionMenu"
+              [popup]="true"
+              appendTo="body"
+            ></p-tieredMenu>
+            <button
+              #btn
+              pButton
+              pRipple
+              type="button"
+              pButton
+              icon="pi pi-fw pi-cog"
+              [label]="Actions.ACTION"
+              [pTooltip]="Actions.ACTION"
+              tooltipPosition="top"
+              (click)="menu.toggle($event); setActionItem(row)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <p-paginator
+          [rows]="maxResultCount"
+          [totalRecords]="totalCount"
+          [showCurrentPageReport]="true"
+          [showJumpToPageInput]="true"
+          (onPageChange)="pageChanged($event)"
+          currentPageReportTemplate="{totalRecords} bản ghi, {currentPage} trang"
+          [rowsPerPageOptions]="[10, 20, 50, 100]"
+        ></p-paginator>
+      </ng-template>
+    </p-table>
+    <!-- ----------------------------------------------------------------------- -->
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
+      <p-progressSpinner
+        [style]="{
+          width: '100px',
+          height: '100px',
+          position: 'absolute',
+          top: '25%',
+          left: '50%'
+        }"
+        strokeWidth="2"
+        animationDuration=".5s"
+      ></p-progressSpinner>
+    </p-blockUI>
+  </p-panel>
+</div>
+<ng-template #emptyTpl><td></td></ng-template>

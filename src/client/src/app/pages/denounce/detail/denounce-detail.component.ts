@@ -3,11 +3,11 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { LinhVuc, LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
 import {
-  ComplainDto,
-  ComplainService,
-  CreateComplainDto,
-  UpdateComplainDto,
-} from '@proxy/complains';
+  DenounceDto,
+  DenounceService,
+  CreateDenounceDto,
+  UpdateDenounceDto,
+} from '@proxy/denounces';
 import { CreateAndUpdateFileAttachmentDto } from '@proxy/file-attachments';
 import { LandTypeLookupDto, LandTypeService } from '@proxy/land-types';
 import { UnitLookupDto, UnitService } from '@proxy/units';
@@ -20,15 +20,15 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
 
 @Component({
-  templateUrl: './complain-detail.component.html',
-  styleUrls: ['./complain-detail.component.scss'],
+  templateUrl: './denounce-detail.component.html',
+  styleUrls: ['./denounce-detail.component.scss'],
 })
-export class ComplainDetailComponent implements OnInit, OnDestroy {
+export class DenounceDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   @ViewChild(FileAttachmentComponent)
   fileAttachmentComponent: FileAttachmentComponent;
 
-  complainId: string;
+  denounceId: string;
   mode: 'create' | 'update' = 'create';
   loaiVuViec = LoaiVuViec.KhieuNai;
   fileUploads: EileUploadDto[] = [];
@@ -37,7 +37,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   public form: FormGroup;
   public title: string;
   public btnDisabled = false;
-  selectedEntity: ComplainDto;
+  selectedEntity: DenounceDto;
 
   // option
   tinhOptions: UnitLookupDto[] = [];
@@ -192,7 +192,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
-    private complainService: ComplainService,
+    private denounceService: DenounceService,
     private utilService: UtilityService,
     private fb: FormBuilder,
     private unitService: UnitService,
@@ -204,9 +204,9 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     this.loadOptions();
     this.buildForm();
     if (this.utilService.isEmpty(this.config.data?.id) == false) {
-      this.complainId = this.config.data?.id;
+      this.denounceId = this.config.data?.id;
       this.mode = 'update';
-      this.loadDetail(this.complainId);
+      this.loadDetail(this.denounceId);
     }
   }
 
@@ -327,11 +327,11 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   loadDetail(id: any) {
     this.toggleBlockUI(true);
-    this.complainService
+    this.denounceService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: ComplainDto) => {
+        next: (response: DenounceDto) => {
           this.selectedEntity = response;
           this.tinhChange(this.selectedEntity.maTinhTP, true);
           this.huyenChange(this.selectedEntity.maQuanHuyen, true);
@@ -339,12 +339,24 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
 
           this.form.patchValue(this.selectedEntity);
-          this.form.get('thoiGianTiepNhan').setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianTiepNhan));
-          this.form.get('thoiGianHenTraKQ').setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianHenTraKQ));
-          this.form.get('ngayKhieuNai1').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai1));
-          this.form.get('ngayTraKQ1').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ1));
-          this.form.get('ngayKhieuNai2').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai2));
-          this.form.get('ngayTraKQ2').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
+          this.form
+            .get('thoiGianTiepNhan')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianTiepNhan));
+          this.form
+            .get('thoiGianHenTraKQ')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianHenTraKQ));
+          this.form
+            .get('ngayKhieuNai1')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai1));
+          this.form
+            .get('ngayTraKQ1')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ1));
+          this.form
+            .get('ngayKhieuNai2')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai2));
+          this.form
+            .get('ngayTraKQ2')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
 
           this.toggleBlockUI(false);
         },
@@ -356,17 +368,17 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.utilService.markAllControlsAsDirty([this.form]);
-    if(this.form.invalid) return;;
+    if (this.form.invalid) return;
     this.toggleBlockUI(true);
-    if (this.utilService.isEmpty(this.complainId)) {
-      let value = this.form.value as CreateComplainDto;
+    if (this.utilService.isEmpty(this.denounceId)) {
+      let value = this.form.value as CreateDenounceDto;
       let fileAttachmentDtos = this.fileAttachmentComponent.data;
       let files = this.fileAttachmentComponent.files;
 
       value.fileAttachments = fileAttachmentDtos.map(x => {
         return {
           loaiVuViec: LoaiVuViec.KhieuNai,
-          complainId: x.complainId,
+          denounceId: x.denounceId,
           tenTaiLieu: x.tenTaiLieu,
           giaiDoan: x.giaiDoan,
           hinhThuc: x.hinhThuc,
@@ -379,11 +391,11 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           contentLength: x.contentLength,
         } as CreateAndUpdateFileAttachmentDto;
       });
-      this.complainService
+      this.denounceService
         .create(value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
-          (res: ComplainDto) => {
+          (res: DenounceDto) => {
             res.fileAttachments.forEach(fmDto => {
               let file = files.find(f => f.name === fmDto.fileName);
               if (file) {
@@ -403,8 +415,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           }
         );
     } else {
-      let value = this.form.value as UpdateComplainDto;
-      this.complainService
+      let value = this.form.value as UpdateDenounceDto;
+      this.denounceService
         .update(this.config.data.id, value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(

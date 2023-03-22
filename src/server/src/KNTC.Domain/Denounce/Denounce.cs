@@ -38,8 +38,8 @@ public class Denounce : FullAuditedAggregateRoot<Guid>
     public DateTime ThoiGianTiepNhan { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
     public string NoiDungVuViec { get; set; }
+    public string NguoiBiToCao { get; set; }
     public string BoPhanDangXL { get; set; }
-
     public string SoThua { get; set; }
     public string ToBanDo { get; set; }
     public decimal DienTich { get; set; }
@@ -51,17 +51,17 @@ public class Denounce : FullAuditedAggregateRoot<Guid>
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }
-    public DateTime? NgayKhieuNai1 { get; set; }
-    public DateTime? NgayTraKQ1 { get; set; }
-    public string ThamQuyen1 { get; set; }
-    public string SoQD1 { get; set; }
-    public LoaiKetQua? KetQua1 { get; set; }
-    public DateTime? NgayKhieuNai2 { get; set; }
-    public DateTime? NgayTraKQ2 { get; set; }
-    public string ThamQuyen2 { get; set; }
-    public string SoQD2 { get; set; }
-    public LoaiKetQua? KetQua2 { get; set; }
+    public DateTime NgayGQTC { get; set; }
+    public string NguoiGQTC { get; set; }
+    public string QuyerDinhThuLyGQTC { get; set; }
+    public DateTime NgayQDGQTC { get; set; }
+    public string QuyetDinhDinhChiGQTC { get; set; }
+    public DateTime GiaHanGQTC1 { get; set; }
+    public DateTime GiaHanGQTC2 { get; set; }
+    public string SoVBKLNDTC { get; set; }
+    public DateTime NgayNhanTBKQXLKLTC { get; set; }
     public LoaiKetQua? KetQua { get; set; }
+    public bool CongKhaiKLGQTC { get; set; }
     public LandType LandType { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)
     {

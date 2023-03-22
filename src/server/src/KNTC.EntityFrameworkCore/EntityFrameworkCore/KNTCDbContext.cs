@@ -103,7 +103,7 @@ public class KNTCDbContext :
             b.HasIndex(x => x.LinhVuc);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
-            b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(KNTCValidatorConsts.MaxNguoiDeNghiLength);
+            b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxCccdCmndLength);
             //b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
             //b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxNoiCapCccdCmnd);
@@ -148,12 +148,6 @@ public class KNTCDbContext :
 
             b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
-
-
-            //b.HasMany(h => h.FileAttachments)
-            // .WithOne(k => k.Complain)
-            // .HasForeignKey(k => k.ComplainId)
-            // .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<Denounce>(b =>
@@ -165,7 +159,7 @@ public class KNTCDbContext :
             b.HasIndex(x => x.LinhVuc);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
-            b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(KNTCValidatorConsts.MaxNguoiDeNghiLength);
+            b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxCccdCmndLength);
             //b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
             //b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxNoiCapCccdCmnd);
@@ -191,30 +185,23 @@ public class KNTCDbContext :
             b.Property(x => x.huyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat");
             b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat");
 
-
-            b.Property(x => x.NgayKhieuNai1).HasColumnName("ngay_khieu_nai_1");
-            b.Property(x => x.NgayTraKQ1).HasColumnName("ngay_tra_kq_1");
-            b.Property(x => x.ThamQuyen1).HasColumnName("tham_quyen_1").HasMaxLength(KNTCValidatorConsts.MaxThamQuyenLength);
-            b.Property(x => x.SoQD1).HasColumnName("so_qd_1").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
-            b.Property(x => x.KetQua1).HasColumnName("ket_qua_1");
-
-            b.Property(x => x.NgayKhieuNai2).HasColumnName("ngay_khieu_nai_2");
-            b.Property(x => x.NgayTraKQ2).HasColumnName("ngay_tra_kq_2");
-            b.Property(x => x.ThamQuyen2).HasColumnName("tham_quyen_2").HasMaxLength(KNTCValidatorConsts.MaxThamQuyenLength);
-            b.Property(x => x.SoQD2).HasColumnName("so_qd_2").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
-            b.Property(x => x.KetQua2).HasColumnName("ket_qua_2");
-
             b.Property(x => x.DuLieuToaDo).HasColumnName("du_lieu_toa_do").HasMaxLength(KNTCValidatorConsts.MaxToaDoLength);
             b.Property(x => x.DuLieuHinhHoc).HasColumnName("du_lieu_hinh_hoc").HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);
 
             b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
 
-
-            //b.HasMany(h => h.FileAttachments)
-            // .WithOne(k => k.Denounce)
-            // .HasForeignKey(k => k.DenounceId)
-            // .OnDelete(DeleteBehavior.Restrict);
+            b.Property(x => x.NguoiBiToCao).IsRequired().HasColumnName("nguoi_bi_to_cao").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
+            b.Property(x => x.NgayGQTC).IsRequired().HasColumnName("ngay_GQTC");
+            b.Property(x => x.NguoiGQTC).IsRequired().HasColumnName("nguoi_GQTC").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
+            b.Property(x => x.QuyerDinhThuLyGQTC).IsRequired().HasColumnName("quyet_dinh_thu_ly_GQTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
+            b.Property(x => x.NgayQDGQTC).IsRequired().HasColumnName("ngay_QDGQTC");
+            b.Property(x => x.QuyetDinhDinhChiGQTC).IsRequired().HasColumnName("quyet_dinh_dinh_chi_GQTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
+            b.Property(x => x.GiaHanGQTC1).IsRequired().HasColumnName("gia_han_GQTC_1");
+            b.Property(x => x.GiaHanGQTC2).IsRequired().HasColumnName("gia_han_GQTC_2");
+            b.Property(x => x.SoVBKLNDTC).IsRequired().HasColumnName("so_VB_KL_NDTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
+            b.Property(x => x.NgayNhanTBKQXLKLTC).IsRequired().HasColumnName("ngay_nhan_TB_KQXLKLTC");
+            b.Property(x => x.CongKhaiKLGQTC).IsRequired().HasColumnName("cong_khai_KL_QDTC").HasDefaultValue(false);
         });
 
         builder.Entity<FileAttachment>(b =>
@@ -304,8 +291,6 @@ public class KNTCDbContext :
              .OnDelete(DeleteBehavior.Restrict);
         });
 
-
-
         builder.Entity<Config>(b =>
         {
             b.ToTable("Configs", KNTCConsts.KNTCDbSchema);
@@ -318,11 +303,6 @@ public class KNTCDbContext :
             b.Property(x => x.Address).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
             b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
-
-            //b.HasMany(h => h.Units)
-            // .WithOne(k => k.Config)
-            // .HasForeignKey(k => k.ConfigId)
-            // .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<SpatialData>(b =>

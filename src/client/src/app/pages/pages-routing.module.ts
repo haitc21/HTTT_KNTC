@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
 import { ComplainComponent } from './complain/complain.component';
 import { SearchMapComponent } from './search-map/search-map.component';
+import { DenounceComponent } from './denounce/denounce.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'map', component: SearchMapComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'complain/:linhVuc', component: ComplainComponent },
+  { path: 'denounce/:linhVuc', component: DenounceComponent },
 ];
 
 @NgModule({
