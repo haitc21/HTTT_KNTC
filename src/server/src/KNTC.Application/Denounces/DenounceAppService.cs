@@ -73,7 +73,7 @@ public class DenounceAppService : CrudAppService<
                        && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
                        && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
                        && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
-                       && (!input.GiaiDoan.HasValue || (input.GiaiDoan == 1 && x.NgayKhieuNai2 == null) || (input.GiaiDoan == 2 && x.NgayKhieuNai2 != null))
+                       && (!input.GiaiDoan.HasValue || (input.GiaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) || (input.GiaiDoan == 2 && x.NgayKhieuNai2 != null))
                        && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                        && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
                        );
@@ -131,7 +131,7 @@ public class DenounceAppService : CrudAppService<
 
         await _denounceRepo.InsertAsync(denounce);
         var result = ObjectMapper.Map<Denounce, DenounceDto>(denounce);
-        if (input.FileAttachments.Count > 0)
+        if (input.FileAttachments != null && input.FileAttachments.Count > 0)
         {
             foreach (var item in input.FileAttachments)
             {

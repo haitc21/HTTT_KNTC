@@ -1,5 +1,5 @@
 <div class="animated fadeIn grid card col-12">
-  <p-panel #pnl header="Khiếu nại đất đai" class="col-12">
+  <p-panel #pnl [header]="header" class="col-12">
     <p-toolbar>
       <div class="formgrid grid col-12">
         <div class="field col-12 md:col-3">
@@ -242,7 +242,6 @@
         ></p-paginator>
       </ng-template>
     </p-table>
-    <!-- ----------------------------------------------------------------------- -->
     <!-- ----------------------------------------------------------------------- -->
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
       <p-progressSpinner

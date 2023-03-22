@@ -34,36 +34,22 @@ import { SearchMapComponent } from './search-map/search-map.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartModule } from 'primeng/chart';
 import { KNTCSharedModule } from '../shared/modules/shared.module';
-import { LandComplainComponent } from './land-complain/land-complain.component';
-import { LandAccusationComponent } from './land-accusation/land-accusation.component';
-import { EnviromentalAccusationComponent } from './enviromental-accusation/enviromental-accusation.component';
-import { MineralResourceAccusationComponent } from './mineral-resource-accusation/mineral-resource-accusation.component';
-import { EnviromentalComplaintComponent } from './enviromental-complaint/enviromental-complaint.component';
-import { MineralResourceComplaintComponent } from './mineral-resource-complaint/mineral-resource-complaint.component';
-import { WaterResourceComplaintComponent } from './water-resource-complaint/water-resource-complaint.component';
-import { WaterResourcAccusationComponent } from './water-resource-accusation/water-resource-accusation.component';
 import { FieldsetModule } from 'primeng/fieldset';
-import { LandComplainDetailComponent } from './land-complain/detail/land-complain-detail.component';
+import { ComplainDetailComponent } from './complain/detail/complain-detail.component';
 import { TabViewModule } from 'primeng/tabview';
 import { FileAttachmentComponent } from './file-attachment/file-attachment.component';
 import { FileAttachmentDetailComponent } from './file-attachment/detial/file-attachment-detail.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
+import { ComplainComponent } from './complain/complain.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     SearchMapComponent,
     DashboardComponent,
-    LandComplainComponent,
-    LandAccusationComponent,
-    EnviromentalComplaintComponent,
-    EnviromentalAccusationComponent,
-    MineralResourceComplaintComponent,
-    MineralResourceAccusationComponent,
-    WaterResourceComplaintComponent,
-    WaterResourcAccusationComponent,
-    LandComplainDetailComponent,
+    ComplainComponent,
+    ComplainDetailComponent,
     FileAttachmentComponent,
     FileAttachmentDetailComponent,
   ],

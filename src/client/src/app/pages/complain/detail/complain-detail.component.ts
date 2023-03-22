@@ -20,10 +20,10 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
 
 @Component({
-  templateUrl: './land-complain-detail.component.html',
-  styleUrls: ['./land-complain-detail.component.scss'],
+  templateUrl: './complain-detail.component.html',
+  styleUrls: ['./complain-detail.component.scss'],
 })
-export class LandComplainDetailComponent implements OnInit, OnDestroy {
+export class ComplainDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   @ViewChild(FileAttachmentComponent)
   fileAttachmentComponent: FileAttachmentComponent;
@@ -339,6 +339,13 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
           this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
 
           this.form.patchValue(this.selectedEntity);
+          this.form.get('thoiGianTiepNhan').setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianTiepNhan));
+          this.form.get('thoiGianHenTraKQ').setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianHenTraKQ));
+          this.form.get('ngayKhieuNai1').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai1));
+          this.form.get('ngayTraKQ1').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ1));
+          this.form.get('ngayKhieuNai2').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai2));
+          this.form.get('ngayTraKQ2').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
+
           this.toggleBlockUI(false);
         },
         error: () => {
@@ -447,7 +454,7 @@ export class LandComplainDetailComponent implements OnInit, OnDestroy {
       maTinhTP: [null, [Validators.required]],
       maQuanHuyen: [null, [Validators.required]],
       maXaPhuongTT: [null, [Validators.required]],
-      linhVuc: [LinhVuc.DataDai],
+      linhVuc: [this.config.data?.linhVuc],
       thoiGianTiepNhan: [null, [Validators.required]],
       thoiGianHenTraKQ: [null, [Validators.required]],
       noiDungVuViec: [null, [Validators.required]],

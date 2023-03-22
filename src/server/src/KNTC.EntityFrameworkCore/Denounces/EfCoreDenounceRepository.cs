@@ -61,7 +61,8 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
              )
              .WhereIf(
                 giaiDoan.HasValue,
-                x => (giaiDoan == 1 && x.NgayKhieuNai2 == null) || (giaiDoan == 1 && x.NgayKhieuNai2 != null)
+                x => (giaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) ||
+                (giaiDoan == 2 && x.NgayKhieuNai2 != null)
              )
              .WhereIf(
                 fromDate.HasValue,

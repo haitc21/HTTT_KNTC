@@ -137,6 +137,8 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     });
     if (this.item) {
       this.form.patchValue(this.item);
+      this.form.get('ngayNhan').setValue(this.utilService.convertDateToLocal(this.item.ngayNhan));
+      this.form.get('thoiGianBanHanh').setValue(this.utilService.convertDateToLocal(this.item.thoiGianBanHanh));
     }
   }
 

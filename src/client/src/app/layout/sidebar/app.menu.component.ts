@@ -1,6 +1,7 @@
 import { PermissionService } from '@abp/ng.core';
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
+import { LinhVuc } from '@proxy';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from '../service/app.layout.service';
 
@@ -60,20 +61,20 @@ export class AppMenuComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: ['/pages/land-complain'],
+            routerLink: [`/pages/complain/${LinhVuc.DataDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: ['/pages/enviromental-complaint'],
+            routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: ['/pages/mineral-resource-complaint'],
+            routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: ['/pages/water-resource-complaint'],
+            routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },
@@ -83,20 +84,20 @@ export class AppMenuComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: ['/pages/land-accusation'],
+            routerLink: [`/pages/denounce/${LinhVuc.DataDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: ['/pages/enviromental-accusation'],
+            routerLink: [`/pages/denounce/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: ['/pages/mineral-resource-accusation'],
+            routerLink: [`/pages/denounce/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: ['/pages/water-resource-accusation'],
+            routerLink: [`/pages/denounce/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },

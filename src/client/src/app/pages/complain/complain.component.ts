@@ -1,51 +1,47 @@
-import { AuthService, ListResultDto } from '@abp/ng.core';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
-import { MockService } from '../../shared/mock/mock.service';
+import { ListResultDto } from '@abp/ng.core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Actions } from 'src/app/shared/enums/actions.enum';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { DialogService } from 'primeng/dynamicdialog';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ComplainDto, ComplainService, GetComplainListDto } from '@proxy/complains';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
 import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
 import { UtilityService } from 'src/app/shared/services/utility.service';
-import { LandComplainDetailComponent } from './detail/land-complain-detail.component';
+import { ComplainDetailComponent } from './detail/complain-detail.component';
 import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
 import { EileUploadDto as FileUploadDto } from 'src/app/shared/models/file-upload.class';
 import { FileService } from 'src/app/shared/services/file.service';
+import { DialogService } from 'primeng/dynamicdialog';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-land-complain',
-  templateUrl: './land-complain.component.html',
-  styleUrls: ['./land-complain.component.scss'],
+  selector: 'app-complain',
+  templateUrl: './complain.component.html',
+  styleUrls: ['./complain.component.scss'],
 })
-export class LandComplainComponent implements OnInit, OnDestroy {
+export class ComplainComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
 
-  blockedPanel = false;
-
-  typesHoSo = typesHoSo;
-  fieldsHoSo = fieldsHoSo;
-
-  filter: GetComplainListDto;
-  keyword: string = '';
+  linhVuc: LinhVuc;
+  header: string = '';
   items: ComplainDto[];
   selectedItems: ComplainDto[] = [];
   actionItem: ComplainDto;
 
+  // default
+  blockedPanel = false;
   skipCount: number = 0;
   maxResultCount: number = 10;
   totalCount: number;
 
+  // filter
+  filter: GetComplainListDto;
+  keyword: string = '';
   maTinh: number;
   maHuyen: number;
   maXa: number;
@@ -77,13 +73,7 @@ export class LandComplainComponent implements OnInit, OnDestroy {
   Actions = Actions;
   actionMenu: MenuItem[];
 
-  get hasLoggedIn(): boolean {
-    return this.oAuthService.hasValidAccessToken();
-  }
-
   constructor(
-    private oAuthService: OAuthService,
-    private authService: AuthService,
     private dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
@@ -91,16 +81,53 @@ export class LandComplainComponent implements OnInit, OnDestroy {
     private complainService: ComplainService,
     private utilService: UtilityService,
     private unitService: UnitService,
-    private fileService: FileService
+    private fileService: FileService,
+    protected route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.getPermission();
     this.buildActionMenu();
     this.loadOptions();
-    this.loadData(true);
-    this.toggleBlockUI(false);
+    this.route.paramMap.subscribe(params => {
+      this.linhVuc = +params.get('linhVuc') as LinhVuc;
+      this.setHeader();
+      this.resetFilter();
+      this.loadData(true);
+    });
   }
+  private resetFilter() {
+    this.skipCount = 0;
+    this.maxResultCount = 10;
+    this.totalCount = 0;
+    this.keyword = '';
+    this.maTinh = null;
+    this.maHuyen = null;
+    this.maXa = null;
+    this.thoiGianTiepNhanRange = [];
+    this.giaiDoan = null;
+    this.tinhTrang = null;
+  }
+
+  private setHeader() {
+    switch (this.linhVuc) {
+      case LinhVuc.DataDai:
+        this.header = 'Khiếu nại đất đai';
+        break;
+      case LinhVuc.MoiTruong:
+        this.header = 'Khiếu nại môi trường';
+        break;
+      case LinhVuc.TaiNguyenNuoc:
+        this.header = 'Khiếu nại tài nguyên nước';
+        break;
+      case LinhVuc.KhoangSan:
+        this.header = 'Khiếu nại khoáng sản';
+        break;
+      default:
+        this.header = '';
+    }
+  }
+
   loadOptions() {
     this.toggleBlockUI(true);
     this.unitService
@@ -155,22 +182,32 @@ export class LandComplainComponent implements OnInit, OnDestroy {
 
   loadData(isFirst: boolean = false) {
     this.toggleBlockUI(true);
-    this.filter = {
-      skipCount: this.skipCount,
-      maxResultCount: this.maxResultCount,
-      keyword: this.keyword,
-      maTinhTP: this.maTinh,
-      maQuanHuyen: this.maHuyen,
-      maXaPhuongTT: this.maXa,
-      fromDate: this.thoiGianTiepNhanRange ? this.thoiGianTiepNhanRange[0].toUTCString() : null,
-      toDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-          ? this.thoiGianTiepNhanRange[1].toUTCString()
+    if (isFirst) {
+      this.filter = {
+        skipCount: this.skipCount,
+        maxResultCount: this.maxResultCount,
+        linhVuc: this.linhVuc
+      } as GetComplainListDto;
+    } else {
+      this.filter = {
+        skipCount: this.skipCount,
+        maxResultCount: this.maxResultCount,
+        keyword: this.keyword,
+        maTinhTP: this.maTinh,
+        maQuanHuyen: this.maHuyen,
+        maXaPhuongTT: this.maXa,
+        fromDate: this.thoiGianTiepNhanRange[0]
+          ? this.thoiGianTiepNhanRange[0].toUTCString()
           : null,
-      linhVuc: LinhVuc.DataDai,
-      ketQua: this.tinhTrang,
-      giaiDoan: this.giaiDoan,
-    } as GetComplainListDto;
+        toDate:
+          this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+            ? this.thoiGianTiepNhanRange[1].toUTCString()
+            : null,
+        linhVuc: this.linhVuc,
+        ketQua: this.tinhTrang,
+        giaiDoan: this.giaiDoan,
+      } as GetComplainListDto;
+    }
 
     this.complainService
       .getList(this.filter)
@@ -259,9 +296,12 @@ export class LandComplainComponent implements OnInit, OnDestroy {
     this.actionItem = item;
   }
   showAddModal() {
-    const ref = this.dialogService.open(LandComplainDetailComponent, {
+    const ref = this.dialogService.open(ComplainDetailComponent, {
       header: 'Thêm khiếu nại/khiếu kiện',
-      width: DIALOG_BG
+      width: DIALOG_BG,
+      data: {
+        linhVuc: this.linhVuc,
+      },
     });
 
     ref.onClose.subscribe((data: ComplainDto | FileUploadDto[]) => {
@@ -302,9 +342,10 @@ export class LandComplainComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const ref = this.dialogService.open(LandComplainDetailComponent, {
+    const ref = this.dialogService.open(ComplainDetailComponent, {
       data: {
         id: row.id,
+        linhVuc: this.linhVuc,
       },
       header: `Cập nhật khiếu nại/khiếu kiện '${row.tieuDe}'`,
       width: DIALOG_BG,

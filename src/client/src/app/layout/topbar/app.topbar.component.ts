@@ -14,6 +14,7 @@ import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
 import { UserInfoDto } from '@proxy/users';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SetPasswordComponent } from 'src/app/system/user/set-password/set-password.component';
+import { LinhVuc } from '@proxy';
 
 @Component({
   selector: 'app-topbar',
@@ -35,9 +36,9 @@ export class AppTopBarComponent implements OnInit {
   userId = '';
   avatarUrl: any;
 
-get isAutenticated() {
-  return this.oAuthService.hasValidAccessToken();
-}
+  get isAutenticated() {
+    return this.oAuthService.hasValidAccessToken();
+  }
 
   constructor(
     public layoutService: LayoutService,
@@ -109,20 +110,20 @@ get isAutenticated() {
         items: [
           {
             label: 'Đất đai',
-            routerLink: ['/pages/land-complain'],
+            routerLink: [`/pages/complain/${LinhVuc.DataDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: ['/pages/enviromental-complaint'],
+            routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: ['/pages/mineral-resource-complaint'],
+            routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: ['/pages/water-resource-complaint'],
+            routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },
@@ -132,20 +133,20 @@ get isAutenticated() {
         items: [
           {
             label: 'Đất đai',
-            routerLink: ['/pages/land-accusation'],
+            routerLink: [`/pages/denounce/${LinhVuc.DataDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: ['/pages/enviromental-accusation'],
+            routerLink: [`/pages/denounce/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: ['/pages/mineral-resource-accusation'],
+            routerLink: [`/pages/denounce/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: ['/pages/water-resource-accusation'],
+            routerLink: [`/pages/denounce/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },
@@ -165,7 +166,7 @@ get isAutenticated() {
           {
             label: 'Bảng tổng hợp',
             routerLink: ['/pages/stats'],
-          }
+          },
         ],
       },
     ];
@@ -219,7 +220,7 @@ get isAutenticated() {
         id: this.userId,
       },
       header: `Thông tin cá nhân'`,
-      width: DIALOG_MD
+      width: DIALOG_MD,
     });
 
     ref.onClose.subscribe((data: UserInfoDto) => {
