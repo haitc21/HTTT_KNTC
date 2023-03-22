@@ -92,6 +92,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
+this.utilService.markAllControlsAsDirty([this.form]);
+    if(this.form.invalid) return;;
     this.toggleBlockUI(true);
     let user = this.form.value;
     user.userName = this.selectedEntity.userName;

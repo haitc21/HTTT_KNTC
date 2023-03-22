@@ -105,6 +105,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
+this.utilService.markAllControlsAsDirty([this.form]);
+    if(this.form.invalid) return;;
     this.toggleBlockUI(true);
     if (this.utilService.isEmpty(this.config.data?.id)) {
       this.userService

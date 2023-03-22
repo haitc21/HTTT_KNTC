@@ -22,7 +22,6 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
 
   // Default
   public blockedPanelDetail: boolean = false;
-  public form: FormGroup;
   public title: string;
   public btnDisabled = false;
   public closeBtnName: string;

@@ -11,6 +11,7 @@ import { RoleDto } from '@proxy/roles';
 import { UsersService } from '@proxy/users';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
   templateUrl: './set-password.component.html',
@@ -48,6 +49,7 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private userService: UsersService,
+    private utilService: UtilityService,
     private fb: FormBuilder
   ) {}
 
@@ -56,6 +58,8 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
+this.utilService.markAllControlsAsDirty([this.form]);
+    if(this.form.invalid) return;;
     this.toggleBlockUI(true);
     this.userService
       .setPassword(this.config.data.id, this.form.value)

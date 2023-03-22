@@ -98,6 +98,8 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
+this.utilService.markAllControlsAsDirty([this.form]);
+    if(this.form.invalid) return;;
     let dto = this.form.value as CreateAndUpdateFileAttachmentDto;
     if (this.file) {
       dto.contentLength = this.file.size;

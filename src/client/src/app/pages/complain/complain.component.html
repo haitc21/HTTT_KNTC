@@ -201,9 +201,13 @@
           <td>
             {{ utilService.convertDateToLocal(row?.thoiGianHenTraKQ) | date : 'dd-MM-yyyy hh:mm' }}
           </td>
-          <td>{{ utilService.convertDateToLocal(row?.ngayTraKQ1) | date : 'dd-MM-yyyy' }}</td>
+          <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
+            {{ utilService.convertDateToLocal(row?.ngayTraKQ1) | date : 'dd-MM-yyyy' }}
+          </td>
           <td>{{ getLoaiKetQua(row?.ketQua1) }}</td>
-          <td>{{ utilService.convertDateToLocal(row?.ngayTraKQ2) | date : 'dd-MM-yyyy' }}</td>
+          <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
+            {{ utilService.convertDateToLocal(row?.ngayTraKQ2) | date : 'dd-MM-yyyy' }}
+          </td>
           <td>{{ getLoaiKetQua(row?.ketQua2) }}</td>
           <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
           <td *ngIf="visibleActionColumn">
@@ -258,3 +262,4 @@
     </p-blockUI>
   </p-panel>
 </div>
+<ng-template #emptyTpl><td></td></ng-template>

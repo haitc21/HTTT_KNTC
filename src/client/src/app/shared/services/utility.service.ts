@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
 
@@ -166,5 +167,46 @@ export class UtilityService {
       bytes[i] = ascii;
     }
     return bytes;
+  }
+
+  /**
+   * disable controls
+   * @param form FormGroup | FormArray
+   * @param controlsName array string controls name
+   * @returns
+   */
+  enableControls(form: AbstractControl, controlsName: string[]): void {
+    controlsName.forEach(x => {
+      let control = form.get(x);
+      if (control) control.enable();
+      else console.error('Could not enable control: ' + x);
+    });
+  }
+
+  /**
+   * disable controls
+   * @param form FormGroup | FormArray
+   * @param controlsName array string controls name
+   * @returns
+   */
+  resetControls(form: AbstractControl, controlsName: string[]): void {
+    controlsName.forEach(x => {
+      let control = form.get(x);
+      if (control) control.reset();
+      else console.error('Could not reset control: ' + x);
+    });
+  }
+  markAllControlsAsDirty(abstractControls: AbstractControl[]): void {
+    abstractControls.forEach(abstractControl => {
+      if (abstractControl instanceof FormControl) {
+        (abstractControl as FormControl).markAsDirty({
+          onlySelf: true,
+        });
+      } else if (abstractControl instanceof FormGroup) {
+        this.markAllControlsAsDirty(Object.values((abstractControl as FormGroup).controls));
+      } else if (abstractControl instanceof FormArray) {
+        this.markAllControlsAsDirty((abstractControl as FormArray).controls);
+      }
+    });
   }
 }
