@@ -125,7 +125,8 @@ export class UtilityService {
     }
     return data;
   };
-  convertDateToLocal = (date: Date | string) => {
+  convertDateToLocal = (date: Date | string | null) => {
+    if (date) return null;
     const localDateTime = moment.utc(date).local().toDate(); // Giá trị ngày và giờ trong múi giờ địa phương
     return localDateTime;
   };

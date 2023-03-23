@@ -55,6 +55,9 @@ public class CreateDenounceDto
     [Required]
     public string NoiDungVuViec { get; set; }
     [Required]
+    [MaxLength(KNTCValidatorConsts.MaxTenNguoiLength)]
+    public string NguoiBiToCao { get; set; }
+    [Required]
     [MaxLength(KNTCValidatorConsts.MaxBoPhanXLLength)]
     public string BoPhanDangXL { get; set; }
 
@@ -82,20 +85,27 @@ public class CreateDenounceDto
     [MaxLength(KNTCValidatorConsts.MaxHinhHocLength)]
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }
-    public DateTime? NgayKhieuNai1 { get; set; }
-    public DateTime? NgayTraKQ1 { get; set; }
-    [MaxLength(KNTCValidatorConsts.MaxThamQuyenLength)]
-    public string ThamQuyen1 { get; set; }
+    [Required]
+    public DateTime NgayGQTC { get; set; }
+    [Required]
+    [MaxLength(KNTCValidatorConsts.MaxTenNguoiLength)]
+    public string NguoiGQTC { get; set; }
+    [Required]
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
-    public string SoQD1 { get; set; }
-    public LoaiKetQua? KetQua1 { get; set; }
-    public DateTime? NgayKhieuNai2 { get; set; }
-    public DateTime? NgayTraKQ2 { get; set; }
-    [MaxLength(KNTCValidatorConsts.MaxThamQuyenLength)]
-    public string ThamQuyen2 { get; set; }
-
+    public string QuyerDinhThuLyGQTC { get; set; }
+    [Required]
+    public DateTime NgayQDGQTC { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
-    public string SoQD2 { get; set; }
-    public LoaiKetQua? KetQua2 { get; set; }
+    public string QuyetDinhDinhChiGQTC { get; set; }
+    public DateTime? GiaHanGQTC1 { get; set; }
+    public DateTime? GiaHanGQTC2 { get; set; }
+    [Required]
+    [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
+    public string SoVBKLNDTC { get; set; }
+    [Required]
+    public DateTime NgayNhanTBKQXLKLTC { get; set; }
+    [Required]
+    public LoaiKetQua KetQua { get; set; }
+    public bool CongKhaiKLGQTC { get; set; }
     public virtual List<CreateAndUpdateFileAttachmentDto> FileAttachments { get; set; }
 }

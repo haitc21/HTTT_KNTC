@@ -4,6 +4,7 @@ using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -12,9 +13,10 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230323151421_require_kq_denounce")]
+    partial class require_kq_denounce
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -454,11 +456,11 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasColumnName("ghi_chu");
 
-                    b.Property<DateTime?>("GiaHanGQTC1")
+                    b.Property<DateTime>("GiaHanGQTC1")
                         .HasColumnType("datetime2")
                         .HasColumnName("gia_han_GQTC_1");
 
-                    b.Property<DateTime?>("GiaHanGQTC2")
+                    b.Property<DateTime>("GiaHanGQTC2")
                         .HasColumnType("datetime2")
                         .HasColumnName("gia_han_GQTC_2");
 
@@ -552,6 +554,7 @@ namespace KNTC.Migrations
                         .HasColumnName("quyet_dinh_thu_ly_GQTC");
 
                     b.Property<string>("QuyetDinhDinhChiGQTC")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("quyet_dinh_dinh_chi_GQTC");

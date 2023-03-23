@@ -89,22 +89,6 @@
         <div class="field col-12 md:col-3">
           <span class="p-float-label">
             <p-dropdown
-              [options]="giaiDoanOptions"
-              [(ngModel)]="giaiDoan"
-              optionLabel="text"
-              optionValue="value"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              styleClass="w-full"
-              (onChange)="loadData()"
-            ></p-dropdown>
-            <label for="phoneNumber">Giai đoạn</label>
-          </span>
-        </div>
-        <!-- --------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-3">
-          <span class="p-float-label">
-            <p-dropdown
               [options]="loaiKQOptions"
               [(ngModel)]="tinhTrang"
               optionLabel="text"

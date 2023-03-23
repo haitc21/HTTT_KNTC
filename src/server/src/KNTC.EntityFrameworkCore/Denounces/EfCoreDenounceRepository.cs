@@ -26,7 +26,6 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                int? maTinhTp,
                                                int? maQuanHuyen,
                                                int? maXaPhuongTT,
-                                               int? giaiDoan,
                                                DateTime? fromDate,
                                                DateTime? toDate,
                                                bool includeDetails = false)

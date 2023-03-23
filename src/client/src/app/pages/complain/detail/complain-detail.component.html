@@ -39,7 +39,7 @@
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="description">Tiêu đề <span class="required">*</span></label>
+                    <label for="tieuDe">Tiêu đề <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.tieuDe"
@@ -57,7 +57,7 @@
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="description">Người đề nghị <span class="required">*</span></label>
+                    <label for="nguoiDeNghi">Người đề nghị <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.nguoiDeNghi"
@@ -75,7 +75,7 @@
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="description">CCCD/CMND <span class="required">*</span></label>
+                    <label for="cccdCmnd">CCCD/CMND <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.cccdCmnd"
@@ -94,7 +94,7 @@
                       [showClear]="true"
                       inputId="dob"
                     ></p-calendar>
-                    <label for="dob">Ngày sinh <span class="required">*</span></label>
+                    <label for="ngaySinh">Ngày sinh <span class="required">*</span></label>
                     <app-validation-message
                       [entityControl]="formControls.ngaySinh"
                       [validationMessages]="validationMessages.ngaySinh"
@@ -154,7 +154,7 @@
                       styleClass="w-full"
                       (onChange)="tinhChange($event?.value)"
                     ></p-dropdown>
-                    <label for="description">Tỉnh/TP <span class="required">*</span></label>
+                    <label for="maTinhTP">Tỉnh/TP <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.maTinhTP"
@@ -178,7 +178,7 @@
                       styleClass="w-full"
                       (onChange)="huyenChange($event?.value)"
                     ></p-dropdown>
-                    <label for="description">Quận/Huyện <span class="required">*</span></label>
+                    <label for="maQuanHuyen">Quận/Huyện <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.maQuanHuyen"
@@ -201,7 +201,7 @@
                       filterBy="unitName"
                       styleClass="w-full"
                     ></p-dropdown>
-                    <label for="description">Xã/Phường/TT <span class="required">*</span></label>
+                    <label for="maXaPhuongTT">Xã/Phường/TT <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.maXaPhuongTT"
@@ -219,7 +219,7 @@
                       pInputTextarea
                       class="w-full"
                     ></textarea>
-                    <label for="description"
+                    <label for="diaChiThuongTru"
                       >Địau chỉ thường trú <span class="required">*</span></label
                     >
                   </span>
@@ -239,7 +239,7 @@
                       pInputTextarea
                       class="w-full"
                     ></textarea>
-                    <label for="description"
+                    <label for="diaChiLienHe"
                       >Địau chỉ liên hệ <span class="required">*</span></label
                     >
                   </span>
@@ -261,7 +261,7 @@
                       showTime="true"
                       [hourFormat]="24"
                     ></p-calendar>
-                    <label for="dob">Thời gian tiếp nhận</label>
+                    <label for="thoiGianTiepNhan">Thời gian tiếp nhận</label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.thoiGianTiepNhan"
@@ -281,7 +281,7 @@
                       showTime="true"
                       [hourFormat]="24"
                     ></p-calendar>
-                    <label for="dob">Thời gian hẹn trả kết quả</label>
+                    <label for="thoiGianHenTraKQ">Thời gian hẹn trả kết quả</label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.thoiGianHenTraKQ"
@@ -299,7 +299,7 @@
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="description">Bộ phận đang XL <span class="required">*</span></label>
+                    <label for="boPhanDangXL">Bộ phận đang XL <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.boPhanDangXL"
@@ -311,13 +311,13 @@
                 <div class="field col-12 md:col-12">
                   <span class="p-float-label">
                     <textarea
-                      id="description"
+                      id="noiDungVuViec"
                       formControlName="noiDungVuViec"
                       [rows]="5"
                       pInputTextarea
                       class="w-full"
                     ></textarea>
-                    <label for="description">Nội dung KN?KK <span class="required">*</span></label>
+                    <label for="noiDungVuViec">Nội dung KN?KK <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.noiDungVuViec"
@@ -335,7 +335,7 @@
                       pInputTextarea
                       class="w-full"
                     ></textarea>
-                    <label for="description">Ghi chú</label>
+                    <label for="ghiChu">Ghi chú</label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.ghiChu"
@@ -358,7 +358,7 @@
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="description">Số thửa <span class="required">*</span></label>
+                    <label for="soThua">Số thửa <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.soThua"
@@ -376,7 +376,7 @@
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="description">Tờ bản đồ <span class="required">*</span></label>
+                    <label for="toBanDo">Tờ bản đồ <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.toBanDo"
@@ -394,7 +394,7 @@
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="description">Diện tích <span class="required">*</span></label>
+                    <label for="dienTich">Diện tích <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.dienTich"
@@ -417,7 +417,7 @@
                       filterBy="landTypeName"
                       styleClass="w-full"
                     ></p-dropdown>
-                    <label for="description">loại đất <span class="required">*</span></label>
+                    <label for="loaiDat">loại đất <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.loaiDat"
@@ -441,7 +441,7 @@
                       styleClass="w-full"
                       (onChange)="tinhThuaDatChange($event?.value)"
                     ></p-dropdown>
-                    <label for="description">Tỉnh/TP <span class="required">*</span></label>
+                    <label for="tinhThuaDat">Tỉnh/TP <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.tinhThuaDat"
@@ -465,7 +465,7 @@
                       styleClass="w-full"
                       (onChange)="huyenThuaDatChange($event?.value)"
                     ></p-dropdown>
-                    <label for="description">Quận/Huyện <span class="required">*</span></label>
+                    <label for="huyenThuaDat">Quận/Huyện <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.huyenThuaDat"
@@ -488,7 +488,7 @@
                       filterBy="unitName"
                       styleClass="w-full"
                     ></p-dropdown>
-                    <label for="description">Xã/Phường/TT<span class="required">*</span></label>
+                    <label for="xaThuaDat">Xã/Phường/TT<span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.xaThuaDat"
@@ -506,7 +506,7 @@
                       pInputTextarea
                       class="w-full"
                     ></textarea>
-                    <label for="description"
+                    <label for="diaChiThuaDat"
                       >Địa chỉ thửa đất <span class="required">*</span></label
                     >
                   </span>
@@ -535,7 +535,7 @@
                       [autoDisplayFirst]="false"
                       styleClass="w-full"
                     ></p-dropdown>
-                    <label for="description">Khiếu nại/Khiếu kiện</label>
+                    <label for="loaiKhieuNai1">Khiếu nại/Khiếu kiện</label>
                   </span>
                 </div>
                 <!-- ---------------------------------ngayKhieuNai1------------------------------------------------- -->
@@ -548,7 +548,7 @@
                       dateFormat="dd/mm/yy"
                       [showClear]="true"
                     ></p-calendar>
-                    <label for="dob">Ngày QĐ GQKN</label>
+                    <label for="ngayKhieuNai1">Ngày QĐ GQKN</label>
                   </span>
                 </div>
                 <!-- ---------------------------------ngayTraKQ1------------------------------------------------- -->
@@ -561,7 +561,7 @@
                       dateFormat="dd/mm/yy"
                       [showClear]="true"
                     ></p-calendar>
-                    <label for="dob">Ngày trả kết quả</label>
+                    <label for="ngayTraKQ1">Ngày trả kết quả</label>
                   </span>
                 </div>
                 <!-- -------------------------------thamQuyen1--------------------------------------------------- -->
@@ -613,7 +613,7 @@
                       [autoDisplayFirst]="false"
                       styleClass="w-full"
                     ></p-dropdown>
-                    <label for="description">Kết quả GQKN</label>
+                    <label for="ketQua1">Kết quả GQKN</label>
                   </span>
                 </div>
               </div>
@@ -635,7 +635,7 @@
                       [autoDisplayFirst]="false"
                       styleClass="w-full"
                     ></p-dropdown>
-                    <label for="description">Khiếu nại/Khiếu kiện</label>
+                    <label for="loaiKhieuNai2">Khiếu nại/Khiếu kiện</label>
                   </span>
                 </div>
                 <!-- ---------------------------------ngayKhieuNai2------------------------------------------------- -->
@@ -648,7 +648,7 @@
                       dateFormat="dd/mm/yy"
                       [showClear]="true"
                     ></p-calendar>
-                    <label for="dob">Ngày QĐ GQKN</label>
+                    <label for="ngayKhieuNai2">Ngày QĐ GQKN</label>
                   </span>
                 </div>
                 <!-- ---------------------------------ngayTraKQ2------------------------------------------------- -->
@@ -661,7 +661,7 @@
                       dateFormat="dd/mm/yy"
                       [showClear]="true"
                     ></p-calendar>
-                    <label for="dob">Ngày trả kết quả</label>
+                    <label for="ngayTraKQ2">Ngày trả kết quả</label>
                   </span>
                 </div>
                 <!-- -------------------------------thamQuyen2--------------------------------------------------- -->
@@ -713,7 +713,7 @@
                       [autoDisplayFirst]="false"
                       styleClass="w-full"
                     ></p-dropdown>
-                    <label for="description">Kết quả GQKN</label>
+                    <label for="ketQua2">Kết quả GQKN</label>
                   </span>
                 </div>
               </div>

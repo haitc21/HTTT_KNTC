@@ -196,9 +196,9 @@ public class KNTCDbContext :
             b.Property(x => x.NguoiGQTC).IsRequired().HasColumnName("nguoi_GQTC").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
             b.Property(x => x.QuyerDinhThuLyGQTC).IsRequired().HasColumnName("quyet_dinh_thu_ly_GQTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
             b.Property(x => x.NgayQDGQTC).IsRequired().HasColumnName("ngay_QDGQTC");
-            b.Property(x => x.QuyetDinhDinhChiGQTC).IsRequired().HasColumnName("quyet_dinh_dinh_chi_GQTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
-            b.Property(x => x.GiaHanGQTC1).IsRequired().HasColumnName("gia_han_GQTC_1");
-            b.Property(x => x.GiaHanGQTC2).IsRequired().HasColumnName("gia_han_GQTC_2");
+            b.Property(x => x.QuyetDinhDinhChiGQTC).HasColumnName("quyet_dinh_dinh_chi_GQTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
+            b.Property(x => x.GiaHanGQTC1).HasColumnName("gia_han_GQTC_1");
+            b.Property(x => x.GiaHanGQTC2).HasColumnName("gia_han_GQTC_2");
             b.Property(x => x.SoVBKLNDTC).IsRequired().HasColumnName("so_VB_KL_NDTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
             b.Property(x => x.NgayNhanTBKQXLKLTC).IsRequired().HasColumnName("ngay_nhan_TB_KQXLKLTC");
             b.Property(x => x.CongKhaiKLGQTC).IsRequired().HasColumnName("cong_khai_KL_QDTC").HasDefaultValue(false);

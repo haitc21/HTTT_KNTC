@@ -17,7 +17,6 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
                      int? maTinhTp,
                      int? maQuanHuyen,
                      int? maXaPhuongTT,
-                     int? giaiDoan,
                      DateTime? FromDate,
                      DateTime? ToDate,
                      bool includeDetails = false);

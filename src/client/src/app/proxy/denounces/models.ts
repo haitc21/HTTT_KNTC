@@ -22,6 +22,7 @@ export interface CreateDenounceDto {
   thoiGianTiepNhan: string;
   thoiGianTraKQ: string;
   noiDungVuViec: string;
+  nguoiBiToCao: string;
   boPhanDangXL: string;
   soThua: string;
   toBanDo: string;
@@ -34,16 +35,17 @@ export interface CreateDenounceDto {
   duLieuToaDo?: string;
   duLieuHinhHoc?: string;
   ghiChu?: string;
-  ngayKhieuNai1?: string;
-  ngayTraKQ1?: string;
-  thamQuyen1?: string;
-  soQD1?: string;
-  ketQua1?: LoaiKetQua;
-  ngayKhieuNai2?: string;
-  ngayTraKQ2?: string;
-  thamQuyen2?: string;
-  soQD2?: string;
-  ketQua2?: LoaiKetQua;
+  ngayGQTC: string;
+  nguoiGQTC: string;
+  quyerDinhThuLyGQTC: string;
+  ngayQDGQTC: string;
+  quyetDinhDinhChiGQTC?: string;
+  giaHanGQTC1?: string;
+  giaHanGQTC2?: string;
+  soVBKLNDTC: string;
+  ngayNhanTBKQXLKLTC: string;
+  ketQua: LoaiKetQua;
+  congKhaiKLGQTC: boolean;
   fileAttachments: CreateAndUpdateFileAttachmentDto[];
 }
 
@@ -66,6 +68,7 @@ export interface DenounceDto extends AuditedEntityDto<string> {
   thoiGianTiepNhan?: string;
   thoiGianHenTraKQ?: string;
   noiDungVuViec?: string;
+  nguoiBiToCao?: string;
   boPhanDangXL?: string;
   soThua?: string;
   toBanDo?: string;
@@ -78,17 +81,17 @@ export interface DenounceDto extends AuditedEntityDto<string> {
   duLieuToaDo?: string;
   duLieuHinhHoc?: string;
   ghiChu?: string;
-  ngayKhieuNai1?: string;
-  ngayTraKQ1?: string;
-  thamQuyen1?: string;
-  soQD1?: string;
-  ketQua1?: LoaiKetQua;
-  ngayKhieuNai2?: string;
-  ngayTraKQ2?: string;
-  thamQuyen2?: string;
-  soQDII?: string;
-  ketQua2?: LoaiKetQua;
-  ketQua?: LoaiKetQua;
+  ngayGQTC?: string;
+  nguoiGQTC?: string;
+  quyerDinhThuLyGQTC?: string;
+  ngayQDGQTC?: string;
+  quyetDinhDinhChiGQTC?: string;
+  giaHanGQTC1?: string;
+  giaHanGQTC2?: string;
+  soVBKLNDTC?: string;
+  ngayNhanTBKQXLKLTC?: string;
+  ketQua: LoaiKetQua;
+  congKhaiKLGQTC: boolean;
   fileAttachments: FileAttachmentDto[];
   concurrencyStamp?: string;
 }
@@ -101,7 +104,6 @@ export interface GetDenounceListDto extends BaseListFilterDto {
   toDate?: string;
   linhVuc?: LinhVuc;
   ketQua?: LoaiKetQua;
-  giaiDoan?: number;
 }
 
 export interface UpdateDenounceDto extends EntityDto<string> {
@@ -122,6 +124,7 @@ export interface UpdateDenounceDto extends EntityDto<string> {
   thoiGianTiepNhan: string;
   thoiGianHenTraKQ: string;
   noiDungVuViec: string;
+  nguoiBiToCao: string;
   boPhanDangXL: string;
   soThua: string;
   toBanDo: string;
@@ -134,15 +137,16 @@ export interface UpdateDenounceDto extends EntityDto<string> {
   duLieuToaDo?: string;
   duLieuHinhHoc?: string;
   ghiChu?: string;
-  ngayKhieuNai1?: string;
-  ngayTraKQ1?: string;
-  thamQuyen1?: string;
-  soQD1?: string;
-  ketQua1?: LoaiKetQua;
-  ngayKhieuNai2?: string;
-  ngayTraKQ2?: string;
-  thamQuyen2?: string;
-  soQD2?: string;
-  ketQua2?: LoaiKetQua;
+  ngayGQTC: string;
+  nguoiGQTC: string;
+  quyerDinhThuLyGQTC: string;
+  ngayQDGQTC: string;
+  quyetDinhDinhChiGQTC?: string;
+  giaHanGQTC1?: string;
+  giaHanGQTC2?: string;
+  soVBKLNDTC: string;
+  ngayNhanTBKQXLKLTC: string;
+  ketQua: LoaiKetQua;
+  congKhaiKLGQTC: boolean;
   concurrencyStamp?: string;
 }

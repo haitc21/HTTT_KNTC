@@ -21,5 +21,4 @@ export interface SpatialDataDto extends EntityDto<number> {
 }
 
 export interface SpatialDataLookupDto extends EntityDto<number> {
-  
 }

@@ -60,7 +60,6 @@ public class DenounceAppService : CrudAppService<
             input.maTinhTP,
             input.maQuanHuyen,
             input.maXaPhuongTT,
-            input.GiaiDoan,
             input.FromDate,
             input.ToDate
         );
@@ -103,6 +102,7 @@ public class DenounceAppService : CrudAppService<
                                                   thoiGianTiepNhan: input.ThoiGianTiepNhan,
                                                   thoiGianHenTraKQ: input.ThoiGianTraKQ,
                                                   noiDungVuViec: input.NoiDungVuViec,
+                                                  nguoiBiToCao: input.NguoiBiToCao,
                                                   boPhanDangXL: input.BoPhanDangXL,
                                                   soThua: input.SoThua,
                                                   toBanDo: input.ToBanDo,
@@ -115,18 +115,18 @@ public class DenounceAppService : CrudAppService<
                                                   duLieuToaDo: input.DuLieuToaDo,
                                                   duLieuHinhHoc: input.DuLieuHinhHoc,
                                                   GhiChu: input.GhiChu,
-
-                                                  ngayKhieuNai1: input.NgayKhieuNai1,
-                                                  NgayTraKQ1: input.NgayTraKQ1,
-                                                  ThamQuyen1: input.ThamQuyen1,
-                                                  SoQD1: input.SoQD1,
-
-                                                  ngayKhieuNai2: input.NgayKhieuNai2,
-                                                  NgayTraKQ2: input.NgayTraKQ2,
-                                                  ThamQuyen2: input.ThamQuyen2,
-                                                  SoQD2: input.SoQD2,
-                                                  KetQua1: input.KetQua1,
-                                                  KetQua2: input.KetQua2);
+                                                  ngayGQTC: input.NgayGQTC,
+                                                  nguoiGQTC: input.NguoiGQTC,
+                                                  quyerDinhThuLyGQTC: input.QuyerDinhThuLyGQTC,
+                                                  ngayQDGQTC: input.NgayQDGQTC,
+                                                  quyetDinhDinhChiGQTC: input.QuyetDinhDinhChiGQTC,
+                                                  giaHanGQTC1: input.GiaHanGQTC1,
+                                                  giaHanGQTC2: input.GiaHanGQTC2,
+                                                  soVBKLNDTC: input.SoVBKLNDTC,
+                                                  ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
+                                                  ketQua: input.KetQua,
+                                                  congKhaiKLGQTC: input.CongKhaiKLGQTC
+                                                  );
 
         await _denounceRepo.InsertAsync(denounce);
         var result = ObjectMapper.Map<Denounce, DenounceDto>(denounce);
@@ -177,6 +177,7 @@ public class DenounceAppService : CrudAppService<
                                                   thoiGianTiepNhan: input.ThoiGianTiepNhan,
                                                   thoiGianHenTraKQ: input.ThoiGianHenTraKQ,
                                                   noiDungVuViec: input.NoiDungVuViec,
+                                                  nguoiBiToCao: input.NguoiBiToCao,
                                                   boPhanDangXL: input.BoPhanDangXL,
                                                   soThua: input.SoThua,
                                                   toBanDo: input.ToBanDo,
@@ -189,16 +190,17 @@ public class DenounceAppService : CrudAppService<
                                                   duLieuToaDo: input.DuLieuToaDo,
                                                   duLieuHinhHoc: input.DuLieuHinhHoc,
                                                   GhiChu: input.GhiChu,
-                                                  ngayKhieuNai1: input.NgayKhieuNai1,
-                                                  NgayTraKQ1: input.NgayTraKQ1,
-                                                  ThamQuyen1: input.ThamQuyen1,
-                                                  SoQD1: input.SoQD1,
-                                                  ngayKhieuNai2: input.NgayKhieuNai2,
-                                                  NgayTraKQ2: input.NgayTraKQ2,
-                                                  ThamQuyen2: input.ThamQuyen2,
-                                                  SoQD2: input.SoQD2,
-                                                  KetQua1: input.KetQua1,
-                                                  KetQua2: input.KetQua2);
+                                                  ngayGQTC: input.NgayGQTC,
+                                                  nguoiGQTC: input.NguoiGQTC,
+                                                  quyerDinhThuLyGQTC: input.QuyerDinhThuLyGQTC,
+                                                  ngayQDGQTC: input.NgayQDGQTC,
+                                                  quyetDinhDinhChiGQTC: input.QuyetDinhDinhChiGQTC,
+                                                  giaHanGQTC1: input.GiaHanGQTC1,
+                                                  giaHanGQTC2: input.GiaHanGQTC2,
+                                                  soVBKLNDTC: input.SoVBKLNDTC,
+                                                  ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
+                                                  ketQua: input.KetQua,
+                                                  congKhaiKLGQTC: input.CongKhaiKLGQTC);
         await _denounceRepo.UpdateAsync(denounce);
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }

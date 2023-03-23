@@ -51,10 +51,6 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
   ];
-  loaiKhieuNaiOptions = [
-    { value: LoaiKhieuNai.KhieuNai, text: 'Khiếu nại' },
-    { value: LoaiKhieuNai.KhieuKien, text: 'Khiếu kiện' },
-  ];
 
   // Validate
   validationMessages = {
@@ -120,6 +116,13 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     thoiGianTiepNhan: [{ type: 'required', message: 'Mgày tiếp nhận không được để trống' }],
     thoiGianHenTraKQ: [{ type: 'required', message: 'Ngày hẹn trả kết quả không được để trống' }],
     noiDungVuViec: [{ type: 'required', message: 'Nội dung vụ việc không được để trống' }],
+    nguoiBiToCao: [
+      { type: 'required', message: 'Người bị tố cáo không được để trống' },
+      {
+        type: 'maxLength',
+        message: `Người bị tố cáo không vượt quá ${KNTCValidatorConsts.MaxTenNguoiLength} kí tự`,
+      },
+    ],
     boPhanDangXL: [
       { type: 'required', message: 'Bộ phận đang XL không được để trống' },
       {
@@ -165,24 +168,45 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         message: `Dữ liệu hình học không vượt quá ${KNTCValidatorConsts.MaxHinhHocLength} kí tự`,
       },
     ],
-    thamQuyen: [
-      {
-        type: 'maxlength',
-        message: `Thẩm quyền không vượt quá ${KNTCValidatorConsts.MaxThamQuyenLength} kí tự`,
-      },
-    ],
-    soQD: [
-      {
-        type: 'maxlength',
-        message: `Số QĐ không vượt quá ${KNTCValidatorConsts.MaxSoQDLength} kí tự`,
-      },
-    ],
     ghiChu: [
       {
         type: 'maxlength',
         message: `Ghi chú không vượt quá ${KNTCValidatorConsts.MaxGhiChuLength} kí tự`,
       },
     ],
+    ngayGQTC: [{ type: 'required', message: 'Ngày giải quyết tố cáo không được để trống' }],
+    nguoiGQTC: [
+      { type: 'required', message: 'Người bị tố cáo không được để trống' },
+      {
+        type: 'maxLength',
+        message: `Người bị tố cáo không vượt quá ${KNTCValidatorConsts.MaxTenNguoiLength} kí tự`,
+      },
+    ],
+    quyerDinhThuLyGQTC: [
+      { type: 'required', message: 'QĐ thụ lý không được để trống' },
+      {
+        type: 'maxlength',
+        message: `QĐ không vượt quá ${KNTCValidatorConsts.MaxSoQDLength} kí tự`,
+      },
+    ],
+    ngayQDGQTC: [{ type: 'required', message: 'Ngày QĐ GQTC không được để trống' }],
+    quyetDinhDinhChiGQTC: [
+      {
+        type: 'maxlength',
+        message: `QĐ không vượt quá ${KNTCValidatorConsts.MaxSoQDLength} kí tự`,
+      },
+    ],
+    soVBKLNDTC: [
+      { type: 'required', message: 'Số VB KL NDTC không được để trống' },
+      {
+        type: 'maxlength',
+        message: `Số VB KL NDTC không vượt quá ${KNTCValidatorConsts.MaxSoQDLength} kí tự`,
+      },
+    ],
+    ngayNhanTBKQXLKLTC: [
+      { type: 'required', message: 'Ngày nhận TB KQXLKLTC không được để trống' },
+    ],
+    ketQua: [{ type: 'required', message: 'Xã/Phường/TT  thửa đất không được để trống' }],
   };
 
   get formControls() {
@@ -346,17 +370,20 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
             .get('thoiGianHenTraKQ')
             .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianHenTraKQ));
           this.form
-            .get('ngayKhieuNai1')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai1));
+            .get('ngayGQTC')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayGQTC));
           this.form
-            .get('ngayTraKQ1')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ1));
+            .get('ngayQDGQTC')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayQDGQTC));
           this.form
-            .get('ngayKhieuNai2')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai2));
+            .get('giaHanGQTC1')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.giaHanGQTC1));
           this.form
-            .get('ngayTraKQ2')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
+            .get('giaHanGQTC2')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.giaHanGQTC2));
+          this.form
+            .get('ngayNhanTBKQXLKLTC')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayNhanTBKQXLKLTC));
 
           this.toggleBlockUI(false);
         },
@@ -472,6 +499,10 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       thoiGianTiepNhan: [null, [Validators.required]],
       thoiGianHenTraKQ: [null, [Validators.required]],
       noiDungVuViec: [null, [Validators.required]],
+      nguoiBiToCoa: [
+        null,
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenNguoiLength)],
+      ],
       boPhanDangXL: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxBoPhanXLLength)],
@@ -498,21 +529,28 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       duLieuHinhHoc: [null, [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
       ghiChu: [null, Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
 
-      loaiKhieuNai1: [],
-      ngayKhieuNai1: [],
-      ngayTraKQ1: [],
-      thamQuyen1: [null, [Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)]],
-      soQD1: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
-      ketQua1: [],
+      ngayGQTC: [[Validators.required]],
+      nguoiGQTC: [
+        null,
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenNguoiLength)],
+      ],
+      quyerDinhThuLyGQTC: [
+        null,
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)],
+      ],
+      ngayQDGQTC: [[Validators.required]],
+      quyetDinhDinhChiGQTC: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      giaHanGQTC1: [null],
+      giaHanGQTC2: [null],
 
-      loaiKhieuNai2: [],
-      ngayKhieuNai2: [],
-      ngayTraKQ2: [],
-      thamQuyen2: [null, [Validators.maxLength(KNTCValidatorConsts.MaxThamQuyenLength)]],
-      soQD2: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
-      ketQua2: [],
+      soVBKLNDTC: [
+        null,
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)],
+      ],
+      ngayNhanTBKQXLKLTC: [[Validators.required]],
+      ketQua: [[Validators.required]],
+      congKhaiKLGQTC: [false],
 
-      listFileDeleted: [],
       concurrencyStamp: [],
     });
   }
