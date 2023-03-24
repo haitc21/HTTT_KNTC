@@ -339,6 +339,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
 
           this.form.patchValue(this.selectedEntity);
+          this.form.get('ngaySinh').setValue(this.utilService.convertDateToLocal(this.selectedEntity.ngaySinh));
           this.form.get('thoiGianTiepNhan').setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianTiepNhan));
           this.form.get('thoiGianHenTraKQ').setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianHenTraKQ));
           this.form.get('ngayKhieuNai1').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai1));

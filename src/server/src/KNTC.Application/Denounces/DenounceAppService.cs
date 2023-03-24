@@ -1,4 +1,5 @@
-﻿using KNTC.FileAttachments;
+﻿using KNTC.Complains;
+using KNTC.FileAttachments;
 using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
@@ -26,13 +27,15 @@ public class DenounceAppService : CrudAppService<
     private readonly IDenounceRepository _denounceRepo;
     private readonly DenounceManager _denounceManager;
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
+    private readonly FileAttachmentManager _fileAttachmentManager;
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
 
     public DenounceAppService(IRepository<Denounce, Guid> repository,
         IDenounceRepository denounceRepo,
         DenounceManager denounceManager,
         IRepository<FileAttachment, Guid> fileAttachmentRepo,
-        IBlobContainer<FileAttachmentContainer> blobContainer) : base(repository)
+        IBlobContainer<FileAttachmentContainer> blobContainer,
+        FileAttachmentManager fileAttachmentManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
@@ -40,6 +43,7 @@ public class DenounceAppService : CrudAppService<
         _fileAttachmentRepo = fileAttachmentRepo;
         _denounceManager = denounceManager;
         _blobContainer = blobContainer;
+        _fileAttachmentManager = fileAttachmentManager;
     }
 
     [AllowAnonymous]
@@ -61,7 +65,8 @@ public class DenounceAppService : CrudAppService<
             input.maQuanHuyen,
             input.maXaPhuongTT,
             input.FromDate,
-            input.ToDate
+            input.ToDate,
+            input.CongKhaiKLGQTC
         );
 
         var totalCount = await _denounceRepo.CountAsync(
@@ -74,6 +79,7 @@ public class DenounceAppService : CrudAppService<
                        && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
                        && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                        && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
+                       && (!input.CongKhaiKLGQTC.HasValue || x.CongKhaiKLGQTC == input.CongKhaiKLGQTC)
                        );
 
         return new PagedResultDto<DenounceDto>(
@@ -87,7 +93,7 @@ public class DenounceAppService : CrudAppService<
         var denounce = await _denounceManager.CreateAsync(maHoSo: input.MaHoSo,
                                                   linhVuc: input.LinhVuc,
                                                   tieuDe: input.TieuDe,
-                                                  nguoiDeNghi: input.NguoiDeNghi,
+                                                  nguoiToCao: input.NguoiToCao,
                                                   cccdCmnd: input.CccdCmnd,
                                                   //ngayCapCccdCmnd: input.NgayCapCccdCmnd,
                                                   //noiCapCccdCmnd: input.NoiCapCccdCmnd,
@@ -134,19 +140,19 @@ public class DenounceAppService : CrudAppService<
         {
             foreach (var item in input.FileAttachments)
             {
-                var fileAttach = await _denounceManager.CreateFileAttachmentAsync(denounce: denounce,
-                                                                        giaiDoan: item.GiaiDoan,
-                                                                        tenTaiLieu: item.TenTaiLieu,
-                                                                        hinhThuc: item.HinhThuc,
-                                                                        thoiGianBanHanh: item.ThoiGianBanHanh,
-                                                                        ngayNhan: item.NgayNhan,
-                                                                        thuTuButLuc: item.ThuTuButLuc,
-                                                                        noiDungChinh: item.NoiDungChinh,
-                                                                        fileName: item.FileName,
-                                                                        contentType: item.ContentType,
-                                                                        contentLength: item.ContentLength
-                                                                        );
-
+                var fileAttach = await _fileAttachmentManager.CreateAsync(loaiVuViec: LoaiVuViec.ToCao,
+                                                                     complainId: null,
+                                                                     DenounceId: denounce.Id,
+                                                                     giaiDoan: item.GiaiDoan,
+                                                                     tenTaiLieu: item.TenTaiLieu,
+                                                                     hinhThuc: item.HinhThuc,
+                                                                     thoiGianBanHanh: item.ThoiGianBanHanh,
+                                                                     ngayNhan: item.NgayNhan,
+                                                                     thuTuButLuc: item.ThuTuButLuc,
+                                                                     noiDungChinh: item.NoiDungChinh,
+                                                                     fileName: item.FileName,
+                                                                     contentType: item.ContentType,
+                                                                     contentLength: item.ContentLength);
                 await _fileAttachmentRepo.InsertAsync(fileAttach);
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
@@ -161,46 +167,46 @@ public class DenounceAppService : CrudAppService<
         await _denounceManager.UpdateAsync(denounce: denounce,
                                            maHoSo: input.MaHoSo,
                                           linhVuc: input.LinhVuc,
-                                                  tieuDe: input.TieuDe,
-                                                  nguoiDeNghi: input.NguoiDeNghi,
-                                                  cccdCmnd: input.CccdCmnd,
-                                                  //ngayCapCccdCmnd: input.NgayCapCccdCmnd,
-                                                  //noiCapCccdCmnd: input.NoiCapCccdCmnd,
-                                                  ngaySinh: input.NgaySinh,
-                                                  DienThoai: input.DienThoai,
-                                                  email: input.Email,
-                                                  diaChiThuongTru: input.DiaChiThuongTru,
-                                                  diaChiLienHe: input.DiaChiLienHe,
-                                                  maTinhTP: input.maTinhTP,
-                                                  maQuanHuyen: input.maQuanHuyen,
-                                                  maXaPhuongTT: input.maXaPhuongTT,
-                                                  thoiGianTiepNhan: input.ThoiGianTiepNhan,
-                                                  thoiGianHenTraKQ: input.ThoiGianHenTraKQ,
-                                                  noiDungVuViec: input.NoiDungVuViec,
-                                                  nguoiBiToCao: input.NguoiBiToCao,
-                                                  boPhanDangXL: input.BoPhanDangXL,
-                                                  soThua: input.SoThua,
-                                                  toBanDo: input.ToBanDo,
-                                                  dienTich: input.DienTich,
-                                                  loaiDat: input.LoaiDat,
-                                                  diaChiThuaDat: input.DiaChiThuaDat,
-                                                  tinhThuaDat: input.tinhThuaDat,
-                                                  huyenThuaDat: input.huyenThuaDat,
-                                                  xaThuaDat: input.xaThuaDat,
-                                                  duLieuToaDo: input.DuLieuToaDo,
-                                                  duLieuHinhHoc: input.DuLieuHinhHoc,
-                                                  GhiChu: input.GhiChu,
-                                                  ngayGQTC: input.NgayGQTC,
-                                                  nguoiGQTC: input.NguoiGQTC,
-                                                  quyerDinhThuLyGQTC: input.QuyerDinhThuLyGQTC,
-                                                  ngayQDGQTC: input.NgayQDGQTC,
-                                                  quyetDinhDinhChiGQTC: input.QuyetDinhDinhChiGQTC,
-                                                  giaHanGQTC1: input.GiaHanGQTC1,
-                                                  giaHanGQTC2: input.GiaHanGQTC2,
-                                                  soVBKLNDTC: input.SoVBKLNDTC,
-                                                  ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
-                                                  ketQua: input.KetQua,
-                                                  congKhaiKLGQTC: input.CongKhaiKLGQTC);
+                                          tieuDe: input.TieuDe,
+                                          nguoiToCao: input.NguoiToCao,
+                                          cccdCmnd: input.CccdCmnd,
+                                          //ngayCapCccdCmnd: input.NgayCapCccdCmnd,
+                                          //noiCapCccdCmnd: input.NoiCapCccdCmnd,
+                                          ngaySinh: input.NgaySinh,
+                                          DienThoai: input.DienThoai,
+                                          email: input.Email,
+                                          diaChiThuongTru: input.DiaChiThuongTru,
+                                          diaChiLienHe: input.DiaChiLienHe,
+                                          maTinhTP: input.maTinhTP,
+                                          maQuanHuyen: input.maQuanHuyen,
+                                          maXaPhuongTT: input.maXaPhuongTT,
+                                          thoiGianTiepNhan: input.ThoiGianTiepNhan,
+                                          thoiGianHenTraKQ: input.ThoiGianHenTraKQ,
+                                          noiDungVuViec: input.NoiDungVuViec,
+                                          nguoiBiToCao: input.NguoiBiToCao,
+                                          boPhanDangXL: input.BoPhanDangXL,
+                                          soThua: input.SoThua,
+                                          toBanDo: input.ToBanDo,
+                                          dienTich: input.DienTich,
+                                          loaiDat: input.LoaiDat,
+                                          diaChiThuaDat: input.DiaChiThuaDat,
+                                          tinhThuaDat: input.tinhThuaDat,
+                                          huyenThuaDat: input.huyenThuaDat,
+                                          xaThuaDat: input.xaThuaDat,
+                                          duLieuToaDo: input.DuLieuToaDo,
+                                          duLieuHinhHoc: input.DuLieuHinhHoc,
+                                          GhiChu: input.GhiChu,
+                                          ngayGQTC: input.NgayGQTC,
+                                          nguoiGQTC: input.NguoiGQTC,
+                                          quyerDinhThuLyGQTC: input.QuyerDinhThuLyGQTC,
+                                          ngayQDGQTC: input.NgayQDGQTC,
+                                          quyetDinhDinhChiGQTC: input.QuyetDinhDinhChiGQTC,
+                                          giaHanGQTC1: input.GiaHanGQTC1,
+                                          giaHanGQTC2: input.GiaHanGQTC2,
+                                          soVBKLNDTC: input.SoVBKLNDTC,
+                                          ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
+                                          ketQua: input.KetQua,
+                                          congKhaiKLGQTC: input.CongKhaiKLGQTC);
         await _denounceRepo.UpdateAsync(denounce);
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }

@@ -48,20 +48,21 @@ export class DenounceComponent implements OnInit, OnDestroy {
   thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
   tinhTrang: number;
+  congKhaiKLGQTC: boolean | null;
 
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
-
-  giaiDoanOptions = [
-    { value: 1, text: 'Khiếu nại lần I' },
-    { value: 2, text: 'Khiếu nại lần II' },
-  ];
+  
   loaiKQOptions = [
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
+  ];
+  congKhaiKLGQTCOptions = [
+    { value: true, text: 'Công khai' },
+    { value: false, text: 'Không công khai' },
   ];
 
   // Permissions
@@ -206,6 +207,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         ketQua: this.tinhTrang,
         giaiDoan: this.giaiDoan,
+        congKhaiKLGQTC: this.congKhaiKLGQTC
       } as GetDenounceListDto;
     }
 

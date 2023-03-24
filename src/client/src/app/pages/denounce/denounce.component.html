@@ -89,6 +89,22 @@
         <div class="field col-12 md:col-3">
           <span class="p-float-label">
             <p-dropdown
+              [options]="congKhaiKLGQTCOptions"
+              [(ngModel)]="congKhaiKLGQTC"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label for="phoneNumber">Coong khai</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-dropdown
               [options]="loaiKQOptions"
               [(ngModel)]="tinhTrang"
               optionLabel="text"
@@ -98,9 +114,10 @@
               styleClass="w-full"
               (onChange)="loadData()"
             ></p-dropdown>
-            <label for="phoneNumber">Tình trạng</label>
+            <label for="phoneNumber">Kết luận</label>
           </span>
         </div>
+        <!-- --------------------------------------------------------------------------------- -->
       </div>
     </p-toolbar>
     <!-- ----------------------------------------------------------------------- -->
@@ -152,18 +169,16 @@
         <tr>
           <th class="row-num-column">STT</th>
           <th>Mã hồ sơ</th>
-          <th>Người đề nghị</th>
-          <th>Địa chỉ</th>
+          <th>Người tố cáo</th>
           <th>Số ĐT</th>
-          <th>Nội dung KN/KK</th>
+          <th>Địa chỉ</th>
+          <th>Người bị tố cáo</th>
+          <th>Người giải quyết TC</th>
+          <th>Nội dung TC</th>
           <th>Thời gian nộp</th>
-          <th>Bộ phận đang XL</th>
           <th>Ngày hẹn trả KQ</th>
-          <th>Ngày trả KQ lần I</th>
-          <th>KQ GQKN lần I</th>
-          <th>Ngày trả KQ lần II</th>
-          <th>KQ GQKN lần II</th>
-          <th style="width: 150px">Trạng thái</th>
+          <th>Bộ phận đang XL</th>
+          <th style="width: 150px">Kết luận NDTC</th>
           <th *ngIf="visibleActionColumn" class="action-column"></th>
         </tr>
       </ng-template>
@@ -174,25 +189,19 @@
           </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
           <td>{{ row.maHoSo }}</td>
-          <td>{{ row.nguoiDeNghi }}</td>
-          <td>{{ row.diaChiThuongTru }}</td>
+          <td>{{ row.nguoiToCao }}</td>
           <td>{{ row.dienThoai }}</td>
+          <td>{{ row.diaChiLienHe }}</td>
+          <td>{{ row.nguoiBiToCao }}</td>
+          <td>{{ row.nguoiGQTC }}</td>
           <td>{{ row.tieuDe }}</td>
           <td>
             {{ utilService.convertDateToLocal(row?.thoiGianTiepNhan) | date : 'dd-MM-yyyy hh:mm' }}
           </td>
-          <td>{{ row.boPhanDangXL }}</td>
           <td>
             {{ utilService.convertDateToLocal(row?.thoiGianHenTraKQ) | date : 'dd-MM-yyyy hh:mm' }}
           </td>
-          <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
-            {{ utilService.convertDateToLocal(row?.ngayTraKQ1) | date : 'dd-MM-yyyy' }}
-          </td>
-          <td>{{ getLoaiKetQua(row?.ketQua1) }}</td>
-          <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
-            {{ utilService.convertDateToLocal(row?.ngayTraKQ2) | date : 'dd-MM-yyyy' }}
-          </td>
-          <td>{{ getLoaiKetQua(row?.ketQua2) }}</td>
+          <td>{{ row?.boPhanDangXL }}</td>
           <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
           <td *ngIf="visibleActionColumn">
             <p-tieredMenu

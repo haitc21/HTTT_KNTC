@@ -12,4 +12,5 @@ public class GetDenounceListDto : BaseListFilterDto
     public DateTime? ToDate { get; set; }
     public LinhVuc? LinhVuc { get; set; }
     public LoaiKetQua? KetQua { get; set; }
+    public bool? CongKhaiKLGQTC { get; set; }
 }

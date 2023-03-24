@@ -17,7 +17,7 @@ public class CreateDenounceDto
     public string TieuDe { get; set; }
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxTenNguoiLength)]
-    public string NguoiDeNghi { get; set; }
+    public string NguoiToCao { get; set; }
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxCccdCmndLength)]
     public string CccdCmnd { get; set; }

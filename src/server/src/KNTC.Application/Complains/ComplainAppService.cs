@@ -28,13 +28,15 @@ public class ComplainAppService : CrudAppService<
     private readonly IComplainRepository _complainRepo;
     private readonly ComplainManager _complainManager;
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
+    private readonly FileAttachmentManager _fileAttachmentManager;
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
 
     public ComplainAppService(IRepository<Complain, Guid> repository,
         IComplainRepository complainRepo,
         ComplainManager complainManager,
         IRepository<FileAttachment, Guid> fileAttachmentRepo,
-        IBlobContainer<FileAttachmentContainer> blobContainer) : base(repository)
+        IBlobContainer<FileAttachmentContainer> blobContainer,
+        FileAttachmentManager fileAttachmentManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
@@ -42,6 +44,7 @@ public class ComplainAppService : CrudAppService<
         _fileAttachmentRepo = fileAttachmentRepo;
         _complainManager = complainManager;
         _blobContainer = blobContainer;
+        _fileAttachmentManager = fileAttachmentManager;
     }
     [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
@@ -137,18 +140,19 @@ public class ComplainAppService : CrudAppService<
         {
             foreach (var item in input.FileAttachments)
             {
-                var fileAttach = await _complainManager.CreateFileAttachmentAsync(complain: complain,
-                                                                        giaiDoan: item.GiaiDoan,
-                                                                        tenTaiLieu: item.TenTaiLieu,
-                                                                        hinhThuc: item.HinhThuc,
-                                                                        thoiGianBanHanh: item.ThoiGianBanHanh,
-                                                                        ngayNhan: item.NgayNhan,
-                                                                        thuTuButLuc: item.ThuTuButLuc,
-                                                                        noiDungChinh: item.NoiDungChinh,
-                                                                        fileName: item.FileName,
-                                                                        contentType: item.ContentType,
-                                                                        contentLength: item.ContentLength
-                                                                        );
+                var fileAttach = await _fileAttachmentManager.CreateAsync(loaiVuViec: LoaiVuViec.KhieuNai,
+                                                                     complainId: complain.Id,
+                                                                     DenounceId: null,
+                                                                     giaiDoan: item.GiaiDoan,
+                                                                     tenTaiLieu: item.TenTaiLieu,
+                                                                     hinhThuc: item.HinhThuc,
+                                                                     thoiGianBanHanh: item.ThoiGianBanHanh,
+                                                                     ngayNhan: item.NgayNhan,
+                                                                     thuTuButLuc: item.ThuTuButLuc,
+                                                                     noiDungChinh: item.NoiDungChinh,
+                                                                     fileName: item.FileName,
+                                                                     contentType: item.ContentType,
+                                                                     contentLength: item.ContentLength);
                 await _fileAttachmentRepo.InsertAsync(fileAttach);
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }

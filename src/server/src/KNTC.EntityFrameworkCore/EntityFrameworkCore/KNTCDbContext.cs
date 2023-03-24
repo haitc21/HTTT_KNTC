@@ -159,7 +159,7 @@ public class KNTCDbContext :
             b.HasIndex(x => x.LinhVuc);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
-            b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
+            b.Property(x => x.NguoiToCao).IsRequired().HasColumnName("nguoi_to_cao").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxCccdCmndLength);
             //b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
             //b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxNoiCapCccdCmnd);
@@ -210,7 +210,7 @@ public class KNTCDbContext :
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasIndex(x => x.ComplainId);
             b.HasIndex(x => x.DenounceId);
-            b.Property(x => x.GiaiDoan).IsRequired().HasColumnName("giai_doan");
+            b.Property(x => x.GiaiDoan).HasColumnName("giai_doan");
             b.Property(x => x.TenTaiLieu).IsRequired().HasColumnName("ten_tai_lieu").HasMaxLength(KNTCValidatorConsts.MaxTenTaiLieuLength);
             b.Property(x => x.HinhThuc).IsRequired().HasColumnName("hinh_thuc").HasMaxLength(KNTCValidatorConsts.MaxHinhThucLength);
             b.Property(x => x.ThoiGianBanHanh).IsRequired().HasColumnName("thoi_gian_ban_hanh");

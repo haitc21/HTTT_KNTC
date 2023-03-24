@@ -22,7 +22,7 @@ public class DenounceManager : DomainService
     public async Task<Denounce> CreateAsync([NotNull] string maHoSo,
                                               [NotNull] LinhVuc linhVuc,
                                               [NotNull] string tieuDe,
-                                              [NotNull] string nguoiDeNghi,
+                                              [NotNull] string nguoiToCao,
                                               [NotNull] string cccdCmnd,
                                               //[NotNull] DateTime ngayCapCccdCmnd,
                                               //[NotNull] string noiCapCccdCmnd,
@@ -66,7 +66,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
         Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
-        Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
+        Check.NotNullOrWhiteSpace(nguoiToCao, nameof(nguoiToCao));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
         //Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
         //Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
@@ -106,7 +106,7 @@ public class DenounceManager : DomainService
         {
             TieuDe = tieuDe,
             LinhVuc = linhVuc,
-            NguoiDeNghi = nguoiDeNghi,
+            NguoiToCao = nguoiToCao,
             CccdCmnd = cccdCmnd,
             //NgayCapCccdCmnd = ngayCapCccdCmnd,
             //NoiCapCccdCmnd = noiCapCccdCmnd,
@@ -123,6 +123,14 @@ public class DenounceManager : DomainService
             NoiDungVuViec = noiDungVuViec,
             NguoiBiToCao = noiDungVuViec,
             BoPhanDangXL = boPhanDangXL,
+            SoThua = soThua,
+            ToBanDo = toBanDo,
+            DienTich = dienTich,
+            LoaiDat = loaiDat,
+            DiaChiThuaDat = diaChiThuaDat,
+            tinhThuaDat = tinhThuaDat,
+            huyenThuaDat = huyenThuaDat,
+            xaThuaDat = xaThuaDat,
             DuLieuToaDo = duLieuToaDo,
             DuLieuHinhHoc = duLieuHinhHoc,
             GhiChu = GhiChu,
@@ -154,7 +162,7 @@ public class DenounceManager : DomainService
                                   [NotNull] string maHoSo,
                                   [NotNull] LinhVuc linhVuc,
                                    [NotNull] string tieuDe,
-                                   [NotNull] string nguoiDeNghi,
+                                   [NotNull] string nguoiToCao,
                                    [NotNull] string cccdCmnd,
                                    //[NotNull] DateTime ngayCapCccdCmnd,
                                    //[NotNull] string noiCapCccdCmnd,
@@ -199,7 +207,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
         Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
-        Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
+        Check.NotNullOrWhiteSpace(nguoiToCao, nameof(nguoiToCao));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
         //Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
         //Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
@@ -237,7 +245,7 @@ public class DenounceManager : DomainService
         }
         denounce.TieuDe = tieuDe;
         //denounce.LinhVuc = linhVuc;
-        denounce.NguoiDeNghi = nguoiDeNghi;
+        denounce.NguoiToCao = nguoiToCao;
         denounce.CccdCmnd = cccdCmnd;
         //denounce.NgayCapCccdCmnd = ngayCapCccdCmnd;
         //denounce.NoiCapCccdCmnd = noiCapCccdCmnd;
@@ -254,6 +262,16 @@ public class DenounceManager : DomainService
         denounce.NoiDungVuViec = noiDungVuViec;
         denounce.NguoiBiToCao = nguoiBiToCao;
         denounce.BoPhanDangXL = boPhanDangXL;
+        denounce.SoThua = soThua;
+        denounce.ToBanDo = toBanDo;
+        denounce.DienTich = dienTich;
+        denounce.LoaiDat = loaiDat;
+        denounce.DiaChiThuaDat = diaChiThuaDat;
+        denounce.tinhThuaDat = tinhThuaDat;
+        denounce.huyenThuaDat = huyenThuaDat;
+        denounce.xaThuaDat = xaThuaDat;
+        denounce.DuLieuToaDo = duLieuToaDo;
+        denounce.DuLieuHinhHoc = duLieuHinhHoc;
         denounce.GhiChu = GhiChu;
         denounce.NgayGQTC = ngayGQTC;
         denounce.NguoiGQTC = nguoiGQTC;
@@ -266,48 +284,5 @@ public class DenounceManager : DomainService
         denounce.NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC;
         denounce.KetQua = ketQua;
         denounce.CongKhaiKLGQTC = congKhaiKLGQTC;
-    }
-    public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Denounce denounce,
-                                                                [NotNull] int giaiDoan,
-                                                                [NotNull] string tenTaiLieu,
-                                                                [NotNull] int hinhThuc,
-                                                                DateTime thoiGianBanHanh,
-                                                                DateTime ngayNhan,
-                                                                [NotNull] string thuTuButLuc,
-                                                                [NotNull] string noiDungChinh,
-                                                                [NotNull] string fileName,
-                                                                [NotNull] string contentType,
-                                                                [NotNull] long contentLength)
-    {
-        Check.NotNull(denounce, nameof(denounce));
-        Check.NotNull(denounce, nameof(giaiDoan));
-        Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
-        Check.NotNull(hinhThuc, nameof(hinhThuc));
-        Check.NotNullOrWhiteSpace(thuTuButLuc, nameof(thuTuButLuc));
-        Check.NotNullOrWhiteSpace(noiDungChinh, nameof(noiDungChinh));
-        Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
-        Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
-        Check.NotNull(contentLength, nameof(contentLength));
-        var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
-                                                     && x.DenounceId == denounce.Id);
-        if (existTepDinhKem != null)
-        {
-            throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
-                .WithData("tenTaiLieu", tenTaiLieu)
-                .WithData("maHoSo", denounce.MaHoSo);
-        }
-        return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
-        {
-            DenounceId = denounce.Id,
-            GiaiDoan = giaiDoan,
-            HinhThuc = hinhThuc,
-            ThoiGianBanHanh = thoiGianBanHanh,
-            NgayNhan = ngayNhan,
-            ThuTuButLuc = thuTuButLuc,
-            NoiDungChinh = noiDungChinh,
-            FileName = fileName,
-            ContentType = contentType,
-            ContentLength = contentLength
-        };
     }
 }

@@ -8,7 +8,7 @@ export interface CreateDenounceDto {
   maHoSo: string;
   linhVuc: LinhVuc;
   tieuDe: string;
-  nguoiDeNghi: string;
+  nguoiToCao: string;
   cccdCmnd: string;
   noiCapCccdCmnd?: string;
   ngaySinh: string;
@@ -53,7 +53,7 @@ export interface DenounceDto extends AuditedEntityDto<string> {
   maHoSo?: string;
   linhVuc: LinhVuc;
   tieuDe?: string;
-  nguoiDeNghi?: string;
+  nguoiToCao?: string;
   cccdCmnd?: string;
   ngayCapCccdCmnd?: string;
   noiCapCccdCmnd?: string;
@@ -64,7 +64,7 @@ export interface DenounceDto extends AuditedEntityDto<string> {
   diaChiLienHe?: string;
   maTinhTP: number;
   maQuanHuyen: number;
-  maXaPhuongTT?: string;
+  maXaPhuongTT: number;
   thoiGianTiepNhan?: string;
   thoiGianHenTraKQ?: string;
   noiDungVuViec?: string;
@@ -104,13 +104,14 @@ export interface GetDenounceListDto extends BaseListFilterDto {
   toDate?: string;
   linhVuc?: LinhVuc;
   ketQua?: LoaiKetQua;
+  congKhaiKLGQTC?: boolean;
 }
 
 export interface UpdateDenounceDto extends EntityDto<string> {
   maHoSo: string;
   linhVuc: LinhVuc;
   tieuDe: string;
-  nguoiDeNghi: string;
+  nguoiToCao: string;
   cccdCmnd: string;
   noiCapCccdCmnd?: string;
   ngaySinh: string;

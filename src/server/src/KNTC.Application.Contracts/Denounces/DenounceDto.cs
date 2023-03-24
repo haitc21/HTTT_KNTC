@@ -7,10 +7,14 @@ namespace KNTC.Denounces;
 
 public class DenounceDto : AuditedEntityDto<Guid>
 {
+    public DenounceDto()
+    {
+        FileAttachments = new List<FileAttachmentDto>();
+    }
     public string MaHoSo { get; private set; }
     public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
-    public string NguoiDeNghi { get; set; }
+    public string NguoiToCao { get; set; }
     public string CccdCmnd { get; set; }
     public DateTime NgayCapCccdCmnd { get; set; }
     public string NoiCapCccdCmnd { get; set; }
@@ -21,7 +25,7 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public string DiaChiLienHe { get; set; }
     public int maTinhTP { get; set; }
     public int maQuanHuyen { get; set; }
-    public string maXaPhuongTT { get; set; }
+    public int maXaPhuongTT { get; set; }
     public DateTime ThoiGianTiepNhan { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
     public string NoiDungVuViec { get; set; }

@@ -47,21 +47,21 @@
                   >
                   </app-validation-message>
                 </div>
-                <!-- ----------------------------nguoiDeNghi---------------------------=----------------------------- -->
+                <!-- ----------------------------nguoiToCao---------------------------=----------------------------- -->
                 <div class="field col-12 md:col-6">
                   <span class="p-float-label">
                     <input
-                      id="nguoiDeNghi"
-                      formControlName="nguoiDeNghi"
+                      id="nguoiToCao"
+                      formControlName="nguoiToCao"
                       type="text"
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="nguoiDeNghi">Người đề nghị <span class="required">*</span></label>
+                    <label for="nguoiToCao">Người tố cáo <span class="required">*</span></label>
                   </span>
                   <app-validation-message
-                    [entityControl]="formControls.nguoiDeNghi"
-                    [validationMessages]="validationMessages.nguoiDeNghi"
+                    [entityControl]="formControls.nguoiToCao"
+                    [validationMessages]="validationMessages.nguoiToCao"
                   >
                   </app-validation-message>
                 </div>
@@ -293,13 +293,13 @@
                 <div class="field col-12 md:col-6">
                   <span class="p-float-label">
                     <input
-                      id="nguoiDeNghi"
+                      id="nguoiBiToCao"
                       formControlName="nguoiBiToCao"
                       type="text"
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="nguoiDeNghi">Người bị tố cáo <span class="required">*</span></label>
+                    <label for="nguoiToCao">Người bị tố cáo <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.nguoiBiToCao"

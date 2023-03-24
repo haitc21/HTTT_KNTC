@@ -28,6 +28,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                int? maXaPhuongTT,
                                                DateTime? fromDate,
                                                DateTime? toDate,
+                                               bool? CongKhaiKLGQTC,
                                                bool includeDetails = false)
     {
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
@@ -65,6 +66,10 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
              .WhereIf(
                 toDate.HasValue,
                 x => x.ThoiGianTiepNhan <= toDate
+             )
+             .WhereIf(
+                CongKhaiKLGQTC.HasValue,
+                x => x.CongKhaiKLGQTC == CongKhaiKLGQTC
              )
             .OrderBy(sorting)
             .Skip(skipCount)

@@ -68,11 +68,11 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         message: `Tiêu đề không vượt quá ${KNTCValidatorConsts.MaxTieuDeLength} kí tự`,
       },
     ],
-    nguoiDeNghi: [
-      { type: 'required', message: 'Người đề nghị không được để trống' },
+    nguoiToCao: [
+      { type: 'required', message: 'Người tố cáo không được để trống' },
       {
         type: 'maxLength',
-        message: `Người đề nghị không vượt quá ${KNTCValidatorConsts.MaxTenNguoiLength} kí tự`,
+        message: `Người tố cáo không vượt quá ${KNTCValidatorConsts.MaxTenNguoiLength} kí tự`,
       },
     ],
     cccdCmnd: [
@@ -364,6 +364,9 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
 
           this.form.patchValue(this.selectedEntity);
           this.form
+            .get('ngaySinh')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.ngaySinh));
+          this.form
             .get('thoiGianTiepNhan')
             .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianTiepNhan));
           this.form
@@ -468,7 +471,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTieuDeLength)],
       ],
-      nguoiDeNghi: [
+      nguoiToCao: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenNguoiLength)],
       ],
@@ -499,7 +502,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       thoiGianTiepNhan: [null, [Validators.required]],
       thoiGianHenTraKQ: [null, [Validators.required]],
       noiDungVuViec: [null, [Validators.required]],
-      nguoiBiToCoa: [
+      nguoiBiToCao: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenNguoiLength)],
       ],
@@ -529,7 +532,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       duLieuHinhHoc: [null, [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
       ghiChu: [null, Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
 
-      ngayGQTC: [[Validators.required]],
+      ngayGQTC: [null, [Validators.required]],
       nguoiGQTC: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenNguoiLength)],
@@ -538,7 +541,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)],
       ],
-      ngayQDGQTC: [[Validators.required]],
+      ngayQDGQTC: [null, [Validators.required]],
       quyetDinhDinhChiGQTC: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
       giaHanGQTC1: [null],
       giaHanGQTC2: [null],
@@ -547,8 +550,8 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)],
       ],
-      ngayNhanTBKQXLKLTC: [[Validators.required]],
-      ketQua: [[Validators.required]],
+      ngayNhanTBKQXLKLTC: [null, [Validators.required]],
+      ketQua: [null, [Validators.required]],
       congKhaiKLGQTC: [false],
 
       concurrencyStamp: [],
