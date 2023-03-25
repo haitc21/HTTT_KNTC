@@ -194,7 +194,24 @@ export class AppTopBarComponent implements OnInit {
       {
         label: 'Danh mục',
         routerLink: ['/system/common-list'],
-        //visible: this.permissionService.getGrantedPolicy('AbpIdentity.List'),
+        items: [
+          {
+            label: 'Hình thức tệp',
+            routerLink: [`/pages/document-type`],
+          },
+          {
+            label: 'Loại đất',
+            routerLink: [`/pages/land-type`],
+          },
+          {
+            label: 'Loại địa danh',
+            routerLink: [`/pages/unit-type`],
+          },
+          {
+            label: 'Địa danh',
+            routerLink: [`/pages/unit`],
+          },
+        ],
       },
     ];
   }

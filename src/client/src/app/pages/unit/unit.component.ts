@@ -1,6 +1,6 @@
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DocumentTypeDto, DocumentTypeService } from '@proxy/document-types';
+import { UnitDto, UnitService } from '@proxy/units';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,13 +8,13 @@ import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
-import { DocumentTypeDetailComponent } from './detail/document-type-detail.component';
+import { UnitDetailComponent } from './detail/unit-detail.component';
 
 @Component({
-  selector: 'app-document-type',
-  templateUrl: './document-type.component.html',
+  selector: 'app-unit',
+  templateUrl: './unit.component.html',
 })
-export class DocumentTypeComponent implements OnInit, OnDestroy {
+export class UnitComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
@@ -26,9 +26,9 @@ export class DocumentTypeComponent implements OnInit, OnDestroy {
   Actions = Actions;
 
   //Business variables
-  public items: DocumentTypeDto[];
-  public selectedItems: DocumentTypeDto[] = [];
-  actionItem: DocumentTypeDto;
+  public items: UnitDto[];
+  public selectedItems: UnitDto[] = [];
+  actionItem: UnitDto;
   public keyword: string = '';
 
   hasPermissionUpdate = false;
@@ -37,7 +37,7 @@ export class DocumentTypeComponent implements OnInit, OnDestroy {
   actionMenu: MenuItem[];
 
   constructor(
-    private documentTypeService: DocumentTypeService,
+    private unitService: UnitService,
     public dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
@@ -50,15 +50,15 @@ export class DocumentTypeComponent implements OnInit, OnDestroy {
     this.loadData();
   }
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('DocumentType.Edit');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('DocumentType.Delete');
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Unit.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Unit.Delete');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 
   loadData() {
     this.toggleBlockUI(true);
 
-    this.documentTypeService
+    this.unitService
       .getList({
         maxResultCount: this.maxResultCount,
         skipCount: this.skipCount,
@@ -66,7 +66,7 @@ export class DocumentTypeComponent implements OnInit, OnDestroy {
       })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: PagedResultDto<DocumentTypeDto>) => {
+        next: (response: PagedResultDto<UnitDto>) => {
           this.items = response.items;
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
@@ -78,12 +78,12 @@ export class DocumentTypeComponent implements OnInit, OnDestroy {
   }
 
   showAddModal() {
-    const ref = this.dialogService.open(DocumentTypeDetailComponent, {
-      header: 'Thêm loại hình thức',
+    const ref = this.dialogService.open(UnitDetailComponent, {
+      header: 'Thêm địa danh',
       width: DIALOG_MD,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: DocumentTypeDto) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: UnitDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.selectedItems = [];
@@ -103,15 +103,15 @@ export class DocumentTypeComponent implements OnInit, OnDestroy {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    const ref = this.dialogService.open(DocumentTypeDetailComponent, {
+    const ref = this.dialogService.open(UnitDetailComponent, {
       data: {
         id: row.id,
       },
-      header: `Cập nhật loại hình thức`,
+      header: `Cập nhật địa danh`,
       width: DIALOG_MD,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: DocumentTypeDto) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: UnitDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -138,7 +138,7 @@ export class DocumentTypeComponent implements OnInit, OnDestroy {
   deleteItemsConfirm(ids: any[]) {
     this.toggleBlockUI(true);
 
-    this.documentTypeService
+    this.unitService
       .deleteMultiple(ids)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -169,7 +169,7 @@ export class DocumentTypeComponent implements OnInit, OnDestroy {
   deleteRowConfirm(id) {
     this.toggleBlockUI(true);
 
-    this.documentTypeService
+    this.unitService
       .delete(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
