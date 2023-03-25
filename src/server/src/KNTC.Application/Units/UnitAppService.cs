@@ -67,6 +67,7 @@ public class UnitAppService : CrudAppService<
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
+                    .Where(x => x.Status == Status.Active)
                     .Where(x => x.UnitTypeId == unitTypeId)
                     .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
                     .OrderBy(nameof(UnitLookupDto.UnitName));
@@ -84,7 +85,8 @@ public class UnitAppService : CrudAppService<
                                                    input.ShortName,
                                                    input.UnitTypeId,
                                                    input.Description,
-                                                   input.OrderIndex);
+                                                   input.OrderIndex,
+                                                   input.Status);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
@@ -99,7 +101,8 @@ public class UnitAppService : CrudAppService<
                                        input.ShortName,
                                        input.UnitTypeId,
                                        input.Description,
-                                              input.OrderIndex);
+                                       input.OrderIndex,
+                                       input.Status);
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }

@@ -44,6 +44,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ComplainComponent } from './complain/complain.component';
 import { DenounceComponent } from './denounce/denounce.component';
 import { DenounceDetailComponent } from './denounce/detail/denounce-detail.component';
+import { DocumentTypeComponent } from './document-type/document-type.component';
+import { DocumentTypeDetailComponent } from './document-type/detail/document-type-detail.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { DenounceDetailComponent } from './denounce/detail/denounce-detail.compo
     DenounceDetailComponent,
     FileAttachmentComponent,
     FileAttachmentDetailComponent,
+    DocumentTypeComponent,
+    DocumentTypeDetailComponent
   ],
   imports: [
     PagesRoutingModule,

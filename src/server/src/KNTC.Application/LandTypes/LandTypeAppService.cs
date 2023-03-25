@@ -65,7 +65,7 @@ public class LandTypeAppService : CrudAppService<
     }
     public async Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync()
     {
-        var landTypes = await Repository.GetListAsync();
+        var landTypes = await Repository.GetListAsync(x => x.Status == Status.Active);
 
         return new ListResultDto<LandTypeLookupDto>(
             ObjectMapper.Map<List<LandType>, List<LandTypeLookupDto>>(landTypes)
@@ -77,7 +77,8 @@ public class LandTypeAppService : CrudAppService<
         var entity = await _landTypeManager.CreateAsync(input.LandTypeCode,
                                                           input.LandTypeName,
                                                           input.Description,
-                                                          input.OrderIndex);
+                                                          input.OrderIndex,
+                                                          input.Status);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
@@ -87,10 +88,11 @@ public class LandTypeAppService : CrudAppService<
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _landTypeManager.UpdateAsync(entity,
-                                              input.LandTypeCode,
-                                              input.LandTypeName,
-                                              input.Description,
-                                              input.OrderIndex);
+                                           input.LandTypeCode,
+                                           input.LandTypeName,
+                                           input.Description,
+                                           input.OrderIndex,
+                                           input.Status);
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }

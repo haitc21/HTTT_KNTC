@@ -1,22 +1,20 @@
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RoleDto, RolesService } from '@proxy/roles';
+import { DocumentTypeDto, DocumentTypeService } from '@proxy/Document-types';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { PermissionGrantComponent } from '../permission-grant/permission-grant.component';
-import { RoleDetailComponent } from './detail/role-detail.component';
-import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
-import { ROLE_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
+import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
+import { DocumentTypeDetailComponent } from './detail/document-type-detail.component';
 
 @Component({
-  selector: 'app-role',
-  templateUrl: './role.component.html'
+  selector: 'app-Document-type',
+  templateUrl: './Document-type.component.html',
 })
-export class RoleComponent implements OnInit, OnDestroy {
+export class DocumentTypeComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
@@ -28,19 +26,18 @@ export class RoleComponent implements OnInit, OnDestroy {
   Actions = Actions;
 
   //Business variables
-  public items: RoleDto[];
-  public selectedItems: RoleDto[] = [];
-  actionItem: RoleDto;
+  public items: DocumentTypeDto[];
+  public selectedItems: DocumentTypeDto[] = [];
+  actionItem: DocumentTypeDto;
   public keyword: string = '';
 
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
-  hasPermissionManagementPermionsion = false;
   visibleActionColumn = false;
   actionMenu: MenuItem[];
 
   constructor(
-    private roleService: RolesService,
+    private documentTypeService: DocumentTypeService,
     public dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
@@ -49,33 +46,27 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getPermission();
-  this.buildActionMenu();
+    this.buildActionMenu();
     this.loadData();
   }
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('AbpIdentity.Users.Update');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('AbpIdentity.Users.Delete');
-    this.hasPermissionManagementPermionsion = this.permissionService.getGrantedPolicy(
-      'AbpIdentity.Users.ManagePermissions'
-    );
-    this.visibleActionColumn =
-      this.hasPermissionUpdate ||
-      this.hasPermissionDelete ||
-      this.hasPermissionManagementPermionsion;
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('DocumentType.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('DocumentType.Delete');
+    this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 
   loadData() {
     this.toggleBlockUI(true);
 
-    this.roleService
-      .getListFilter({
+    this.documentTypeService
+      .getList({
         maxResultCount: this.maxResultCount,
         skipCount: this.skipCount,
         keyword: this.keyword,
       })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: PagedResultDto<RoleDto>) => {
+        next: (response: PagedResultDto<DocumentTypeDto>) => {
           this.items = response.items;
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
@@ -87,12 +78,12 @@ export class RoleComponent implements OnInit, OnDestroy {
   }
 
   showAddModal() {
-    const ref = this.dialogService.open(RoleDetailComponent, {
-      header: 'Thêm vai trò',
-      width: DIALOG_SM,
+    const ref = this.dialogService.open(DocumentTypeDetailComponent, {
+      header: 'Thêm loại hình thức',
+      width: DIALOG_MD,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: RoleDto) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: DocumentTypeDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.selectedItems = [];
@@ -112,37 +103,15 @@ export class RoleComponent implements OnInit, OnDestroy {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    const ref = this.dialogService.open(RoleDetailComponent, {
+    const ref = this.dialogService.open(DocumentTypeDetailComponent, {
       data: {
         id: row.id,
       },
-      header: `Cập nhật vai trò '${row.name}'`,
-      width: DIALOG_SM,
+      header: `Cập nhật loại hình thức`,
+      width: DIALOG_MD,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: RoleDto) => {
-      if (data) {
-        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
-        this.selectedItems = [];
-        this.loadData();
-      }
-    });
-  }
-  showPermissionModal(row) {
-    if (!row) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
-      return;
-    }
-    const ref = this.dialogService.open(PermissionGrantComponent, {
-      data: {
-        providerKey: row.name,
-        providerName: ROLE_PROVIDER,
-      },
-      header: `Phân quyền cho vai trò '${row.name}'`,
-      width: DIALOG_SM,
-    });
-
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: any) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: DocumentTypeDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -169,7 +138,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   deleteItemsConfirm(ids: any[]) {
     this.toggleBlockUI(true);
 
-    this.roleService
+    this.documentTypeService
       .deleteMultiple(ids)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -200,7 +169,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   deleteRowConfirm(id) {
     this.toggleBlockUI(true);
 
-    this.roleService
+    this.documentTypeService
       .delete(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -228,15 +197,6 @@ export class RoleComponent implements OnInit, OnDestroy {
           this.actionItem = null;
         },
         visible: this.hasPermissionUpdate,
-      },
-      {
-        label: this.Actions.MANAGE_PERMISSIONS,
-        icon: 'pi pi-fw pi-wrench',
-        command: event => {
-          this.showPermissionModal(this.actionItem);
-          this.actionItem = null;
-        },
-        visible: this.hasPermissionManagementPermionsion,
       },
       {
         label: this.Actions.DELETE,

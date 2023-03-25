@@ -28,8 +28,8 @@
     "Permission:Denounces.Edit": "Sửa tố cáo",
     "Permission:Denounces.Delete": "Xóa tố cáo",
     // DocumentType
-    "Permission:DocumentTypeGr": "Loại hình thức tệp gắn kèmm",
-    "Permission:DocumentType": " Xem DS loại hình thức tệp gắn kèmm",
+    "Permission:DocumentTypeGr": "Loại hình thức tệp gắn kèm",
+    "Permission:DocumentType": " Xem DS loại hình thức tệp gắn kèm",
     "Permission:DocumentType.Create": "Thêm loại hình thức tệp gắn kèm",
     "Permission:DocumentType.Edit": "Sửal oại hình thức tệp gắn kèm",
     "Permission:DocumentType.Delete": "Xóa loại hình thức tệp gắn kèm",

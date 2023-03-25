@@ -40,7 +40,7 @@ public class DocumentTypeSeedContributor : IDataSeedContributor, ITransientDepen
         d1.Status = Status.Active;
         DocumentTypes.Add(d2);
 
-        var d3 = new DocumentType("2", "Bản phô tô");
+        var d3 = new DocumentType("3", "Bản phô tô");
         d3.Description = "";
         d3.OrderIndex = 2;
         d3.Status = Status.Active;

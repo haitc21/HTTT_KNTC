@@ -16,7 +16,8 @@ public class DocumentTypeManager : DomainService
     public async Task<DocumentType> CreateAsync([NotNull] string code,
                                                 [NotNull] string name,
                                                 string description,
-                                                int orderIndex)
+                                                int orderIndex,
+                                                Status status)
     {
 
         Check.NotNullOrWhiteSpace(code, nameof(code));
@@ -27,14 +28,15 @@ public class DocumentTypeManager : DomainService
         {
             Description = description,
             OrderIndex = orderIndex,
-            Status = Status.Active
+            Status = status
         };
     }
     public async Task UpdateAsync([NotNull] DocumentType documentType,
-                                                 [NotNull] string code,
-                                                 [NotNull] string name,
-                                                 string description,
-                                                 int orderIndex)
+                                   [NotNull] string code,
+                                   [NotNull] string name,
+                                   string description,
+                                   int orderIndex,
+                                   Status status)
     {
         Check.NotNull(documentType, nameof(documentType));
         Check.NotNullOrWhiteSpace(code, nameof(code));
@@ -49,6 +51,7 @@ public class DocumentTypeManager : DomainService
         }
         documentType.Description = description;
         documentType.OrderIndex = orderIndex;
+        documentType.Status = status;   
     }
     private async Task ChangeName(DocumentType documentType, string name)
     {
