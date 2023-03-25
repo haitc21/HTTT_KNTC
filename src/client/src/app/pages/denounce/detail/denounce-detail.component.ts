@@ -387,7 +387,6 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
           this.form
             .get('ngayNhanTBKQXLKLTC')
             .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayNhanTBKQXLKLTC));
-
           this.toggleBlockUI(false);
         },
         error: () => {

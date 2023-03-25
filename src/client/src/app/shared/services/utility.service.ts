@@ -125,7 +125,8 @@ export class UtilityService {
     }
     return data;
   };
-  convertDateToLocal = (date: Date | string) => {
+  convertDateToLocal = (date: Date | string | null) => {
+    if (!date) return null;
     const localDateTime = moment.utc(date).local().toDate(); // Giá trị ngày và giờ trong múi giờ địa phương
     return localDateTime;
   };
@@ -196,16 +197,16 @@ export class UtilityService {
       else console.error('Could not reset control: ' + x);
     });
   }
-  markAllControlsAsDirty(abstractControls: AbstractControl[]): void {
-    abstractControls.forEach(abstractControl => {
-      if (abstractControl instanceof FormControl) {
-        (abstractControl as FormControl).markAsDirty({
+  markAllControlsAsDirty(controls: AbstractControl[]): void {
+    controls.forEach(control => {
+      if (control instanceof FormControl) {
+        (control as FormControl).markAsDirty({
           onlySelf: true,
         });
-      } else if (abstractControl instanceof FormGroup) {
-        this.markAllControlsAsDirty(Object.values((abstractControl as FormGroup).controls));
-      } else if (abstractControl instanceof FormArray) {
-        this.markAllControlsAsDirty((abstractControl as FormArray).controls);
+      } else if (control instanceof FormGroup) {
+        this.markAllControlsAsDirty(Object.values((control as FormGroup).controls));
+      } else if (control instanceof FormArray) {
+        this.markAllControlsAsDirty((control as FormArray).controls);
       }
     });
   }

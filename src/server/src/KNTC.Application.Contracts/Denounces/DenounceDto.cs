@@ -47,8 +47,8 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public string QuyerDinhThuLyGQTC { get; set; }
     public DateTime NgayQDGQTC { get; set; }
     public string QuyetDinhDinhChiGQTC { get; set; }
-    public DateTime GiaHanGQTC1 { get; set; }
-    public DateTime GiaHanGQTC2 { get; set; }
+    public DateTime? GiaHanGQTC1 { get; set; }
+    public DateTime? GiaHanGQTC2 { get; set; }
     public string SoVBKLNDTC { get; set; }
     public DateTime NgayNhanTBKQXLKLTC { get; set; }
     public LoaiKetQua KetQua { get; set; }
