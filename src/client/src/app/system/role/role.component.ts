@@ -1,7 +1,7 @@
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RoleDto, RolesService } from '@proxy/roles';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
@@ -31,12 +31,14 @@ export class RoleComponent implements OnInit, OnDestroy {
   //Business variables
   public items: RoleDto[];
   public selectedItems: RoleDto[] = [];
+  actionItem: RoleDto;
   public keyword: string = '';
 
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
   hasPermissionManagementPermionsion = false;
   visibleActionColumn = false;
+  actionMenu: MenuItem[];
 
   constructor(
     private roleService: RolesService,
@@ -48,6 +50,7 @@ export class RoleComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getPermission();
+  this.buildActionMenu();
     this.loadData();
   }
   getPermission() {
@@ -213,7 +216,40 @@ export class RoleComponent implements OnInit, OnDestroy {
         },
       });
   }
-
+  setActionItem(item) {
+    this.actionItem = item;
+  }
+  buildActionMenu() {
+    this.actionMenu = [
+      {
+        label: this.Actions.UPDATE,
+        icon: 'pi pi-fw pi-pencil',
+        command: event => {
+          this.showEditModal(this.actionItem);
+          this.actionItem = null;
+        },
+        visible: this.hasPermissionUpdate,
+      },
+      {
+        label: this.Actions.MANAGE_PERMISSIONS,
+        icon: 'pi pi-fw pi-wrench',
+        command: event => {
+          this.showPermissionModal(this.actionItem);
+          this.actionItem = null;
+        },
+        visible: this.hasPermissionManagementPermionsion,
+      },
+      {
+        label: this.Actions.DELETE,
+        icon: 'pi pi-fw pi-trash',
+        command: event => {
+          this.deleteRow(this.actionItem);
+          this.actionItem = null;
+        },
+        visible: this.hasPermissionDelete,
+      },
+    ];
+  }
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.blockedPanel = true;

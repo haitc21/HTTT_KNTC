@@ -89,39 +89,25 @@
             </p-tag>
           </td>
           <td *ngIf="visibleActionColumn">
+            <p-tieredMenu
+              [showTransitionOptions]="'300ms'"
+              [hideTransitionOptions]="'300ms'"
+              #menu
+              [model]="actionMenu"
+              [popup]="true"
+              appendTo="body"
+            ></p-tieredMenu>
             <button
-              *abpPermission="'AbpIdentity.Roles.Update'"
-              type="button"
+              #btn
               pButton
               pRipple
-              icon="pi pi-pencil"
-              class="p-button-rounded p-button-info mr-1"
-              [pTooltip]="Actions.UPDATE"
-              tooltipPosition="top"
-              (click)="showEditModal(row)"
-            ></button>
-            <button
-              *abpPermission="'AbpIdentity.Roles.ManagePermissions'"
               type="button"
               pButton
-              pRipple
-              icon="pi pi-wrench"
-              class="p-button-rounded p-button-help mr-1"
-              [pTooltip]="Actions.MANAGE_PERMISSIONS"
+              icon="pi pi-fw pi-cog"
+              [label]="Actions.ACTION"
+              [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
-              (click)="showPermissionModal(row)"
-            ></button>
-
-            <button
-              *abpPermission="'AbpIdentity.Roles.Delete'"
-              type="button"
-              pButton
-              pRipple
-              icon="pi pi-trash"
-              class="p-button-rounded p-button-danger"
-              [pTooltip]="Actions.DELETE"
-              tooltipPosition="top"
-              (click)="deleteRow(row)"
+              (click)="menu.toggle($event); setActionItem(row)"
             ></button>
           </td>
         </tr>
