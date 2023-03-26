@@ -44,7 +44,8 @@ import { DialogModule } from 'primeng/dialog';
 import { ComplainComponent } from './complain/complain.component';
 import { DenounceComponent } from './denounce/denounce.component';
 import { DenounceDetailComponent } from './denounce/detail/denounce-detail.component';
-
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { DividerModule } from "primeng/divider";
 @NgModule({
   declarations: [
     HomeComponent,
@@ -93,6 +94,8 @@ import { DenounceDetailComponent } from './denounce/detail/denounce-detail.compo
     FieldsetModule,
     TabViewModule,
     FileUploadModule,
+    BreadcrumbModule,
+    DividerModule,
     DialogModule
   ],
   exports: [HomeComponent],

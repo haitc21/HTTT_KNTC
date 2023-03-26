@@ -4,6 +4,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
 import { MockService } from '../../shared/mock/mock.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import {MenuItem} from 'primeng/api';
 
 @Component({
   selector: 'app-home',
@@ -48,6 +49,8 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 })
 export class HomeComponent implements OnInit {
   blockedPanel = false;
+  home: MenuItem;
+
   @ViewChild('map', { static: true }) mapContainer: ElementRef;
 
   data: Complain[] = [];
@@ -91,6 +94,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.toggleBlockUI(true);
+    this.home = {label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/'};
     this.mockData = this.mockService.mockData();
     this.toggleBlockUI(false);
     this.loadData(true);

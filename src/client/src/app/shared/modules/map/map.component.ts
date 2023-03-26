@@ -211,7 +211,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     });
   }
 
-  renderMarkers(hosos: Complain[]) {
+  renderMarkers(hosos: any[]) {
     this.map.eachLayer(layer => {
       if (!(layer instanceof L.TileLayer)) {
         this.map.removeLayer(layer);
@@ -219,17 +219,25 @@ export class MapComponent implements AfterViewInit, OnChanges {
     });
     debugger;
     //Add markers
-    hosos.forEach(hoSo => {
-      const marker = L.marker([hoSo.latLng[0], hoSo.latLng[1]], {
+    hosos.filter(x => x.duLieuToaDo!=null).forEach(hoSo => {
+      var point = hoSo.duLieuToaDo.split(",")
+      const marker = L.marker([point[0], point[1]], {
         icon: hoSo.typeHoSo === 0 ? blueIcon : redIcon,
       });
 
       marker.bindPopup(`
+        <h5>${hoSo.tieuDe}</h5>
+        <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Mã hồ sơ:</label>
+          <div class="col-sm-10">
+            ${hoSo.maHoSo}
+          </div>
+        </div>
         <div>
-          <h5>${hoSo.title}</h5>
-          <p>Mã đơn: ${hoSo.code}</p>
-          <p>Người gửi đơn: ${hoSo.sender}</p>
-          <p>Khu vực: ${hoSo.area}</p>
+          
+          <p>Mã hồ sơ: </p>
+          <p>Người gửi đơn: ${hoSo.nguoiDeNghi}</p>
+          <p>CCCD/CCID: ${hoSo.cccdCmnd}</p>
           <p>Loại đơn: ${this.loaiHS[hoSo.typeHoSo]}</p>
           <p>Lĩnh vực: ${this.linhVuc[hoSo.fieldType]}</p>
         </div>

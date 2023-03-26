@@ -61,7 +61,7 @@ export class AppMenuComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: [`/pages/complain/${LinhVuc.DataDai}`],
+            routerLink: [`/pages/complain/${LinhVuc.DatDai}`],
           },
           {
             label: 'Môi trường',
@@ -84,7 +84,7 @@ export class AppMenuComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: [`/pages/denounce/${LinhVuc.DataDai}`],
+            routerLink: [`/pages/denounce/${LinhVuc.DatDai}`],
           },
           {
             label: 'Môi trường',

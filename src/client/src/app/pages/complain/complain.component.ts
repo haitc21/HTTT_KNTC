@@ -26,6 +26,8 @@ import { ActivatedRoute } from '@angular/router';
 export class ComplainComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
+  home: MenuItem;
+  breadcrumb: MenuItem[];
 
   linhVuc: LinhVuc;
   header: string = '';
@@ -86,12 +88,14 @@ export class ComplainComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.home = {label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/'};
     this.getPermission();
     this.buildActionMenu();
     this.loadOptions();
     this.route.paramMap.subscribe(params => {
       this.linhVuc = +params.get('linhVuc') as LinhVuc;
-      this.setHeader();
+      this.buildBreadcrumb();
+      //this.setHeader();
       this.resetFilter();
       this.loadData(true);
     });
@@ -109,6 +113,31 @@ export class ComplainComponent implements OnInit, OnDestroy {
     this.tinhTrang = null;
   }
 
+  
+  private buildBreadcrumb(){
+    this.breadcrumb = [
+      {label:' Khiếu nại', icon: 'pi pi-inbox', routerLink: '/pages/complain'}
+    ];
+    
+    switch (this.linhVuc) {
+      case LinhVuc.DatDai:
+        this.breadcrumb.push({label:' Đất đai', icon: 'pi pi-image', routerLink: [`/pages/complain/${LinhVuc.DatDai}`]});
+        break;
+      case LinhVuc.MoiTruong:
+        this.breadcrumb.push({label:' Môi trường', icon: 'pi pi-sun', routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`]});
+        break;
+      case LinhVuc.TaiNguyenNuoc:
+        this.breadcrumb.push({label:' Tài nguyên nước', icon: 'pi pi-flag-fill', routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`]});
+        break;
+      case LinhVuc.KhoangSan:
+        this.breadcrumb.push({label:' Khoáng sản', icon: 'pi pi-bitcoin', routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`]});
+        break;
+      default:
+        //this.header = '';
+    }
+  }
+
+  /*
   private setHeader() {
     switch (this.linhVuc) {
       case LinhVuc.DataDai:
@@ -127,6 +156,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         this.header = '';
     }
   }
+  */
 
   loadOptions() {
     this.toggleBlockUI(true);
@@ -143,7 +173,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         }
       );
   }
-  inhChange(event) {
+  TinhChange(event) {
     this.loadData();
     if (event.value) {
       this.toggleBlockUI(true);
@@ -161,6 +191,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         );
     } else this.huyenOptions = [];
   }
+
   huyenChange(event) {
     this.loadData();
     if (event.value) {
@@ -295,6 +326,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   setActionItem(item) {
     this.actionItem = item;
   }
+
   showAddModal() {
     const ref = this.dialogService.open(ComplainDetailComponent, {
       header: 'Thêm khiếu nại/khiếu kiện',
@@ -336,6 +368,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   showEditModal(row) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
@@ -413,6 +446,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
       }, 300);
     }
   }
+
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

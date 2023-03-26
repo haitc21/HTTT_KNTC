@@ -104,6 +104,11 @@ export interface GetComplainListDto extends BaseListFilterDto {
   linhVuc?: LinhVuc;
   ketQua?: LoaiKetQua;
   giaiDoan?: number;
+  //
+  landComplaint: boolean;
+  enviromentalComplaint: boolean;
+  waterResourceComplaint: boolean;
+  mineralResourceComplaint: boolean;
 }
 
 export interface UpdateComplainDto extends EntityDto<string> {

@@ -112,7 +112,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
 
   private setHeader() {
     switch (this.linhVuc) {
-      case LinhVuc.DataDai:
+      case LinhVuc.DatDai:
         this.header = 'Tố cao đất đai';
         break;
       case LinhVuc.MoiTruong:

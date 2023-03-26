@@ -1,5 +1,6 @@
 <div class="animated fadeIn grid card col-12">
-  <p-panel #pnl [header]="header" class="col-12">
+  <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+  <p-panel #pnl class="col-12">
     <p-toolbar>
       <div class="formgrid grid col-12">
         <div class="field col-12 md:col-3">
@@ -28,7 +29,7 @@
               [filter]="true"
               filterBy="unitName"
               styleClass="w-full"
-              (onChange)="inhChange($event)"
+              (onChange)="TinhChange($event)"
             ></p-dropdown>
             <label>Tỉnh/TP</label>
           </span>
@@ -122,7 +123,8 @@
     <!-- ----------------------------------------------------------------------- -->
     <p-toolbar>
       <ng-template pTemplate="left">
-        <!-- <h3 style="color: blue">Kết quả tìm kiếm</h3> -->
+        <i class="pi pi-search mr-2"></i>
+          <h5>Kết quả tìm kiếm</h5>
       </ng-template>
 
       <ng-template pTemplate="right">

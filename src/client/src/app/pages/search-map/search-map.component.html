@@ -90,7 +90,7 @@
   <!-- ----------------------Main------------------------------------------------- -->
   <div [@expandColumn]="expandColumnState" class="col-12 md:col-10 grid">
     <div
-      style="height: 90vh; width: 3%"
+      style="height: 90vh; width: 1%"
       class="flex flex-column justify-content-center align-items-center"
     >
       <button
@@ -112,11 +112,12 @@
         (click)="toggleMenuLeft()"
       ></button>
     </div>
-    <div style="width: 97%">
-      <p-panel #pnl header="Bản đồ">
+    <div style="width: 99%">
+      <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+      <p-panel #pnl>
         <p-toolbar>
           <div class="formgrid grid col-12">
-            <div class="field col-12 md:col-4">
+            <div class="field col-12 md:col-3">
               <span class="p-input-icon-left w-full">
                 <i class="pi pi-search"></i>
                 <input
@@ -130,11 +131,97 @@
               </span>
             </div>
             <!-- --------------------------------------------------------------------------------- -->
-            <div class="field col-12 md:col-4">
+            <div class="field col-12 md:col-3">
+              <span class="p-float-label">
+                <p-dropdown
+                  [options]="loaiVuviecOptions"
+                  [(ngModel)]="loaiVuviec"
+                  optionLabel="text"
+                  optionValue="value"
+                  [showClear]="true"
+                  [autoDisplayFirst]="false"
+                  styleClass="w-full"
+                  (onChange)="loadData($event)"
+                ></p-dropdown>
+                <label>Phân loại</label>
+              </span>
+            </div>
+            <!-- --------------------------------------------------------------------------------- -->
+            <div class="field col-12 md:col-3">
+              <span class="p-float-label">
+                <p-dropdown
+                  [options]="tinhOptions"
+                  [(ngModel)]="maTinh"
+                  optionLabel="unitName"
+                  optionValue="id"
+                  [showClear]="true"
+                  [autoDisplayFirst]="false"
+                  [filter]="true"
+                  filterBy="unitName"
+                  styleClass="w-full"
+                  (onChange)="TinhChange($event)"
+                ></p-dropdown>
+                <label>Tỉnh/TP</label>
+              </span>
+            </div>
+            <!-- --------------------------------------------------------------------------------- -->
+            <div class="field col-12 md:col-3">
+              <span class="p-float-label">
+                <p-dropdown
+                  [options]="huyenOptions"
+                  [(ngModel)]="maHuyen"
+                  optionLabel="unitName"
+                  optionValue="id"
+                  [showClear]="true"
+                  [autoDisplayFirst]="false"
+                  [filter]="true"
+                  filterBy="unitName"
+                  styleClass="w-full"
+                  (onChange)="huyenChange($event)"
+                ></p-dropdown>
+                <label>Quận/Huyện</label>
+              </span>
+            </div>
+            <!-- --------------------------------------------------------------------------------- -->
+            <div class="field col-12 md:col-3">
+              <span class="p-float-label">
+                <p-dropdown
+                  [options]="xaOptions"
+                  [(ngModel)]="maXa"
+                  optionLabel="unitName"
+                  optionValue="id"
+                  [showClear]="true"
+                  [autoDisplayFirst]="false"
+                  [filter]="true"
+                  filterBy="unitName"
+                  styleClass="w-full"
+                  (onChange)="loadData()"
+                ></p-dropdown>
+                <label for="phoneNumber">Phường/Xã</label>
+              </span>
+            </div>
+            <!-- --------------------------------------------------------------------------------- -->
+            <div class="field col-12 md:col-3">
+              <span class="p-float-label">
+                <p-calendar
+                  appendTo="body"
+                  [(ngModel)]="thoiGianTiepNhanRange"
+                  selectionMode="range"
+                  dateFormat="dd/mm/yy"
+                  [showClear]="true"
+                  inputId="thoiGianTiepNhanRange"
+                  (onSelect)="thoiGiantiepNhanChange()"
+                  (onClear)="thoiGiantiepNhanChange()"
+                ></p-calendar>
+                <label for="phoneNumber">Thời gian tiếp nhận</label>
+              </span>
+            </div>
+            <!-- --------------------------------------------------------------------------------- -->
+            <div class="field col-12 md:col-3">
               <span class="p-float-label">
                 <p-dropdown
                   [options]="giaiDoanOptions"
-                  [(ngModel)]="lanKNSearch"
+                  [(ngModel)]="giaiDoan"
                   optionLabel="text"
                   optionValue="value"
                   [showClear]="true"
@@ -142,15 +229,15 @@
                   styleClass="w-full"
                   (onChange)="loadData()"
                 ></p-dropdown>
-                <label for="phoneNumber">Lần nộp đơn</label>
+                <label for="phoneNumber">Giai đoạn</label>
               </span>
             </div>
             <!-- --------------------------------------------------------------------------------- -->
-            <div class="field col-12 md:col-4">
+            <div class="field col-12 md:col-3">
               <span class="p-float-label">
                 <p-dropdown
-                  [options]="stageOptions"
-                  [(ngModel)]="stageSearch"
+                  [options]="loaiKQOptions"
+                  [(ngModel)]="tinhTrang"
                   optionLabel="text"
                   optionValue="value"
                   [showClear]="true"
@@ -169,8 +256,9 @@
         <!-- ----------------------------------------------------------------------- -->
         <p-card>
           <p-toolbar>
-            <ng-template pTemplate="left">
-              <h3 style="color: blue">Kết quả tìm kiếm</h3>
+            <ng-template pTemplate="left"> 
+              <i class="pi pi-search mr-2"></i>
+              <h5>Kết quả tìm kiếm</h5>
             </ng-template>
 
             <ng-template pTemplate="right">
@@ -208,14 +296,14 @@
             [rows]="10"
             [paginator]="true"
             [globalFilterFields]="['code', 'title']"
-            [tableStyle]="{ width: '100%' }"
+            [tableStyle]="{ 'width': '100%' }"
             [(selection)]="selectedItems"
             [rowHover]="true"
             dataKey="code"
             currentPageReportTemplate="Tổng số: {totalRecords}"
             [showCurrentPageReport]="true"
           >
-            <ng-template pTemplate="header">
+            <ng-template pTemplate="header" let-columns>
               <tr>
                 <th class="row-num-column">STT</th>
                 <th>Mã hồ sơ</th>
@@ -231,20 +319,20 @@
                 <th>KQ GQKN lần II</th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
               <tr>
                 <td class="row-num-cell">{{ rowIndex + 1 }}</td>
-                <td>{{ row.code }}</td>
-                <td>{{ row.title }}</td>
-                <td>{{ row.sender }}</td>
-                <td>{{ row.area }}</td>
-                <td>{{ row.sentDate.toLocaleDateString('vi-VN') }}</td>
-                <td>{{ loaiHS[row.typeHoSo] }}</td>
-                <td>{{ linhVuc[row.fieldType] }}</td>
-                <td>{{ row.returnDate1.toLocaleDateString('vi-VN') }}</td>
-                <td>{{ row.result1 ? 'Đúng' : 'Sai' }}</td>
-                <td>{{ row.returnDate2 ? row.returnDate2.toLocaleDateString('vi-VN') : '' }}</td>
-                <td>{{ row.result2 === true ? 'Đúng' : row.result2 === false ? 'Sai' : '' }}</td>
+                <td>{{ row.maHoSo }}</td>
+                <td>{{ row.tieuDe }}</td>
+                <td>{{ row.nguoiDeNghi }}</td>
+                <td>{{ row.maQuanHuyen }} - {{row.maXaPhuongTT}}</td>
+                <td>{{ row.thoiGianTiepNhan.toLocaleDateString('vi-VN') }}</td>
+                <td>{{ LoaiVuViec[row.typeHoSo] }}</td>
+                <td>{{ LinhVuc[row.fieldType] }}</td>
+                <td>{{ row.ngayTraKQ1.toLocaleDateString('vi-VN') }}</td>
+                <td>{{ row.ketQua1 ? 'Đúng' : 'Sai' }}</td>
+                <td>{{ row.ngayTraKQ2 ? row.ngayTraKQ2.toLocaleDateString('vi-VN') : '' }}</td>
+                <td>{{ row.ketQua2 === true ? 'Đúng' : row.result2 === false ? 'Sai' : '' }}</td>
               </tr>
             </ng-template>
             <!-- <ng-template pTemplate="summary">

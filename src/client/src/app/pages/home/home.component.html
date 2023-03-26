@@ -81,7 +81,7 @@
   <!-- ----------------------Main------------------------------------------------- -->
   <div [@expandColumn]="expandColumnState" class="col-12 md:col-10 grid">
     <div
-      style="height: 90vh; width: 3%"
+      style="height: 90vh; width: 1%"
       class="flex flex-column justify-content-center align-items-center"
     >
       <button
@@ -103,8 +103,15 @@
         (click)="toggleMenuLeft()"
       ></button>
     </div>
-    <div style="width: 97%" class="card">
-      <p-panel #pnl header="Trang chủ">
+    <div style="width: 99%" class="card">
+      <p-breadcrumb [home]="home"></p-breadcrumb>
+      <p-divider align="left">
+        <div class="inline-flex align-items-center">
+          <i class="pi pi-map mr-2"></i>
+          <b>Đơn thư khiếu nại - tố cáo</b>
+        </div>    
+      </p-divider>
+      <p-panel #pnl>        
         <app-map idMap="homeMap" [data]="data" heightMap="80vh" [zoomLv]="12"></app-map>
         <!-- ----------------------------------------------------------------------- -->
         <p-blockUI [target]="pnl" [blocked]="blockedPanel">
