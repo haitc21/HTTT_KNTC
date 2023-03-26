@@ -34,7 +34,7 @@ public class DocumentTypeAppService : CrudAppService<
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(DocumentType.OrderIndex);
+            input.Sorting = $"{nameof(DocumentType.OrderIndex)}, {nameof(DocumentType.DocumentTypeName)}";
         }
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();

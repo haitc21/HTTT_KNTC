@@ -33,7 +33,7 @@ public class LandTypeAppService : CrudAppService<
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(LandType.OrderIndex);
+            input.Sorting = $"{nameof(LandType.OrderIndex)}, {nameof(LandType.LandTypeName)}";
         }
 
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";

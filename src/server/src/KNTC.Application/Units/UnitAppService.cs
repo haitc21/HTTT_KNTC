@@ -33,7 +33,7 @@ public class UnitAppService : CrudAppService<
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(Unit.OrderIndex);
+            input.Sorting = $"{nameof(Unit.OrderIndex)}, {nameof(Unit.UnitName)}";
         }
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
@@ -42,6 +42,7 @@ public class UnitAppService : CrudAppService<
                     .WhereIf(!filter.IsNullOrEmpty(),
                              x => x.UnitCode.ToUpper().Contains(filter)
                                  || x.UnitName.ToUpper().Contains(filter)
+                                 || x.ShortName.ToUpper().Contains(filter)
                              )
                     .WhereIf(input.UnitTypeId.HasValue, x => x.UnitTypeId == input.UnitTypeId)
                     .WhereIf(input.ParentId.HasValue, x => x.ParentId == input.ParentId)
@@ -55,7 +56,9 @@ public class UnitAppService : CrudAppService<
 
         var totalCount = await Repository.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
-                    || (x.UnitCode.ToUpper().Contains(input.Keyword) || x.UnitName.ToUpper().Contains(input.Keyword)))
+                    || (x.UnitCode.ToUpper().Contains(input.Keyword) 
+                    || x.UnitName.ToUpper().Contains(input.Keyword)
+                    || x.ShortName.ToUpper().Contains(input.Keyword)))
                 && (!input.UnitTypeId.HasValue || x.UnitTypeId == input.UnitTypeId)
                 && (!input.ParentId.HasValue || x.ParentId == input.ParentId)
                 && (!input.Status.HasValue || x.Status == input.Status)

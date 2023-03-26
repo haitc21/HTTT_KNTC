@@ -34,7 +34,7 @@ public class UnitTypeAppService : CrudAppService<
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(UnitType.OrderIndex);
+            input.Sorting = $"{nameof(UnitType.OrderIndex)}, {nameof(UnitType.UnitTypeName)}";
         }
 
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";

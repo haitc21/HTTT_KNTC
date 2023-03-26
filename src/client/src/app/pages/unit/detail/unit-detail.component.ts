@@ -44,6 +44,13 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
         message: `Tên không vượt quá ${KNTCValidatorConsts.MaxNameLength} kí tự`,
       },
     ],
+    shortName: [
+      { type: 'required', message: 'Tên thu gọn không được để trống' },
+      {
+        type: 'maxLength',
+        message: `Tên thu gọn không vượt quá ${KNTCValidatorConsts.MaxNameLength} kí tự`,
+      },
+    ],
     unitTypeId: [{ type: 'required', message: 'Loại địa danh không được để trống' }],
     parentId: [{ type: 'required', message: 'Địa danh cha không được để trống' }],
     status: [{ type: 'required', message: 'Tên không được để trống' }],
@@ -134,6 +141,10 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxCodeLength)],
       ],
       unitName: [
+        null,
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxCodeLength)],
+      ],
+      shortName: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxCodeLength)],
       ],

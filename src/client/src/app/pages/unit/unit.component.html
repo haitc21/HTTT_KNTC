@@ -98,6 +98,7 @@
           <th class="row-num-column">STT</th>
           <th pSortableColumn="unitCode">Mã</th>
           <th pSortableColumn="unitName">Tên</th>
+          <th pSortableColumn="shortName">Tên thu gọn</th>
           <th pSortableColumn="status">Trạng thái</th>
           <th *ngIf="visibleActionColumn" class="action-column"></th>
         </tr>
@@ -110,6 +111,7 @@
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
           <td>{{ row.unitCode }}</td>
           <td>{{ row.unitName }}</td>
+          <td>{{ row.shortName }}</td>
           <td>
             <p-tag
               styleClass="mr-1"

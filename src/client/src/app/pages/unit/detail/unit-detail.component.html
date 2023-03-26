@@ -37,6 +37,24 @@
         >
         </app-validation-message>
       </div>
+      <!-- --------------------------------shortName-------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <input
+            id="shortName"
+            formControlName="shortName"
+            type="text"
+            pInputText
+            [style]="{ width: '100%' }"
+          />
+          <label for="name">Tên thu gọn<span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.shortName"
+          [validationMessages]="validationMessages.shortName"
+        >
+        </app-validation-message>
+      </div>
       <!-- ----------------------------unitTypeId---------------------------=----------------------------- -->
       <div class="field col-12 md:col-6">
         <span class="p-float-label">
