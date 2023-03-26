@@ -16,7 +16,8 @@ public class LandTypeManager : DomainService
     public async Task<LandType> CreateAsync([NotNull] string code,
                                                 [NotNull] string name,
                                                 string description,
-                                                int orderIndex)
+                                                int orderIndex,
+                                                Status status)
     {
 
         Check.NotNullOrWhiteSpace(code, nameof(code));
@@ -27,14 +28,15 @@ public class LandTypeManager : DomainService
         {
             Description = description,
             OrderIndex = orderIndex,
-            Status = Status.Active
+            Status = status
         };
     }
     public async Task UpdateAsync([NotNull] LandType landType,
-                                                 [NotNull] string code,
-                                                 [NotNull] string name,
-                                                 string description,
-                                                 int orderIndex)
+                                  [NotNull] string code,
+                                  [NotNull] string name,
+                                  string description,
+                                  int orderIndex,
+                                  Status status)
     {
         Check.NotNull(landType, nameof(landType));
         Check.NotNullOrWhiteSpace(code, nameof(code));
@@ -49,6 +51,7 @@ public class LandTypeManager : DomainService
         }
         landType.Description = description;
         landType.OrderIndex = orderIndex;
+        landType.Status = status;
     }
     private async Task ChangeName(LandType landType, string name)
     {

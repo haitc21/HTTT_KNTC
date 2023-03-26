@@ -1,14 +1,16 @@
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { RoleDto, RolesService } from '@proxy/roles';
+import { Status } from '@proxy';
+import { DocumentTypeDto, DocumentTypeService } from '@proxy/document-types';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
-  templateUrl: './role-detail.component.html',
+  templateUrl: './document-type-detail.component.html',
 })
-export class RoleDetailComponent implements OnInit, OnDestroy {
+export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
 
   // Default
@@ -17,12 +19,15 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public closeBtnName: string;
-  selectedEntity = {} as RoleDto;
-
+  selectedEntity = {} as DocumentTypeDto;
+  statusOptions = [
+    { value: Status.Active, text: 'Hoạt động' },
+    { value: Status.DeActive, text: 'Khóa' },
+  ];
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
-    private roleService: RolesService,
+    private documentTypeService: DocumentTypeService,
     private utilService: UtilityService,
     private fb: FormBuilder
   ) {}
@@ -36,14 +41,26 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
 
   // Validate
   validationMessages = {
-    name: [
-      { type: 'required', message: 'Tên vai trò không được để trống!' },
-      { type: 'minlength', message: 'Bạn phải nhập ít nhất 3 kí tự' },
-      { type: 'maxlength', message: 'Bạn không được nhập quá 255 kí tự' },
+    documentTypeCode: [
+      { type: 'required', message: 'Mã không được để trống' },
+      {
+        type: 'maxLength',
+        message: `Mã không vượt quá ${KNTCValidatorConsts.MaxMaHoSoLength} kí tự`,
+      },
     ],
+    documentTypeName: [
+      { type: 'required', message: 'Tên không được để trống' },
+      {
+        type: 'maxLength',
+        message: `Tên không vượt quá ${KNTCValidatorConsts.MaxNameLength} kí tự`,
+      },
+    ],
+    status: [{ type: 'required', message: 'Tên không được để trống' }],
     description: [
-      { type: 'required', message: 'Bạn phải mô tả' },
-      { type: 'minlength', message: 'Bạn phải nhập ít nhất 3 kí tự' },
+      {
+        type: 'maxLength',
+        message: `Mô tả không vượt quá ${KNTCValidatorConsts.MaxDescriptionLength} kí tự`,
+      },
     ],
   };
 
@@ -53,11 +70,11 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
 
   loadDetail(id: any) {
     this.toggleBlockUI(true);
-    this.roleService
+    this.documentTypeService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: RoleDto) => {
+        next: (response: DocumentTypeDto) => {
           this.selectedEntity = response;
           this.form.patchValue(this.selectedEntity);
           this.toggleBlockUI(false);
@@ -73,8 +90,8 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) return;
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
-      ? this.roleService.create(this.form.value)
-      : this.roleService.update(this.config.data.id, this.form.value);
+      ? this.documentTypeService.create(this.form.value)
+      : this.documentTypeService.update(this.config.data.id, this.form.value);
     obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       () => {
         this.toggleBlockUI(false);
@@ -88,10 +105,17 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.form = this.fb.group({
-      name: [null, [Validators.required, Validators.maxLength(255), Validators.minLength(3)]],
-      description: [null, [Validators.required, Validators.maxLength(500)]],
-      isPublic: [true],
-      isDefault: [false],
+      documentTypeCode: [
+        null,
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxCodeLength)],
+      ],
+      documentTypeName: [
+        null,
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxCodeLength)],
+      ],
+      description: [null, [Validators.maxLength(KNTCValidatorConsts.MaxCodeLength)]],
+      orderIndex: [null],
+      status: [Status.Active, [Validators.required]],
       concurrencyStamp: [null],
     });
   }

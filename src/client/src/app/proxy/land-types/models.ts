@@ -1,13 +1,13 @@
 import type { EntityDto, FullAuditedEntityDto } from '@abp/ng.core';
-import type { BaseListFilterDto } from '../models';
 import type { Status } from '../status.enum';
+import type { BaseListFilterDto } from '../models';
 
 export interface CreateAndUpdateLandTypeDto extends EntityDto<number> {
   landTypeCode: string;
   landTypeName: string;
   description?: string;
   orderIndex: number;
-  status: number;
+  status: Status;
   concurrencyStamp?: string;
 }
 

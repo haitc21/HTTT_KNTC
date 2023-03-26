@@ -1,22 +1,21 @@
-import { PagedResultDto, PermissionService } from '@abp/ng.core';
+import { ListResultDto, PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RoleDto, RolesService } from '@proxy/roles';
+import { UnitDto, UnitLookupDto, UnitService } from '@proxy/units';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { PermissionGrantComponent } from '../permission-grant/permission-grant.component';
-import { RoleDetailComponent } from './detail/role-detail.component';
-import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
-import { ROLE_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
+import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
+import { UnitDetailComponent } from './detail/unit-detail.component';
+import { UnitTypeLookupDto, UnitTypeService } from '@proxy/unit-types';
 
 @Component({
-  selector: 'app-role',
-  templateUrl: './role.component.html'
+  selector: 'app-unit',
+  templateUrl: './unit.component.html',
 })
-export class RoleComponent implements OnInit, OnDestroy {
+export class UnitComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
@@ -28,54 +27,96 @@ export class RoleComponent implements OnInit, OnDestroy {
   Actions = Actions;
 
   //Business variables
-  public items: RoleDto[];
-  public selectedItems: RoleDto[] = [];
-  actionItem: RoleDto;
+  public items: UnitDto[];
+  public selectedItems: UnitDto[] = [];
+  actionItem: UnitDto;
   public keyword: string = '';
+  unitTypeId: number = 1;
+  parentId: number;
+
+  unitTypeOptions: UnitTypeLookupDto[] = [];
+  parentUnitOptions: UnitLookupDto[] = [];
 
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
-  hasPermissionManagementPermionsion = false;
   visibleActionColumn = false;
   actionMenu: MenuItem[];
 
   constructor(
-    private roleService: RolesService,
+    private unitService: UnitService,
     public dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    private unitTypeService: UnitTypeService
   ) {}
 
   ngOnInit() {
+    this.getOptions();
     this.getPermission();
-  this.buildActionMenu();
+    this.buildActionMenu();
     this.loadData();
   }
+
+  getOptions() {
+    this.toggleBlockUI(true);
+    this.unitTypeService
+      .getLookup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<UnitTypeLookupDto>) => {
+          this.unitTypeOptions = res.items;
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
+  }
+
+  unitTypeChange(id, isFirst: boolean = false) {
+    if (!id) return;
+    if (id > 1) {
+      this.toggleBlockUI(true);
+      this.unitService
+        .getLookup(id - 1)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<UnitLookupDto>) => {
+            this.parentUnitOptions = res.items;
+            this.toggleBlockUI(false);
+          },
+          () => {
+            this.parentUnitOptions = [];
+            this.toggleBlockUI(false);
+          }
+        );
+    } else {
+      this.parentUnitOptions = [];
+      this.parentId = null;
+    }
+  }
+
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('AbpIdentity.Users.Update');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('AbpIdentity.Users.Delete');
-    this.hasPermissionManagementPermionsion = this.permissionService.getGrantedPolicy(
-      'AbpIdentity.Users.ManagePermissions'
-    );
-    this.visibleActionColumn =
-      this.hasPermissionUpdate ||
-      this.hasPermissionDelete ||
-      this.hasPermissionManagementPermionsion;
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Unit.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Unit.Delete');
+    this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 
   loadData() {
     this.toggleBlockUI(true);
 
-    this.roleService
-      .getListFilter({
+    this.unitService
+      .getList({
         maxResultCount: this.maxResultCount,
         skipCount: this.skipCount,
         keyword: this.keyword,
+        unitTypeId: this.unitTypeId,
+        parentId: this.parentId
       })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: PagedResultDto<RoleDto>) => {
+        next: (response: PagedResultDto<UnitDto>) => {
           this.items = response.items;
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
@@ -87,12 +128,12 @@ export class RoleComponent implements OnInit, OnDestroy {
   }
 
   showAddModal() {
-    const ref = this.dialogService.open(RoleDetailComponent, {
-      header: 'Thêm vai trò',
-      width: DIALOG_SM,
+    const ref = this.dialogService.open(UnitDetailComponent, {
+      header: 'Thêm địa danh',
+      width: DIALOG_MD,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: RoleDto) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: UnitDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.selectedItems = [];
@@ -112,37 +153,15 @@ export class RoleComponent implements OnInit, OnDestroy {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    const ref = this.dialogService.open(RoleDetailComponent, {
+    const ref = this.dialogService.open(UnitDetailComponent, {
       data: {
         id: row.id,
       },
-      header: `Cập nhật vai trò '${row.name}'`,
-      width: DIALOG_SM,
+      header: `Cập nhật địa danh`,
+      width: DIALOG_MD,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: RoleDto) => {
-      if (data) {
-        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
-        this.selectedItems = [];
-        this.loadData();
-      }
-    });
-  }
-  showPermissionModal(row) {
-    if (!row) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
-      return;
-    }
-    const ref = this.dialogService.open(PermissionGrantComponent, {
-      data: {
-        providerKey: row.name,
-        providerName: ROLE_PROVIDER,
-      },
-      header: `Phân quyền cho vai trò '${row.name}'`,
-      width: DIALOG_SM,
-    });
-
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: any) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: UnitDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -169,7 +188,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   deleteItemsConfirm(ids: any[]) {
     this.toggleBlockUI(true);
 
-    this.roleService
+    this.unitService
       .deleteMultiple(ids)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -200,7 +219,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   deleteRowConfirm(id) {
     this.toggleBlockUI(true);
 
-    this.roleService
+    this.unitService
       .delete(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -228,15 +247,6 @@ export class RoleComponent implements OnInit, OnDestroy {
           this.actionItem = null;
         },
         visible: this.hasPermissionUpdate,
-      },
-      {
-        label: this.Actions.MANAGE_PERMISSIONS,
-        icon: 'pi pi-fw pi-wrench',
-        command: event => {
-          this.showPermissionModal(this.actionItem);
-          this.actionItem = null;
-        },
-        visible: this.hasPermissionManagementPermionsion,
       },
       {
         label: this.Actions.DELETE,

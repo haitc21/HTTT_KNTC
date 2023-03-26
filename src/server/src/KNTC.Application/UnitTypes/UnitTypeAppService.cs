@@ -34,7 +34,7 @@ public class UnitTypeAppService : CrudAppService<
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(UnitType.OrderIndex);
+            input.Sorting = $"{nameof(UnitType.OrderIndex)}, {nameof(UnitType.UnitTypeName)}";
         }
 
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
@@ -66,7 +66,7 @@ public class UnitTypeAppService : CrudAppService<
     }
     public async Task<ListResultDto<UnitTypeLookupDto>> GetLookupAsync()
     {
-        var unitTypes = await Repository.GetListAsync();
+        var unitTypes = await Repository.GetListAsync(x => x.Status == Status.Active);
 
         return new ListResultDto<UnitTypeLookupDto>(
             ObjectMapper.Map<List<UnitType>, List<UnitTypeLookupDto>>(unitTypes)
@@ -78,7 +78,8 @@ public class UnitTypeAppService : CrudAppService<
         var entity = await _unitTypeManager.CreateAsync(input.UnitTypeCode,
                                                           input.UnitTypeName,
                                                           input.Description,
-                                                          input.OrderIndex);
+                                                          input.OrderIndex,
+                                                          input.Status);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
@@ -88,10 +89,11 @@ public class UnitTypeAppService : CrudAppService<
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _unitTypeManager.UpdateAsync(entity,
-                                              input.UnitTypeCode,
-                                              input.UnitTypeName,
-                                              input.Description,
-                                              input.OrderIndex);
+                                           input.UnitTypeCode,
+                                           input.UnitTypeName,
+                                           input.Description,
+                                           input.OrderIndex,
+                                           input.Status);
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }

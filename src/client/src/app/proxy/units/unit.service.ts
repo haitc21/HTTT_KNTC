@@ -48,7 +48,7 @@ export class UnitService {
     this.restService.request<any, PagedResultDto<UnitDto>>({
       method: 'GET',
       url: '/api/app/unit',
-      params: { status: input.status, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      params: { status: input.status, unitTypeId: input.unitTypeId, parentId: input.parentId, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
   

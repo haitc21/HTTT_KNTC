@@ -34,7 +34,7 @@ public class DocumentTypeAppService : CrudAppService<
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(DocumentType.OrderIndex);
+            input.Sorting = $"{nameof(DocumentType.OrderIndex)}, {nameof(DocumentType.DocumentTypeName)}";
         }
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
@@ -66,7 +66,7 @@ public class DocumentTypeAppService : CrudAppService<
     }
     public async Task<ListResultDto<DocumentTypeLookupDto>> GetLookupAsync()
     {
-        var documentTypes = await Repository.GetListAsync();
+        var documentTypes = await Repository.GetListAsync(x => x.Status == Status.Active);
 
         return new ListResultDto<DocumentTypeLookupDto>(
             ObjectMapper.Map<List<DocumentType>, List<DocumentTypeLookupDto>>(documentTypes)
@@ -78,7 +78,8 @@ public class DocumentTypeAppService : CrudAppService<
         var entity = await _documentTypeManager.CreateAsync(input.DocumentTypeCode,
                                                             input.DocumentTypeName,
                                                             input.Description,
-                                                            input.OrderIndex);
+                                                            input.OrderIndex,
+                                                            input.Status);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
 
@@ -92,7 +93,8 @@ public class DocumentTypeAppService : CrudAppService<
                                               input.DocumentTypeCode,
                                               input.DocumentTypeName,
                                               input.Description,
-                                              input.OrderIndex);
+                                              input.OrderIndex,
+                                              input.Status);
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
     }

@@ -1,14 +1,16 @@
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { RoleDto, RolesService } from '@proxy/roles';
+import { Status } from '@proxy';
+import { LandTypeDto, LandTypeService } from '@proxy/land-types';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
-  templateUrl: './role-detail.component.html',
+  templateUrl: './land-type-detail.component.html',
 })
-export class RoleDetailComponent implements OnInit, OnDestroy {
+export class LandTypeDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
 
   // Default
@@ -17,12 +19,15 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public closeBtnName: string;
-  selectedEntity = {} as RoleDto;
-
+  selectedEntity = {} as LandTypeDto;
+  statusOptions = [
+    { value: Status.Active, text: 'Hoạt động' },
+    { value: Status.DeActive, text: 'Khóa' },
+  ];
   constructor(
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
-    private roleService: RolesService,
+    private landTypeService: LandTypeService,
     private utilService: UtilityService,
     private fb: FormBuilder
   ) {}
@@ -36,14 +41,26 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
 
   // Validate
   validationMessages = {
-    name: [
-      { type: 'required', message: 'Tên vai trò không được để trống!' },
-      { type: 'minlength', message: 'Bạn phải nhập ít nhất 3 kí tự' },
-      { type: 'maxlength', message: 'Bạn không được nhập quá 255 kí tự' },
+    landTypeCode: [
+      { type: 'required', message: 'Mã không được để trống' },
+      {
+        type: 'maxLength',
+        message: `Mã không vượt quá ${KNTCValidatorConsts.MaxMaHoSoLength} kí tự`,
+      },
     ],
+    landTypeName: [
+      { type: 'required', message: 'Tên không được để trống' },
+      {
+        type: 'maxLength',
+        message: `Tên không vượt quá ${KNTCValidatorConsts.MaxNameLength} kí tự`,
+      },
+    ],
+    status: [{ type: 'required', message: 'Tên không được để trống' }],
     description: [
-      { type: 'required', message: 'Bạn phải mô tả' },
-      { type: 'minlength', message: 'Bạn phải nhập ít nhất 3 kí tự' },
+      {
+        type: 'maxLength',
+        message: `Mô tả không vượt quá ${KNTCValidatorConsts.MaxDescriptionLength} kí tự`,
+      },
     ],
   };
 
@@ -53,11 +70,11 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
 
   loadDetail(id: any) {
     this.toggleBlockUI(true);
-    this.roleService
+    this.landTypeService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: RoleDto) => {
+        next: (response: LandTypeDto) => {
           this.selectedEntity = response;
           this.form.patchValue(this.selectedEntity);
           this.toggleBlockUI(false);
@@ -73,8 +90,8 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) return;
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
-      ? this.roleService.create(this.form.value)
-      : this.roleService.update(this.config.data.id, this.form.value);
+      ? this.landTypeService.create(this.form.value)
+      : this.landTypeService.update(this.config.data.id, this.form.value);
     obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       () => {
         this.toggleBlockUI(false);
@@ -88,10 +105,17 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
 
   buildForm() {
     this.form = this.fb.group({
-      name: [null, [Validators.required, Validators.maxLength(255), Validators.minLength(3)]],
-      description: [null, [Validators.required, Validators.maxLength(500)]],
-      isPublic: [true],
-      isDefault: [false],
+      landTypeCode: [
+        null,
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxCodeLength)],
+      ],
+      landTypeName: [
+        null,
+        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxCodeLength)],
+      ],
+      description: [null, [Validators.maxLength(KNTCValidatorConsts.MaxCodeLength)]],
+      orderIndex: [null],
+      status: [Status.Active, [Validators.required]],
       concurrencyStamp: [null],
     });
   }

@@ -7,7 +7,7 @@ export interface CreateAndUpdateUnitDto extends EntityDto<number> {
   unitName: string;
   shortName: string;
   unitTypeId: number;
-  parentId: number;
+  parentId?: number;
   description?: string;
   orderIndex: number;
   status: Status;
@@ -16,6 +16,8 @@ export interface CreateAndUpdateUnitDto extends EntityDto<number> {
 
 export interface GetUnitListDto extends BaseListFilterDto {
   status?: Status;
+  unitTypeId?: number;
+  parentId?: number;
 }
 
 export interface UnitDto extends FullAuditedEntityDto<number> {
@@ -23,7 +25,7 @@ export interface UnitDto extends FullAuditedEntityDto<number> {
   unitName?: string;
   shortName?: string;
   unitTypeId: number;
-  parentId: number;
+  parentId?: number;
   description?: string;
   orderIndex: number;
   status: Status;

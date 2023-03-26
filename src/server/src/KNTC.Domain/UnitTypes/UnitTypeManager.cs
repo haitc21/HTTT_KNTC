@@ -16,7 +16,8 @@ public class UnitTypeManager : DomainService
     public async Task<UnitType> CreateAsync([NotNull] string code,
                                                 [NotNull] string name,
                                                 string description,
-                                                int orderIndex)
+                                                int orderIndex,
+                                                Status status)
     {
 
         Check.NotNullOrWhiteSpace(code, nameof(code));
@@ -27,14 +28,15 @@ public class UnitTypeManager : DomainService
         {
             Description = description,
             OrderIndex = orderIndex,
-            Status = Status.Active
+            Status = status
         };
     }
     public async Task UpdateAsync([NotNull] UnitType unitType,
-                                                 [NotNull] string code,
-                                                 [NotNull] string name,
-                                                 string description,
-                                                 int orderIndex)
+                                   [NotNull] string code,
+                                   [NotNull] string name,
+                                   string description,
+                                   int orderIndex,
+                                   Status status)
     {
         Check.NotNull(unitType, nameof(unitType));
         Check.NotNullOrWhiteSpace(code, nameof(code));
@@ -49,6 +51,7 @@ public class UnitTypeManager : DomainService
         }
         unitType.Description = description;
         unitType.OrderIndex = orderIndex;
+        unitType.Status = status;
     }
     private async Task ChangeName(UnitType unitType, string name)
     {

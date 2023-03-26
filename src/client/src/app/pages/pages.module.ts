@@ -44,8 +44,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ComplainComponent } from './complain/complain.component';
 import { DenounceComponent } from './denounce/denounce.component';
 import { DenounceDetailComponent } from './denounce/detail/denounce-detail.component';
-import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { DividerModule } from "primeng/divider";
+
 @NgModule({
   declarations: [
     HomeComponent,
@@ -57,6 +56,14 @@ import { DividerModule } from "primeng/divider";
     DenounceDetailComponent,
     FileAttachmentComponent,
     FileAttachmentDetailComponent,
+    DocumentTypeComponent,
+    DocumentTypeDetailComponent,
+    LandTypeComponent,
+    LandTypeDetailComponent,
+    UnitTypeComponent,
+    UnitTypeDetailComponent,
+    UnitComponent,
+    UnitDetailComponent
   ],
   imports: [
     PagesRoutingModule,

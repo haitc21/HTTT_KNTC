@@ -33,7 +33,7 @@ public class UnitAppService : CrudAppService<
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(Unit.OrderIndex);
+            input.Sorting = $"{nameof(Unit.OrderIndex)}, {nameof(Unit.UnitName)}";
         }
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
@@ -42,7 +42,10 @@ public class UnitAppService : CrudAppService<
                     .WhereIf(!filter.IsNullOrEmpty(),
                              x => x.UnitCode.ToUpper().Contains(filter)
                                  || x.UnitName.ToUpper().Contains(filter)
+                                 || x.ShortName.ToUpper().Contains(filter)
                              )
+                    .WhereIf(input.UnitTypeId.HasValue, x => x.UnitTypeId == input.UnitTypeId)
+                    .WhereIf(input.ParentId.HasValue, x => x.ParentId == input.ParentId)
                     .WhereIf(input.Status.HasValue, x => x.Status == input.Status)
                     .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
@@ -53,7 +56,11 @@ public class UnitAppService : CrudAppService<
 
         var totalCount = await Repository.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
-                    || (x.UnitCode.ToUpper().Contains(input.Keyword) || x.UnitName.ToUpper().Contains(input.Keyword)))
+                    || (x.UnitCode.ToUpper().Contains(input.Keyword) 
+                    || x.UnitName.ToUpper().Contains(input.Keyword)
+                    || x.ShortName.ToUpper().Contains(input.Keyword)))
+                && (!input.UnitTypeId.HasValue || x.UnitTypeId == input.UnitTypeId)
+                && (!input.ParentId.HasValue || x.ParentId == input.ParentId)
                 && (!input.Status.HasValue || x.Status == input.Status)
                 );
 
@@ -67,6 +74,7 @@ public class UnitAppService : CrudAppService<
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
+                    .Where(x => x.Status == Status.Active)
                     .Where(x => x.UnitTypeId == unitTypeId)
                     .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
                     .OrderBy(nameof(UnitLookupDto.UnitName));
@@ -84,7 +92,8 @@ public class UnitAppService : CrudAppService<
                                                    input.ShortName,
                                                    input.UnitTypeId,
                                                    input.Description,
-                                                   input.OrderIndex);
+                                                   input.OrderIndex,
+                                                   input.Status);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
@@ -99,7 +108,8 @@ public class UnitAppService : CrudAppService<
                                        input.ShortName,
                                        input.UnitTypeId,
                                        input.Description,
-                                              input.OrderIndex);
+                                       input.OrderIndex,
+                                       input.Status);
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
