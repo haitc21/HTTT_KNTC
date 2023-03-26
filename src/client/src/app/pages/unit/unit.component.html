@@ -1,7 +1,58 @@
 <div class="animated fadeIn card">
   <p-panel #pnl header="Quản lý địa danh">
-    <p-toolbar>
-      <ng-template pTemplate="left">
+    <div class="flex col-12" style="height: 100px; margin: 1rem 0;">
+      <div class="flex col-12 md:col-8">
+        <div class="col-12 md:col-4">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (keyup.enter)="loadData()"
+              [(ngModel)]="keyword"
+              placeholder="Tìm kiếm"
+              [style]="{ width: '100%' }"
+            />
+          </span>
+        </div>
+        <div class="col-12 md:col-4">
+          <span class="p-float-label">
+            <p-dropdown
+              id="unitTypeId"
+              [(ngModel)]="unitTypeId"
+              [options]="unitTypeOptions"
+              optionLabel="unitTypeName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitTypeName"
+              styleClass="w-full"
+              (onChange)="unitTypeChange($event?.value); loadData()"
+            ></p-dropdown>
+            <label for="loaiDat">loại địa danh</label>
+          </span>
+        </div>
+        <div class="col-12 md:col-4">
+          <span class="p-float-label">
+            <p-dropdown
+              id="parentId"
+              [(ngModel)]="parentId"
+              [options]="parentUnitOptions"
+              optionLabel="unitName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitName"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label for="loaiDat">DDịa danh cha</label>
+          </span>
+        </div>
+      </div>
+      <div class="col-12 md:col-4 flex justify-content-end">
         <button
           *abpPermission="'Unit.Create'"
           type="button"
@@ -27,22 +78,8 @@
           (click)="deleteItems()"
           [disabled]="!selectedItems || !selectedItems.length"
         ></button>
-      </ng-template>
-
-      <ng-template pTemplate="right">
-        <span class="p-input-icon-left search-width">
-          <i class="pi pi-search"></i>
-          <input
-            pInputText
-            type="text"
-            (keyup.enter)="loadData()"
-            [(ngModel)]="keyword"
-            placeholder="Tên vai trò"
-            class="w-full"
-          />
-        </span>
-      </ng-template>
-    </p-toolbar>
+      </div>
+    </div>
 
     <p-table
       #dt
@@ -95,12 +132,12 @@
               pButton
               pRipple
               type="button"
-              pButton
               icon="pi pi-fw pi-cog"
               [label]="Actions.ACTION"
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
+              style="height: 2rem;"
             ></button>
           </td>
         </tr>
@@ -112,7 +149,7 @@
           [showCurrentPageReport]="true"
           [showJumpToPageInput]="true"
           (onPageChange)="pageChanged($event)"
-          currentPageReportTemplate="{totalRecords} bản ghi, {currentPage} trang"
+          currentPageReportTemplate="{totalRecords} bản ghi"
           [rowsPerPageOptions]="[10, 20, 50, 100]"
         ></p-paginator>
       </ng-template>

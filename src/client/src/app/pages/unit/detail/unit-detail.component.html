@@ -37,6 +37,56 @@
         >
         </app-validation-message>
       </div>
+      <!-- ----------------------------unitTypeId---------------------------=----------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <p-dropdown
+            id="unitTypeId"
+            formControlName="unitTypeId"
+            [options]="unitTypeOptions"
+            optionLabel="unitTypeName"
+            optionValue="id"
+            [showClear]="true"
+            [autoDisplayFirst]="false"
+            [filter]="true"
+            filterBy="unitTypeName"
+            styleClass="w-full"
+            (onChange)="unitTypeChange($event?.value)"
+          ></p-dropdown>
+          <label for="loaiDat">loại địa danh <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.unitTypeId"
+          [validationMessages]="validationMessages.unitTypeId"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ----------------------------parentId---------------------------=----------------------------- -->
+      <div
+        *ngIf="formControls?.unitTypeId && formControls?.unitTypeId?.value > 1"
+        class="field col-12 md:col-6"
+      >
+        <span class="p-float-label">
+          <p-dropdown
+            id="parentId"
+            formControlName="parentId"
+            [options]="parentUnitOptions"
+            optionLabel="unitName"
+            optionValue="id"
+            [showClear]="true"
+            [autoDisplayFirst]="false"
+            [filter]="true"
+            filterBy="unitName"
+            styleClass="w-full"
+          ></p-dropdown>
+          <label for="loaiDat">DDịa danh cha <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.parentId"
+          [validationMessages]="validationMessages.parentId"
+        >
+        </app-validation-message>
+      </div>
       <!-- ----------------------------------------------orderIndex----------------------->
       <div class="field col-12 md:col-6">
         <span class="p-float-label">

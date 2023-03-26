@@ -1,6 +1,6 @@
-import { PagedResultDto, PermissionService } from '@abp/ng.core';
+import { ListResultDto, PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UnitDto, UnitService } from '@proxy/units';
+import { UnitDto, UnitLookupDto, UnitService } from '@proxy/units';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -9,6 +9,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
 import { UnitDetailComponent } from './detail/unit-detail.component';
+import { UnitTypeLookupDto, UnitTypeService } from '@proxy/unit-types';
 
 @Component({
   selector: 'app-unit',
@@ -30,6 +31,11 @@ export class UnitComponent implements OnInit, OnDestroy {
   public selectedItems: UnitDto[] = [];
   actionItem: UnitDto;
   public keyword: string = '';
+  unitTypeId: number = 1;
+  parentId: number;
+
+  unitTypeOptions: UnitTypeLookupDto[] = [];
+  parentUnitOptions: UnitLookupDto[] = [];
 
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
@@ -41,14 +47,56 @@ export class UnitComponent implements OnInit, OnDestroy {
     public dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
-    private permissionService: PermissionService
+    private permissionService: PermissionService,
+    private unitTypeService: UnitTypeService
   ) {}
 
   ngOnInit() {
+    this.getOptions();
     this.getPermission();
     this.buildActionMenu();
     this.loadData();
   }
+
+  getOptions() {
+    this.toggleBlockUI(true);
+    this.unitTypeService
+      .getLookup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<UnitTypeLookupDto>) => {
+          this.unitTypeOptions = res.items;
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
+  }
+
+  unitTypeChange(id, isFirst: boolean = false) {
+    if (!id) return;
+    if (id > 1) {
+      this.toggleBlockUI(true);
+      this.unitService
+        .getLookup(id - 1)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<UnitLookupDto>) => {
+            this.parentUnitOptions = res.items;
+            this.toggleBlockUI(false);
+          },
+          () => {
+            this.parentUnitOptions = [];
+            this.toggleBlockUI(false);
+          }
+        );
+    } else {
+      this.parentUnitOptions = [];
+      this.parentId = null;
+    }
+  }
+
   getPermission() {
     this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Unit.Edit');
     this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Unit.Delete');
@@ -63,6 +111,8 @@ export class UnitComponent implements OnInit, OnDestroy {
         maxResultCount: this.maxResultCount,
         skipCount: this.skipCount,
         keyword: this.keyword,
+        unitTypeId: this.unitTypeId,
+        parentId: this.parentId
       })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({

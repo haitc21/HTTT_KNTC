@@ -43,6 +43,8 @@ public class UnitAppService : CrudAppService<
                              x => x.UnitCode.ToUpper().Contains(filter)
                                  || x.UnitName.ToUpper().Contains(filter)
                              )
+                    .WhereIf(input.UnitTypeId.HasValue, x => x.UnitTypeId == input.UnitTypeId)
+                    .WhereIf(input.ParentId.HasValue, x => x.ParentId == input.ParentId)
                     .WhereIf(input.Status.HasValue, x => x.Status == input.Status)
                     .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
@@ -54,6 +56,8 @@ public class UnitAppService : CrudAppService<
         var totalCount = await Repository.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.UnitCode.ToUpper().Contains(input.Keyword) || x.UnitName.ToUpper().Contains(input.Keyword)))
+                && (!input.UnitTypeId.HasValue || x.UnitTypeId == input.UnitTypeId)
+                && (!input.ParentId.HasValue || x.ParentId == input.ParentId)
                 && (!input.Status.HasValue || x.Status == input.Status)
                 );
 
