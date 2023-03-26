@@ -8,6 +8,7 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import { LoaiVuViec } from '@proxy';
 import * as L from 'leaflet';
 import 'leaflet.locatecontrol';
 import { Complain, typesHoSo } from '../../mock/Complain';
@@ -99,23 +100,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
     });
   
     this.map = L.map(this.idMap, {
-      center: [21.027764, 105.83416],
+      center: [21.59053436945016, 105.83127034149382],
       zoom: 10,
       layers: [osm, this.khieunai]
     });
   
-    const baseLayers = {
+    var baseMaps  = {
       'OpenStreetMap': osm,
       'Streets': streets
     };
   
-    const overlays = {
-      'Khiếu nại': this.khieunai,
-      'Tố cáo': this.tocao
-    };
-  
-    const layerControl = L.control.layers(baseLayers, overlays).addTo(this.map);
-
     var geojsonFeature = {
       "type": "Feature",
       "properties": {
@@ -125,6 +119,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       },
       "geometry": this.spatialData
     };
+
     var myStyle = {
       fillColor: "#ff7800",
       weight: 2,
@@ -136,11 +131,21 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
     this.quyhoach = L.geoJSON(geojsonFeature,
       {style: myStyle
-      }).addTo(this.map);
+      });    
+
+    var overlayMaps  = {
+      'Khiếu nại': this.khieunai,
+      'Tố cáo': this.tocao,
+      'Quy hoạch': this.quyhoach
+    };
+  
+    const layerControl = L.control.layers(baseMaps , overlayMaps ).addTo(this.map);    
     
     const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
     layerControl.addBaseLayer(satellite, 'Satellite');
-    layerControl.addOverlay(this.quyhoach, 'Quy hoạch');
+
+    //layerControl.addOverlay(this.quyhoach, 'Quy hoạch');
+
 
     /*
     //
@@ -220,9 +225,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
     debugger;
     //Add markers
     hosos.filter(x => x.duLieuToaDo!=null).forEach(hoSo => {
-      var point = hoSo.duLieuToaDo.split(",")
+      var point = hoSo.duLieuToaDo.split(",");
       const marker = L.marker([point[0], point[1]], {
-        icon: hoSo.typeHoSo === 0 ? blueIcon : redIcon,
+        icon: hoSo.type === 1 ? blueIcon : redIcon,
       });
 
       marker.bindPopup(`
@@ -243,9 +248,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
         </div>
       `);
       //marker.addTo(this.map);
-      if (hoSo.typeHoSo==typesHoSo.Complaint)
+      if (hoSo.type==LoaiVuViec.KhieuNai)
         marker.addTo(this.khieunai);
-      else if (hoSo.typeHoSo==typesHoSo.Accusation)
+      else if (hoSo.type==LoaiVuViec.ToCao)
         marker.addTo(this.tocao);
     });    
   }

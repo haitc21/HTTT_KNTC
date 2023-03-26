@@ -8,6 +8,7 @@ import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@prox
 import { ComplainDto, ComplainService, GetComplainListDto } from '@proxy/complains';
 import { DenounceDto, DenounceService, GetDenounceListDto } from '@proxy/denounces';
 import { Subject, takeUntil } from 'rxjs';
+import { UtilityService } from 'src/app/shared/services/utility.service';
 //import { each } from 'chart.js/dist/helpers/helpers.core';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
@@ -119,16 +120,27 @@ export class SearchMapComponent implements OnInit {
   tinhTrang: number;
 
   loaiVuviecOptions = [
+    { value: 0, text: 'Tất cả' },
     { value: LoaiVuViec.KhieuNai, text: 'Khiếu nại' },
     { value: LoaiVuViec.ToCao, text: 'Tố cáo' },
   ];
 
+  linhVucOptions = [
+    { value: 0, text: '' },
+    { value: LinhVuc.DatDai, text: 'Đất đai' },
+    { value: LinhVuc.KhoangSan, text: 'Khoáng sản' },
+    { value: LinhVuc.MoiTruong, text: 'Môi trường' },
+    { value: LinhVuc.TaiNguyenNuoc, text: 'Tài nguyên nước' },
+  ];
+
   giaiDoanOptions = [
+    { value: 0, text: '' },
     { value: 1, text: 'Khiếu nại lần I' },
     { value: 2, text: 'Khiếu nại lần II' },
   ];
 
   loaiKQOptions = [
+    { value: 0, text: '' },
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
@@ -150,6 +162,7 @@ export class SearchMapComponent implements OnInit {
     private spatialDataService: SpatialDataService,
     private complainService: ComplainService,
     private denounceService: DenounceService,
+    private utilService: UtilityService,
     private unitService: UnitService
   ) {}
 
@@ -160,9 +173,9 @@ export class SearchMapComponent implements OnInit {
     ];
     this.home = {label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/'};
     //this.mockData = this.mockService.mockData();
-    this.loadData(true);
-      
     this.loadOptions();
+    this.loadData(true);
+    
     this.route.paramMap.subscribe(params => {
       //this.linhVuc = +params.get('linhVuc') as LinhVuc;
       //this.setHeader();
@@ -274,7 +287,7 @@ export class SearchMapComponent implements OnInit {
         .subscribe({
           next: (response: PagedResultDto<ComplainDto>) => {
             this.data = response.items;
-
+            this.data.forEach(x => x.type = 1);
             this.totalCount = response.totalCount;
             this.toggleBlockUI(false);
           },
@@ -310,9 +323,9 @@ export class SearchMapComponent implements OnInit {
         .getList(filter)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
-          next: (response: PagedResultDto<ComplainDto>) => {
+          next: (response: PagedResultDto<DenounceDto>) => {
             this.data = response.items;
-
+            this.data.forEach(x => x.type = 2);
             this.totalCount = response.totalCount;
             this.toggleBlockUI(false);
           },
@@ -329,8 +342,9 @@ export class SearchMapComponent implements OnInit {
 
   loadOptions() {
     this.toggleBlockUI(true);
+
     this.unitService
-      .getLookup(1)
+      .getLookup(1, 12) //Mã tỉnh Thái Nguyên
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<UnitLookupDto>) => {

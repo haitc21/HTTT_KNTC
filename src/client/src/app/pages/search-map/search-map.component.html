@@ -139,7 +139,7 @@
                   optionLabel="text"
                   optionValue="value"
                   [showClear]="true"
-                  [autoDisplayFirst]="false"
+                  [autoDisplayFirst]="true"
                   styleClass="w-full"
                   (onChange)="loadData($event)"
                 ></p-dropdown>
@@ -311,8 +311,9 @@
                 <th>Người gửi đơn</th>
                 <th>Khu vực</th>
                 <th>Ngày nộp đơn</th>
-                <th>Loại khiếu nai/tố cáo</th>
+                <th>Loại KN/TC</th>                
                 <th>Lĩnh vực</th>
+                <th>Bộ phận XL</th>
                 <th>Ngày hẹn trả KQ lần I</th>
                 <th>KQ GQKN lần I</th>
                 <th>Ngày hẹn trả KQ lần II</th>
@@ -326,13 +327,20 @@
                 <td>{{ row.tieuDe }}</td>
                 <td>{{ row.nguoiDeNghi }}</td>
                 <td>{{ row.maQuanHuyen }} - {{row.maXaPhuongTT}}</td>
-                <td>{{ row.thoiGianTiepNhan.toLocaleDateString('vi-VN') }}</td>
-                <td>{{ LoaiVuViec[row.typeHoSo] }}</td>
-                <td>{{ LinhVuc[row.fieldType] }}</td>
-                <td>{{ row.ngayTraKQ1.toLocaleDateString('vi-VN') }}</td>
-                <td>{{ row.ketQua1 ? 'Đúng' : 'Sai' }}</td>
-                <td>{{ row.ngayTraKQ2 ? row.ngayTraKQ2.toLocaleDateString('vi-VN') : '' }}</td>
-                <td>{{ row.ketQua2 === true ? 'Đúng' : row.result2 === false ? 'Sai' : '' }}</td>
+                <td>
+                  {{ utilService.convertDateToLocal(row?.thoiGianTiepNhan) | date : 'dd-MM-yyyy hh:mm' }}
+                </td>
+                <td>{{ loaiVuviecOptions[row.type]?.text}}</td>
+                <td>{{ linhVucOptions[row.linhVuc]?.text}}</td>
+                <td>{{ row.boPhanDangXL }}</td>
+                <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
+                  {{ utilService.convertDateToLocal(row?.ngayTraKQ1) | date : 'dd-MM-yyyy' }}
+                </td>
+                <td>{{ loaiKQOptions[row.ketQua1]}}</td>
+                <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
+                  {{ utilService.convertDateToLocal(row?.ngayTraKQ2) | date : 'dd-MM-yyyy' }}
+                </td>
+                <td>{{ loaiKQOptions[row.ketQua2]}}</td>
               </tr>
             </ng-template>
             <!-- <ng-template pTemplate="summary">
