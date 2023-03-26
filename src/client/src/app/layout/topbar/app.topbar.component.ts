@@ -193,7 +193,6 @@ export class AppTopBarComponent implements OnInit {
       },
       {
         label: 'Danh mục',
-        routerLink: ['/system/common-list'],
         items: [
           {
             label: 'Hình thức tệp',
