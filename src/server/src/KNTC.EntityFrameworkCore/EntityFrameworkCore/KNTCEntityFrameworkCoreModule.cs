@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KNTC.Summaries;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
@@ -48,5 +49,6 @@ public class KNTCEntityFrameworkCoreModule : AbpModule
              * See also KNTCMigrationsDbContextFactory for EF Core tooling. */
             options.UseSqlServer(x => x.UseNetTopologySuite());
         });
+        context.Services.AddTransient<ISummaryRepository, SummaryRepository>();
     }
 }

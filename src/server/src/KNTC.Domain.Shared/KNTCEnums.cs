@@ -6,7 +6,7 @@ public enum LoaiVuViec
 }
 public enum LinhVuc
 {
-    DataDai = 1,
+    DatDai = 1,
     MoiTruong = 2,
     TaiNguyenNuoc = 3,
     KhoangSan = 4

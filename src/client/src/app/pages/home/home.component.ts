@@ -68,15 +68,15 @@ export class HomeComponent implements OnInit {
   public totalCount: number;
 
   // fileter
-  landComplaint = true;
-  enviromentalComplaint = true;
-  waterResourceComplaint = true;
-  mineralResourceComplaint = true;
+  landComplain = true;
+  enviromentalComplain = true;
+  waterComplain = true;
+  mineralComplain = true;
 
-  landAccusation = true;
-  emviromentalAccusation = true;
-  waterResourceAccusation = true;
-  mineralResourceAccusation = true;
+  landDenounce = true;
+  enviromentDenounce = true;
+  waterDenounce = true;
+  mineralDenounce = true;
   // ẩn hiện menu trái
   visibleFilterLeff = true;
   hideColumnState = 'visible';
@@ -103,56 +103,56 @@ export class HomeComponent implements OnInit {
   loadData(isFirst: boolean = false) {
     this.data = [];
 
-    if (this.landComplaint)
+    if (this.landComplain)
       this.data.push(
         ...this.mockData.filter(
           x => x.typeHoSo === typesHoSo.Complaint && x.fieldType === fieldsHoSo.Land
         )
       );
 
-    if (this.enviromentalComplaint)
+    if (this.enviromentalComplain)
       this.data.push(
         ...this.mockData.filter(
           x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Emviroment
         )
       );
 
-    if (this.waterResourceComplaint)
+    if (this.waterComplain)
       this.data.push(
         ...this.mockData.filter(
           x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Water
         )
       );
 
-    if (this.mineralResourceComplaint)
+    if (this.mineralComplain)
       this.data.push(
         ...this.mockData.filter(
           x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Mineral
         )
       );
 
-    if (this.landAccusation)
+    if (this.landDenounce)
       this.data.push(
         ...this.mockData.filter(
           x => x.typeHoSo === typesHoSo.Accusation && x.fieldType === fieldsHoSo.Land
         )
       );
 
-    if (this.emviromentalAccusation)
+    if (this.enviromentDenounce)
       this.data.push(
         ...this.mockData.filter(
           x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Emviroment
         )
       );
 
-    if (this.waterResourceAccusation)
+    if (this.waterDenounce)
       this.data.push(
         ...this.mockData.filter(
           x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Water
         )
       );
 
-    if (this.mineralResourceAccusation)
+    if (this.mineralDenounce)
       this.data.push(
         ...this.mockData.filter(
           x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Mineral

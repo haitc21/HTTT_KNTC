@@ -7,6 +7,7 @@ using KNTC.FileAttachments;
 using KNTC.LandTypes;
 using KNTC.Roles;
 using KNTC.SpatialDatas;
+using KNTC.Summaries;
 using KNTC.Units;
 using KNTC.UnitTypes;
 using KNTC.Users;
@@ -77,6 +78,8 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<SpatialData, SpatialDataDto>();
         CreateMap<SpatialData, SpatialDataLookupDto>();
         CreateMap<CreateAndUpdateSpatialDataDto, SpatialData>();
+
+        CreateMap<Summary, SummaryDto>();
 
 
     }
