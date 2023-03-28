@@ -17,6 +17,8 @@ import { EileUploadDto as FileUploadDto } from 'src/app/shared/models/file-uploa
 import { FileService } from 'src/app/shared/services/file.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
+import { type_EXCEL as TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-complain',
@@ -47,7 +49,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   maTinh: number;
   maHuyen: number;
   maXa: number;
-  thoiGianTiepNhanRange: Date[];
+  thoiGianTiepNhanRange: Date[] = null;
   giaiDoan: number;
   tinhTrang: number;
 
@@ -88,7 +90,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.home = {label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/'};
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
     this.getPermission();
     this.buildActionMenu();
     this.loadOptions();
@@ -113,27 +115,40 @@ export class ComplainComponent implements OnInit, OnDestroy {
     this.tinhTrang = null;
   }
 
-  
-  private buildBreadcrumb(){
-    this.breadcrumb = [
-      {label:' Khiếu nại', icon: 'pi pi-inbox', routerLink: '/pages/complain'}
-    ];
-    
+  private buildBreadcrumb() {
+    this.breadcrumb = [{ label: ' Khiếu nại', icon: 'pi pi-inbox', routerLink: '/pages/complain' }];
+
     switch (this.linhVuc) {
       case LinhVuc.DatDai:
-        this.breadcrumb.push({label:' Đất đai', icon: 'pi pi-image', routerLink: [`/pages/complain/${LinhVuc.DatDai}`]});
+        this.breadcrumb.push({
+          label: ' Đất đai',
+          icon: 'pi pi-image',
+          routerLink: [`/pages/complain/${LinhVuc.DatDai}`],
+        });
         break;
       case LinhVuc.MoiTruong:
-        this.breadcrumb.push({label:' Môi trường', icon: 'pi pi-sun', routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`]});
+        this.breadcrumb.push({
+          label: ' Môi trường',
+          icon: 'pi pi-sun',
+          routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`],
+        });
         break;
       case LinhVuc.TaiNguyenNuoc:
-        this.breadcrumb.push({label:' Tài nguyên nước', icon: 'pi pi-flag-fill', routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`]});
+        this.breadcrumb.push({
+          label: ' Tài nguyên nước',
+          icon: 'pi pi-flag-fill',
+          routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`],
+        });
         break;
       case LinhVuc.KhoangSan:
-        this.breadcrumb.push({label:' Khoáng sản', icon: 'pi pi-bitcoin', routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`]});
+        this.breadcrumb.push({
+          label: ' Khoáng sản',
+          icon: 'pi pi-bitcoin',
+          routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`],
+        });
         break;
       default:
-        //this.header = '';
+      //this.header = '';
     }
   }
 
@@ -217,7 +232,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
       this.filter = {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,
-        linhVuc: this.linhVuc
+        linhVuc: this.linhVuc,
       } as GetComplainListDto;
     } else {
       this.filter = {
@@ -227,9 +242,10 @@ export class ComplainComponent implements OnInit, OnDestroy {
         maTinhTP: this.maTinh,
         maQuanHuyen: this.maHuyen,
         maXaPhuongTT: this.maXa,
-        fromDate: this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
+        fromDate:
+          this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+            ? this.thoiGianTiepNhanRange[0].toUTCString()
+            : null,
         toDate:
           this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
             ? this.thoiGianTiepNhanRange[1].toUTCString()
@@ -255,6 +271,42 @@ export class ComplainComponent implements OnInit, OnDestroy {
         },
       });
     this.toggleBlockUI(false);
+  }
+  exportExcel() {
+    this.toggleBlockUI(true);
+    this.filter = {
+      maTinhTP: this.maTinh,
+      maQuanHuyen: this.maHuyen,
+      maXaPhuongTT: this.maXa,
+      fromDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+          ? this.thoiGianTiepNhanRange[0].toUTCString()
+          : null,
+      toDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+          ? this.thoiGianTiepNhanRange[1].toUTCString()
+          : null,
+      linhVuc: this.linhVuc,
+      ketQua: this.tinhTrang,
+      giaiDoan: this.giaiDoan,
+    } as GetComplainListDto;
+
+    this.complainService
+      .exxportExcelByInput(this.filter)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (data: any) => {
+          debugger
+          const uint8Array = this.utilService.base64ToArrayBuffer(data);
+          const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
+          let fileName = this.utilService.convertDateToLocal(new Date()) + "_Khiếu nại/Khiếu kiện.xlsx";
+          saveAs(blob, fileName);
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
   }
 
   pageChanged(event: any): void {

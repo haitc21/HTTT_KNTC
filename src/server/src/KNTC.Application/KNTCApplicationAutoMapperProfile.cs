@@ -43,7 +43,8 @@ public class KNTCApplicationAutoMapperProfile : Profile
 
 
         CreateMap<Complain, ComplainDto>();
-        CreateMap<Complain, ComplainListDto>();
+        CreateMap<Complain, ComplainInListDto>();
+        CreateMap<Complain, ComplainExcelDto>();
         CreateMap<CreateComplainDto, Complain>();
         CreateMap<UpdateComplainDto, Complain>();
 

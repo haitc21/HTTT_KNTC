@@ -24,9 +24,9 @@ public class UnitTypeAppService : CrudAppService<
     public UnitTypeAppService(IRepository<UnitType, int> repository, UnitTypeManager unitTypeManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
-        CreatePolicyName = KNTCPermissions.UnitType.Create;
-        UpdatePolicyName = KNTCPermissions.UnitType.Edit;
-        DeletePolicyName = KNTCPermissions.UnitType.Delete;
+        CreatePolicyName = KNTCPermissions.UnitTypePermission.Create;
+        UpdatePolicyName = KNTCPermissions.UnitTypePermission.Edit;
+        DeletePolicyName = KNTCPermissions.UnitTypePermission.Delete;
         _unitTypeManager = unitTypeManager;
     }
 
@@ -98,7 +98,7 @@ public class UnitTypeAppService : CrudAppService<
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
 
-    [Authorize(KNTCPermissions.UnitType.Delete)]
+    [Authorize(KNTCPermissions.UnitTypePermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);

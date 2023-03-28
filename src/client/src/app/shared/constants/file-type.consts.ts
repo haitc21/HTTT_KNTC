@@ -1,0 +1,1 @@
+export const type_EXCEL = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';

@@ -24,9 +24,9 @@ public class UnitAppService : CrudAppService<
     public UnitAppService(IRepository<Unit, int> repository, UnitManager unitManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
-        CreatePolicyName = KNTCPermissions.Unit.Create;
-        UpdatePolicyName = KNTCPermissions.Unit.Edit;
-        DeletePolicyName = KNTCPermissions.Unit.Delete;
+        CreatePolicyName = KNTCPermissions.UnitPermission.Create;
+        UpdatePolicyName = KNTCPermissions.UnitPermission.Edit;
+        DeletePolicyName = KNTCPermissions.UnitPermission.Delete;
         _unitManager = unitManager;
     }
     public async override Task<PagedResultDto<UnitDto>> GetListAsync(GetUnitListDto input)
@@ -114,7 +114,7 @@ public class UnitAppService : CrudAppService<
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
 
-    [Authorize(KNTCPermissions.Unit.Delete)]
+    [Authorize(KNTCPermissions.UnitPermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);

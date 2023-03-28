@@ -36,6 +36,15 @@ export class ComplainService {
     { apiName: this.apiName });
   
 
+  exxportExcelByInput = (input: GetComplainListDto) =>
+    this.restService.request<any, number[]>({
+      method: 'POST',
+      url: '/api/app/complain/exxport-excel',
+      body: input,
+    },
+    { apiName: this.apiName });
+  
+
   get = (id: string) =>
     this.restService.request<any, ComplainDto>({
       method: 'GET',

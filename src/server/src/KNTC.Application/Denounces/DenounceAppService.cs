@@ -87,7 +87,7 @@ public class DenounceAppService : CrudAppService<
             ObjectMapper.Map<List<Denounce>, List<DenounceDto>>(denounces)
         );
     }
-    [Authorize(KNTCPermissions.Denounces.Create)]
+    [Authorize(KNTCPermissions.DenouncesPermission.Create)]
     public override async Task<DenounceDto> CreateAsync(CreateDenounceDto input)
     {
         var denounce = await _denounceManager.CreateAsync(maHoSo: input.MaHoSo,
@@ -159,7 +159,7 @@ public class DenounceAppService : CrudAppService<
         }
         return result;
     }
-    [Authorize(KNTCPermissions.Denounces.Default)]
+    [Authorize(KNTCPermissions.DenouncesPermission.Default)]
     public override async Task<DenounceDto> UpdateAsync(Guid id, UpdateDenounceDto input)
     {
         var denounce = await _denounceRepo.GetAsync(id, false);
@@ -211,7 +211,7 @@ public class DenounceAppService : CrudAppService<
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }
 
-    [Authorize(KNTCPermissions.Denounces.Delete)]
+    [Authorize(KNTCPermissions.DenouncesPermission.Delete)]
     public override async Task DeleteAsync(Guid id)
     {
         var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.DenounceId)).Select(x => x.Id);
@@ -223,7 +223,7 @@ public class DenounceAppService : CrudAppService<
         await _denounceRepo.DeleteAsync(id);
     }
 
-    [Authorize(KNTCPermissions.Denounces.Delete)]
+    [Authorize(KNTCPermissions.DenouncesPermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
         var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Any(i => i == x.DenounceId))).Select(x => x.Id);

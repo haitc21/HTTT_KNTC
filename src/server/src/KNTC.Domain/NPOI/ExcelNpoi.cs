@@ -1,4 +1,5 @@
-﻿using NPOI.HSSF.UserModel;
+﻿using KNTC.Common;
+using NPOI.HSSF.UserModel;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
@@ -19,7 +20,6 @@ namespace KNTC.NPOI;
 
 public static class ExcelNpoi
 {
-    private static string DateTimeFormat = "dd/MM/yyyy";
     /// <summary>
     /// Tao Style cho o excel
     /// </summary>
@@ -459,7 +459,7 @@ public static class ExcelNpoi
             {
                 case CellType.Numeric:
                     if (HSSFDateUtil.IsCellDateFormatted(cell))
-                        result = cell.DateCellValue.ToString(DateTimeFormat);
+                        result = cell.DateCellValue.ToString(FormatType.FormatDateVN);
                     else
                         result = cell.NumericCellValue.ToString();
                     break;
@@ -518,7 +518,7 @@ public static class ExcelNpoi
             {
                 case CellType.Numeric:
                     if (HSSFDateUtil.IsCellDateFormatted(cell))
-                        result = new DateTime((long)cellValue.NumberValue).ToString(DateTimeFormat);
+                        result = new DateTime((long)cellValue.NumberValue).ToString(FormatType.FormatDateVN);
                     else
                         result = cellValue.NumberValue.ToString();
                     break;
@@ -531,49 +531,139 @@ public static class ExcelNpoi
         return result;
     }
 
-    public static void NOMCreateTable(this ISheet sheet, string tableName, List<string> headers, int rowStart, int colStart)
+    public static void WriteDMToTable(this ISheet sheet, List<DropdownItemValue> lst, string tableName, int numCol)
     {
+        if (lst == null || lst.Count == 0) return;
         XSSFSheet s = (XSSFSheet)sheet;
-        CellReference cellRefStart = new CellReference(rowStart, colStart);
-        CellReference cellRefEnd = new CellReference(rowStart + 1, colStart + headers.Count - 1);
-        AreaReference reference = new AreaReference(cellRefStart, cellRefEnd);
-        XSSFTable tbl = s.CreateTable();
-        tbl.Name = tableName;
-        tbl.DisplayName = tableName;
+        XSSFTable tbl = s.GetTables().Where(a => a.Name == tableName).FirstOrDefault();
+        if (tbl == null) return;
         CT_Table ctTBl = tbl.GetCTTable();
+        if (numCol < 2 || ctTBl.tableColumns.count < numCol) return;
+        CellReference cellRefStart = tbl.GetStartCellReference();
+        int rowStart = cellRefStart.Row + 1;
+        short colStart = cellRefStart.Col;
+        CellReference cellRefEnd = tbl.GetEndCellReference();
+        AreaReference reference = new AreaReference(cellRefStart, new CellReference(cellRefStart.Row + lst.Count, cellRefEnd.Col));
         ctTBl.insertRow = true;
         ctTBl.insertRowShift = true;
-        ctTBl.id = 1;
         ctTBl.@ref = reference.FormatAsString();
-        ctTBl.tableStyleInfo = new CT_TableStyleInfo();
-        ctTBl.tableStyleInfo.name = "TableStyleMedium9"; // TableStyleMedium2 is one of XSSFBuiltinTableStyle
-        ctTBl.tableStyleInfo.showRowStripes = true;
-        ctTBl.tableColumns = new CT_TableColumns();
-        ctTBl.tableColumns.tableColumn = new List<CT_TableColumn>();
-        uint index = 1;
-        var row = GetCreateRow(sheet, rowStart);
-        foreach (var header in headers)
+        IRow row = GetCreateRow(sheet, rowStart);
+        switch (numCol)
         {
-            var ctName = new CT_TableColumn();
-            ctName.name = "tbl.col" + index;
-            ctName.id = index++;
-            ctTBl.tableColumns.tableColumn.Add(ctName);
-            sheet.SetColumnWidth(colStart, 7500);
-            row.GetCreateCell(colStart++).SetCellValue(header);
+            case 3:
+                foreach (DropdownItemValue item in lst)
+                {
+                    row = GetCreateRow(sheet, rowStart++);
+
+                    row.GetCreateCell(colStart).SetCellValue(item.Id);
+
+                    row.GetCreateCell(colStart + 1).SetCellValue(item.Code);
+
+                    row.GetCreateCell(colStart + 2).SetCellValue(item.Value);
+
+                    row.GetCreateCell(colStart + 3).SetCellValue(item.Name);
+                }
+                break;
+
+            case 4:
+                foreach (DropdownItemValue item in lst)
+                {
+                    row = GetCreateRow(sheet, rowStart++);
+
+                    row.GetCreateCell(colStart).SetCellValue(item.Id);
+
+                    row.GetCreateCell(colStart + 1).SetCellValue(item.Code);
+
+                    row.GetCreateCell(colStart + 2).SetCellValue(item.Value);
+
+                    row.GetCreateCell(colStart + 3).SetCellValue(item.Name);
+                }
+                break;
+
+            case 2:
+            default:
+                foreach (DropdownItemValue item in lst)
+                {
+                    row = GetCreateRow(sheet, rowStart++);
+
+                    row.GetCreateCell(colStart).SetCellValue(item.Id);
+
+                    row.GetCreateCell(colStart + 1).SetCellValue(item.Code);
+
+                    row.GetCreateCell(colStart + 2).SetCellValue(item.Value);
+
+                    row.GetCreateCell(colStart + 3).SetCellValue(item.Name);
+                }
+                break;
         }
     }
 
-
-    public static IWorkbook ReadExcelToIWorkBook(byte[] content)
+    public static void WriteAddDMToTable(this ISheet sheet, List<DropdownItemValue> lst, string tableName, int numCol)
     {
-        IWorkbook templateWorkbook;
-        using (MemoryStream ms = new MemoryStream(content))
+        if (lst == null || lst.Count == 0) return;
+        XSSFSheet s = (XSSFSheet)sheet;
+        XSSFTable tbl = s.GetTables().Where(a => a.Name == tableName).FirstOrDefault();
+        if (tbl == null) return;
+        CT_Table ctTBl = tbl.GetCTTable();
+        if (numCol < 2 || ctTBl.tableColumns.count < numCol) return;
+        CellReference cellRefStart = tbl.GetStartCellReference();
+        int rowStart = cellRefStart.Row + tbl.RowCount + 1;
+        short colStart = cellRefStart.Col;
+        CellReference cellRefEnd = tbl.GetEndCellReference();
+        AreaReference reference = new AreaReference(cellRefStart, new CellReference(cellRefStart.Row + tbl.RowCount + lst.Count, cellRefEnd.Col));
+        ctTBl.insertRow = true;
+        ctTBl.insertRowShift = true;
+        ctTBl.@ref = reference.FormatAsString();
+        IRow row = GetCreateRow(sheet, rowStart);
+        switch (numCol)
         {
-            templateWorkbook = new XSSFWorkbook(ms);
-        };
-        return templateWorkbook;
-    }
+            case 3:
+                foreach (DropdownItemValue item in lst)
+                {
+                    row = GetCreateRow(sheet, rowStart++);
 
+                    row.GetCreateCell(colStart).SetCellValue(item.Id);
+
+                    row.GetCreateCell(colStart + 1).SetCellValue(item.Code);
+
+                    row.GetCreateCell(colStart + 2).SetCellValue(item.Value);
+
+                    row.GetCreateCell(colStart + 3).SetCellValue(item.Name);
+                }
+                break;
+
+            case 4:
+                foreach (DropdownItemValue item in lst)
+                {
+                    row = GetCreateRow(sheet, rowStart++);
+
+                    row.GetCreateCell(colStart).SetCellValue(item.Id);
+
+                    row.GetCreateCell(colStart + 1).SetCellValue(item.Code);
+
+                    row.GetCreateCell(colStart + 2).SetCellValue(item.Value);
+
+                    row.GetCreateCell(colStart + 3).SetCellValue(item.Name);
+                }
+                break;
+
+            case 2:
+            default:
+                foreach (DropdownItemValue item in lst)
+                {
+                    row = GetCreateRow(sheet, rowStart++);
+
+                    row.GetCreateCell(colStart).SetCellValue(item.Id);
+
+                    row.GetCreateCell(colStart + 1).SetCellValue(item.Code);
+
+                    row.GetCreateCell(colStart + 2).SetCellValue(item.Value);
+
+                    row.GetCreateCell(colStart + 3).SetCellValue(item.Name);
+                }
+                break;
+        }
+    }
 
     /// <summary>
     /// Đọc excel to IWorkBook
@@ -764,7 +854,11 @@ public static class ExcelNpoi
                 }
                 else if (lstCellValueType[j] == ExcelValueType.Number && dr[j] != DBNull.Value)
                 {
-                    cell.SetCellValue(dr[j].ToString());
+                    var val = Validate.ConvertDoubleAlowNull(dr[j].ToString(), null);
+                    if (val == null)
+                        cell.SetCellValue(dr[j].ToString());
+                    else
+                        cell.SetCellValue(val.Value);
                 }
                 else
                 {
@@ -775,6 +869,99 @@ public static class ExcelNpoi
             }
         }
         return wb;
+    }
+    public static IWorkbook WriteExcelByTemp<T>(List<T> dataList, string filePath, int rowStart, int colStart, bool isCount = false) where T : class
+    {
+        if (!File.Exists(filePath))
+            return null;
+
+        using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
+        {
+            var workbook = WorkbookFactory.Create(stream);
+
+            if (workbook == null)
+                return null;
+
+            var sheet = workbook.GetSheetAt(0);
+            var rowCount = dataList.Count;
+
+            if (rowCount == 0)
+                return workbook;
+
+            var colSTT = isCount ? 1 : 0;
+            var colCount = typeof(T).GetProperties().Length;
+
+            int indexRow = rowStart;
+            IRow row = sheet.GetRow(indexRow);
+
+            if (row.Cells.Count < colCount + colSTT)
+                return workbook;
+
+            ICellStyle[] lstCellStyle = new ICellStyle[colCount + colSTT];
+            ExcelValueType[] lstCellValueType = new ExcelValueType[colCount + colSTT];
+
+            ICell cell;
+            int indexCol = colStart;
+
+            if (isCount)
+            {
+                cell = row.GetCell(indexCol);
+                lstCellStyle[indexCol - colStart] = cell.CellStyle;
+                cell.SetCellValue(1);
+                indexCol++;
+            }
+
+            for (int i = 0; i < colCount; i++)
+            {
+                cell = row.GetCreateCell(indexCol);
+                var indexVal = indexCol - colStart;
+                lstCellStyle[indexVal] = cell.CellStyle;
+                lstCellValueType[i] = cell.GetCellValueType();
+                indexCol++;
+            }
+
+            foreach (var item in dataList)
+            {
+                row = sheet.GetCreateRow(indexRow++);
+                indexCol = colStart;
+
+                if (isCount)
+                {
+                    cell = row.CreateCell(indexCol);
+                    cell.SetCellValue(indexRow - rowStart);
+                    cell.CellStyle = lstCellStyle[indexCol - colStart];
+                    indexCol++;
+                }
+
+                PropertyInfo[] properties = item.GetType().GetProperties();
+                for (int j = 0; j < colCount; j++)
+                {
+                    cell = row.CreateCell(indexCol);
+
+                    if (lstCellValueType[j] == ExcelValueType.Date)
+                    {
+                        if (DateTime.TryParse(properties[j].GetValue(item)?.ToString(), out DateTime dateValue))
+                            cell.SetCellValue(dateValue);
+                    }
+                    else if (lstCellValueType[j] == ExcelValueType.Number)
+                    {
+                        if (double.TryParse(properties[j].GetValue(item)?.ToString(), out double numericValue))
+                            cell.SetCellValue(numericValue);
+                        else
+                            cell.SetCellValue(properties[j].GetValue(item)?.ToString());
+                    }
+                    else
+                    {
+                        cell.SetCellValue(properties[j].GetValue(item)?.ToString());
+                    }
+
+                    cell.CellStyle = lstCellStyle[indexCol - colStart];
+                    indexCol++;
+                }
+            }
+
+            return workbook;
+        }
     }
 
     /// <summary>/// <summary>
@@ -856,7 +1043,11 @@ public static class ExcelNpoi
                 }
                 else if (lstCellValueType[j] == ExcelValueType.Number && dr[j] != DBNull.Value)
                 {
-                    cell.SetCellValue(dr[j].ToString());
+                    var val = Validate.ConvertDoubleAlowNull(dr[j].ToString(), null);
+                    if (val == null)
+                        cell.SetCellValue(dr[j].ToString());
+                    else
+                        cell.SetCellValue(val.Value);
                 }
                 else
                 {
@@ -958,7 +1149,11 @@ public static class ExcelNpoi
                 }
                 else if (lstCellValueType[j] == ExcelValueType.Number && dr[j] != DBNull.Value)
                 {
-                    cell.SetCellValue(dr[j].ToString());
+                    var val = Validate.ConvertDoubleAlowNull(dr[j].ToString(), null);
+                    if (val == null)
+                        cell.SetCellValue(dr[j].ToString());
+                    else
+                        cell.SetCellValue(val.Value);
                 }
                 else
                 {
@@ -1032,7 +1227,7 @@ public static class ExcelNpoi
                     {
                         case CellType.Numeric:
                             if (HSSFDateUtil.IsCellDateFormatted(cell))
-                                dr[i] = cell.DateCellValue.ToString(DateTimeFormat);
+                                dr[i] = cell.DateCellValue.ToString(FormatType.FormatDateVN);
                             else
                                 dr[i] = cell.NumericCellValue.ToString();
                             hashValue = true;
@@ -1099,7 +1294,7 @@ public static class ExcelNpoi
                     {
                         case CellType.Numeric:
                             if (HSSFDateUtil.IsCellDateFormatted(cell))
-                                dr[i] = cell.DateCellValue.ToString(DateTimeFormat);
+                                dr[i] = cell.DateCellValue.ToString(FormatType.FormatDateVN);
                             else
                                 dr[i] = cell.NumericCellValue.ToString();
                             hashValue = true;

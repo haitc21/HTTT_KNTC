@@ -197,7 +197,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         maTinhTP: this.maTinh,
         maQuanHuyen: this.maHuyen,
         maXaPhuongTT: this.maXa,
-        fromDate: this.thoiGianTiepNhanRange[0]
+        fromDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
           ? this.thoiGianTiepNhanRange[0].toUTCString()
           : null,
         toDate:

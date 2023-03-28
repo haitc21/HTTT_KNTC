@@ -24,9 +24,9 @@ public class ConfigAppService : CrudAppService<
     public ConfigAppService(IRepository<Config, int> repository, ConfigManager configManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
-        CreatePolicyName = KNTCPermissions.UnitType.Create;
-        UpdatePolicyName = KNTCPermissions.UnitType.Edit;
-        DeletePolicyName = KNTCPermissions.UnitType.Delete;
+        CreatePolicyName = KNTCPermissions.UnitTypePermission.Create;
+        UpdatePolicyName = KNTCPermissions.UnitTypePermission.Edit;
+        DeletePolicyName = KNTCPermissions.UnitTypePermission.Delete;
         _configManager = configManager;
     }
 

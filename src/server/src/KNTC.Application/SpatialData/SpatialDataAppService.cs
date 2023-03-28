@@ -27,9 +27,9 @@ public class SpatialDataAppService : CrudAppService<
     public SpatialDataAppService(IRepository<SpatialData, int> repository, SpatialDataManager spatialDataManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
-        CreatePolicyName = KNTCPermissions.SpatialDatas.Create;
-        UpdatePolicyName = KNTCPermissions.SpatialDatas.Edit;
-        DeletePolicyName = KNTCPermissions.SpatialDatas.Delete;
+        CreatePolicyName = KNTCPermissions.SpatialDatasPermission.Create;
+        UpdatePolicyName = KNTCPermissions.SpatialDatasPermission.Edit;
+        DeletePolicyName = KNTCPermissions.SpatialDatasPermission.Delete;
         _spatialDataManager = spatialDataManager;
     }
 
@@ -90,7 +90,7 @@ public class SpatialDataAppService : CrudAppService<
         return ObjectMapper.Map<SpatialData, SpatialDataDto>(entity);
     }
 
-    [Authorize(KNTCPermissions.SpatialDatas.Delete)]
+    [Authorize(KNTCPermissions.SpatialDatasPermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);
