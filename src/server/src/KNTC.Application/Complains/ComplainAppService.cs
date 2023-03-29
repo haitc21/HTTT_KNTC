@@ -63,6 +63,7 @@ public class ComplainAppService : CrudAppService<
     [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
     {
+        var d = DateTime.Now;
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = nameof(Complain.MaHoSo);
@@ -156,7 +157,7 @@ public class ComplainAppService : CrudAppService<
             {
                 var fileAttach = await _fileAttachmentManager.CreateAsync(loaiVuViec: LoaiVuViec.KhieuNai,
                                                                      complainId: complain.Id,
-                                                                     DenounceId: null,
+                                                                     denounceId: null,
                                                                      giaiDoan: item.GiaiDoan,
                                                                      tenTaiLieu: item.TenTaiLieu,
                                                                      hinhThuc: item.HinhThuc,
@@ -363,13 +364,17 @@ public class ComplainAppService : CrudAppService<
             var toDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.ToDate.Value, TimeZoneInfo.Local);
             denNgay = toDateGmt7.ToString(FormatType.FormatDateVN);
         }
-        row = sheet.GetCreateRow(8);
-        cell = row.GetCreateCell(4);
-        cell.SetCellValue(tuNgay + " - " + denNgay);
-        cell.CellStyle.WrapText = false;
-        cell.CellStyle.SetFont(font);
 
-        string giaiDoan = "";
+        if(!tuNgay.IsNullOrEmpty() && !denNgay.IsNullOrEmpty())
+        {
+            row = sheet.GetCreateRow(8);
+            cell = row.GetCreateCell(4);
+            cell.SetCellValue(tuNgay + " - " + denNgay);
+            cell.CellStyle.WrapText = false;
+            cell.CellStyle.SetFont(font);
+        }
+
+        string giaiDoan = "Tất cả";
         if (input.GiaiDoan.HasValue)
         {
             if (input.GiaiDoan == 1)
@@ -383,7 +388,7 @@ public class ComplainAppService : CrudAppService<
         cell.CellStyle.WrapText = false;
         cell.CellStyle.SetFont(font);
 
-        string ketQua = "";
+        string ketQua = "Tất cả";
         if (input.KetQua.HasValue)
         {
             switch (input.KetQua)

@@ -181,9 +181,9 @@ public class KNTCDbContext :
             b.Property(x => x.DienTich).IsRequired().HasColumnName("dien_tich");
             b.Property(x => x.LoaiDat).IsRequired().HasColumnName("loai_dat");
             b.Property(x => x.DiaChiThuaDat).IsRequired().HasColumnName("dia_chi_thua_dat").HasMaxLength(KNTCValidatorConsts.MaxDiaChiLength);
-            b.Property(x => x.tinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat");
-            b.Property(x => x.huyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat");
-            b.Property(x => x.xaThuaDat).IsRequired().HasColumnName("xa_thua_dat");
+            b.Property(x => x.TinhThuaDat).IsRequired().IsRequired().HasColumnName("tinh_thua_dat");
+            b.Property(x => x.HuyenThuaDat).IsRequired().HasColumnName("huyen_thua_dat");
+            b.Property(x => x.XaThuaDat).IsRequired().HasColumnName("xa_thua_dat");
 
             b.Property(x => x.DuLieuToaDo).HasColumnName("du_lieu_toa_do").HasMaxLength(KNTCValidatorConsts.MaxToaDoLength);
             b.Property(x => x.DuLieuHinhHoc).HasColumnName("du_lieu_hinh_hoc").HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);

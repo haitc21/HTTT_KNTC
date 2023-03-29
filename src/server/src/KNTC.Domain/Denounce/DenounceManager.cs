@@ -128,9 +128,9 @@ public class DenounceManager : DomainService
             DienTich = dienTich,
             LoaiDat = loaiDat,
             DiaChiThuaDat = diaChiThuaDat,
-            tinhThuaDat = tinhThuaDat,
-            huyenThuaDat = huyenThuaDat,
-            xaThuaDat = xaThuaDat,
+            TinhThuaDat = tinhThuaDat,
+            HuyenThuaDat = huyenThuaDat,
+            XaThuaDat = xaThuaDat,
             DuLieuToaDo = duLieuToaDo,
             DuLieuHinhHoc = duLieuHinhHoc,
             GhiChu = GhiChu,
@@ -267,9 +267,9 @@ public class DenounceManager : DomainService
         denounce.DienTich = dienTich;
         denounce.LoaiDat = loaiDat;
         denounce.DiaChiThuaDat = diaChiThuaDat;
-        denounce.tinhThuaDat = tinhThuaDat;
-        denounce.huyenThuaDat = huyenThuaDat;
-        denounce.xaThuaDat = xaThuaDat;
+        denounce.TinhThuaDat = tinhThuaDat;
+        denounce.HuyenThuaDat = huyenThuaDat;
+        denounce.XaThuaDat = xaThuaDat;
         denounce.DuLieuToaDo = duLieuToaDo;
         denounce.DuLieuHinhHoc = duLieuHinhHoc;
         denounce.GhiChu = GhiChu;

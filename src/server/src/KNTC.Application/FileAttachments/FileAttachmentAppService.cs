@@ -76,7 +76,7 @@ public class FileAttachmentAppService : CrudAppService<
     {
         var entity = await _fileAttachmentManager.CreateAsync(loaiVuViec: input.LoaiVuViec,
                                                              complainId: input.ComplainId,
-                                                             DenounceId: input.DenounceId,
+                                                             denounceId: input.DenounceId,
                                                              giaiDoan: input.GiaiDoan,
                                                              tenTaiLieu: input.TenTaiLieu,
                                                              hinhThuc: input.HinhThuc,

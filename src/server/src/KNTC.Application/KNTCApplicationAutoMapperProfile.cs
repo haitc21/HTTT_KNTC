@@ -3,6 +3,7 @@ using KNTC.Complains;
 using KNTC.Configs;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
+using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.LandTypes;
 using KNTC.Roles;
@@ -44,12 +45,17 @@ public class KNTCApplicationAutoMapperProfile : Profile
 
         CreateMap<Complain, ComplainDto>();
         CreateMap<Complain, ComplainInListDto>();
-        CreateMap<Complain, ComplainExcelDto>();
+        CreateMap<Complain, ComplainExcelDto>()
+                        .ForMember(dto => dto.KetQua1, opt => opt.MapFrom(c => c.KetQua1.HasValue ? c.KetQua1.Value.ToVietnameseString() : string.Empty))
+                        .ForMember(dto => dto.KetQua2, opt => opt.MapFrom(c => c.KetQua2.HasValue ? c.KetQua2.Value.ToVietnameseString() : string.Empty))
+                        .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVietnameseString() : string.Empty));
         CreateMap<CreateComplainDto, Complain>();
         CreateMap<UpdateComplainDto, Complain>();
 
         CreateMap<Denounce, DenounceDto>();
-        CreateMap<Denounce, UnitTypeListDto>();
+        CreateMap<Denounce, DenounceInListDto>();
+        CreateMap<Denounce, DenounceExcelDto>()
+                        .ForMember(dto => dto.KetQua, opt => opt.MapFrom(denounce => denounce.KetQua.ToVietnameseString()));
         CreateMap<CreateDenounceDto, Denounce>();
         CreateMap<UpdateDenounceDto, Denounce>();
 

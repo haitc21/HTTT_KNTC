@@ -328,17 +328,17 @@
                 <td>{{ row.nguoiDeNghi }}</td>
                 <td>{{ row.maQuanHuyen }} - {{row.maXaPhuongTT}}</td>
                 <td>
-                  {{ utilService.convertDateToLocal(row?.thoiGianTiepNhan) | date : 'dd-MM-yyyy hh:mm' }}
+                  {{ row?.thoiGianTiepNhan | date : 'dd-MM-yyyy HH:mm' }}
                 </td>
                 <td>{{ loaiVuviecOptions[row.type]?.text}}</td>
                 <td>{{ linhVucOptions[row.linhVuc]?.text}}</td>
                 <td>{{ row.boPhanDangXL }}</td>
                 <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
-                  {{ utilService.convertDateToLocal(row?.ngayTraKQ1) | date : 'dd-MM-yyyy' }}
+                  {{ row?.ngayTraKQ1 | date : 'dd-MM-yyyy' }}
                 </td>
                 <td>{{ loaiKQOptions[row.ketQua1]}}</td>
                 <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
-                  {{ utilService.convertDateToLocal(row?.ngayTraKQ2) | date : 'dd-MM-yyyy' }}
+                  {{ row?.ngayTraKQ2 | date : 'dd-MM-yyyy' }}
                 </td>
                 <td>{{ loaiKQOptions[row.ketQua2]}}</td>
               </tr>

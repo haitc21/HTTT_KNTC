@@ -17,7 +17,7 @@ import { EileUploadDto as FileUploadDto } from 'src/app/shared/models/file-uploa
 import { FileService } from 'src/app/shared/services/file.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
-import { type_EXCEL as TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { saveAs } from 'file-saver';
 
 @Component({

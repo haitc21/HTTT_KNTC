@@ -144,6 +144,7 @@
           label="Xuất exel"
           icon="pi pi-download"
           class="p-button-info mr-2"
+          (click)="exportExcel()"
         ></button>
         <button
           type="button"
@@ -196,10 +197,10 @@
           <td>{{ row.nguoiGQTC }}</td>
           <td>{{ row.tieuDe }}</td>
           <td>
-            {{ utilService.convertDateToLocal(row?.thoiGianTiepNhan) | date : 'dd-MM-yyyy hh:mm' }}
+            {{ row?.thoiGianTiepNhan | date : 'dd-MM-yyyy HH:mm' }}
           </td>
           <td>
-            {{ utilService.convertDateToLocal(row?.thoiGianHenTraKQ) | date : 'dd-MM-yyyy hh:mm' }}
+            {{ row?.thoiGianHenTraKQ | date : 'dd-MM-yyyy HH:mm' }}
           </td>
           <td>{{ row?.boPhanDangXL }}</td>
           <td>{{ getLoaiKetQua(row?.ketQua) }}</td>

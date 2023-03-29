@@ -1,11 +1,16 @@
-﻿using KNTC.Complains;
+﻿using KNTC.Denounces;
 using KNTC.FileAttachments;
 using KNTC.Localization;
+using KNTC.NPOI;
 using KNTC.Permissions;
+using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -29,13 +34,17 @@ public class DenounceAppService : CrudAppService<
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
     private readonly FileAttachmentManager _fileAttachmentManager;
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
+    private readonly IHostEnvironment _env;
+    private readonly IRepository<Unit, int> _unitRepo;
 
     public DenounceAppService(IRepository<Denounce, Guid> repository,
         IDenounceRepository denounceRepo,
         DenounceManager denounceManager,
         IRepository<FileAttachment, Guid> fileAttachmentRepo,
         IBlobContainer<FileAttachmentContainer> blobContainer,
-        FileAttachmentManager fileAttachmentManager) : base(repository)
+        FileAttachmentManager fileAttachmentManager,
+        IHostEnvironment env,
+        IRepository<Unit, int> unitRepo) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
@@ -44,6 +53,8 @@ public class DenounceAppService : CrudAppService<
         _denounceManager = denounceManager;
         _blobContainer = blobContainer;
         _fileAttachmentManager = fileAttachmentManager;
+        _env = env;
+        _unitRepo = unitRepo;
     }
 
     [AllowAnonymous]
@@ -115,9 +126,9 @@ public class DenounceAppService : CrudAppService<
                                                   dienTich: input.DienTich,
                                                   loaiDat: input.LoaiDat,
                                                   diaChiThuaDat: input.DiaChiThuaDat,
-                                                  tinhThuaDat: input.tinhThuaDat,
-                                                  huyenThuaDat: input.huyenThuaDat,
-                                                  xaThuaDat: input.xaThuaDat,
+                                                  tinhThuaDat: input.TinhThuaDat,
+                                                  huyenThuaDat: input.HuyenThuaDat,
+                                                  xaThuaDat: input.XaThuaDat,
                                                   duLieuToaDo: input.DuLieuToaDo,
                                                   duLieuHinhHoc: input.DuLieuHinhHoc,
                                                   GhiChu: input.GhiChu,
@@ -142,7 +153,7 @@ public class DenounceAppService : CrudAppService<
             {
                 var fileAttach = await _fileAttachmentManager.CreateAsync(loaiVuViec: LoaiVuViec.ToCao,
                                                                      complainId: null,
-                                                                     DenounceId: denounce.Id,
+                                                                     denounceId: denounce.Id,
                                                                      giaiDoan: item.GiaiDoan,
                                                                      tenTaiLieu: item.TenTaiLieu,
                                                                      hinhThuc: item.HinhThuc,
@@ -190,9 +201,9 @@ public class DenounceAppService : CrudAppService<
                                           dienTich: input.DienTich,
                                           loaiDat: input.LoaiDat,
                                           diaChiThuaDat: input.DiaChiThuaDat,
-                                          tinhThuaDat: input.tinhThuaDat,
-                                          huyenThuaDat: input.huyenThuaDat,
-                                          xaThuaDat: input.xaThuaDat,
+                                          tinhThuaDat: input.TinhThuaDat,
+                                          huyenThuaDat: input.HuyenThuaDat,
+                                          xaThuaDat: input.XaThuaDat,
                                           duLieuToaDo: input.DuLieuToaDo,
                                           duLieuHinhHoc: input.DuLieuHinhHoc,
                                           GhiChu: input.GhiChu,
@@ -233,5 +244,176 @@ public class DenounceAppService : CrudAppService<
             await _blobContainer.DeleteAsync(item.ToString());
         }
         await _denounceRepo.DeleteManyAsync(ids);
+    }
+
+
+
+    [AllowAnonymous]
+    public async Task<byte[]> GetExcelAsync(GetDenounceListDto input)
+    {
+        if (input.Sorting.IsNullOrWhiteSpace())
+        {
+            input.Sorting = nameof(Denounce.MaHoSo);
+        }
+        var denounces = await _denounceRepo.GetDataExportAsync(
+            input.Sorting,
+            input.LinhVuc,
+            input.KetQua,
+            input.maTinhTP,
+            input.maQuanHuyen,
+            input.maXaPhuongTT,
+            input.FromDate,
+            input.ToDate,
+            input.CongKhaiKLGQTC
+        );
+        if (denounces == null) return null;
+
+        var denounceDto = ObjectMapper.Map<List<Denounce>, List<DenounceExcelDto>>(denounces);
+
+        var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "Denounce.xlsx");
+        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<DenounceExcelDto>(denounceDto, templatePath, 14, 0, true);
+        if (wb == null) return null;
+
+        ISheet sheet = wb.GetSheetAt(0);
+        ICellStyle cellStyle = wb.CreateCellStyle();
+        cellStyle.BorderLeft = BorderStyle.Thin;
+        cellStyle.BorderBottom = BorderStyle.Thin;
+        cellStyle.BorderRight = BorderStyle.Thin;
+        var font = wb.CreateFont();
+        font.IsBold = false;
+        font.FontName = "Times New Roman";
+        cellStyle.SetFont(font);
+
+        string linhVuc = "Tất cả";
+        if (input.LinhVuc != null)
+        {
+            switch (input.LinhVuc)
+            {
+                case LinhVuc.DatDai:
+                    linhVuc = "Đất đai";
+                    break;
+                case LinhVuc.MoiTruong:
+                    linhVuc = "Mỗi trường";
+                    break;
+                case LinhVuc.TaiNguyenNuoc:
+                    linhVuc = "tài nguyên nước";
+                    break;
+                case LinhVuc.KhoangSan:
+                    linhVuc = "Khoáng sản";
+                    break;
+                default:
+                    linhVuc = "";
+                    break;
+            }
+        }
+        IRow row = sheet.GetCreateRow(4);
+        var cell = row.GetCreateCell(4);
+        cell.SetCellValue(linhVuc);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tenTinh = "Tất cả";
+        if (input.maTinhTP != null)
+        {
+            var tinh = await _unitRepo.GetAsync(x => x.Id == input.maTinhTP);
+            tenTinh = tinh.UnitName;
+        }
+        row = sheet.GetCreateRow(5);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tenTinh);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tenHuyen = "Tất cả";
+        if (input.maQuanHuyen != null)
+        {
+            var huyen = await _unitRepo.GetAsync(x => x.Id == input.maQuanHuyen);
+            tenHuyen = huyen.UnitName;
+        }
+        row = sheet.GetCreateRow(6);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tenHuyen);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tenXa = "Tất cả";
+        if (input.maXaPhuongTT != null)
+        {
+            var xa = await _unitRepo.GetAsync(x => x.Id == input.maXaPhuongTT);
+            tenXa = xa.UnitName;
+        }
+        row = sheet.GetCreateRow(7);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tenXa);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tuNgay = "";
+        if (input.FromDate.HasValue)
+        {
+            var fromDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.FromDate.Value, TimeZoneInfo.Local);
+            tuNgay = fromDateGmt7.ToString(FormatType.FormatDateVN);
+        }
+
+
+        string denNgay = "";
+        if (input.ToDate.HasValue)
+        {
+            var toDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.ToDate.Value, TimeZoneInfo.Local);
+            denNgay = toDateGmt7.ToString(FormatType.FormatDateVN);
+        }
+        if(!tuNgay.IsNullOrEmpty() && !denNgay.IsNullOrEmpty())
+        {
+            row = sheet.GetCreateRow(8);
+            cell = row.GetCreateCell(4);
+            cell.SetCellValue(tuNgay + " - " + denNgay);
+            cell.CellStyle.WrapText = false;
+            cell.CellStyle.SetFont(font);
+        }
+
+        string ketQua = "Tất cả";
+        if (input.KetQua.HasValue)
+        {
+            switch (input.KetQua)
+            {
+                case LoaiKetQua.Dung:
+                    ketQua = "Đúng";
+                    break;
+                case LoaiKetQua.Sai:
+                    ketQua = "Sai";
+                    break;
+                case LoaiKetQua.CoDungCoSai:
+                    ketQua = "Có đúng có sai";
+                    break;
+                default:
+                    ketQua = "";
+                    break;
+            }
+        }
+        row = sheet.GetCreateRow(9);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(ketQua);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string congKhai = "Tất cả";
+        if (input.CongKhaiKLGQTC.HasValue)
+        {
+            congKhai = input.CongKhaiKLGQTC.Value == true ? "Công khai kế quả" : "Không công khai";
+
+        }
+        row = sheet.GetCreateRow(10);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(congKhai);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        using (var stream = new MemoryStream())
+        {
+            wb.Write(stream);
+            wb.Close();
+            return stream.ToArray();
+        }
+
     }
 }

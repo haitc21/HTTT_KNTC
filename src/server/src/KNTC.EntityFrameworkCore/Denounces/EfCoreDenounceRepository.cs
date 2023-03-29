@@ -82,4 +82,52 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
         var dbSet = await GetDbSetAsync();
         return await dbSet.FirstOrDefaultAsync(x => x.MaHoSo == maHoSo);
     }
+
+    public async Task<List<Denounce>> GetDataExportAsync(string sorting,
+                                                   LinhVuc? linhVuc,
+                                                   LoaiKetQua? ketQua,
+                                                   int? maTinhTp,
+                                                   int? maQuanHuyen,
+                                                   int? maXaPhuongTT,
+                                                   DateTime? fromDate,
+                                                   DateTime? toDate,
+                                                   bool? CongKhaiKLGQTC)
+    {
+        var dbSet = await GetDbSetAsync();
+        return await dbSet
+            .WhereIf(
+                linhVuc.HasValue,
+                x => x.LinhVuc == linhVuc
+             )
+             .WhereIf(
+                ketQua.HasValue,
+                x => x.KetQua == ketQua
+             )
+             .WhereIf(
+                maTinhTp.HasValue,
+                x => x.MaTinhTP == maTinhTp
+             )
+             .WhereIf(
+                maQuanHuyen.HasValue,
+                x => x.MaQuanHuyen == maQuanHuyen
+             )
+             .WhereIf(
+                maXaPhuongTT.HasValue,
+                x => x.MaXaPhuongTT == maXaPhuongTT
+             )
+             .WhereIf(
+                fromDate.HasValue,
+                x => x.ThoiGianTiepNhan >= fromDate
+             )
+             .WhereIf(
+                toDate.HasValue,
+                x => x.ThoiGianTiepNhan <= toDate
+             )
+             .WhereIf(
+                CongKhaiKLGQTC.HasValue,
+                x => x.CongKhaiKLGQTC == CongKhaiKLGQTC
+             )
+            .OrderBy(sorting)
+            .ToListAsync();
+    }
 }

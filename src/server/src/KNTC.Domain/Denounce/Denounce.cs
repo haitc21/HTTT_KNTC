@@ -45,9 +45,9 @@ public class Denounce : FullAuditedAggregateRoot<Guid>
     public decimal DienTich { get; set; }
     public int LoaiDat { get; set; }
     public string DiaChiThuaDat { get; set; }
-    public int tinhThuaDat { get; set; }
-    public int huyenThuaDat { get; set; }
-    public int xaThuaDat { get; set; }
+    public int TinhThuaDat { get; set; }
+    public int HuyenThuaDat { get; set; }
+    public int XaThuaDat { get; set; }
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }

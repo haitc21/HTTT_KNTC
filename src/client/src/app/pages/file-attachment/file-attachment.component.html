@@ -87,8 +87,8 @@
           <td>{{ row.tenTaiLieu }}</td>
           <td>{{ getGiaiDoan(row.giaiDoan) }}</td>
           <td>{{ getHinhThuc(row.hinhThuc) }}</td>
-          <td>{{ utilService.convertDateToLocal(row?.ngayNhan) | date : 'dd-MM-yyyy' }}</td>
-          <td>{{ utilService.convertDateToLocal(row?.thoiGianBanHanh) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row?.ngayNhan | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row?.thoiGianBanHanh | date : 'dd-MM-yyyy' }}</td>
           <td>{{ row.thuTuButLuc }}</td>
           <td>
             <p-tieredMenu
@@ -201,8 +201,8 @@
           <td>{{ row.tenTaiLieu }}</td>
           <td>{{ getGiaiDoan(row.giaiDoan) }}</td>
           <td>{{ getHinhThuc(row.hinhThuc) }}</td>
-          <td>{{ utilService.convertDateToLocal(row?.ngayNhan) | date : 'dd-MM-yyyy' }}</td>
-          <td>{{ utilService.convertDateToLocal(row?.thoiGianBanHanh) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row?.ngayNhan | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row?.thoiGianBanHanh | date : 'dd-MM-yyyy' }}</td>
           <td>{{ row.thuTuButLuc }}</td>
           <td>
             <p-tieredMenu

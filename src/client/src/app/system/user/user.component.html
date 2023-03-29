@@ -94,7 +94,7 @@
           <td>{{ row.surname ? row.surname + ' ' + row.name : row.name }}</td>
           <td>{{ row.email }}</td>
           <td>{{ row.phoneNumber }}</td>
-          <td>{{ utilService.convertDateToLocal(row?.dob) | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row?.dob | date : 'dd-MM-yyyy' }}</td>
           <td>
             <p-tag
               [severity]="row.isActive ? 'info' : 'warning'"
@@ -121,7 +121,7 @@
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem;"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>

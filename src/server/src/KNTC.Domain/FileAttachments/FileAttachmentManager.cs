@@ -28,7 +28,7 @@ public class FileAttachmentManager : DomainService
     }
     public async Task<FileAttachment> CreateAsync([NotNull] LoaiVuViec loaiVuViec,
                                                    Guid? complainId,
-                                                   Guid? DenounceId,
+                                                   Guid? denounceId,
                                                    [NotNull] int giaiDoan,
                                                    [NotNull] string tenTaiLieu,
                                                    [NotNull] int hinhThuc,
@@ -54,7 +54,7 @@ public class FileAttachmentManager : DomainService
         var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
                                                      && (
                                                      (loaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == complainId)
-                                                     || (loaiVuViec == LoaiVuViec.ToCao && x.DenounceId == DenounceId)
+                                                     || (loaiVuViec == LoaiVuViec.ToCao && x.DenounceId == denounceId)
                                                      ));
         if (existTepDinhKem != null)
         {
@@ -76,7 +76,7 @@ public class FileAttachmentManager : DomainService
         return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
         {
             ComplainId= complainId,
-            DenounceId = DenounceId,
+            DenounceId = denounceId,
             GiaiDoan = giaiDoan,
             HinhThuc = hinhThuc,
             ThoiGianBanHanh = thoiGianBanHanh,

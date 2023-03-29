@@ -17,6 +17,8 @@ import { EileUploadDto as FileUploadDto } from 'src/app/shared/models/file-uploa
 import { FileService } from 'src/app/shared/services/file.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
+import { saveAs } from 'file-saver';
+import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 
 @Component({
   selector: 'app-denounce',
@@ -54,7 +56,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
-  
+
   loaiKQOptions = [
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
@@ -187,7 +189,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
       this.filter = {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,
-        linhVuc: this.linhVuc
+        linhVuc: this.linhVuc,
       } as GetDenounceListDto;
     } else {
       this.filter = {
@@ -197,9 +199,10 @@ export class DenounceComponent implements OnInit, OnDestroy {
         maTinhTP: this.maTinh,
         maQuanHuyen: this.maHuyen,
         maXaPhuongTT: this.maXa,
-        fromDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
+        fromDate:
+          this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+            ? this.thoiGianTiepNhanRange[0].toUTCString()
+            : null,
         toDate:
           this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
             ? this.thoiGianTiepNhanRange[1].toUTCString()
@@ -207,7 +210,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         ketQua: this.tinhTrang,
         giaiDoan: this.giaiDoan,
-        congKhaiKLGQTC: this.congKhaiKLGQTC
+        congKhaiKLGQTC: this.congKhaiKLGQTC,
       } as GetDenounceListDto;
     }
 
@@ -226,6 +229,46 @@ export class DenounceComponent implements OnInit, OnDestroy {
         },
       });
     this.toggleBlockUI(false);
+  }
+
+  exportExcel() {
+    this.toggleBlockUI(true);
+    this.filter = {
+      skipCount: this.skipCount,
+      maxResultCount: this.maxResultCount,
+      keyword: this.keyword,
+      maTinhTP: this.maTinh,
+      maQuanHuyen: this.maHuyen,
+      maXaPhuongTT: this.maXa,
+      fromDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+          ? this.thoiGianTiepNhanRange[0].toUTCString()
+          : null,
+      toDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+          ? this.thoiGianTiepNhanRange[1].toUTCString()
+          : null,
+      linhVuc: this.linhVuc,
+      ketQua: this.tinhTrang,
+      giaiDoan: this.giaiDoan,
+      congKhaiKLGQTC: this.congKhaiKLGQTC,
+    } as GetDenounceListDto;
+    this.denounceService
+      .getExcel(this.filter)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (data: any) => {
+          const uint8Array = this.utilService.base64ToArrayBuffer(data);
+          const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
+          let fileName =
+            this.utilService.convertDateToLocal(new Date()) + '_Tố cáo.xlsx';
+          saveAs(blob, fileName);
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
   }
 
   pageChanged(event: any): void {
