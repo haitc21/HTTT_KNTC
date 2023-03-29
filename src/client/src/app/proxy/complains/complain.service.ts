@@ -36,19 +36,19 @@ export class ComplainService {
     { apiName: this.apiName });
   
 
-  exxportExcelByInput = (input: GetComplainListDto) =>
-    this.restService.request<any, number[]>({
-      method: 'POST',
-      url: '/api/app/complain/exxport-excel',
-      body: input,
-    },
-    { apiName: this.apiName });
-  
-
   get = (id: string) =>
     this.restService.request<any, ComplainDto>({
       method: 'GET',
       url: `/api/app/complain/${id}`,
+    },
+    { apiName: this.apiName });
+  
+
+  getExcel = (input: GetComplainListDto) =>
+    this.restService.request<any, number[]>({
+      method: 'GET',
+      url: '/api/app/complain/excel',
+      params: { maTinhTP: input.maTinhTP, maQuanHuyen: input.maQuanHuyen, maXaPhuongTT: input.maXaPhuongTT, fromDate: input.fromDate, toDate: input.toDate, linhVuc: input.linhVuc, ketQua: input.ketQua, giaiDoan: input.giaiDoan, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
   

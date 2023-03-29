@@ -275,6 +275,9 @@ export class ComplainComponent implements OnInit, OnDestroy {
   exportExcel() {
     this.toggleBlockUI(true);
     this.filter = {
+      skipCount: this.skipCount,
+      maxResultCount: this.maxResultCount,
+      keyword: this.keyword,
       maTinhTP: this.maTinh,
       maQuanHuyen: this.maHuyen,
       maXaPhuongTT: this.maXa,
@@ -290,16 +293,15 @@ export class ComplainComponent implements OnInit, OnDestroy {
       ketQua: this.tinhTrang,
       giaiDoan: this.giaiDoan,
     } as GetComplainListDto;
-
     this.complainService
-      .exxportExcelByInput(this.filter)
+      .getExcel(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (data: any) => {
-          debugger
           const uint8Array = this.utilService.base64ToArrayBuffer(data);
           const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
-          let fileName = this.utilService.convertDateToLocal(new Date()) + "_Khiếu nại/Khiếu kiện.xlsx";
+          let fileName =
+            this.utilService.convertDateToLocal(new Date()) + '_Khiếu nại/Khiếu kiện.xlsx';
           saveAs(blob, fileName);
           this.toggleBlockUI(false);
         },

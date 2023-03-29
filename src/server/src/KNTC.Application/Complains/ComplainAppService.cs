@@ -250,7 +250,7 @@ public class ComplainAppService : CrudAppService<
     }
 
     [AllowAnonymous]
-    public async Task<byte[]> ExxportExcel(GetComplainListDto input)
+    public async Task<byte[]> GetExcelAsync(GetComplainListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -285,14 +285,42 @@ public class ComplainAppService : CrudAppService<
         font.FontName = "Times New Roman";
         cellStyle.SetFont(font);
 
+        string linhVuc = "Tất cả";
+        if (input.LinhVuc != null)
+        {
+            switch (input.LinhVuc)
+            {
+                case LinhVuc.DatDai:
+                    linhVuc = "Đất đai";
+                    break;
+                case LinhVuc.MoiTruong:
+                    linhVuc = "Mỗi trường";
+                    break;
+                case LinhVuc.TaiNguyenNuoc:
+                    linhVuc = "tài nguyên nước";
+                    break;
+                case LinhVuc.KhoangSan:
+                    linhVuc = "Khoáng sản";
+                    break;
+                default:
+                    linhVuc = "";
+                    break;
+            }
+        }
+        IRow row = sheet.GetCreateRow(4);
+        var cell = row.GetCreateCell(4);
+        cell.SetCellValue(linhVuc);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
         string tenTinh = "Tất cả";
         if (input.maTinhTP != null)
         {
             var tinh = await _unitRepo.GetAsync(x => x.Id == input.maTinhTP);
             tenTinh = tinh.UnitName;
         }
-        IRow row = sheet.GetCreateRow(4);
-        var cell = row.GetCreateCell(4);
+        row = sheet.GetCreateRow(5);
+        cell = row.GetCreateCell(4);
         cell.SetCellValue(tenTinh);
         cell.CellStyle.WrapText = false;
         cell.CellStyle.SetFont(font);
@@ -303,7 +331,7 @@ public class ComplainAppService : CrudAppService<
             var huyen = await _unitRepo.GetAsync(x => x.Id == input.maQuanHuyen);
             tenHuyen = huyen.UnitName;
         }
-        row = sheet.GetCreateRow(5);
+        row = sheet.GetCreateRow(6);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(tenHuyen);
         cell.CellStyle.WrapText = false;
@@ -315,7 +343,7 @@ public class ComplainAppService : CrudAppService<
             var xa = await _unitRepo.GetAsync(x => x.Id == input.maXaPhuongTT);
             tenXa = xa.UnitName;
         }
-        row = sheet.GetCreateRow(6);
+        row = sheet.GetCreateRow(7);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(tenXa);
         cell.CellStyle.WrapText = false;
@@ -325,7 +353,7 @@ public class ComplainAppService : CrudAppService<
         if (input.FromDate.HasValue)
         {
             var fromDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.FromDate.Value, TimeZoneInfo.Local);
-            tuNgay = fromDateGmt7.ToString(FormatType.FormatDateTimeVN);
+            tuNgay = fromDateGmt7.ToString(FormatType.FormatDateVN);
         }
 
 
@@ -333,11 +361,11 @@ public class ComplainAppService : CrudAppService<
         if (input.ToDate.HasValue)
         {
             var toDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.ToDate.Value, TimeZoneInfo.Local);
-            denNgay = toDateGmt7.ToString(FormatType.FormatDateTimeVN);
+            denNgay = toDateGmt7.ToString(FormatType.FormatDateVN);
         }
-        row = sheet.GetCreateRow(7);
+        row = sheet.GetCreateRow(8);
         cell = row.GetCreateCell(4);
-        cell.SetCellValue(tuNgay);
+        cell.SetCellValue(tuNgay + " - " + denNgay);
         cell.CellStyle.WrapText = false;
         cell.CellStyle.SetFont(font);
 
@@ -349,7 +377,7 @@ public class ComplainAppService : CrudAppService<
             if (input.GiaiDoan == 2)
                 giaiDoan = "Khiếu nại/Khiếu kiện lần 2";
         }
-        row = sheet.GetCreateRow(8);
+        row = sheet.GetCreateRow(9);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(giaiDoan);
         cell.CellStyle.WrapText = false;
@@ -374,7 +402,7 @@ public class ComplainAppService : CrudAppService<
                     break;
             }
         }
-        row = sheet.GetCreateRow(9);
+        row = sheet.GetCreateRow(10);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(ketQua);
         cell.CellStyle.WrapText = false;
