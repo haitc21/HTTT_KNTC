@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit {
 
   // fileter
   landComplain = true;
-  enviromentalComplain = true;
+  enviromentComplain = true;
   waterComplain = true;
   mineralComplain = true;
 
@@ -110,7 +110,7 @@ export class HomeComponent implements OnInit {
         )
       );
 
-    if (this.enviromentalComplain)
+    if (this.enviromentComplain)
       this.data.push(
         ...this.mockData.filter(
           x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Emviroment

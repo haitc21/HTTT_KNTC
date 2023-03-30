@@ -49,7 +49,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   maTinh: number;
   maHuyen: number;
   maXa: number;
-  thoiGianTiepNhanRange: Date[] = null;
+  thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
   tinhTrang: number;
 
@@ -110,7 +110,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     this.maTinh = null;
     this.maHuyen = null;
     this.maXa = null;
-    this.thoiGianTiepNhanRange = [];
+    this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
     this.tinhTrang = null;
   }
@@ -188,7 +188,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         }
       );
   }
-  TinhChange(event) {
+  tinhChange(event) {
     this.loadData();
     if (event.value) {
       this.toggleBlockUI(true);

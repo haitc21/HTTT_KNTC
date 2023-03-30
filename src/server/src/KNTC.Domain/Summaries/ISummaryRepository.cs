@@ -15,5 +15,12 @@ public interface ISummaryRepository
                                            bool landDenounce,
                                            bool enviromentDenounce,
                                            bool waterDenounce,
-                                           bool mineralDenounce);
+                                           bool mineralDenounce,
+                                           string keyword,
+                                           LoaiKetQua? ketQua,
+                                           int? maTinhTp,
+                                           int? maQuanHuyen,
+                                           int? maXaPhuongTT,
+                                           DateTime? FromDate,
+                                           DateTime? ToDate);
 }

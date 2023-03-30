@@ -95,7 +95,7 @@
           <th style="width: 3rem">
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
-          <th class="row-num-column">STT</th>
+          <th class="row-num-column">Id</th>
           <th pSortableColumn="unitCode">Mã</th>
           <th pSortableColumn="unitName">Tên</th>
           <th pSortableColumn="shortName">Tên thu gọn</th>
@@ -108,7 +108,8 @@
           <td>
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td>
-          <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
+          <!-- <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td> -->
+          <td>{{ row.id }}</td>
           <td>{{ row.unitCode }}</td>
           <td>{{ row.unitName }}</td>
           <td>{{ row.shortName }}</td>

@@ -107,7 +107,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.maTinh = null;
     this.maHuyen = null;
     this.maXa = null;
-    this.thoiGianTiepNhanRange = [];
+    this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
     this.tinhTrang = null;
   }
@@ -146,7 +146,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         }
       );
   }
-  inhChange(event) {
+ tinhChange(event) {
     this.loadData();
     if (event.value) {
       this.toggleBlockUI(true);

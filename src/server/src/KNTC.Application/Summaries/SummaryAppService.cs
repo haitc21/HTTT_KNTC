@@ -37,7 +37,14 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                                                     input.LandDenounce,
                                                     input.EnviromentDenounce,
                                                     input.WaterDenounce,
-                                                    input.MineralDenounce);
+                                                    input.MineralDenounce,
+                                                    input.Keyword,
+                                                    input.KetQua,
+                                                    input.maTinhTP,
+                                                    input.maQuanHuyen,
+                                                    input.maXaPhuongTT,
+                                                    input.FromDate,
+                                                    input.ToDate);
         var totalCount = await AsyncExecuter.CountAsync(query);
         query = query.OrderBy(input.Sorting)
                     .Skip(input.SkipCount)

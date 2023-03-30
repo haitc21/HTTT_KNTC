@@ -2,7 +2,6 @@
   <!-- --------------Sidebar--------------------------------------------------------- -->
   <div [@hideColumn]="hideColumnState" class="col-12 md:col-2 home-sidebar">
     <p-card>
-      
       <ng-template pTemplate="header">
         <h5 class="home-sidebar-header">LỚP BẢN ĐỒ</h5>
       </ng-template>
@@ -10,8 +9,8 @@
       <div class="grid col-12 md:col-12">
         <div id="quyhoach" class="group-header ml-3">
           <img src="assets/images/map/quyhoach_icon.png" alt="Bản đồ quy hoạch" />
-          <span>Bản đồ quy hoạch</span>    
-            <p-inputSwitch [(ngModel)]="geo" (onChange)="loadData()"></p-inputSwitch>
+          <span>Bản đồ quy hoạch</span>
+          <p-inputSwitch [(ngModel)]="geo" (onChange)="loadData()"></p-inputSwitch>
         </div>
       </div>
       <!-- ----------------------------------------------------------------------- -->
@@ -28,26 +27,17 @@
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch
-            [(ngModel)]="enviromentalComplain"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="enviromentComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch
-            [(ngModel)]="waterComplain"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="waterComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch
-            [(ngModel)]="mineralComplain"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="mineralComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="group-header ml-3 mt-5">
@@ -62,26 +52,17 @@
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch
-            [(ngModel)]="enviromentDenounce"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="enviromentDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch
-            [(ngModel)]="waterDenounce"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch
-            [(ngModel)]="mineralDenounce"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="mineralDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
       </div>
@@ -134,22 +115,6 @@
             <div class="field col-12 md:col-3">
               <span class="p-float-label">
                 <p-dropdown
-                  [options]="loaiVuviecOptions"
-                  [(ngModel)]="loaiVuviec"
-                  optionLabel="text"
-                  optionValue="value"
-                  [showClear]="true"
-                  [autoDisplayFirst]="true"
-                  styleClass="w-full"
-                  (onChange)="loadData($event)"
-                ></p-dropdown>
-                <label>Phân loại</label>
-              </span>
-            </div>
-            <!-- --------------------------------------------------------------------------------- -->
-            <div class="field col-12 md:col-3">
-              <span class="p-float-label">
-                <p-dropdown
                   [options]="tinhOptions"
                   [(ngModel)]="maTinh"
                   optionLabel="unitName"
@@ -159,7 +124,7 @@
                   [filter]="true"
                   filterBy="unitName"
                   styleClass="w-full"
-                  (onChange)="TinhChange($event)"
+                  (onChange)="tinhChange($event)"
                 ></p-dropdown>
                 <label>Tỉnh/TP</label>
               </span>
@@ -200,6 +165,7 @@
                 <label for="phoneNumber">Phường/Xã</label>
               </span>
             </div>
+
             <!-- --------------------------------------------------------------------------------- -->
             <div class="field col-12 md:col-3">
               <span class="p-float-label">
@@ -214,22 +180,6 @@
                   (onClear)="thoiGiantiepNhanChange()"
                 ></p-calendar>
                 <label for="phoneNumber">Thời gian tiếp nhận</label>
-              </span>
-            </div>
-            <!-- --------------------------------------------------------------------------------- -->
-            <div class="field col-12 md:col-3">
-              <span class="p-float-label">
-                <p-dropdown
-                  [options]="giaiDoanOptions"
-                  [(ngModel)]="giaiDoan"
-                  optionLabel="text"
-                  optionValue="value"
-                  [showClear]="true"
-                  [autoDisplayFirst]="false"
-                  styleClass="w-full"
-                  (onChange)="loadData()"
-                ></p-dropdown>
-                <label for="phoneNumber">Giai đoạn</label>
               </span>
             </div>
             <!-- --------------------------------------------------------------------------------- -->
@@ -251,12 +201,12 @@
           </div>
         </p-toolbar>
         <p-card>
-          <app-map idMap="searchMap" [data]="data" [spatialData]="spatialData"></app-map>
+          <app-map idMap="searchMap" [data]="items" [spatialData]="spatialData"></app-map>
         </p-card>
         <!-- ----------------------------------------------------------------------- -->
         <p-card>
           <p-toolbar>
-            <ng-template pTemplate="left"> 
+            <ng-template pTemplate="left">
               <i class="pi pi-search mr-2"></i>
               <h5>Kết quả tìm kiếm</h5>
             </ng-template>
@@ -281,79 +231,62 @@
             </ng-template>
           </p-toolbar>
 
-          <!-- <p-table
-          #dt
-          [value]="data"
-          [rows]="10"
-          [paginator]="false"
-          [(selection)]="selectedItems"
-          [rowHover]="true"
-          dataKey="id"
-        > -->
           <p-table
             #dt
-            [value]="data"
+            [value]="items"
             [rows]="10"
-            [paginator]="true"
-            [globalFilterFields]="['code', 'title']"
-            [tableStyle]="{ 'width': '100%' }"
+            [paginator]="false"
             [(selection)]="selectedItems"
             [rowHover]="true"
-            dataKey="code"
-            currentPageReportTemplate="Tổng số: {totalRecords}"
-            [showCurrentPageReport]="true"
+            dataKey="id"
           >
-            <ng-template pTemplate="header" let-columns>
+            <ng-template pTemplate="header">
               <tr>
                 <th class="row-num-column">STT</th>
                 <th>Mã hồ sơ</th>
-                <th>Nội dung đơn</th>
-                <th>Người gửi đơn</th>
-                <th>Khu vực</th>
-                <th>Ngày nộp đơn</th>
-                <th>Loại KN/TC</th>                
+                <th>Người nộp đơn</th>
+                <th>Số ĐT</th>
+                <th>Địa chỉ</th>
+                <th>Loại vụ việc</th>
                 <th>Lĩnh vực</th>
-                <th>Bộ phận XL</th>
-                <th>Ngày hẹn trả KQ lần I</th>
-                <th>KQ GQKN lần I</th>
-                <th>Ngày hẹn trả KQ lần II</th>
-                <th>KQ GQKN lần II</th>
+                <th>Nội dung</th>
+                <th>Thời gian nộp</th>
+                <th>Bộ phận đang XL</th>
+                <th>Ngày hẹn trả KQ</th>
+                <th style="width: 150px">Trạng thái</th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
               <tr>
-                <td class="row-num-cell">{{ rowIndex + 1 }}</td>
+                <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
                 <td>{{ row.maHoSo }}</td>
+                <td>{{ row.nguoiNopDon }}</td>
+                <td>{{ row.dienThoai }}</td>
+                <td>{{ row.diaChiLienHe }}</td>
+                <td>{{ getLoaiVuViecName(row.loaiVuViec) }}</td>
+                <td>{{ getLinhVucName(row.linhVuc) }}</td>
                 <td>{{ row.tieuDe }}</td>
-                <td>{{ row.nguoiDeNghi }}</td>
-                <td>{{ row.maQuanHuyen }} - {{row.maXaPhuongTT}}</td>
                 <td>
                   {{ row?.thoiGianTiepNhan | date : 'dd-MM-yyyy HH:mm' }}
                 </td>
-                <td>{{ loaiVuviecOptions[row.type]?.text}}</td>
-                <td>{{ linhVucOptions[row.linhVuc]?.text}}</td>
                 <td>{{ row.boPhanDangXL }}</td>
-                <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
-                  {{ row?.ngayTraKQ1 | date : 'dd-MM-yyyy' }}
+                <td>
+                  {{ row?.thoiGianHenTraKQ | date : 'dd-MM-yyyy HH:mm' }}
                 </td>
-                <td>{{ loaiKQOptions[row.ketQua1]}}</td>
-                <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
-                  {{ row?.ngayTraKQ2 | date : 'dd-MM-yyyy' }}
-                </td>
-                <td>{{ loaiKQOptions[row.ketQua2]}}</td>
+                <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
               </tr>
             </ng-template>
-            <!-- <ng-template pTemplate="summary">
-            <p-paginator
-              [rows]="maxResultCount"
-              [totalRecords]="totalCount"
-              [showCurrentPageReport]="true"
-              [showJumpToPageInput]="true"
-              (onPageChange)="pageChanged($event)"
-              currentPageReportTemplate="{totalRecords} bản ghi"
-              [rowsPerPageOptions]="[10, 20, 50, 100]"
-            ></p-paginator>
-          </ng-template> -->
+            <ng-template pTemplate="summary">
+              <p-paginator
+                [rows]="maxResultCount"
+                [totalRecords]="totalCount"
+                [showCurrentPageReport]="true"
+                [showJumpToPageInput]="true"
+                (onPageChange)="pageChanged($event)"
+                currentPageReportTemplate="{totalRecords} bản ghi"
+                [rowsPerPageOptions]="[10, 20, 50, 100]"
+              ></p-paginator>
+            </ng-template>
           </p-table>
           <!-- ----------------------------------------------------------------------- -->
         </p-card>

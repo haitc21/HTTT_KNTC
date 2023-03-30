@@ -14,7 +14,7 @@ export class SummaryService {
     this.restService.request<any, PagedResultDto<SummaryDto>>({
       method: 'GET',
       url: '/api/app/summary',
-      params: { landComplain: input.landComplain, enviromentComplain: input.enviromentComplain, waterComplain: input.waterComplain, mineralComplain: input.mineralComplain, landDenounce: input.landDenounce, enviromentDenounce: input.enviromentDenounce, waterDenounce: input.waterDenounce, mineralDenounce: input.mineralDenounce, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      params: { landComplain: input.landComplain, enviromentComplain: input.enviromentComplain, waterComplain: input.waterComplain, mineralComplain: input.mineralComplain, landDenounce: input.landDenounce, enviromentDenounce: input.enviromentDenounce, waterDenounce: input.waterDenounce, mineralDenounce: input.mineralDenounce, maTinhTP: input.maTinhTP, maQuanHuyen: input.maQuanHuyen, maXaPhuongTT: input.maXaPhuongTT, fromDate: input.fromDate, toDate: input.toDate, ketQua: input.ketQua, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
 

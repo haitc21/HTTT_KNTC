@@ -5,7 +5,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace KNTC.Summaries;
 
-public class GetSummaryListDto : PagedAndSortedResultRequestDto
+public class GetSummaryListDto : BaseListFilterDto
 {
     public bool LandComplain { get; set; }
     public bool EnviromentComplain { get; set; }
@@ -16,4 +16,11 @@ public class GetSummaryListDto : PagedAndSortedResultRequestDto
     public bool EnviromentDenounce { get; set; }
     public bool WaterDenounce { get; set; }
     public bool MineralDenounce { get; set; }
+
+    public int? maTinhTP { get; set; }
+    public int? maQuanHuyen { get; set; }
+    public int? maXaPhuongTT { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+    public LoaiKetQua? KetQua { get; set; }
 }
