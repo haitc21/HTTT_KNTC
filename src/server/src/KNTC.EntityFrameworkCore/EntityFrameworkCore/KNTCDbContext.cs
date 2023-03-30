@@ -148,6 +148,7 @@ public class KNTCDbContext :
 
             b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
+            b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
         });
 
         builder.Entity<Denounce>(b =>
@@ -201,7 +202,7 @@ public class KNTCDbContext :
             b.Property(x => x.GiaHanGQTC2).HasColumnName("gia_han_GQTC_2");
             b.Property(x => x.SoVBKLNDTC).IsRequired().HasColumnName("so_VB_KL_NDTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
             b.Property(x => x.NgayNhanTBKQXLKLTC).IsRequired().HasColumnName("ngay_nhan_TB_KQXLKLTC");
-            b.Property(x => x.CongKhaiKLGQTC).IsRequired().HasColumnName("cong_khai_KL_QDTC").HasDefaultValue(false);
+            b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
         });
 
         builder.Entity<FileAttachment>(b =>
@@ -220,6 +221,9 @@ public class KNTCDbContext :
             b.Property(x => x.FileName).IsRequired().HasColumnName("file_name").HasMaxLength(KNTCValidatorConsts.MaxFileNameLength);
             b.Property(x => x.ContentType).IsRequired().HasColumnName("content_type").HasMaxLength(KNTCValidatorConsts.MaxContenTypeLength);
             b.Property(x => x.ContentLength).IsRequired().HasColumnName("content_length");
+            b.Property(x => x.LoaiVuViec).HasColumnName("loai_vu_viec");
+            b.HasIndex(x => new { x.LoaiVuViec, x.ComplainId });
+            b.HasIndex(x => new { x.LoaiVuViec, x.DenounceId });
         });
 
         builder.Entity<DocumentType>(b =>

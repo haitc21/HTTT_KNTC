@@ -7,7 +7,7 @@ public class FileAttachmentDto : AuditedEntityDto<Guid>
 {
     public Guid? ComplainId { get; set; }
     public Guid? DenounceId { get; set; }
-    public string TenTaiLieu { get; private set; }
+    public string TenTaiLieu { get; set; }
     public int GiaiDoan { get; set; }
     public int HinhThuc { get; set; }
     public DateTime ThoiGianBanHanh { get; set; }

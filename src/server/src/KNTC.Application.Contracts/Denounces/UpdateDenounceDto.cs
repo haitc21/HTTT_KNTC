@@ -107,6 +107,6 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
     public DateTime NgayNhanTBKQXLKLTC { get; set; }
     [Required]
     public LoaiKetQua KetQua { get; set; }
-    public bool CongKhaiKLGQTC { get; set; }
+    public bool CongKhai { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

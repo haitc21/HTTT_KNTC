@@ -18,18 +18,22 @@ export interface GetSummaryListDto extends BaseListFilterDto {
   fromDate?: string;
   toDate?: string;
   ketQua?: LoaiKetQua;
+  congKhai?: boolean;
 }
 
 export interface SummaryDto {
   id?: string;
   maHoSo?: string;
+  nguoiNopDon?: string;
+  dienThoai?: string;
+  diaChiLienHe?: string;
   loaiVuViec: LoaiVuViec;
   linhVuc: LinhVuc;
   tieuDe?: string;
-  nguoiNopDon?: string;
-  dienThoai?: string;
   thoiGianTiepNhan?: string;
   thoiGianHenTraKQ?: string;
   boPhanDangXL?: string;
   ketQua?: LoaiKetQua;
+  duLieuToaDo?: string;
+  duLieuHinhHoc?: string;
 }

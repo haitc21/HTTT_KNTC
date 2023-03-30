@@ -9,4 +9,5 @@ namespace KNTC.Summaries;
 public interface ISummaryAppService
 {
     Task<PagedResultDto<SummaryDto>> GetListAsync(GetSummaryListDto input);
+    Task<byte[]> GetExcelAsync(GetSummaryListDto input);
 }

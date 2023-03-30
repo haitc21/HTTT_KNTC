@@ -46,16 +46,16 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<Complain, ComplainDto>();
         CreateMap<Complain, ComplainInListDto>();
         CreateMap<Complain, ComplainExcelDto>()
-                        .ForMember(dto => dto.KetQua1, opt => opt.MapFrom(c => c.KetQua1.HasValue ? c.KetQua1.Value.ToVietnameseString() : string.Empty))
-                        .ForMember(dto => dto.KetQua2, opt => opt.MapFrom(c => c.KetQua2.HasValue ? c.KetQua2.Value.ToVietnameseString() : string.Empty))
-                        .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVietnameseString() : string.Empty));
+                 .ForMember(dto => dto.KetQua1, opt => opt.MapFrom(c => c.KetQua1.HasValue ? c.KetQua1.Value.ToVNString() : string.Empty))
+                 .ForMember(dto => dto.KetQua2, opt => opt.MapFrom(c => c.KetQua2.HasValue ? c.KetQua2.Value.ToVNString() : string.Empty))
+                 .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVNString() : string.Empty));
         CreateMap<CreateComplainDto, Complain>();
         CreateMap<UpdateComplainDto, Complain>();
 
         CreateMap<Denounce, DenounceDto>();
         CreateMap<Denounce, DenounceInListDto>();
         CreateMap<Denounce, DenounceExcelDto>()
-                        .ForMember(dto => dto.KetQua, opt => opt.MapFrom(denounce => denounce.KetQua.ToVietnameseString()));
+                 .ForMember(dto => dto.KetQua, opt => opt.MapFrom(denounce => denounce.KetQua.ToVNString()));
         CreateMap<CreateDenounceDto, Denounce>();
         CreateMap<UpdateDenounceDto, Denounce>();
 
@@ -87,7 +87,9 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<CreateAndUpdateSpatialDataDto, SpatialData>();
 
         CreateMap<Summary, SummaryDto>();
-
-
+        CreateMap<Summary, SummaryExcelDto>()
+            .ForMember(dto => dto.LoaiVuViec, opt => opt.MapFrom(c => c.LoaiVuViec.ToVNString()))
+            .ForMember(dto => dto.LinhVuc, opt => opt.MapFrom(c => c.LinhVuc.ToVNString()))
+            .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVNString() : string.Empty));
     }
 }

@@ -61,7 +61,7 @@ public class Denounce : FullAuditedAggregateRoot<Guid>
     public string SoVBKLNDTC { get; set; }
     public DateTime NgayNhanTBKQXLKLTC { get; set; }
     public LoaiKetQua KetQua { get; set; }
-    public bool CongKhaiKLGQTC { get; set; }
+    public bool CongKhai { get; set; }
     public LandType LandType { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)
     {

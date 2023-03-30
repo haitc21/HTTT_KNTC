@@ -501,7 +501,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       soQD2: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
       ketQua2: [],
 
-      
+      congKhai: [false],
+
       concurrencyStamp: [],
     });
   }

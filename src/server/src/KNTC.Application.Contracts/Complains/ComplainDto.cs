@@ -54,6 +54,7 @@ public class ComplainDto : AuditedEntityDto<Guid>
     public string SoQD2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
+    public bool CongKhai { get; set; }
     public virtual List<FileAttachmentDto> FileAttachments { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

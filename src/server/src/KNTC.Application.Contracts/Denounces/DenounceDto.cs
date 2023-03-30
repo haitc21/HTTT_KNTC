@@ -11,7 +11,7 @@ public class DenounceDto : AuditedEntityDto<Guid>
     {
         FileAttachments = new List<FileAttachmentDto>();
     }
-    public string MaHoSo { get; private set; }
+    public string MaHoSo { get; set; }
     public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
     public string NguoiToCao { get; set; }
@@ -52,7 +52,7 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public string SoVBKLNDTC { get; set; }
     public DateTime NgayNhanTBKQXLKLTC { get; set; }
     public LoaiKetQua KetQua { get; set; }
-    public bool CongKhaiKLGQTC { get; set; }
+    public bool CongKhai { get; set; }
     public virtual List<FileAttachmentDto> FileAttachments { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

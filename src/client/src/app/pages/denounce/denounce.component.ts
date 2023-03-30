@@ -50,7 +50,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
   tinhTrang: number;
-  congKhaiKLGQTC: boolean | null;
+  congKhai: boolean | null;
 
   // option
   tinhOptions: UnitLookupDto[] = [];
@@ -62,7 +62,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
   ];
-  congKhaiKLGQTCOptions = [
+  congKhaiOptions = [
     { value: true, text: 'Công khai' },
     { value: false, text: 'Không công khai' },
   ];
@@ -210,7 +210,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         ketQua: this.tinhTrang,
         giaiDoan: this.giaiDoan,
-        congKhaiKLGQTC: this.congKhaiKLGQTC,
+        congKhai: this.congKhai,
       } as GetDenounceListDto;
     }
 
@@ -251,7 +251,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
       linhVuc: this.linhVuc,
       ketQua: this.tinhTrang,
       giaiDoan: this.giaiDoan,
-      congKhaiKLGQTC: this.congKhaiKLGQTC,
+      congKhai: this.congKhai,
     } as GetDenounceListDto;
     this.denounceService
       .getExcel(this.filter)

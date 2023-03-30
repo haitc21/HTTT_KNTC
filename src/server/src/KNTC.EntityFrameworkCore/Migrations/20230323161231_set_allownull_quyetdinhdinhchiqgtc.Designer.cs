@@ -382,7 +382,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<bool>("CongKhaiKLGQTC")
+                    b.Property<bool>("CongKhai")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false)

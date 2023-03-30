@@ -29,6 +29,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                int? giaiDoan,
                                                DateTime? fromDate,
                                                DateTime? toDate,
+                                               bool? congKhai,
                                                bool includeDetails = false)
     {
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
@@ -71,6 +72,10 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              .WhereIf(
                 toDate.HasValue,
                 x => x.ThoiGianTiepNhan <= toDate
+             )
+             .WhereIf(
+                congKhai.HasValue,
+                x => x.CongKhai == congKhai.Value
              )
             .OrderBy(sorting)
             .Skip(skipCount)

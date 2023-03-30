@@ -1,4 +1,5 @@
-﻿using KNTC.FileAttachments;
+﻿using KNTC.Extenssions;
+using KNTC.FileAttachments;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using NPOI.SS.UserModel;
 using NPOI.XWPF.UserModel;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -63,7 +65,11 @@ public class ComplainAppService : CrudAppService<
     [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
     {
-        var d = DateTime.Now;
+        var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
+        if(hasPermission.Succeeded == false)
+        {
+            input.CongKhai = false;
+        }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = nameof(Complain.MaHoSo);
@@ -81,7 +87,8 @@ public class ComplainAppService : CrudAppService<
             input.maXaPhuongTT,
             input.GiaiDoan,
             input.FromDate,
-            input.ToDate
+            input.ToDate,
+            input.CongKhai
         );
 
         var totalCount = await _complainRepo.CountAsync(
@@ -97,6 +104,7 @@ public class ComplainAppService : CrudAppService<
                     (input.GiaiDoan == 2 && x.NgayKhieuNai2 != null))
                 && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                 && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
+                && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
                 );
 
         return new PagedResultDto<ComplainDto>(
@@ -147,6 +155,7 @@ public class ComplainAppService : CrudAppService<
                                                   NgayTraKQ2: input.NgayTraKQ2,
                                                   ThamQuyen2: input.ThamQuyen2,
                                                   SoQD2: input.SoQD2,
+                                                  congKhai: input.CongKhai,
                                                   KetQua1: input.KetQua1,
                                                   KetQua2: input.KetQua2);
         await _complainRepo.InsertAsync(complain);
@@ -220,6 +229,7 @@ public class ComplainAppService : CrudAppService<
                                           NgayTraKQ2: input.NgayTraKQ2,
                                           ThamQuyen2: input.ThamQuyen2,
                                           SoQD2: input.SoQD2,
+                                          congKhai: input.CongKhai,
                                           KetQua1: input.KetQua1,
                                           KetQua2: input.KetQua2);
         await _complainRepo.UpdateAsync(complain);
@@ -250,7 +260,8 @@ public class ComplainAppService : CrudAppService<
         await _complainRepo.DeleteManyAsync(ids);
     }
 
-    [AllowAnonymous]
+
+    [Authorize(KNTCPermissions.ComplainsPermission.Default)]
     public async Task<byte[]> GetExcelAsync(GetComplainListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
@@ -287,26 +298,9 @@ public class ComplainAppService : CrudAppService<
         cellStyle.SetFont(font);
 
         string linhVuc = "Tất cả";
-        if (input.LinhVuc != null)
+        if (input.LinhVuc.HasValue)
         {
-            switch (input.LinhVuc)
-            {
-                case LinhVuc.DatDai:
-                    linhVuc = "Đất đai";
-                    break;
-                case LinhVuc.MoiTruong:
-                    linhVuc = "Mỗi trường";
-                    break;
-                case LinhVuc.TaiNguyenNuoc:
-                    linhVuc = "tài nguyên nước";
-                    break;
-                case LinhVuc.KhoangSan:
-                    linhVuc = "Khoáng sản";
-                    break;
-                default:
-                    linhVuc = "";
-                    break;
-            }
+            linhVuc = input.LinhVuc.Value.ToVNString();
         }
         IRow row = sheet.GetCreateRow(4);
         var cell = row.GetCreateCell(4);
@@ -391,25 +385,23 @@ public class ComplainAppService : CrudAppService<
         string ketQua = "Tất cả";
         if (input.KetQua.HasValue)
         {
-            switch (input.KetQua)
-            {
-                case LoaiKetQua.Dung:
-                    ketQua = "Đúng";
-                    break;
-                case LoaiKetQua.Sai:
-                    ketQua = "Sai";
-                    break;
-                case LoaiKetQua.CoDungCoSai:
-                    ketQua = "Có đúng có sai";
-                    break;
-                default:
-                    ketQua = "";
-                    break;
-            }
+            ketQua = input.KetQua.Value.ToVNString();
         }
         row = sheet.GetCreateRow(10);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(ketQua);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string congKhai = "Tất cả";
+        if (input.CongKhai.HasValue)
+        {
+            congKhai = input.CongKhai.Value == true ? "Công khai kế quả" : "Không công khai";
+
+        }
+        row = sheet.GetCreateRow(11);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(congKhai);
         cell.CellStyle.WrapText = false;
         cell.CellStyle.SetFont(font);
 

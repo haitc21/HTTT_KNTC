@@ -18,8 +18,9 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                      int? maQuanHuyen,
                      int? maXaPhuongTT,
                      int? giaiDoan,
-                     DateTime? FromDate,
-                     DateTime? ToDate,
+                     DateTime? fromDate,
+                     DateTime? toDate,
+                     bool? congKhai,
                      bool includeDetails = false);
     Task<Complain> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
     Task<List<Complain>> GetDataExportAsync(

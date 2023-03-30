@@ -1,4 +1,5 @@
 ﻿using KNTC.Denounces;
+using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Localization;
 using KNTC.NPOI;
@@ -60,6 +61,11 @@ public class DenounceAppService : CrudAppService<
     [AllowAnonymous]
     public override async Task<PagedResultDto<DenounceDto>> GetListAsync(GetDenounceListDto input)
     {
+        var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.DenouncesPermission.Default);
+        if (hasPermission.Succeeded == false)
+        {
+            input.CongKhai = false;
+        }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = nameof(Denounce.MaHoSo);
@@ -77,7 +83,7 @@ public class DenounceAppService : CrudAppService<
             input.maXaPhuongTT,
             input.FromDate,
             input.ToDate,
-            input.CongKhaiKLGQTC
+            input.CongKhai
         );
 
         var totalCount = await _denounceRepo.CountAsync(
@@ -90,7 +96,7 @@ public class DenounceAppService : CrudAppService<
                        && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
                        && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                        && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
-                       && (!input.CongKhaiKLGQTC.HasValue || x.CongKhaiKLGQTC == input.CongKhaiKLGQTC)
+                       && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
                        );
 
         return new PagedResultDto<DenounceDto>(
@@ -142,7 +148,7 @@ public class DenounceAppService : CrudAppService<
                                                   soVBKLNDTC: input.SoVBKLNDTC,
                                                   ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
                                                   ketQua: input.KetQua,
-                                                  congKhaiKLGQTC: input.CongKhaiKLGQTC
+                                                  congKhai: input.CongKhai
                                                   );
 
         await _denounceRepo.InsertAsync(denounce);
@@ -217,7 +223,7 @@ public class DenounceAppService : CrudAppService<
                                           soVBKLNDTC: input.SoVBKLNDTC,
                                           ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
                                           ketQua: input.KetQua,
-                                          congKhaiKLGQTC: input.CongKhaiKLGQTC);
+                                          congKhai: input.CongKhai);
         await _denounceRepo.UpdateAsync(denounce);
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }
@@ -248,7 +254,7 @@ public class DenounceAppService : CrudAppService<
 
 
 
-    [AllowAnonymous]
+    [Authorize(KNTCPermissions.DenouncesPermission.Default)]
     public async Task<byte[]> GetExcelAsync(GetDenounceListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
@@ -264,7 +270,7 @@ public class DenounceAppService : CrudAppService<
             input.maXaPhuongTT,
             input.FromDate,
             input.ToDate,
-            input.CongKhaiKLGQTC
+            input.CongKhai
         );
         if (denounces == null) return null;
 
@@ -285,26 +291,9 @@ public class DenounceAppService : CrudAppService<
         cellStyle.SetFont(font);
 
         string linhVuc = "Tất cả";
-        if (input.LinhVuc != null)
+        if (input.LinhVuc.HasValue)
         {
-            switch (input.LinhVuc)
-            {
-                case LinhVuc.DatDai:
-                    linhVuc = "Đất đai";
-                    break;
-                case LinhVuc.MoiTruong:
-                    linhVuc = "Mỗi trường";
-                    break;
-                case LinhVuc.TaiNguyenNuoc:
-                    linhVuc = "tài nguyên nước";
-                    break;
-                case LinhVuc.KhoangSan:
-                    linhVuc = "Khoáng sản";
-                    break;
-                default:
-                    linhVuc = "";
-                    break;
-            }
+            linhVuc = input.LinhVuc.Value.ToVNString();
         }
         IRow row = sheet.GetCreateRow(4);
         var cell = row.GetCreateCell(4);
@@ -362,7 +351,7 @@ public class DenounceAppService : CrudAppService<
             var toDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.ToDate.Value, TimeZoneInfo.Local);
             denNgay = toDateGmt7.ToString(FormatType.FormatDateVN);
         }
-        if(!tuNgay.IsNullOrEmpty() && !denNgay.IsNullOrEmpty())
+        if (!tuNgay.IsNullOrEmpty() && !denNgay.IsNullOrEmpty())
         {
             row = sheet.GetCreateRow(8);
             cell = row.GetCreateCell(4);
@@ -374,21 +363,7 @@ public class DenounceAppService : CrudAppService<
         string ketQua = "Tất cả";
         if (input.KetQua.HasValue)
         {
-            switch (input.KetQua)
-            {
-                case LoaiKetQua.Dung:
-                    ketQua = "Đúng";
-                    break;
-                case LoaiKetQua.Sai:
-                    ketQua = "Sai";
-                    break;
-                case LoaiKetQua.CoDungCoSai:
-                    ketQua = "Có đúng có sai";
-                    break;
-                default:
-                    ketQua = "";
-                    break;
-            }
+            ketQua = input.KetQua.Value.ToVNString();
         }
         row = sheet.GetCreateRow(9);
         cell = row.GetCreateCell(4);
@@ -397,9 +372,9 @@ public class DenounceAppService : CrudAppService<
         cell.CellStyle.SetFont(font);
 
         string congKhai = "Tất cả";
-        if (input.CongKhaiKLGQTC.HasValue)
+        if (input.CongKhai.HasValue)
         {
-            congKhai = input.CongKhaiKLGQTC.Value == true ? "Công khai kế quả" : "Không công khai";
+            congKhai = input.CongKhai.Value == true ? "Công khai kế quả" : "Không công khai";
 
         }
         row = sheet.GetCreateRow(10);
@@ -414,6 +389,5 @@ public class DenounceAppService : CrudAppService<
             wb.Close();
             return stream.ToArray();
         }
-
     }
 }

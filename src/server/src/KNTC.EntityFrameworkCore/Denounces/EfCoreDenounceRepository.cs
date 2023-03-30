@@ -28,7 +28,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                int? maXaPhuongTT,
                                                DateTime? fromDate,
                                                DateTime? toDate,
-                                               bool? CongKhaiKLGQTC,
+                                               bool? CongKhai,
                                                bool includeDetails = false)
     {
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
@@ -68,8 +68,8 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                 x => x.ThoiGianTiepNhan <= toDate
              )
              .WhereIf(
-                CongKhaiKLGQTC.HasValue,
-                x => x.CongKhaiKLGQTC == CongKhaiKLGQTC
+                CongKhai.HasValue,
+                x => x.CongKhai == CongKhai
              )
             .OrderBy(sorting)
             .Skip(skipCount)
@@ -91,7 +91,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                    int? maXaPhuongTT,
                                                    DateTime? fromDate,
                                                    DateTime? toDate,
-                                                   bool? CongKhaiKLGQTC)
+                                                   bool? CongKhai)
     {
         var dbSet = await GetDbSetAsync();
         return await dbSet
@@ -124,8 +124,8 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                 x => x.ThoiGianTiepNhan <= toDate
              )
              .WhereIf(
-                CongKhaiKLGQTC.HasValue,
-                x => x.CongKhaiKLGQTC == CongKhaiKLGQTC
+                CongKhai.HasValue,
+                x => x.CongKhai == CongKhai
              )
             .OrderBy(sorting)
             .ToListAsync();

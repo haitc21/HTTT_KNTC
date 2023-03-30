@@ -251,8 +251,8 @@
                 <th>Lĩnh vực</th>
                 <th>Nội dung</th>
                 <th>Thời gian nộp</th>
-                <th>Bộ phận đang XL</th>
                 <th>Ngày hẹn trả KQ</th>
+                <th>Bộ phận đang XL</th>
                 <th style="width: 150px">Trạng thái</th>
               </tr>
             </ng-template>
@@ -269,10 +269,10 @@
                 <td>
                   {{ row?.thoiGianTiepNhan | date : 'dd-MM-yyyy HH:mm' }}
                 </td>
-                <td>{{ row.boPhanDangXL }}</td>
                 <td>
                   {{ row?.thoiGianHenTraKQ | date : 'dd-MM-yyyy HH:mm' }}
                 </td>
+                <td>{{ row.boPhanDangXL }}</td>
                 <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
               </tr>
             </ng-template>

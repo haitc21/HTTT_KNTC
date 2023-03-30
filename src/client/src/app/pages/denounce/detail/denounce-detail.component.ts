@@ -551,7 +551,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       ],
       ngayNhanTBKQXLKLTC: [null, [Validators.required]],
       ketQua: [null, [Validators.required]],
-      congKhaiKLGQTC: [false],
+      congKhai: [false],
 
       concurrencyStamp: [],
     });

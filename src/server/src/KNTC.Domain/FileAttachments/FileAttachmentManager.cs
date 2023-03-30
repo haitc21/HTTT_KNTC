@@ -85,7 +85,8 @@ public class FileAttachmentManager : DomainService
             NoiDungChinh = noiDungChinh,
             FileName = fileName,
             ContentType = contentType,
-            ContentLength = contentLength
+            ContentLength = contentLength,
+            LoaiVuViec = complainId.HasValue ? LoaiVuViec.KhieuNai : LoaiVuViec.ToCao
         };
     }
     public async Task UpdateAsync([NotNull] FileAttachment fileAttachment,

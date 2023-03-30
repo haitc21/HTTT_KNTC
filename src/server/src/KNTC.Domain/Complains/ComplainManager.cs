@@ -58,6 +58,7 @@ public class ComplainManager : DomainService
                                               DateTime? NgayTraKQ2,
                                               string ThamQuyen2,
                                               string SoQD2,
+                                              bool congKhai,
                                               LoaiKetQua? KetQua1 = null,
                                               LoaiKetQua? KetQua2 = null
         )
@@ -135,7 +136,8 @@ public class ComplainManager : DomainService
             ThamQuyen2 = ThamQuyen2,
             SoQD2 = SoQD2,
             KetQua2 = KetQua2,
-            KetQua = KetQua2 ?? KetQua1
+            KetQua = KetQua2 ?? KetQua1,
+            CongKhai = congKhai
         };
     }
     public async Task ChangeMaHoSoAsync([NotNull] Complain hoSo, [NotNull] string maHoSo)
@@ -190,6 +192,7 @@ public class ComplainManager : DomainService
                                    DateTime? NgayTraKQ2,
                                    string ThamQuyen2,
                                    string SoQD2,
+                                   bool congKhai,
                                    LoaiKetQua? KetQua1 = null,
                                    LoaiKetQua? KetQua2 = null
       )
@@ -265,6 +268,7 @@ public class ComplainManager : DomainService
         complain.ThamQuyen2 = ThamQuyen2;
         complain.SoQD2 = SoQD2;
         complain.KetQua2 = KetQua2;
+        complain.CongKhai = congKhai;
         complain.KetQua = KetQua2 ?? KetQua1;
     }
     public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Complain complain,

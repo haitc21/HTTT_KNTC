@@ -34,7 +34,8 @@ public class SummaryRepository :  ISummaryRepository
                                                         int? maQuanHuyen,
                                                         int? maXaPhuongTT,
                                                         DateTime? fromDate,
-                                                        DateTime? toDate)
+                                                        DateTime? toDate,
+                                                        bool? congKhai)
     {
 
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
@@ -73,6 +74,10 @@ public class SummaryRepository :  ISummaryRepository
                             toDate.HasValue,
                             x => x.ThoiGianTiepNhan <= toDate
                          )
+                         .WhereIf(
+                            congKhai.HasValue,
+                            x => x.CongKhai == congKhai
+                         )
                         .Select(c => new Summary()
                         {
                             Id = c.Id,
@@ -84,7 +89,10 @@ public class SummaryRepository :  ISummaryRepository
                             ThoiGianTiepNhan = c.ThoiGianTiepNhan,
                             ThoiGianHenTraKQ = c.ThoiGianHenTraKQ,
                             BoPhanDangXL = c.BoPhanDangXL,
-                            KetQua = c.KetQua
+                            KetQua = c.KetQua,
+                            DiaChiLienHe = c.DiaChiLienHe,
+                            DuLieuToaDo = c.DuLieuToaDo,
+                            DuLieuHinhHoc = c.DuLieuHinhHoc
                         });
 
         var denounceQuery = dbContext.Set<Denounce>()
@@ -121,6 +129,10 @@ public class SummaryRepository :  ISummaryRepository
                             toDate.HasValue,
                             x => x.ThoiGianTiepNhan <= toDate
                          )
+                         .WhereIf(
+                            congKhai.HasValue,
+                            x => x.CongKhai == congKhai
+                         )
                         .Select(d => new Summary()
                         {
                             Id = d.Id,
@@ -132,7 +144,10 @@ public class SummaryRepository :  ISummaryRepository
                             ThoiGianTiepNhan = d.ThoiGianTiepNhan,
                             ThoiGianHenTraKQ = d.ThoiGianHenTraKQ,
                             BoPhanDangXL = d.BoPhanDangXL,
-                            KetQua = d.KetQua
+                            KetQua = d.KetQua,
+                            DiaChiLienHe = d.DiaChiLienHe,
+                            DuLieuToaDo = d.DuLieuToaDo,
+                            DuLieuHinhHoc = d.DuLieuHinhHoc
                         });
         var query = complainQuery.Union(denounceQuery);
         return query;

@@ -1,19 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Volo.Abp.Application.Dtos;
 
-namespace KNTC.Denounces;
+namespace KNTC.Summaries;
 
-public class DenounceInListDto : AuditedEntityDto<Guid>
+public class SummaryExcelDto
 {
     public string MaHoSo { get; set; }
-    public string NguoiToCao { get; set; }
+    public string NguoiNopDon { get; set; }
     public string DienThoai { get; set; }
     public string DiaChiLienHe { get; set; }
-    public string NguoiBiToCao { get; set; }
-    public DateTime NgayGQTC { get; set; }
+    public string LoaiVuViec { get; set; }
+    public string LinhVuc { get; set; }
     public string TieuDe { get; set; }
     public DateTime ThoiGianTiepNhan { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
     public string BoPhanDangXL { get; set; }
-    public bool CongKhai { get; set; }
+    public string KetQua { get; set; }
+
 }

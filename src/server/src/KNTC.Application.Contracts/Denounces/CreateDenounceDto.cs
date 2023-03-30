@@ -106,6 +106,6 @@ public class CreateDenounceDto
     public DateTime NgayNhanTBKQXLKLTC { get; set; }
     [Required]
     public LoaiKetQua KetQua { get; set; }
-    public bool CongKhaiKLGQTC { get; set; }
+    public bool CongKhai { get; set; }
     public virtual List<CreateAndUpdateFileAttachmentDto> FileAttachments { get; set; }
 }

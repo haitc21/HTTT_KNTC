@@ -60,7 +60,7 @@ public class DenounceManager : DomainService
                                               [NotNull] string soVBKLNDTC,
                                               [NotNull] DateTime ngayNhanTBKQXLKLTC,
                                               [NotNull] LoaiKetQua ketQua,
-                                              bool congKhaiKLGQTC
+                                              bool congKhai
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
@@ -144,7 +144,7 @@ public class DenounceManager : DomainService
             SoVBKLNDTC = soVBKLNDTC,
             NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC,
             KetQua = ketQua,
-            CongKhaiKLGQTC = congKhaiKLGQTC
+            CongKhai = congKhai
         };
     }
     public async Task ChangeMaHoSoAsync([NotNull] Denounce hoSo, [NotNull] string maHoSo)
@@ -200,7 +200,7 @@ public class DenounceManager : DomainService
                                    [NotNull] string soVBKLNDTC,
                                    [NotNull] DateTime ngayNhanTBKQXLKLTC,
                                    [NotNull] LoaiKetQua ketQua,
-                                   bool congKhaiKLGQTC
+                                   bool congKhai
       )
     {
         Check.NotNull(denounce, nameof(denounce));
@@ -283,6 +283,6 @@ public class DenounceManager : DomainService
         denounce.SoVBKLNDTC = soVBKLNDTC;
         denounce.NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC;
         denounce.KetQua = ketQua;
-        denounce.CongKhaiKLGQTC = congKhaiKLGQTC;
+        denounce.CongKhai = congKhai;
     }
 }

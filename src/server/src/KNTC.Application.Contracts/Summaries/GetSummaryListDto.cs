@@ -23,4 +23,5 @@ public class GetSummaryListDto : BaseListFilterDto
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
     public LoaiKetQua? KetQua { get; set; }
+    public bool? CongKhai { get; set; }
 }

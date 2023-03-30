@@ -299,13 +299,23 @@
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="boPhanDangXL">Bộ phận đang XL <span class="required">*</span></label>
+                    <label for="boPhanDangXL"
+                      >Bộ phận đang XL <span class="required">*</span></label
+                    >
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.boPhanDangXL"
                     [validationMessages]="validationMessages.boPhanDangXL"
                   >
                   </app-validation-message>
+                </div>
+                <!-- ----------------------------congKhai---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <p-checkbox
+                    binary="true"
+                    label="Công khai"
+                    formControlName="congKhai"
+                  ></p-checkbox>
                 </div>
                 <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
                 <div class="field col-12 md:col-12">
@@ -317,7 +327,9 @@
                       pInputTextarea
                       class="w-full"
                     ></textarea>
-                    <label for="noiDungVuViec">Nội dung KN?KK <span class="required">*</span></label>
+                    <label for="noiDungVuViec"
+                      >Nội dung KN?KK <span class="required">*</span></label
+                    >
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.noiDungVuViec"

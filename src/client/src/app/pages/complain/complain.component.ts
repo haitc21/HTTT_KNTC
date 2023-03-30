@@ -52,6 +52,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
   tinhTrang: number;
+  congKhai: boolean | null;
 
   // option
   tinhOptions: UnitLookupDto[] = [];
@@ -66,6 +67,10 @@ export class ComplainComponent implements OnInit, OnDestroy {
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
+  ];
+  congKhaiOptions = [
+    { value: true, text: 'Công khai' },
+    { value: false, text: 'Không công khai' },
   ];
 
   // Permissions
@@ -253,6 +258,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         ketQua: this.tinhTrang,
         giaiDoan: this.giaiDoan,
+        congKhai: this.congKhai,
       } as GetComplainListDto;
     }
 

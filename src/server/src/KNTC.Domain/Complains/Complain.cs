@@ -63,6 +63,7 @@ public class Complain : FullAuditedAggregateRoot<Guid>
     public string SoQD2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
+    public bool CongKhai { get; set; }
     public LandType LandType { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)
     {
