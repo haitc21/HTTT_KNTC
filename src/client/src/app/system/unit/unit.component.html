@@ -1,9 +1,61 @@
 <div class="animated fadeIn card">
-  <p-panel #pnl header="Quản lý loại địa danh">
-    <p-toolbar>
-      <ng-template pTemplate="left">
+  <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+  <p-panel #pnl>
+    <div class="flex col-12" style="height: 100px; margin: 1rem 0">
+      <div class="flex col-12 md:col-8">
+        <div class="col-12 md:col-4">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (keyup.enter)="loadData()"
+              [(ngModel)]="keyword"
+              placeholder="Tìm kiếm"
+              [style]="{ width: '100%' }"
+            />
+          </span>
+        </div>
+        <div class="col-12 md:col-4">
+          <span class="p-float-label">
+            <p-dropdown
+              id="unitTypeId"
+              [(ngModel)]="unitTypeId"
+              [options]="unitTypeOptions"
+              optionLabel="unitTypeName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitTypeName"
+              styleClass="w-full"
+              (onChange)="unitTypeChange($event?.value); loadData()"
+            ></p-dropdown>
+            <label for="loaiDat">loại địa danh</label>
+          </span>
+        </div>
+        <div class="col-12 md:col-4">
+          <span class="p-float-label">
+            <p-dropdown
+              id="parentId"
+              [(ngModel)]="parentId"
+              [options]="parentUnitOptions"
+              optionLabel="unitName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitName"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label for="loaiDat">DDịa danh cha</label>
+          </span>
+        </div>
+      </div>
+      <div class="col-12 md:col-4 flex justify-content-end">
         <button
-          *abpPermission="'UnitType.Create'"
+          *abpPermission="'Unit.Create'"
           type="button"
           pButton
           pRipple
@@ -15,7 +67,7 @@
           (click)="showAddModal()"
         ></button>
         <button
-          *abpPermission="'UnitType.Delete'"
+          *abpPermission="'Unit.Delete'"
           type="button"
           pButton
           pRipple
@@ -27,22 +79,8 @@
           (click)="deleteItems()"
           [disabled]="!selectedItems || !selectedItems.length"
         ></button>
-      </ng-template>
-
-      <ng-template pTemplate="right">
-        <span class="p-input-icon-left search-width">
-          <i class="pi pi-search"></i>
-          <input
-            pInputText
-            type="text"
-            (keyup.enter)="loadData()"
-            [(ngModel)]="keyword"
-            placeholder="Tìm kiếm"
-            class="w-full"
-          />
-        </span>
-      </ng-template>
-    </p-toolbar>
+      </div>
+    </div>
 
     <p-table
       #dt
@@ -58,9 +96,10 @@
           <th style="width: 3rem">
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
-          <th class="row-num-column">STT</th>
-          <th pSortableColumn="unitTypeCode">Mã</th>
-          <th pSortableColumn="unitTypeName">Tên</th>
+          <th class="row-num-column">Id</th>
+          <th pSortableColumn="unitCode">Mã</th>
+          <th pSortableColumn="unitName">Tên</th>
+          <th pSortableColumn="shortName">Tên thu gọn</th>
           <th pSortableColumn="status">Trạng thái</th>
           <th *ngIf="visibleActionColumn" class="action-column"></th>
         </tr>
@@ -70,9 +109,11 @@
           <td>
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td>
-          <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-          <td>{{ row.unitTypeCode }}</td>
-          <td>{{ row.unitTypeName }}</td>
+          <!-- <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td> -->
+          <td>{{ row.id }}</td>
+          <td>{{ row.unitCode }}</td>
+          <td>{{ row.unitName }}</td>
+          <td>{{ row.shortName }}</td>
           <td>
             <p-tag
               styleClass="mr-1"
@@ -100,7 +141,7 @@
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem;"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>

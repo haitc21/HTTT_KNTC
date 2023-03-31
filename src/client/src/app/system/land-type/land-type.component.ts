@@ -18,6 +18,8 @@ export class LandTypeComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
+  home: MenuItem;
+  breadcrumb: MenuItem[];
 
   //Paging variables
   public skipCount: number = 0;
@@ -45,6 +47,8 @@ export class LandTypeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.breadcrumb = [{ label: 'Danh mục loại đất' }];
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
     this.getPermission();
     this.buildActionMenu();
     this.loadData();

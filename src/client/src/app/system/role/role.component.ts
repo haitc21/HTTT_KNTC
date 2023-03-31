@@ -14,12 +14,14 @@ import { Actions } from 'src/app/shared/enums/actions.enum';
 
 @Component({
   selector: 'app-role',
-  templateUrl: './role.component.html'
+  templateUrl: './role.component.html',
 })
 export class RoleComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
+  home: MenuItem;
+  breadcrumb: MenuItem[];
 
   //Paging variables
   public skipCount: number = 0;
@@ -48,8 +50,10 @@ export class RoleComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.breadcrumb = [{ label: 'Quản lý vai trò' }];
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
     this.getPermission();
-  this.buildActionMenu();
+    this.buildActionMenu();
     this.loadData();
   }
   getPermission() {

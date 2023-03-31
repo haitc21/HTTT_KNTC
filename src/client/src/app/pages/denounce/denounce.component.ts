@@ -481,9 +481,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   }
   buildBreadcrumb() {
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
-    this.breadcrumb = [
-      { label: 'Tố cáo', icon: 'fa fa-balance-scale', routerLink: '/pages/denounce' },
-    ];
+    this.breadcrumb = [{ label: 'Tố cáo', icon: 'fa fa-balance-scale', disabled: true }];
 
     switch (this.linhVuc) {
       case LinhVuc.DatDai:

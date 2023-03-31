@@ -46,14 +46,6 @@ import { DenounceComponent } from './denounce/denounce.component';
 import { DenounceDetailComponent } from './denounce/detail/denounce-detail.component';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
-import { DocumentTypeComponent } from './document-type/document-type.component';
-import { DocumentTypeDetailComponent } from './document-type/detail/document-type-detail.component';
-import { LandTypeComponent } from './land-type/land-type.component';
-import { LandTypeDetailComponent } from './land-type/detail/land-type-detail.component';
-import { UnitTypeComponent } from './unit-type/unit-type.component';
-import { UnitTypeDetailComponent } from './unit-type/detail/unit-type-detail.component';
-import { UnitComponent } from './unit/unit.component';
-import { UnitDetailComponent } from './unit/detail/unit-detail.component';
 
 @NgModule({
   declarations: [
@@ -65,15 +57,7 @@ import { UnitDetailComponent } from './unit/detail/unit-detail.component';
     DenounceComponent,
     DenounceDetailComponent,
     FileAttachmentComponent,
-    FileAttachmentDetailComponent,
-    DocumentTypeComponent,
-    DocumentTypeDetailComponent,
-    LandTypeComponent,
-    LandTypeDetailComponent,
-    UnitTypeComponent,
-    UnitTypeDetailComponent,
-    UnitComponent,
-    UnitDetailComponent
+    FileAttachmentDetailComponent
   ],
   imports: [
     PagesRoutingModule,

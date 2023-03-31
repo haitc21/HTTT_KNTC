@@ -1,5 +1,6 @@
 <div class="animated fadeIn card">
-  <p-panel #pnl header="Quản lý người dùng">
+  <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+  <p-panel #pnl>
     <p-toolbar>
       <ng-template pTemplate="left">
         <button

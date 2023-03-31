@@ -1,6 +1,6 @@
-import { ListResultDto, PagedResultDto, PermissionService } from '@abp/ng.core';
+import { PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UnitDto, UnitLookupDto, UnitService } from '@proxy/units';
+import { DocumentTypeDto, DocumentTypeService } from '@proxy/document-types';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -8,17 +8,18 @@ import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
-import { UnitDetailComponent } from './detail/unit-detail.component';
-import { UnitTypeLookupDto, UnitTypeService } from '@proxy/unit-types';
+import { DocumentTypeDetailComponent } from './detail/document-type-detail.component';
 
 @Component({
-  selector: 'app-unit',
-  templateUrl: './unit.component.html',
+  selector: 'app-document-type',
+  templateUrl: './document-type.component.html',
 })
-export class UnitComponent implements OnInit, OnDestroy {
+export class DocumentTypeComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
+  home: MenuItem;
+  breadcrumb: MenuItem[];
 
   //Paging variables
   public skipCount: number = 0;
@@ -27,15 +28,10 @@ export class UnitComponent implements OnInit, OnDestroy {
   Actions = Actions;
 
   //Business variables
-  public items: UnitDto[];
-  public selectedItems: UnitDto[] = [];
-  actionItem: UnitDto;
+  public items: DocumentTypeDto[];
+  public selectedItems: DocumentTypeDto[] = [];
+  actionItem: DocumentTypeDto;
   public keyword: string = '';
-  unitTypeId: number = 1;
-  parentId: number;
-
-  unitTypeOptions: UnitTypeLookupDto[] = [];
-  parentUnitOptions: UnitLookupDto[] = [];
 
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
@@ -43,80 +39,38 @@ export class UnitComponent implements OnInit, OnDestroy {
   actionMenu: MenuItem[];
 
   constructor(
-    private unitService: UnitService,
+    private documentTypeService: DocumentTypeService,
     public dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
-    private permissionService: PermissionService,
-    private unitTypeService: UnitTypeService
+    private permissionService: PermissionService
   ) {}
 
   ngOnInit() {
-    this.getOptions();
+    this.breadcrumb = [{ label: 'Danh mục hình thức tệp' }];
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
     this.getPermission();
     this.buildActionMenu();
     this.loadData();
   }
-
-  getOptions() {
-    this.toggleBlockUI(true);
-    this.unitTypeService
-      .getLookup()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        (res: ListResultDto<UnitTypeLookupDto>) => {
-          this.unitTypeOptions = res.items;
-          this.toggleBlockUI(false);
-        },
-        () => {
-          this.toggleBlockUI(false);
-        }
-      );
-  }
-
-  unitTypeChange(id, isFirst: boolean = false) {
-    if (!id) return;
-    if (id > 1) {
-      this.toggleBlockUI(true);
-      this.unitService
-        .getLookup(id - 1)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.parentUnitOptions = res.items;
-            this.toggleBlockUI(false);
-          },
-          () => {
-            this.parentUnitOptions = [];
-            this.toggleBlockUI(false);
-          }
-        );
-    } else {
-      this.parentUnitOptions = [];
-      this.parentId = null;
-    }
-  }
-
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Unit.Edit');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Unit.Delete');
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('DocumentType.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('DocumentType.Delete');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 
   loadData() {
     this.toggleBlockUI(true);
 
-    this.unitService
+    this.documentTypeService
       .getList({
         maxResultCount: this.maxResultCount,
         skipCount: this.skipCount,
         keyword: this.keyword,
-        unitTypeId: this.unitTypeId,
-        parentId: this.parentId
       })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: PagedResultDto<UnitDto>) => {
+        next: (response: PagedResultDto<DocumentTypeDto>) => {
           this.items = response.items;
           this.totalCount = response.totalCount;
           this.toggleBlockUI(false);
@@ -128,12 +82,12 @@ export class UnitComponent implements OnInit, OnDestroy {
   }
 
   showAddModal() {
-    const ref = this.dialogService.open(UnitDetailComponent, {
-      header: 'Thêm địa danh',
+    const ref = this.dialogService.open(DocumentTypeDetailComponent, {
+      header: 'Thêm loại hình thức',
       width: DIALOG_MD,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: UnitDto) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: DocumentTypeDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.selectedItems = [];
@@ -153,15 +107,15 @@ export class UnitComponent implements OnInit, OnDestroy {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    const ref = this.dialogService.open(UnitDetailComponent, {
+    const ref = this.dialogService.open(DocumentTypeDetailComponent, {
       data: {
         id: row.id,
       },
-      header: `Cập nhật địa danh`,
+      header: `Cập nhật loại hình thức`,
       width: DIALOG_MD,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: UnitDto) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: DocumentTypeDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -188,7 +142,7 @@ export class UnitComponent implements OnInit, OnDestroy {
   deleteItemsConfirm(ids: any[]) {
     this.toggleBlockUI(true);
 
-    this.unitService
+    this.documentTypeService
       .deleteMultiple(ids)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -219,7 +173,7 @@ export class UnitComponent implements OnInit, OnDestroy {
   deleteRowConfirm(id) {
     this.toggleBlockUI(true);
 
-    this.unitService
+    this.documentTypeService
       .delete(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({

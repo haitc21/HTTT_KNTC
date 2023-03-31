@@ -1,8 +1,5 @@
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
-import {
-  IdentityUserCreateDto,
-  IdentityUserUpdateDto,
-} from '@abp/ng.identity/proxy';
+import { IdentityUserCreateDto, IdentityUserUpdateDto } from '@abp/ng.identity/proxy';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RoleLookupDto, RolesService } from '@proxy/roles';
@@ -30,6 +27,8 @@ export class UserComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
+  home: MenuItem;
+  breadcrumb: MenuItem[];
 
   //Paging variables
   public skipCount: number = 0;
@@ -65,10 +64,12 @@ export class UserComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private permissionService: PermissionService,
     private utilService: UtilityService,
-    private sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
+    this.breadcrumb = [{ label: 'Quản lý người dùng' }];
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
     this.getPermission();
     this.buildActionMenu();
     this.loadOptions();

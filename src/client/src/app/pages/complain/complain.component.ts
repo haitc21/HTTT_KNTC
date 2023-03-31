@@ -121,7 +121,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   }
 
   buildBreadcrumb() {
-    this.breadcrumb = [{ label: ' Khiếu nại', icon: 'pi pi-inbox', routerLink: '/pages/complain' }];
+    this.breadcrumb = [{ label: ' Khiếu nại', icon: 'pi pi-inbox', disabled: true }];
 
     switch (this.linhVuc) {
       case LinhVuc.DatDai:

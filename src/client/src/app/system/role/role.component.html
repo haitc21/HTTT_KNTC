@@ -1,5 +1,6 @@
 <div class="animated fadeIn card">
-  <p-panel #pnl header="Quản lý vai trò">
+  <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+  <p-panel #pnl>
     <p-toolbar>
       <ng-template pTemplate="left">
         <button
@@ -107,7 +108,7 @@
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem;"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>
