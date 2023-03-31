@@ -36,6 +36,7 @@ public class FileAttachment : FullAuditedAggregateRoot<Guid>
     public long ContentLength { get; set; }
     public DocumentType DocumentType { get; set; }
     public LoaiVuViec LoaiVuViec { get; set; }
+    public bool CongKhai { get; set; }
     private void SetTenTaiLieu([NotNull] string tenTaiLieu)
     {
         TenTaiLieu = Check.NotNullOrWhiteSpace(

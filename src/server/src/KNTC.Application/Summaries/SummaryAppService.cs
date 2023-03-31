@@ -37,7 +37,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         var userId = CurrentUser.Id;
         if (userId == null)
         {
-            input.CongKhai = false;
+            input.CongKhai = true;
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -199,7 +199,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         string congKhai = "Tất cả";
         if (input.CongKhai.HasValue)
         {
-            congKhai = input.CongKhai.Value == true ? "Công khai kế quả" : "Không công khai";
+            congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
 
         }
         row = sheet.GetCreateRow(10);

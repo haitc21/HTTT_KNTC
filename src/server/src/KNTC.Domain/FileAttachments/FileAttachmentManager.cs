@@ -38,7 +38,8 @@ public class FileAttachmentManager : DomainService
                                                    [NotNull] string noiDungChinh,
                                                    [NotNull] string fileName,
                                                    [NotNull] string contentType,
-                                                   [NotNull] long contentLength)
+                                                   [NotNull] long contentLength,
+                                                   [NotNull] bool congKhai)
     {
         Check.NotNull(loaiVuViec, nameof(loaiVuViec));
         Check.NotNull(giaiDoan, nameof(giaiDoan));
@@ -51,6 +52,8 @@ public class FileAttachmentManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
+        Check.NotNull(congKhai, nameof(congKhai));
+
         var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
                                                      && (
                                                      (loaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == complainId)
@@ -86,7 +89,8 @@ public class FileAttachmentManager : DomainService
             FileName = fileName,
             ContentType = contentType,
             ContentLength = contentLength,
-            LoaiVuViec = complainId.HasValue ? LoaiVuViec.KhieuNai : LoaiVuViec.ToCao
+            LoaiVuViec = complainId.HasValue ? LoaiVuViec.KhieuNai : LoaiVuViec.ToCao,
+            CongKhai = congKhai
         };
     }
     public async Task UpdateAsync([NotNull] FileAttachment fileAttachment,
@@ -100,7 +104,8 @@ public class FileAttachmentManager : DomainService
                                    [NotNull] string noiDungChinh,
                                    string fileName,
                                    string contentType,
-                                   long contentLength)
+                                   long contentLength,
+                                   [NotNull] bool congKhai)
     {
         Check.NotNull(loaiVuViec, nameof(loaiVuViec));
         Check.NotNull(giaiDoan, nameof(giaiDoan));
@@ -114,6 +119,8 @@ public class FileAttachmentManager : DomainService
         Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
         Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
         Check.NotNull(contentLength, nameof(contentLength));
+        Check.NotNull(congKhai, nameof(congKhai));
+
         if (fileAttachment.TenTaiLieu != tenTaiLieu)
         {
             var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
@@ -146,6 +153,7 @@ public class FileAttachmentManager : DomainService
         fileAttachment.NgayNhan = ngayNhan;
         fileAttachment.ThuTuButLuc = thuTuButLuc;
         fileAttachment.NoiDungChinh = noiDungChinh;
+        fileAttachment.CongKhai = congKhai;
         if (!!string.IsNullOrEmpty(fileName))
         {
             fileAttachment.FileName = fileName;

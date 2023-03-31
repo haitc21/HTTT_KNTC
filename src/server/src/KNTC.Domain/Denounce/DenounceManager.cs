@@ -60,7 +60,7 @@ public class DenounceManager : DomainService
                                               [NotNull] string soVBKLNDTC,
                                               [NotNull] DateTime ngayNhanTBKQXLKLTC,
                                               [NotNull] LoaiKetQua ketQua,
-                                              bool congKhai
+                                              [NotNull] bool congKhai
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
@@ -96,6 +96,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(soVBKLNDTC, nameof(soVBKLNDTC));
         Check.NotNull(ngayNhanTBKQXLKLTC, nameof(ngayNhanTBKQXLKLTC));
         Check.NotNull(ketQua, nameof(ketQua));
+        Check.NotNull(congKhai, nameof(congKhai));
 
         var existedHoSo = await _hoSoRepo.FindByMaHoSoAsync(maHoSo, false);
         if (existedHoSo != null)
@@ -200,7 +201,7 @@ public class DenounceManager : DomainService
                                    [NotNull] string soVBKLNDTC,
                                    [NotNull] DateTime ngayNhanTBKQXLKLTC,
                                    [NotNull] LoaiKetQua ketQua,
-                                   bool congKhai
+                                   [NotNull] bool congKhai
       )
     {
         Check.NotNull(denounce, nameof(denounce));
@@ -238,6 +239,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(soVBKLNDTC, nameof(soVBKLNDTC));
         Check.NotNull(ngayNhanTBKQXLKLTC, nameof(ngayNhanTBKQXLKLTC));
         Check.NotNull(ketQua, nameof(ketQua));
+        Check.NotNull(congKhai, nameof(congKhai));
 
         if (denounce.MaHoSo != maHoSo)
         {

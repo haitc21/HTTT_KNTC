@@ -58,7 +58,7 @@ public class ComplainManager : DomainService
                                               DateTime? NgayTraKQ2,
                                               string ThamQuyen2,
                                               string SoQD2,
-                                              bool congKhai,
+                                              [NotNull] bool congKhai,
                                               LoaiKetQua? KetQua1 = null,
                                               LoaiKetQua? KetQua2 = null
         )
@@ -87,6 +87,7 @@ public class ComplainManager : DomainService
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
+        Check.NotNull(congKhai, nameof(congKhai));
 
         var existedHoSo = await _hoSoRepo.FindByMaHoSoAsync(maHoSo, false);
         if (existedHoSo != null)
@@ -192,7 +193,7 @@ public class ComplainManager : DomainService
                                    DateTime? NgayTraKQ2,
                                    string ThamQuyen2,
                                    string SoQD2,
-                                   bool congKhai,
+                                   [NotNull] bool congKhai,
                                    LoaiKetQua? KetQua1 = null,
                                    LoaiKetQua? KetQua2 = null
       )
@@ -222,6 +223,7 @@ public class ComplainManager : DomainService
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
+        Check.NotNull(congKhai, nameof(congKhai));
 
         if (complain.MaHoSo != maHoSo)
         {
@@ -270,48 +272,5 @@ public class ComplainManager : DomainService
         complain.KetQua2 = KetQua2;
         complain.CongKhai = congKhai;
         complain.KetQua = KetQua2 ?? KetQua1;
-    }
-    public async Task<FileAttachment> CreateFileAttachmentAsync([NotNull] Complain complain,
-                                                                [NotNull] int giaiDoan,
-                                                                [NotNull] string tenTaiLieu,
-                                                                [NotNull] int hinhThuc,
-                                                                DateTime thoiGianBanHanh,
-                                                                DateTime ngayNhan,
-                                                                [NotNull] string thuTuButLuc,
-                                                                [NotNull] string noiDungChinh,
-                                                                [NotNull] string fileName,
-                                                                [NotNull] string contentType,
-                                                                [NotNull] long contentLength)
-    {
-        Check.NotNull(complain, nameof(complain));
-        Check.NotNull(giaiDoan, nameof(giaiDoan));
-        Check.NotNullOrWhiteSpace(tenTaiLieu, nameof(tenTaiLieu));
-        Check.NotNull(hinhThuc, nameof(hinhThuc));
-        Check.NotNullOrWhiteSpace(thuTuButLuc, nameof(thuTuButLuc));
-        Check.NotNullOrWhiteSpace(noiDungChinh, nameof(noiDungChinh));
-        Check.NotNullOrWhiteSpace(fileName, nameof(fileName));
-        Check.NotNullOrWhiteSpace(contentType, nameof(contentType));
-        Check.NotNull(contentLength, nameof(contentLength));
-        var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
-                                                     && x.ComplainId == complain.Id);
-        if (existTepDinhKem != null)
-        {
-            throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
-                .WithData("tenTaiLieu", tenTaiLieu)
-                .WithData("maHoSo", complain.MaHoSo);
-        }
-        return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
-        {
-            ComplainId = complain.Id,
-            GiaiDoan = giaiDoan,
-            HinhThuc = hinhThuc,
-            ThoiGianBanHanh = thoiGianBanHanh,
-            NgayNhan = ngayNhan,
-            ThuTuButLuc = thuTuButLuc,
-            NoiDungChinh = noiDungChinh,
-            FileName = fileName,
-            ContentType = contentType,
-            ContentLength = contentLength
-        };
     }
 }

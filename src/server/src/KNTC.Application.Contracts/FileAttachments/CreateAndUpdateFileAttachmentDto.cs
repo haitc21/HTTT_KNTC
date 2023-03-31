@@ -30,4 +30,6 @@ public class CreateAndUpdateFileAttachmentDto : IHasConcurrencyStamp
     public string ContentType { get; set; }
     public long ContentLength { get; set; }
     public string ConcurrencyStamp { get; set; }
+    [Required]
+    public bool CongKhai { get; set; }
 }

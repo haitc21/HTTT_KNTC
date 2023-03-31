@@ -101,6 +101,7 @@ public class UpdateComplainDto : EntityDto<Guid>, IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
     public string SoQD2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
+    [Required]
     public bool CongKhai { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

@@ -222,6 +222,7 @@ public class KNTCDbContext :
             b.Property(x => x.ContentType).IsRequired().HasColumnName("content_type").HasMaxLength(KNTCValidatorConsts.MaxContenTypeLength);
             b.Property(x => x.ContentLength).IsRequired().HasColumnName("content_length");
             b.Property(x => x.LoaiVuViec).HasColumnName("loai_vu_viec");
+            b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
             b.HasIndex(x => new { x.LoaiVuViec, x.ComplainId });
             b.HasIndex(x => new { x.LoaiVuViec, x.DenounceId });
         });

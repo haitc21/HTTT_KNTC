@@ -68,7 +68,7 @@ public class ComplainAppService : CrudAppService<
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
         if(hasPermission.Succeeded == false)
         {
-            input.CongKhai = false;
+            input.CongKhai = true;
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -176,7 +176,8 @@ public class ComplainAppService : CrudAppService<
                                                                      noiDungChinh: item.NoiDungChinh,
                                                                      fileName: item.FileName,
                                                                      contentType: item.ContentType,
-                                                                     contentLength: item.ContentLength);
+                                                                     contentLength: item.ContentLength,
+                                                                     congKhai: item.CongKhai);
                 await _fileAttachmentRepo.InsertAsync(fileAttach);
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
@@ -396,7 +397,7 @@ public class ComplainAppService : CrudAppService<
         string congKhai = "Tất cả";
         if (input.CongKhai.HasValue)
         {
-            congKhai = input.CongKhai.Value == true ? "Công khai kế quả" : "Không công khai";
+            congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
 
         }
         row = sheet.GetCreateRow(11);
