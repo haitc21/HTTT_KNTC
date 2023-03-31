@@ -130,6 +130,11 @@ export class UtilityService {
     const localDateTime = moment.utc(date).local().toDate(); // Giá trị ngày và giờ trong múi giờ địa phương
     return localDateTime;
   };
+  formatDate = (date: Date | string, format: string) => {
+    if (!date) return '';
+    const momentDate = moment(date);
+    return momentDate.format(format).toString();
+  };
   convertToRomanNumeral(number: number): string {
     const romanMap = [
       { value: 1000, symbol: 'M' },

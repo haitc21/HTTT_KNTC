@@ -316,6 +316,11 @@
                     label="Công khai"
                     formControlName="congKhai"
                   ></p-checkbox>
+                  <app-validation-message
+                    [entityControl]="formControls.congKhai"
+                    [validationMessages]="validationMessages.congKhai"
+                  >
+                  </app-validation-message>
                 </div>
                 <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
                 <div class="field col-12 md:col-12">
@@ -740,7 +745,7 @@
           </ng-template>
           <app-file-attachment
             [loaiVuViec]="loaiVuViec"
-            [mode]="mode"
+            [modeHoSo]="mode"
             [complainId]="complainId"
           ></app-file-attachment>
         </p-tabPanel>
@@ -754,7 +759,7 @@
       </p-tabView>
     </div>
 
-    <ng-template pTemplate="footer">
+    <ng-template *ngIf="mode != 'view'" pTemplate="footer">
       <div class="flex justify-content-end">
         <button
           pButton

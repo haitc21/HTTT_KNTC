@@ -715,7 +715,14 @@
                       [autoDisplayFirst]="false"
                       styleClass="w-full"
                     ></p-dropdown>
-                    <label for="ketQua">Kết luận nội dung tố cáo</label>
+                    <label for="ketQua"
+                      >Kết luận nội dung tố cáo <span class="required">*</span></label
+                    >
+                    <app-validation-message
+                      [entityControl]="formControls.ketQua"
+                      [validationMessages]="validationMessages.ketQua"
+                    >
+                    </app-validation-message>
                   </span>
                 </div>
               </div>
@@ -723,9 +730,14 @@
               <div class="field col-12 md:col-6">
                 <p-checkbox
                   binary="true"
-                  label="Công khai"
+                  label="Công khai *"
                   formControlName="congKhai"
                 ></p-checkbox>
+                <app-validation-message
+                  [entityControl]="formControls.congKhai"
+                  [validationMessages]="validationMessages.congKhai"
+                >
+                </app-validation-message>
               </div>
             </p-fieldset>
             <!-- ---------------------------------------------------------------------------------- -->
@@ -738,7 +750,7 @@
           </ng-template>
           <app-file-attachment
             [loaiVuViec]="loaiVuViec"
-            [mode]="mode"
+            [modeHoSo]="mode"
             [denounceId]="denounceId"
           ></app-file-attachment>
         </p-tabPanel>
@@ -752,7 +764,7 @@
       </p-tabView>
     </div>
 
-    <ng-template pTemplate="footer">
+    <ng-template *ngIf="mode != 'view'" pTemplate="footer">
       <div class="flex justify-content-end">
         <button
           pButton

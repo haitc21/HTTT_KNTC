@@ -194,7 +194,7 @@ public class FileAttachmentAppService : CrudAppService<
                     };
         query = query.OrderBy(input.Sorting);
         var fileAttachments = await AsyncExecuter.ToListAsync<FileAttachmentExcelDto>(query);
-        if (fileAttachments.Any()) return null;
+        if (fileAttachments == null) return null;
 
         var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "FileAttachment.xlsx");
 

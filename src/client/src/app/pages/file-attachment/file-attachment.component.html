@@ -2,7 +2,7 @@
   <p-panel #pnl>
     <!-- -------------------------------------CREATE------------------------------------------------------ -->
     <p-table
-      *ngIf="mode == 'create'"
+      *ngIf="modeHoSo == 'create'"
       #dt
       [value]="items"
       [rows]="10"
@@ -35,6 +35,7 @@
                 optionValue="value"
                 [showClear]="true"
                 [autoDisplayFirst]="false"
+                (onChange)="loadData()"
                 styleClass="w-full"
               ></p-dropdown>
               <label for="phoneNumber">Giai đoạn</label>
@@ -47,14 +48,30 @@
                 optionValue="id"
                 [showClear]="true"
                 [autoDisplayFirst]="false"
+                (onChange)="loadData()"
                 styleClass="w-full"
               ></p-dropdown>
               <label for="phoneNumber">Hình thức tài liệu</label>
+            </span>
+            <span class="p-float-label flex-1">
+              <p-dropdown
+                *ngIf="hasLoggedIn"
+                [options]="congKhaiOptions"
+                [(ngModel)]="congKhai"
+                optionLabel="text"
+                optionValue="value"
+                [showClear]="true"
+                [autoDisplayFirst]="false"
+                styleClass="w-full"
+                (onChange)="loadData()"
+              ></p-dropdown>
+              <label for="phoneNumber">Coong khai</label>
             </span>
           </div>
           <div class="grid flex-end flex-row-reverse col-4">
             <div class="flex-end">
               <button
+                *ngIf="modeHoSo != 'view'"
                 pButton
                 pRipple
                 label="Thêm"
@@ -95,7 +112,7 @@
               [showTransitionOptions]="'300ms'"
               [hideTransitionOptions]="'300ms'"
               #menu1
-              [model]="actionMenu"
+              [modeHoSol]="actionMenu"
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
@@ -117,7 +134,7 @@
 
     <!-- ------------------------------------UPDATE----------------------------------- -->
     <p-table
-      *ngIf="mode == 'update'"
+      *ngIf="modeHoSo == 'update' || modeHoSo == 'view'"
       #dt
       [value]="items"
       [rows]="10"
@@ -166,16 +183,40 @@
               ></p-dropdown>
               <label for="phoneNumber">Hình thức tài liệu</label>
             </span>
+            <span class="p-float-label flex-1">
+              <p-dropdown
+                [options]="congKhaiOptions"
+                [(ngModel)]="congKhai"
+                optionLabel="text"
+                optionValue="value"
+                [showClear]="true"
+                [autoDisplayFirst]="false"
+                styleClass="w-full"
+                (onChange)="loadData()"
+              ></p-dropdown>
+              <label for="phoneNumber">Coong khai</label>
+            </span>
           </div>
           <div class="grid flex-end flex-row-reverse col-4">
             <div class="flex-end">
               <button
+                *ngIf="modeHoSo != 'view'"
                 pButton
                 pRipple
                 label="Thêm"
                 icon="pi pi-plus"
                 class="p-button-info mr-2"
                 (click)="showAddModal()"
+              ></button>
+              <button
+                *ngIf="hasLoggedIn && modeHoSo != 'create'"
+                type="button"
+                pButton
+                pRipple
+                label="Xuất exel"
+                icon="pi pi-download"
+                class="p-button-info mr-2"
+                (click)="exportExcel()"
               ></button>
             </div>
           </div>
@@ -197,8 +238,12 @@
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
         <tr>
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-          <td>{{ row.fileName }}</td>
-          <td>{{ row.tenTaiLieu }}</td>
+          <td>
+            <span class="p-link" (click)="viewDetail(row)">{{ row.fileName }}</span>
+          </td>
+          <td>
+            <span class="p-link" (click)="viewDetail(row)">{{ row.tenTaiLieu }}</span>
+          </td>
           <td>{{ getGiaiDoan(row.giaiDoan) }}</td>
           <td>{{ getHinhThuc(row.hinhThuc) }}</td>
           <td>{{ row?.ngayNhan | date : 'dd-MM-yyyy' }}</td>
@@ -223,7 +268,7 @@
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem;"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>
@@ -292,6 +337,26 @@
       [item]="selectedItem"
       (save)="submitUpdate($event)"
       (close)="closeUpdateModal()"
+    ></app-file-attachment-detail>
+  </p-dialog>
+</ng-container>
+
+<!-- -----------------------------------VIEW MODAL--------------------------------------------- -->
+<ng-container *ngIf="visibleViewModal">
+  <p-dialog
+    [draggable]="false"
+    [resizable]="false"
+    [(visible)]="visibleViewModal"
+    [header]="headerModal"
+    modal="true"
+    (onHide)="closeViewModal()"
+    [style]="{ width: DIALOG_MD }"
+  >
+    <app-file-attachment-detail
+      [loaiVuViec]="loaiVuViec"
+      [isView]="true"
+      [item]="selectedItem"
+      (close)="closeViewModal()"
     ></app-file-attachment-detail>
   </p-dialog>
 </ng-container>

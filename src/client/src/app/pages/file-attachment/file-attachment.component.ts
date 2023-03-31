@@ -18,6 +18,8 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.component';
 import { saveAs } from 'file-saver';
+import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'app-file-attachment',
@@ -28,7 +30,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
 
   @Input() loaiVuViec!: LoaiVuViec;
-  @Input() mode: 'create' | 'update';
+  @Input() modeHoSo: 'create' | 'update' | 'view';
   @Input() complainId: string | null = null;
   @Input() denounceId: string | null = null;
 
@@ -38,10 +40,12 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   files: File[] = [];
   actionItem: FileAttachmentDto;
   actionMenu: MenuItem[];
+  congKhai: boolean | null;
 
   // modal
   visibleAddModal = false;
   visibleUpdateModal = false;
+  visibleViewModal = false;
   headerModal = '';
   selectedItem: FileAttachmentDto;
 
@@ -50,6 +54,10 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
     { value: 0, text: 'Tất cả' },
     { value: 1, text: 'Khiếu nại lần I' },
     { value: 2, text: 'Khiếu nại lần II' },
+  ];
+  congKhaiOptions = [
+    { value: true, text: 'Công khai' },
+    { value: false, text: 'Không công khai' },
   ];
 
   giaiDoan: number;
@@ -61,7 +69,9 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   public skipCount: number = 0;
   public maxResultCount: number = 10;
   public totalCount: number;
-
+  get hasLoggedIn(): boolean {
+    return this.oAuthService.hasValidAccessToken();
+  }
   constructor(
     private documentTypeService: DocumentTypeService,
     private dialogService: DialogService,
@@ -69,18 +79,20 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private notificationService: NotificationService,
     private fileAttachmentService: FileAttachmentService,
-    private fileService: FileService
+    private fileService: FileService,
+    private oAuthService: OAuthService
   ) {}
 
   ngOnInit() {
     this.buildActionMenu();
     this.getOptions();
     this.loadData();
+    console.log('modeHoSo', this.modeHoSo);
   }
 
   loadData() {
     this.toggleBlockUI(true);
-    if (this.mode == 'update') {
+    if (this.modeHoSo == 'update' || this.modeHoSo == 'view') {
       this.fileAttachmentService
         .getList({
           maxResultCount: this.maxResultCount,
@@ -90,6 +102,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           denounceId: this.denounceId,
           giaiDoan: this.giaiDoan,
           hinhThuc: this.hinhThuc,
+          congKhai: this.hasLoggedIn ? this.congKhai : true,
         })
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
@@ -104,14 +117,46 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
         });
     }
 
-    if (this.mode == 'create') {
+    if (this.modeHoSo == 'create') {
       this.items = this.data.filter(
         x =>
           (!this.giaiDoan || x.giaiDoan == this.giaiDoan) &&
-          (!this.hinhThuc || x.hinhThuc == this.hinhThuc)
+          (!this.hinhThuc || x.hinhThuc == this.hinhThuc) &&
+          (!this.congKhai || x.congKhai == this.congKhai)
       );
       this.toggleBlockUI(false);
     }
+  }
+
+  exportExcel() {
+    this.toggleBlockUI(true);
+    this.fileAttachmentService
+      .getExcel({
+        maxResultCount: this.maxResultCount,
+        skipCount: this.skipCount,
+        keyword: this.keyword,
+        complainId: this.complainId,
+        denounceId: this.denounceId,
+        giaiDoan: this.giaiDoan,
+        hinhThuc: this.hinhThuc,
+        congKhai: this.modeHoSo == 'view' ? true : this.congKhai,
+      })
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (data: any) => {
+          if (data) {
+            const uint8Array = this.utilService.base64ToArrayBuffer(data);
+            const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
+            let fileName =
+              this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') + '_Tệp gắn kèm.xlsx';
+            saveAs(blob, fileName);
+          }
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
   }
 
   getOptions() {
@@ -132,11 +177,12 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
   showAddModal() {
     this.visibleAddModal = true;
+    this.headerModal = 'Thêm mới tệp gắn kèm';
   }
   submitAdd(dto: any) {
     if (dto) {
       this.toggleBlockUI(true);
-      if (this.mode == 'create') {
+      if (this.modeHoSo == 'create') {
         let fileAttachment = {
           loaiVuViec: this.loaiVuViec,
           complainId: this.complainId,
@@ -151,15 +197,17 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           fileName: dto.fileName,
           contentType: dto.contentType,
           contentLength: dto.contentLength,
+          congKhai: dto.congKhai,
         } as FileAttachmentDto;
         this.data.push(fileAttachment);
         this.files.push(dto.file);
-        this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
+        // this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.loadData();
         this.visibleAddModal = false;
+        this.headerModal = '';
         this.toggleBlockUI(false);
       }
-      if (this.mode == 'update') {
+      if (this.modeHoSo == 'update') {
         dto.loaiVuViec = this.loaiVuViec;
         dto.complainId = this.complainId;
         dto.denounceId = this.denounceId;
@@ -177,6 +225,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
                       this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
                       this.loadData();
                       this.visibleAddModal = false;
+                      this.headerModal = '';
                       this.toggleBlockUI(false);
                     },
                     () => {
@@ -194,14 +243,16 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   }
   closeAddModal() {
     this.visibleAddModal = false;
+    this.headerModal = '';
   }
-  showEditModal(item: FileAttachmentDto) {
+  showUpdateModal(item: FileAttachmentDto) {
     this.selectedItem = item;
+    this.headerModal = `Cập nhật tệp gắn kèm "${item.tenTaiLieu}"`;
     this.visibleUpdateModal = true;
   }
   submitUpdate(dto: any) {
     if (dto) {
-      if (this.mode == 'create') {
+      if (this.modeHoSo == 'create') {
         let fileAttachment = {
           giaiDoan: dto.giaiDoan,
           tenTaiLieu: dto.tenTaiLieu,
@@ -213,6 +264,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           fileName: dto.fileName,
           contentType: dto.contentType,
           contentLength: dto.contentLength,
+          congKhai: dto.congKhai,
         } as FileAttachmentDto;
         let index = this.data.indexOf(this.selectedItem);
         if (index > -1) {
@@ -222,13 +274,14 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
             let indexFile = this.files.indexOf(file);
             if (index > -1) this.files[indexFile] = dto.file;
           }
-          this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
+          // this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
           this.loadData();
+          this.headerModal = '';
           this.visibleUpdateModal = false;
           this.selectedItem = null;
         }
       }
-      if (this.mode == 'update') {
+      if (this.modeHoSo == 'update') {
         this.fileAttachmentService
           .update(this.selectedItem.id, dto)
           .pipe(takeUntil(this.ngUnsubscribe))
@@ -242,6 +295,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
                     res => {
                       this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
                       this.loadData();
+                      this.headerModal = '';
                       this.visibleUpdateModal = false;
                       this.selectedItem = null;
                       this.toggleBlockUI(false);
@@ -253,6 +307,9 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
               } else {
                 this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
                 this.loadData();
+                this.headerModal = '';
+                this.visibleUpdateModal = false;
+                this.selectedItem = null;
                 this.toggleBlockUI(false);
               }
             },
@@ -265,18 +322,32 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   }
   closeUpdateModal() {
     this.visibleUpdateModal = false;
+    this.headerModal = '';
     this.selectedItem = null;
   }
-  dowload(item: FileAttachmentDto) {
+  viewDetail(item: FileAttachmentDto) {
+    this.selectedItem = item;
+    this.headerModal = `Chi tiết tệp gắn kèm "${item.tenTaiLieu}"`;
+    this.visibleViewModal = true;
+  }
+  closeViewModal() {
+    this.visibleViewModal = false;
+    this.headerModal = '';
+    this.selectedItem = null;
+  }
+
+  download(item: FileAttachmentDto) {
     this.toggleBlockUI(true);
     this.fileService
       .downloadFileAttachment(item.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (data: any) => {
-          const uint8Array = this.utilService.base64ToArrayBuffer(data);
-          const blob = new Blob([uint8Array], { type: item.contentType });
-          saveAs(blob, item.fileName);
+          if (data) {
+            const uint8Array = this.utilService.base64ToArrayBuffer(data);
+            const blob = new Blob([uint8Array], { type: item.contentType });
+            saveAs(blob, item.fileName);
+          }
           this.toggleBlockUI(false);
         },
         () => {
@@ -298,7 +369,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   }
 
   deleteRowConfirm(item: FileAttachmentDto) {
-    if (this.mode == 'create') {
+    if (this.modeHoSo == 'create') {
       let index = this.data.indexOf(item);
       if (index !== -1) {
         this.data.splice(index, 1);
@@ -309,7 +380,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
       }
     }
-    if (this.mode == 'update') {
+    if (this.modeHoSo == 'update') {
       this.fileAttachmentService
         .delete(item.id)
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -346,18 +417,19 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
         label: this.Actions.UPDATE,
         icon: 'pi pi-fw pi-pencil',
         command: event => {
-          this.showEditModal(this.actionItem);
+          this.showUpdateModal(this.actionItem);
           this.actionItem = null;
         },
+        visible: this.modeHoSo != 'view',
       },
       {
         label: this.Actions.DOWNLOAD,
         icon: 'pi pi-fw pi-download',
         command: event => {
-          this.dowload(this.actionItem);
+          this.download(this.actionItem);
           this.actionItem = null;
         },
-        visible: this.mode == 'update',
+        visible: this.modeHoSo != 'create',
       },
       {
         label: this.Actions.DELETE,
@@ -366,6 +438,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           this.deleteRow(this.actionItem);
           this.actionItem = null;
         },
+        visible: this.modeHoSo != 'view',
       },
     ];
   }

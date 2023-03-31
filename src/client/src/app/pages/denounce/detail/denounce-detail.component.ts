@@ -29,7 +29,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   fileAttachmentComponent: FileAttachmentComponent;
 
   denounceId: string;
-  mode: 'create' | 'update' = 'create';
+  mode: 'create' | 'update' | 'view' = 'view';
   loaiVuViec = LoaiVuViec.KhieuNai;
   fileUploads: EileUploadDto[] = [];
   // Default
@@ -207,6 +207,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       { type: 'required', message: 'Ngày nhận TB KQXLKLTC không được để trống' },
     ],
     ketQua: [{ type: 'required', message: 'Xã/Phường/TT  thửa đất không được để trống' }],
+    congKhai: [{ type: 'required', message: 'Không được để trống' }],
   };
 
   get formControls() {
@@ -227,9 +228,12 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadOptions();
     this.buildForm();
+
+    if (this.utilService.isEmpty(this.config.data?.mode) == false) {
+      this.mode = this.config.data?.mode;
+    }
     if (this.utilService.isEmpty(this.config.data?.id) == false) {
       this.denounceId = this.config.data?.id;
-      this.mode = 'update';
       this.loadDetail(this.denounceId);
     }
   }
@@ -387,6 +391,8 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
           this.form
             .get('ngayNhanTBKQXLKLTC')
             .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayNhanTBKQXLKLTC));
+
+          if (this.mode == 'view') this.form.disable();
           this.toggleBlockUI(false);
         },
         error: () => {
@@ -418,6 +424,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
           fileName: x.fileName,
           contentType: x.contentType,
           contentLength: x.contentLength,
+          congKhai: x.congKhai,
         } as CreateAndUpdateFileAttachmentDto;
       });
       this.denounceService
@@ -551,7 +558,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       ],
       ngayNhanTBKQXLKLTC: [null, [Validators.required]],
       ketQua: [null, [Validators.required]],
-      congKhai: [false],
+      congKhai: [false, [Validators.required]],
 
       concurrencyStamp: [],
     });

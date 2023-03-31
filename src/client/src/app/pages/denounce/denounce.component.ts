@@ -146,7 +146,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         }
       );
   }
- tinhChange(event) {
+  tinhChange(event) {
     this.loadData();
     if (event.value) {
       this.toggleBlockUI(true);
@@ -258,11 +258,12 @@ export class DenounceComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (data: any) => {
-          const uint8Array = this.utilService.base64ToArrayBuffer(data);
-          const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
-          let fileName =
-            this.utilService.convertDateToLocal(new Date()) + '_Tố cáo.xlsx';
-          saveAs(blob, fileName);
+          if (data) {
+            const uint8Array = this.utilService.base64ToArrayBuffer(data);
+            const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
+            let fileName = this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') + '_Tố cáo.xlsx';
+            saveAs(blob, fileName);
+          }
           this.toggleBlockUI(false);
         },
         () => {
@@ -290,7 +291,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         label: this.Actions.UPDATE,
         icon: 'pi pi-fw pi-pencil',
         command: event => {
-          this.showEditModal(this.actionItem);
+          this.showUpdateModal(this.actionItem);
           this.actionItem = null;
         },
         visible: this.hasPermissionUpdate,
@@ -342,10 +343,12 @@ export class DenounceComponent implements OnInit, OnDestroy {
   }
   showAddModal() {
     const ref = this.dialogService.open(DenounceDetailComponent, {
-      header: 'Thêm khiếu nại/khiếu kiện',
+      header: 'Thêm tố cáo',
       width: DIALOG_BG,
       data: {
+        loaiVuViec: LoaiVuViec.ToCao,
         linhVuc: this.linhVuc,
+        mode: 'create',
       },
     });
 
@@ -381,7 +384,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
       }
     });
   }
-  showEditModal(row) {
+  showUpdateModal(row) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
@@ -390,9 +393,11 @@ export class DenounceComponent implements OnInit, OnDestroy {
     const ref = this.dialogService.open(DenounceDetailComponent, {
       data: {
         id: row.id,
+        loaiVuViec: LoaiVuViec.ToCao,
         linhVuc: this.linhVuc,
+        mode: 'update',
       },
-      header: `Cập nhật khiếu nại/khiếu kiện '${row.tieuDe}'`,
+      header: `Cập nhật tố cáo "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
 
@@ -403,6 +408,23 @@ export class DenounceComponent implements OnInit, OnDestroy {
         this.actionItem = null;
         this.loadData();
       }
+    });
+  }
+  viewDetail(row) {
+    if (!row) {
+      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      return;
+    }
+
+    const ref = this.dialogService.open(DenounceDetailComponent, {
+      data: {
+        id: row.id,
+        loaiVuViec: LoaiVuViec.ToCao,
+        linhVuc: this.linhVuc,
+        mode: 'view',
+      },
+      header: `Chi tiết đơn tố cáo "${row.tieuDe}"`,
+      width: DIALOG_BG,
     });
   }
 

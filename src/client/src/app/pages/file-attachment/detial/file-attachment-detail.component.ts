@@ -26,6 +26,8 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
 
   @Input() loaiVuViec: LoaiVuViec;
   @Input() item: FileAttachmentDto;
+  @Input() isView = false;
+
   @Output() save: EventEmitter<any> = new EventEmitter();
   @Output() close: EventEmitter<any> = new EventEmitter();
 
@@ -64,6 +66,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     fileName: [{ type: 'required', message: 'Vui lòng chọn tệp' }],
     thoiGianBanHanh: [{ type: 'required', message: 'Thời gian ban hành không được để trống' }],
     ngayNhan: [{ type: 'required', message: 'Ngày nhận không được để trống' }],
+    congKhai: [{ type: 'required', message: 'Không được để trống' }],
   };
 
   get formControls() {
@@ -98,8 +101,8 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
-this.utilService.markAllControlsAsDirty([this.form]);
-    if(this.form.invalid) return;;
+    this.utilService.markAllControlsAsDirty([this.form]);
+    if (this.isView || this.form.invalid) return;
     let dto = this.form.value as CreateAndUpdateFileAttachmentDto;
     if (this.file) {
       dto.contentLength = this.file.size;
@@ -136,12 +139,16 @@ this.utilService.markAllControlsAsDirty([this.form]);
       loaiVuViec: [this.loaiVuViec],
       complainId: [],
       denounceId: [],
+      congKhai: [false, [Validators.required]],
     });
     if (this.item) {
       this.form.patchValue(this.item);
       this.form.get('ngayNhan').setValue(this.utilService.convertDateToLocal(this.item.ngayNhan));
-      this.form.get('thoiGianBanHanh').setValue(this.utilService.convertDateToLocal(this.item.thoiGianBanHanh));
+      this.form
+        .get('thoiGianBanHanh')
+        .setValue(this.utilService.convertDateToLocal(this.item.thoiGianBanHanh));
     }
+    if (this.isView) this.form.disable();
   }
 
   choseFile(event) {

@@ -107,7 +107,7 @@ export class UserComponent implements OnInit, OnDestroy {
         label: this.Actions.UPDATE,
         icon: 'pi pi-fw pi-pencil',
         command: event => {
-          this.showEditModal(this.actionItem);
+          this.showUpdateModal(this.actionItem);
           this.actionItem = null;
         },
         visible: this.hasPermissionUpdate,
@@ -207,7 +207,7 @@ export class UserComponent implements OnInit, OnDestroy {
     this.loadData();
   }
 
-  showEditModal(row) {
+  showUpdateModal(row) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;

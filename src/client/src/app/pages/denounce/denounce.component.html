@@ -86,7 +86,7 @@
           </span>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-3">
+        <div *abpPermission="'Denounces'" class="field col-12 md:col-3">
           <span class="p-float-label">
             <p-dropdown
               [options]="congKhaiOptions"
@@ -138,6 +138,7 @@
           (click)="showAddModal()"
         ></button>
         <button
+          *abpPermission="'Denounces'"
           type="button"
           pButton
           pRipple
@@ -145,14 +146,6 @@
           icon="pi pi-download"
           class="p-button-info mr-2"
           (click)="exportExcel()"
-        ></button>
-        <button
-          type="button"
-          pButton
-          pRipple
-          label="In"
-          icon="pi pi-print"
-          class="p-button-info"
         ></button>
       </ng-template>
     </p-toolbar>
@@ -189,7 +182,9 @@
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-          <td>{{ row.maHoSo }}</td>
+          <td>
+            <span class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+          </td>
           <td>{{ row.nguoiToCao }}</td>
           <td>{{ row.dienThoai }}</td>
           <td>{{ row.diaChiLienHe }}</td>
@@ -197,10 +192,10 @@
           <td>{{ row.nguoiGQTC }}</td>
           <td>{{ row.tieuDe }}</td>
           <td>
-            {{ row?.thoiGianTiepNhan | date : 'dd-MM-yyyy HH:mm' }}
+            {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
           </td>
           <td>
-            {{ row?.thoiGianHenTraKQ | date : 'dd-MM-yyyy HH:mm' }}
+            {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
           </td>
           <td>{{ row?.boPhanDangXL }}</td>
           <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
@@ -223,7 +218,7 @@
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem;"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>

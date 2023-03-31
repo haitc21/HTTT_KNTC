@@ -48,7 +48,7 @@ export class FileAttachmentService {
     this.restService.request<any, number[]>({
       method: 'GET',
       url: '/api/app/file-attachment/excel',
-      params: { complainId: input.complainId, denounceId: input.denounceId, giaiDoan: input.giaiDoan, hinhThuc: input.hinhThuc, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      params: { complainId: input.complainId, denounceId: input.denounceId, giaiDoan: input.giaiDoan, hinhThuc: input.hinhThuc, congKhai: input.congKhai, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
   
@@ -57,7 +57,7 @@ export class FileAttachmentService {
     this.restService.request<any, PagedResultDto<FileAttachmentDto>>({
       method: 'GET',
       url: '/api/app/file-attachment',
-      params: { complainId: input.complainId, denounceId: input.denounceId, giaiDoan: input.giaiDoan, hinhThuc: input.hinhThuc, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      params: { complainId: input.complainId, denounceId: input.denounceId, giaiDoan: input.giaiDoan, hinhThuc: input.hinhThuc, congKhai: input.congKhai, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
   

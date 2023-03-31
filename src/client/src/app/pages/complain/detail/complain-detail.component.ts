@@ -29,7 +29,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   fileAttachmentComponent: FileAttachmentComponent;
 
   complainId: string;
-  mode: 'create' | 'update' = 'create';
+  mode: 'create' | 'update' | 'view' = 'view';
   loaiVuViec = LoaiVuViec.KhieuNai;
   fileUploads: EileUploadDto[] = [];
   // Default
@@ -183,6 +183,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         message: `Ghi chú không vượt quá ${KNTCValidatorConsts.MaxGhiChuLength} kí tự`,
       },
     ],
+    congKhai: [{ type: 'required', message: 'Không được để trống' }],
   };
 
   get formControls() {
@@ -203,9 +204,11 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadOptions();
     this.buildForm();
+    if (this.utilService.isEmpty(this.config.data?.mode) == false) {
+      this.mode = this.config.data?.mode;
+    }
     if (this.utilService.isEmpty(this.config.data?.id) == false) {
       this.complainId = this.config.data?.id;
-      this.mode = 'update';
       this.loadDetail(this.complainId);
     }
   }
@@ -339,14 +342,29 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
 
           this.form.patchValue(this.selectedEntity);
-          this.form.get('ngaySinh').setValue(this.utilService.convertDateToLocal(this.selectedEntity.ngaySinh));
-          this.form.get('thoiGianTiepNhan').setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianTiepNhan));
-          this.form.get('thoiGianHenTraKQ').setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianHenTraKQ));
-          this.form.get('ngayKhieuNai1').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai1));
-          this.form.get('ngayTraKQ1').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ1));
-          this.form.get('ngayKhieuNai2').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai2));
-          this.form.get('ngayTraKQ2').setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
+          this.form
+            .get('ngaySinh')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.ngaySinh));
+          this.form
+            .get('thoiGianTiepNhan')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianTiepNhan));
+          this.form
+            .get('thoiGianHenTraKQ')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianHenTraKQ));
+          this.form
+            .get('ngayKhieuNai1')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai1));
+          this.form
+            .get('ngayTraKQ1')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ1));
+          this.form
+            .get('ngayKhieuNai2')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai2));
+          this.form
+            .get('ngayTraKQ2')
+            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
 
+          if (this.mode == 'view') this.form.disable();
           this.toggleBlockUI(false);
         },
         error: () => {
@@ -357,7 +375,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.utilService.markAllControlsAsDirty([this.form]);
-    if(this.form.invalid) return;;
+    if (this.form.invalid) return;
     this.toggleBlockUI(true);
     if (this.utilService.isEmpty(this.complainId)) {
       let value = this.form.value as CreateComplainDto;
@@ -378,6 +396,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           fileName: x.fileName,
           contentType: x.contentType,
           contentLength: x.contentLength,
+          congKhai: x.congKhai,
         } as CreateAndUpdateFileAttachmentDto;
       });
       this.complainService
@@ -405,6 +424,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         );
     } else {
       let value = this.form.value as UpdateComplainDto;
+      console.log('cong khai', value.congKhai);
+
       this.complainService
         .update(this.config.data.id, value)
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -501,7 +522,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       soQD2: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
       ketQua2: [],
 
-      congKhai: [false],
+      congKhai: [false, [Validators.required]],
 
       concurrencyStamp: [],
     });

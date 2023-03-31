@@ -107,7 +107,7 @@ export class RoleComponent implements OnInit, OnDestroy {
     this.loadData();
   }
 
-  showEditModal(row: any) {
+  showUpdateModal(row: any) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
@@ -224,7 +224,7 @@ export class RoleComponent implements OnInit, OnDestroy {
         label: this.Actions.UPDATE,
         icon: 'pi pi-fw pi-pencil',
         command: event => {
-          this.showEditModal(this.actionItem);
+          this.showUpdateModal(this.actionItem);
           this.actionItem = null;
         },
         visible: this.hasPermissionUpdate,

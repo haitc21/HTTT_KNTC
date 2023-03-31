@@ -61,26 +61,6 @@
         >
         </app-validation-message>
       </div>
-      <!-- ---------------------------------thoiGianBanHanh------------------------------------------------- -->
-      <div class="field col-12 md:col-6">
-        <span class="p-float-label">
-          <p-calendar
-            id="thoiGianBanHanh"
-            formControlName="thoiGianBanHanh"
-            appendTo="body"
-            dateFormat="dd/mm/yy"
-            [showClear]="true"
-            showTime="true"
-            [hourFormat]="24"
-          ></p-calendar>
-          <label for="dob">Thời gian ban hành <span class="required">*</span></label>
-        </span>
-        <app-validation-message
-          [entityControl]="formControls.thoiGianBanHanh"
-          [validationMessages]="validationMessages.thoiGianBanHanh"
-        >
-        </app-validation-message>
-      </div>
       <!-- ---------------------------------ngayNhan------------------------------------------------- -->
       <div class="field col-12 md:col-6">
         <span class="p-float-label">
@@ -101,6 +81,26 @@
         >
         </app-validation-message>
       </div>
+      <!-- ---------------------------------thoiGianBanHanh------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <p-calendar
+            id="thoiGianBanHanh"
+            formControlName="thoiGianBanHanh"
+            appendTo="body"
+            dateFormat="dd/mm/yy"
+            [showClear]="true"
+            showTime="true"
+            [hourFormat]="24"
+          ></p-calendar>
+          <label for="dob">Thời gian ban hành <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.thoiGianBanHanh"
+          [validationMessages]="validationMessages.thoiGianBanHanh"
+        >
+        </app-validation-message>
+      </div>
       <!-- ---------------------------------thuTuButLuc----------------------=----------------------------- -->
       <div class="field col-12 md:col-6">
         <span class="p-float-label">
@@ -116,6 +116,15 @@
         <app-validation-message
           [entityControl]="formControls.thuTuButLuc"
           [validationMessages]="validationMessages.thuTuButLuc"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ----------------------------congKhai---------------------------=----------------------------- -->
+      <div class="field col-12 md:col-6">
+        <p-checkbox binary="true" label="Công khai" formControlName="congKhai"></p-checkbox>
+        <app-validation-message
+          [entityControl]="formControls.congKhai"
+          [validationMessages]="validationMessages.congKhai"
         >
         </app-validation-message>
       </div>
@@ -157,7 +166,7 @@
         </app-validation-message>
       </div>
       <!-- ----------------------------file---------------------------=----------------------------- -->
-      <div class="field col-12 md:col-6">
+      <div *ngIf="!isView" class="field col-12 md:col-6">
         <div class="flex w-full">
           <p-fileUpload
             name="file[]"
@@ -175,7 +184,7 @@
       <!-- ---------------------------------------------------------------------------------- -->
     </div>
 
-    <ng-template pTemplate="footer">
+    <ng-template *ngIf="!isView" pTemplate="footer">
       <div class="flex justify-content-end">
         <button
           pButton
@@ -185,7 +194,7 @@
           label="Lưu"
           class="p-button-info mr-2"
           icon="pi pi-check"
-          [disabled]="!form.valid || btnDisabled"
+          [disabled]="!form.valid || btnDisabled || isView"
         ></button>
         <button
           pButton

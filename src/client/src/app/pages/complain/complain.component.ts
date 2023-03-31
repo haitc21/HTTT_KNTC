@@ -157,27 +157,6 @@ export class ComplainComponent implements OnInit, OnDestroy {
     }
   }
 
-  /*
-  private setHeader() {
-    switch (this.linhVuc) {
-      case LinhVuc.DataDai:
-        this.header = 'Khiếu nại đất đai';
-        break;
-      case LinhVuc.MoiTruong:
-        this.header = 'Khiếu nại môi trường';
-        break;
-      case LinhVuc.TaiNguyenNuoc:
-        this.header = 'Khiếu nại tài nguyên nước';
-        break;
-      case LinhVuc.KhoangSan:
-        this.header = 'Khiếu nại khoáng sản';
-        break;
-      default:
-        this.header = '';
-    }
-  }
-  */
-
   loadOptions() {
     this.toggleBlockUI(true);
     this.unitService
@@ -304,11 +283,13 @@ export class ComplainComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (data: any) => {
-          const uint8Array = this.utilService.base64ToArrayBuffer(data);
-          const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
-          let fileName =
-            this.utilService.convertDateToLocal(new Date()) + '_Khiếu nại/Khiếu kiện.xlsx';
-          saveAs(blob, fileName);
+          if (data) {
+            const uint8Array = this.utilService.base64ToArrayBuffer(data);
+            const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
+            let fileName =
+              this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') + '_Khiếu nại/Khiếu kiện.xlsx';
+            saveAs(blob, fileName);
+          }
           this.toggleBlockUI(false);
         },
         () => {
@@ -336,7 +317,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         label: this.Actions.UPDATE,
         icon: 'pi pi-fw pi-pencil',
         command: event => {
-          this.showEditModal(this.actionItem);
+          this.showUpdateModal(this.actionItem);
           this.actionItem = null;
         },
         visible: this.hasPermissionUpdate,
@@ -392,7 +373,9 @@ export class ComplainComponent implements OnInit, OnDestroy {
       header: 'Thêm khiếu nại/khiếu kiện',
       width: DIALOG_BG,
       data: {
+        loaiVuViec: LoaiVuViec.KhieuNai,
         linhVuc: this.linhVuc,
+        mode: 'create',
       },
     });
 
@@ -429,7 +412,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     });
   }
 
-  showEditModal(row) {
+  showUpdateModal(row) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
@@ -438,9 +421,11 @@ export class ComplainComponent implements OnInit, OnDestroy {
     const ref = this.dialogService.open(ComplainDetailComponent, {
       data: {
         id: row.id,
+        loaiVuViec: LoaiVuViec.KhieuNai,
         linhVuc: this.linhVuc,
+        mode: 'update',
       },
-      header: `Cập nhật khiếu nại/khiếu kiện '${row.tieuDe}'`,
+      header: `Cập nhật khiếu nại/khiếu kiện "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
 
@@ -451,6 +436,23 @@ export class ComplainComponent implements OnInit, OnDestroy {
         this.actionItem = null;
         this.loadData();
       }
+    });
+  }
+  viewDetail(row) {
+    if (!row) {
+      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      return;
+    }
+
+    const ref = this.dialogService.open(ComplainDetailComponent, {
+      data: {
+        id: row.id,
+        loaiVuViec: LoaiVuViec.KhieuNai,
+        linhVuc: this.linhVuc,
+        mode: 'view',
+      },
+      header: `Chi tiết khiếu nại/khiếu kiện "${row.tieuDe}"`,
+      width: DIALOG_BG,
     });
   }
 
