@@ -1,7 +1,7 @@
 import { ListResultDto } from '@abp/ng.core';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { LinhVuc, LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
+import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
 import {
   DenounceDto,
   DenounceService,
@@ -30,7 +30,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
 
   denounceId: string;
   mode: 'create' | 'update' | 'view' = 'view';
-  loaiVuViec = LoaiVuViec.KhieuNai;
+  loaiVuViec = LoaiVuViec.ToCao;
   fileUploads: EileUploadDto[] = [];
   // Default
   public blockedPanelDetail: boolean = false;
@@ -412,7 +412,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
 
       value.fileAttachments = fileAttachmentDtos.map(x => {
         return {
-          loaiVuViec: LoaiVuViec.KhieuNai,
+          loaiVuViec: LoaiVuViec.ToCao,
           denounceId: x.denounceId,
           tenTaiLieu: x.tenTaiLieu,
           giaiDoan: x.giaiDoan,

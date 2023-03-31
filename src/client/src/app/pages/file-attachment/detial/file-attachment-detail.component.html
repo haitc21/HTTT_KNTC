@@ -20,7 +20,7 @@
         </app-validation-message>
       </div>
       <!-- -----------------------------------------giaiDoan---------------------------------------- -->
-      <div class="field col-12 md:col-6">
+      <div *ngIf="loaiVuViec == LoaiVuViec.KhieuNai" class="field col-12 md:col-6">
         <span class="p-float-label">
           <p-dropdown
             formControlName="giaiDoan"

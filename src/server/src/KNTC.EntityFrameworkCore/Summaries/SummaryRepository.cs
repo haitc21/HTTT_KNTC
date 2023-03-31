@@ -85,12 +85,13 @@ public class SummaryRepository :  ISummaryRepository
                             LoaiVuViec = LoaiVuViec.KhieuNai,
                             LinhVuc = c.LinhVuc,
                             NguoiNopDon = c.NguoiDeNghi,
+                            DienThoai = c.DienThoai,
+                            DiaChiLienHe = c.DiaChiLienHe,
                             TieuDe = c.TieuDe,
                             ThoiGianTiepNhan = c.ThoiGianTiepNhan,
                             ThoiGianHenTraKQ = c.ThoiGianHenTraKQ,
                             BoPhanDangXL = c.BoPhanDangXL,
                             KetQua = c.KetQua,
-                            DiaChiLienHe = c.DiaChiLienHe,
                             DuLieuToaDo = c.DuLieuToaDo,
                             DuLieuHinhHoc = c.DuLieuHinhHoc
                         });
@@ -140,12 +141,13 @@ public class SummaryRepository :  ISummaryRepository
                             LoaiVuViec = LoaiVuViec.ToCao,
                             LinhVuc = d.LinhVuc,
                             NguoiNopDon = d.NguoiToCao,
+                            DienThoai = d.DienThoai,
+                            DiaChiLienHe = d.DiaChiLienHe,
                             TieuDe = d.TieuDe,
                             ThoiGianTiepNhan = d.ThoiGianTiepNhan,
                             ThoiGianHenTraKQ = d.ThoiGianHenTraKQ,
                             BoPhanDangXL = d.BoPhanDangXL,
                             KetQua = d.KetQua,
-                            DiaChiLienHe = d.DiaChiLienHe,
                             DuLieuToaDo = d.DuLieuToaDo,
                             DuLieuHinhHoc = d.DuLieuHinhHoc
                         });

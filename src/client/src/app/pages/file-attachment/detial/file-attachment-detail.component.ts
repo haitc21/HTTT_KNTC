@@ -37,6 +37,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   file: File;
+  LoaiVuViec = LoaiVuViec;
 
   documentTypeOptions: DocumentTypeLookupDto[];
   giaiDoanOptions = [
@@ -147,6 +148,13 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
       this.form
         .get('thoiGianBanHanh')
         .setValue(this.utilService.convertDateToLocal(this.item.thoiGianBanHanh));
+    }
+    if (this.loaiVuViec == LoaiVuViec.KhieuNai) {
+      this.form.get('giaiDoan').enable();
+      this.form.get('giaiDoan').setValidators([Validators.required]);
+    }
+    if (this.loaiVuViec == LoaiVuViec.ToCao) {
+      this.form.get('giaiDoan').disable();
     }
     if (this.isView) this.form.disable();
   }

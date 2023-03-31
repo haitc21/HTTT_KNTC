@@ -28,6 +28,8 @@ import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 export class DenounceComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
+  home: MenuItem;
+  breadcrumb: MenuItem[];
 
   linhVuc: LinhVuc;
   header: string = '';
@@ -94,6 +96,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.loadOptions();
     this.route.paramMap.subscribe(params => {
       this.linhVuc = +params.get('linhVuc') as LinhVuc;
+      this.buildBreadcrumb();
       this.setHeader();
       this.resetFilter();
       this.loadData(true);
@@ -261,7 +264,8 @@ export class DenounceComponent implements OnInit, OnDestroy {
           if (data) {
             const uint8Array = this.utilService.base64ToArrayBuffer(data);
             const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
-            let fileName = this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') + '_Tố cáo.xlsx';
+            let fileName =
+              this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') + '_Tố cáo.xlsx';
             saveAs(blob, fileName);
           }
           this.toggleBlockUI(false);
@@ -327,6 +331,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.denounceService.delete(id).subscribe({
       next: () => {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+        this.resetFilter();
         this.loadData();
         this.selectedItems = [];
         this.actionItem = null;
@@ -370,6 +375,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
               this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
               this.toggleBlockUI(false);
               this.selectedItems = [];
+              this.resetFilter();
               this.loadData();
             },
             () => {
@@ -379,6 +385,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         } else {
           this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
           this.selectedItems = [];
+          this.resetFilter();
           this.loadData();
         }
       }
@@ -406,6 +413,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
         this.actionItem = null;
+        this.resetFilter();
         this.loadData();
       }
     });
@@ -455,6 +463,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.denounceService.deleteMultiple(ids).subscribe({
       next: () => {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+        this.resetFilter();
         this.loadData();
         this.selectedItems = [];
         this.toggleBlockUI(false);
@@ -470,7 +479,45 @@ export class DenounceComponent implements OnInit, OnDestroy {
       this.loadData();
     }
   }
+  buildBreadcrumb() {
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [
+      { label: 'Tố cáo', icon: 'fa fa-balance-scale', routerLink: '/pages/denounce' },
+    ];
 
+    switch (this.linhVuc) {
+      case LinhVuc.DatDai:
+        this.breadcrumb.push({
+          label: ' Đất đai',
+          icon: 'pi pi-image',
+          routerLink: [`/pages/denounce/${LinhVuc.DatDai}`],
+        });
+        break;
+      case LinhVuc.MoiTruong:
+        this.breadcrumb.push({
+          label: ' Môi trường',
+          icon: 'pi pi-sun',
+          routerLink: [`/pages/denounce/${LinhVuc.MoiTruong}`],
+        });
+        break;
+      case LinhVuc.TaiNguyenNuoc:
+        this.breadcrumb.push({
+          label: ' Tài nguyên nước',
+          icon: 'pi pi-flag-fill',
+          routerLink: [`/pages/denounce/${LinhVuc.TaiNguyenNuoc}`],
+        });
+        break;
+      case LinhVuc.KhoangSan:
+        this.breadcrumb.push({
+          label: ' Khoáng sản',
+          icon: 'pi pi-bitcoin',
+          routerLink: [`/pages/denounce/${LinhVuc.KhoangSan}`],
+        });
+        break;
+      default:
+      //this.header = '';
+    }
+  }
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.blockedPanel = true;

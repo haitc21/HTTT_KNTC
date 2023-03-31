@@ -17,6 +17,14 @@ import { LinhVuc, LoaiKetQua, LoaiVuViec, SpatialDatas } from '@proxy';
 import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
+import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
+import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { saveAs } from 'file-saver';
+import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 
 @Component({
   selector: 'app-search-map',
@@ -94,6 +102,7 @@ export class SearchMapComponent implements OnInit {
   mineralDenounce = true;
   filter: GetSummaryListDto;
   keyword: string = '';
+  congKhai: boolean | null;
   maTinh: number = 24;
   maHuyen: number;
   maXa: number;
@@ -110,6 +119,10 @@ export class SearchMapComponent implements OnInit {
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
   ];
+  congKhaiOptions = [
+    { value: true, text: 'Công khai' },
+    { value: false, text: 'Không công khai' },
+  ];
   // ẩn hiện menu trái
   visibleFilterLeff = true;
   hideColumnState = 'visible';
@@ -120,11 +133,14 @@ export class SearchMapComponent implements OnInit {
   }
 
   constructor(
+    private dialogService: DialogService,
+    private notificationService: NotificationService,
     private oAuthService: OAuthService,
     private authService: AuthService,
     protected route: ActivatedRoute,
     private spatialDataService: SpatialDataService,
     private unitService: UnitService,
+    private utilService: UtilityService,
     private summaryService: SummaryService
   ) {}
 
@@ -188,6 +204,7 @@ export class SearchMapComponent implements OnInit {
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
       ketQua: this.tinhTrang,
+      congKhai: this.hasLoggedIn ? this.congKhai : true,
     } as GetSummaryListDto;
 
     this.toggleBlockUI(true);
@@ -204,6 +221,58 @@ export class SearchMapComponent implements OnInit {
           this.toggleBlockUI(false);
         },
       });
+  }
+
+  exportExcel() {
+    this.toggleBlockUI(true);
+    this.filter = {
+      skipCount: this.skipCount,
+      maxResultCount: this.maxResultCount,
+      keyword: this.keyword,
+
+      landComplain: this.landComplain,
+      enviromentComplain: this.enviromentComplain,
+      waterComplain: this.waterComplain,
+      mineralComplain: this.mineralComplain,
+      landDenounce: this.landDenounce,
+      enviromentDenounce: this.enviromentDenounce,
+      waterDenounce: this.waterDenounce,
+      mineralDenounce: this.mineralDenounce,
+
+      maTinhTP: this.maTinh,
+      maQuanHuyen: this.maHuyen,
+      maXaPhuongTT: this.maXa,
+      fromDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+          ? this.thoiGianTiepNhanRange[0].toUTCString()
+          : null,
+      toDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+          ? this.thoiGianTiepNhanRange[1].toUTCString()
+          : null,
+      ketQua: this.tinhTrang,
+      congKhai: this.hasLoggedIn ? this.congKhai : true,
+    } as GetSummaryListDto;
+
+    this.summaryService
+      .getExcel(this.filter)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (data: any) => {
+          if (data) {
+            const uint8Array = this.utilService.base64ToArrayBuffer(data);
+            const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
+            let fileName =
+              this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +
+              '_Khiếu nại Tố cáo.xlsx';
+            saveAs(blob, fileName);
+          }
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
   }
 
   loadOptions() {
@@ -239,6 +308,37 @@ export class SearchMapComponent implements OnInit {
           }
         );
     } else this.huyenOptions = [];
+  }
+
+  viewDetail(row) {
+    if (!row) {
+      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      return;
+    }
+    if (row.loaiVuViec == LoaiVuViec.KhieuNai) {
+      const ref = this.dialogService.open(ComplainDetailComponent, {
+        data: {
+          id: row.id,
+          loaiVuViec: LoaiVuViec.KhieuNai,
+          linhVuc: row.linhVuc,
+          mode: 'view',
+        },
+        header: `Chi tiết khiếu nại/khiếu kiện "${row.tieuDe}"`,
+        width: DIALOG_BG,
+      });
+    }
+    if (row.loaiVuViec == LoaiVuViec.ToCao) {
+      const ref = this.dialogService.open(DenounceDetailComponent, {
+        data: {
+          id: row.id,
+          loaiVuViec: LoaiVuViec.ToCao,
+          linhVuc: row.linhVuc,
+          mode: 'view',
+        },
+        header: `Chi tiết đơn tố cáo "${row.tieuDe}"`,
+        width: DIALOG_BG,
+      });
+    }
   }
 
   huyenChange(event) {

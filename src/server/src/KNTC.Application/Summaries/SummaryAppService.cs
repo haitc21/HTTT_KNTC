@@ -72,6 +72,11 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     [Authorize]
     public async Task<byte[]> GetExcelAsync(GetSummaryListDto input)
     {
+        var userId = CurrentUser.Id;
+        if (userId == null)
+        {
+            input.CongKhai = true;
+        }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = $"{nameof(SummaryDto.MaHoSo)}";

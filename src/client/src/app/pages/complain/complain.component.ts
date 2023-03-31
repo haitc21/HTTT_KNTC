@@ -120,7 +120,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     this.tinhTrang = null;
   }
 
-  private buildBreadcrumb() {
+  buildBreadcrumb() {
     this.breadcrumb = [{ label: ' Khiếu nại', icon: 'pi pi-inbox', routerLink: '/pages/complain' }];
 
     switch (this.linhVuc) {
@@ -287,7 +287,8 @@ export class ComplainComponent implements OnInit, OnDestroy {
             const uint8Array = this.utilService.base64ToArrayBuffer(data);
             const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
             let fileName =
-              this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') + '_Khiếu nại/Khiếu kiện.xlsx';
+              this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +
+              '_Khiếu nại/Khiếu kiện.xlsx';
             saveAs(blob, fileName);
           }
           this.toggleBlockUI(false);
@@ -353,6 +354,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     this.complainService.delete(id).subscribe({
       next: () => {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+        this.resetFilter();
         this.loadData();
         this.selectedItems = [];
         this.actionItem = null;
@@ -397,6 +399,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
               this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
               this.toggleBlockUI(false);
               this.selectedItems = [];
+              this.resetFilter();
               this.loadData();
             },
             () => {
@@ -406,6 +409,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         } else {
           this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
           this.selectedItems = [];
+          this.resetFilter();
           this.loadData();
         }
       }
@@ -434,6 +438,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
         this.actionItem = null;
+        this.resetFilter();
         this.loadData();
       }
     });
@@ -483,6 +488,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     this.complainService.deleteMultiple(ids).subscribe({
       next: () => {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+        this.resetFilter();
         this.loadData();
         this.selectedItems = [];
         this.toggleBlockUI(false);

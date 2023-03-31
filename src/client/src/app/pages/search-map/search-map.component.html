@@ -182,6 +182,23 @@
                 <label for="phoneNumber">Thời gian tiếp nhận</label>
               </span>
             </div>
+
+            <!-- --------------------------------------------------------------------------------- -->
+            <div *ngIf="hasLoggedIn" class="field col-12 md:col-3">
+              <span class="p-float-label">
+                <p-dropdown
+                  [options]="congKhaiOptions"
+                  [(ngModel)]="congKhai"
+                  optionLabel="text"
+                  optionValue="value"
+                  [showClear]="true"
+                  [autoDisplayFirst]="false"
+                  styleClass="w-full"
+                  (onChange)="loadData()"
+                ></p-dropdown>
+                <label for="phoneNumber">Coong khai</label>
+              </span>
+            </div>
             <!-- --------------------------------------------------------------------------------- -->
             <div class="field col-12 md:col-3">
               <span class="p-float-label">
@@ -216,17 +233,10 @@
                 type="button"
                 pButton
                 pRipple
-                label="Xuất"
+                label="Xuất excel"
                 icon="pi pi-download"
                 class="p-button-info mr-2"
-              ></button>
-              <button
-                type="button"
-                pButton
-                pRipple
-                label="In"
-                icon="pi pi-print"
-                class="p-button-info"
+                (click)="exportExcel()"
               ></button>
             </ng-template>
           </p-toolbar>
@@ -259,7 +269,9 @@
             <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
               <tr>
                 <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-                <td>{{ row.maHoSo }}</td>
+                <td>
+                  <span class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+                </td>
                 <td>{{ row.nguoiNopDon }}</td>
                 <td>{{ row.dienThoai }}</td>
                 <td>{{ row.diaChiLienHe }}</td>

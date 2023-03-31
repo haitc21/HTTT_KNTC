@@ -34,6 +34,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   @Input() complainId: string | null = null;
   @Input() denounceId: string | null = null;
 
+  LoaiVuViec = LoaiVuViec;
   blockedPanel = false;
   items: FileAttachmentDto[] = [];
   data: FileAttachmentDto[] = [];
@@ -69,9 +70,11 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   public skipCount: number = 0;
   public maxResultCount: number = 10;
   public totalCount: number;
+
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();
   }
+
   constructor(
     private documentTypeService: DocumentTypeService,
     private dialogService: DialogService,
