@@ -17,9 +17,20 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
                      int? maTinhTp,
                      int? maQuanHuyen,
                      int? maXaPhuongTT,
-                     DateTime? FromDate,
-                     DateTime? ToDate,
-                     bool? CongKhaiKLGQTC,
+                     DateTime? fromDate,
+                     DateTime? toDate,
+                     bool? CongKhai,
                      bool includeDetails = false);
     Task<Denounce> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
+
+    Task<List<Denounce>> GetDataExportAsync(
+                 string sorting,
+                 LinhVuc? linhVuc,
+                 LoaiKetQua? ketQua,
+                 int? maTinhTp,
+                 int? maQuanHuyen,
+                 int? maXaPhuongTT,
+                 DateTime? FromDate,
+                 DateTime? ToDate,
+                 bool? CongKhai);
 }

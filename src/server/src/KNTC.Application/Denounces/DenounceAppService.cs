@@ -1,11 +1,17 @@
-﻿using KNTC.Complains;
+﻿using KNTC.Denounces;
+using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Localization;
+using KNTC.NPOI;
 using KNTC.Permissions;
+using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -29,13 +35,17 @@ public class DenounceAppService : CrudAppService<
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
     private readonly FileAttachmentManager _fileAttachmentManager;
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
+    private readonly IHostEnvironment _env;
+    private readonly IRepository<Unit, int> _unitRepo;
 
     public DenounceAppService(IRepository<Denounce, Guid> repository,
         IDenounceRepository denounceRepo,
         DenounceManager denounceManager,
         IRepository<FileAttachment, Guid> fileAttachmentRepo,
         IBlobContainer<FileAttachmentContainer> blobContainer,
-        FileAttachmentManager fileAttachmentManager) : base(repository)
+        FileAttachmentManager fileAttachmentManager,
+        IHostEnvironment env,
+        IRepository<Unit, int> unitRepo) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
@@ -44,11 +54,18 @@ public class DenounceAppService : CrudAppService<
         _denounceManager = denounceManager;
         _blobContainer = blobContainer;
         _fileAttachmentManager = fileAttachmentManager;
+        _env = env;
+        _unitRepo = unitRepo;
     }
 
     [AllowAnonymous]
     public override async Task<PagedResultDto<DenounceDto>> GetListAsync(GetDenounceListDto input)
     {
+        var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.DenouncesPermission.Default);
+        if (hasPermission.Succeeded == false)
+        {
+            input.CongKhai = true;
+        }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = nameof(Denounce.MaHoSo);
@@ -66,7 +83,7 @@ public class DenounceAppService : CrudAppService<
             input.maXaPhuongTT,
             input.FromDate,
             input.ToDate,
-            input.CongKhaiKLGQTC
+            input.CongKhai
         );
 
         var totalCount = await _denounceRepo.CountAsync(
@@ -79,7 +96,7 @@ public class DenounceAppService : CrudAppService<
                        && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
                        && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                        && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
-                       && (!input.CongKhaiKLGQTC.HasValue || x.CongKhaiKLGQTC == input.CongKhaiKLGQTC)
+                       && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
                        );
 
         return new PagedResultDto<DenounceDto>(
@@ -87,7 +104,7 @@ public class DenounceAppService : CrudAppService<
             ObjectMapper.Map<List<Denounce>, List<DenounceDto>>(denounces)
         );
     }
-    [Authorize(KNTCPermissions.Denounces.Create)]
+    [Authorize(KNTCPermissions.DenouncesPermission.Create)]
     public override async Task<DenounceDto> CreateAsync(CreateDenounceDto input)
     {
         var denounce = await _denounceManager.CreateAsync(maHoSo: input.MaHoSo,
@@ -115,9 +132,9 @@ public class DenounceAppService : CrudAppService<
                                                   dienTich: input.DienTich,
                                                   loaiDat: input.LoaiDat,
                                                   diaChiThuaDat: input.DiaChiThuaDat,
-                                                  tinhThuaDat: input.tinhThuaDat,
-                                                  huyenThuaDat: input.huyenThuaDat,
-                                                  xaThuaDat: input.xaThuaDat,
+                                                  tinhThuaDat: input.TinhThuaDat,
+                                                  huyenThuaDat: input.HuyenThuaDat,
+                                                  xaThuaDat: input.XaThuaDat,
                                                   duLieuToaDo: input.DuLieuToaDo,
                                                   duLieuHinhHoc: input.DuLieuHinhHoc,
                                                   GhiChu: input.GhiChu,
@@ -131,7 +148,7 @@ public class DenounceAppService : CrudAppService<
                                                   soVBKLNDTC: input.SoVBKLNDTC,
                                                   ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
                                                   ketQua: input.KetQua,
-                                                  congKhaiKLGQTC: input.CongKhaiKLGQTC
+                                                  congKhai: input.CongKhai
                                                   );
 
         await _denounceRepo.InsertAsync(denounce);
@@ -142,7 +159,7 @@ public class DenounceAppService : CrudAppService<
             {
                 var fileAttach = await _fileAttachmentManager.CreateAsync(loaiVuViec: LoaiVuViec.ToCao,
                                                                      complainId: null,
-                                                                     DenounceId: denounce.Id,
+                                                                     denounceId: denounce.Id,
                                                                      giaiDoan: item.GiaiDoan,
                                                                      tenTaiLieu: item.TenTaiLieu,
                                                                      hinhThuc: item.HinhThuc,
@@ -152,14 +169,15 @@ public class DenounceAppService : CrudAppService<
                                                                      noiDungChinh: item.NoiDungChinh,
                                                                      fileName: item.FileName,
                                                                      contentType: item.ContentType,
-                                                                     contentLength: item.ContentLength);
+                                                                     contentLength: item.ContentLength,
+                                                                     congKhai: item.CongKhai);
                 await _fileAttachmentRepo.InsertAsync(fileAttach);
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
         }
         return result;
     }
-    [Authorize(KNTCPermissions.Denounces.Default)]
+    [Authorize(KNTCPermissions.DenouncesPermission.Default)]
     public override async Task<DenounceDto> UpdateAsync(Guid id, UpdateDenounceDto input)
     {
         var denounce = await _denounceRepo.GetAsync(id, false);
@@ -190,9 +208,9 @@ public class DenounceAppService : CrudAppService<
                                           dienTich: input.DienTich,
                                           loaiDat: input.LoaiDat,
                                           diaChiThuaDat: input.DiaChiThuaDat,
-                                          tinhThuaDat: input.tinhThuaDat,
-                                          huyenThuaDat: input.huyenThuaDat,
-                                          xaThuaDat: input.xaThuaDat,
+                                          tinhThuaDat: input.TinhThuaDat,
+                                          huyenThuaDat: input.HuyenThuaDat,
+                                          xaThuaDat: input.XaThuaDat,
                                           duLieuToaDo: input.DuLieuToaDo,
                                           duLieuHinhHoc: input.DuLieuHinhHoc,
                                           GhiChu: input.GhiChu,
@@ -206,12 +224,12 @@ public class DenounceAppService : CrudAppService<
                                           soVBKLNDTC: input.SoVBKLNDTC,
                                           ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
                                           ketQua: input.KetQua,
-                                          congKhaiKLGQTC: input.CongKhaiKLGQTC);
+                                          congKhai: input.CongKhai);
         await _denounceRepo.UpdateAsync(denounce);
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }
 
-    [Authorize(KNTCPermissions.Denounces.Delete)]
+    [Authorize(KNTCPermissions.DenouncesPermission.Delete)]
     public override async Task DeleteAsync(Guid id)
     {
         var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.DenounceId)).Select(x => x.Id);
@@ -223,7 +241,7 @@ public class DenounceAppService : CrudAppService<
         await _denounceRepo.DeleteAsync(id);
     }
 
-    [Authorize(KNTCPermissions.Denounces.Delete)]
+    [Authorize(KNTCPermissions.DenouncesPermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
         var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Any(i => i == x.DenounceId))).Select(x => x.Id);
@@ -233,5 +251,144 @@ public class DenounceAppService : CrudAppService<
             await _blobContainer.DeleteAsync(item.ToString());
         }
         await _denounceRepo.DeleteManyAsync(ids);
+    }
+
+
+
+    [Authorize(KNTCPermissions.DenouncesPermission.Default)]
+    public async Task<byte[]> GetExcelAsync(GetDenounceListDto input)
+    {
+        if (input.Sorting.IsNullOrWhiteSpace())
+        {
+            input.Sorting = nameof(Denounce.MaHoSo);
+        }
+        var denounces = await _denounceRepo.GetDataExportAsync(
+            input.Sorting,
+            input.LinhVuc,
+            input.KetQua,
+            input.maTinhTP,
+            input.maQuanHuyen,
+            input.maXaPhuongTT,
+            input.FromDate,
+            input.ToDate,
+            input.CongKhai
+        );
+        if (denounces == null) return null;
+
+        var denounceDto = ObjectMapper.Map<List<Denounce>, List<DenounceExcelDto>>(denounces);
+
+        var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "Denounce.xlsx");
+        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<DenounceExcelDto>(denounceDto, templatePath, 14, 0, true);
+        if (wb == null) return null;
+
+        ISheet sheet = wb.GetSheetAt(0);
+        ICellStyle cellStyle = wb.CreateCellStyle();
+        cellStyle.BorderLeft = BorderStyle.Thin;
+        cellStyle.BorderBottom = BorderStyle.Thin;
+        cellStyle.BorderRight = BorderStyle.Thin;
+        var font = wb.CreateFont();
+        font.IsBold = false;
+        font.FontName = "Times New Roman";
+        cellStyle.SetFont(font);
+
+        string linhVuc = "Tất cả";
+        if (input.LinhVuc.HasValue)
+        {
+            linhVuc = input.LinhVuc.Value.ToVNString();
+        }
+        IRow row = sheet.GetCreateRow(4);
+        var cell = row.GetCreateCell(4);
+        cell.SetCellValue(linhVuc);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tenTinh = "Tất cả";
+        if (input.maTinhTP != null)
+        {
+            var tinh = await _unitRepo.GetAsync(x => x.Id == input.maTinhTP);
+            tenTinh = tinh.UnitName;
+        }
+        row = sheet.GetCreateRow(5);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tenTinh);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tenHuyen = "Tất cả";
+        if (input.maQuanHuyen != null)
+        {
+            var huyen = await _unitRepo.GetAsync(x => x.Id == input.maQuanHuyen);
+            tenHuyen = huyen.UnitName;
+        }
+        row = sheet.GetCreateRow(6);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tenHuyen);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tenXa = "Tất cả";
+        if (input.maXaPhuongTT != null)
+        {
+            var xa = await _unitRepo.GetAsync(x => x.Id == input.maXaPhuongTT);
+            tenXa = xa.UnitName;
+        }
+        row = sheet.GetCreateRow(7);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tenXa);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tuNgay = "";
+        if (input.FromDate.HasValue)
+        {
+            var fromDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.FromDate.Value, TimeZoneInfo.Local);
+            tuNgay = fromDateGmt7.ToString(FormatType.FormatDateVN);
+        }
+
+
+        string denNgay = "";
+        if (input.ToDate.HasValue)
+        {
+            var toDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.ToDate.Value, TimeZoneInfo.Local);
+            denNgay = toDateGmt7.ToString(FormatType.FormatDateVN);
+        }
+        if (!tuNgay.IsNullOrEmpty() && !denNgay.IsNullOrEmpty())
+        {
+            row = sheet.GetCreateRow(8);
+            cell = row.GetCreateCell(4);
+            cell.SetCellValue(tuNgay + " - " + denNgay);
+            cell.CellStyle.WrapText = false;
+            cell.CellStyle.SetFont(font);
+        }
+
+        string ketQua = "Tất cả";
+        if (input.KetQua.HasValue)
+        {
+            ketQua = input.KetQua.Value.ToVNString();
+        }
+        row = sheet.GetCreateRow(9);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(ketQua);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string congKhai = "Tất cả";
+        if (input.CongKhai.HasValue)
+        {
+            congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
+
+        }
+        row = sheet.GetCreateRow(10);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(congKhai);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        using (var stream = new MemoryStream())
+        {
+            wb.Write(stream);
+            wb.Close();
+            return stream.ToArray();
+        }
     }
 }

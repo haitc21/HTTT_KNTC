@@ -30,6 +30,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                int? giaiDoan,
                                                DateTime? fromDate,
                                                DateTime? toDate,
+                                               bool? congKhai,
                                                bool includeDetails = false)
     {
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
@@ -73,10 +74,6 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 toDate.HasValue,
                 x => x.ThoiGianTiepNhan <= toDate
              )
-             .WhereIf(
-                !mangLinhVuc.IsNullOrEmpty(),
-                x => mangLinhVuc.Contains((int) x.LinhVuc)
-             )
             .OrderBy(sorting)
             .Skip(skipCount)
             .Take(maxResultCount)
@@ -87,5 +84,55 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
     {
         var dbSet = await GetDbSetAsync();
         return await dbSet.FirstOrDefaultAsync(x => x.MaHoSo == maHoSo);
+    }
+
+    public async Task<List<Complain>> GetDataExportAsync(
+                                               string sorting,
+                                               LinhVuc? linhVuc,
+                                               LoaiKetQua? ketQua,
+                                               int? maTinhTp,
+                                               int? maQuanHuyen,
+                                               int? maXaPhuongTT,
+                                               int? giaiDoan,
+                                               DateTime? fromDate,
+                                               DateTime? toDate)
+    {
+        var dbSet = await GetDbSetAsync();
+        return await dbSet
+            .WhereIf(
+                linhVuc.HasValue,
+                x => x.LinhVuc == linhVuc
+             )
+             .WhereIf(
+                ketQua.HasValue,
+                x => x.KetQua == ketQua
+             )
+             .WhereIf(
+                maTinhTp.HasValue,
+                x => x.MaTinhTP == maTinhTp
+             )
+             .WhereIf(
+                maQuanHuyen.HasValue,
+                x => x.MaQuanHuyen == maQuanHuyen
+             )
+             .WhereIf(
+                maXaPhuongTT.HasValue,
+                x => x.MaXaPhuongTT == maXaPhuongTT
+             )
+             .WhereIf(
+                giaiDoan.HasValue,
+                x => (giaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) ||
+                (giaiDoan == 2 && x.NgayKhieuNai2 != null)
+             )
+             .WhereIf(
+                fromDate.HasValue,
+                x => x.ThoiGianTiepNhan >= fromDate
+             )
+             .WhereIf(
+                toDate.HasValue,
+                x => x.ThoiGianTiepNhan <= toDate
+             )
+            .OrderBy(sorting)
+            .ToListAsync();
     }
 }

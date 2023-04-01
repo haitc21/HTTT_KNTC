@@ -29,7 +29,7 @@
               [filter]="true"
               filterBy="unitName"
               styleClass="w-full"
-              (onChange)="TinhChange($event)"
+              (onChange)="tinhChange($event)"
             ></p-dropdown>
             <label>Tỉnh/TP</label>
           </span>
@@ -103,6 +103,22 @@
           </span>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
+        <div *abpPermission="'Complains'" class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="congKhaiOptions"
+              [(ngModel)]="congKhai"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label for="phoneNumber">Coong khai</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-3">
           <span class="p-float-label">
             <p-dropdown
@@ -124,7 +140,7 @@
     <p-toolbar>
       <ng-template pTemplate="left">
         <i class="pi pi-search mr-2"></i>
-          <h5>Kết quả tìm kiếm</h5>
+        <h5>Kết quả tìm kiếm</h5>
       </ng-template>
 
       <ng-template pTemplate="right">
@@ -139,20 +155,14 @@
           (click)="showAddModal()"
         ></button>
         <button
+          *abpPermission="'Complains'"
           type="button"
           pButton
           pRipple
           label="Xuất exel"
           icon="pi pi-download"
           class="p-button-info mr-2"
-        ></button>
-        <button
-          type="button"
-          pButton
-          pRipple
-          label="In"
-          icon="pi pi-print"
-          class="p-button-info"
+          (click)="exportExcel()"
         ></button>
       </ng-template>
     </p-toolbar>
@@ -191,24 +201,26 @@
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-          <td>{{ row.maHoSo }}</td>
+          <td>
+            <span class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+          </td>
           <td>{{ row.nguoiDeNghi }}</td>
           <td>{{ row.diaChiLienHe }}</td>
           <td>{{ row.dienThoai }}</td>
           <td>{{ row.tieuDe }}</td>
           <td>
-            {{ utilService.convertDateToLocal(row?.thoiGianTiepNhan) | date : 'dd-MM-yyyy hh:mm' }}
+            {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
           </td>
           <td>{{ row.boPhanDangXL }}</td>
           <td>
-            {{ utilService.convertDateToLocal(row?.thoiGianHenTraKQ) | date : 'dd-MM-yyyy hh:mm' }}
+            {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
           </td>
           <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
-            {{ utilService.convertDateToLocal(row?.ngayTraKQ1) | date : 'dd-MM-yyyy' }}
+            {{ row?.ngayTraKQ1 | date : 'dd-MM-yyyy' }}
           </td>
           <td>{{ getLoaiKetQua(row?.ketQua1) }}</td>
           <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
-            {{ utilService.convertDateToLocal(row?.ngayTraKQ2) | date : 'dd-MM-yyyy' }}
+            {{ row?.ngayTraKQ2 | date : 'dd-MM-yyyy' }}
           </td>
           <td>{{ getLoaiKetQua(row?.ketQua2) }}</td>
           <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
@@ -231,7 +243,7 @@
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem;"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>

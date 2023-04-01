@@ -14,4 +14,5 @@ public interface IComplainAppService :
             UpdateComplainDto>
 {
     Task DeleteMultipleAsync(IEnumerable<Guid> ids);
+    Task<byte[]> GetExcelAsync(GetComplainListDto input);
 }

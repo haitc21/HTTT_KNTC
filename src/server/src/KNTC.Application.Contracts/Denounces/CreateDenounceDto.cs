@@ -75,11 +75,11 @@ public class CreateDenounceDto
     [MaxLength(KNTCValidatorConsts.MaxDiaChiLength)]
     public string DiaChiThuaDat { get; set; }
     [Required]
-    public int tinhThuaDat { get; set; }
+    public int TinhThuaDat { get; set; }
     [Required]
-    public int huyenThuaDat { get; set; }
+    public int HuyenThuaDat { get; set; }
     [Required]
-    public int xaThuaDat { get; set; }
+    public int XaThuaDat { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxToaDoLength)]
     public string DuLieuToaDo { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxHinhHocLength)]
@@ -106,6 +106,7 @@ public class CreateDenounceDto
     public DateTime NgayNhanTBKQXLKLTC { get; set; }
     [Required]
     public LoaiKetQua KetQua { get; set; }
-    public bool CongKhaiKLGQTC { get; set; }
+    [Required]
+    public bool CongKhai { get; set; }
     public virtual List<CreateAndUpdateFileAttachmentDto> FileAttachments { get; set; }
 }

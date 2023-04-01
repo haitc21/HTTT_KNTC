@@ -100,5 +100,7 @@ public class CreateComplainDto
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
     public string SoQD2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
+    [Required]
+    public bool CongKhai { get; set; }
     public virtual List<CreateAndUpdateFileAttachmentDto> FileAttachments { get; set; }
 }

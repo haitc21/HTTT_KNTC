@@ -1,7 +1,15 @@
-﻿using KNTC.Localization;
+﻿using KNTC.Complains;
+using KNTC.Denounces;
+using KNTC.DocumentTypes;
+using KNTC.Localization;
+using KNTC.NPOI;
 using KNTC.Permissions;
+using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+using NPOI.OpenXmlFormats.Wordprocessing;
+using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,12 +34,25 @@ public class FileAttachmentAppService : CrudAppService<
 {
     private readonly FileAttachmentManager _fileAttachmentManager;
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
-    public FileAttachmentAppService(IRepository<FileAttachment, Guid> repository, FileAttachmentManager fileAttachmentManager, IBlobContainer<FileAttachmentContainer> blobContainer)
+    private readonly IHostEnvironment _env;
+    private readonly IRepository<DocumentType, int> _documentTypeRepo;
+    private readonly IComplainRepository _complainRepo;
+    private readonly IDenounceRepository _denounceRepo;
+
+    public FileAttachmentAppService(IRepository<FileAttachment, Guid> repository,
+        FileAttachmentManager fileAttachmentManager,
+        IBlobContainer<FileAttachmentContainer> blobContainer,
+        IHostEnvironment env,
+        IRepository<DocumentType, int> documentRepo,
+        IComplainRepository complainRepo)
         : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         _fileAttachmentManager = fileAttachmentManager;
         _blobContainer = blobContainer;
+        _env = env;
+        _documentTypeRepo = documentRepo;
+        _complainRepo = complainRepo;
     }
     public async override Task<PagedResultDto<FileAttachmentDto>> GetListAsync(GetFileAttachmentListDto input)
     {
@@ -44,14 +65,15 @@ public class FileAttachmentAppService : CrudAppService<
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
-                    .WhereIf(input.ComplainId.HasValue, x => x.ComplainId == input.ComplainId)
-                    .WhereIf(input.DenounceId.HasValue, x => x.DenounceId == input.DenounceId)
+                    .WhereIf(input.ComplainId.HasValue, x => x.LoaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == input.ComplainId)
+                    .WhereIf(input.DenounceId.HasValue, x => x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId)
                     .WhereIf(!filter.IsNullOrEmpty(),
                              x => x.TenTaiLieu.ToUpper().Contains(filter)
                                  || x.FileName.ToUpper().Contains(filter)
                              )
                     .WhereIf(input.HinhThuc.HasValue, x => x.HinhThuc == input.HinhThuc)
                     .WhereIf(input.GiaiDoan.HasValue, x => x.GiaiDoan == input.GiaiDoan)
+                    .WhereIf(input.CongKhai.HasValue, x => x.CongKhai == input.CongKhai)
                     .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
                     .Take(input.MaxResultCount);
@@ -76,7 +98,7 @@ public class FileAttachmentAppService : CrudAppService<
     {
         var entity = await _fileAttachmentManager.CreateAsync(loaiVuViec: input.LoaiVuViec,
                                                              complainId: input.ComplainId,
-                                                             DenounceId: input.DenounceId,
+                                                             denounceId: input.DenounceId,
                                                              giaiDoan: input.GiaiDoan,
                                                              tenTaiLieu: input.TenTaiLieu,
                                                              hinhThuc: input.HinhThuc,
@@ -86,7 +108,8 @@ public class FileAttachmentAppService : CrudAppService<
                                                              noiDungChinh: input.NoiDungChinh,
                                                              fileName: input.FileName,
                                                              contentType: input.ContentType,
-                                                             contentLength: input.ContentLength);
+                                                             contentLength: input.ContentLength,
+                                                             congKhai: input.CongKhai);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<FileAttachment, FileAttachmentDto>(entity);
     }
@@ -96,17 +119,18 @@ public class FileAttachmentAppService : CrudAppService<
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _fileAttachmentManager.UpdateAsync(fileAttachment: entity,
-                                             loaiVuViec: input.LoaiVuViec,
-                                             giaiDoan: input.GiaiDoan,
-                                             tenTaiLieu: input.TenTaiLieu,
-                                             hinhThuc: input.HinhThuc,
-                                             thoiGianBanHanh: input.ThoiGianBanHanh,
-                                             ngayNhan: input.NgayNhan,
-                                             thuTuButLuc: input.ThuTuButLuc,
-                                             noiDungChinh: input.NoiDungChinh,
-                                             fileName: input.FileName,
-                                             contentType: input.ContentType,
-                                                             contentLength: input.ContentLength);
+                                                  loaiVuViec: input.LoaiVuViec,
+                                                  giaiDoan: input.GiaiDoan,
+                                                  tenTaiLieu: input.TenTaiLieu,
+                                                  hinhThuc: input.HinhThuc,
+                                                  thoiGianBanHanh: input.ThoiGianBanHanh,
+                                                  ngayNhan: input.NgayNhan,
+                                                  thuTuButLuc: input.ThuTuButLuc,
+                                                  noiDungChinh: input.NoiDungChinh,
+                                                  fileName: input.FileName,
+                                                  contentType: input.ContentType,
+                                                  contentLength: input.ContentLength,
+                                                  congKhai: input.CongKhai);
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<FileAttachment, FileAttachmentDto>(entity);
     }
@@ -136,11 +160,129 @@ public class FileAttachmentAppService : CrudAppService<
         }
     }
 
-    [AllowAnonymous]
     public async Task<byte[]> DownloadAsync(Guid fileAttachmentId)
     {
         var result = await _blobContainer.GetAllBytesOrNullAsync(fileAttachmentId.ToString());
         return result;
+    }
+
+    public async Task<byte[]> GetExcelAsync(GetFileAttachmentListDto input)
+    {
+        if (input.Sorting.IsNullOrWhiteSpace())
+        {
+            input.Sorting = nameof(FileAttachmentDto.TenTaiLieu);
+        }
+
+        var fileQuery = await Repository.GetQueryableAsync();
+        fileQuery = fileQuery
+                    .WhereIf(input.ComplainId.HasValue, x => x.LoaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == input.ComplainId)
+                    .WhereIf(input.DenounceId.HasValue, x => x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId)
+                    .WhereIf(input.HinhThuc.HasValue, x => x.HinhThuc == input.HinhThuc)
+                    .WhereIf(input.GiaiDoan.HasValue, x => x.GiaiDoan == input.GiaiDoan)
+                    .WhereIf(input.CongKhai.HasValue, x => x.CongKhai == input.CongKhai);
+        var query = from f in fileQuery
+                    join dt in await _documentTypeRepo.GetQueryableAsync()
+                    on f.HinhThuc equals dt.Id
+                    select new FileAttachmentExcelDto
+                    {
+                        TenTaiLieu = f.TenTaiLieu,
+                        HinhThuc = dt.DocumentTypeName,
+                        NgayNhan = f.NgayNhan,
+                        ThoiGianBanHanh = f.ThoiGianBanHanh,
+                        ThuTuButLuc = f.ThuTuButLuc,
+                        NoiDungChinh = f.NoiDungChinh
+                    };
+        query = query.OrderBy(input.Sorting);
+        var fileAttachments = await AsyncExecuter.ToListAsync<FileAttachmentExcelDto>(query);
+        if (fileAttachments == null) return null;
+
+        var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "FileAttachment.xlsx");
+
+        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<FileAttachmentExcelDto>(fileAttachments, templatePath, 14, 0, true);
+        if (wb == null) return null;
+
+        ISheet sheet = wb.GetSheetAt(0);
+        ICellStyle cellStyle = wb.CreateCellStyle();
+        cellStyle.BorderLeft = BorderStyle.Thin;
+        cellStyle.BorderBottom = BorderStyle.Thin;
+        cellStyle.BorderRight = BorderStyle.Thin;
+        var font = wb.CreateFont();
+        font.IsBold = false;
+        font.FontName = "Times New Roman";
+        cellStyle.SetFont(font);
+
+        string maHoSo = "";
+        string tieuDe = "";
+        if (input.ComplainId.HasValue)
+        {
+            var complain = await _complainRepo.GetAsync(input.ComplainId.Value);
+            maHoSo = complain.MaHoSo;
+            tieuDe = complain.TieuDe;
+        }
+        if (input.DenounceId.HasValue)
+        {
+            var denounce = await _denounceRepo.GetAsync(input.DenounceId.Value);
+            maHoSo = denounce.MaHoSo;
+            tieuDe = denounce.TieuDe;
+        }
+
+        IRow row = sheet.GetCreateRow(5);
+        var cell = row.GetCreateCell(4);
+        cell.SetCellValue(maHoSo);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        row = sheet.GetCreateRow(6);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tieuDe);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string hinhThuc = "Tất cả";
+        if (input.HinhThuc.HasValue)
+        {
+            var coType = await _documentTypeRepo.GetAsync(input.HinhThuc.Value);
+            hinhThuc = coType.DocumentTypeName;
+        }
+        row = sheet.GetCreateRow(7);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(hinhThuc);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string congKhai = "Tất cả";
+        if (input.CongKhai.HasValue)
+        {
+            congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
+
+        }
+        row = sheet.GetCreateRow(8);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(congKhai);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string giaiDoan = "Tất cả";
+        if (input.GiaiDoan.HasValue)
+        {
+            if (input.GiaiDoan == 1)
+                giaiDoan = "Khiếu nại/Khiếu kiện lần 1";
+            if (input.GiaiDoan == 2)
+                giaiDoan = "Khiếu nại/Khiếu kiện lần 2";
+        }
+        row = sheet.GetCreateRow(9);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(giaiDoan);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+
+        using (var stream = new MemoryStream())
+        {
+            wb.Write(stream);
+            wb.Close();
+            return stream.ToArray();
+        }
     }
 }
 

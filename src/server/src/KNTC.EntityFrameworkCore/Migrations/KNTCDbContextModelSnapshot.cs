@@ -47,6 +47,12 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
+                    b.Property<bool>("CongKhai")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("cong_khai");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreationTime");
@@ -380,11 +386,11 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<bool>("CongKhaiKLGQTC")
+                    b.Property<bool>("CongKhai")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
-                        .HasColumnName("cong_khai_KL_QDTC");
+                        .HasColumnName("cong_khai");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -461,6 +467,10 @@ namespace KNTC.Migrations
                     b.Property<DateTime?>("GiaHanGQTC2")
                         .HasColumnType("datetime2")
                         .HasColumnName("gia_han_GQTC_2");
+
+                    b.Property<int>("HuyenThuaDat")
+                        .HasColumnType("int")
+                        .HasColumnName("huyen_thua_dat");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -582,21 +592,17 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("tieu_de");
 
+                    b.Property<int>("TinhThuaDat")
+                        .HasColumnType("int")
+                        .HasColumnName("tinh_thua_dat");
+
                     b.Property<string>("ToBanDo")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .HasColumnName("to_ban_do");
 
-                    b.Property<int>("huyenThuaDat")
-                        .HasColumnType("int")
-                        .HasColumnName("huyen_thua_dat");
-
-                    b.Property<int>("tinhThuaDat")
-                        .HasColumnType("int")
-                        .HasColumnName("tinh_thua_dat");
-
-                    b.Property<int>("xaThuaDat")
+                    b.Property<int>("XaThuaDat")
                         .HasColumnType("int")
                         .HasColumnName("xa_thua_dat");
 
@@ -700,6 +706,12 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
+                    b.Property<bool>("CongKhai")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("cong_khai");
+
                     b.Property<long>("ContentLength")
                         .HasColumnType("bigint")
                         .HasColumnName("content_length");
@@ -762,6 +774,10 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<int>("LoaiVuViec")
+                        .HasColumnType("int")
+                        .HasColumnName("loai_vu_viec");
+
                     b.Property<DateTime>("NgayNhan")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_nhan");
@@ -793,6 +809,10 @@ namespace KNTC.Migrations
                     b.HasIndex("DenounceId");
 
                     b.HasIndex("HinhThuc");
+
+                    b.HasIndex("LoaiVuViec", "ComplainId");
+
+                    b.HasIndex("LoaiVuViec", "DenounceId");
 
                     b.ToTable("FileAttachments", "KNTC");
                 });

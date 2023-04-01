@@ -10,4 +10,5 @@ public class GetFileAttachmentListDto : BaseListFilterDto
     public Guid? DenounceId { get; set; }
     public int? GiaiDoan { get; set; }
     public int? HinhThuc { get; set; }
+    public bool? CongKhai { get; set; }
 }

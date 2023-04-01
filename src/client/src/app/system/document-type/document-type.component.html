@@ -1,9 +1,10 @@
 <div class="animated fadeIn card">
-  <p-panel #pnl header="Quản lý loại đất">
+  <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+  <p-panel #pnl>
     <p-toolbar>
       <ng-template pTemplate="left">
         <button
-          *abpPermission="'LandType.Create'"
+          *abpPermission="'DocumentType.Create'"
           type="button"
           pButton
           pRipple
@@ -15,7 +16,7 @@
           (click)="showAddModal()"
         ></button>
         <button
-          *abpPermission="'LandType.Delete'"
+          *abpPermission="'DocumentType.Delete'"
           type="button"
           pButton
           pRipple
@@ -59,8 +60,8 @@
             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
           </th>
           <th class="row-num-column">STT</th>
-          <th pSortableColumn="landTypeCode">Mã</th>
-          <th pSortableColumn="landTypeName">Tên</th>
+          <th pSortableColumn="documentTypeCode">Mã</th>
+          <th pSortableColumn="documentTypeName">Tên</th>
           <th pSortableColumn="status">Trạng thái</th>
           <th *ngIf="visibleActionColumn" class="action-column"></th>
         </tr>
@@ -71,8 +72,8 @@
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td>
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-          <td>{{ row.landTypeCode }}</td>
-          <td>{{ row.landTypeName }}</td>
+          <td>{{ row.documentTypeCode }}</td>
+          <td>{{ row.documentTypeName }}</td>
           <td>
             <p-tag
               styleClass="mr-1"
@@ -100,7 +101,7 @@
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem;"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>

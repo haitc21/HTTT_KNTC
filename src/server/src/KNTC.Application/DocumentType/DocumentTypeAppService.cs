@@ -24,9 +24,9 @@ public class DocumentTypeAppService : CrudAppService<
     public DocumentTypeAppService(IRepository<DocumentType, int> repository, DocumentTypeManager documentTypeManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
-        CreatePolicyName = KNTCPermissions.DocumentType.Create;
-        UpdatePolicyName = KNTCPermissions.DocumentType.Edit;
-        DeletePolicyName = KNTCPermissions.DocumentType.Delete;
+        CreatePolicyName = KNTCPermissions.DocumentTypePermission.Create;
+        UpdatePolicyName = KNTCPermissions.DocumentTypePermission.Edit;
+        DeletePolicyName = KNTCPermissions.DocumentTypePermission.Delete;
         _documentTypeManager = documentTypeManager;
     }
 
@@ -100,7 +100,7 @@ public class DocumentTypeAppService : CrudAppService<
     }
 
 
-    [Authorize(KNTCPermissions.DocumentType.Delete)]
+    [Authorize(KNTCPermissions.DocumentTypePermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);

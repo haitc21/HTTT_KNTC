@@ -45,7 +45,7 @@ export interface CreateDenounceDto {
   soVBKLNDTC: string;
   ngayNhanTBKQXLKLTC: string;
   ketQua: LoaiKetQua;
-  congKhaiKLGQTC: boolean;
+  congKhai: boolean;
   fileAttachments: CreateAndUpdateFileAttachmentDto[];
 }
 
@@ -91,7 +91,7 @@ export interface DenounceDto extends AuditedEntityDto<string> {
   soVBKLNDTC?: string;
   ngayNhanTBKQXLKLTC?: string;
   ketQua: LoaiKetQua;
-  congKhaiKLGQTC: boolean;
+  congKhai: boolean;
   fileAttachments: FileAttachmentDto[];
   concurrencyStamp?: string;
 }
@@ -104,7 +104,7 @@ export interface GetDenounceListDto extends BaseListFilterDto {
   toDate?: string;
   linhVuc?: LinhVuc;
   ketQua?: LoaiKetQua;
-  congKhaiKLGQTC?: boolean;
+  congKhai?: boolean;
 }
 
 export interface UpdateDenounceDto extends EntityDto<string> {
@@ -148,6 +148,6 @@ export interface UpdateDenounceDto extends EntityDto<string> {
   soVBKLNDTC: string;
   ngayNhanTBKQXLKLTC: string;
   ketQua: LoaiKetQua;
-  congKhaiKLGQTC: boolean;
+  congKhai: boolean;
   concurrencyStamp?: string;
 }

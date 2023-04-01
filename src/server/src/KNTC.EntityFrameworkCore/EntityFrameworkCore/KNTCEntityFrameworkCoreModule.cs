@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KNTC.Summaries;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
@@ -11,6 +13,7 @@ using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.Timing;
 
 namespace KNTC.EntityFrameworkCore;
 
@@ -31,6 +34,10 @@ public class KNTCEntityFrameworkCoreModule : AbpModule
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
         KNTCEfCoreEntityExtensionMappings.Configure();
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
+        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -48,5 +55,6 @@ public class KNTCEntityFrameworkCoreModule : AbpModule
              * See also KNTCMigrationsDbContextFactory for EF Core tooling. */
             options.UseSqlServer(x => x.UseNetTopologySuite());
         });
+        context.Services.AddTransient<ISummaryRepository, SummaryRepository>();
     }
 }

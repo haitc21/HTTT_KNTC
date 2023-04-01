@@ -1,5 +1,6 @@
 <div class="animated fadeIn grid card col-12">
-  <p-panel #pnl [header]="header" class="col-12">
+  <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+  <p-panel #pnl class="col-12">
     <p-toolbar>
       <div class="formgrid grid col-12">
         <div class="field col-12 md:col-3">
@@ -28,7 +29,7 @@
               [filter]="true"
               filterBy="unitName"
               styleClass="w-full"
-              (onChange)="inhChange($event)"
+              (onChange)="tinhChange($event)"
             ></p-dropdown>
             <label>Tỉnh/TP</label>
           </span>
@@ -86,11 +87,11 @@
           </span>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-3">
+        <div *abpPermission="'Denounces'" class="field col-12 md:col-3">
           <span class="p-float-label">
             <p-dropdown
-              [options]="congKhaiKLGQTCOptions"
-              [(ngModel)]="congKhaiKLGQTC"
+              [options]="congKhaiOptions"
+              [(ngModel)]="congKhai"
               optionLabel="text"
               optionValue="value"
               [showClear]="true"
@@ -138,20 +139,14 @@
           (click)="showAddModal()"
         ></button>
         <button
+          *abpPermission="'Denounces'"
           type="button"
           pButton
           pRipple
           label="Xuất exel"
           icon="pi pi-download"
           class="p-button-info mr-2"
-        ></button>
-        <button
-          type="button"
-          pButton
-          pRipple
-          label="In"
-          icon="pi pi-print"
-          class="p-button-info"
+          (click)="exportExcel()"
         ></button>
       </ng-template>
     </p-toolbar>
@@ -188,7 +183,9 @@
             <p-tableCheckbox [value]="row"></p-tableCheckbox>
           </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-          <td>{{ row.maHoSo }}</td>
+          <td>
+            <span class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+          </td>
           <td>{{ row.nguoiToCao }}</td>
           <td>{{ row.dienThoai }}</td>
           <td>{{ row.diaChiLienHe }}</td>
@@ -196,10 +193,10 @@
           <td>{{ row.nguoiGQTC }}</td>
           <td>{{ row.tieuDe }}</td>
           <td>
-            {{ utilService.convertDateToLocal(row?.thoiGianTiepNhan) | date : 'dd-MM-yyyy hh:mm' }}
+            {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
           </td>
           <td>
-            {{ utilService.convertDateToLocal(row?.thoiGianHenTraKQ) | date : 'dd-MM-yyyy hh:mm' }}
+            {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
           </td>
           <td>{{ row?.boPhanDangXL }}</td>
           <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
@@ -222,7 +219,7 @@
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem;"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>

@@ -36,4 +36,8 @@
     <None Remove="Logs\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\ExcelTemplate\" />
+  </ItemGroup>
+
 </Project>

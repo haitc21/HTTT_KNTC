@@ -14,7 +14,17 @@ import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
 import { ActivatedRoute } from '@angular/router';
 import { LinhVuc, LoaiKetQua, LoaiVuViec, SpatialDatas } from '@proxy';
-import {MenuItem} from 'primeng/api';
+import { MenuItem } from 'primeng/api';
+import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
+import { SummaryService } from '@proxy/summaries';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
+import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
+import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
+import { DialogService } from 'primeng/dynamicdialog';
+import { NotificationService } from 'src/app/shared/services/notification.service';
+import { saveAs } from 'file-saver';
+import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 
 @Component({
   selector: 'app-search-map',
@@ -57,7 +67,6 @@ import {MenuItem} from 'primeng/api';
     ]),
   ],
 })
-
 export class SearchMapComponent implements OnInit {
   //System variables
   private ngUnsubscribe = new Subject<void>();
@@ -65,28 +74,12 @@ export class SearchMapComponent implements OnInit {
   breadcrumb: MenuItem[];
 
   blockedPanel = false;
-  data: any[] = [];
+  items: SummaryDto[] = [];
 
   spatialData: SpatialDataDto[];
-  complains: ComplainDto[] = []
-  denounces: DenounceDto[] = []
-  //mockData: Complain[] = [];
+  complains: ComplainDto[] = [];
+  denounces: DenounceDto[] = [];
 
-  // option
-  tinhOptions: UnitLookupDto[] = [];
-  huyenOptions: UnitLookupDto[] = [];
-  xaOptions: UnitLookupDto[] = [];
-
-  //loaiHS = ['khiếu nại', 'Tố cáo'];
-  //linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
-  linhVuc: LinhVuc;
-  //header: string = '';
-  
-  //typesHoSo = typesHoSo;
-  //fieldsHoSo = fieldsHoSo;
-
-  //public selectedItems: Complain[] = [];
-  //items: ComplainDto[];
   selectedItems: ComplainDto[] = [];
   //Paging variables
   public skipCount: number = 0;
@@ -98,52 +91,37 @@ export class SearchMapComponent implements OnInit {
   //filter: GetSpatialDataListDto;
   //filter: GetComplainListDto;
 
-  landComplaint = true;
-  enviromentalComplaint = true;
-  waterResourceComplaint = true;
-  mineralResourceComplaint = true;
+  landComplain = true;
+  enviromentComplain = true;
+  waterComplain = true;
+  mineralComplain = true;
 
-  landAccusation = true;
-  emviromentalAccusation = true;
-  waterResourceAccusation = true;
-  mineralResourceAccusation = true;
-
-  keyword = '';
-  loaiVuviec: number;
-  lanKNSearch: Number;
-  stageSearch: Number;
-  maTinh: number;
+  landDenounce = true;
+  enviromentDenounce = true;
+  waterDenounce = true;
+  mineralDenounce = true;
+  filter: GetSummaryListDto;
+  keyword: string = '';
+  congKhai: boolean | null;
+  maTinh: number = 24;
   maHuyen: number;
   maXa: number;
   thoiGianTiepNhanRange: Date[];
-  giaiDoan: number;
   tinhTrang: number;
 
-  loaiVuviecOptions = [
-    { value: 0, text: 'Tất cả' },
-    { value: LoaiVuViec.KhieuNai, text: 'Khiếu nại' },
-    { value: LoaiVuViec.ToCao, text: 'Tố cáo' },
-  ];
-
-  linhVucOptions = [
-    { value: 0, text: '' },
-    { value: LinhVuc.DatDai, text: 'Đất đai' },
-    { value: LinhVuc.KhoangSan, text: 'Khoáng sản' },
-    { value: LinhVuc.MoiTruong, text: 'Môi trường' },
-    { value: LinhVuc.TaiNguyenNuoc, text: 'Tài nguyên nước' },
-  ];
-
-  giaiDoanOptions = [
-    { value: 0, text: '' },
-    { value: 1, text: 'Khiếu nại lần I' },
-    { value: 2, text: 'Khiếu nại lần II' },
-  ];
+  // option
+  tinhOptions: UnitLookupDto[] = [];
+  huyenOptions: UnitLookupDto[] = [];
+  xaOptions: UnitLookupDto[] = [];
 
   loaiKQOptions = [
-    { value: 0, text: '' },
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
+  ];
+  congKhaiOptions = [
+    { value: true, text: 'Công khai' },
+    { value: false, text: 'Không công khai' },
   ];
   // ẩn hiện menu trái
   visibleFilterLeff = true;
@@ -155,196 +133,152 @@ export class SearchMapComponent implements OnInit {
   }
 
   constructor(
+    private dialogService: DialogService,
+    private notificationService: NotificationService,
     private oAuthService: OAuthService,
     private authService: AuthService,
-    
     protected route: ActivatedRoute,
     private spatialDataService: SpatialDataService,
-    private complainService: ComplainService,
-    private denounceService: DenounceService,
+    private unitService: UnitService,
     private utilService: UtilityService,
-    private unitService: UnitService
+    private summaryService: SummaryService
   ) {}
 
   ngOnInit(): void {
     this.toggleBlockUI(true);
-    this.breadcrumb = [
-      {label:'Bản đồ'}
-    ];
-    this.home = {label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/'};
+    this.breadcrumb = [{ label: 'Bản đồ' }];
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
     //this.mockData = this.mockService.mockData();
     this.loadOptions();
     this.loadData(true);
-    
-    this.route.paramMap.subscribe(params => {
-      //this.linhVuc = +params.get('linhVuc') as LinhVuc;
-      //this.setHeader();
-      this.resetFilter();
-      this.loadData(true);
-    });
-    this.toggleBlockUI(false);  
+    this.toggleBlockUI(false);
   }
-
-  /*
-  private setHeader() {
-    switch (this.linhVuc) {
-      case LinhVuc.DataDai:
-        this.header = 'Khiếu nại đất đai';
-        break;
-      case LinhVuc.MoiTruong:
-        this.header = 'Khiếu nại môi trường';
-        break;
-      case LinhVuc.TaiNguyenNuoc:
-        this.header = 'Khiếu nại tài nguyên nước';
-        break;
-      case LinhVuc.KhoangSan:
-        this.header = 'Khiếu nại khoáng sản';
-        break;
-      default:
-        this.header = '';
-    }
-  }
-  */
-
-  private resetFilter() {
-    this.skipCount = 0;
-    this.maxResultCount = 10;
-    this.totalCount = 0;
-    this.keyword = '';
-    this.maTinh = null;
-    this.maHuyen = null;
-    this.maXa = null;
-    this.thoiGianTiepNhanRange = [];
-    this.giaiDoan = null;
-    this.tinhTrang = null;
-    this.loaiVuviec = null;
-  }
-
-  
   loadData(isFirst: boolean = false) {
     this.toggleBlockUI(true);
-
     //spatialData
-    debugger
-    if (this.geo){
-      
+    if (this.geo) {
       let filter = {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,
         keyword: this.keyword,
       } as GetSpatialDataListDto;
-       //this.spatialData
-      this.spatialDataService.getList(filter)
+      //this.spatialData
+      this.spatialDataService
+        .getList(filter)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<SpatialDataDto>) => {
+            this.spatialData = res.items; //.map(item => item.geoJson);
+
+            this.toggleBlockUI(false);
+          },
+          () => {
+            this.toggleBlockUI(false);
+          }
+        );
+    }
+
+    this.filter = {
+      skipCount: this.skipCount,
+      maxResultCount: this.maxResultCount,
+      keyword: this.keyword,
+
+      landComplain: this.landComplain,
+      enviromentComplain: this.enviromentComplain,
+      waterComplain: this.waterComplain,
+      mineralComplain: this.mineralComplain,
+      landDenounce: this.landDenounce,
+      enviromentDenounce: this.enviromentDenounce,
+      waterDenounce: this.waterDenounce,
+      mineralDenounce: this.mineralDenounce,
+
+      maTinhTP: this.maTinh,
+      maQuanHuyen: this.maHuyen,
+      maXaPhuongTT: this.maXa,
+      fromDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+          ? this.thoiGianTiepNhanRange[0].toUTCString()
+          : null,
+      toDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+          ? this.thoiGianTiepNhanRange[1].toUTCString()
+          : null,
+      ketQua: this.tinhTrang,
+      congKhai: this.hasLoggedIn ? this.congKhai : true,
+    } as GetSummaryListDto;
+
+    this.toggleBlockUI(true);
+    this.summaryService
+      .getList(this.filter)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: PagedResultDto<SummaryDto>) => {
+          this.items = response.items;
+          this.totalCount = response.totalCount;
+          this.toggleBlockUI(false);
+        },
+        error: () => {
+          this.toggleBlockUI(false);
+        },
+      });
+  }
+
+  exportExcel() {
+    this.toggleBlockUI(true);
+    this.filter = {
+      skipCount: this.skipCount,
+      maxResultCount: this.maxResultCount,
+      keyword: this.keyword,
+
+      landComplain: this.landComplain,
+      enviromentComplain: this.enviromentComplain,
+      waterComplain: this.waterComplain,
+      mineralComplain: this.mineralComplain,
+      landDenounce: this.landDenounce,
+      enviromentDenounce: this.enviromentDenounce,
+      waterDenounce: this.waterDenounce,
+      mineralDenounce: this.mineralDenounce,
+
+      maTinhTP: this.maTinh,
+      maQuanHuyen: this.maHuyen,
+      maXaPhuongTT: this.maXa,
+      fromDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+          ? this.thoiGianTiepNhanRange[0].toUTCString()
+          : null,
+      toDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+          ? this.thoiGianTiepNhanRange[1].toUTCString()
+          : null,
+      ketQua: this.tinhTrang,
+      congKhai: this.hasLoggedIn ? this.congKhai : true,
+    } as GetSummaryListDto;
+
+    this.summaryService
+      .getExcel(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
-        (res: ListResultDto<SpatialDataDto>) => {
-
-          this.spatialData = res.items;//.map(item => item.geoJson);
-          
+        (data: any) => {
+          if (data) {
+            const uint8Array = this.utilService.base64ToArrayBuffer(data);
+            const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
+            let fileName =
+              this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +
+              '_Khiếu nại Tố cáo.xlsx';
+            saveAs(blob, fileName);
+          }
           this.toggleBlockUI(false);
         },
         () => {
           this.toggleBlockUI(false);
         }
       );
-    }
-
-    /*
-    if (isFirst) {      
-      this.filter = {
-        skipCount: this.skipCount,
-        maxResultCount: this.maxResultCount,
-        linhVuc: this.linhVuc
-      } as GetComplainListDto;
-    } else {
-    */
-   //Khiếu nại
-    if (this.loaiVuviec==LoaiVuViec.KhieuNai){
-      let filter = {
-        skipCount: this.skipCount,
-        maxResultCount: this.maxResultCount,
-        keyword: this.keyword,
-        
-        maTinhTP: this.maTinh,
-        maQuanHuyen: this.maHuyen,
-        maXaPhuongTT: this.maXa,
-        fromDate: this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
-        toDate:
-          this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-            ? this.thoiGianTiepNhanRange[1].toUTCString()
-            : null,
-        linhVuc: this.linhVuc,
-        ketQua: this.tinhTrang,
-        giaiDoan: this.giaiDoan,
-      } as GetComplainListDto;
-    //}
-
-      this.complainService
-        .getList(filter)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe({
-          next: (response: PagedResultDto<ComplainDto>) => {
-            this.data = response.items;
-            this.data.forEach(x => x.type = 1);
-            this.totalCount = response.totalCount;
-            this.toggleBlockUI(false);
-          },
-          error: () => {
-            this.toggleBlockUI(false);
-          },
-        });
-      }
-    else if (this.loaiVuviec==LoaiVuViec.ToCao){
-      //Tố cáo
-      let filter = {
-        skipCount: this.skipCount,
-        maxResultCount: this.maxResultCount,
-        keyword: this.keyword,
-        
-        maTinhTP: this.maTinh,
-        maQuanHuyen: this.maHuyen,
-        maXaPhuongTT: this.maXa,
-        fromDate: this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
-        toDate:
-          this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-            ? this.thoiGianTiepNhanRange[1].toUTCString()
-            : null,
-        linhVuc: this.linhVuc,
-        ketQua: this.tinhTrang,
-        giaiDoan: this.giaiDoan,
-      } as GetDenounceListDto;
-    //}
-
-      this.denounceService
-        .getList(filter)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe({
-          next: (response: PagedResultDto<DenounceDto>) => {
-            this.data = response.items;
-            this.data.forEach(x => x.type = 2);
-            this.totalCount = response.totalCount;
-            this.toggleBlockUI(false);
-          },
-          error: () => {
-            this.toggleBlockUI(false);
-          },
-        });
-    }
-    else{//Ca 2 loai luon :D
-
-    }
-    this.toggleBlockUI(false);
   }
 
   loadOptions() {
     this.toggleBlockUI(true);
-
     this.unitService
-      .getLookup(1, 12) //Mã tỉnh Thái Nguyên
+      .getLookup(1)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<UnitLookupDto>) => {
@@ -357,7 +291,7 @@ export class SearchMapComponent implements OnInit {
       );
   }
 
-  TinhChange(event) {
+  tinhChange(event) {
     this.loadData();
     if (event.value) {
       this.toggleBlockUI(true);
@@ -374,6 +308,37 @@ export class SearchMapComponent implements OnInit {
           }
         );
     } else this.huyenOptions = [];
+  }
+
+  viewDetail(row) {
+    if (!row) {
+      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      return;
+    }
+    if (row.loaiVuViec == LoaiVuViec.KhieuNai) {
+      const ref = this.dialogService.open(ComplainDetailComponent, {
+        data: {
+          id: row.id,
+          loaiVuViec: LoaiVuViec.KhieuNai,
+          linhVuc: row.linhVuc,
+          mode: 'view',
+        },
+        header: `Chi tiết khiếu nại/khiếu kiện "${row.tieuDe}"`,
+        width: DIALOG_BG,
+      });
+    }
+    if (row.loaiVuViec == LoaiVuViec.ToCao) {
+      const ref = this.dialogService.open(DenounceDetailComponent, {
+        data: {
+          id: row.id,
+          loaiVuViec: LoaiVuViec.ToCao,
+          linhVuc: row.linhVuc,
+          mode: 'view',
+        },
+        header: `Chi tiết đơn tố cáo "${row.tieuDe}"`,
+        width: DIALOG_BG,
+      });
+    }
   }
 
   huyenChange(event) {
@@ -407,115 +372,6 @@ export class SearchMapComponent implements OnInit {
     this.loadData();
   }
 
-  /*
-  loadData(isFirst: boolean = false) {
-    this.toggleBlockUI(true);
-    this.data = [];
-    
-    this.filter = {
-      filter: this.keyword,
-      skipCount: this.skipCount,
-      maxResultCount: this.maxResultCount,
-      email: this.emailSearch,
-      phoneNumber: this.phoneNumberSearch,
-      roleId: this.roleIdSearch,
-    };
-
-    /*
-    if(this.keyword || this.lanKNSearch || this.stageSearch || 
-      this.landComplaint || this.enviromentalComplaint || this.waterResourceComplaint || this.mineralResourceComplaint ||
-      this.landAccusation || this.emviromentalAccusation || this.waterResourceAccusation || this.mineralResourceAccusation){
-      //search 
-      if (this.landComplaint)
-        this.data.push(
-          ...this.mockData.filter(
-            x => x.typeHoSo === typesHoSo.Complaint && x.fieldType === fieldsHoSo.Land
-          )
-        );
-
-      if (this.enviromentalComplaint)
-        this.data.push(
-          ...this.mockData.filter(
-            x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Emviroment
-          )
-        );
-
-      if (this.waterResourceComplaint)
-        this.data.push(
-          ...this.mockData.filter(
-            x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Water
-          )
-        );
-
-      if (this.mineralResourceComplaint)
-        this.data.push(
-          ...this.mockData.filter(
-            x => x.typeHoSo == typesHoSo.Complaint && x.fieldType == fieldsHoSo.Mineral
-          )
-        );
-
-      if (this.landAccusation)
-        this.data.push(
-          ...this.mockData.filter(
-            x => x.typeHoSo === typesHoSo.Accusation && x.fieldType === fieldsHoSo.Land
-          )
-        );
-
-      if (this.emviromentalAccusation)
-        this.data.push(
-          ...this.mockData.filter(
-            x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Emviroment
-          )
-        );
-
-      if (this.waterResourceAccusation)
-        this.data.push(
-          ...this.mockData.filter(
-            x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Water
-          )
-        );
-
-      if (this.mineralResourceAccusation)
-        this.data.push(
-          ...this.mockData.filter(
-            x => x.typeHoSo == typesHoSo.Accusation && x.fieldType == fieldsHoSo.Mineral
-          )
-        );
-
-      if (this.keyword) {
-        this.data = this.data.filter(
-          x => x.code.includes(this.keyword) || x.title.includes(this.keyword)
-        );
-      }
-
-      switch (this.lanKNSearch) {
-        case 0:
-          this.data = this.data.filter(x => !x.returnDate2);
-          break;
-        case 1:
-          this.data = this.data.filter(x => x.returnDate2);
-          break;
-        default:
-          this.data = this.data;
-      }
-
-      switch (this.stageSearch) {
-        case 0:
-          this.data = this.data.filter(x => x.result1 || x.result2);
-          break;
-        case 1:
-          this.data = this.data.filter(x => x.result2 === false);
-          break;
-        default:
-          this.data = this.data;
-      }
-    }
-    /
-
-    this.toggleBlockUI(false);
-  }
-  */
- 
   toggleMenuLeft() {
     this.visibleFilterLeff = !this.visibleFilterLeff;
     if (!this.visibleFilterLeff) {
@@ -526,7 +382,42 @@ export class SearchMapComponent implements OnInit {
       this.expandColumnState = 'normal';
     }
   }
-  
+  getLoaiKetQua(kq: any): string {
+    if (!kq) return '';
+    return this.loaiKQOptions.find(x => x.value == kq).text;
+  }
+
+  getLoaiVuViecName(loaiVuViec: LoaiVuViec) {
+    switch (loaiVuViec) {
+      case LoaiVuViec.KhieuNai:
+        return 'Khiếu nại/Khiếu kiện';
+        break;
+      case LoaiVuViec.ToCao:
+        return 'Tố cáo';
+        break;
+      default:
+        return '';
+    }
+  }
+  getLinhVucName(linhVuc: LinhVuc) {
+    switch (linhVuc) {
+      case LinhVuc.DatDai:
+        return 'Đất đai';
+        break;
+      case LinhVuc.MoiTruong:
+        return 'Môi trường';
+        break;
+      case LinhVuc.TaiNguyenNuoc:
+        return 'Tài nguyên nước';
+        break;
+      case LinhVuc.KhoangSan:
+        return 'Khoáng sản';
+        break;
+      default:
+        return '';
+    }
+  }
+
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.blockedPanel = true;

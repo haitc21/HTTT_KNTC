@@ -24,9 +24,9 @@ public class LandTypeAppService : CrudAppService<
     public LandTypeAppService(IRepository<LandType, int> repository, LandTypeManager landTypeManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
-        CreatePolicyName = KNTCPermissions.LandType.Create;
-        UpdatePolicyName = KNTCPermissions.LandType.Edit;
-        DeletePolicyName = KNTCPermissions.LandType.Delete;
+        CreatePolicyName = KNTCPermissions.LandTypePermission.Create;
+        UpdatePolicyName = KNTCPermissions.LandTypePermission.Edit;
+        DeletePolicyName = KNTCPermissions.LandTypePermission.Delete;
         _landTypeManager = landTypeManager;
     }
     public async override Task<PagedResultDto<LandTypeDto>> GetListAsync(GetLandTypeListDto input)
@@ -97,7 +97,7 @@ public class LandTypeAppService : CrudAppService<
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
 
-    [Authorize(KNTCPermissions.LandType.Delete)]
+    [Authorize(KNTCPermissions.LandTypePermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);

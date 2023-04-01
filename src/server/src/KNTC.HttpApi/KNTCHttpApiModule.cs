@@ -1,5 +1,6 @@
 ﻿using KNTC.Localization;
 using Localization.Resources.AbpUi;
+using System;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -7,6 +8,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.Timing;
 //using Volo.Abp.TenantManagement;
 
 namespace KNTC;
@@ -25,6 +27,10 @@ public class KNTCHttpApiModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         ConfigureLocalization();
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
+        });
     }
 
     private void ConfigureLocalization()

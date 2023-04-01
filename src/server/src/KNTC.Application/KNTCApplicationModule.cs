@@ -1,4 +1,5 @@
 ﻿using KNTC.Localization;
+using System;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
@@ -9,6 +10,7 @@ using Volo.Abp.Localization.ExceptionHandling;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.Timing;
 //using Volo.Abp.TenantManagement;
 
 namespace KNTC;
@@ -46,6 +48,10 @@ public class KNTCApplicationModule : AbpModule
                     fileSys.BasePath = "C:\\HTTT_KNTC";
                 });
             });
+        });
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
         });
     }
 }

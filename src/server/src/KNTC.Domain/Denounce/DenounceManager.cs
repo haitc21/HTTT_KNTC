@@ -60,7 +60,7 @@ public class DenounceManager : DomainService
                                               [NotNull] string soVBKLNDTC,
                                               [NotNull] DateTime ngayNhanTBKQXLKLTC,
                                               [NotNull] LoaiKetQua ketQua,
-                                              bool congKhaiKLGQTC
+                                              [NotNull] bool congKhai
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
@@ -96,6 +96,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(soVBKLNDTC, nameof(soVBKLNDTC));
         Check.NotNull(ngayNhanTBKQXLKLTC, nameof(ngayNhanTBKQXLKLTC));
         Check.NotNull(ketQua, nameof(ketQua));
+        Check.NotNull(congKhai, nameof(congKhai));
 
         var existedHoSo = await _hoSoRepo.FindByMaHoSoAsync(maHoSo, false);
         if (existedHoSo != null)
@@ -128,9 +129,9 @@ public class DenounceManager : DomainService
             DienTich = dienTich,
             LoaiDat = loaiDat,
             DiaChiThuaDat = diaChiThuaDat,
-            tinhThuaDat = tinhThuaDat,
-            huyenThuaDat = huyenThuaDat,
-            xaThuaDat = xaThuaDat,
+            TinhThuaDat = tinhThuaDat,
+            HuyenThuaDat = huyenThuaDat,
+            XaThuaDat = xaThuaDat,
             DuLieuToaDo = duLieuToaDo,
             DuLieuHinhHoc = duLieuHinhHoc,
             GhiChu = GhiChu,
@@ -144,7 +145,7 @@ public class DenounceManager : DomainService
             SoVBKLNDTC = soVBKLNDTC,
             NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC,
             KetQua = ketQua,
-            CongKhaiKLGQTC = congKhaiKLGQTC
+            CongKhai = congKhai
         };
     }
     public async Task ChangeMaHoSoAsync([NotNull] Denounce hoSo, [NotNull] string maHoSo)
@@ -200,7 +201,7 @@ public class DenounceManager : DomainService
                                    [NotNull] string soVBKLNDTC,
                                    [NotNull] DateTime ngayNhanTBKQXLKLTC,
                                    [NotNull] LoaiKetQua ketQua,
-                                   bool congKhaiKLGQTC
+                                   [NotNull] bool congKhai
       )
     {
         Check.NotNull(denounce, nameof(denounce));
@@ -238,6 +239,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(soVBKLNDTC, nameof(soVBKLNDTC));
         Check.NotNull(ngayNhanTBKQXLKLTC, nameof(ngayNhanTBKQXLKLTC));
         Check.NotNull(ketQua, nameof(ketQua));
+        Check.NotNull(congKhai, nameof(congKhai));
 
         if (denounce.MaHoSo != maHoSo)
         {
@@ -267,9 +269,9 @@ public class DenounceManager : DomainService
         denounce.DienTich = dienTich;
         denounce.LoaiDat = loaiDat;
         denounce.DiaChiThuaDat = diaChiThuaDat;
-        denounce.tinhThuaDat = tinhThuaDat;
-        denounce.huyenThuaDat = huyenThuaDat;
-        denounce.xaThuaDat = xaThuaDat;
+        denounce.TinhThuaDat = tinhThuaDat;
+        denounce.HuyenThuaDat = huyenThuaDat;
+        denounce.XaThuaDat = xaThuaDat;
         denounce.DuLieuToaDo = duLieuToaDo;
         denounce.DuLieuHinhHoc = duLieuHinhHoc;
         denounce.GhiChu = GhiChu;
@@ -283,6 +285,6 @@ public class DenounceManager : DomainService
         denounce.SoVBKLNDTC = soVBKLNDTC;
         denounce.NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC;
         denounce.KetQua = ketQua;
-        denounce.CongKhaiKLGQTC = congKhaiKLGQTC;
+        denounce.CongKhai = congKhai;
     }
 }

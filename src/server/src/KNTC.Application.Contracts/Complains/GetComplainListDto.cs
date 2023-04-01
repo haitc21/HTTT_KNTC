@@ -14,4 +14,5 @@ public class GetComplainListDto : BaseListFilterDto
     public int[]? mangLinhVuc { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public int? GiaiDoan { get; set; }
+    public bool? CongKhai { get; set; }
 }

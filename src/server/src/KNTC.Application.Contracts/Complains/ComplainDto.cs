@@ -11,7 +11,7 @@ public class ComplainDto : AuditedEntityDto<Guid>
     {
         FileAttachments = new List<FileAttachmentDto>();
     }
-    public string MaHoSo { get; private set; }
+    public string MaHoSo { get; set; }
     public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
     public string NguoiDeNghi { get; set; }
@@ -54,6 +54,7 @@ public class ComplainDto : AuditedEntityDto<Guid>
     public string SoQD2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
+    public bool CongKhai { get; set; }
     public virtual List<FileAttachmentDto> FileAttachments { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

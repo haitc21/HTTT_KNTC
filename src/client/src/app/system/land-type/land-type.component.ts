@@ -18,6 +18,8 @@ export class LandTypeComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
+  home: MenuItem;
+  breadcrumb: MenuItem[];
 
   //Paging variables
   public skipCount: number = 0;
@@ -45,6 +47,8 @@ export class LandTypeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.breadcrumb = [{ label: 'Danh mục loại đất' }];
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
     this.getPermission();
     this.buildActionMenu();
     this.loadData();
@@ -98,7 +102,7 @@ export class LandTypeComponent implements OnInit, OnDestroy {
     this.loadData();
   }
 
-  showEditModal(row: any) {
+  showUpdateModal(row: any) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
@@ -193,7 +197,7 @@ export class LandTypeComponent implements OnInit, OnDestroy {
         label: this.Actions.UPDATE,
         icon: 'pi pi-fw pi-pencil',
         command: event => {
-          this.showEditModal(this.actionItem);
+          this.showUpdateModal(this.actionItem);
           this.actionItem = null;
         },
         visible: this.hasPermissionUpdate,

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layout/app.layout.component';
+import { AuthGuard } from '@abp/ng.core';
 
 const routes: Routes = [
   { path: '', redirectTo: 'pages/home', pathMatch: 'full' },
@@ -13,6 +14,7 @@ const routes: Routes = [
     path: 'system',
     loadChildren: () => import('./system/system.module').then(m => m.SystemModule),
     component: AppLayoutComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'auth',

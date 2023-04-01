@@ -47,6 +47,7 @@ export interface ComplainDto extends AuditedEntityDto<string> {
   soQD2?: string;
   ketQua2?: LoaiKetQua;
   ketQua?: LoaiKetQua;
+  congKhai: boolean;
   fileAttachments: FileAttachmentDto[];
   concurrencyStamp?: string;
 }
@@ -92,6 +93,7 @@ export interface CreateComplainDto {
   thamQuyen2?: string;
   soQD2?: string;
   ketQua2?: LoaiKetQua;
+  congKhai: boolean;
   fileAttachments: CreateAndUpdateFileAttachmentDto[];
 }
 
@@ -104,11 +106,7 @@ export interface GetComplainListDto extends BaseListFilterDto {
   linhVuc?: LinhVuc;
   ketQua?: LoaiKetQua;
   giaiDoan?: number;
-  //
-  landComplaint: boolean;
-  enviromentalComplaint: boolean;
-  waterResourceComplaint: boolean;
-  mineralResourceComplaint: boolean;
+  congKhai?: boolean;
 }
 
 export interface UpdateComplainDto extends EntityDto<string> {
@@ -152,5 +150,6 @@ export interface UpdateComplainDto extends EntityDto<string> {
   thamQuyen2?: string;
   soQD2?: string;
   ketQua2?: LoaiKetQua;
+  congKhai: boolean;
   concurrencyStamp?: string;
 }

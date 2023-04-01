@@ -17,6 +17,8 @@ import { EileUploadDto as FileUploadDto } from 'src/app/shared/models/file-uploa
 import { FileService } from 'src/app/shared/services/file.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
+import { saveAs } from 'file-saver';
+import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 
 @Component({
   selector: 'app-denounce',
@@ -26,6 +28,8 @@ import { ActivatedRoute } from '@angular/router';
 export class DenounceComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
+  home: MenuItem;
+  breadcrumb: MenuItem[];
 
   linhVuc: LinhVuc;
   header: string = '';
@@ -48,19 +52,19 @@ export class DenounceComponent implements OnInit, OnDestroy {
   thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
   tinhTrang: number;
-  congKhaiKLGQTC: boolean | null;
+  congKhai: boolean | null;
 
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
-  
+
   loaiKQOptions = [
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
   ];
-  congKhaiKLGQTCOptions = [
+  congKhaiOptions = [
     { value: true, text: 'Công khai' },
     { value: false, text: 'Không công khai' },
   ];
@@ -92,6 +96,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.loadOptions();
     this.route.paramMap.subscribe(params => {
       this.linhVuc = +params.get('linhVuc') as LinhVuc;
+      this.buildBreadcrumb();
       this.setHeader();
       this.resetFilter();
       this.loadData(true);
@@ -105,7 +110,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.maTinh = null;
     this.maHuyen = null;
     this.maXa = null;
-    this.thoiGianTiepNhanRange = [];
+    this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
     this.tinhTrang = null;
   }
@@ -144,7 +149,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         }
       );
   }
-  inhChange(event) {
+  tinhChange(event) {
     this.loadData();
     if (event.value) {
       this.toggleBlockUI(true);
@@ -187,7 +192,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
       this.filter = {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,
-        linhVuc: this.linhVuc
+        linhVuc: this.linhVuc,
       } as GetDenounceListDto;
     } else {
       this.filter = {
@@ -197,9 +202,10 @@ export class DenounceComponent implements OnInit, OnDestroy {
         maTinhTP: this.maTinh,
         maQuanHuyen: this.maHuyen,
         maXaPhuongTT: this.maXa,
-        fromDate: this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
+        fromDate:
+          this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+            ? this.thoiGianTiepNhanRange[0].toUTCString()
+            : null,
         toDate:
           this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
             ? this.thoiGianTiepNhanRange[1].toUTCString()
@@ -207,7 +213,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         ketQua: this.tinhTrang,
         giaiDoan: this.giaiDoan,
-        congKhaiKLGQTC: this.congKhaiKLGQTC
+        congKhai: this.congKhai,
       } as GetDenounceListDto;
     }
 
@@ -226,6 +232,48 @@ export class DenounceComponent implements OnInit, OnDestroy {
         },
       });
     this.toggleBlockUI(false);
+  }
+
+  exportExcel() {
+    this.toggleBlockUI(true);
+    this.filter = {
+      skipCount: this.skipCount,
+      maxResultCount: this.maxResultCount,
+      keyword: this.keyword,
+      maTinhTP: this.maTinh,
+      maQuanHuyen: this.maHuyen,
+      maXaPhuongTT: this.maXa,
+      fromDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+          ? this.thoiGianTiepNhanRange[0].toUTCString()
+          : null,
+      toDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+          ? this.thoiGianTiepNhanRange[1].toUTCString()
+          : null,
+      linhVuc: this.linhVuc,
+      ketQua: this.tinhTrang,
+      giaiDoan: this.giaiDoan,
+      congKhai: this.congKhai,
+    } as GetDenounceListDto;
+    this.denounceService
+      .getExcel(this.filter)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (data: any) => {
+          if (data) {
+            const uint8Array = this.utilService.base64ToArrayBuffer(data);
+            const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
+            let fileName =
+              this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') + '_Tố cáo.xlsx';
+            saveAs(blob, fileName);
+          }
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
   }
 
   pageChanged(event: any): void {
@@ -247,7 +295,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         label: this.Actions.UPDATE,
         icon: 'pi pi-fw pi-pencil',
         command: event => {
-          this.showEditModal(this.actionItem);
+          this.showUpdateModal(this.actionItem);
           this.actionItem = null;
         },
         visible: this.hasPermissionUpdate,
@@ -283,6 +331,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.denounceService.delete(id).subscribe({
       next: () => {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+        this.resetFilter();
         this.loadData();
         this.selectedItems = [];
         this.actionItem = null;
@@ -299,10 +348,12 @@ export class DenounceComponent implements OnInit, OnDestroy {
   }
   showAddModal() {
     const ref = this.dialogService.open(DenounceDetailComponent, {
-      header: 'Thêm khiếu nại/khiếu kiện',
+      header: 'Thêm tố cáo',
       width: DIALOG_BG,
       data: {
+        loaiVuViec: LoaiVuViec.ToCao,
         linhVuc: this.linhVuc,
+        mode: 'create',
       },
     });
 
@@ -324,6 +375,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
               this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
               this.toggleBlockUI(false);
               this.selectedItems = [];
+              this.resetFilter();
               this.loadData();
             },
             () => {
@@ -333,12 +385,13 @@ export class DenounceComponent implements OnInit, OnDestroy {
         } else {
           this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
           this.selectedItems = [];
+          this.resetFilter();
           this.loadData();
         }
       }
     });
   }
-  showEditModal(row) {
+  showUpdateModal(row) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
@@ -347,9 +400,11 @@ export class DenounceComponent implements OnInit, OnDestroy {
     const ref = this.dialogService.open(DenounceDetailComponent, {
       data: {
         id: row.id,
+        loaiVuViec: LoaiVuViec.ToCao,
         linhVuc: this.linhVuc,
+        mode: 'update',
       },
-      header: `Cập nhật khiếu nại/khiếu kiện '${row.tieuDe}'`,
+      header: `Cập nhật tố cáo "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
 
@@ -358,8 +413,26 @@ export class DenounceComponent implements OnInit, OnDestroy {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
         this.actionItem = null;
+        this.resetFilter();
         this.loadData();
       }
+    });
+  }
+  viewDetail(row) {
+    if (!row) {
+      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      return;
+    }
+
+    const ref = this.dialogService.open(DenounceDetailComponent, {
+      data: {
+        id: row.id,
+        loaiVuViec: LoaiVuViec.ToCao,
+        linhVuc: this.linhVuc,
+        mode: 'view',
+      },
+      header: `Chi tiết đơn tố cáo "${row.tieuDe}"`,
+      width: DIALOG_BG,
     });
   }
 
@@ -390,6 +463,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.denounceService.deleteMultiple(ids).subscribe({
       next: () => {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+        this.resetFilter();
         this.loadData();
         this.selectedItems = [];
         this.toggleBlockUI(false);
@@ -405,7 +479,43 @@ export class DenounceComponent implements OnInit, OnDestroy {
       this.loadData();
     }
   }
+  buildBreadcrumb() {
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [{ label: 'Tố cáo', icon: 'fa fa-balance-scale', disabled: true }];
 
+    switch (this.linhVuc) {
+      case LinhVuc.DatDai:
+        this.breadcrumb.push({
+          label: ' Đất đai',
+          icon: 'pi pi-image',
+          routerLink: [`/pages/denounce/${LinhVuc.DatDai}`],
+        });
+        break;
+      case LinhVuc.MoiTruong:
+        this.breadcrumb.push({
+          label: ' Môi trường',
+          icon: 'pi pi-sun',
+          routerLink: [`/pages/denounce/${LinhVuc.MoiTruong}`],
+        });
+        break;
+      case LinhVuc.TaiNguyenNuoc:
+        this.breadcrumb.push({
+          label: ' Tài nguyên nước',
+          icon: 'pi pi-flag-fill',
+          routerLink: [`/pages/denounce/${LinhVuc.TaiNguyenNuoc}`],
+        });
+        break;
+      case LinhVuc.KhoangSan:
+        this.breadcrumb.push({
+          label: ' Khoáng sản',
+          icon: 'pi pi-bitcoin',
+          routerLink: [`/pages/denounce/${LinhVuc.KhoangSan}`],
+        });
+        break;
+      default:
+      //this.header = '';
+    }
+  }
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.blockedPanel = true;

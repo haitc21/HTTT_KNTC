@@ -196,19 +196,19 @@ export class AppTopBarComponent implements OnInit {
         items: [
           {
             label: 'Hình thức tệp',
-            routerLink: [`/pages/document-type`],
+            routerLink: [`/system/document-type`],
           },
           {
             label: 'Loại đất',
-            routerLink: [`/pages/land-type`],
+            routerLink: [`/system/land-type`],
           },
           {
             label: 'Loại địa danh',
-            routerLink: [`/pages/unit-type`],
+            routerLink: [`/system/unit-type`],
           },
           {
             label: 'Địa danh',
-            routerLink: [`/pages/unit`],
+            routerLink: [`/system/unit`],
           },
         ],
       },

@@ -44,11 +44,20 @@ export class DenounceService {
     { apiName: this.apiName });
   
 
+  getExcel = (input: GetDenounceListDto) =>
+    this.restService.request<any, number[]>({
+      method: 'GET',
+      url: '/api/app/denounce/excel',
+      params: { maTinhTP: input.maTinhTP, maQuanHuyen: input.maQuanHuyen, maXaPhuongTT: input.maXaPhuongTT, fromDate: input.fromDate, toDate: input.toDate, linhVuc: input.linhVuc, ketQua: input.ketQua, congKhai: input.congKhai, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+    },
+    { apiName: this.apiName });
+  
+
   getList = (input: GetDenounceListDto) =>
     this.restService.request<any, PagedResultDto<DenounceDto>>({
       method: 'GET',
       url: '/api/app/denounce',
-      params: { maTinhTP: input.maTinhTP, maQuanHuyen: input.maQuanHuyen, maXaPhuongTT: input.maXaPhuongTT, fromDate: input.fromDate, toDate: input.toDate, linhVuc: input.linhVuc, ketQua: input.ketQua, congKhaiKLGQTC: input.congKhaiKLGQTC, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      params: { maTinhTP: input.maTinhTP, maQuanHuyen: input.maQuanHuyen, maXaPhuongTT: input.maXaPhuongTT, fromDate: input.fromDate, toDate: input.toDate, linhVuc: input.linhVuc, ketQua: input.ketQua, congKhai: input.congKhai, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName });
   

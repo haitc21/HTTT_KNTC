@@ -18,6 +18,7 @@ export interface CreateAndUpdateFileAttachmentDto {
   contentType?: string;
   contentLength: number;
   concurrencyStamp?: string;
+  congKhai: boolean;
 }
 
 export interface FileAttachmentDto extends AuditedEntityDto<string> {
@@ -33,6 +34,7 @@ export interface FileAttachmentDto extends AuditedEntityDto<string> {
   fileName?: string;
   contentType?: string;
   contentLength: number;
+  congKhai: boolean;
 }
 
 export interface GetFileAttachmentListDto extends BaseListFilterDto {
@@ -40,4 +42,5 @@ export interface GetFileAttachmentListDto extends BaseListFilterDto {
   denounceId?: string;
   giaiDoan?: number;
   hinhThuc?: number;
+  congKhai?: boolean;
 }
