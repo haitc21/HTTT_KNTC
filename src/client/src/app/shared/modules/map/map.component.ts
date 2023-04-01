@@ -230,23 +230,45 @@ export class MapComponent implements AfterViewInit, OnChanges {
         icon: hoSo.type === 1 ? blueIcon : redIcon,
       });
 
+      var customOptions =
+      {
+      'maxWidth': '400',
+      'width': '200',
+      'className' : 'popupCustom'
+      }
+
       marker.bindPopup(`
-        <h5>${hoSo.tieuDe}</h5>
-        <div class="form-group row">
-        <label class="col-sm-2 col-form-label">Mã hồ sơ:</label>
-          <div class="col-sm-10">
-            ${hoSo.maHoSo}
-          </div>
-        </div>
-        <div>
-          
-          <p>Mã hồ sơ: </p>
-          <p>Người gửi đơn: ${hoSo.nguoiDeNghi}</p>
-          <p>CCCD/CCID: ${hoSo.cccdCmnd}</p>
-          <p>Loại đơn: ${this.loaiHS[hoSo.typeHoSo]}</p>
-          <p>Lĩnh vực: ${this.linhVuc[hoSo.fieldType]}</p>
-        </div>
-      `);
+      <form name="myform" role="form" id="form" class="form-horizontal">
+      <div class="form-group">
+        <label class="control-label col-sm-2"><strong>Nội dung</strong></label>      
+        <div class="col-sm-10"><b>${hoSo.tieuDe}</b></div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><strong>Mã hồ sơ:</strong></label>
+        <div class="col-sm-10">${hoSo.maHoSo}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><strong>Người gửi đơn:</strong></label>
+        <div class="col-sm-10">${hoSo.nguoiDeNghi}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><strong>CCCD/CCID:</strong></label>
+        <div class="col-sm-10">${hoSo.cccdCmnd}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><strong>Thời gian tiếp nhận:</strong></label>
+        <div class="col-sm-10">${hoSo.thoiGianTiepNhan}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><strong>Thời gian hẹn trả KQ:</strong></label>
+        <div class="col-sm-10">${hoSo.thoiGianHenTraKQ}</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2"><strong>Bộ phận đang XL:</strong></label>
+        <div class="col-sm-10">${hoSo.boPhanDangXL}</div>
+      </div>
+      `,customOptions);
+        
       //marker.addTo(this.map);
       if (hoSo.type==LoaiVuViec.KhieuNai)
         marker.addTo(this.khieunai);

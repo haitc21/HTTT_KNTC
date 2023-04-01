@@ -11,6 +11,7 @@ public class GetComplainListDto : BaseListFilterDto
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
     public LinhVuc? LinhVuc { get; set; }
+    public int[]? mangLinhVuc { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public int? GiaiDoan { get; set; }
 }

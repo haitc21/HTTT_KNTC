@@ -22,6 +22,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                string sorting,
                                                string keyword,
                                                LinhVuc? linhVuc,
+                                               int[]? mangLinhVuc,
                                                LoaiKetQua? ketQua,
                                                int? maTinhTp,
                                                int? maQuanHuyen,
@@ -71,6 +72,10 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              .WhereIf(
                 toDate.HasValue,
                 x => x.ThoiGianTiepNhan <= toDate
+             )
+             .WhereIf(
+                !mangLinhVuc.IsNullOrEmpty(),
+                x => mangLinhVuc.Contains((int) x.LinhVuc)
              )
             .OrderBy(sorting)
             .Skip(skipCount)

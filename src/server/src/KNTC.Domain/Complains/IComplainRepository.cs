@@ -13,6 +13,7 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                      string sorting,
                      string keyword,
                      LinhVuc? linhVuc,
+                     int[]? mangLinhVuc,
                      LoaiKetQua? ketQua,
                      int? maTinhTp,
                      int? maQuanHuyen,

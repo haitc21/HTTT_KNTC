@@ -60,6 +60,7 @@ public class ComplainAppService : CrudAppService<
             input.Sorting,
             input.Keyword,
             input.LinhVuc,
+            input.mangLinhVuc,
             input.KetQua,
             input.maTinhTP,
             input.maQuanHuyen,
@@ -73,6 +74,7 @@ public class ComplainAppService : CrudAppService<
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
                 && (!input.LinhVuc.HasValue || x.LinhVuc == input.LinhVuc)
+                && (input.mangLinhVuc.IsNullOrEmpty() || input.mangLinhVuc.Contains((int) x.LinhVuc))
                 && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
                 && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
                 && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
