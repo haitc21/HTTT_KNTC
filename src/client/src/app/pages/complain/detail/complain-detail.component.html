@@ -1,12 +1,14 @@
 <form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
   <p-panel #pnlDetail [collapsed]="false">
-    <div class="card">
-      <p-tabView styleClass="tabview-custom">
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <i class="pi pi-fw pi-envelope mr-2"></i>
-            <span>Hồ sơ khiếu nại</span>
-          </ng-template>
+    <p-tabView styleClass="tabview-custom">
+      <!-- ----------------------------------------------------------------------- -->
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-fw pi-envelope mr-2"></i>
+          <span>Hồ sơ khiếu nại</span>
+        </ng-template>
+
+        <ng-template pTemplate="content">
           <div class="formgrid grid">
             <!-- -------------------------------Thông tin khiếu nại/khiếu kiện--------------------------------------------------- -->
             <p-fieldset legend="Thông tin khiếu nại/khiếu kiện" [toggleable]="true" class="w-full">
@@ -737,27 +739,88 @@
             </p-fieldset>
             <!-- ---------------------------------------------------------------------------------- -->
           </div>
-        </p-tabPanel>
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <i class="pi pi-folder mr-2"></i>
-            <span>Tệp gắn kèm</span>
-          </ng-template>
+        </ng-template>
+      </p-tabPanel>
+      <!-- ----------------------------------------------------------------------- -->
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-folder mr-2"></i>
+          <span>Tệp gắn kèm</span>
+        </ng-template>
+
+        <ng-template pTemplate="content">
           <app-file-attachment
             [loaiVuViec]="loaiVuViec"
             [modeHoSo]="mode"
             [complainId]="complainId"
           ></app-file-attachment>
-        </p-tabPanel>
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <i class="pi pi-fw pi-map-marker mr-2"></i>
-            <span>Bản đồ</span>
-          </ng-template>
-          <h1>Ban do</h1>
-        </p-tabPanel>
-      </p-tabView>
-    </div>
+        </ng-template>
+      </p-tabPanel>
+      <!-- ----------------------------------------------------------------------- -->
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-fw pi-map-marker mr-2"></i>
+          <span>Bản đồ</span>
+        </ng-template>
+        <ng-template pTemplate="content">
+          <!-- -------------------------------Dữ liệu--------------------------------------------------- -->
+          <p-fieldset legend="Dữ liệu" [toggleable]="true" class="w-full">
+            <div class="grid">
+              <!-- -------------------------------maHoSo--------------------------------------------------- -->
+              <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                  <input
+                    id="duLieuToaDo"
+                    formControlName="duLieuToaDo"
+                    type="text"
+                    pInputText
+                    [style]="{ width: '100%' }"
+                  />
+                  <label for="name">Dữ liệu tọa đọ</label>
+                </span>
+                <app-validation-message
+                  [entityControl]="formControls.duLieuToaDo"
+                  [validationMessages]="validationMessages.duLieuToaDo"
+                >
+                </app-validation-message>
+              </div>
+              <div class="field col-12 md:col-6">
+                <button
+                  pButton
+                  pRipples
+                  type="button"
+                  (click)="getCoordiate()"
+                  label="Lấy tọa độ"
+                  class="p-button-info mr-2"
+                  icon="pi pi-map-marker"
+                ></button>
+              </div>
+              <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                  <textarea
+                    id="duLieuHinhHoc"
+                    formControlName="duLieuHinhHoc"
+                    [rows]="5"
+                    pInputTextarea
+                    class="w-full"
+                  ></textarea>
+                  <label for="name">Dữ liệu hình học</label>
+                </span>
+                <app-validation-message
+                  [entityControl]="formControls.duLieuHinhHoc"
+                  [validationMessages]="validationMessages.duLieuHinhHoc"
+                >
+                </app-validation-message>
+              </div>
+            </div>
+          </p-fieldset>
+          <!-- -------------------------------Bản đồ--------------------------------------------------- -->
+          <p-fieldset legend="Bản đồ" [toggleable]="true" class="w-full">
+            <app-map [duLieuToaDo]="formControls.duLieuToaDo.value"></app-map>
+          </p-fieldset>
+        </ng-template>
+      </p-tabPanel>
+    </p-tabView>
 
     <ng-template *ngIf="mode != 'view'" pTemplate="footer">
       <div class="flex justify-content-end">

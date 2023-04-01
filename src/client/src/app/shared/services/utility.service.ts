@@ -128,11 +128,12 @@ export class UtilityService {
   convertDateToLocal = (date: Date | string | null) => {
     if (!date) return null;
 
-    const parsedDate = parseISO(date.toString());
-    const localDate = new Date(parsedDate.getTime() - parsedDate.getTimezoneOffset() * 60000);
-    const formattedDate = format(localDate, 'yyyy-MM-dd HH:mm:ss');
+    // const parsedDate = parseISO(date.toString());
+    // const localDate = new Date(parsedDate.getTime() - parsedDate.getTimezoneOffset() * 60000);
+    // const formattedDate = format(localDate, 'yyyy-MM-dd HH:mm:ss');
 
-    return formattedDate;
+    // return formattedDate;
+    return new Date(date);
   };
   formatDate = (date: Date | string, formatStr: string) => {
     if (!date) return '';

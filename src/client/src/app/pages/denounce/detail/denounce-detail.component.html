@@ -1,12 +1,13 @@
 <form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
   <p-panel #pnlDetail [collapsed]="false">
-    <div class="card">
-      <p-tabView styleClass="tabview-custom">
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <i class="pi pi-fw pi-envelope mr-2"></i>
-            <span>Hồ sơ khiếu nại</span>
-          </ng-template>
+    <p-tabView styleClass="tabview-custom">
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-fw pi-envelope mr-2"></i>
+          <span>Hồ sơ khiếu nại</span>
+        </ng-template>
+
+        <ng-template pTemplate="content">
           <div class="formgrid grid">
             <!-- -------------------------------Thông tin khiếu nại/khiếu kiện--------------------------------------------------- -->
             <p-fieldset legend="Thông tin khiếu nại/khiếu kiện" [toggleable]="true" class="w-full">
@@ -742,27 +743,36 @@
             </p-fieldset>
             <!-- ---------------------------------------------------------------------------------- -->
           </div>
-        </p-tabPanel>
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <i class="pi pi-folder mr-2"></i>
-            <span>Tệp gắn kèm</span>
-          </ng-template>
+        </ng-template>
+      </p-tabPanel>
+      <!-- --------------------------------------------------------------------------------- -->
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-folder mr-2"></i>
+          <span>Tệp gắn kèm</span>
+        </ng-template>
+
+        <ng-template pTemplate="content">
           <app-file-attachment
             [loaiVuViec]="loaiVuViec"
             [modeHoSo]="mode"
             [denounceId]="denounceId"
           ></app-file-attachment>
-        </p-tabPanel>
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <i class="pi pi-fw pi-map-marker mr-2"></i>
-            <span>Bản đồ</span>
-          </ng-template>
+        </ng-template>
+      </p-tabPanel>
+      <!-- ----------------------------------------------------------------------- -->
+      <p-tabPanel>
+        <ng-template pTemplate="header">
+          <i class="pi pi-fw pi-map-marker mr-2"></i>
+          <span>Bản đồ</span>
+        </ng-template>
+
+        <ng-template pTemplate="content">
           <h1>Ban do</h1>
-        </p-tabPanel>
-      </p-tabView>
-    </div>
+        </ng-template>
+      </p-tabPanel>
+      <!-- ----------------------------------------------------------------------- -->
+    </p-tabView>
 
     <ng-template *ngIf="mode != 'view'" pTemplate="footer">
       <div class="flex justify-content-end">

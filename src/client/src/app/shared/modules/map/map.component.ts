@@ -11,7 +11,8 @@ import {
 import { LoaiVuViec } from '@proxy';
 import * as L from 'leaflet';
 import 'leaflet.locatecontrol';
-import { Complain, typesHoSo } from '../../mock/Complain';
+import { v4 as uuidv4 } from 'uuid';
+import { SummaryDto } from '@proxy/summaries';
 
 const blueIcon = new L.Icon({
   iconUrl: 'assets/images/map/marker-icon.png',
@@ -33,30 +34,32 @@ const redIcon = new L.Icon({
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-
 export class MapComponent implements AfterViewInit, OnChanges {
-  @Input() idMap: string = 'map';
-  @Input() data: Complain[] = [];
+  @Input() data: SummaryDto[] = [];
   @Input() spatialData: any[];
   @Input() heightMap: string = '600px';
   @Input() zoomLv: number = 13;
+  @Input() duLieuToaDo: string;
 
+  idMap: string = uuidv4();
   map: L.Map;
 
   khieunai: any;
   tocao: any;
   quyhoach: any;
 
-  loaiHS = ['khiếu nại', 'Tố cáo'];
-  linhVuc = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
-
   constructor() {}
+
   ngAfterViewInit() {
     this.initMap();
     this.buildLocateBtn();
     this.buildEventMapClick();
     this.renderMarkers(this.data);
     this.renderSpatialData(this.spatialData);
+    if (this.duLieuToaDo) {
+      let marker = L.marker(this.convertStringCoordiate(this.duLieuToaDo), { icon: blueIcon });
+      marker.addTo(this.map);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -64,12 +67,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
       this.renderMarkers(changes.data.currentValue);
     }
 
-    if (changes.spatialData && changes.spatialData.currentValue && !changes.spatialData.isFirstChange()) {
+    if (
+      changes.spatialData &&
+      changes.spatialData.currentValue &&
+      !changes.spatialData.isFirstChange()
+    ) {
       this.renderSpatialData(changes.spatialData.currentValue);
     }
   }
 
-  initMap() {    
+  initMap() {
     /*
     this.map = L.map(this.idMap).setView([21.027764, 105.83416], this.zoomLv);
     this.vitri = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -89,63 +96,75 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.khieunai = L.layerGroup();
     this.tocao = L.layerGroup();
 
-    const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
-    const mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
-   
-    const streets = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-  
+    const mbAttr =
+      'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+    const mbUrl =
+      'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+    const streets = L.tileLayer(mbUrl, {
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution: mbAttr,
+    });
+
     const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     });
-  
+
+    let center = this.duLieuToaDo
+      ? this.convertStringCoordiate(this.duLieuToaDo)
+      : [21.59053436945016, 105.83127034149382];
     this.map = L.map(this.idMap, {
-      center: [21.59053436945016, 105.83127034149382],
+      center: center,
       zoom: 10,
-      layers: [osm, this.khieunai]
+      layers: [osm, this.khieunai],
     });
-  
-    var baseMaps  = {
-      'OpenStreetMap': osm,
-      'Streets': streets
+
+    var baseMaps = {
+      OpenStreetMap: osm,
+      Streets: streets,
     };
-  
+
     var geojsonFeature = {
-      "type": "Feature",
-      "properties": {
-          "name": "Dữ liệu quy hoạch",
-          "amenity": "Thái Nguyên",
-          "popupContent": "Xem dữ liệu quy hoạch!"
+      type: 'Feature',
+      properties: {
+        name: 'Dữ liệu quy hoạch',
+        amenity: 'Thái Nguyên',
+        popupContent: 'Xem dữ liệu quy hoạch!',
       },
-      "geometry": this.spatialData
+      geometry: this.spatialData,
     };
 
     var myStyle = {
-      fillColor: "#ff7800",
+      fillColor: '#ff7800',
       weight: 2,
       opacity: 1,
       color: 'white',
       dashArray: '3',
-      fillOpacity: 0.7
+      fillOpacity: 0.7,
     };
 
-    this.quyhoach = L.geoJSON(geojsonFeature,
-      {style: myStyle
-      });    
+    this.quyhoach = L.geoJSON(geojsonFeature, { style: myStyle });
 
-    var overlayMaps  = {
+    var overlayMaps = {
       'Khiếu nại': this.khieunai,
       'Tố cáo': this.tocao,
-      'Quy hoạch': this.quyhoach
+      'Quy hoạch': this.quyhoach,
     };
-  
-    const layerControl = L.control.layers(baseMaps , overlayMaps ).addTo(this.map);    
-    
-    const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+
+    const layerControl = L.control.layers(baseMaps, overlayMaps).addTo(this.map);
+
+    const satellite = L.tileLayer(mbUrl, {
+      id: 'mapbox/satellite-v9',
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution: mbAttr,
+    });
     layerControl.addBaseLayer(satellite, 'Satellite');
 
     //layerControl.addOverlay(this.quyhoach, 'Quy hoạch');
-
 
     /*
     //
@@ -207,37 +226,39 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
   buildEventMapClick() {
     this.map.on('click', e => {
+      this.duLieuToaDo = `${e.latlng.lat}, ${e.latlng.lng}`;
       L.popup()
         .setLatLng(e.latlng)
         .setContent(
-          `<b>Vị trí: </b> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
+          `<h5>Vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
         )
         .openOn(this.map);
     });
   }
 
-  renderMarkers(hosos: any[]) {
+  renderMarkers(data: SummaryDto[]) {
     this.map.eachLayer(layer => {
       if (!(layer instanceof L.TileLayer)) {
         this.map.removeLayer(layer);
       }
     });
-    
+
     //Add markers
-    hosos.filter(x => x.duLieuToaDo!=null).forEach(hoSo => {
-      var point = hoSo.duLieuToaDo.split(",");
-      const marker = L.marker([point[0], point[1]], {
-        icon: hoSo.type === 1 ? blueIcon : redIcon,
-      });
+    data
+      .filter(x => x.duLieuToaDo != null)
+      .forEach(hoSo => {
+        const marker = L.marker(this.convertStringCoordiate(hoSo.duLieuToaDo), {
+          icon: hoSo.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
+        });
 
-      var customOptions =
-      {
-      'maxWidth': '400',
-      'width': '200',
-      'className' : 'popupCustom'
-      }
+        var customOptions = {
+          maxWidth: '400',
+          width: '200',
+          className: 'popupCustom',
+        };
 
-      marker.bindPopup(`
+        marker.bindPopup(
+          `
       <form name="myform" role="form" id="form" class="form-horizontal">
       <div class="form-group">
         <label class="control-label col-sm-2"><strong>Nội dung</strong></label>      
@@ -249,11 +270,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
       </div>
       <div class="form-group">
         <label class="control-label col-sm-2"><strong>Người gửi đơn:</strong></label>
-        <div class="col-sm-10">${hoSo.nguoiDeNghi}</div>
+        <div class="col-sm-10">${hoSo.nguoiNopDon}</div>
       </div>
       <div class="form-group">
-        <label class="control-label col-sm-2"><strong>CCCD/CCID:</strong></label>
-        <div class="col-sm-10">${hoSo.cccdCmnd}</div>
+        <label class="control-label col-sm-2"><strong>Điện thoại:</strong></label>
+        <div class="col-sm-10">${hoSo.dienThoai}</div>
       </div>
       <div class="form-group">
         <label class="control-label col-sm-2"><strong>Thời gian tiếp nhận:</strong></label>
@@ -267,20 +288,19 @@ export class MapComponent implements AfterViewInit, OnChanges {
         <label class="control-label col-sm-2"><strong>Bộ phận đang XL:</strong></label>
         <div class="col-sm-10">${hoSo.boPhanDangXL}</div>
       </div>
-      `,customOptions);
-        
-      //marker.addTo(this.map);
-      if (hoSo.type==LoaiVuViec.KhieuNai)
-        marker.addTo(this.khieunai);
-      else if (hoSo.type==LoaiVuViec.ToCao)
-        marker.addTo(this.tocao);
-    });    
+      `,
+          customOptions
+        );
+
+        //marker.addTo(this.map);
+        if (hoSo.loaiVuViec == LoaiVuViec.KhieuNai) marker.addTo(this.khieunai);
+        else if (hoSo.loaiVuViec == LoaiVuViec.ToCao) marker.addTo(this.tocao);
+      });
   }
 
   renderSpatialData(khonggian: any[]) {
     //Add polygons
-    //this.spatialData 
-    
+    //this.spatialData
     /*
     var myStyle = {
       "color": "#ff7800",
@@ -288,6 +308,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
       "opacity": 0.65
     };
     */
-    
+  }
+  convertStringCoordiate(cor: string): [number, number] {
+    var point = cor.split(',');
+    return [+point[0], +point[1]];
   }
 }

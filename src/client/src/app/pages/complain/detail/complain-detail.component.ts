@@ -18,6 +18,7 @@ import { EileUploadDto } from 'src/app/shared/models/file-upload.class';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
+import { MapComponent } from 'src/app/shared/modules/map/map.component';
 
 @Component({
   templateUrl: './complain-detail.component.html',
@@ -25,8 +26,8 @@ import { FileAttachmentComponent } from '../../file-attachment/file-attachment.c
 })
 export class ComplainDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  @ViewChild(FileAttachmentComponent)
-  fileAttachmentComponent: FileAttachmentComponent;
+  @ViewChild(FileAttachmentComponent) fileAttachmentComponent: FileAttachmentComponent;
+  @ViewChild(MapComponent) mapComponent: MapComponent;
 
   complainId: string;
   mode: 'create' | 'update' | 'view' = 'view';
@@ -526,6 +527,11 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
       concurrencyStamp: [],
     });
+  }
+  getCoordiate() {
+    if (this.mapComponent?.duLieuToaDo) {
+      this.form.get('duLieuToaDo').setValue(this.mapComponent?.duLieuToaDo);
+    }
   }
 
   private toggleBlockUI(enabled: boolean) {
