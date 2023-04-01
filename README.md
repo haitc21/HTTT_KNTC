@@ -65,3 +65,6 @@ Dùng công cụ AnotherRedisDesktopManager
 cd scr/client
 abp generate-proxy -t ng
 ```
+
+lẫn .net 6 vs mấy chỗ cũ?
+chạy lệnh dotnet restore cho mấy dự án là ok
