@@ -11,7 +11,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 
-namespace KNTC.UnitTypes;
+namespace KNTC.CategoryUnitTypes;
 
 public class UnitTypeAppService : CrudAppService<
             UnitType,

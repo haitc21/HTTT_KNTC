@@ -5,7 +5,7 @@ using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
 using KNTC.LandTypes;
 using KNTC.Units;
-using KNTC.UnitTypes;
+using KNTC.CategoryUnitTypes;
 using KNTC.Users;
 using KNTC.SpatialDatas;
 using Microsoft.EntityFrameworkCore;

@@ -2,7 +2,7 @@
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
-namespace KNTC.UnitTypes;
+namespace KNTC.CategoryUnitTypes;
 
 public class CreateAndUpdateUnitTypeDto : EntityDto<int>, IHasConcurrencyStamp
 {

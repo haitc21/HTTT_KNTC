@@ -2,7 +2,7 @@ import { ListResultDto } from '@abp/ng.core';
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Status } from '@proxy';
-import { UnitTypeLookupDto, UnitTypeService } from '@proxy/unit-types';
+import { UnitTypeLookupDto, UnitTypeService } from '@proxy/category-unit-types';
 import { UnitDto, UnitLookupDto, UnitService } from '@proxy/units';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -158,7 +158,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   }
   unitTypeChange(id, isFirst: boolean = false) {
     if (!id) return;
-    debugger;
+    
     let parentControl = this.form.get('parentId');
     if (isFirst) parentControl.reset();
     if (id > 1) {

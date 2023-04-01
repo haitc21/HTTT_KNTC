@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
-namespace KNTC.UnitTypes;
+namespace KNTC.CategoryUnitTypes;
 
 public interface IUnitTypeAppService :
     ICrudAppService<UnitTypeDto,

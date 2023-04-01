@@ -23,7 +23,6 @@ import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
 import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { saveAs } from 'file-saver';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 
 @Component({
@@ -262,10 +261,19 @@ export class SearchMapComponent implements OnInit {
           if (data) {
             const uint8Array = this.utilService.base64ToArrayBuffer(data);
             const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
-            let fileName =
+
+            const url = window.URL.createObjectURL(blob); // Tạo URL tạm thời
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download =
               this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +
               '_Khiếu nại Tố cáo.xlsx';
-            saveAs(blob, fileName);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            window.URL.revokeObjectURL(url); // Xóa URL tạm thời
           }
           this.toggleBlockUI(false);
         },

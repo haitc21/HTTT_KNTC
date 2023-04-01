@@ -222,7 +222,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
         this.map.removeLayer(layer);
       }
     });
-    debugger;
+    
     //Add markers
     hosos.filter(x => x.duLieuToaDo!=null).forEach(hoSo => {
       var point = hoSo.duLieuToaDo.split(",");
@@ -280,7 +280,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   renderSpatialData(khonggian: any[]) {
     //Add polygons
     //this.spatialData 
-    debugger;
+    
     /*
     var myStyle = {
       "color": "#ff7800",

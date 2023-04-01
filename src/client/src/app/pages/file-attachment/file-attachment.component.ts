@@ -17,7 +17,6 @@ import { FileService } from 'src/app/shared/services/file.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.component';
-import { saveAs } from 'file-saver';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { OAuthService } from 'angular-oauth2-oidc';
 
@@ -150,9 +149,18 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           if (data) {
             const uint8Array = this.utilService.base64ToArrayBuffer(data);
             const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
-            let fileName =
+
+            const url = window.URL.createObjectURL(blob); // Tạo URL tạm thời
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download =
               this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') + '_Tệp gắn kèm.xlsx';
-            saveAs(blob, fileName);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            window.URL.revokeObjectURL(url); // Xóa URL tạm thời
           }
           this.toggleBlockUI(false);
         },
@@ -349,7 +357,17 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           if (data) {
             const uint8Array = this.utilService.base64ToArrayBuffer(data);
             const blob = new Blob([uint8Array], { type: item.contentType });
-            saveAs(blob, item.fileName);
+
+            const url = window.URL.createObjectURL(blob); // Tạo URL tạm thời
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = item.fileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            window.URL.revokeObjectURL(url); // Xóa URL tạm thời
           }
           this.toggleBlockUI(false);
         },

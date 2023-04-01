@@ -4,7 +4,7 @@ using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 
-namespace KNTC.UnitTypes;
+namespace KNTC.CategoryUnitTypes;
 
 public class UnitTypeManager : DomainService
 {

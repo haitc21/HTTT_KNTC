@@ -10,7 +10,7 @@ using KNTC.Roles;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
 using KNTC.Units;
-using KNTC.UnitTypes;
+using KNTC.CategoryUnitTypes;
 using KNTC.Users;
 using Volo.Abp.Identity;
 

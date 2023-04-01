@@ -104,6 +104,7 @@ export interface GetComplainListDto extends BaseListFilterDto {
   fromDate?: string;
   toDate?: string;
   linhVuc?: LinhVuc;
+  mangLinhVuc: number[];
   ketQua?: LoaiKetQua;
   giaiDoan?: number;
   congKhai?: boolean;

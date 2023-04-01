@@ -1,6 +1,5 @@
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { UnitTypeDto, UnitTypeService } from '@proxy/Unit-types';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
@@ -9,6 +8,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
 import { UnitTypeDetailComponent } from './detail/unit-type-detail.component';
+import { UnitTypeDto, UnitTypeService } from '@proxy/category-unit-types';
 
 @Component({
   selector: 'app-Unit-type',

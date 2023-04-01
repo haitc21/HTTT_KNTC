@@ -1,4 +1,4 @@
-﻿namespace KNTC.UnitTypes;
+﻿namespace KNTC.CategoryUnitTypes;
 
 public class UnitTypeConsts
 {

@@ -9,7 +9,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
 import { UnitDetailComponent } from './detail/unit-detail.component';
-import { UnitTypeLookupDto, UnitTypeService } from '@proxy/unit-types';
+import { UnitTypeLookupDto, UnitTypeService } from '@proxy/category-unit-types';
 
 @Component({
   selector: 'app-unit',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import * as moment from 'moment';
+import { format, parseISO } from 'date-fns';
 
 @Injectable()
 export class UtilityService {
@@ -127,13 +127,16 @@ export class UtilityService {
   };
   convertDateToLocal = (date: Date | string | null) => {
     if (!date) return null;
-    const localDateTime = moment.utc(date).local().toDate(); // Giá trị ngày và giờ trong múi giờ địa phương
-    return localDateTime;
+
+    const parsedDate = parseISO(date.toString());
+    const localDate = new Date(parsedDate.getTime() - parsedDate.getTimezoneOffset() * 60000);
+    const formattedDate = format(localDate, 'yyyy-MM-dd HH:mm:ss');
+
+    return formattedDate;
   };
-  formatDate = (date: Date | string, format: string) => {
+  formatDate = (date: Date | string, formatStr: string) => {
     if (!date) return '';
-    const momentDate = moment(date);
-    return momentDate.format(format).toString();
+    return format(new Date(date), formatStr);
   };
   convertToRomanNumeral(number: number): string {
     const romanMap = [

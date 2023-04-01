@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Status } from '@proxy';
-import { UnitTypeDto, UnitTypeService } from '@proxy/unit-types';
+import { UnitTypeDto, UnitTypeService } from '@proxy/category-unit-types';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';

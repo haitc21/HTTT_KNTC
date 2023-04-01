@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace KNTC.UnitTypes;
+namespace KNTC.CategoryUnitTypes;
 
 public class UnitType : FullAuditedAggregateRoot<int>
 {

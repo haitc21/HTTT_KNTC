@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 using KNTC.Configs;
-using KNTC.UnitTypes;
+using KNTC.CategoryUnitTypes;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 

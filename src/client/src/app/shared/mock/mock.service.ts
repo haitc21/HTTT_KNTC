@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
 import { Complain } from './Complain';
 
 @Injectable({
@@ -90,15 +89,7 @@ export class MockService {
     return [latitude, longitude];
   }
   randomDates(): [Date, Date, Date] {
-    const start = moment('2022-01-01', 'YYYY-MM-DD');
-    const end = moment('2023-12-31', 'YYYY-MM-DD');
-    const randomDate1 = moment(start.valueOf() + Math.random() * (end.valueOf() - start.valueOf()));
-    const randomDate2 = moment(
-      randomDate1.valueOf() + Math.random() * (end.valueOf() - randomDate1.valueOf())
-    );
-    const randomDate3 = moment(
-      randomDate2.valueOf() + Math.random() * (end.valueOf() - randomDate2.valueOf())
-    );
-    return [randomDate1.toDate(), randomDate2.toDate(), randomDate3.toDate()];
+    let date = new Date();
+    return [date, date, date];
   }
 }
