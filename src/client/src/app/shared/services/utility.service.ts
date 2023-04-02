@@ -172,8 +172,8 @@ export class UtilityService {
     let binaryString = window.atob(base64);
     let binaryLen = binaryString.length;
     let bytes = new Uint8Array(binaryLen);
-    for (var i = 0; i < binaryLen; i++) {
-      var ascii = binaryString.charCodeAt(i);
+    for (let i = 0; i < binaryLen; i++) {
+      let ascii = binaryString.charCodeAt(i);
       bytes[i] = ascii;
     }
     return bytes;

@@ -474,7 +474,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    var ids = [];
+    let ids = [];
     this.selectedItems.forEach(element => {
       ids.push(element.id);
     });

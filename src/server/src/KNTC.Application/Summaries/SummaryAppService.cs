@@ -69,6 +69,34 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             ObjectMapper.Map<List<Summary>, List<SummaryDto>>(result)
        );
     }
+
+    public async Task<List<SummaryDto>> GetMapAsync(GetSumaryMapDto input)
+    {
+        var userId = CurrentUser.Id;
+        if (userId == null)
+        {
+            input.CongKhai = true;
+        }
+        var query = await _summaryRepo.GetListAsync(input.LandComplain,
+                                                    input.EnviromentComplain,
+                                                    input.WaterComplain,
+                                                    input.MineralComplain,
+                                                    input.LandDenounce,
+                                                    input.EnviromentDenounce,
+                                                    input.WaterDenounce,
+                                                    input.MineralDenounce,
+                                                    input.Keyword,
+                                                    input.KetQua,
+                                                    input.maTinhTP,
+                                                    input.maQuanHuyen,
+                                                    input.maXaPhuongTT,
+                                                    input.FromDate,
+                                                    input.ToDate,
+                                                    input.CongKhai);
+        var result = await AsyncExecuter.ToListAsync(query);
+        return ObjectMapper.Map<List<Summary>, List<SummaryDto>>(result);
+    }
+
     [Authorize]
     public async Task<byte[]> GetExcelAsync(GetSummaryListDto input)
     {

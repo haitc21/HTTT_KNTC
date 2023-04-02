@@ -74,6 +74,7 @@ export class SearchMapComponent implements OnInit {
 
   blockedPanel = false;
   items: SummaryDto[] = [];
+  dataMap: SummaryDto[] = [];
 
   spatialData: SpatialDataDto[];
   complains: ComplainDto[] = [];
@@ -144,39 +145,19 @@ export class SearchMapComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.toggleBlockUI(true);
-    this.breadcrumb = [{ label: 'Bản đồ' }];
-    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.buildBreadcumb();
     //this.mockData = this.mockService.mockData();
     this.loadOptions();
+    this.loadGeo();
     this.loadData(true);
-    this.toggleBlockUI(false);
   }
+  private buildBreadcumb() {
+    this.breadcrumb = [{ label: 'Bản đồ' }];
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+  }
+
   loadData(isFirst: boolean = false) {
     this.toggleBlockUI(true);
-    //spatialData
-    if (this.geo) {
-      let filter = {
-        skipCount: this.skipCount,
-        maxResultCount: this.maxResultCount,
-        keyword: this.keyword,
-      } as GetSpatialDataListDto;
-      //this.spatialData
-      this.spatialDataService
-        .getList(filter)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<SpatialDataDto>) => {
-            this.spatialData = res.items; //.map(item => item.geoJson);
-
-            this.toggleBlockUI(false);
-          },
-          () => {
-            this.toggleBlockUI(false);
-          }
-        );
-    }
-
     this.filter = {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
@@ -206,7 +187,6 @@ export class SearchMapComponent implements OnInit {
       congKhai: this.hasLoggedIn ? this.congKhai : true,
     } as GetSummaryListDto;
 
-    this.toggleBlockUI(true);
     this.summaryService
       .getList(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -220,6 +200,45 @@ export class SearchMapComponent implements OnInit {
           this.toggleBlockUI(false);
         },
       });
+
+    this.toggleBlockUI(true);
+    this.summaryService
+      .getMap(this.filter)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: SummaryDto[]) => {
+          this.dataMap = response;
+          this.toggleBlockUI(false);
+        },
+        error: () => {
+          this.toggleBlockUI(false);
+        },
+      });
+  }
+
+  loadGeo() {
+    if (this.geo) {
+      this.toggleBlockUI(true);
+      let filter = {
+        skipCount: this.skipCount,
+        maxResultCount: this.maxResultCount,
+        keyword: this.keyword,
+      } as GetSpatialDataListDto;
+      //this.spatialData
+      this.spatialDataService
+        .getList(filter)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<SpatialDataDto>) => {
+            this.spatialData = res.items; //.map(item => item.geoJson);
+
+            this.toggleBlockUI(false);
+          },
+          () => {
+            this.toggleBlockUI(false);
+          }
+        );
+    }
   }
 
   exportExcel() {

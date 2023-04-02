@@ -5,10 +5,24 @@ import { ValidationMessageComponent } from './validation-message/validation-mess
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { MapComponent } from './map/map.component';
+import { MapPopupComponent } from './map-popup/map-popup.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
-  imports: [CoreModule, CommonModule, MessagesModule, MessageModule],
-  declarations: [ValidationMessageComponent,MapComponent],
-  exports: [ValidationMessageComponent,MapComponent],
+  imports: [
+    CoreModule,
+    CommonModule,
+    MessagesModule,
+    MessageModule,
+    InputTextModule,
+    CalendarModule,
+    DropdownModule,
+    PanelModule,
+  ],
+  declarations: [ValidationMessageComponent, MapComponent, MapPopupComponent],
+  exports: [ValidationMessageComponent, MapComponent, MapPopupComponent],
 })
 export class KNTCSharedModule {}

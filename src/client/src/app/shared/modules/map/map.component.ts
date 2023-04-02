@@ -1,18 +1,22 @@
 import {
   AfterViewInit,
   Component,
+  ComponentFactoryResolver,
+  ComponentRef,
   ElementRef,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { LoaiVuViec } from '@proxy';
 import * as L from 'leaflet';
 import 'leaflet.locatecontrol';
 import { v4 as uuidv4 } from 'uuid';
 import { SummaryDto } from '@proxy/summaries';
+import { MapPopupComponent } from '../map-popup/map-popup.component';
 
 const blueIcon = new L.Icon({
   iconUrl: 'assets/images/map/marker-icon.png',
@@ -49,7 +53,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
   tocao: any;
   quyhoach: any;
 
-  constructor() {}
+  @ViewChild('popup', { read: ViewContainerRef }) popupContainer: ViewContainerRef;
+  private popupComponentRef: ComponentRef<MapPopupComponent>;
+
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
 
   ngAfterViewInit() {
     this.initMap();
@@ -58,7 +65,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.renderMarkers(this.data);
     this.renderSpatialData(this.spatialData);
     if (this.duLieuToaDo) {
-      let marker = L.marker(this.convertStringCoordiate(this.duLieuToaDo), { icon: this.loaiVuViec == LoaiVuViec.KhieuNai ? blueIcon : redIcon });
+      let marker = L.marker(this.convertStringCoordiate(this.duLieuToaDo), {
+        icon: this.loaiVuViec == LoaiVuViec.KhieuNai ? blueIcon : redIcon,
+      });
       marker.addTo(this.map);
     }
   }
@@ -123,12 +132,12 @@ export class MapComponent implements AfterViewInit, OnChanges {
       layers: [osm, this.khieunai],
     });
 
-    var baseMaps = {
+    let baseMaps = {
       OpenStreetMap: osm,
       Streets: streets,
     };
 
-    var geojsonFeature = {
+    let geojsonFeature = {
       type: 'Feature',
       properties: {
         name: 'Dữ liệu quy hoạch',
@@ -138,7 +147,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       geometry: this.spatialData,
     };
 
-    var myStyle = {
+    let myStyle = {
       fillColor: '#ff7800',
       weight: 2,
       opacity: 1,
@@ -149,7 +158,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
     this.quyhoach = L.geoJSON(geojsonFeature, { style: myStyle });
 
-    var overlayMaps = {
+    let overlayMaps = {
       'Khiếu nại': this.khieunai,
       'Tố cáo': this.tocao,
       'Quy hoạch': this.quyhoach,
@@ -170,7 +179,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     /*
     //
     this.khonggian = L.geoJSON();
-    var myStyle = {
+    let myStyle = {
       "color": "#ff7800",
       "weight": 1,
       "opacity": 0.65
@@ -238,12 +247,17 @@ export class MapComponent implements AfterViewInit, OnChanges {
   }
 
   renderMarkers(data: SummaryDto[]) {
+    if (!data || data.length == 0) return;
     this.map.eachLayer(layer => {
       if (!(layer instanceof L.TileLayer)) {
         this.map.removeLayer(layer);
       }
     });
-
+    let customOptions = {
+      maxWidth: 300,
+      maxHieght: 300,
+      className: 'popupCustom',
+    };
     //Add markers
     data
       .filter(x => x.duLieuToaDo != null)
@@ -252,46 +266,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
           icon: hoSo.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
         });
 
-        var customOptions = {
-          maxWidth: '400',
-          width: '200',
-          className: 'popupCustom',
-        };
-
-        marker.bindPopup(
-          `
-      <form name="myform" role="form" id="form" class="form-horizontal">
-      <div class="form-group">
-        <label class="control-label col-sm-2"><strong>Nội dung</strong></label>      
-        <div class="col-sm-10"><b>${hoSo.tieuDe}</b></div>
-      </div>
-      <div class="form-group">
-        <label class="control-label col-sm-2"><strong>Mã hồ sơ:</strong></label>
-        <div class="col-sm-10">${hoSo.maHoSo}</div>
-      </div>
-      <div class="form-group">
-        <label class="control-label col-sm-2"><strong>Người gửi đơn:</strong></label>
-        <div class="col-sm-10">${hoSo.nguoiNopDon}</div>
-      </div>
-      <div class="form-group">
-        <label class="control-label col-sm-2"><strong>Điện thoại:</strong></label>
-        <div class="col-sm-10">${hoSo.dienThoai}</div>
-      </div>
-      <div class="form-group">
-        <label class="control-label col-sm-2"><strong>Thời gian tiếp nhận:</strong></label>
-        <div class="col-sm-10">${hoSo.thoiGianTiepNhan}</div>
-      </div>
-      <div class="form-group">
-        <label class="control-label col-sm-2"><strong>Thời gian hẹn trả KQ:</strong></label>
-        <div class="col-sm-10">${hoSo.thoiGianHenTraKQ}</div>
-      </div>
-      <div class="form-group">
-        <label class="control-label col-sm-2"><strong>Bộ phận đang XL:</strong></label>
-        <div class="col-sm-10">${hoSo.boPhanDangXL}</div>
-      </div>
-      `,
-          customOptions
-        );
+        marker.bindPopup(this.getPopup(hoSo), customOptions);
 
         //marker.addTo(this.map);
         if (hoSo.loaiVuViec == LoaiVuViec.KhieuNai) marker.addTo(this.khieunai);
@@ -303,7 +278,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     //Add polygons
     //this.spatialData
     /*
-    var myStyle = {
+    let myStyle = {
       "color": "#ff7800",
       "weight": 5,
       "opacity": 0.65
@@ -311,7 +286,13 @@ export class MapComponent implements AfterViewInit, OnChanges {
     */
   }
   convertStringCoordiate(cor: string): [number, number] {
-    var point = cor.split(',');
+    let point = cor.split(',');
     return [+point[0], +point[1]];
+  }
+  getPopup(hoSo: SummaryDto): HTMLElement {
+    const factory = this.componentFactoryResolver.resolveComponentFactory(MapPopupComponent);
+    this.popupComponentRef = this.popupContainer.createComponent(factory);
+    this.popupComponentRef.instance.hoSo = hoSo;
+    return this.popupComponentRef.location.nativeElement;
   }
 }
