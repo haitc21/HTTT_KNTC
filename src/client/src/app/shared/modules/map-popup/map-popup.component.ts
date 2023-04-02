@@ -56,6 +56,7 @@ export class MapPopupComponent implements OnInit {
     }
     if (this.hoSo.loaiVuViec == LoaiVuViec.KhieuNai) {
       const ref = this.dialogService.open(ComplainDetailComponent, {
+        height: '80vh',
         data: {
           id: this.hoSo.id,
           loaiVuViec: LoaiVuViec.KhieuNai,
@@ -68,6 +69,7 @@ export class MapPopupComponent implements OnInit {
     }
     if (this.hoSo.loaiVuViec == LoaiVuViec.ToCao) {
       const ref = this.dialogService.open(DenounceDetailComponent, {
+        height: '80vh',
         data: {
           id: this.hoSo.id,
           loaiVuViec: LoaiVuViec.ToCao,
