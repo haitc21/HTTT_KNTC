@@ -18,6 +18,7 @@ import { EileUploadDto } from 'src/app/shared/models/file-upload.class';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
+import { MapComponent } from 'src/app/shared/modules/map/map.component';
 
 @Component({
   templateUrl: './denounce-detail.component.html',
@@ -25,8 +26,8 @@ import { FileAttachmentComponent } from '../../file-attachment/file-attachment.c
 })
 export class DenounceDetailComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
-  @ViewChild(FileAttachmentComponent)
-  fileAttachmentComponent: FileAttachmentComponent;
+  @ViewChild(FileAttachmentComponent) fileAttachmentComponent: FileAttachmentComponent;
+  @ViewChild(MapComponent) mapComponent: MapComponent;
 
   denounceId: string;
   mode: 'create' | 'update' | 'view' = 'view';
@@ -51,6 +52,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
   ];
+  LoaiVuViec = LoaiVuViec;
 
   // Validate
   validationMessages = {
@@ -68,7 +70,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         message: `Tiêu đề không vượt quá ${KNTCValidatorConsts.MaxTieuDeLength} kí tự`,
       },
     ],
-    nguoiToCao: [
+    nguoiNopDon: [
       { type: 'required', message: 'Người tố cáo không được để trống' },
       {
         type: 'maxLength',
@@ -477,7 +479,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTieuDeLength)],
       ],
-      nguoiToCao: [
+      nguoiNopDon: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenNguoiLength)],
       ],
@@ -563,7 +565,18 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       concurrencyStamp: [],
     });
   }
-
+  getCoordiate() {
+    if (this.mapComponent?.duLieuToaDo) {
+      this.form.get('duLieuToaDo').setValue(this.mapComponent?.duLieuToaDo);
+    } else {
+      this.notificationService.showWarn('Vui lòng chọn tọa độ trên bản đồ');
+    }
+  }
+  close() {
+    if (this.ref) {
+      this.ref.close();
+    }
+  }
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.btnDisabled = true;
@@ -573,11 +586,6 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         this.btnDisabled = false;
         this.blockedPanelDetail = false;
       }, 300);
-    }
-  }
-  close() {
-    if (this.ref) {
-      this.ref.close();
     }
   }
   ngOnDestroy(): void {

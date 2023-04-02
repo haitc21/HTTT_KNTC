@@ -22,7 +22,7 @@ public class DenounceManager : DomainService
     public async Task<Denounce> CreateAsync([NotNull] string maHoSo,
                                               [NotNull] LinhVuc linhVuc,
                                               [NotNull] string tieuDe,
-                                              [NotNull] string nguoiToCao,
+                                              [NotNull] string nguoiNopDon,
                                               [NotNull] string cccdCmnd,
                                               //[NotNull] DateTime ngayCapCccdCmnd,
                                               //[NotNull] string noiCapCccdCmnd,
@@ -66,7 +66,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
         Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
-        Check.NotNullOrWhiteSpace(nguoiToCao, nameof(nguoiToCao));
+        Check.NotNullOrWhiteSpace(nguoiNopDon, nameof(nguoiNopDon));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
         //Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
         //Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
@@ -107,7 +107,7 @@ public class DenounceManager : DomainService
         {
             TieuDe = tieuDe,
             LinhVuc = linhVuc,
-            NguoiToCao = nguoiToCao,
+            NguoiNopDon = nguoiNopDon,
             CccdCmnd = cccdCmnd,
             //NgayCapCccdCmnd = ngayCapCccdCmnd,
             //NoiCapCccdCmnd = noiCapCccdCmnd,
@@ -163,7 +163,7 @@ public class DenounceManager : DomainService
                                   [NotNull] string maHoSo,
                                   [NotNull] LinhVuc linhVuc,
                                    [NotNull] string tieuDe,
-                                   [NotNull] string nguoiToCao,
+                                   [NotNull] string nguoiNopDon,
                                    [NotNull] string cccdCmnd,
                                    //[NotNull] DateTime ngayCapCccdCmnd,
                                    //[NotNull] string noiCapCccdCmnd,
@@ -208,7 +208,7 @@ public class DenounceManager : DomainService
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
         Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
-        Check.NotNullOrWhiteSpace(nguoiToCao, nameof(nguoiToCao));
+        Check.NotNullOrWhiteSpace(nguoiNopDon, nameof(nguoiNopDon));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
         //Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
         //Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
@@ -247,7 +247,7 @@ public class DenounceManager : DomainService
         }
         denounce.TieuDe = tieuDe;
         //denounce.LinhVuc = linhVuc;
-        denounce.NguoiToCao = nguoiToCao;
+        denounce.NguoiNopDon = nguoiNopDon;
         denounce.CccdCmnd = cccdCmnd;
         //denounce.NgayCapCccdCmnd = ngayCapCccdCmnd;
         //denounce.NoiCapCccdCmnd = noiCapCccdCmnd;

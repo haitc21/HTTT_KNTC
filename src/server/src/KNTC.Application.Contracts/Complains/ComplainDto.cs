@@ -14,7 +14,7 @@ public class ComplainDto : AuditedEntityDto<Guid>
     public string MaHoSo { get; set; }
     public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
-    public string NguoiDeNghi { get; set; }
+    public string NguoiNopDon { get; set; }
     public string CccdCmnd { get; set; }
     //public DateTime NgayCapCccdCmnd { get; set; }
     //public string NoiCapCccdCmnd { get; set; }

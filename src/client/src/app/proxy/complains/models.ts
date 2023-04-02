@@ -9,7 +9,7 @@ export interface ComplainDto extends AuditedEntityDto<string> {
   maHoSo?: string;
   linhVuc: LinhVuc;
   tieuDe?: string;
-  nguoiDeNghi?: string;
+  nguoiNopDon?: string;
   cccdCmnd?: string;
   ngaySinh?: string;
   dienThoai?: string;
@@ -56,7 +56,7 @@ export interface CreateComplainDto {
   maHoSo: string;
   linhVuc: LinhVuc;
   tieuDe: string;
-  nguoiDeNghi: string;
+  nguoiNopDon: string;
   cccdCmnd: string;
   ngaySinh: string;
   dienThoai: string;
@@ -114,7 +114,7 @@ export interface UpdateComplainDto extends EntityDto<string> {
   maHoSo: string;
   linhVuc: LinhVuc;
   tieuDe: string;
-  nguoiDeNghi: string;
+  nguoiNopDon: string;
   cccdCmnd: string;
   ngaySinh: string;
   dienThoai: string;

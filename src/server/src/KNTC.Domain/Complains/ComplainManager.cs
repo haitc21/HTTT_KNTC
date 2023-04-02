@@ -21,7 +21,7 @@ public class ComplainManager : DomainService
     public async Task<Complain> CreateAsync([NotNull] string maHoSo,
                                               [NotNull] LinhVuc linhVuc,
                                               [NotNull] string tieuDe,
-                                              [NotNull] string nguoiDeNghi,
+                                              [NotNull] string nguoiNopDon,
                                               [NotNull] string cccdCmnd,
                                               //[NotNull] DateTime ngayCapCccdCmnd,
                                               //[NotNull] string noiCapCccdCmnd,
@@ -66,7 +66,7 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
         Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
-        Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
+        Check.NotNullOrWhiteSpace(nguoiNopDon, nameof(nguoiNopDon));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
         //Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
         //Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
@@ -98,7 +98,7 @@ public class ComplainManager : DomainService
         {
             TieuDe = tieuDe,
             LinhVuc = linhVuc,
-            NguoiDeNghi = nguoiDeNghi,
+            NguoiNopDon = nguoiNopDon,
             CccdCmnd = cccdCmnd,
             //NgayCapCccdCmnd = ngayCapCccdCmnd,
             //NoiCapCccdCmnd = noiCapCccdCmnd,
@@ -156,7 +156,7 @@ public class ComplainManager : DomainService
                                   [NotNull] string maHoSo,
                                   [NotNull] LinhVuc linhVuc,
                                    [NotNull] string tieuDe,
-                                   [NotNull] string nguoiDeNghi,
+                                   [NotNull] string nguoiNopDon,
                                    [NotNull] string cccdCmnd,
                                    //[NotNull] DateTime ngayCapCccdCmnd,
                                    //[NotNull] string noiCapCccdCmnd,
@@ -202,7 +202,7 @@ public class ComplainManager : DomainService
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
         Check.NotNull(linhVuc, nameof(linhVuc));
         Check.NotNullOrWhiteSpace(tieuDe, nameof(tieuDe));
-        Check.NotNullOrWhiteSpace(nguoiDeNghi, nameof(nguoiDeNghi));
+        Check.NotNullOrWhiteSpace(nguoiNopDon, nameof(nguoiNopDon));
         Check.NotNullOrWhiteSpace(cccdCmnd, nameof(cccdCmnd));
         //Check.NotNullOrWhiteSpace(noiCapCccdCmnd, nameof(noiCapCccdCmnd));
         //Check.NotNull(ngayCapCccdCmnd, nameof(ngayCapCccdCmnd));
@@ -231,7 +231,7 @@ public class ComplainManager : DomainService
         }
         complain.TieuDe = tieuDe;
         //complain.LinhVuc = linhVuc;
-        complain.NguoiDeNghi = nguoiDeNghi;
+        complain.NguoiNopDon = nguoiNopDon;
         complain.CccdCmnd = cccdCmnd;
         //complain.NgayCapCccdCmnd = ngayCapCccdCmnd;
         //complain.NoiCapCccdCmnd = noiCapCccdCmnd;

@@ -40,6 +40,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   @Input() heightMap: string = '600px';
   @Input() zoomLv: number = 13;
   @Input() duLieuToaDo: string;
+  @Input() loaiVuViec: LoaiVuViec = LoaiVuViec.KhieuNai;
 
   idMap: string = uuidv4();
   map: L.Map;
@@ -57,7 +58,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.renderMarkers(this.data);
     this.renderSpatialData(this.spatialData);
     if (this.duLieuToaDo) {
-      let marker = L.marker(this.convertStringCoordiate(this.duLieuToaDo), { icon: blueIcon });
+      let marker = L.marker(this.convertStringCoordiate(this.duLieuToaDo), { icon: this.loaiVuViec == LoaiVuViec.KhieuNai ? blueIcon : redIcon });
       marker.addTo(this.map);
     }
   }

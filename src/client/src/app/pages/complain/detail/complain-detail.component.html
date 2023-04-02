@@ -49,21 +49,21 @@
                   >
                   </app-validation-message>
                 </div>
-                <!-- ----------------------------nguoiDeNghi---------------------------=----------------------------- -->
+                <!-- ----------------------------nguoiNopDon---------------------------=----------------------------- -->
                 <div class="field col-12 md:col-6">
                   <span class="p-float-label">
                     <input
-                      id="nguoiDeNghi"
-                      formControlName="nguoiDeNghi"
+                      id="nguoiNopDon"
+                      formControlName="nguoiNopDon"
                       type="text"
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="nguoiDeNghi">Người đề nghị <span class="required">*</span></label>
+                    <label for="nguoiNopDon">Người đề nghị <span class="required">*</span></label>
                   </span>
                   <app-validation-message
-                    [entityControl]="formControls.nguoiDeNghi"
-                    [validationMessages]="validationMessages.nguoiDeNghi"
+                    [entityControl]="formControls.nguoiNopDon"
+                    [validationMessages]="validationMessages.nguoiNopDon"
                   >
                   </app-validation-message>
                 </div>
@@ -816,7 +816,7 @@
           </p-fieldset>
           <!-- -------------------------------Bản đồ--------------------------------------------------- -->
           <p-fieldset legend="Bản đồ" [toggleable]="true" class="w-full">
-            <app-map [duLieuToaDo]="formControls.duLieuToaDo.value"></app-map>
+            <app-map [duLieuToaDo]="formControls.duLieuToaDo.value" [loaiVuViec]="LoaiVuViec.KhieuNai"></app-map>
           </p-fieldset>
         </ng-template>
       </p-tabPanel>

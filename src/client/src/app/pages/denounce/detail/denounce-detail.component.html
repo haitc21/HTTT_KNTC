@@ -48,21 +48,21 @@
                   >
                   </app-validation-message>
                 </div>
-                <!-- ----------------------------nguoiToCao---------------------------=----------------------------- -->
+                <!-- ----------------------------nguoiNopDon---------------------------=----------------------------- -->
                 <div class="field col-12 md:col-6">
                   <span class="p-float-label">
                     <input
-                      id="nguoiToCao"
-                      formControlName="nguoiToCao"
+                      id="nguoiNopDon"
+                      formControlName="nguoiNopDon"
                       type="text"
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="nguoiToCao">Người tố cáo <span class="required">*</span></label>
+                    <label for="nguoiNopDon">Người tố cáo <span class="required">*</span></label>
                   </span>
                   <app-validation-message
-                    [entityControl]="formControls.nguoiToCao"
-                    [validationMessages]="validationMessages.nguoiToCao"
+                    [entityControl]="formControls.nguoiNopDon"
+                    [validationMessages]="validationMessages.nguoiNopDon"
                   >
                   </app-validation-message>
                 </div>
@@ -300,7 +300,7 @@
                       pInputText
                       [style]="{ width: '100%' }"
                     />
-                    <label for="nguoiToCao">Người bị tố cáo <span class="required">*</span></label>
+                    <label for="nguoiNopDon">Người bị tố cáo <span class="required">*</span></label>
                   </span>
                   <app-validation-message
                     [entityControl]="formControls.nguoiBiToCao"
@@ -768,7 +768,64 @@
         </ng-template>
 
         <ng-template pTemplate="content">
-          <h1>Ban do</h1>
+          <!-- -------------------------------Dữ liệu--------------------------------------------------- -->
+          <p-fieldset legend="Dữ liệu" [toggleable]="true" class="w-full">
+            <div class="grid">
+              <!-- -------------------------------maHoSo--------------------------------------------------- -->
+              <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                  <input
+                    id="duLieuToaDo"
+                    formControlName="duLieuToaDo"
+                    type="text"
+                    pInputText
+                    [style]="{ width: '100%' }"
+                  />
+                  <label for="name">Dữ liệu tọa đọ</label>
+                </span>
+                <app-validation-message
+                  [entityControl]="formControls.duLieuToaDo"
+                  [validationMessages]="validationMessages.duLieuToaDo"
+                >
+                </app-validation-message>
+              </div>
+              <div class="field col-12 md:col-6">
+                <button
+                  pButton
+                  pRipples
+                  type="button"
+                  (click)="getCoordiate()"
+                  label="Lấy tọa độ"
+                  class="p-button-info mr-2"
+                  icon="pi pi-map-marker"
+                ></button>
+              </div>
+              <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                  <textarea
+                    id="duLieuHinhHoc"
+                    formControlName="duLieuHinhHoc"
+                    [rows]="5"
+                    pInputTextarea
+                    class="w-full"
+                  ></textarea>
+                  <label for="name">Dữ liệu hình học</label>
+                </span>
+                <app-validation-message
+                  [entityControl]="formControls.duLieuHinhHoc"
+                  [validationMessages]="validationMessages.duLieuHinhHoc"
+                >
+                </app-validation-message>
+              </div>
+            </div>
+          </p-fieldset>
+          <!-- -------------------------------Bản đồ--------------------------------------------------- -->
+          <p-fieldset legend="Bản đồ" [toggleable]="true" class="w-full">
+            <app-map
+              [duLieuToaDo]="formControls.duLieuToaDo.value"
+              [loaiVuViec]="LoaiVuViec.ToCao"
+            ></app-map>
+          </p-fieldset>
         </ng-template>
       </p-tabPanel>
       <!-- ----------------------------------------------------------------------- -->

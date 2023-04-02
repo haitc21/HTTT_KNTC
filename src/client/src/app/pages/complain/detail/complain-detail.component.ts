@@ -56,6 +56,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     { value: LoaiKhieuNai.KhieuNai, text: 'Khiếu nại' },
     { value: LoaiKhieuNai.KhieuKien, text: 'Khiếu kiện' },
   ];
+  LoaiVuViec = LoaiVuViec;
 
   // Validate
   validationMessages = {
@@ -73,7 +74,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         message: `Tiêu đề không vượt quá ${KNTCValidatorConsts.MaxTieuDeLength} kí tự`,
       },
     ],
-    nguoiDeNghi: [
+    nguoiNopDon: [
       { type: 'required', message: 'Người đề nghị không được để trống' },
       {
         type: 'maxLength',
@@ -452,7 +453,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTieuDeLength)],
       ],
-      nguoiDeNghi: [
+      nguoiNopDon: [
         null,
         [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenNguoiLength)],
       ],
@@ -531,6 +532,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   getCoordiate() {
     if (this.mapComponent?.duLieuToaDo) {
       this.form.get('duLieuToaDo').setValue(this.mapComponent?.duLieuToaDo);
+    } else {
+      this.notificationService.showWarn('Vui lòng chọn tọa độ trên bản đồ');
     }
   }
 

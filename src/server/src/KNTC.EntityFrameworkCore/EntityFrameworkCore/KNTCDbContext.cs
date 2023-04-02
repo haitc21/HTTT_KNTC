@@ -103,7 +103,7 @@ public class KNTCDbContext :
             b.HasIndex(x => x.LinhVuc);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
-            b.Property(x => x.NguoiDeNghi).IsRequired().HasColumnName("nguoi_de_nghi").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
+            b.Property(x => x.NguoiNopDon).IsRequired().HasColumnName("nguoi_nop_don").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxCccdCmndLength);
             //b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
             //b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxNoiCapCccdCmnd);
@@ -160,7 +160,7 @@ public class KNTCDbContext :
             b.HasIndex(x => x.LinhVuc);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
-            b.Property(x => x.NguoiToCao).IsRequired().HasColumnName("nguoi_to_cao").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
+            b.Property(x => x.NguoiNopDon).IsRequired().HasColumnName("nguoi_nop_don").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
             b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxCccdCmndLength);
             //b.Property(x => x.NgayCapCccdCmnd).IsRequired().HasColumnName("ngay_cap_cccd_cmnd");
             //b.Property(x => x.NoiCapCccdCmnd).IsRequired().HasColumnName("noi_cap_cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxNoiCapCccdCmnd);
