@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ApplicationRef,
   Component,
   ComponentFactoryResolver,
   ComponentRef,
@@ -53,10 +54,14 @@ export class MapComponent implements AfterViewInit, OnChanges {
   tocao: any;
   quyhoach: any;
 
-  @ViewChild('popup', { read: ViewContainerRef }) popupContainer: ViewContainerRef;
+  // @ViewChild('popup', { read: ViewContainerRef }) popupContainer: ViewContainerRef;
   private popupComponentRef: ComponentRef<MapPopupComponent>;
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+  constructor(
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private popupContainer: ViewContainerRef,
+    private appRef: ApplicationRef
+  ) {}
 
   ngAfterViewInit() {
     this.initMap();
@@ -64,7 +69,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.buildEventMapClick();
     this.renderMarkers(this.data);
     this.renderSpatialData(this.spatialData);
+    this.mảkerInToaDo();
+  }
+
+  private mảkerInToaDo() {
     if (this.duLieuToaDo) {
+      this.map.eachLayer(layer => {
+        if (!(layer instanceof L.TileLayer)) {
+          this.map.removeLayer(layer);
+        }
+      });
       let marker = L.marker(this.convertStringCoordiate(this.duLieuToaDo), {
         icon: this.loaiVuViec == LoaiVuViec.KhieuNai ? blueIcon : redIcon,
       });
@@ -83,6 +97,14 @@ export class MapComponent implements AfterViewInit, OnChanges {
       !changes.spatialData.isFirstChange()
     ) {
       this.renderSpatialData(changes.spatialData.currentValue);
+    }
+
+    if (
+      changes.duLieuToaDo &&
+      changes.duLieuToaDo.currentValue &&
+      !changes.duLieuToaDo.isFirstChange()
+    ) {
+      this.mảkerInToaDo();
     }
   }
 
@@ -291,8 +313,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
   }
   getPopup(hoSo: SummaryDto): HTMLElement {
     const factory = this.componentFactoryResolver.resolveComponentFactory(MapPopupComponent);
-    this.popupComponentRef = this.popupContainer.createComponent(factory);
+    this.popupComponentRef = factory.create(this.popupContainer.injector);
     this.popupComponentRef.instance.hoSo = hoSo;
+    this.appRef.attachView(this.popupComponentRef.hostView); // Đính kèm view của component
     return this.popupComponentRef.location.nativeElement;
   }
 }

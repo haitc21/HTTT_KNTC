@@ -1,18 +1,12 @@
-import { AuthService, ListResultDto, PagedResultDto } from '@abp/ng.core';
+import { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-//import { Complain, fieldsHoSo, typesHoSo } from '../../shared/mock/Complain';
-//import { MockService } from '../../shared/mock/mock.service';
 import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
-import { ComplainDto, ComplainService, GetComplainListDto } from '@proxy/complains';
-import { DenounceDto, DenounceService, GetDenounceListDto } from '@proxy/denounces';
 import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
-//import { each } from 'chart.js/dist/helpers/helpers.core';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
-import { ActivatedRoute } from '@angular/router';
 import { LinhVuc, LoaiKetQua, LoaiVuViec, SpatialDatas } from '@proxy';
 import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
@@ -66,7 +60,7 @@ import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
     ]),
   ],
 })
-export class SearchMapComponent implements OnInit {
+export class SearchMapComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   home: MenuItem;
@@ -77,10 +71,7 @@ export class SearchMapComponent implements OnInit {
   dataMap: SummaryDto[] = [];
 
   spatialData: SpatialDataDto[];
-  complains: ComplainDto[] = [];
-  denounces: DenounceDto[] = [];
 
-  selectedItems: ComplainDto[] = [];
   //Paging variables
   public skipCount: number = 0;
   public maxResultCount: number = 10;
@@ -136,8 +127,6 @@ export class SearchMapComponent implements OnInit {
     private dialogService: DialogService,
     private notificationService: NotificationService,
     private oAuthService: OAuthService,
-    private authService: AuthService,
-    protected route: ActivatedRoute,
     private spatialDataService: SpatialDataService,
     private unitService: UnitService,
     private utilService: UtilityService,

@@ -17,7 +17,7 @@ import { UtilityService } from '../../services/utility.service';
   styleUrls: ['./map-popup.component.scss'],
 })
 export class MapPopupComponent implements OnInit {
-  @Input() hoSo: SummaryDto;
+  @Input() hoSo!: SummaryDto;
   public form: FormGroup;
 
   loaiKQOPtions = [
@@ -29,8 +29,9 @@ export class MapPopupComponent implements OnInit {
     private fb: FormBuilder,
     private dialogService: DialogService,
     private notificationService: NotificationService,
-    private utilService: UtilityService,
-  ) {}
+    private utilService: UtilityService
+  ) {
+  }
 
   ngOnInit() {
     this.buildForm();
