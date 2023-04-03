@@ -4,32 +4,32 @@
 
 namespace KNTC.Migrations
 {
-    public partial class require_kq_denounce : Migration
+    public partial class allownull_configID_unit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "ket_qua",
+                name: "ConfigId",
                 schema: "KNTC",
-                table: "Denounces",
+                table: "Units",
+                type: "int",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AlterColumn<int>(
+                name: "ConfigId",
+                schema: "KNTC",
+                table: "Units",
                 type: "int",
                 nullable: false,
                 defaultValue: 0,
                 oldClrType: typeof(int),
                 oldType: "int",
                 oldNullable: true);
-        }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AlterColumn<int>(
-                name: "ket_qua",
-                schema: "KNTC",
-                table: "Denounces",
-                type: "int",
-                nullable: true,
-                oldClrType: typeof(int),
-                oldType: "int");
         }
     }
 }

@@ -1,14 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace KNTC.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initialdb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.EnsureSchema(
+                name: "KNTC");
+
             migrationBuilder.CreateTable(
                 name: "AbpAuditLogs",
                 columns: table => new
@@ -218,27 +221,6 @@ namespace KNTC.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpTenants",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
-                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpTenants", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AbpUsers",
                 columns: table => new
                 {
@@ -274,6 +256,89 @@ namespace KNTC.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Configs",
+                schema: "KNTC",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrganizationCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    OrganizationName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ToaDo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Tel = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Configs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DocumentTypes",
+                schema: "KNTC",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DocumentTypeCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DocumentTypeName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    OrderIndex = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocumentTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LandTypes",
+                schema: "KNTC",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LandTypeCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LandTypeName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    OrderIndex = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LandTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -334,6 +399,51 @@ namespace KNTC.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OpenIddictScopes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SpatialData",
+                schema: "KNTC",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OBJECTID = table.Column<double>(type: "float", nullable: false),
+                    TenToChuc = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Quyen = table.Column<float>(type: "real", nullable: true),
+                    So_to_BD = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    GeoJson = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SpatialData", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UnitTypes",
+                schema: "KNTC",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UnitTypeCode = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    UnitTypeName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    OrderIndex = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UnitTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -430,25 +540,6 @@ namespace KNTC.Migrations
                         name: "FK_AbpRoleClaims_AbpRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AbpRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpTenantConnectionStrings",
-                columns: table => new
-                {
-                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(1024)", maxLength: 1024, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpTenantConnectionStrings", x => new { x.TenantId, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AbpTenantConnectionStrings_AbpTenants_TenantId",
-                        column: x => x.TenantId,
-                        principalTable: "AbpTenants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -569,6 +660,205 @@ namespace KNTC.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppUserInfos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Dob = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppUserInfos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppUserInfos_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FileAttachments",
+                schema: "KNTC",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ComplainId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DenounceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    giai_doan = table.Column<int>(type: "int", nullable: false),
+                    ten_tai_lieu = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    hinh_thuc = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    thoi_gian_ban_hanh = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ngay_nhan = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    thu_tu_but_luc = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    noi_dung_chinh = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    file_name = table.Column<string>(type: "nvarchar(258)", maxLength: 258, nullable: false),
+                    content_type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    content_length = table.Column<long>(type: "bigint", nullable: false),
+                    loai_vu_viec = table.Column<int>(type: "int", nullable: false),
+                    cong_khai = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FileAttachments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FileAttachments_DocumentTypes_hinh_thuc",
+                        column: x => x.hinh_thuc,
+                        principalSchema: "KNTC",
+                        principalTable: "DocumentTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Complains",
+                schema: "KNTC",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ma_ho_so = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    linh_vuc = table.Column<int>(type: "int", nullable: false),
+                    tieu_de = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    nguoi_nop_don = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    cccd_cmnd = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ngay_sinh = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    dien_thoai = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    dia_chi_thuong_tru = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    dia_chi_lien_he = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    ma_tinh_tp = table.Column<int>(type: "int", nullable: false),
+                    ma_quan_huyen = table.Column<int>(type: "int", nullable: false),
+                    ma_xa_phuong_tt = table.Column<int>(type: "int", nullable: false),
+                    thoi_gian_tiep_nhan = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    thoi_gian_hen_tra_kq = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    noi_dung_vu_viec = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    bo_phan_dang_xl = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    so_thua = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    to_ban_do = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    dien_tich = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    loai_dat = table.Column<int>(type: "int", nullable: false),
+                    dia_chi_thua_dat = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    tinh_thua_dat = table.Column<int>(type: "int", nullable: false),
+                    huyen_thua_dat = table.Column<int>(type: "int", nullable: false),
+                    xa_thua_dat = table.Column<int>(type: "int", nullable: false),
+                    du_lieu_toa_do = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    du_lieu_hinh_hoc = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ghi_chu = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    loai_khieu_nai_1 = table.Column<int>(type: "int", nullable: true),
+                    ngay_khieu_nai_1 = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ngay_tra_kq_1 = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    tham_quyen_1 = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    so_qd_1 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ket_qua_1 = table.Column<int>(type: "int", nullable: true),
+                    loai_khieu_nai_2 = table.Column<int>(type: "int", nullable: true),
+                    ngay_khieu_nai_2 = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ngay_tra_kq_2 = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    tham_quyen_2 = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    so_qd_2 = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ket_qua_2 = table.Column<int>(type: "int", nullable: true),
+                    ket_qua = table.Column<int>(type: "int", nullable: true),
+                    cong_khai = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Complains", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Complains_LandTypes_loai_dat",
+                        column: x => x.loai_dat,
+                        principalSchema: "KNTC",
+                        principalTable: "LandTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Denounces",
+                schema: "KNTC",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ma_ho_so = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    linh_vuc = table.Column<int>(type: "int", nullable: false),
+                    tieu_de = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    nguoi_nop_don = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    cccd_cmnd = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ngay_sinh = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    dien_thoai = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    dia_chi_thuong_tru = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    dia_chi_lien_he = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    ma_tinh_tp = table.Column<int>(type: "int", nullable: false),
+                    ma_quan_huyen = table.Column<int>(type: "int", nullable: false),
+                    ma_xa_phuong_tt = table.Column<int>(type: "int", nullable: false),
+                    thoi_gian_tiep_nhan = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    thoi_gian_hen_tra_kq = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    noi_dung_vu_viec = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    nguoi_bi_to_cao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    bo_phan_dang_xl = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    so_thua = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    to_ban_do = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    dien_tich = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    loai_dat = table.Column<int>(type: "int", nullable: false),
+                    dia_chi_thua_dat = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    tinh_thua_dat = table.Column<int>(type: "int", nullable: false),
+                    huyen_thua_dat = table.Column<int>(type: "int", nullable: false),
+                    xa_thua_dat = table.Column<int>(type: "int", nullable: false),
+                    du_lieu_toa_do = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    du_lieu_hinh_hoc = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ghi_chu = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    ngay_GQTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    nguoi_GQTC = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    quyet_dinh_thu_ly_GQTC = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ngay_QDGQTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    quyet_dinh_dinh_chi_GQTC = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    gia_han_GQTC_1 = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    gia_han_GQTC_2 = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    so_VB_KL_NDTC = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ngay_nhan_TB_KQXLKLTC = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ket_qua = table.Column<int>(type: "int", nullable: false),
+                    cong_khai = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Denounces", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Denounces_LandTypes_loai_dat",
+                        column: x => x.loai_dat,
+                        principalSchema: "KNTC",
+                        principalTable: "LandTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OpenIddictAuthorizations",
                 columns: table => new
                 {
@@ -598,6 +888,44 @@ namespace KNTC.Migrations
                         column: x => x.ApplicationId,
                         principalTable: "OpenIddictApplications",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Units",
+                schema: "KNTC",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UnitCode = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    UnitName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ShortName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    UnitTypeId = table.Column<int>(type: "int", nullable: false),
+                    ConfigId = table.Column<int>(type: "int", nullable: false),
+                    ParentId = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    OrderIndex = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Units", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Units_UnitTypes_UnitTypeId",
+                        column: x => x.UnitTypeId,
+                        principalSchema: "KNTC",
+                        principalTable: "UnitTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -778,11 +1106,6 @@ namespace KNTC.Migrations
                 filter: "[ProviderName] IS NOT NULL AND [ProviderKey] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpTenants_Name",
-                table: "AbpTenants",
-                column: "Name");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
                 table: "AbpUserClaims",
                 column: "UserId");
@@ -823,6 +1146,78 @@ namespace KNTC.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppUserInfos_UserId",
+                table: "AppUserInfos",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complains_linh_vuc",
+                schema: "KNTC",
+                table: "Complains",
+                column: "linh_vuc");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complains_loai_dat",
+                schema: "KNTC",
+                table: "Complains",
+                column: "loai_dat");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Complains_ma_ho_so",
+                schema: "KNTC",
+                table: "Complains",
+                column: "ma_ho_so");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Denounces_linh_vuc",
+                schema: "KNTC",
+                table: "Denounces",
+                column: "linh_vuc");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Denounces_loai_dat",
+                schema: "KNTC",
+                table: "Denounces",
+                column: "loai_dat");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Denounces_ma_ho_so",
+                schema: "KNTC",
+                table: "Denounces",
+                column: "ma_ho_so");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileAttachments_ComplainId",
+                schema: "KNTC",
+                table: "FileAttachments",
+                column: "ComplainId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileAttachments_DenounceId",
+                schema: "KNTC",
+                table: "FileAttachments",
+                column: "DenounceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileAttachments_hinh_thuc",
+                schema: "KNTC",
+                table: "FileAttachments",
+                column: "hinh_thuc");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileAttachments_loai_vu_viec_ComplainId",
+                schema: "KNTC",
+                table: "FileAttachments",
+                columns: new[] { "loai_vu_viec", "ComplainId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FileAttachments_loai_vu_viec_DenounceId",
+                schema: "KNTC",
+                table: "FileAttachments",
+                columns: new[] { "loai_vu_viec", "DenounceId" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
                 table: "OpenIddictApplications",
                 column: "ClientId");
@@ -851,6 +1246,18 @@ namespace KNTC.Migrations
                 name: "IX_OpenIddictTokens_ReferenceId",
                 table: "OpenIddictTokens",
                 column: "ReferenceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Units_UnitTypeId",
+                schema: "KNTC",
+                table: "Units",
+                column: "UnitTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Units_UnitTypeId_ParentId",
+                schema: "KNTC",
+                table: "Units",
+                columns: new[] { "UnitTypeId", "ParentId" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -889,9 +1296,6 @@ namespace KNTC.Migrations
                 name: "AbpSettings");
 
             migrationBuilder.DropTable(
-                name: "AbpTenantConnectionStrings");
-
-            migrationBuilder.DropTable(
                 name: "AbpUserClaims");
 
             migrationBuilder.DropTable(
@@ -907,16 +1311,40 @@ namespace KNTC.Migrations
                 name: "AbpUserTokens");
 
             migrationBuilder.DropTable(
+                name: "AppUserInfos");
+
+            migrationBuilder.DropTable(
+                name: "Complains",
+                schema: "KNTC");
+
+            migrationBuilder.DropTable(
+                name: "Configs",
+                schema: "KNTC");
+
+            migrationBuilder.DropTable(
+                name: "Denounces",
+                schema: "KNTC");
+
+            migrationBuilder.DropTable(
+                name: "FileAttachments",
+                schema: "KNTC");
+
+            migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictTokens");
 
             migrationBuilder.DropTable(
-                name: "AbpEntityChanges");
+                name: "SpatialData",
+                schema: "KNTC");
 
             migrationBuilder.DropTable(
-                name: "AbpTenants");
+                name: "Units",
+                schema: "KNTC");
+
+            migrationBuilder.DropTable(
+                name: "AbpEntityChanges");
 
             migrationBuilder.DropTable(
                 name: "AbpOrganizationUnits");
@@ -928,7 +1356,19 @@ namespace KNTC.Migrations
                 name: "AbpUsers");
 
             migrationBuilder.DropTable(
+                name: "LandTypes",
+                schema: "KNTC");
+
+            migrationBuilder.DropTable(
+                name: "DocumentTypes",
+                schema: "KNTC");
+
+            migrationBuilder.DropTable(
                 name: "OpenIddictAuthorizations");
+
+            migrationBuilder.DropTable(
+                name: "UnitTypes",
+                schema: "KNTC");
 
             migrationBuilder.DropTable(
                 name: "AbpAuditLogs");

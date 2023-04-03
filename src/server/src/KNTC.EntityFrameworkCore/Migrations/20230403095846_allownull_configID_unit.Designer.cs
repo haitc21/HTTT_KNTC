@@ -13,8 +13,8 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    [Migration("20230307165049_remove_fk_file_doctype")]
-    partial class remove_fk_file_doctype
+    [Migration("20230403095846_allownull_configID_unit")]
+    partial class allownull_configID_unit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,10 +26,91 @@ namespace KNTC.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("KNTC.CategoryUnitTypes.UnitType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<int?>("OrderIndex")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("UnitTypeCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UnitTypeName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UnitTypes", "KNTC");
+                });
+
             modelBuilder.Entity("KNTC.Complains.Complain", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BoPhanDangXL")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("bo_phan_dang_xl");
 
                     b.Property<string>("CccdCmnd")
                         .IsRequired()
@@ -42,6 +123,12 @@ namespace KNTC.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<bool>("CongKhai")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("cong_khai");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -137,19 +224,39 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<int>("LinhVuc")
+                        .HasColumnType("int")
+                        .HasColumnName("linh_vuc");
+
                     b.Property<int>("LoaiDat")
                         .HasColumnType("int")
                         .HasColumnName("loai_dat");
-
-                    b.Property<int>("LoaiVuViec")
-                        .HasColumnType("int")
-                        .HasColumnName("loai_vu_viec");
 
                     b.Property<string>("MaHoSo")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_ho_so");
+
+                    b.Property<int>("MaQuanHuyen")
+                        .HasColumnType("int")
+                        .HasColumnName("ma_quan_huyen");
+
+                    b.Property<int>("MaTinhTP")
+                        .HasColumnType("int")
+                        .HasColumnName("ma_tinh_tp");
+
+                    b.Property<int>("MaXaPhuongTT")
+                        .HasColumnType("int")
+                        .HasColumnName("ma_xa_phuong_tt");
+
+                    b.Property<DateTime?>("NgayKhieuNai1")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ngay_khieu_nai_1");
+
+                    b.Property<DateTime?>("NgayKhieuNai2")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ngay_khieu_nai_2");
 
                     b.Property<DateTime>("NgaySinh")
                         .HasColumnType("datetime2")
@@ -163,11 +270,11 @@ namespace KNTC.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_tra_kq_2");
 
-                    b.Property<string>("NguoiDeNghi")
+                    b.Property<string>("NguoiNopDon")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasColumnName("nguoi_de_nghi");
+                        .HasColumnName("nguoi_nop_don");
 
                     b.Property<string>("NoiDungVuViec")
                         .IsRequired()
@@ -216,18 +323,11 @@ namespace KNTC.Migrations
 
                     b.Property<string>("ToBanDo")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
                         .HasColumnName("to_ban_do");
 
-                    b.Property<string>("boPhanDangXL")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("bo_phan_dang_xl");
-
                     b.Property<int>("huyenThuaDat")
-                        .HasMaxLength(50)
                         .HasColumnType("int")
                         .HasColumnName("huyen_thua_dat");
 
@@ -239,52 +339,117 @@ namespace KNTC.Migrations
                         .HasColumnType("int")
                         .HasColumnName("loai_khieu_nai_2");
 
-                    b.Property<int>("maQuanHuyen")
-                        .HasMaxLength(50)
-                        .HasColumnType("int")
-                        .HasColumnName("ma_quan_huyen");
-
-                    b.Property<int>("maTinhTP")
-                        .HasMaxLength(50)
-                        .HasColumnType("int")
-                        .HasColumnName("ma_tinh_tp");
-
-                    b.Property<int>("maXaPhuongTT")
-                        .HasMaxLength(50)
-                        .HasColumnType("int")
-                        .HasColumnName("ma_xa_phuong_tt");
-
-                    b.Property<DateTime?>("ngayKhieuNai1")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_khieu_nai_1");
-
-                    b.Property<DateTime?>("ngayKhieuNai2")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_khieu_nai_2");
-
                     b.Property<int>("tinhThuaDat")
-                        .HasMaxLength(50)
                         .HasColumnType("int")
                         .HasColumnName("tinh_thua_dat");
 
                     b.Property<int>("xaThuaDat")
-                        .HasMaxLength(50)
                         .HasColumnType("int")
                         .HasColumnName("xa_thua_dat");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LoaiVuViec");
+                    b.HasIndex("LinhVuc");
+
+                    b.HasIndex("LoaiDat");
 
                     b.HasIndex("MaHoSo");
 
                     b.ToTable("Complains", "KNTC");
                 });
 
+            modelBuilder.Entity("KNTC.Configs.Config", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeletionTime");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("OrganizationCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("OrganizationName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("Tel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ToaDo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Configs", "KNTC");
+                });
+
             modelBuilder.Entity("KNTC.Denounces.Denounce", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BoPhanDangXL")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("bo_phan_dang_xl");
 
                     b.Property<string>("CccdCmnd")
                         .IsRequired()
@@ -297,6 +462,12 @@ namespace KNTC.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<bool>("CongKhai")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("cong_khai");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -366,23 +537,27 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(250)")
                         .HasColumnName("ghi_chu");
 
+                    b.Property<DateTime?>("GiaHanGQTC1")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("gia_han_GQTC_1");
+
+                    b.Property<DateTime?>("GiaHanGQTC2")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("gia_han_GQTC_2");
+
+                    b.Property<int>("HuyenThuaDat")
+                        .HasColumnType("int")
+                        .HasColumnName("huyen_thua_dat");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnName("IsDeleted");
 
-                    b.Property<int?>("KetQua")
+                    b.Property<int>("KetQua")
                         .HasColumnType("int")
                         .HasColumnName("ket_qua");
-
-                    b.Property<int?>("KetQua1")
-                        .HasColumnType("int")
-                        .HasColumnName("ket_qua_1");
-
-                    b.Property<int?>("KetQua2")
-                        .HasColumnType("int")
-                        .HasColumnName("ket_qua_2");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2")
@@ -392,13 +567,13 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
+                    b.Property<int>("LinhVuc")
+                        .HasColumnType("int")
+                        .HasColumnName("linh_vuc");
+
                     b.Property<int>("LoaiDat")
                         .HasColumnType("int")
                         .HasColumnName("loai_dat");
-
-                    b.Property<int>("LoaiVuViec")
-                        .HasColumnType("int")
-                        .HasColumnName("loai_vu_viec");
 
                     b.Property<string>("MaHoSo")
                         .IsRequired()
@@ -406,38 +581,67 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("ma_ho_so");
 
+                    b.Property<int>("MaQuanHuyen")
+                        .HasColumnType("int")
+                        .HasColumnName("ma_quan_huyen");
+
+                    b.Property<int>("MaTinhTP")
+                        .HasColumnType("int")
+                        .HasColumnName("ma_tinh_tp");
+
+                    b.Property<int>("MaXaPhuongTT")
+                        .HasColumnType("int")
+                        .HasColumnName("ma_xa_phuong_tt");
+
+                    b.Property<DateTime>("NgayGQTC")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ngay_GQTC");
+
+                    b.Property<DateTime>("NgayNhanTBKQXLKLTC")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ngay_nhan_TB_KQXLKLTC");
+
+                    b.Property<DateTime>("NgayQDGQTC")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ngay_QDGQTC");
+
                     b.Property<DateTime>("NgaySinh")
                         .HasColumnType("datetime2")
                         .HasColumnName("ngay_sinh");
 
-                    b.Property<DateTime?>("NgayTraKQ1")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_tra_kq_1");
-
-                    b.Property<DateTime?>("NgayTraKQ2")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_tra_kq_2");
-
-                    b.Property<string>("NguoiDeNghi")
+                    b.Property<string>("NguoiBiToCao")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasColumnName("nguoi_de_nghi");
+                        .HasColumnName("nguoi_bi_to_cao");
+
+                    b.Property<string>("NguoiGQTC")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("nguoi_GQTC");
+
+                    b.Property<string>("NguoiNopDon")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("nguoi_nop_don");
 
                     b.Property<string>("NoiDungVuViec")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("noi_dung_vu_viec");
 
-                    b.Property<string>("SoQD1")
+                    b.Property<string>("QuyerDinhThuLyGQTC")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasColumnName("so_qd_1");
+                        .HasColumnName("quyet_dinh_thu_ly_GQTC");
 
-                    b.Property<string>("SoQD2")
+                    b.Property<string>("QuyetDinhDinhChiGQTC")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasColumnName("so_qd_2");
+                        .HasColumnName("quyet_dinh_dinh_chi_GQTC");
 
                     b.Property<string>("SoThua")
                         .IsRequired()
@@ -445,15 +649,11 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("so_thua");
 
-                    b.Property<string>("ThamQuyen1")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("tham_quyen_1");
-
-                    b.Property<string>("ThamQuyen2")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("tham_quyen_2");
+                    b.Property<string>("SoVBKLNDTC")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("so_VB_KL_NDTC");
 
                     b.Property<DateTime>("ThoiGianHenTraKQ")
                         .HasColumnType("datetime2")
@@ -469,59 +669,25 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(100)")
                         .HasColumnName("tieu_de");
 
-                    b.Property<string>("ToBanDo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("to_ban_do");
-
-                    b.Property<string>("boPhanDangXL")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)")
-                        .HasColumnName("bo_phan_dang_xl");
-
-                    b.Property<int>("huyenThuaDat")
-                        .HasMaxLength(50)
-                        .HasColumnType("int")
-                        .HasColumnName("huyen_thua_dat");
-
-                    b.Property<int>("maQuanHuyen")
-                        .HasMaxLength(50)
-                        .HasColumnType("int")
-                        .HasColumnName("ma_quan_huyen");
-
-                    b.Property<int>("maTinhTP")
-                        .HasMaxLength(50)
-                        .HasColumnType("int")
-                        .HasColumnName("ma_tinh_tp");
-
-                    b.Property<int>("maXaPhuongTT")
-                        .HasMaxLength(50)
-                        .HasColumnType("int")
-                        .HasColumnName("ma_xa_phuong_tt");
-
-                    b.Property<DateTime?>("ngayKhieuNai1")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_khieu_nai_1");
-
-                    b.Property<DateTime?>("ngayKhieuNai2")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("ngay_khieu_nai_2");
-
-                    b.Property<int>("tinhThuaDat")
-                        .HasMaxLength(50)
+                    b.Property<int>("TinhThuaDat")
                         .HasColumnType("int")
                         .HasColumnName("tinh_thua_dat");
 
-                    b.Property<int>("xaThuaDat")
-                        .HasMaxLength(50)
+                    b.Property<string>("ToBanDo")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("to_ban_do");
+
+                    b.Property<int>("XaThuaDat")
                         .HasColumnType("int")
                         .HasColumnName("xa_thua_dat");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LoaiVuViec");
+                    b.HasIndex("LinhVuc");
+
+                    b.HasIndex("LoaiDat");
 
                     b.HasIndex("MaHoSo");
 
@@ -535,6 +701,12 @@ namespace KNTC.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -558,13 +730,17 @@ namespace KNTC.Migrations
 
                     b.Property<string>("DocumentTypeCode")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("DocumentTypeName")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -580,7 +756,7 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<int>("OrderIndex")
+                    b.Property<int?>("OrderIndex")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -597,6 +773,21 @@ namespace KNTC.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ComplainId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<bool>("CongKhai")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("cong_khai");
 
                     b.Property<long>("ContentLength")
                         .HasColumnType("bigint")
@@ -624,6 +815,13 @@ namespace KNTC.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("DeletionTime");
 
+                    b.Property<Guid?>("DenounceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasMaxLength(258)
@@ -639,10 +837,6 @@ namespace KNTC.Migrations
                         .HasColumnType("int")
                         .HasColumnName("hinh_thuc");
 
-                    b.Property<Guid>("IdHoSo")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("id_ho_so");
-
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -656,6 +850,10 @@ namespace KNTC.Migrations
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
+
+                    b.Property<int>("LoaiVuViec")
+                        .HasColumnType("int")
+                        .HasColumnName("loai_vu_viec");
 
                     b.Property<DateTime>("NgayNhan")
                         .HasColumnType("datetime2")
@@ -683,7 +881,15 @@ namespace KNTC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdHoSo");
+                    b.HasIndex("ComplainId");
+
+                    b.HasIndex("DenounceId");
+
+                    b.HasIndex("HinhThuc");
+
+                    b.HasIndex("LoaiVuViec", "ComplainId");
+
+                    b.HasIndex("LoaiVuViec", "DenounceId");
 
                     b.ToTable("FileAttachments", "KNTC");
                 });
@@ -696,6 +902,12 @@ namespace KNTC.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
                         .HasColumnName("CreationTime");
@@ -716,6 +928,10 @@ namespace KNTC.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -724,13 +940,13 @@ namespace KNTC.Migrations
 
                     b.Property<string>("LandTypeCode")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LandTypeName")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2")
@@ -740,7 +956,7 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<int>("OrderIndex")
+                    b.Property<int?>("OrderIndex")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -753,11 +969,57 @@ namespace KNTC.Migrations
                     b.ToTable("LandTypes", "KNTC");
                 });
 
+            modelBuilder.Entity("KNTC.SpatialDatas.SpatialData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("GeoJson")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("GeoJson");
+
+                    b.Property<double>("ObjectId")
+                        .HasColumnType("float")
+                        .HasColumnName("OBJECTID");
+
+                    b.Property<float?>("Quyen")
+                        .HasColumnType("real");
+
+                    b.Property<string>("SoToBD")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("So_to_BD");
+
+                    b.Property<string>("TenToChuc")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)")
+                        .HasColumnName("TenToChuc");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpatialData", "KNTC");
+                });
+
             modelBuilder.Entity("KNTC.Units.Unit", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<int?>("ConfigId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2")
@@ -779,6 +1041,10 @@ namespace KNTC.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -793,15 +1059,15 @@ namespace KNTC.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("LastModifierId");
 
-                    b.Property<int>("OrderIndex")
+                    b.Property<int?>("OrderIndex")
                         .HasColumnType("int");
 
-                    b.Property<int>("ParentId")
+                    b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
                     b.Property<string>("ShortName")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
@@ -810,13 +1076,13 @@ namespace KNTC.Migrations
 
                     b.Property<string>("UnitCode")
                         .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("UnitName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("UnitTypeId")
                         .HasColumnType("int");
@@ -825,72 +1091,9 @@ namespace KNTC.Migrations
 
                     b.HasIndex("UnitTypeId");
 
+                    b.HasIndex("UnitTypeId", "ParentId");
+
                     b.ToTable("Units", "KNTC");
-                });
-
-            modelBuilder.Entity("KNTC.UnitTypes.UnitType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<int>("OrderIndex")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
-                    b.Property<string>("UnitTypeCode")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UnitTypeName")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UnitTypes", "KNTC");
                 });
 
             modelBuilder.Entity("KNTC.Users.UserInfo", b =>
@@ -2278,107 +2481,45 @@ namespace KNTC.Migrations
                     b.ToTable("AbpSettings", (string)null);
                 });
 
-            modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
+            modelBuilder.Entity("KNTC.Complains.Complain", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasOne("KNTC.LandTypes.LandType", "LandType")
+                        .WithMany("Complains")
+                        .HasForeignKey("LoaiDat")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("ExtraProperties")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name");
-
-                    b.ToTable("AbpTenants", (string)null);
+                    b.Navigation("LandType");
                 });
 
-            modelBuilder.Entity("Volo.Abp.TenantManagement.TenantConnectionString", b =>
+            modelBuilder.Entity("KNTC.Denounces.Denounce", b =>
                 {
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasOne("KNTC.LandTypes.LandType", "LandType")
+                        .WithMany("Denounces")
+                        .HasForeignKey("LoaiDat")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
-
-                    b.HasKey("TenantId", "Name");
-
-                    b.ToTable("AbpTenantConnectionStrings", (string)null);
+                    b.Navigation("LandType");
                 });
 
             modelBuilder.Entity("KNTC.FileAttachments.FileAttachment", b =>
                 {
-                    b.HasOne("KNTC.Complains.Complain", "Complain")
+                    b.HasOne("KNTC.DocumentTypes.DocumentType", "DocumentType")
                         .WithMany("FileAttachments")
-                        .HasForeignKey("IdHoSo")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("HinhThuc")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("KNTC.Denounces.Denounce", "Denounce")
-                        .WithMany("FileAttachments")
-                        .HasForeignKey("IdHoSo")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Complain");
-
-                    b.Navigation("Denounce");
+                    b.Navigation("DocumentType");
                 });
 
             modelBuilder.Entity("KNTC.Units.Unit", b =>
                 {
-                    b.HasOne("KNTC.UnitTypes.UnitType", "UnitType")
+                    b.HasOne("KNTC.CategoryUnitTypes.UnitType", "UnitType")
                         .WithMany("Units")
                         .HasForeignKey("UnitTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("UnitType");
@@ -2526,28 +2667,21 @@ namespace KNTC.Migrations
                         .HasForeignKey("AuthorizationId");
                 });
 
-            modelBuilder.Entity("Volo.Abp.TenantManagement.TenantConnectionString", b =>
-                {
-                    b.HasOne("Volo.Abp.TenantManagement.Tenant", null)
-                        .WithMany("ConnectionStrings")
-                        .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("KNTC.Complains.Complain", b =>
-                {
-                    b.Navigation("FileAttachments");
-                });
-
-            modelBuilder.Entity("KNTC.Denounces.Denounce", b =>
-                {
-                    b.Navigation("FileAttachments");
-                });
-
-            modelBuilder.Entity("KNTC.UnitTypes.UnitType", b =>
+            modelBuilder.Entity("KNTC.CategoryUnitTypes.UnitType", b =>
                 {
                     b.Navigation("Units");
+                });
+
+            modelBuilder.Entity("KNTC.DocumentTypes.DocumentType", b =>
+                {
+                    b.Navigation("FileAttachments");
+                });
+
+            modelBuilder.Entity("KNTC.LandTypes.LandType", b =>
+                {
+                    b.Navigation("Complains");
+
+                    b.Navigation("Denounces");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
@@ -2583,11 +2717,6 @@ namespace KNTC.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.OrganizationUnit", b =>
                 {
                     b.Navigation("Roles");
-                });
-
-            modelBuilder.Entity("Volo.Abp.TenantManagement.Tenant", b =>
-                {
-                    b.Navigation("ConnectionStrings");
                 });
 #pragma warning restore 612, 618
         }

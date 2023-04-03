@@ -30,13 +30,12 @@ public class Unit : FullAuditedAggregateRoot<int>
     public string UnitName { get; private set; }
     public string ShortName { get; set; }
     public int UnitTypeId { get; set; }
-    public int ConfigId { get; set; }
+    public int? ConfigId { get; set; }
     public int? ParentId { get; set; }
     public string Description { get; set; }
     public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public UnitType UnitType { get; set; }
-    //public Config Config { get; set; }
     private void SetCode([NotNull] string code)
     {
         UnitCode = Check.NotNullOrWhiteSpace(

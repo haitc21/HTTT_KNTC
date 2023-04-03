@@ -1016,7 +1016,7 @@ namespace KNTC.Migrations
                         .HasColumnType("nvarchar(40)")
                         .HasColumnName("ConcurrencyStamp");
 
-                    b.Property<int>("ConfigId")
+                    b.Property<int?>("ConfigId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreationTime")
