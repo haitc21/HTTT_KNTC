@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using Volo.Abp.EntityFrameworkCore;
 
 #nullable disable
@@ -979,6 +980,10 @@ namespace KNTC.Migrations
                     b.Property<string>("GeoJson")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("GeoJson");
+
+                    b.Property<Geometry>("Geometry")
+                        .HasColumnType("geometry")
+                        .HasColumnName("Geometry");
 
                     b.Property<double>("ObjectId")
                         .HasColumnType("float")

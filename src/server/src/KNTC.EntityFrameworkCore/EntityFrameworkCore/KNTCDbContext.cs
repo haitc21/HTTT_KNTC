@@ -316,7 +316,7 @@ public class KNTCDbContext :
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(p => p.Id).HasColumnName("Id");
             //b.Property(p => p.Id).ValueGeneratedOnAdd();
-            //b.Property(p => p.Geometry).HasColumnType("geography").HasColumnName("Geometry");
+            b.Property(p => p.Geometry).HasColumnType("geometry").HasColumnName("Geometry");
             b.Property(p => p.GeoJson).HasColumnName("GeoJson");
             b.Property(p => p.ObjectId).HasColumnName("OBJECTID");
             b.Property(p => p.SoToBD).HasColumnName("So_to_BD").HasMaxLength(KNTCValidatorConsts.MaxToBanDoLength);

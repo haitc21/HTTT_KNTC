@@ -47,9 +47,9 @@ public class SpatialDataAppService : CrudAppService<
         queryable = queryable
                     //.WhereIf(!filter.IsNullOrEmpty(), x => x.GeoJson.ToUpper().Contains(filter))
                     .WhereIf(!filter.IsNullOrEmpty(),
-                             x => x.TenToChuc.ToUpper().Contains(filter)                  
+                             x => x.TenToChuc.ToUpper().Contains(filter)
                              )
-                    .OrderBy(input.Sorting) 
+                    .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
                     .Take(input.MaxResultCount);
 
@@ -61,7 +61,7 @@ public class SpatialDataAppService : CrudAppService<
             totalCount,
             ObjectMapper.Map<List<SpatialData>, List<SpatialDataDto>>(queryResult)
         );
-        
+
         return result;
 
     }
@@ -94,5 +94,12 @@ public class SpatialDataAppService : CrudAppService<
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);
+    }
+    public async Task<List<string>> GetGeoJsonAsync()
+    {
+        var query = await Repository.GetQueryableAsync();
+        var query2 = query.Select(x => x.GeoJson);
+        var groJson = await AsyncExecuter.ToListAsync(query2);
+        return groJson;
     }
 }

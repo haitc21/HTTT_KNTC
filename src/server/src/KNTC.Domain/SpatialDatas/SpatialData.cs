@@ -1,5 +1,6 @@
 ﻿//using Microsoft.SqlServer.Types;
 //using NetTopologySuite.Geometries;
+using NetTopologySuite.Geometries;
 using System;
 using Volo.Abp.Domain.Entities;
 //using System.ComponentModel.DataAnnotations.Schema;
@@ -22,6 +23,6 @@ public class SpatialData : Entity<int>
     public virtual string? TenToChuc { get; set; }
     public virtual Single? Quyen { get; set; }
     public virtual string? SoToBD { get; set; }
-    //public SqlGeometry Geometry { get; set; }
+    public Geometry Geometry { get; set; }
     public virtual string GeoJson { get; set; }
 }

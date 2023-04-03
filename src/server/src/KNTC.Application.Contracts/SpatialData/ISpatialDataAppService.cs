@@ -14,4 +14,5 @@ public interface ISpatialDataAppService :
 {
     Task<ListResultDto<SpatialDataLookupDto>> GetLookupAsync();
     Task DeleteMultipleAsync(IEnumerable<int> ids);
+    Task<List<string>> GetGeoJsonAsync();
 }
