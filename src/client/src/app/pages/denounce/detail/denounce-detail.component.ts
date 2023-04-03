@@ -116,7 +116,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     maQuanHuyen: [{ type: 'required', message: 'Quận/huyện không được để trống' }],
     maXaPhuongTT: [{ type: 'required', message: 'Xã/phường/TT không được để trống' }],
     thoiGianTiepNhan: [{ type: 'required', message: 'Mgày tiếp nhận không được để trống' }],
-    thoiGianHenTraKQ: [{ type: 'required', message: 'Ngày hẹn trả kết quả không được để trống' }],
+    thoiGianHenTraKQ: [{ type: 'required', message: 'Thời hẹn trả kết quả không được để trống' }],
     noiDungVuViec: [{ type: 'required', message: 'Nội dung vụ việc không được để trống' }],
     nguoiBiToCao: [
       { type: 'required', message: 'Người bị tố cáo không được để trống' },
@@ -409,39 +409,42 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     this.toggleBlockUI(true);
     if (this.utilService.isEmpty(this.denounceId)) {
       let value = this.form.value as CreateDenounceDto;
-      let fileAttachmentDtos = this.fileAttachmentComponent.data;
-      let files = this.fileAttachmentComponent.files;
+      if (this.fileAttachmentComponent?.data) {
+        let fileAttachmentDtos = this.fileAttachmentComponent.data;
 
-      value.fileAttachments = fileAttachmentDtos.map(x => {
-        return {
-          loaiVuViec: LoaiVuViec.ToCao,
-          denounceId: x.denounceId,
-          tenTaiLieu: x.tenTaiLieu,
-          giaiDoan: x.giaiDoan,
-          hinhThuc: x.hinhThuc,
-          thoiGianBanHanh: x.thoiGianBanHanh,
-          ngayNhan: x.ngayNhan,
-          thuTuButLuc: x.thuTuButLuc,
-          noiDungChinh: x.noiDungChinh,
-          fileName: x.fileName,
-          contentType: x.contentType,
-          contentLength: x.contentLength,
-          congKhai: x.congKhai,
-        } as CreateAndUpdateFileAttachmentDto;
-      });
+        value.fileAttachments = fileAttachmentDtos.map(x => {
+          return {
+            loaiVuViec: LoaiVuViec.ToCao,
+            denounceId: x.denounceId,
+            tenTaiLieu: x.tenTaiLieu,
+            giaiDoan: x.giaiDoan,
+            hinhThuc: x.hinhThuc,
+            thoiGianBanHanh: x.thoiGianBanHanh,
+            ngayNhan: x.ngayNhan,
+            thuTuButLuc: x.thuTuButLuc,
+            noiDungChinh: x.noiDungChinh,
+            fileName: x.fileName,
+            contentType: x.contentType,
+            contentLength: x.contentLength,
+            congKhai: x.congKhai,
+          } as CreateAndUpdateFileAttachmentDto;
+        });
+      }
+
       this.denounceService
         .create(value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: DenounceDto) => {
             res.fileAttachments.forEach(fmDto => {
-              let file = files.find(f => f.name === fmDto.fileName);
-              if (file) {
-                this.fileUploads.push({
-                  id: fmDto.id,
-                  name: fmDto.tenTaiLieu,
-                  file: file,
-                });
+              if (this.fileAttachmentComponent?.files) {
+                let file = this.fileAttachmentComponent?.files.find(f => f.name === fmDto.fileName);
+                if (file)
+                  this.fileUploads.push({
+                    id: fmDto.id,
+                    name: fmDto.tenTaiLieu,
+                    file: file,
+                  });
               }
             });
             this.toggleBlockUI(false);

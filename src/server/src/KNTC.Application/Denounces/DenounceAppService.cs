@@ -123,7 +123,7 @@ public class DenounceAppService : CrudAppService<
                                                   maQuanHuyen: input.maQuanHuyen,
                                                   maXaPhuongTT: input.maXaPhuongTT,
                                                   thoiGianTiepNhan: input.ThoiGianTiepNhan,
-                                                  thoiGianHenTraKQ: input.ThoiGianTraKQ,
+                                                  thoiGianHenTraKQ: input.ThoiGianHenTraKQ,
                                                   noiDungVuViec: input.NoiDungVuViec,
                                                   nguoiBiToCao: input.NguoiBiToCao,
                                                   boPhanDangXL: input.BoPhanDangXL,

@@ -147,10 +147,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
     let center = this.duLieuToaDo
       ? this.convertStringCoordiate(this.duLieuToaDo)
-      : [21.59053436945016, 105.83127034149382];
+      : [21.5928, 105.8442];
     this.map = L.map(this.idMap, {
       center: center,
-      zoom: 10,
+      zoom: this.zoomLv,
       layers: [osm, this.khieunai],
     });
 
@@ -166,7 +166,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
         amenity: 'Thái Nguyên',
         popupContent: 'Xem dữ liệu quy hoạch!',
       },
-      geometry: this.spatialData,
+      geometry: this.spatialData, // undefined vì chưa được load đã chạy câu này rồi
     };
 
     let myStyle = {

@@ -78,7 +78,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   public totalCount: number;
 
   // filter
-  geo = false;
+  geo = true;
   //filter: GetSpatialDataListDto;
   //filter: GetComplainListDto;
 
@@ -146,6 +146,11 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   }
 
   loadData(isFirst: boolean = false) {
+    this.getDataTable();
+    this.getDataMap();
+  }
+
+  private getDataMap() {
     this.toggleBlockUI(true);
     this.filter = {
       skipCount: this.skipCount,
@@ -164,33 +169,15 @@ export class SearchMapComponent implements OnInit, OnDestroy {
       maTinhTP: this.maTinh,
       maQuanHuyen: this.maHuyen,
       maXaPhuongTT: this.maXa,
-      fromDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
-      toDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-          ? this.thoiGianTiepNhanRange[1].toUTCString()
-          : null,
+      fromDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+        ? this.thoiGianTiepNhanRange[0].toUTCString()
+        : null,
+      toDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+        ? this.thoiGianTiepNhanRange[1].toUTCString()
+        : null,
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
     } as GetSummaryListDto;
-
-    this.summaryService
-      .getList(this.filter)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response: PagedResultDto<SummaryDto>) => {
-          this.items = response.items;
-          this.totalCount = response.totalCount;
-          this.toggleBlockUI(false);
-        },
-        error: () => {
-          this.toggleBlockUI(false);
-        },
-      });
-
-    this.toggleBlockUI(true);
     this.summaryService
       .getMap(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -203,6 +190,36 @@ export class SearchMapComponent implements OnInit, OnDestroy {
           this.toggleBlockUI(false);
         },
       });
+  }
+
+  private getDataTable() {
+    this.toggleBlockUI(true);
+    this.filter = {
+      skipCount: this.skipCount,
+      maxResultCount: this.maxResultCount,
+      keyword: this.keyword,
+
+      landComplain: this.landComplain,
+      enviromentComplain: this.enviromentComplain,
+      waterComplain: this.waterComplain,
+      mineralComplain: this.mineralComplain,
+      landDenounce: this.landDenounce,
+      enviromentDenounce: this.enviromentDenounce,
+      waterDenounce: this.waterDenounce,
+      mineralDenounce: this.mineralDenounce,
+
+      maTinhTP: this.maTinh,
+      maQuanHuyen: this.maHuyen,
+      maXaPhuongTT: this.maXa,
+      fromDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+        ? this.thoiGianTiepNhanRange[0].toUTCString()
+        : null,
+      toDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+        ? this.thoiGianTiepNhanRange[1].toUTCString()
+        : null,
+      ketQua: this.tinhTrang,
+      congKhai: this.hasLoggedIn ? this.congKhai : true,
+    } as GetSummaryListDto;
   }
 
   loadGeo() {
@@ -219,6 +236,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<SpatialDataDto>) => {
+            debugger
             this.spatialData = res.items; //.map(item => item.geoJson);
 
             this.toggleBlockUI(false);
@@ -387,7 +405,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;
-    this.loadData();
+    this.getDataTable();
   }
 
   toggleMenuLeft() {

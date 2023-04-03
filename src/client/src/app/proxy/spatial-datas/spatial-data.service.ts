@@ -44,6 +44,14 @@ export class SpatialDataService {
     { apiName: this.apiName });
   
 
+  getGeoJson = () =>
+    this.restService.request<any, string[]>({
+      method: 'GET',
+      url: '/api/app/spatial-data/geo-json',
+    },
+    { apiName: this.apiName });
+  
+
   getList = (input: GetSpatialDataListDto) =>
     this.restService.request<any, PagedResultDto<SpatialDataDto>>({
       method: 'GET',

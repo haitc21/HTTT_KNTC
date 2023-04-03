@@ -20,7 +20,7 @@ export interface CreateDenounceDto {
   maQuanHuyen: number;
   maXaPhuongTT: number;
   thoiGianTiepNhan: string;
-  thoiGianTraKQ: string;
+  thoiGianHenTraKQ: string;
   noiDungVuViec: string;
   nguoiBiToCao: string;
   boPhanDangXL: string;

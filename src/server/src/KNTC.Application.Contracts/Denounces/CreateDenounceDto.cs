@@ -51,7 +51,7 @@ public class CreateDenounceDto
     [Required]
     public DateTime ThoiGianTiepNhan { get; set; }
     [Required]
-    public DateTime ThoiGianTraKQ { get; set; }
+    public DateTime ThoiGianHenTraKQ { get; set; }
     [Required]
     public string NoiDungVuViec { get; set; }
     [Required]

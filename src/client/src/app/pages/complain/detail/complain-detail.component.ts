@@ -381,39 +381,41 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     this.toggleBlockUI(true);
     if (this.utilService.isEmpty(this.complainId)) {
       let value = this.form.value as CreateComplainDto;
-      let fileAttachmentDtos = this.fileAttachmentComponent.data;
-      let files = this.fileAttachmentComponent.files;
+      if (this.fileAttachmentComponent?.data) {
+        let fileAttachmentDtos = this.fileAttachmentComponent.data;
+        value.fileAttachments = fileAttachmentDtos.map(x => {
+          return {
+            loaiVuViec: LoaiVuViec.KhieuNai,
+            complainId: x.complainId,
+            tenTaiLieu: x.tenTaiLieu,
+            giaiDoan: x.giaiDoan,
+            hinhThuc: x.hinhThuc,
+            thoiGianBanHanh: x.thoiGianBanHanh,
+            ngayNhan: x.ngayNhan,
+            thuTuButLuc: x.thuTuButLuc,
+            noiDungChinh: x.noiDungChinh,
+            fileName: x.fileName,
+            contentType: x.contentType,
+            contentLength: x.contentLength,
+            congKhai: x.congKhai,
+          } as CreateAndUpdateFileAttachmentDto;
+        });
+      }
 
-      value.fileAttachments = fileAttachmentDtos.map(x => {
-        return {
-          loaiVuViec: LoaiVuViec.KhieuNai,
-          complainId: x.complainId,
-          tenTaiLieu: x.tenTaiLieu,
-          giaiDoan: x.giaiDoan,
-          hinhThuc: x.hinhThuc,
-          thoiGianBanHanh: x.thoiGianBanHanh,
-          ngayNhan: x.ngayNhan,
-          thuTuButLuc: x.thuTuButLuc,
-          noiDungChinh: x.noiDungChinh,
-          fileName: x.fileName,
-          contentType: x.contentType,
-          contentLength: x.contentLength,
-          congKhai: x.congKhai,
-        } as CreateAndUpdateFileAttachmentDto;
-      });
       this.complainService
         .create(value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ComplainDto) => {
             res.fileAttachments.forEach(fmDto => {
-              let file = files.find(f => f.name === fmDto.fileName);
-              if (file) {
-                this.fileUploads.push({
-                  id: fmDto.id,
-                  name: fmDto.tenTaiLieu,
-                  file: file,
-                });
+              if (this.fileAttachmentComponent?.files) {
+                let file = this.fileAttachmentComponent?.files.find(f => f.name === fmDto.fileName);
+                if (file)
+                  this.fileUploads.push({
+                    id: fmDto.id,
+                    name: fmDto.tenTaiLieu,
+                    file: file,
+                  });
               }
             });
             this.toggleBlockUI(false);
