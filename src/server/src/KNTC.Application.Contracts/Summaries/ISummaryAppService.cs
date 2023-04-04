@@ -11,4 +11,5 @@ public interface ISummaryAppService
     Task<PagedResultDto<SummaryDto>> GetListAsync(GetSummaryListDto input);
     Task<byte[]> GetExcelAsync(GetSummaryListDto input);
     Task<List<SummaryDto>> GetMapAsync(GetSumaryMapDto input);
+    Task<SumaryChartDto> GetChartAsync();
 }

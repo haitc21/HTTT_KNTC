@@ -15,6 +15,8 @@ using NPOI.SS.UserModel;
 using System.IO;
 using Volo.Abp.ObjectMapping;
 using Microsoft.AspNetCore.Authorization;
+using KNTC.Complains;
+using KNTC.Denounces;
 
 namespace KNTC.Summaries;
 
@@ -23,13 +25,19 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     private readonly ISummaryRepository _summaryRepo;
     private readonly IHostEnvironment _env;
     private readonly IRepository<Unit, int> _unitRepo;
+    private readonly IComplainRepository _complainRepo;
+    private readonly IDenounceRepository _denounceRepo;
     public SummaryAppService(ISummaryRepository summaryRepo,
         IHostEnvironment env,
-        IRepository<Unit, int> unitRepo)
+        IRepository<Unit, int> unitRepo,
+        IComplainRepository complainRepo,
+        IDenounceRepository denounceRepo)
     {
         _summaryRepo = summaryRepo;
         _env = env;
         _unitRepo = unitRepo;
+        _complainRepo = complainRepo;
+        _denounceRepo = denounceRepo;
     }
 
     public async Task<PagedResultDto<SummaryDto>> GetListAsync(GetSummaryListDto input)
@@ -247,5 +255,20 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             wb.Close();
             return stream.ToArray();
         }
+    }
+    public async Task<SumaryChartDto> GetChartAsync()
+    {
+        var result = new SumaryChartDto();
+        result.LandComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai);
+        result.EnviromentComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong);
+        result.WaterComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc);
+        result.MineralComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan);
+
+        result.LandDenounce = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai);
+        result.EnviromentDenounce = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong);
+        result.WaterDenounce = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc);
+        result.MineralDenounce = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan);
+
+        return result;
     }
 }
