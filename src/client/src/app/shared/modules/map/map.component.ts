@@ -43,7 +43,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   @Input() data: SummaryDto[] = [];
   @Input() spatialData: any[];
   @Input() heightMap: string = '600px';
-  @Input() zoomLv: number = 13;
+  @Input() zoomLv: number = 11;
   @Input() duLieuToaDo: string;
   @Input() loaiVuViec: LoaiVuViec = LoaiVuViec.KhieuNai;
 

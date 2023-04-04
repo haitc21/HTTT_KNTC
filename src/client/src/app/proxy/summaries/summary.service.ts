@@ -1,4 +1,4 @@
-import type { GetSumaryMapDto, GetSummaryListDto, SummaryDto } from './models';
+import type { GetSumaryMapDto, GetSummaryListDto, SummaryChartDto, SummaryDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -8,6 +8,14 @@ import { Injectable } from '@angular/core';
 })
 export class SummaryService {
   apiName = 'Default';
+  
+
+  getChart = () =>
+    this.restService.request<any, SummaryChartDto>({
+      method: 'GET',
+      url: '/api/app/summary/chart',
+    },
+    { apiName: this.apiName });
   
 
   getExcel = (input: GetSummaryListDto) =>

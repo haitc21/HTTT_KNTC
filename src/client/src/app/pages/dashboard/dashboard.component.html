@@ -19,26 +19,17 @@
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch
-            [(ngModel)]="enviromentComplain"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="enviromentComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch
-            [(ngModel)]="waterComplain"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="waterComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch
-            [(ngModel)]="mineralComplain"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="mineralComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="group-header ml-3 mt-5">
@@ -53,26 +44,17 @@
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch
-            [(ngModel)]="enviromentDenounce"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="enviromentDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch
-            [(ngModel)]="waterDenounce"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch
-            [(ngModel)]="mineralDenounce"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="mineralDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
       </div>
@@ -81,7 +63,7 @@
   <!-- ----------------------Main------------------------------------------------- -->
   <div [@expandColumn]="expandColumnState" class="col-12 md:col-10 grid">
     <div
-      style="height: 90vh; width: 3%"
+      style="height: 90vh; width: 1%"
       class="flex flex-column justify-content-center align-items-center"
     >
       <button
@@ -103,8 +85,9 @@
         (click)="toggleMenuLeft()"
       ></button>
     </div>
-    <div style="width: 97%" class="card">
-      <p-panel #pnl header="Dash Board">
+    <div style="width: 99%">
+      <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+      <p-panel #pnl>
         <div class="grid">
           <div class="col-6 md:col-6 flex flex-column justify-content-between">
             <p-card header="Biểu đồ tình hình khiếu nại, tố cáo" class="flex-1">
@@ -127,7 +110,7 @@
             </p-card>
           </div>
           <div class="col-6 md:col-6">
-            <app-map [data]="data" heightMap="100%"></app-map>
+            <app-map [data]="dataMap" [spatialData]="spatialData" heightMap="100%"></app-map>
           </div>
         </div>
 
@@ -147,75 +130,66 @@
                 icon="pi pi-download"
                 class="p-button-info mr-2"
               ></button>
-             
             </ng-template>
           </p-toolbar>
 
-          <!-- <p-table
-          #dt
-          [value]="data"
-          [rows]="10"
-          [paginator]="false"
-          [(selection)]="selectedItems"
-          [rowHover]="true"
-          dataKey="id"
-        > -->
           <p-table
             #dt
-            [value]="mockData"
+            [value]="items"
             [rows]="10"
-            [paginator]="true"
-            [globalFilterFields]="['code', 'title']"
-            [tableStyle]="{ width: '100%' }"
-            [(selection)]="selectedItems"
+            [paginator]="false"
             [rowHover]="true"
-            dataKey="code"
-            currentPageReportTemplate="Tổng số: {totalRecords}"
-            [showCurrentPageReport]="true"
+            dataKey="id"
           >
             <ng-template pTemplate="header">
               <tr>
                 <th class="row-num-column">STT</th>
                 <th>Mã hồ sơ</th>
-                <th>Nội dung đơn</th>
-                <th>Người gửi đơn</th>
-                <th>Khu vực</th>
-                <th>Ngày nộp đơn</th>
-                <th>Loại khiếu nai/tố cáo</th>
+                <th>Người nộp đơn</th>
+                <th>Số ĐT</th>
+                <th>Địa chỉ</th>
+                <th>Loại vụ việc</th>
                 <th>Lĩnh vực</th>
-                <th>Ngày hẹn trả KQ lần I</th>
-                <th>KQ GQKN lần I</th>
-                <th>Ngày hẹn trả KQ lần II</th>
-                <th>KQ GQKN lần II</th>
+                <th>Nội dung</th>
+                <th>Thời gian nộp</th>
+                <th>Ngày hẹn trả KQ</th>
+                <th>Bộ phận đang XL</th>
+                <th style="width: 150px">Trạng thái</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
               <tr>
-                <td class="row-num-cell">{{ rowIndex + 1 }}</td>
-                <td>{{ row.code }}</td>
-                <td>{{ row.title }}</td>
-                <td>{{ row.sender }}</td>
-                <td>{{ row.area }}</td>
-                <td>{{ row.sentDate.toLocaleDateString('vi-VN') }}</td>
-                <td>{{ loaiHS[row.typeHoSo] }}</td>
-                <td>{{ linhVuc[row.fieldType] }}</td>
-                <td>{{ row.returnDate1.toLocaleDateString('vi-VN') }}</td>
-                <td>{{ row.result1 ? 'Đúng' : 'Sai' }}</td>
-                <td>{{ row.returnDate2 ? row.returnDate2.toLocaleDateString('vi-VN') : '' }}</td>
-                <td>{{ row.result2 === true ? 'Đúng' : row.result2 === false ? 'Sai' : '' }}</td>
+                <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
+                <td>
+                  <span class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+                </td>
+                <td>{{ row.nguoiNopDon }}</td>
+                <td>{{ row.dienThoai }}</td>
+                <td>{{ row.diaChiLienHe }}</td>
+                <td>{{ getLoaiVuViecName(row.loaiVuViec) }}</td>
+                <td>{{ getLinhVucName(row.linhVuc) }}</td>
+                <td>{{ row.tieuDe }}</td>
+                <td>
+                  {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
+                </td>
+                <td>
+                  {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
+                </td>
+                <td>{{ row.boPhanDangXL }}</td>
+                <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
               </tr>
             </ng-template>
-            <!-- <ng-template pTemplate="summary">
-            <p-paginator
-              [rows]="maxResultCount"
-              [totalRecords]="totalCount"
-              [showCurrentPageReport]="true"
-              [showJumpToPageInput]="true"
-              (onPageChange)="pageChanged($event)"
-              currentPageReportTemplate="{totalRecords} bản ghi"
-              [rowsPerPageOptions]="[10, 20, 50, 100]"
-            ></p-paginator>
-          </ng-template> -->
+            <ng-template pTemplate="summary">
+              <p-paginator
+                [rows]="maxResultCount"
+                [totalRecords]="totalCount"
+                [showCurrentPageReport]="true"
+                [showJumpToPageInput]="true"
+                (onPageChange)="pageChanged($event)"
+                currentPageReportTemplate="{totalRecords} bản ghi"
+                [rowsPerPageOptions]="[10, 20, 50, 100]"
+              ></p-paginator>
+            </ng-template>
           </p-table>
           <!-- ----------------------------------------------------------------------- -->
         </p-card>

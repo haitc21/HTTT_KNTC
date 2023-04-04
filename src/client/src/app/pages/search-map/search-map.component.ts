@@ -169,12 +169,14 @@ export class SearchMapComponent implements OnInit, OnDestroy {
       maTinhTP: this.maTinh,
       maQuanHuyen: this.maHuyen,
       maXaPhuongTT: this.maXa,
-      fromDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-        ? this.thoiGianTiepNhanRange[0].toUTCString()
-        : null,
-      toDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-        ? this.thoiGianTiepNhanRange[1].toUTCString()
-        : null,
+      fromDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+          ? this.thoiGianTiepNhanRange[0].toUTCString()
+          : null,
+      toDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+          ? this.thoiGianTiepNhanRange[1].toUTCString()
+          : null,
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
     } as GetSummaryListDto;
@@ -211,15 +213,30 @@ export class SearchMapComponent implements OnInit, OnDestroy {
       maTinhTP: this.maTinh,
       maQuanHuyen: this.maHuyen,
       maXaPhuongTT: this.maXa,
-      fromDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-        ? this.thoiGianTiepNhanRange[0].toUTCString()
-        : null,
-      toDate: this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-        ? this.thoiGianTiepNhanRange[1].toUTCString()
-        : null,
+      fromDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+          ? this.thoiGianTiepNhanRange[0].toUTCString()
+          : null,
+      toDate:
+        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+          ? this.thoiGianTiepNhanRange[1].toUTCString()
+          : null,
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
     } as GetSummaryListDto;
+    this.summaryService
+      .getList(this.filter)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (res: PagedResultDto<SummaryDto>) => {
+          this.items = res.items;
+          this.totalCount = res.totalCount;
+          this.toggleBlockUI(false);
+        },
+        error: () => {
+          this.toggleBlockUI(false);
+        },
+      });
   }
 
   loadGeo() {
@@ -236,7 +253,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<SpatialDataDto>) => {
-            debugger
+            debugger;
             this.spatialData = res.items; //.map(item => item.geoJson);
 
             this.toggleBlockUI(false);

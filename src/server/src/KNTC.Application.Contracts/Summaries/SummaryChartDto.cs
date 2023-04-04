@@ -4,7 +4,7 @@ using System.Text;
 
 namespace KNTC.Summaries
 {
-    public class SumaryChartDto
+    public class SummaryChartDto
     {
         public int LandComplain { get; set; }
         public int EnviromentComplain { get; set; }

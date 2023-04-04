@@ -256,9 +256,9 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             return stream.ToArray();
         }
     }
-    public async Task<SumaryChartDto> GetChartAsync()
+    public async Task<SummaryChartDto> GetChartAsync()
     {
-        var result = new SumaryChartDto();
+        var result = new SummaryChartDto();
         result.LandComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai);
         result.EnviromentComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong);
         result.WaterComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc);

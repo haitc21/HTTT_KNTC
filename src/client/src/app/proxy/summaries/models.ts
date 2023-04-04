@@ -40,6 +40,17 @@ export interface GetSummaryListDto extends BaseListFilterDto {
   congKhai?: boolean;
 }
 
+export interface SummaryChartDto {
+  landComplain: number;
+  enviromentComplain: number;
+  waterComplain: number;
+  mineralComplain: number;
+  landDenounce: number;
+  enviromentDenounce: number;
+  waterDenounce: number;
+  mineralDenounce: number;
+}
+
 export interface SummaryDto {
   id?: string;
   maHoSo?: string;
