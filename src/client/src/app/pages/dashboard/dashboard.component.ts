@@ -279,7 +279,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<SpatialDataDto>) => {
-            debugger;
+            ;
             this.spatialData = res.items; //.map(item => item.geoJson);
 
             this.toggleBlockUI(false);

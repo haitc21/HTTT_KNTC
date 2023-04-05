@@ -253,7 +253,6 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<SpatialDataDto>) => {
-            debugger;
             this.spatialData = res.items; //.map(item => item.geoJson);
 
             this.toggleBlockUI(false);
@@ -340,6 +339,21 @@ export class SearchMapComponent implements OnInit, OnDestroy {
           this.toggleBlockUI(false);
         }
       );
+    if (this.maTinh) {
+      this.toggleBlockUI(true);
+    this.unitService
+      .getLookup(2, this.maTinh)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<UnitLookupDto>) => {
+          this.huyenOptions = res.items;
+          this.toggleBlockUI(false);
+        },
+        () => {
+          this.toggleBlockUI(false);
+        }
+      );
+    }
   }
 
   tinhChange(event) {

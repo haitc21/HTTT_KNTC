@@ -1,13 +1,16 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 
@@ -21,13 +24,16 @@ public class UnitAppService : CrudAppService<
             CreateAndUpdateUnitDto>, IUnitAppService
 {
     private readonly UnitManager _unitManager;
-    public UnitAppService(IRepository<Unit, int> repository, UnitManager unitManager) : base(repository)
+    private readonly IDistributedCache<UnitLookupCache, UnitCacheKey> _cache;
+    public UnitAppService(IRepository<Unit, int> repository, UnitManager unitManager,
+        IDistributedCache<UnitLookupCache, UnitCacheKey> cache) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.UnitPermission.Create;
         UpdatePolicyName = KNTCPermissions.UnitPermission.Edit;
         DeletePolicyName = KNTCPermissions.UnitPermission.Delete;
         _unitManager = unitManager;
+        _cache = cache;
     }
     public async override Task<PagedResultDto<UnitDto>> GetListAsync(GetUnitListDto input)
     {
@@ -56,7 +62,7 @@ public class UnitAppService : CrudAppService<
 
         var totalCount = await Repository.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
-                    || (x.UnitCode.ToUpper().Contains(input.Keyword) 
+                    || (x.UnitCode.ToUpper().Contains(input.Keyword)
                     || x.UnitName.ToUpper().Contains(input.Keyword)
                     || x.ShortName.ToUpper().Contains(input.Keyword)))
                 && (!input.UnitTypeId.HasValue || x.UnitTypeId == input.UnitTypeId)
@@ -71,19 +77,30 @@ public class UnitAppService : CrudAppService<
     }
     public async Task<ListResultDto<UnitLookupDto>> GetLookupAsync(int unitTypeId, int? parentId = null)
     {
-        var queryable = await Repository.GetQueryableAsync();
+        var cacheItem = await _cache.GetOrAddAsync(
+        new UnitCacheKey(unitTypeId, parentId),
+        async () => await GetListLookup(unitTypeId, parentId),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+        });
+        return new ListResultDto<UnitLookupDto>(cacheItem.Items);
+    }
 
+    private async Task<UnitLookupCache> GetListLookup(int unitTypeId, int? parentId)
+    {
+        var queryable = await Repository.GetQueryableAsync();
         queryable = queryable
                     .Where(x => x.Status == Status.Active)
                     .Where(x => x.UnitTypeId == unitTypeId)
                     .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
                     .OrderBy(nameof(UnitLookupDto.UnitName));
-        var queryResult = await AsyncExecuter.ToListAsync(queryable);
-
-        return new ListResultDto<UnitLookupDto>(
-            ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(queryResult)
-        );
+        var entities = await AsyncExecuter.ToListAsync(queryable);
+        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
+        var result = new UnitLookupCache() { Items = dtos};
+        return result;
     }
+
 
     public async override Task<UnitDto> CreateAsync(CreateAndUpdateUnitDto input)
     {

@@ -1,6 +1,8 @@
-﻿using KNTC.Localization;
+﻿using KNTC.LandTypes;
+using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +10,10 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace KNTC.DocumentTypes;
 
@@ -21,13 +25,15 @@ public class DocumentTypeAppService : CrudAppService<
             CreateAndUpdateDocumentTypeDto>, IDocumentTypeAppService
 {
     private readonly DocumentTypeManager _documentTypeManager;
-    public DocumentTypeAppService(IRepository<DocumentType, int> repository, DocumentTypeManager documentTypeManager) : base(repository)
+    private readonly IDistributedCache<DocumentTypeLookupCache> _cache;
+    public DocumentTypeAppService(IRepository<DocumentType, int> repository, DocumentTypeManager documentTypeManager, IDistributedCache<DocumentTypeLookupCache> cache) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.DocumentTypePermission.Create;
         UpdatePolicyName = KNTCPermissions.DocumentTypePermission.Edit;
         DeletePolicyName = KNTCPermissions.DocumentTypePermission.Delete;
         _documentTypeManager = documentTypeManager;
+        _cache = cache;
     }
 
     public async override Task<PagedResultDto<DocumentTypeDto>> GetListAsync(GetDocumentTypesListDto input)
@@ -66,11 +72,20 @@ public class DocumentTypeAppService : CrudAppService<
     }
     public async Task<ListResultDto<DocumentTypeLookupDto>> GetLookupAsync()
     {
-        var documentTypes = await Repository.GetListAsync(x => x.Status == Status.Active);
+        var cacheItem = await _cache.GetOrAddAsync(
+        "DocumentTypeLookup",
+        async () =>
+        {
+            var entities = await Repository.GetListAsync(x => x.Status == Status.Active);
+            var dtos = ObjectMapper.Map<List<DocumentType>, List<DocumentTypeLookupDto>>(entities);
+            return new DocumentTypeLookupCache() { Items = dtos };
+        },
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+        });
 
-        return new ListResultDto<DocumentTypeLookupDto>(
-            ObjectMapper.Map<List<DocumentType>, List<DocumentTypeLookupDto>>(documentTypes)
-        );
+        return new ListResultDto<DocumentTypeLookupDto>(cacheItem.Items);
     }
 
     public async override Task<DocumentTypeDto> CreateAsync(CreateAndUpdateDocumentTypeDto input)

@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.Emailing;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -29,7 +31,8 @@ namespace KNTC;
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpSettingManagementDomainModule),
     //typeof(AbpTenantManagementDomainModule),
-    typeof(AbpEmailingModule)
+    typeof(AbpEmailingModule),
+    typeof(AbpCachingStackExchangeRedisModule)
 )]
 public class KNTCDomainModule : AbpModule
 {
@@ -44,6 +47,8 @@ public class KNTCDomainModule : AbpModule
         //{
         //    options.IsEnabled = MultiTenancyConsts.IsEnabled;
         //});
+
+        //Configure<AbpDistributedCacheOptions>(options => { options.KeyPrefix = "KNTC:"; });
 
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());

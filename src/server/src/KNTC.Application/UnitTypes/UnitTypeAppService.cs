@@ -1,6 +1,9 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
+using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
+using NPOI.POIFS.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +11,10 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace KNTC.CategoryUnitTypes;
 
@@ -21,13 +26,17 @@ public class UnitTypeAppService : CrudAppService<
             CreateAndUpdateUnitTypeDto>, IUnitTypeAppService
 {
     private readonly UnitTypeManager _unitTypeManager;
-    public UnitTypeAppService(IRepository<UnitType, int> repository, UnitTypeManager unitTypeManager) : base(repository)
+    private readonly IDistributedCache<UnitTypeLookupCache> _cache;
+    public UnitTypeAppService(IRepository<UnitType, int> repository,
+        UnitTypeManager unitTypeManager,
+        IDistributedCache<UnitTypeLookupCache> cache) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.UnitTypePermission.Create;
         UpdatePolicyName = KNTCPermissions.UnitTypePermission.Edit;
         DeletePolicyName = KNTCPermissions.UnitTypePermission.Delete;
         _unitTypeManager = unitTypeManager;
+        _cache = cache;
     }
 
     public async override Task<PagedResultDto<UnitTypeDto>> GetListAsync(GetUnitTypeListDto input)
@@ -66,13 +75,21 @@ public class UnitTypeAppService : CrudAppService<
     }
     public async Task<ListResultDto<UnitTypeLookupDto>> GetLookupAsync()
     {
-        var unitTypes = await Repository.GetListAsync(x => x.Status == Status.Active);
+        var cacheItem = await _cache.GetOrAddAsync(
+        "UnitTypeLookup",
+        async () =>
+        {
+            var entities = await Repository.GetListAsync(x => x.Status == Status.Active);
+            var dtos = ObjectMapper.Map<List<UnitType>, List<UnitTypeLookupDto>>(entities);
+            return new UnitTypeLookupCache() { Items = dtos };
+        },
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+        });
 
-        return new ListResultDto<UnitTypeLookupDto>(
-            ObjectMapper.Map<List<UnitType>, List<UnitTypeLookupDto>>(unitTypes)
-        );
+        return new ListResultDto<UnitTypeLookupDto>(cacheItem.Items);
     }
-
     public async override Task<UnitTypeDto> CreateAsync(CreateAndUpdateUnitTypeDto input)
     {
         var entity = await _unitTypeManager.CreateAsync(input.UnitTypeCode,

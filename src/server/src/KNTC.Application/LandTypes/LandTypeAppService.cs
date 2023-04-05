@@ -1,6 +1,7 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,10 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace KNTC.LandTypes;
 
@@ -21,13 +24,15 @@ public class LandTypeAppService : CrudAppService<
             CreateAndUpdateLandTypeDto>, ILandTypeAppService
 {
     private readonly LandTypeManager _landTypeManager;
-    public LandTypeAppService(IRepository<LandType, int> repository, LandTypeManager landTypeManager) : base(repository)
+    private readonly IDistributedCache<LandTypeLookupCache> _cache;
+    public LandTypeAppService(IRepository<LandType, int> repository, LandTypeManager landTypeManager, IDistributedCache<LandTypeLookupCache> cache) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.LandTypePermission.Create;
         UpdatePolicyName = KNTCPermissions.LandTypePermission.Edit;
         DeletePolicyName = KNTCPermissions.LandTypePermission.Delete;
         _landTypeManager = landTypeManager;
+        _cache = cache;
     }
     public async override Task<PagedResultDto<LandTypeDto>> GetListAsync(GetLandTypeListDto input)
     {
@@ -65,11 +70,20 @@ public class LandTypeAppService : CrudAppService<
     }
     public async Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync()
     {
-        var landTypes = await Repository.GetListAsync(x => x.Status == Status.Active);
+        var cacheItem = await _cache.GetOrAddAsync(
+        "LandTypeLookup",
+        async () =>
+        {
+            var entities = await Repository.GetListAsync(x => x.Status == Status.Active);
+            var dtos = ObjectMapper.Map<List<LandType>, List<LandTypeLookupDto>>(entities);
+            return new LandTypeLookupCache() { Items = dtos };
+        },
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+        });
 
-        return new ListResultDto<LandTypeLookupDto>(
-            ObjectMapper.Map<List<LandType>, List<LandTypeLookupDto>>(landTypes)
-        );
+        return new ListResultDto<LandTypeLookupDto>(cacheItem.Items);
     }
 
     public async override Task<LandTypeDto> CreateAsync(CreateAndUpdateLandTypeDto input)
