@@ -96,6 +96,7 @@ public class DocumentTypeAppService : CrudAppService<
                                                             input.OrderIndex,
                                                             input.Status);
         await Repository.InsertAsync(entity);
+        await _cache.RemoveAsync("DocumentTypeLookup");
         return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
 
     }
@@ -111,14 +112,20 @@ public class DocumentTypeAppService : CrudAppService<
                                               input.OrderIndex,
                                               input.Status);
         await Repository.UpdateAsync(entity);
+        await _cache.RemoveAsync("DocumentTypeLookup");
         return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
     }
 
-
+    public override async Task DeleteAsync(int id)
+    {
+        await Repository.DeleteAsync(id);
+        await _cache.RemoveAsync("DocumentTypeLookup");
+    }
     [Authorize(KNTCPermissions.DocumentTypePermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);
+        await _cache.RemoveAsync("DocumentTypeLookup");
     }
 }
 

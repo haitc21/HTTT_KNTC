@@ -98,6 +98,7 @@ public class UnitTypeAppService : CrudAppService<
                                                           input.OrderIndex,
                                                           input.Status);
         await Repository.InsertAsync(entity);
+        await _cache.RemoveAsync("UnitTypeLookup");
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
 
@@ -112,13 +113,20 @@ public class UnitTypeAppService : CrudAppService<
                                            input.OrderIndex,
                                            input.Status);
         await Repository.UpdateAsync(entity);
+        await _cache.RemoveAsync("UnitTypeLookup");
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
+    }
+    public override async Task DeleteAsync(int id)
+    {
+        await Repository.DeleteAsync(id);
+        await _cache.RemoveAsync("UnitTypeLookup");
     }
 
     [Authorize(KNTCPermissions.UnitTypePermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);
+        await _cache.RemoveAsync("UnitTypeLookup");
     }
 }
 

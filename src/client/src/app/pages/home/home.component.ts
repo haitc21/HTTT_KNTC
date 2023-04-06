@@ -1,21 +1,14 @@
-import { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
 import { Subject, takeUntil } from 'rxjs';
-import { UtilityService } from 'src/app/shared/services/utility.service';
 import { UnitLookupDto } from '@proxy/units/models';
-import { LinhVuc, LoaiKetQua, LoaiVuViec, SpatialDatas } from '@proxy';
 import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
-import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
 import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
-import { DialogService } from 'primeng/dynamicdialog';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { MenuItem } from 'primeng/api';
 
 @Component({
@@ -89,11 +82,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private dialogService: DialogService,
-    private notificationService: NotificationService,
     private oAuthService: OAuthService,
     private spatialDataService: SpatialDataService,
-    private utilService: UtilityService,
     private summaryService: SummaryService
   ) {}
 
@@ -127,39 +117,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.toggleBlockUI(false);
         },
       });
-  }
-
-  viewDetail(row) {
-    if (!row) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
-      return;
-    }
-    if (row.loaiVuViec == LoaiVuViec.KhieuNai) {
-      const ref = this.dialogService.open(ComplainDetailComponent, {
-        height: '80vh',
-        data: {
-          id: row.id,
-          loaiVuViec: LoaiVuViec.KhieuNai,
-          linhVuc: row.linhVuc,
-          mode: 'view',
-        },
-        header: `Chi tiết khiếu nại/khiếu kiện "${row.tieuDe}"`,
-        width: DIALOG_BG,
-      });
-    }
-    if (row.loaiVuViec == LoaiVuViec.ToCao) {
-      const ref = this.dialogService.open(DenounceDetailComponent, {
-        height: '80vh',
-        data: {
-          id: row.id,
-          loaiVuViec: LoaiVuViec.ToCao,
-          linhVuc: row.linhVuc,
-          mode: 'view',
-        },
-        header: `Chi tiết đơn tố cáo "${row.tieuDe}"`,
-        width: DIALOG_BG,
-      });
-    }
   }
 
   toggleMenuLeft() {

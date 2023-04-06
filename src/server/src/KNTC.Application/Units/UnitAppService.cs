@@ -1,7 +1,10 @@
-﻿using KNTC.Localization;
+﻿using JetBrains.Annotations;
+using KNTC.CategoryUnitTypes;
+using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
+using NPOI.POIFS.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -112,6 +115,7 @@ public class UnitAppService : CrudAppService<
                                                    input.OrderIndex,
                                                    input.Status);
         await Repository.InsertAsync(entity);
+        await _cache.RemoveAsync(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
 
@@ -128,12 +132,26 @@ public class UnitAppService : CrudAppService<
                                        input.OrderIndex,
                                        input.Status);
         await Repository.UpdateAsync(entity);
+        await _cache.RemoveAsync(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
 
+    public override async Task DeleteAsync(int id)
+    {
+        var entity = await Repository.GetAsync(id, false);
+        await _cache.RemoveAsync(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
+        await Repository.DeleteAsync(id);
+    }
     [Authorize(KNTCPermissions.UnitPermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
+        var lstCache = new List<UnitCacheKey>();
+        foreach (var id in ids)
+        {
+            var entity = await Repository.GetAsync(id, false);
+            lstCache.Add(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
+        }
+        await _cache.RemoveManyAsync(lstCache);
         await Repository.DeleteManyAsync(ids);
     }
 }
