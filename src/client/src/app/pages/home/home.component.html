@@ -105,14 +105,14 @@
     </div>
     <div style="width: 99%" class="card">
       <p-breadcrumb [home]="home"></p-breadcrumb>
-      <p-divider align="left">
+      <!-- <p-divider align="left">
         <div class="inline-flex align-items-center">
           <i class="pi pi-map mr-2"></i>
           <b>Đơn thư khiếu nại - tố cáo</b>
         </div>    
-      </p-divider>
+      </p-divider> -->
       <p-panel #pnl>        
-        <app-map [data]="dataMap" heightMap="80vh" [zoomLv]="12"></app-map>
+        <app-map [data]="dataMap" heightMap="80vh" [zoomLv]="10"></app-map>
         <!-- ----------------------------------------------------------------------- -->
         <p-blockUI [target]="pnl" [blocked]="blockedPanel">
           <p-progressSpinner

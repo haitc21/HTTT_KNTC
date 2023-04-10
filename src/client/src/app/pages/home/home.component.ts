@@ -4,7 +4,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
 import { Subject, takeUntil } from 'rxjs';
 import { UnitLookupDto } from '@proxy/units/models';
-import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
+import { GetSummaryListDto, SummaryDto, SummaryMapDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   home: MenuItem;
 
   blockedPanel = false;
-  dataMap: SummaryDto[] = [];
+  dataMap: SummaryMapDto[] = [];
 
   filter: GetSummaryListDto;
 
@@ -109,7 +109,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       .getMap(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: SummaryDto[]) => {
+        next: (response: SummaryMapDto[]) => {
           this.dataMap = response;
           this.toggleBlockUI(false);
         },

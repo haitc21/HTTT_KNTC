@@ -1,4 +1,4 @@
-import type { GetSumaryMapDto, GetSummaryListDto, SummaryChartDto, SummaryDto } from './models';
+import type { GetSumaryMapDto, GetSummaryListDto, SummaryChartDto, SummaryDto, SummaryMapDto } from './models';
 import { RestService } from '@abp/ng.core';
 import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -37,10 +37,10 @@ export class SummaryService {
   
 
   getMap = (input: GetSumaryMapDto) =>
-    this.restService.request<any, SummaryDto[]>({
+    this.restService.request<any, SummaryMapDto[]>({
       method: 'GET',
       url: '/api/app/summary/map',
-      params: { keyword: input.keyword, landComplain: input.landComplain, enviromentComplain: input.enviromentComplain, waterComplain: input.waterComplain, mineralComplain: input.mineralComplain, landDenounce: input.landDenounce, enviromentDenounce: input.enviromentDenounce, waterDenounce: input.waterDenounce, mineralDenounce: input.mineralDenounce, maTinhTP: input.maTinhTP, maQuanHuyen: input.maQuanHuyen, maXaPhuongTT: input.maXaPhuongTT, fromDate: input.fromDate, toDate: input.toDate, ketQua: input.ketQua, congKhai: input.congKhai },
+      params: { landComplain: input.landComplain, enviromentComplain: input.enviromentComplain, waterComplain: input.waterComplain, mineralComplain: input.mineralComplain, landDenounce: input.landDenounce, enviromentDenounce: input.enviromentDenounce, waterDenounce: input.waterDenounce, mineralDenounce: input.mineralDenounce, maTinhTP: input.maTinhTP, maQuanHuyen: input.maQuanHuyen, maXaPhuongTT: input.maXaPhuongTT, fromDate: input.fromDate, toDate: input.toDate, ketQua: input.ketQua, congKhai: input.congKhai, keyword: input.keyword },
     },
     { apiName: this.apiName });
 

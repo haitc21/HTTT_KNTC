@@ -17,6 +17,10 @@ using Volo.Abp.ObjectMapping;
 using Microsoft.AspNetCore.Authorization;
 using KNTC.Complains;
 using KNTC.Denounces;
+using Volo.Abp.Caching;
+using KNTC.CategoryUnitTypes;
+using Microsoft.Extensions.Caching.Distributed;
+using NPOI.POIFS.Properties;
 
 namespace KNTC.Summaries;
 
@@ -27,17 +31,20 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     private readonly IRepository<Unit, int> _unitRepo;
     private readonly IComplainRepository _complainRepo;
     private readonly IDenounceRepository _denounceRepo;
+    private readonly IDistributedCache<SummaryMapCache, GetSumaryMapDto> _cache;
     public SummaryAppService(ISummaryRepository summaryRepo,
         IHostEnvironment env,
         IRepository<Unit, int> unitRepo,
         IComplainRepository complainRepo,
-        IDenounceRepository denounceRepo)
+        IDenounceRepository denounceRepo,
+        IDistributedCache<SummaryMapCache, GetSumaryMapDto> cache)
     {
         _summaryRepo = summaryRepo;
         _env = env;
         _unitRepo = unitRepo;
         _complainRepo = complainRepo;
         _denounceRepo = denounceRepo;
+        _cache = cache;
     }
 
     public async Task<PagedResultDto<SummaryDto>> GetListAsync(GetSummaryListDto input)
@@ -78,13 +85,24 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
        );
     }
 
-    public async Task<List<SummaryDto>> GetMapAsync(GetSumaryMapDto input)
+    public async Task<List<SummaryMapDto>> GetMapAsync(GetSumaryMapDto input)
     {
         var userId = CurrentUser.Id;
         if (userId == null)
         {
             input.CongKhai = true;
         }
+        var cacheItem = await _cache.GetOrAddAsync(
+        input,
+        async () => await GetDataMap(input),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(30)
+        });
+        return cacheItem.Items;
+    }
+    private async Task<SummaryMapCache> GetDataMap(GetSumaryMapDto input)
+    {
         var query = await _summaryRepo.GetListAsync(input.LandComplain,
                                                     input.EnviromentComplain,
                                                     input.WaterComplain,
@@ -95,14 +113,17 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                                                     input.MineralDenounce,
                                                     input.Keyword,
                                                     input.KetQua,
-                                                    input.maTinhTP,
-                                                    input.maQuanHuyen,
-                                                    input.maXaPhuongTT,
+                                                    input.MaTinhTP,
+                                                    input.MaQuanHuyen,
+                                                    input.MaXaPhuongTT,
                                                     input.FromDate,
                                                     input.ToDate,
                                                     input.CongKhai);
-        var result = await AsyncExecuter.ToListAsync(query);
-        return ObjectMapper.Map<List<Summary>, List<SummaryDto>>(result);
+        var entities = await AsyncExecuter.ToListAsync(query);
+        return new SummaryMapCache()
+        {
+            Items = ObjectMapper.Map<List<Summary>, List<SummaryMapDto>>(entities)
+        };
     }
 
     [Authorize]
@@ -259,6 +280,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     public async Task<SummaryChartDto> GetChartAsync()
     {
         var result = new SummaryChartDto();
+
         result.LandComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai);
         result.EnviromentComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong);
         result.WaterComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc);

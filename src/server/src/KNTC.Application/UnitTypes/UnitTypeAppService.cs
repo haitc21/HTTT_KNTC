@@ -76,7 +76,7 @@ public class UnitTypeAppService : CrudAppService<
     public async Task<ListResultDto<UnitTypeLookupDto>> GetLookupAsync()
     {
         var cacheItem = await _cache.GetOrAddAsync(
-        "UnitTypeLookup",
+        "All",
         async () =>
         {
             var entities = await Repository.GetListAsync(x => x.Status == Status.Active);
@@ -98,7 +98,7 @@ public class UnitTypeAppService : CrudAppService<
                                                           input.OrderIndex,
                                                           input.Status);
         await Repository.InsertAsync(entity);
-        await _cache.RemoveAsync("UnitTypeLookup");
+        await _cache.RemoveAsync("All");
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
 
@@ -113,20 +113,20 @@ public class UnitTypeAppService : CrudAppService<
                                            input.OrderIndex,
                                            input.Status);
         await Repository.UpdateAsync(entity);
-        await _cache.RemoveAsync("UnitTypeLookup");
+        await _cache.RemoveAsync("All");
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);
-        await _cache.RemoveAsync("UnitTypeLookup");
+        await _cache.RemoveAsync("All");
     }
 
     [Authorize(KNTCPermissions.UnitTypePermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);
-        await _cache.RemoveAsync("UnitTypeLookup");
+        await _cache.RemoveAsync("All");
     }
 }
 

@@ -4,7 +4,6 @@ import type { LoaiVuViec } from '../loai-vu-viec.enum';
 import type { LinhVuc } from '../linh-vuc.enum';
 
 export interface GetSumaryMapDto {
-  keyword?: string;
   landComplain: boolean;
   enviromentComplain: boolean;
   waterComplain: boolean;
@@ -20,6 +19,7 @@ export interface GetSumaryMapDto {
   toDate?: string;
   ketQua?: LoaiKetQua;
   congKhai?: boolean;
+  keyword?: string;
 }
 
 export interface GetSummaryListDto extends BaseListFilterDto {
@@ -64,6 +64,13 @@ export interface SummaryDto {
   thoiGianHenTraKQ?: string;
   boPhanDangXL?: string;
   ketQua?: LoaiKetQua;
+  duLieuToaDo?: string;
+  duLieuHinhHoc?: string;
+}
+
+export interface SummaryMapDto {
+  id?: string;
+  loaiVuViec: LoaiVuViec;
   duLieuToaDo?: string;
   duLieuHinhHoc?: string;
 }

@@ -1,103 +1,111 @@
-<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
-  <div class="grid" style="width: 250px; max-height: 250px; overflow-y: auto">
-    <p-panel>
-      <ng-template pTemplate="header">
-        <div class="flex justify-content-center col-12">
-          <span class="p-link map-popup-header" (click)="viewDetail()">{{ hoSo.tieuDe }}</span>
+<ng-container *ngIf="hoSo">
+  <form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
+    <div class="grid" style="width: 250px; max-height: 250px; overflow-y: auto">
+      <p-panel #pnlDetail [collapsed]="false">
+        <ng-template pTemplate="header">
+          <div class="flex justify-content-center col-12">
+            <span class="p-link map-popup-header" (click)="viewDetail()">{{ hoSo.tieuDe }}</span>
+          </div>
+        </ng-template>
+        <!-- -------------------------------maHoSo--------------------------------------------------- -->
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <input
+              id="maHoSo"
+              formControlName="maHoSo"
+              type="text"
+              pInputText
+              [style]="{ width: '100%' }"
+            />
+            <label for="name">Mã hồ sơ </label>
+          </span>
         </div>
-      </ng-template>
-      <!-- -------------------------------maHoSo--------------------------------------------------- -->
-      <div class="field col-12 md:col-12">
-        <span class="p-float-label">
-          <input
-            id="maHoSo"
-            formControlName="maHoSo"
-            type="text"
-            pInputText
-            [style]="{ width: '100%' }"
-          />
-          <label for="name">Mã hồ sơ </label>
-        </span>
-      </div>
-      <!-- ----------------------------nguoiNopDon---------------------------=----------------------------- -->
-      <div class="field col-12 md:col-12">
-        <span class="p-float-label">
-          <input
-            id="nguoiNopDon"
-            formControlName="nguoiNopDon"
-            type="text"
-            pInputText
-            [style]="{ width: '100%' }"
-          />
-          <label for="nguoiNopDon">Người nộp đơn </label>
-        </span>
-      </div>
-      <!-- ------------------------------dienThoai---------------------------------------------------- -->
-      <div class="field col-12 md:col-12">
-        <span class="p-float-label">
-          <input id="dienThoai" formControlName="dienThoai" type="text" pInputText class="w-full" />
-          <label for="phoneNumber">Số ĐT</label>
-        </span>
-      </div>
-      <!-- ---------------------------------thoiGianTiepNhan------------------------------------------------- -->
-      <div class="field col-12 md:col-12">
-        <span class="p-float-label">
-          <p-calendar
-            id="thoiGianTiepNhan"
-            formControlName="thoiGianTiepNhan"
-            appendTo="body"
-            dateFormat="dd/mm/yy"
-            [showClear]="true"
-            showTime="true"
-            [hourFormat]="24"
-          ></p-calendar>
-          <label for="thoiGianTiepNhan">Thời gian tiếp nhận</label>
-        </span>
-      </div>
-      <!-- ---------------------------------thoiGianHenTraKQ------------------------------------------------- -->
-      <div class="field col-12 md:col-12">
-        <span class="p-float-label">
-          <p-calendar
-            id="thoiGianHenTraKQ"
-            formControlName="thoiGianHenTraKQ"
-            appendTo="body"
-            dateFormat="dd/mm/yy"
-            [showClear]="true"
-            showTime="true"
-            [hourFormat]="24"
-          ></p-calendar>
-          <label for="thoiGianHenTraKQ">Thời gian hẹn trả kết quả</label>
-        </span>
-      </div>
-      <!-- ----------------------------boPhanDangXL---------------------------=----------------------------- -->
-      <div class="field col-12 md:col-12">
-        <span class="p-float-label">
-          <input
-            id="boPhanDangXL"
-            formControlName="boPhanDangXL"
-            type="text"
-            pInputText
-            [style]="{ width: '100%' }"
-          />
-          <label for="boPhanDangXL">Bộ phận đang XL </label>
-        </span>
-      </div>
-      <!-- ----------------------------ketQua---------------------------=----------------------------- -->
-      <div class="field col-12 md:col-12">
-        <span class="p-float-label">
-          <p-dropdown
-            id="ketQua"
-            formControlName="ketQua"
-            [options]="loaiKQOPtions"
-            optionLabel="text"
-            optionValue="value"
-            [showClear]="true"
-            [autoDisplayFirst]="false"
-            styleClass="w-full"
-          ></p-dropdown>
-          <label for="ketQua">Kết uqả</label>
-        </span>
-      </div>
-    </p-panel>
-  </div>
-</form>
+        <!-- ----------------------------nguoiNopDon---------------------------=----------------------------- -->
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <input
+              id="nguoiNopDon"
+              formControlName="nguoiNopDon"
+              type="text"
+              pInputText
+              [style]="{ width: '100%' }"
+            />
+            <label for="nguoiNopDon">Người nộp đơn </label>
+          </span>
+        </div>
+        <!-- ------------------------------dienThoai---------------------------------------------------- -->
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <input
+              id="dienThoai"
+              formControlName="dienThoai"
+              type="text"
+              pInputText
+              class="w-full"
+            />
+            <label for="phoneNumber">Số ĐT</label>
+          </span>
+        </div>
+        <!-- ---------------------------------thoiGianTiepNhan------------------------------------------------- -->
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <p-calendar
+              id="thoiGianTiepNhan"
+              formControlName="thoiGianTiepNhan"
+              appendTo="body"
+              dateFormat="dd/mm/yy"
+              [showClear]="true"
+              showTime="true"
+              [hourFormat]="24"
+            ></p-calendar>
+            <label for="thoiGianTiepNhan">Thời gian tiếp nhận</label>
+          </span>
+        </div>
+        <!-- ---------------------------------thoiGianHenTraKQ------------------------------------------------- -->
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <p-calendar
+              id="thoiGianHenTraKQ"
+              formControlName="thoiGianHenTraKQ"
+              appendTo="body"
+              dateFormat="dd/mm/yy"
+              [showClear]="true"
+              showTime="true"
+              [hourFormat]="24"
+            ></p-calendar>
+            <label for="thoiGianHenTraKQ">Thời gian hẹn trả kết quả</label>
+          </span>
+        </div>
+        <!-- ----------------------------boPhanDangXL---------------------------=----------------------------- -->
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <input
+              id="boPhanDangXL"
+              formControlName="boPhanDangXL"
+              type="text"
+              pInputText
+              [style]="{ width: '100%' }"
+            />
+            <label for="boPhanDangXL">Bộ phận đang XL </label>
+          </span>
+        </div>
+        <!-- ----------------------------ketQua---------------------------=----------------------------- -->
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <p-dropdown
+              id="ketQua"
+              formControlName="ketQua"
+              [options]="loaiKQOPtions"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+            ></p-dropdown>
+            <label for="ketQua">Kết uqả</label>
+          </span>
+        </div>
+      </p-panel>
+    </div>
+  </form>
+</ng-container>

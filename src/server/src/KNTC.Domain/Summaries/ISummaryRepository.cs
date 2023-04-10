@@ -18,10 +18,10 @@ public interface ISummaryRepository
                                            bool mineralDenounce,
                                            string keyword,
                                            LoaiKetQua? ketQua,
-                                           int? maTinhTp,
+                                           int? maTinhTP,
                                            int? maQuanHuyen,
                                            int? maXaPhuongTT,
-                                           DateTime? FromDate,
-                                           DateTime? ToDate,
+                                           DateTime? fromDate,
+                                           DateTime? toDate,
                                            bool? congKhai);
 }

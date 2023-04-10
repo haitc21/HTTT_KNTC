@@ -3,7 +3,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 
 namespace KNTC.CategoryUnitTypes;
-
+[CacheName("UnitTypeLookup")]
 public class UnitTypeLookupCache
 {
     public List<UnitTypeLookupDto> Items { get; set; }

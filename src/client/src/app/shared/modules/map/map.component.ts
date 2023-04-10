@@ -16,7 +16,7 @@ import { LoaiVuViec } from '@proxy';
 import * as L from 'leaflet';
 import 'leaflet.locatecontrol';
 import { v4 as uuidv4 } from 'uuid';
-import { SummaryDto } from '@proxy/summaries';
+import { SummaryDto, SummaryMapDto } from '@proxy/summaries';
 import { MapPopupComponent } from '../map-popup/map-popup.component';
 
 const blueIcon = new L.Icon({
@@ -40,18 +40,18 @@ const redIcon = new L.Icon({
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements AfterViewInit, OnChanges {
-  @Input() data: SummaryDto[] = [];
+  @Input() data: SummaryMapDto[] = [];
   @Input() spatialData: any[];
   @Input() heightMap: string = '600px';
-  @Input() zoomLv: number = 11;
+  @Input() zoomLv: number = 10;
   @Input() duLieuToaDo: string;
   @Input() loaiVuViec: LoaiVuViec = LoaiVuViec.KhieuNai;
 
   idMap: string = uuidv4();
   map: L.Map;
 
-  khieunai: any;
-  tocao: any;
+  // khieunai: any;
+  // tocao: any;
   quyhoach: any;
 
   // @ViewChild('popup', { read: ViewContainerRef }) popupContainer: ViewContainerRef;
@@ -99,13 +99,13 @@ export class MapComponent implements AfterViewInit, OnChanges {
       this.renderSpatialData(changes.spatialData.currentValue);
     }
 
-    if (
-      changes.duLieuToaDo &&
-      changes.duLieuToaDo.currentValue &&
-      !changes.duLieuToaDo.isFirstChange()
-    ) {
-      this.mảkerInToaDo();
-    }
+    // if (
+    //   changes.duLieuToaDo &&
+    //   changes.duLieuToaDo.currentValue &&
+    //   !changes.duLieuToaDo.isFirstChange()
+    // ) {
+    //   this.mảkerInToaDo();
+    // }
   }
 
   initMap() {
@@ -125,8 +125,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
       maxZoom: 18,
     })
     */
-    this.khieunai = L.layerGroup();
-    this.tocao = L.layerGroup();
+    // this.khieunai = L.layerGroup();
+    // this.tocao = L.layerGroup();
 
     const mbAttr =
       'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
@@ -151,7 +151,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.map = L.map(this.idMap, {
       center: center,
       zoom: this.zoomLv,
-      layers: [osm, this.khieunai],
+      // layers: [osm, this.khieunai],
+      layers: [osm],
     });
 
     let baseMaps = {
@@ -181,8 +182,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.quyhoach = L.geoJSON(geojsonFeature, { style: myStyle });
 
     let overlayMaps = {
-      'Khiếu nại': this.khieunai,
-      'Tố cáo': this.tocao,
+      // 'Khiếu nại': this.khieunai,
+      // 'Tố cáo': this.tocao,
       'Quy hoạch': this.quyhoach,
     };
 
@@ -268,7 +269,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     });
   }
 
-  renderMarkers(data: SummaryDto[]) {
+  renderMarkers(data: SummaryMapDto[]) {
     if (!data || data.length == 0) return;
     this.map.eachLayer(layer => {
       if (!(layer instanceof L.TileLayer)) {
@@ -283,16 +284,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
     //Add markers
     data
       .filter(x => x.duLieuToaDo != null)
-      .forEach(hoSo => {
-        const marker = L.marker(this.convertStringCoordiate(hoSo.duLieuToaDo), {
-          icon: hoSo.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
+      .forEach(dataMap => {
+        const marker = L.marker(this.convertStringCoordiate(dataMap.duLieuToaDo), {
+          icon: dataMap.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
         });
 
-        marker.bindPopup(this.getPopup(hoSo), customOptions);
+        marker.bindPopup(this.getPopup(dataMap), customOptions);
 
-        //marker.addTo(this.map);
-        if (hoSo.loaiVuViec == LoaiVuViec.KhieuNai) marker.addTo(this.khieunai);
-        else if (hoSo.loaiVuViec == LoaiVuViec.ToCao) marker.addTo(this.tocao);
+        marker.addTo(this.map);
+        // if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) marker.addTo(this.khieunai);
+        // else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) marker.addTo(this.tocao);
       });
   }
 
@@ -311,10 +312,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
     let point = cor.split(',');
     return [+point[0], +point[1]];
   }
-  getPopup(hoSo: SummaryDto): HTMLElement {
+  getPopup(dataMap: SummaryMapDto): HTMLElement {
     const factory = this.componentFactoryResolver.resolveComponentFactory(MapPopupComponent);
     this.popupComponentRef = factory.create(this.popupContainer.injector);
-    this.popupComponentRef.instance.hoSo = hoSo;
+    this.popupComponentRef.instance.dataMap = dataMap;
     this.appRef.attachView(this.popupComponentRef.hostView); // Đính kèm view của component
     return this.popupComponentRef.location.nativeElement;
   }

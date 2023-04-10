@@ -87,6 +87,7 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<CreateAndUpdateSpatialDataDto, SpatialData>();
 
         CreateMap<Summary, SummaryDto>();
+        CreateMap<Summary, SummaryMapDto>();
         CreateMap<Summary, SummaryExcelDto>()
             .ForMember(dto => dto.LoaiVuViec, opt => opt.MapFrom(c => c.LoaiVuViec.ToVNString()))
             .ForMember(dto => dto.LinhVuc, opt => opt.MapFrom(c => c.LinhVuc.ToVNString()))

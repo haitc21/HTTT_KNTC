@@ -71,7 +71,7 @@ public class LandTypeAppService : CrudAppService<
     public async Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync()
     {
         var cacheItem = await _cache.GetOrAddAsync(
-        "LandTypeLookup",
+        "All",
         async () =>
         {
             var entities = await Repository.GetListAsync(x => x.Status == Status.Active);
@@ -94,7 +94,7 @@ public class LandTypeAppService : CrudAppService<
                                                           input.OrderIndex,
                                                           input.Status);
         await Repository.InsertAsync(entity);
-        await _cache.RemoveAsync("LandTypeLookup");
+        await _cache.RemoveAsync("All");
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
 
@@ -109,20 +109,20 @@ public class LandTypeAppService : CrudAppService<
                                            input.OrderIndex,
                                            input.Status);
         await Repository.UpdateAsync(entity);
-        await _cache.RemoveAsync("LandTypeLookup");
+        await _cache.RemoveAsync("All");
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);
-        await _cache.RemoveAsync("LandTypeLookup");
+        await _cache.RemoveAsync("All");
     }
 
     [Authorize(KNTCPermissions.LandTypePermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
         await Repository.DeleteManyAsync(ids);
-        await _cache.RemoveAsync("LandTypeLookup");
+        await _cache.RemoveAsync("All");
     }
 }
 
