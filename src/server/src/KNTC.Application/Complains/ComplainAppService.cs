@@ -264,7 +264,7 @@ public class ComplainAppService : CrudAppService<
     }
 
 
-    [Authorize(KNTCPermissions.ComplainsPermission.Default)]
+    //[Authorize(KNTCPermissions.ComplainsPermission.Default)]
     public async Task<byte[]> GetExcelAsync(GetComplainListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())

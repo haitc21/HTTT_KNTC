@@ -126,7 +126,6 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         };
     }
 
-    [Authorize]
     public async Task<byte[]> GetExcelAsync(GetSummaryListDto input)
     {
         var userId = CurrentUser.Id;

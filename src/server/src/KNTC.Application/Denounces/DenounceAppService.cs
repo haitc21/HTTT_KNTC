@@ -253,9 +253,7 @@ public class DenounceAppService : CrudAppService<
         await _denounceRepo.DeleteManyAsync(ids);
     }
 
-
-
-    [Authorize(KNTCPermissions.DenouncesPermission.Default)]
+    //[Authorize(KNTCPermissions.DenouncesPermission.Default)]
     public async Task<byte[]> GetExcelAsync(GetDenounceListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())

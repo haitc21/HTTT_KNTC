@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -32,13 +33,19 @@ public class Program
         {
             Log.Information("Starting KNTC.HttpApi.Host.");
             var builder = WebApplication.CreateBuilder(args);
-
             builder.WebHost.ConfigureKestrel(options =>
             {
                 options.Limits.MaxRequestBodySize = null; // không giới hạn dung lượng request. Mặc định 30MB
             });
 
-            builder.Host.AddAppSettingsSecretsJson()
+            builder.Host.ConfigureAppConfiguration((context, config) =>
+            {
+                var env = context.HostingEnvironment;
+                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables();
+            })
+                .AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
             await builder.AddApplicationAsync<KNTCHttpApiHostModule>();
