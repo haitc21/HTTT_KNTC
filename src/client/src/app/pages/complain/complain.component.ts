@@ -380,7 +380,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
 
   showAddModal() {
     const ref = this.dialogService.open(ComplainDetailComponent, {
-      height: '80vh',
+      height: '92vh',
       header: 'Thêm khiếu nại/khiếu kiện',
       width: DIALOG_BG,
       data: {
@@ -432,7 +432,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     }
 
     const ref = this.dialogService.open(ComplainDetailComponent, {
-      height: '80vh',
+      height: '92vh',
       data: {
         id: row.id,
         loaiVuViec: LoaiVuViec.KhieuNai,
@@ -460,7 +460,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     }
 
     const ref = this.dialogService.open(ComplainDetailComponent, {
-      height: '80vh',
+      height: '92vh',
       data: {
         id: row.id,
         loaiVuViec: LoaiVuViec.KhieuNai,

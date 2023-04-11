@@ -68,3 +68,13 @@ abp generate-proxy -t ng
 
 lẫn .net 6 vs mấy chỗ cũ?
 chạy lệnh dotnet restore cho mấy dự án là ok
+
+1 cậu kiểm tra xem c có changes gì không nếu có thì undo hết
+2 pull code
+3 drop db dùng ssms cho nhanh
+4 chạy update-database
+4 run project DBMigration
+6 vào thư mục git vào scripts chạy lần lượt 3 file sql là xong
+còn 1 bước nữa là clear  cache đi không là k đăng nhập được
+ubuntu
+redis-cli flushall
