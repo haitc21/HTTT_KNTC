@@ -4,6 +4,8 @@ using KNTC.FileAttachments;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
+using KNTC.RedisCache;
+using KNTC.Summaries;
 using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -37,6 +39,7 @@ public class DenounceAppService : CrudAppService<
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
     private readonly IHostEnvironment _env;
     private readonly IRepository<Unit, int> _unitRepo;
+    private readonly IRedisCacheService _cacheService;
 
     public DenounceAppService(IRepository<Denounce, Guid> repository,
         IDenounceRepository denounceRepo,
@@ -45,7 +48,8 @@ public class DenounceAppService : CrudAppService<
         IBlobContainer<FileAttachmentContainer> blobContainer,
         FileAttachmentManager fileAttachmentManager,
         IHostEnvironment env,
-        IRepository<Unit, int> unitRepo) : base(repository)
+        IRepository<Unit, int> unitRepo,
+        IRedisCacheService cacheService = null) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
@@ -56,6 +60,7 @@ public class DenounceAppService : CrudAppService<
         _fileAttachmentManager = fileAttachmentManager;
         _env = env;
         _unitRepo = unitRepo;
+        _cacheService = cacheService;
     }
 
     [AllowAnonymous]
@@ -175,6 +180,7 @@ public class DenounceAppService : CrudAppService<
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
         }
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
         return result;
     }
     [Authorize(KNTCPermissions.DenouncesPermission.Default)]
@@ -226,6 +232,7 @@ public class DenounceAppService : CrudAppService<
                                           ketQua: input.KetQua,
                                           congKhai: input.CongKhai);
         await _denounceRepo.UpdateAsync(denounce);
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }
 
@@ -238,6 +245,7 @@ public class DenounceAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
         await _denounceRepo.DeleteAsync(id);
     }
 
@@ -250,6 +258,7 @@ public class DenounceAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
         await _denounceRepo.DeleteManyAsync(ids);
     }
 
