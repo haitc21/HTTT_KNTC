@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.DocumentTypes;
 
-public class DocumentType : FullAuditedAggregateRoot<int>
+public class DocumentType : AuditedAggregateRoot<int>
 {
     public DocumentType()
     {

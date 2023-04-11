@@ -8,7 +8,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.FileAttachments;
 
-public class FileAttachment : FullAuditedAggregateRoot<Guid>
+public class FileAttachment : AuditedAggregateRoot<Guid>
 {
     public FileAttachment()
     {

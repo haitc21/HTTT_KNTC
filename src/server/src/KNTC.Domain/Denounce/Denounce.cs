@@ -8,7 +8,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.Denounces;
 
-public class Denounce : FullAuditedAggregateRoot<Guid>
+public class Denounce : AuditedAggregateRoot<Guid>
 {
     public Denounce()
     {

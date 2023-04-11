@@ -8,7 +8,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.Complains;
 
-public class Complain : FullAuditedAggregateRoot<Guid>
+public class Complain : AuditedAggregateRoot<Guid>
 {
     public Complain()
     {

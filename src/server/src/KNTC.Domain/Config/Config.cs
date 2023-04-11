@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.Configs;
 
-public class Config : FullAuditedAggregateRoot<int>
+public class Config : AuditedAggregateRoot<int>
 {
     public Config()
     {

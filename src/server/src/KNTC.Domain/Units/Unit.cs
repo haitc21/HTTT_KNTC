@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.Units;
 
-public class Unit : FullAuditedAggregateRoot<int>
+public class Unit : AuditedAggregateRoot<int>
 {
     public Unit()
     {

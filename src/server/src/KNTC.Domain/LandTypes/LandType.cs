@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace KNTC.LandTypes;
 
-public class LandType : FullAuditedAggregateRoot<int>
+public class LandType : AuditedAggregateRoot<int>
 {
     public LandType()
     {
