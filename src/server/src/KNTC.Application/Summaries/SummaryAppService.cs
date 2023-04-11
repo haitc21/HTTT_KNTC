@@ -97,7 +97,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         async () => await GetDataMap(input),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(30)
+            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
         });
         return cacheItem.Items;
     }

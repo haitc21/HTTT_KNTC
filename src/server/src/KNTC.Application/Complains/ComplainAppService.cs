@@ -3,6 +3,8 @@ using KNTC.FileAttachments;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
+using KNTC.RedisCache;
+using KNTC.Summaries;
 using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -41,6 +43,7 @@ public class ComplainAppService : CrudAppService<
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
     private readonly IHostEnvironment _env;
     private readonly IRepository<Unit, int> _unitRepo;
+    private readonly IRedisCacheService _cacheService;
 
     public ComplainAppService(IRepository<Complain, Guid> repository,
         IComplainRepository complainRepo,
@@ -49,7 +52,8 @@ public class ComplainAppService : CrudAppService<
         IBlobContainer<FileAttachmentContainer> blobContainer,
         FileAttachmentManager fileAttachmentManager,
         IHostEnvironment env,
-        IRepository<Unit, int> unitRepo) : base(repository)
+        IRepository<Unit, int> unitRepo,
+        IRedisCacheService cacheService = null) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
@@ -61,6 +65,7 @@ public class ComplainAppService : CrudAppService<
         _env = env;
         _unitRepo = unitRepo;
         _unitRepo = unitRepo;
+        _cacheService = cacheService;
     }
     [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
@@ -184,6 +189,7 @@ public class ComplainAppService : CrudAppService<
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
         }
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
         return result;
     }
     [Authorize(KNTCPermissions.ComplainsPermission.Default)]
@@ -236,6 +242,7 @@ public class ComplainAppService : CrudAppService<
                                           KetQua1: input.KetQua1,
                                           KetQua2: input.KetQua2);
         await _complainRepo.UpdateAsync(complain);
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
         return ObjectMapper.Map<Complain, ComplainDto>(complain);
     }
 
@@ -248,6 +255,7 @@ public class ComplainAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
         await _complainRepo.DeleteAsync(id);
     }
 
@@ -260,6 +268,7 @@ public class ComplainAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
         await _complainRepo.DeleteManyAsync(ids);
     }
 

@@ -34,6 +34,7 @@ public class GetSumaryMapDto
     {
         var stringBuilder = new StringBuilder();
         stringBuilder
+            .Append(nameof(SummaryMapCache))
             .Append(LandComplain)
             .Append("_")
             .Append(EnviromentComplain)
