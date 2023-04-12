@@ -356,7 +356,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   }
   showAddModal() {
     const ref = this.dialogService.open(DenounceDetailComponent, {
-      height: '80vh',
+      height: '92vh',
       header: 'Thêm tố cáo',
       width: DIALOG_BG,
       data: {
@@ -407,7 +407,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     }
 
     const ref = this.dialogService.open(DenounceDetailComponent, {
-      height: '80vh',
+      height: '92vh',
       data: {
         id: row.id,
         loaiVuViec: LoaiVuViec.ToCao,
@@ -435,7 +435,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     }
 
     const ref = this.dialogService.open(DenounceDetailComponent, {
-      height: '80vh',
+      height: '92vh',
       data: {
         id: row.id,
         loaiVuViec: LoaiVuViec.ToCao,

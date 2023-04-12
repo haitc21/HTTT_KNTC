@@ -382,7 +382,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     }
     if (row.loaiVuViec == LoaiVuViec.KhieuNai) {
       const ref = this.dialogService.open(ComplainDetailComponent, {
-        height: '80vh',
+        height: '92vh',
         data: {
           id: row.id,
           loaiVuViec: LoaiVuViec.KhieuNai,
@@ -395,7 +395,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     }
     if (row.loaiVuViec == LoaiVuViec.ToCao) {
       const ref = this.dialogService.open(DenounceDetailComponent, {
-        height: '80vh',
+        height: '92vh',
         data: {
           id: row.id,
           loaiVuViec: LoaiVuViec.ToCao,

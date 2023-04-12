@@ -46,7 +46,7 @@ import { DenounceComponent } from './denounce/denounce.component';
 import { DenounceDetailComponent } from './denounce/detail/denounce-detail.component';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
-
+import { AccordionModule } from 'primeng/accordion';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -97,6 +97,7 @@ import { DividerModule } from 'primeng/divider';
     FileUploadModule,
     BreadcrumbModule,
     DividerModule,
+    AccordionModule,
     DialogModule
   ],
   exports: [HomeComponent],

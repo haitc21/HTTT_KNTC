@@ -115,7 +115,7 @@
               styleClass="w-full"
               (onChange)="loadData()"
             ></p-dropdown>
-            <label for="phoneNumber">Coong khai</label>
+            <label for="phoneNumber">Công khai</label>
           </span>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
@@ -180,19 +180,19 @@
         <tr>
           <th class="row-num-column">STT</th>
           <th>Mã hồ sơ</th>
-          <th>Người đề nghị</th>
-          <th>Địa chỉ</th>
+          <th style="width: 100px">Người đề nghị</th>
+          <th style="width: 150px">Địa chỉ</th>
           <th>Số ĐT</th>
-          <th>Nội dung KN/KK</th>
+          <th style="width: 180px">Nội dung KN/KK</th>
           <th>Thời gian nộp</th>
-          <th>Bộ phận đang XL</th>
+          <th style="width: 150px">Bộ phận đang XL</th>
           <th>Ngày hẹn trả KQ</th>
-          <th>Ngày trả KQ lần I</th>
+          <th style="width: 100px">Ngày trả KQ lần I</th>
           <th>KQ GQKN lần I</th>
-          <th>Ngày trả KQ lần II</th>
+          <th style="width: 100px">Ngày trả KQ lần II</th>
           <th>KQ GQKN lần II</th>
-          <th style="width: 150px">Trạng thái</th>
-          <th *ngIf="visibleActionColumn" class="action-column"></th>
+          <th style="width: 100px">Trạng thái</th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -239,7 +239,7 @@
               pRipple
               type="button"
               icon="pi pi-fw pi-cog"
-              [label]="Actions.ACTION"
+              [label]=""
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
