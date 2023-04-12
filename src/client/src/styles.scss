@@ -150,3 +150,29 @@ li {
     margin-left: -10px;*/
   }
 }
+
+.p-float-label input:focus~label, .p-float-label input.p-filled~label, .p-float-label textarea:focus~label, .p-float-label textarea.p-filled~label, .p-float-label .p-inputwrapper-focus~label, .p-float-label .p-inputwrapper-filled~label {
+  top: -.75rem;
+  font-size: 12px;
+}
+.p-float-label input:focus ~ label, .p-float-label input.p-filled ~ label, .p-float-label textarea:focus ~ label, .p-float-label textarea.p-filled ~ label, .p-float-label .p-inputwrapper-focus ~ label, .p-float-label .p-inputwrapper-filled ~ label {
+  top: -0.5rem !important;
+  background-color: #ffffff;
+  padding: 2px 4px;
+  margin-left: -4px;
+  margin-top: 0;
+}
+.p-float-label label {
+  position: absolute;
+  pointer-events: none;
+  top: 50%;
+  margin-top: -.5rem;
+  transition-property: all;
+  transition-timing-function: ease;
+  line-height: 1;
+}
+.p-float-label > label {
+  left: 1rem;
+  // color: rgba(0, 0, 0, 0.6);
+  transition-duration: 0.2s;
+}
