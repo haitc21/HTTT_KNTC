@@ -1,4 +1,4 @@
-<div class="animated fadeIn grid card">
+<div class="animated fadeIn grid">
   <!-- --------------Sidebar--------------------------------------------------------- -->
   <div [@hideColumn]="hideColumnState" class="col-12 md:col-2 home-sidebar">
     <p-card>
@@ -110,24 +110,9 @@
           <i class="pi pi-map mr-2"></i>
           <b>Đơn thư khiếu nại - tố cáo</b>
         </div>    
-      </p-divider> -->
-      <p-panel #pnl>        
+      </p-divider> -->  
         <app-map [data]="dataMap" heightMap="80vh" [zoomLv]="10"></app-map>
         <!-- ----------------------------------------------------------------------- -->
-        <p-blockUI [target]="pnl" [blocked]="blockedPanel">
-          <p-progressSpinner
-            [style]="{
-              width: '100px',
-              height: '100px',
-              position: 'absolute',
-              top: '25%',
-              left: '50%'
-            }"
-            strokeWidth="2"
-            animationDuration=".5s"
-          ></p-progressSpinner>
-        </p-blockUI>
-      </p-panel>
     </div>
   </div>
 </div>

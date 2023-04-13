@@ -1,14 +1,23 @@
-<div class="layout-wrapper" [ngClass]="containerClass">
+<p-panel #layoutPnl>
+  <div #layout class="layout-wrapper" [ngClass]="containerClass">
     <app-topbar></app-topbar>
     <div class="layout-sidebar">
-        <app-sidebar></app-sidebar>
+      <app-sidebar></app-sidebar>
     </div>
     <div class="layout-main-container">
-        <div class="layout-main">
-            <router-outlet></router-outlet>
-        </div>
-        <app-footer></app-footer>
+      <div class="layout-main">
+        <router-outlet></router-outlet>
+      </div>
+      <app-footer></app-footer>
     </div>
     <app-config></app-config>
-    <div class="layout-mask"></div>
-</div>
+    <!-- <div class="layout-mask"></div> -->
+  </div>
+  <p-blockUI [target]="layoutPnl" [blocked]="blockedLayout">
+    <p-progressSpinner
+      [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
+      strokeWidth="2"
+      animationDuration=".5s"
+    ></p-progressSpinner>
+  </p-blockUI>
+</p-panel>

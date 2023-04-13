@@ -9,6 +9,7 @@ import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
 import { UnitTypeDetailComponent } from './detail/unit-type-detail.component';
 import { UnitTypeDto, UnitTypeService } from '@proxy/category-unit-types';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-Unit-type',
@@ -39,6 +40,7 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
   actionMenu: MenuItem[];
 
   constructor(
+    public layoutService: LayoutService,
     private unitTypeService: UnitTypeService,
     public dialogService: DialogService,
     private notificationService: NotificationService,
@@ -60,7 +62,7 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.unitTypeService
       .getList({
@@ -73,10 +75,10 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
         next: (response: PagedResultDto<UnitTypeDto>) => {
           this.items = response.items;
           this.totalCount = response.totalCount;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -140,7 +142,7 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
     });
   }
   deleteItemsConfirm(ids: any[]) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.unitTypeService
       .deleteMultiple(ids)
@@ -150,10 +152,10 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
           this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
           this.loadData();
           this.selectedItems = [];
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -171,7 +173,7 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
     });
   }
   deleteRowConfirm(id) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.unitTypeService
       .delete(id)
@@ -181,10 +183,10 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
           this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
           this.loadData();
           this.selectedItems = [];
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -212,17 +214,7 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
         visible: this.hasPermissionDelete,
       },
     ];
-  }
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
-  }
-  ngOnDestroy(): void {
+  } ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

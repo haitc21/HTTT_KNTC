@@ -10,6 +10,7 @@ import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
 import { UnitDetailComponent } from './detail/unit-detail.component';
 import { UnitTypeLookupDto, UnitTypeService } from '@proxy/category-unit-types';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-unit',
@@ -45,6 +46,7 @@ export class UnitComponent implements OnInit, OnDestroy {
   actionMenu: MenuItem[];
 
   constructor(
+    public layoutService: LayoutService,
     private unitService: UnitService,
     public dialogService: DialogService,
     private notificationService: NotificationService,
@@ -63,17 +65,17 @@ export class UnitComponent implements OnInit, OnDestroy {
   }
 
   getOptions() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.unitTypeService
       .getLookup()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<UnitTypeLookupDto>) => {
           this.unitTypeOptions = res.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
@@ -81,18 +83,18 @@ export class UnitComponent implements OnInit, OnDestroy {
   unitTypeChange(id, isFirst: boolean = false) {
     if (!id) return;
     if (id > 1) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(id - 1)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.parentUnitOptions = res.items;
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
             this.parentUnitOptions = [];
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else {
@@ -108,7 +110,7 @@ export class UnitComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.unitService
       .getList({
@@ -123,10 +125,10 @@ export class UnitComponent implements OnInit, OnDestroy {
         next: (response: PagedResultDto<UnitDto>) => {
           this.items = response.items;
           this.totalCount = response.totalCount;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -190,7 +192,7 @@ export class UnitComponent implements OnInit, OnDestroy {
     });
   }
   deleteItemsConfirm(ids: any[]) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.unitService
       .deleteMultiple(ids)
@@ -200,10 +202,10 @@ export class UnitComponent implements OnInit, OnDestroy {
           this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
           this.loadData();
           this.selectedItems = [];
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -221,7 +223,7 @@ export class UnitComponent implements OnInit, OnDestroy {
     });
   }
   deleteRowConfirm(id) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.unitService
       .delete(id)
@@ -231,10 +233,10 @@ export class UnitComponent implements OnInit, OnDestroy {
           this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
           this.loadData();
           this.selectedItems = [];
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -262,17 +264,7 @@ export class UnitComponent implements OnInit, OnDestroy {
         visible: this.hasPermissionDelete,
       },
     ];
-  }
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
-  }
-  ngOnDestroy(): void {
+  } ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

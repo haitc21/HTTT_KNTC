@@ -1,6 +1,6 @@
 import { trigger } from '@angular/animations';
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 export interface AppConfig {
     inputStyle: string;
@@ -24,7 +24,8 @@ interface LayoutState {
     providedIn: 'root',
 })
 export class LayoutService {
-
+    public blockUI$ = new BehaviorSubject<boolean>(false);
+    
     config: AppConfig = {
         ripple: false,
         inputStyle: 'outlined',

@@ -63,7 +63,7 @@
           <th pSortableColumn="landTypeCode">Mã</th>
           <th pSortableColumn="landTypeName">Tên</th>
           <th pSortableColumn="status">Trạng thái</th>
-          <th *ngIf="visibleActionColumn" class="action-column"></th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -119,12 +119,5 @@
       </ng-template>
     </p-table>
 
-    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
-      <p-progressSpinner
-        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
-        strokeWidth="2"
-        animationDuration=".5s"
-      ></p-progressSpinner>
-    </p-blockUI>
   </p-panel>
 </div>

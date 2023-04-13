@@ -17,6 +17,7 @@ import { PermissionGrantComponent } from '../permission-grant/permission-grant.c
 import { UserDetailComponent } from './detail/user-detail.component';
 import { RoleAssignComponent } from './role-assign/role-assign.component';
 import { SetPasswordComponent } from './set-password/set-password.component';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-user',
@@ -57,6 +58,7 @@ export class UserComponent implements OnInit, OnDestroy {
   avatarUrl: any;
 
   constructor(
+    public layoutService: LayoutService,
     private userService: UsersService,
     private roleService: RolesService,
     public dialogService: DialogService,
@@ -76,17 +78,17 @@ export class UserComponent implements OnInit, OnDestroy {
     this.loadData();
   }
   loadOptions() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.roleService
       .getRoleLookup()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         res => {
           this.roleOptions = res.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
@@ -156,7 +158,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.filter = {
       filter: this.keyword,
       skipCount: this.skipCount,
@@ -178,10 +180,10 @@ export class UserComponent implements OnInit, OnDestroy {
             }
           });
           this.totalCount = response.totalCount;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -249,16 +251,16 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   deleteItemsConfirm(ids: any[]) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.userService.deleteMultiple(ids).subscribe({
       next: () => {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
         this.loadData();
         this.selectedItems = [];
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       },
       error: () => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       },
     });
   }
@@ -321,7 +323,7 @@ export class UserComponent implements OnInit, OnDestroy {
     });
   }
   deleteRowConfirm(id) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.userService.delete(id).subscribe({
       next: () => {
@@ -329,10 +331,10 @@ export class UserComponent implements OnInit, OnDestroy {
         this.loadData();
         this.selectedItems = [];
         this.actionItem = null;
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       },
       error: () => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       },
     });
   }
@@ -360,17 +362,7 @@ export class UserComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
-  }
-  ngOnDestroy(): void {
+ ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

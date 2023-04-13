@@ -73,7 +73,7 @@
           <th>Số ĐT</th>
           <th>Ngày sinh</th>
           <th style="width: 150px">Trạng thái</th>
-          <th *ngIf="visibleActionColumn" class="action-column"></th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -112,13 +112,12 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-            <button
+           <button
               #btn
               pButton
               pRipple
               type="button"
               icon="pi pi-fw pi-cog"
-              [label]="Actions.ACTION"
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
@@ -139,14 +138,6 @@
         ></p-paginator>
       </ng-template>
     </p-table>
-
-    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
-      <p-progressSpinner
-        [style]="{ width: '200px', height: '200px', position: 'absolute', top: '25%', left: '50%' }"
-        strokeWidth="2"
-        animationDuration=".5s"
-      ></p-progressSpinner>
-    </p-blockUI>
   </p-panel>
 </div>
 

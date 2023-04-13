@@ -22,6 +22,9 @@ import { AppMenuComponent } from './sidebar/app.menu.component';
 import { AppSidebarComponent } from './sidebar/app.sidebar.component';
 import { AppMenuitemComponent } from './sidebar/app.menuitem.component';
 import { AppTopBarComponent } from './topbar/app.topbar.component';
+import { BlockUIModule } from 'primeng/blockui';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({
   declarations: [
@@ -49,7 +52,10 @@ import { AppTopBarComponent } from './topbar/app.topbar.component';
     PanelMenuModule,
     ButtonModule,
     MenubarModule,
-    AvatarModule
+    AvatarModule,
+    BlockUIModule,
+    ProgressSpinnerModule,
+    PanelModule
   ],
   exports: [AppLayoutComponent],
 })
