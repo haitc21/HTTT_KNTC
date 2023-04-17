@@ -1,6 +1,6 @@
 <ng-container *ngIf="hoSo">
   <form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
-    <div class="grid" style="width: 250px; max-height: 250px; overflow-y: auto">
+    <div class="grid">
       <p-panel #pnlDetail [collapsed]="false">
         <ng-template pTemplate="header">
           <div class="flex justify-content-center col-12">
@@ -8,7 +8,7 @@
           </div>
         </ng-template>
         <!-- -------------------------------maHoSo--------------------------------------------------- -->
-        <div class="field col-12 md:col-12">
+        <div class="field col-12 md:col-6">
           <span class="p-float-label">
             <input
               id="maHoSo"
@@ -21,7 +21,7 @@
           </span>
         </div>
         <!-- ----------------------------nguoiNopDon---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-12">
+        <div class="field col-12 md:col-6">
           <span class="p-float-label">
             <input
               id="nguoiNopDon"
@@ -34,7 +34,7 @@
           </span>
         </div>
         <!-- ------------------------------dienThoai---------------------------------------------------- -->
-        <div class="field col-12 md:col-12">
+        <div class="field col-12 md:col-6">
           <span class="p-float-label">
             <input
               id="dienThoai"
@@ -47,7 +47,7 @@
           </span>
         </div>
         <!-- ---------------------------------thoiGianTiepNhan------------------------------------------------- -->
-        <div class="field col-12 md:col-12">
+        <div class="field col-12 md:col-6">
           <span class="p-float-label">
             <p-calendar
               id="thoiGianTiepNhan"
@@ -62,7 +62,7 @@
           </span>
         </div>
         <!-- ---------------------------------thoiGianHenTraKQ------------------------------------------------- -->
-        <div class="field col-12 md:col-12">
+        <div class="field col-12 md:col-6">
           <span class="p-float-label">
             <p-calendar
               id="thoiGianHenTraKQ"
@@ -77,7 +77,7 @@
           </span>
         </div>
         <!-- ----------------------------boPhanDangXL---------------------------=----------------------------- -->
-        <div class="field col-12 md:col-12">
+        <div class="field col-12 md:col-6">
           <span class="p-float-label">
             <input
               id="boPhanDangXL"
@@ -102,7 +102,7 @@
               [autoDisplayFirst]="false"
               styleClass="w-full"
             ></p-dropdown>
-            <label for="ketQua">Kết uqả</label>
+            <label for="ketQua">Kết quả</label>
           </span>
         </div>
       </p-panel>

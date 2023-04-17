@@ -277,9 +277,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
       }
     });
     let customOptions = {
-      maxWidth: 300,
-      maxHieght: 300,
+      minWidth: 500,
+      maxWidth: 800,      
+      maxHeight: 400,
       className: 'popupCustom',
+      closeOnEscapeKey: true,
     };
     //Add markers
     data
