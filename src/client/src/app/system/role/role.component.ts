@@ -11,6 +11,7 @@ import { RoleDetailComponent } from './detail/role-detail.component';
 import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
 import { ROLE_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-role',
@@ -42,6 +43,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   actionMenu: MenuItem[];
 
   constructor(
+    public layoutService: LayoutService,
     private roleService: RolesService,
     public dialogService: DialogService,
     private notificationService: NotificationService,
@@ -69,7 +71,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   }
 
   loadData() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.roleService
       .getListFilter({
@@ -82,10 +84,10 @@ export class RoleComponent implements OnInit, OnDestroy {
         next: (response: PagedResultDto<RoleDto>) => {
           this.items = response.items;
           this.totalCount = response.totalCount;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -171,7 +173,7 @@ export class RoleComponent implements OnInit, OnDestroy {
     });
   }
   deleteItemsConfirm(ids: any[]) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.roleService
       .deleteMultiple(ids)
@@ -181,10 +183,10 @@ export class RoleComponent implements OnInit, OnDestroy {
           this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
           this.loadData();
           this.selectedItems = [];
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -202,7 +204,7 @@ export class RoleComponent implements OnInit, OnDestroy {
     });
   }
   deleteRowConfirm(id) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.roleService
       .delete(id)
@@ -212,10 +214,10 @@ export class RoleComponent implements OnInit, OnDestroy {
           this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
           this.loadData();
           this.selectedItems = [];
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -252,17 +254,7 @@ export class RoleComponent implements OnInit, OnDestroy {
         visible: this.hasPermissionDelete,
       },
     ];
-  }
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
-  }
-  ngOnDestroy(): void {
+  } ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

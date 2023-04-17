@@ -93,7 +93,7 @@
           <th>Ngày nhận</th>
           <th>Thời gian ban hành</th>
           <th>Thứ tự bút lục</th>
-          <th class="action-column"></th>
+          <th class="action-column">{{Actions.ACTION}}</th>
         </tr>
       </ng-template>
 
@@ -122,10 +122,10 @@
               pRipple
               type="button"
               icon="pi pi-fw pi-cog"
-              [label]="Actions.ACTION"
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu1.toggle($event); setActionItem(row)"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>
@@ -232,7 +232,7 @@
           <th>Ngày nhận</th>
           <th>Thời gian ban hành</th>
           <th>Thứ tự bút lục</th>
-          <th class="action-column"></th>
+          <th class="action-column">{{Actions.ACTION}}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -258,17 +258,16 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-            <button
+           <button
               #btn
               pButton
               pRipple
               type="button"
               icon="pi pi-fw pi-cog"
-              [label]="Actions.ACTION"
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem"
+              style="height: 2rem;"
             ></button>
           </td>
         </tr>
@@ -287,15 +286,10 @@
     </p-table>
 
     <!-- ----------------------------------------------------------------------- -->
+
     <p-blockUI [target]="pnl" [blocked]="blockedPanel">
       <p-progressSpinner
-        [style]="{
-          width: '100px',
-          height: '100px',
-          position: 'absolute',
-          top: '25%',
-          left: '50%'
-        }"
+        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
         strokeWidth="2"
         animationDuration=".5s"
       ></p-progressSpinner>

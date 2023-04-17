@@ -18,6 +18,7 @@ import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.comp
 import { DialogService } from 'primeng/dynamicdialog';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -131,6 +132,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    public layoutService: LayoutService,
     private dialogService: DialogService,
     private notificationService: NotificationService,
     private oAuthService: OAuthService,
@@ -159,7 +161,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private getDataChart() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.summaryService
       .getChart()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -168,16 +170,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.dataChart = res;
           this.buildBarChart();
           this.buildPieChart();
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   private getDataMap() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.filter = {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
@@ -212,16 +214,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: SummaryDto[]) => {
           this.dataMap = response;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   private getDataTable() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.filter = {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
@@ -257,17 +259,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         next: (res: PagedResultDto<SummaryDto>) => {
           this.items = res.items;
           this.totalCount = res.totalCount;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   loadGeo() {
     if (this.geo) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       let filter = {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,
@@ -282,17 +284,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
             ;
             this.spatialData = res.items; //.map(item => item.geoJson);
 
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     }
   }
 
   exportExcel() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.filter = {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
@@ -344,26 +346,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
             window.URL.revokeObjectURL(url); // Xóa URL tạm thời
           }
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
 
   loadOptions() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.unitService
       .getLookup(1)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<UnitLookupDto>) => {
           this.tinhOptions = res.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
@@ -371,17 +373,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   tinhChange(event) {
     this.loadData();
     if (event.value) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(2, event.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.huyenOptions = res.items;
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else this.huyenOptions = [];
@@ -502,17 +504,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   huyenChange(event) {
     this.loadData();
     if (event.value) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(3, event.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.xaOptions = res.items;
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else this.xaOptions = [];
@@ -576,17 +578,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
-  }
-
-  ngOnDestroy(): void {
+ ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

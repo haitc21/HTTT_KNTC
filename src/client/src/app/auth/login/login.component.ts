@@ -84,14 +84,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   onSubmit() {
     if (this.form.invalid) return;
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     const { username, password, rememberMe } = this.form.value;
     const redirectUrl = this.redirectUrl;
     const loginParams = { username, password, rememberMe, redirectUrl };
     this.authService.login(loginParams).subscribe(
       () => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
         this.router.navigate([redirectUrl]);
       },
       err => {
@@ -109,22 +109,12 @@ export class LoginComponent implements OnInit, OnDestroy {
           errorMsg = this.localizationService.instant('AbpAccount::UserLockedOutMessage');
         }
         this.notificationService.showError(errorMsg);
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       }
     );
   }
 
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
-  }
-
-  ngOnDestroy(): void {
+ ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

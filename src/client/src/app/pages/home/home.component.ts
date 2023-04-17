@@ -10,6 +10,7 @@ import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
 import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 import { MenuItem } from 'primeng/api';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-home',
@@ -82,6 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    public layoutService: LayoutService,
     private oAuthService: OAuthService,
     private spatialDataService: SpatialDataService,
     private summaryService: SummaryService
@@ -93,7 +95,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   loadData(isFirst: boolean = false) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.filter = {
       landComplain: this.landComplain,
       enviromentComplain: this.enviromentComplain,
@@ -111,10 +113,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: SummaryMapDto[]) => {
           this.dataMap = response;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -130,17 +132,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
-  }
-
-  ngOnDestroy(): void {
+ ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

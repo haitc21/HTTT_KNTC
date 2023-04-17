@@ -18,6 +18,7 @@ import { FileService } from 'src/app/shared/services/file.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-denounce',
@@ -78,6 +79,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   actionMenu: MenuItem[];
 
   constructor(
+    public layoutService: LayoutService,
     private dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
@@ -134,34 +136,34 @@ export class DenounceComponent implements OnInit, OnDestroy {
   }
 
   loadOptions() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.unitService
       .getLookup(1)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<UnitLookupDto>) => {
           this.tinhOptions = res.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
   tinhChange(event) {
     this.loadData();
     if (event.value) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(2, event.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.huyenOptions = res.items;
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else this.huyenOptions = [];
@@ -169,24 +171,24 @@ export class DenounceComponent implements OnInit, OnDestroy {
   huyenChange(event) {
     this.loadData();
     if (event.value) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(3, event.value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.xaOptions = res.items;
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else this.xaOptions = [];
   }
 
   loadData(isFirst: boolean = false) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     if (isFirst) {
       this.filter = {
         skipCount: this.skipCount,
@@ -224,17 +226,17 @@ export class DenounceComponent implements OnInit, OnDestroy {
           this.items = response.items;
 
           this.totalCount = response.totalCount;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
-    this.toggleBlockUI(false);
+    this.layoutService.blockUI$.next(false);
   }
 
   exportExcel() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.filter = {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
@@ -276,10 +278,10 @@ export class DenounceComponent implements OnInit, OnDestroy {
 
             window.URL.revokeObjectURL(url); // Xóa URL tạm thời
           }
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
@@ -334,7 +336,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   }
 
   deleteRowConfirm(id) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
 
     this.denounceService.delete(id).subscribe({
       next: () => {
@@ -343,10 +345,10 @@ export class DenounceComponent implements OnInit, OnDestroy {
         this.loadData();
         this.selectedItems = [];
         this.actionItem = null;
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       },
       error: () => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       },
     });
   }
@@ -369,7 +371,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     ref.onClose.subscribe((data: DenounceDto | FileUploadDto[]) => {
       if (data) {
         if (data instanceof Array) {
-          this.toggleBlockUI(true);
+          this.layoutService.blockUI$.next(true);
           const uploadObservables = data.map(f => {
             return this.fileService
               .uploadFilAttachment(f.id, f.file)
@@ -382,13 +384,13 @@ export class DenounceComponent implements OnInit, OnDestroy {
               //   this.notificationService.showSuccess(`${res}`);
               // });
               this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
-              this.toggleBlockUI(false);
+              this.layoutService.blockUI$.next(false);
               this.selectedItems = [];
               this.resetFilter();
               this.loadData();
             },
             () => {
-              this.toggleBlockUI(false);
+              this.layoutService.blockUI$.next(false);
             }
           );
         } else {
@@ -470,17 +472,17 @@ export class DenounceComponent implements OnInit, OnDestroy {
   }
 
   deleteItemsConfirm(ids: any[]) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.denounceService.deleteMultiple(ids).subscribe({
       next: () => {
         this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
         this.resetFilter();
         this.loadData();
         this.selectedItems = [];
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       },
       error: () => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       },
     });
   }
@@ -526,17 +528,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
       default:
       //this.header = '';
     }
-  }
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.blockedPanel = true;
-    } else {
-      setTimeout(() => {
-        this.blockedPanel = false;
-      }, 300);
-    }
-  }
-  ngOnDestroy(): void {
+  } ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

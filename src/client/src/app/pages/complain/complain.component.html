@@ -139,8 +139,8 @@
     <!-- ----------------------------------------------------------------------- -->
     <p-toolbar>
       <ng-template pTemplate="left">
-        <i class="pi pi-search mr-2"></i>
-        <h5>Kết quả tìm kiếm</h5>
+        <!-- <i class="pi pi-search mr-2"></i>
+        <h5>Kết quả tìm kiếm</h5> -->
       </ng-template>
 
       <ng-template pTemplate="right">
@@ -239,7 +239,6 @@
               pRipple
               type="button"
               icon="pi pi-fw pi-cog"
-              [label]=""
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
@@ -261,19 +260,7 @@
       </ng-template>
     </p-table>
     <!-- ----------------------------------------------------------------------- -->
-    <p-blockUI [target]="pnl" [blocked]="blockedPanel">
-      <p-progressSpinner
-        [style]="{
-          width: '100px',
-          height: '100px',
-          position: 'absolute',
-          top: '25%',
-          left: '50%'
-        }"
-        strokeWidth="2"
-        animationDuration=".5s"
-      ></p-progressSpinner>
-    </p-blockUI>
+
   </p-panel>
 </div>
 <ng-template #emptyTpl><td></td></ng-template>
