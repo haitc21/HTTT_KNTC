@@ -91,6 +91,8 @@ export class MapPopupComponent implements OnInit, OnDestroy {
       tieuDe: res.tieuDe,
       thoiGianTiepNhan: res.thoiGianTiepNhan,
       thoiGianHenTraKQ: res.thoiGianHenTraKQ,
+      soThua: res.soThua,
+      toBanDo: res.toBanDo,
       boPhanDangXL: res.boPhanDangXL,
       ketQua: res.ketQua,
       duLieuToaDo: res.duLieuToaDo,
@@ -107,6 +109,8 @@ export class MapPopupComponent implements OnInit, OnDestroy {
       dienThoai: [this.hoSo.dienThoai],
       thoiGianTiepNhan: [this.utilService.convertDateToLocal(this.hoSo.thoiGianTiepNhan)],
       thoiGianHenTraKQ: [this.utilService.convertDateToLocal(this.hoSo.thoiGianHenTraKQ)],
+      soThua: [this.hoSo.soThua],
+      toBanDo: [this.hoSo.toBanDo],
       boPhanDangXL: [this.hoSo.boPhanDangXL],
       ketQua: [this.hoSo.ketQua],
     });

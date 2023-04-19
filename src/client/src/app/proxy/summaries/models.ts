@@ -62,6 +62,8 @@ export interface SummaryDto {
   tieuDe?: string;
   thoiGianTiepNhan?: string;
   thoiGianHenTraKQ?: string;
+  soThua?: string;
+  toBanDo?: string;
   boPhanDangXL?: string;
   ketQua?: LoaiKetQua;
   duLieuToaDo?: string;
