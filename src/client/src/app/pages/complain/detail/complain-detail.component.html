@@ -763,69 +763,65 @@
           <span>Bản đồ</span>
         </ng-template>
         <ng-template pTemplate="content">
-          <p-accordion [multiple]="true" [activeIndex]="[0]">
-            <!-- -------------------------------Dữ liệu--------------------------------------------------- -->
-            <p-accordionTab header="Dữ liệu không gian" class="w-full">
-              <div class="grid">
-                <!-- -------------------------------duLieuToaDo--------------------------------------------------- -->
-                <div class="field col-12 md:col-6">
-                  <span class="p-float-label">
-                    <input
-                      id="duLieuToaDo"
-                      formControlName="duLieuToaDo"
-                      type="text"
-                      pInputText
-                      [style]="{ width: '100%' }"
-                    />
-                    <label for="duLieuToaDo">Dữ liệu tọa độ</label>
-                  </span>
-                  <app-validation-message
-                    [entityControl]="formControls.duLieuToaDo"
-                    [validationMessages]="validationMessages.duLieuToaDo"
-                  >
-                  </app-validation-message>
-                </div>
-                <!-- -------------------------------getCoordiate--------------------------------------------------- -->
-                <div class="field col-12 md:col-6">
-                  <button
-                    *ngIf="mode != 'view'"
-                    pButton
-                    pRipples
-                    type="button"
-                    (click)="getCoordiate()"
-                    label="Lấy tọa độ"
-                    class="p-button-info mr-2"
-                    icon="pi pi-map-marker"
-                  ></button>
-                </div>
-                <!-- -------------------------------duLieuHinhHoc--------------------------------------------------- -->
-                <div class="field col-12 md:col-12">
-                  <span class="p-float-label">
-                    <textarea
-                      id="duLieuHinhHoc"
-                      formControlName="duLieuHinhHoc"
-                      [rows]="5"
-                      pInputTextarea
-                      class="w-full"
-                    ></textarea>
-                    <label for="name">Dữ liệu hình học</label>
-                  </span>
-                  <app-validation-message
-                    [entityControl]="formControls.duLieuHinhHoc"
-                    [validationMessages]="validationMessages.duLieuHinhHoc"
-                  >
-                  </app-validation-message>
-                </div>
+          <p-card header="Dữ liệu không gian" class="w-full">
+            <div class="grid">
+              <!-- -------------------------------duLieuToaDo--------------------------------------------------- -->
+              <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                  <input
+                    id="duLieuToaDo"
+                    formControlName="duLieuToaDo"
+                    type="text"
+                    pInputText
+                    [style]="{ width: '100%' }"
+                  />
+                  <label for="duLieuToaDo">Dữ liệu tọa độ</label>
+                </span>
+                <app-validation-message
+                  [entityControl]="formControls.duLieuToaDo"
+                  [validationMessages]="validationMessages.duLieuToaDo"
+                >
+                </app-validation-message>
               </div>
-            </p-accordionTab>
-            <p-accordionTab header="Bản đồ">
-              <!-- -------------------------------Bản đồ--------------------------------------------------- -->
-              <app-map
-                [duLieuToaDo]="formControls.duLieuToaDo.value"
-                [loaiVuViec]="LoaiVuViec.KhieuNai"
-              ></app-map>
-            </p-accordionTab>
-          </p-accordion>
+              <!-- -------------------------------getCoordiate--------------------------------------------------- -->
+              <div class="field col-12 md:col-6">
+                <button
+                  *ngIf="mode != 'view'"
+                  pButton
+                  pRipples
+                  type="button"
+                  (click)="getCoordiate()"
+                  label="Lấy tọa độ"
+                  class="p-button-info mr-2"
+                  icon="pi pi-map-marker"
+                ></button>
+              </div>
+              <!-- -------------------------------duLieuHinhHoc--------------------------------------------------- -->
+              <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                  <textarea
+                    id="duLieuHinhHoc"
+                    formControlName="duLieuHinhHoc"
+                    [rows]="5"
+                    pInputTextarea
+                    class="w-full"
+                  ></textarea>
+                  <label for="name">Dữ liệu hình học</label>
+                </span>
+                <app-validation-message
+                  [entityControl]="formControls.duLieuHinhHoc"
+                  [validationMessages]="validationMessages.duLieuHinhHoc"
+                >
+                </app-validation-message>
+              </div>
+            </div>
+          </p-card>
+          <p-card header="Bản đồ">
+            <!-- -------------------------------Bản đồ--------------------------------------------------- -->
+            <app-map
+              [data]="dataMap"
+            ></app-map>
+          </p-card>
         </ng-template>
       </p-tabPanel>
     </p-tabView>

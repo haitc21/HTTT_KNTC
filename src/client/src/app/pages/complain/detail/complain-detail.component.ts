@@ -14,7 +14,7 @@ import { UnitLookupDto, UnitService } from '@proxy/units';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
-import { EileUploadDto } from 'src/app/shared/models/file-upload.class';
+import { FileUploadDto } from 'src/app/shared/models/file-upload.class';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
@@ -32,14 +32,14 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   complainId: string;
   mode: 'create' | 'update' | 'view' = 'view';
   loaiVuViec = LoaiVuViec.KhieuNai;
-  fileUploads: EileUploadDto[] = [];
+  fileUploads: FileUploadDto[] = [];
   // Default
   public blockedPanelDetail: boolean = false;
   public form: FormGroup;
   public title: string;
   public btnDisabled = false;
   selectedEntity: ComplainDto;
-
+  dataMap: any[] = [];
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
@@ -332,12 +332,16 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   loadDetail(id: any) {
     this.toggleBlockUI(true);
+    this.dataMap.splice(0);//clear the array
     this.complainService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: ComplainDto) => {
           this.selectedEntity = response;
+
+          this.dataMap.push(response);
+          this.dataMap[0].loaiVuViec = LoaiVuViec.KhieuNai;
           this.tinhChange(this.selectedEntity.maTinhTP, true);
           this.huyenChange(this.selectedEntity.maQuanHuyen, true);
           this.tinhThuaDatChange(this.selectedEntity.tinhThuaDat, true);

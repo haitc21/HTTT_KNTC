@@ -69,21 +69,6 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.buildEventMapClick();
     this.renderMarkers(this.data);
     this.renderSpatialData(this.spatialData);
-    this.mảkerInToaDo();
-  }
-
-  private mảkerInToaDo() {
-    if (this.duLieuToaDo) {
-      this.map.eachLayer(layer => {
-        if (!(layer instanceof L.TileLayer)) {
-          this.map.removeLayer(layer);
-        }
-      });
-      let marker = L.marker(this.convertStringCoordiate(this.duLieuToaDo), {
-        icon: this.loaiVuViec == LoaiVuViec.KhieuNai ? blueIcon : redIcon,
-      });
-      marker.addTo(this.map);
-    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -98,14 +83,6 @@ export class MapComponent implements AfterViewInit, OnChanges {
     ) {
       this.renderSpatialData(changes.spatialData.currentValue);
     }
-
-    // if (
-    //   changes.duLieuToaDo &&
-    //   changes.duLieuToaDo.currentValue &&
-    //   !changes.duLieuToaDo.isFirstChange()
-    // ) {
-    //   this.mảkerInToaDo();
-    // }
   }
 
   initMap() {
@@ -260,12 +237,14 @@ export class MapComponent implements AfterViewInit, OnChanges {
   buildEventMapClick() {
     this.map.on('click', e => {
       this.duLieuToaDo = `${e.latlng.lat}, ${e.latlng.lng}`;
+      /*
       L.popup()
         .setLatLng(e.latlng)
         .setContent(
           `<h5>Vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
         )
         .openOn(this.map);
+      */
     });
   }
 

@@ -13,7 +13,7 @@ import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { ComplainDetailComponent } from './detail/complain-detail.component';
 import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
-import { EileUploadDto as FileUploadDto } from 'src/app/shared/models/file-upload.class';
+import { FileUploadDto as FileUploadDto } from 'src/app/shared/models/file-upload.class';
 import { FileService } from 'src/app/shared/services/file.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';

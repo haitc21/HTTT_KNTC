@@ -1,4 +1,4 @@
-export class EileUploadDto {
+export class FileUploadDto {
   id: string;
   name: string;
   file: File;

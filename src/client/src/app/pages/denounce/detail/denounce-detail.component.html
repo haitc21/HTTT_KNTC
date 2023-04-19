@@ -222,7 +222,7 @@
                         class="w-full"
                       ></textarea>
                       <label for="diaChiThuongTru"
-                        >Địau chỉ thường trú <span class="required">*</span></label
+                        >Địa chỉ thường trú <span class="required">*</span></label
                       >
                     </span>
                     <app-validation-message
@@ -242,7 +242,7 @@
                         class="w-full"
                       ></textarea>
                       <label for="diaChiLienHe"
-                        >Địau chỉ liên hệ <span class="required">*</span></label
+                        >Địa chỉ liên hệ <span class="required">*</span></label
                       >
                     </span>
                     <app-validation-message
@@ -769,10 +769,9 @@
         </ng-template>
 
         <ng-template pTemplate="content">
-          <p-accordion [multiple]="true" [activeIndex]="[0]">
-            <p-accordionTab header="Dữ liệu không gian" class="w-full">
-              <!-- -------------------------------Dữ liệu--------------------------------------------------- -->
-              <div class="grid">
+          <p-card header="Dữ liệu không gian" class="w-full">
+            <!-- -------------------------------Dữ liệu--------------------------------------------------- -->
+            <div class="grid">
               <!-- -------------------------------maHoSo--------------------------------------------------- -->
               <div class="field col-12 md:col-6">
                 <span class="p-float-label">
@@ -783,7 +782,7 @@
                     pInputText
                     [style]="{ width: '100%' }"
                   />
-                  <label for="name">Dữ liệu tọa đọ</label>
+                  <label for="name">Dữ liệu tọa độ</label>
                 </span>
                 <app-validation-message
                   [entityControl]="formControls.duLieuToaDo"
@@ -820,16 +819,14 @@
                 >
                 </app-validation-message>
               </div>
-              </div>
-            </p-accordionTab>
-            <p-accordionTab header="Bản đồ">
-              <!-- -------------------------------Bản đồ--------------------------------------------------- -->
-              <app-map
-                [duLieuToaDo]="formControls.duLieuToaDo.value"
-                [loaiVuViec]="LoaiVuViec.KhieuNai"
-              ></app-map>
-            </p-accordionTab>
-          </p-accordion>
+            </div>
+          </p-card>
+          <p-card header="Bản đồ">
+            <!-- -------------------------------Bản đồ--------------------------------------------------- -->
+            <app-map
+              [data]="dataMap"
+            ></app-map>
+          </p-card>
         </ng-template>
       </p-tabPanel>
       <!-- ----------------------------------------------------------------------- -->
