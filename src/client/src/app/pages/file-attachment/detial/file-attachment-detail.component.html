@@ -1,4 +1,4 @@
-<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
+<form [formGroup]="form">
   <p-panel #pnlDetail [collapsed]="false">
     <div class="formgrid grid">
       <!-- -----------------------------------tenTaiLieu----------------------------------------------- -->
@@ -167,19 +167,17 @@
       </div>
       <!-- ----------------------------file---------------------------=----------------------------- -->
       <div *ngIf="!isView" class="field col-12 md:col-6">
-        <div class="flex w-full">
-          <p-fileUpload
-            name="file[]"
-            [customUpload]="true"
-            invalidFileSizeMessageSummary="{0}: Vượt quá dung lượng cho phép!"
-            chooseLabel="Chọn tệp"
-            uploadLabel="Tải lên"
-            cancelLabel="Hủy"
-            [auto]="true"
-            (uploadHandler)="choseFile($event)"
-            (onRemove)="removeFile($event)"
-          ></p-fileUpload>
-        </div>
+        <p-fileUpload
+          name="file[]"
+          [customUpload]="true"
+          invalidFileSizeMessageSummary="{0}: Vượt quá dung lượng cho phép!"
+          chooseLabel="Chọn tệp"
+          uploadLabel="Tải lên"
+          cancelLabel="Hủy"
+          [auto]="true"
+          (uploadHandler)="choseFile($event)"
+          (onRemove)="removeFile($event)"
+        ></p-fileUpload>
       </div>
       <!-- ---------------------------------------------------------------------------------- -->
     </div>

@@ -357,14 +357,14 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
 
   loadDetail(id: any) {
     this.toggleBlockUI(true);
-    this.dataMap.splice(0);//clear the array
+    this.dataMap.splice(0); //clear the array
     this.denounceService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: DenounceDto) => {
           this.selectedEntity = response;
-          
+
           this.dataMap.push(response);
           this.dataMap[0].loaiVuViec = LoaiVuViec.ToCao;
 
@@ -548,26 +548,17 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       duLieuHinhHoc: [null, [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
       ghiChu: [null, Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
 
-      ngayGQTC: [null, [Validators.required]],
-      nguoiGQTC: [
-        null,
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxTenNguoiLength)],
-      ],
-      quyerDinhThuLyGQTC: [
-        null,
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)],
-      ],
-      ngayQDGQTC: [null, [Validators.required]],
+      ngayGQTC: [null],
+      nguoiGQTC: [null, [Validators.maxLength(KNTCValidatorConsts.MaxTenNguoiLength)]],
+      quyerDinhThuLyGQTC: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      ngayQDGQTC: [null],
       quyetDinhDinhChiGQTC: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
       giaHanGQTC1: [null],
       giaHanGQTC2: [null],
 
-      soVBKLNDTC: [
-        null,
-        [Validators.required, Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)],
-      ],
-      ngayNhanTBKQXLKLTC: [null, [Validators.required]],
-      ketQua: [null, [Validators.required]],
+      soVBKLNDTC: [null, [Validators.maxLength(KNTCValidatorConsts.MaxSoQDLength)]],
+      ngayNhanTBKQXLKLTC: [null],
+      ketQua: [null],
       congKhai: [false, [Validators.required]],
 
       concurrencyStamp: [],

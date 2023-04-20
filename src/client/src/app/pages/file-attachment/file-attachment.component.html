@@ -301,12 +301,11 @@
 <ng-container *ngIf="visibleAddModal">
   <p-dialog
     [draggable]="false"
-    [resizable]="false"
     [(visible)]="visibleAddModal"
     [header]="headerModal"
     modal="true"
     (onHide)="closeMAddodal()"
-    [style]="{ width: DIALOG_MD }"
+    [style]="{ width: DIALOG_BG }"
   >
     <app-file-attachment-detail
       [loaiVuViec]="loaiVuViec"
