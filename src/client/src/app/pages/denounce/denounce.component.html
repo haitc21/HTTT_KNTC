@@ -2,7 +2,7 @@
   <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
   <p-panel #pnl class="col-12">
     <p-toolbar>
-      <div class="formgrid grid col-12">
+      <div class="formgrid grid">
         <div class="field col-12 md:col-3">
           <span class="p-input-icon-left w-full">
             <i class="pi pi-search"></i>
@@ -164,16 +164,16 @@
         <tr>
           <th class="row-num-column">STT</th>
           <th>Mã hồ sơ</th>
-          <th>Người tố cáo</th>
+          <th style="width: 100px">Người tố cáo</th>
           <th>Số ĐT</th>
-          <th>Địa chỉ</th>
-          <th>Người bị tố cáo</th>
-          <th>Người giải quyết TC</th>
-          <th>Nội dung TC</th>
+          <th style="width: 150px">Địa chỉ</th>
+          <th style="width: 100px">Người bị tố cáo</th>
+          <th>Người giải quyết</th>
+          <th style="width: 180px">Nội dung TC</th>
           <th>Thời gian nộp</th>
           <th>Ngày hẹn trả KQ</th>
-          <th>Bộ phận đang XL</th>
-          <th style="width: 150px">Kết luận NDTC</th>
+          <th style="width: 150px">Bộ phận đang XL</th>
+          <th style="width: 100px">Kết luận</th>
           <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
         </tr>
       </ng-template>

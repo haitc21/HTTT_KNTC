@@ -237,14 +237,14 @@ export class MapComponent implements AfterViewInit, OnChanges {
   buildEventMapClick() {
     this.map.on('click', e => {
       this.duLieuToaDo = `${e.latlng.lat}, ${e.latlng.lng}`;
-      /*
-      L.popup()
+      
+      L.tooltip()
         .setLatLng(e.latlng)
         .setContent(
           `<h5>Vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
         )
         .openOn(this.map);
-      */
+      
     });
   }
 
