@@ -35,16 +35,16 @@ export interface CreateDenounceDto {
   duLieuToaDo?: string;
   duLieuHinhHoc?: string;
   ghiChu?: string;
-  ngayGQTC: string;
-  nguoiGQTC: string;
-  quyerDinhThuLyGQTC: string;
-  ngayQDGQTC: string;
+  ngayGQTC?: string;
+  nguoiGQTC?: string;
+  quyerDinhThuLyGQTC?: string;
+  ngayQDGQTC?: string;
   quyetDinhDinhChiGQTC?: string;
   giaHanGQTC1?: string;
   giaHanGQTC2?: string;
-  soVBKLNDTC: string;
-  ngayNhanTBKQXLKLTC: string;
-  ketQua: LoaiKetQua;
+  soVBKLNDTC?: string;
+  ngayNhanTBKQXLKLTC?: string;
+  ketQua?: LoaiKetQua;
   congKhai: boolean;
   fileAttachments: CreateAndUpdateFileAttachmentDto[];
 }
@@ -138,16 +138,16 @@ export interface UpdateDenounceDto extends EntityDto<string> {
   duLieuToaDo?: string;
   duLieuHinhHoc?: string;
   ghiChu?: string;
-  ngayGQTC: string;
-  nguoiGQTC: string;
-  quyerDinhThuLyGQTC: string;
-  ngayQDGQTC: string;
+  ngayGQTC?: string;
+  nguoiGQTC?: string;
+  quyerDinhThuLyGQTC?: string;
+  ngayQDGQTC?: string;
   quyetDinhDinhChiGQTC?: string;
   giaHanGQTC1?: string;
   giaHanGQTC2?: string;
-  soVBKLNDTC: string;
-  ngayNhanTBKQXLKLTC: string;
-  ketQua: LoaiKetQua;
+  soVBKLNDTC?: string;
+  ngayNhanTBKQXLKLTC?: string;
+  ketQua?: LoaiKetQua;
   congKhai: boolean;
   concurrencyStamp?: string;
 }

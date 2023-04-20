@@ -63,6 +63,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
+    { value: LoaiKetQua.ChuaCoKQ, text: 'Chưa có KQ' },
   ];
   congKhaiOptions = [
     { value: true, text: 'Công khai' },
@@ -467,7 +468,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   }
 
   getLoaiKetQua(kq: any): string {
-    if (!kq) return '';
+    if (!kq) return 'Chưa có KQ';
     return this.loaiKQOptions.find(x => x.value == kq).text;
   }
 
@@ -528,7 +529,8 @@ export class DenounceComponent implements OnInit, OnDestroy {
       default:
       //this.header = '';
     }
-  } ngOnDestroy(): void {
+  }
+  ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
