@@ -128,18 +128,16 @@
         >
         </app-validation-message>
       </div>
+
       <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
       <div class="field col-12 md:col-12">
-        <span class="p-float-label">
-          <textarea
-            id="noiDungChinh"
-            formControlName="noiDungChinh"
-            [rows]="5"
-            pInputTextarea
-            class="w-full"
-          ></textarea>
-          <label for="description">Nội dung chính <span class="required">*</span></label>
-        </span>
+        <label for="noiDungVuViec">Nội dung chính <span class="required">*</span></label>
+        <p-editor
+          id="noiDungChinh"
+          formControlName="noiDungChinh"
+          class="w-full"
+          [style]="{ height: '320px' }"
+        ></p-editor>
         <app-validation-message
           [entityControl]="formControls.noiDungChinh"
           [validationMessages]="validationMessages.noiDungChinh"

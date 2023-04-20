@@ -15,7 +15,7 @@
               <p-accordionTab header="Thông tin khiếu nại/khiếu kiện" class="w-full">
                 <div class="grid">
                   <!-- -------------------------------maHoSo--------------------------------------------------- -->
-                  <div class="field col-12 md:col-6"> 
+                  <div class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="maHoSo"
@@ -302,9 +302,9 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       />
-                      <label for="boPhanDangXL">Bộ phận đang XL <span class="required">*</span>
-                      </label
-                      >
+                      <label for="boPhanDangXL"
+                        >Bộ phận đang XL <span class="required">*</span>
+                      </label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.boPhanDangXL"
@@ -322,26 +322,6 @@
                     <app-validation-message
                       [entityControl]="formControls.congKhai"
                       [validationMessages]="validationMessages.congKhai"
-                    >
-                    </app-validation-message>
-                  </div>
-                  <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-12">
-                    <span class="p-float-label">
-                      <textarea
-                        id="noiDungVuViec"
-                        formControlName="noiDungVuViec"
-                        [rows]="5"
-                        pInputTextarea
-                        class="w-full"
-                      ></textarea>
-                      <label for="noiDungVuViec"
-                        >Nội dung KN/KK <span class="required">*</span></label
-                      >
-                    </span>
-                    <app-validation-message
-                      [entityControl]="formControls.noiDungVuViec"
-                      [validationMessages]="validationMessages.noiDungVuViec"
                     >
                     </app-validation-message>
                   </div>
@@ -363,9 +343,33 @@
                     >
                     </app-validation-message>
                   </div>
+                  <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
+                  <div class="field col-12 md:col-12">
+                    <!-- <textarea
+                        id="noiDungVuViec"
+                        formControlName="noiDungVuViec"
+                        [rows]="5"
+                        pInputTextarea
+                        class="w-full"
+                      ></textarea> -->
+                    <label for="noiDungVuViec"
+                      >Nội dung vụ việc <span class="required">*</span></label
+                    >
+                    <p-editor
+                      id="noiDungVuViec"
+                      formControlName="noiDungVuViec"
+                      class="w-full"
+                      [style]="{ height: '320px' }"
+                    ></p-editor>
+                    <app-validation-message
+                      [entityControl]="formControls.noiDungVuViec"
+                      [validationMessages]="validationMessages.noiDungVuViec"
+                    >
+                    </app-validation-message>
+                  </div>
                 </div>
               </p-accordionTab>
-              <!-- -------------------------------Thông tin thửa đất--------------------------------------------------- --> 
+              <!-- -------------------------------Thông tin thửa đất--------------------------------------------------- -->
               <p-accordionTab header="Thông tin thửa đất">
                 <div class="grid">
                   <!-- ----------------------------soThua---------------------------=----------------------------- -->
@@ -818,9 +822,7 @@
           </p-card>
           <p-card header="Bản đồ">
             <!-- -------------------------------Bản đồ--------------------------------------------------- -->
-            <app-map
-              [data]="dataMap"
-            ></app-map>
+            <app-map [data]="dataMap"></app-map>
           </p-card>
         </ng-template>
       </p-tabPanel>
