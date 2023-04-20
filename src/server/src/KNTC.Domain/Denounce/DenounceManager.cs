@@ -50,17 +50,17 @@ public class DenounceManager : DomainService
                                               string duLieuToaDo,
                                               string duLieuHinhHoc,
                                               string GhiChu,
-                                              [NotNull] DateTime ngayGQTC,
-                                              [NotNull] string nguoiGQTC,
-                                              [NotNull] string quyerDinhThuLyGQTC,
-                                              [NotNull] DateTime ngayQDGQTC,
+                                              DateTime? ngayGQTC,
+                                              string nguoiGQTC,
+                                              string quyerDinhThuLyGQTC,
+                                              DateTime? ngayQDGQTC,
                                               string quyetDinhDinhChiGQTC,
                                               DateTime? giaHanGQTC1,
                                               DateTime? giaHanGQTC2,
-                                              [NotNull] string soVBKLNDTC,
-                                              [NotNull] DateTime ngayNhanTBKQXLKLTC,
-                                              [NotNull] LoaiKetQua ketQua,
-                                              [NotNull] bool congKhai
+                                              string soVBKLNDTC,
+                                              DateTime? ngayNhanTBKQXLKLTC,
+                                              LoaiKetQua? ketQua,
+                                              bool congKhai
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
@@ -88,15 +88,6 @@ public class DenounceManager : DomainService
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
-
-        Check.NotNull(ngayGQTC, nameof(ngayGQTC));
-        Check.NotNullOrWhiteSpace(nguoiGQTC, nameof(nguoiGQTC));
-        Check.NotNullOrWhiteSpace(quyerDinhThuLyGQTC, nameof(quyerDinhThuLyGQTC));
-        Check.NotNull(ngayQDGQTC, nameof(ngayQDGQTC));
-        Check.NotNullOrWhiteSpace(soVBKLNDTC, nameof(soVBKLNDTC));
-        Check.NotNull(ngayNhanTBKQXLKLTC, nameof(ngayNhanTBKQXLKLTC));
-        Check.NotNull(ketQua, nameof(ketQua));
-        Check.NotNull(congKhai, nameof(congKhai));
 
         var existedHoSo = await _hoSoRepo.FindByMaHoSoAsync(maHoSo, false);
         if (existedHoSo != null)
@@ -191,17 +182,17 @@ public class DenounceManager : DomainService
                                    string duLieuToaDo,
                                    string duLieuHinhHoc,
                                    string GhiChu,
-                                   [NotNull] DateTime ngayGQTC,
-                                   [NotNull] string nguoiGQTC,
-                                   [NotNull] string quyerDinhThuLyGQTC,
-                                   [NotNull] DateTime ngayQDGQTC,
+                                   DateTime? ngayGQTC,
+                                   string nguoiGQTC,
+                                   string quyerDinhThuLyGQTC,
+                                   DateTime? ngayQDGQTC,
                                    string quyetDinhDinhChiGQTC,
                                    DateTime? giaHanGQTC1,
                                    DateTime? giaHanGQTC2,
-                                   [NotNull] string soVBKLNDTC,
-                                   [NotNull] DateTime ngayNhanTBKQXLKLTC,
-                                   [NotNull] LoaiKetQua ketQua,
-                                   [NotNull] bool congKhai
+                                   string soVBKLNDTC,
+                                   DateTime? ngayNhanTBKQXLKLTC,
+                                   LoaiKetQua? ketQua,
+                                   bool congKhai
       )
     {
         Check.NotNull(denounce, nameof(denounce));
@@ -231,15 +222,6 @@ public class DenounceManager : DomainService
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
-
-        Check.NotNull(ngayGQTC, nameof(ngayGQTC));
-        Check.NotNullOrWhiteSpace(nguoiGQTC, nameof(nguoiGQTC));
-        Check.NotNullOrWhiteSpace(quyerDinhThuLyGQTC, nameof(quyerDinhThuLyGQTC));
-        Check.NotNull(ngayQDGQTC, nameof(ngayQDGQTC));
-        Check.NotNullOrWhiteSpace(soVBKLNDTC, nameof(soVBKLNDTC));
-        Check.NotNull(ngayNhanTBKQXLKLTC, nameof(ngayNhanTBKQXLKLTC));
-        Check.NotNull(ketQua, nameof(ketQua));
-        Check.NotNull(congKhai, nameof(congKhai));
 
         if (denounce.MaHoSo != maHoSo)
         {

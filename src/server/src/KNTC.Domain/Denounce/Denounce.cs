@@ -51,16 +51,18 @@ public class Denounce : AuditedAggregateRoot<Guid>
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }
-    public DateTime NgayGQTC { get; set; }
+
+    public DateTime? NgayGQTC { get; set; }
     public string NguoiGQTC { get; set; }
     public string QuyerDinhThuLyGQTC { get; set; }
-    public DateTime NgayQDGQTC { get; set; }
+    public DateTime? NgayQDGQTC { get; set; }
     public string QuyetDinhDinhChiGQTC { get; set; }
     public DateTime? GiaHanGQTC1 { get; set; }
     public DateTime? GiaHanGQTC2 { get; set; }
     public string SoVBKLNDTC { get; set; }
-    public DateTime NgayNhanTBKQXLKLTC { get; set; }
-    public LoaiKetQua KetQua { get; set; }
+    public DateTime? NgayNhanTBKQXLKLTC { get; set; }
+    public LoaiKetQua? KetQua { get; set; }
+
     public bool CongKhai { get; set; }
     public LandType LandType { get; set; }
     private void SetMaHoSo([NotNull] string maHoSo)
