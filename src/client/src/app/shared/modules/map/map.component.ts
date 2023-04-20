@@ -243,7 +243,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
         .setContent(
           `<h5>Vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
         )
-        .openOn(this.map);
+        .addTo(this.map);
       
     });
   }
