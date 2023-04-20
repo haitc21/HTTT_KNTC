@@ -86,27 +86,21 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxHinhHocLength)]
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }
-    [Required]
     public DateTime NgayGQTC { get; set; }
-    [Required]
     [MaxLength(KNTCValidatorConsts.MaxTenNguoiLength)]
     public string NguoiGQTC { get; set; }
-    [Required]
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
     public string QuyerDinhThuLyGQTC { get; set; }
-    [Required]
     public DateTime NgayQDGQTC { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
     public string QuyetDinhDinhChiGQTC { get; set; }
     public DateTime? GiaHanGQTC1 { get; set; }
     public DateTime? GiaHanGQTC2 { get; set; }
-    [Required]
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
     public string SoVBKLNDTC { get; set; }
-    [Required]
     public DateTime NgayNhanTBKQXLKLTC { get; set; }
-    [Required]
     public LoaiKetQua KetQua { get; set; }
+    [Required]
     public bool CongKhai { get; set; }
     public string ConcurrencyStamp { get; set; }
 }

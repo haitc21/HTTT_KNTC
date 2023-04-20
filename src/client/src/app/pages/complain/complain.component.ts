@@ -382,6 +382,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
 
   showAddModal() {
     const ref = this.dialogService.open(ComplainDetailComponent, {
+      modal: true,
       height: '92vh',
       header: 'Thêm khiếu nại/khiếu kiện',
       width: DIALOG_BG,

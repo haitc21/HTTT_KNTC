@@ -37,7 +37,7 @@ $gutter: 1rem; //for primeflex grid system
   left: 0;
   top: 0;
   width: 100%;
-  z-index: 10000 !important;
+  z-index: 1001 !important;
 
   .topmenu-logo {
     display: flex;
@@ -188,4 +188,11 @@ li {
 }
 .p-button-icon-only .p-button-label {
   display: none;
+}
+
+.p-fileupload,
+.p-fileupload-buttonbar,
+.p-fileupload-content {
+  margin: 0 !important;
+  padding: 0 !important;
 }
