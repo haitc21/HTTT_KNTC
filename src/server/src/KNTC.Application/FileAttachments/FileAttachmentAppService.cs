@@ -44,7 +44,8 @@ public class FileAttachmentAppService : CrudAppService<
         IBlobContainer<FileAttachmentContainer> blobContainer,
         IHostEnvironment env,
         IRepository<DocumentType, int> documentRepo,
-        IComplainRepository complainRepo)
+        IComplainRepository complainRepo,
+        IDenounceRepository denounceRepo = null)
         : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
@@ -53,6 +54,7 @@ public class FileAttachmentAppService : CrudAppService<
         _env = env;
         _documentTypeRepo = documentRepo;
         _complainRepo = complainRepo;
+        _denounceRepo = denounceRepo;
     }
     public async override Task<PagedResultDto<FileAttachmentDto>> GetListAsync(GetFileAttachmentListDto input)
     {
