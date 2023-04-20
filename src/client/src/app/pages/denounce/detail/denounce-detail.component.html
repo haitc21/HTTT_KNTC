@@ -323,6 +323,20 @@
                     >
                     </app-validation-message>
                   </div>
+
+                  <!-- ----------------------------congKhai---------------------------=----------------------------- -->
+                  <div class="field col-12 md:col-6">
+                    <p-checkbox
+                      binary="true"
+                      label="Công khai *"
+                      formControlName="congKhai"
+                    ></p-checkbox>
+                    <app-validation-message
+                      [entityControl]="formControls.congKhai"
+                      [validationMessages]="validationMessages.congKhai"
+                    >
+                    </app-validation-message>
+                  </div>
                   <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
                   <div class="field col-12 md:col-12">
                     <span class="p-float-label">
@@ -707,19 +721,6 @@
                       >
                       </app-validation-message>
                     </span>
-                  </div>
-                  <!-- ----------------------------congKhai---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
-                    <p-checkbox
-                      binary="true"
-                      label="Công khai *"
-                      formControlName="congKhai"
-                    ></p-checkbox>
-                    <app-validation-message
-                      [entityControl]="formControls.congKhai"
-                      [validationMessages]="validationMessages.congKhai"
-                    >
-                    </app-validation-message>
                   </div>
                 </div>
               </p-accordionTab>

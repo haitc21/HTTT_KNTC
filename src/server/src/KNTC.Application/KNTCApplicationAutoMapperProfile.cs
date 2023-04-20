@@ -55,7 +55,7 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<Denounce, DenounceDto>();
         CreateMap<Denounce, DenounceInListDto>();
         CreateMap<Denounce, DenounceExcelDto>()
-                 .ForMember(dto => dto.KetQua, opt => opt.MapFrom(denounce => denounce.KetQua.ToVNString()));
+                 .ForMember(dto => dto.KetQua, opt => opt.MapFrom(denounce => denounce.KetQua.Value.ToVNString()));
         CreateMap<CreateDenounceDto, Denounce>();
         CreateMap<UpdateDenounceDto, Denounce>();
 
