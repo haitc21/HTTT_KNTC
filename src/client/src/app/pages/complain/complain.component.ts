@@ -67,6 +67,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     { value: LoaiKetQua.Dung, text: 'Đúng' },
     { value: LoaiKetQua.Sai, text: 'Sai' },
     { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
+    { value: LoaiKetQua.ChuaCoKQ, text: 'Chưa có kết quả' },
   ];
   congKhaiOptions = [
     { value: true, text: 'Công khai' },

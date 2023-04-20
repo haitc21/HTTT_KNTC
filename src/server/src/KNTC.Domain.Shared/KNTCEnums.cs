@@ -16,6 +16,7 @@ public enum LoaiKetQua
     Dung = 1,
     Sai = -1,
     CoDungCoSai = 2,
+    ChuaCoKQ = 0
 }
 
 public enum LoaiKhieuNai

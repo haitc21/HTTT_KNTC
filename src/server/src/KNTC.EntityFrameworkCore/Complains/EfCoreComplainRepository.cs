@@ -24,7 +24,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                LinhVuc? linhVuc,
                                                int[]? mangLinhVuc,
                                                LoaiKetQua? ketQua,
-                                               int? maTinhTp,
+                                               int? maTinhTP,
                                                int? maQuanHuyen,
                                                int? maXaPhuongTT,
                                                int? giaiDoan,
@@ -47,11 +47,11 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              )
              .WhereIf(
                 ketQua.HasValue,
-                x => x.KetQua == ketQua
+                x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
              )
              .WhereIf(
-                maTinhTp.HasValue,
-                x => x.MaTinhTP == maTinhTp
+                maTinhTP.HasValue,
+                x => x.MaTinhTP == maTinhTP
              )
              .WhereIf(
                 maQuanHuyen.HasValue,
