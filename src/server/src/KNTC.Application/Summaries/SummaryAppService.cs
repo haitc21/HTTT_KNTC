@@ -89,6 +89,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     }
 
     public async Task<List<SummaryMapDto>> GetMapAsync(GetSumaryMapDto input)
+    
     {
         var userId = CurrentUser.Id;
         if (userId == null)

@@ -3,28 +3,59 @@ import { Router } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
 import { LOGIN_URL } from './shared/constants/urls.const';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { LayoutService } from './layout/service/app.layout.service';
 
 @Component({
   selector: 'app-root',
   template: `
-    <router-outlet></router-outlet>
-    <p-toast position="top-right"></p-toast>
-    <p-confirmDialog
-      header="Xác nhận"
-      acceptLabel="Có"
-      rejectLabel="Không"
-      icon="pi pi-exclamation-triangle"
-    ></p-confirmDialog>
+    <p-panel #layoutPnl>
+      <router-outlet></router-outlet>
+      <p-toast position="top-right"></p-toast>
+      <p-confirmDialog
+        header="Xác nhận"
+        acceptLabel="Có"
+        rejectLabel="Không"
+        icon="pi pi-exclamation-triangle"
+      ></p-confirmDialog>
+      <p-blockUI [target]="layoutPnl" [blocked]="blockedLayout">
+        <p-progressSpinner
+          [style]="{
+            width: '150px',
+            height: '150px',
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)'
+          }"
+          strokeWidth="2"
+          animationDuration=".5s"
+        ></p-progressSpinner>
+      </p-blockUI>
+    </p-panel>
   `,
 })
 export class AppComponent {
   menuMode = 'static';
+  blockedLayout = false;
 
   constructor(
     private primengConfig: PrimeNGConfig,
+    public layoutService: LayoutService,
     private oAuthService: OAuthService,
     private router: Router
-  ) {}
+  ) {
+    this.layoutService.blockUI$.subscribe(block => {
+      if (block == true) {
+        setTimeout(() => {
+          this.blockedLayout = true;
+        }, 300);
+      } else {
+        setTimeout(() => {
+          this.blockedLayout = false;
+        }, 300);
+      }
+    });
+  }
 
   ngOnInit() {
     this.primengConfig.ripple = true;

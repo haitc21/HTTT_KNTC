@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
   selector: 'app-login',
@@ -66,6 +67,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     protected authService: AuthService,
     private oAuthService: OAuthService,
     protected route: ActivatedRoute,
+    private utilService: UtilityService,
     protected localizationService: LocalizationService
   ) {}
   ngOnInit() {
@@ -83,6 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
   onSubmit() {
+    this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) return;
     this.layoutService.blockUI$.next(true);
 
