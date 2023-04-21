@@ -13,6 +13,7 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 import { UserDto, UsersService } from '@proxy/users';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { DomSanitizer } from '@angular/platform-browser';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   templateUrl: './user-detail.component.html',
@@ -66,7 +67,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     private userService: UsersService,
     private utilService: UtilityService,
     private fb: FormBuilder,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -80,7 +82,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
   }
   loadFormDetails(id: string) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.userService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -96,10 +98,10 @@ export class UserDetailComponent implements OnInit, OnDestroy {
             let objectURL = 'data:image/png;base64,' + response.avatarContent;
             this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
           }
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -107,7 +109,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   saveChange() {
 this.utilService.markAllControlsAsDirty([this.form]);
     if(this.form.invalid) return;;
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     if (this.utilService.isEmpty(this.config.data?.id)) {
       this.userService
         .create(this.form.value)
@@ -115,10 +117,10 @@ this.utilService.markAllControlsAsDirty([this.form]);
         .subscribe({
           next: () => {
             this.ref.close(this.form.value);
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           error: () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
         });
     } else {
@@ -131,27 +133,17 @@ this.utilService.markAllControlsAsDirty([this.form]);
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
           next: () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
 
             this.ref.close(this.form.value);
           },
           error: () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
         });
     }
   }
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
 
   setMode(mode: string) {
     this.mode = mode;

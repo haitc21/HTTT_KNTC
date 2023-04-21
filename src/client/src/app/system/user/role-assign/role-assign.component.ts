@@ -9,6 +9,7 @@ import {
 } from '@proxy/volo/abp/identity/models';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   templateUrl: './role-assign.component.html',
@@ -28,43 +29,44 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
     public ref: DynamicDialogRef,
     public config: DynamicDialogConfig,
     private userService: UsersService,
-    private roleService: RolesService
+    private roleService: RolesService,
+    private layoutService: LayoutService
   ) {}
 
   ngOnInit() {
     this.loadData();
   }
   loadData() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.userService
       .getAssignableRoles(this.config.data.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (repsonse: PagedResultDto<IdentityRoleDto>) => {
           this.availableRoles = repsonse.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.userService
       .getRoles(this.config.data.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (repsonse: PagedResultDto<IdentityRoleDto>) => {
           this.seletedRoles = repsonse.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   saveChange() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     let roleNames = this.seletedRoles.map(x => x.name);
     let updateRoleDto: IdentityUserUpdateRolesDto = { roleNames: [...roleNames] };
     this.userService
@@ -73,25 +75,15 @@ export class RoleAssignComponent implements OnInit, OnDestroy {
       .subscribe(
         () => {
           this.ref.close(this.seletedRoles);
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
 
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
   close() {
     if (this.ref) {
       this.ref.close();

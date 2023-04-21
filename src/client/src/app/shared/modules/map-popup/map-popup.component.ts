@@ -13,6 +13,7 @@ import { UtilityService } from '../../services/utility.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ComplainDto, ComplainService } from '@proxy/complains';
 import { DenounceDto, DenounceService } from '@proxy/denounces';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-map-popup',
@@ -38,7 +39,8 @@ export class MapPopupComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private utilService: UtilityService,
     private complainService: ComplainService,
-    private denounceService: DenounceService
+    private denounceService: DenounceService,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class MapPopupComponent implements OnInit, OnDestroy {
   }
 
   loadComplain() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.complainService
       .get(this.dataMap.id)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -55,16 +57,16 @@ export class MapPopupComponent implements OnInit, OnDestroy {
         res => {
           this.mapData(res, LoaiVuViec.KhieuNai);
           this.buildForm();
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         err => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
 
   loadDenounce() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.denounceService
       .get(this.dataMap.id)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -72,10 +74,10 @@ export class MapPopupComponent implements OnInit, OnDestroy {
         res => {
           this.mapData(res, LoaiVuViec.ToCao);
           this.buildForm();
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         err => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }

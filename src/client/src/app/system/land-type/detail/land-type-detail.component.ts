@@ -4,6 +4,7 @@ import { Status } from '@proxy';
 import { LandTypeDto, LandTypeService } from '@proxy/land-types';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
@@ -29,7 +30,8 @@ export class LandTypeDetailComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private landTypeService: LandTypeService,
     private utilService: UtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -69,7 +71,7 @@ export class LandTypeDetailComponent implements OnInit, OnDestroy {
   }
 
   loadDetail(id: any) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.landTypeService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -77,16 +79,16 @@ export class LandTypeDetailComponent implements OnInit, OnDestroy {
         next: (response: LandTypeDto) => {
           this.selectedEntity = response;
           this.form.patchValue(this.selectedEntity);
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   saveChange() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) return;
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
@@ -94,11 +96,11 @@ export class LandTypeDetailComponent implements OnInit, OnDestroy {
       : this.landTypeService.update(this.config.data.id, this.form.value);
     obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       () => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
         this.ref.close(this.form.value);
       },
       err => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       }
     );
   }
@@ -120,17 +122,7 @@ export class LandTypeDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
   close() {
     if (this.ref) {
       this.ref.close();

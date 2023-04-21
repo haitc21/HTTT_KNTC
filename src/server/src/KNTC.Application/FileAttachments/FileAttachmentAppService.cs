@@ -58,6 +58,11 @@ public class FileAttachmentAppService : CrudAppService<
     }
     public async override Task<PagedResultDto<FileAttachmentDto>> GetListAsync(GetFileAttachmentListDto input)
     {
+        var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
+        if (hasPermission.Succeeded == false)
+        {
+            input.CongKhai = true;
+        }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = nameof(FileAttachmentDto.TenTaiLieu);
@@ -170,6 +175,11 @@ public class FileAttachmentAppService : CrudAppService<
 
     public async Task<byte[]> GetExcelAsync(GetFileAttachmentListDto input)
     {
+        var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
+        if (hasPermission.Succeeded == false)
+        {
+            input.CongKhai = true;
+        }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = nameof(FileAttachmentDto.TenTaiLieu);

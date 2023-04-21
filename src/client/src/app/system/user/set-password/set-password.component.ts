@@ -11,6 +11,7 @@ import { RoleDto } from '@proxy/roles';
 import { UsersService } from '@proxy/users';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
@@ -50,7 +51,8 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private userService: UsersService,
     private utilService: UtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -60,17 +62,17 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   saveChange() {
 this.utilService.markAllControlsAsDirty([this.form]);
     if(this.form.invalid) return;;
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.userService
       .setPassword(this.config.data.id, this.form.value)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
           this.ref.close(this.form.value);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
@@ -96,17 +98,7 @@ this.utilService.markAllControlsAsDirty([this.form]);
       return match ? null : { passwordMismatch: true };
     };
   }
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
 
   close() {
     if (this.ref) {

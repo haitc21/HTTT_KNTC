@@ -19,6 +19,7 @@ import { NotificationService } from 'src/app/shared/services/notification.servic
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
 import { MapComponent } from 'src/app/shared/modules/map/map.component';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   templateUrl: './complain-detail.component.html',
@@ -200,7 +201,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private unitService: UnitService,
     private landTypeService: LandTypeService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -217,37 +219,37 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   //#region load options
   loadOptions() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.unitService
       .getLookup(1)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<UnitLookupDto>) => {
           this.tinhOptions = res.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.landTypeService
       .getLookup()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<LandTypeLookupDto>) => {
           this.landTypeOptions = res.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
 
   tinhChange(id: number, isFirst: boolean = false) {
     if (id) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(2, id)
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -258,17 +260,17 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
               this.form.get('maQuanHuyen').reset();
               this.form.get('maXaPhuongTT').reset();
             }
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else this.huyenOptions = [];
   }
   huyenChange(id: number, isFirst: boolean = false) {
     if (id) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(3, id)
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -278,10 +280,10 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
             if (!isFirst) {
               this.form.get('maXaPhuongTT').reset();
             }
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else this.xaOptions = [];
@@ -289,7 +291,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   tinhThuaDatChange(id: number, isFirst: boolean = false) {
     if (id) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(2, id)
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -300,17 +302,17 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
               this.form.get('huyenThuaDat').reset();
               this.form.get('xaThuaDat').reset();
             }
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else this.huyenThuaDateOptions = [];
   }
   huyenThuaDatChange(id: number, isFirst: boolean = false) {
     if (id) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(3, id)
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -320,10 +322,10 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
             if (!isFirst) {
               this.form.get('xaThuaDat').reset();
             }
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else this.xaThuaDatOptions = [];
@@ -331,7 +333,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   //#endregion
 
   loadDetail(id: any) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.dataMap.splice(0);//clear the array
     this.complainService
       .get(id)
@@ -371,10 +373,10 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
             .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
 
           if (this.mode == 'view') this.form.disable();
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -382,7 +384,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   saveChange() {
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) return;
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     if (this.utilService.isEmpty(this.complainId)) {
       let value = this.form.value as CreateComplainDto;
       if (this.fileAttachmentComponent?.data) {
@@ -422,12 +424,12 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
                   });
               }
             });
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
             if (this.fileUploads.length > 0) this.ref.close(this.fileUploads);
             else this.ref.close(res);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     } else {
@@ -439,11 +441,11 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           data => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
             this.ref.close(data);
           },
           err => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           }
         );
     }
@@ -543,17 +545,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
   close() {
     if (this.ref) {
       this.ref.close();

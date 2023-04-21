@@ -19,6 +19,7 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.component';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-file-attachment',
@@ -82,18 +83,18 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     private fileAttachmentService: FileAttachmentService,
     private fileService: FileService,
-    private oAuthService: OAuthService
+    private oAuthService: OAuthService,
+    public layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
     this.buildActionMenu();
     this.getOptions();
     this.loadData();
-    console.log('modeHoSo', this.modeHoSo);
   }
 
   loadData() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     if (this.modeHoSo == 'update' || this.modeHoSo == 'view') {
       this.fileAttachmentService
         .getList({
@@ -111,10 +112,10 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           next: (response: PagedResultDto<FileAttachmentDto>) => {
             this.items = response.items;
             this.totalCount = response.totalCount;
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           error: () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
         });
     }
@@ -126,12 +127,12 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           (!this.hinhThuc || x.hinhThuc == this.hinhThuc) &&
           (!this.congKhai || x.congKhai == this.congKhai)
       );
-      this.toggleBlockUI(false);
+      this.layoutService.blockUI$.next(false);
     }
   }
 
   exportExcel() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.fileAttachmentService
       .getExcel({
         maxResultCount: this.maxResultCount,
@@ -162,26 +163,26 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
             window.URL.revokeObjectURL(url); // Xóa URL tạm thời
           }
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
 
   getOptions() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.documentTypeService
       .getLookup()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<DocumentTypeLookupDto>) => {
           this.documentTypeOptions = res.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
@@ -192,7 +193,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   }
   submitAdd(dto: any) {
     if (dto) {
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       if (this.modeHoSo == 'create') {
         let fileAttachment = {
           loaiVuViec: this.loaiVuViec,
@@ -216,7 +217,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
         this.loadData();
         this.visibleAddModal = false;
         this.headerModal = '';
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       }
       if (this.modeHoSo == 'update') {
         dto.loaiVuViec = this.loaiVuViec;
@@ -237,16 +238,16 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
                       this.loadData();
                       this.visibleAddModal = false;
                       this.headerModal = '';
-                      this.toggleBlockUI(false);
+                      this.layoutService.blockUI$.next(false);
                     },
                     () => {
-                      this.toggleBlockUI(false);
+                      this.layoutService.blockUI$.next(false);
                     }
                   );
               }
             },
             error: () => {
-              this.toggleBlockUI(false);
+              this.layoutService.blockUI$.next(false);
             },
           });
       }
@@ -309,10 +310,10 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
                       this.headerModal = '';
                       this.visibleUpdateModal = false;
                       this.selectedItem = null;
-                      this.toggleBlockUI(false);
+                      this.layoutService.blockUI$.next(false);
                     },
                     () => {
-                      this.toggleBlockUI(false);
+                      this.layoutService.blockUI$.next(false);
                     }
                   );
               } else {
@@ -321,11 +322,11 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
                 this.headerModal = '';
                 this.visibleUpdateModal = false;
                 this.selectedItem = null;
-                this.toggleBlockUI(false);
+                this.layoutService.blockUI$.next(false);
               }
             },
             error: () => {
-              this.toggleBlockUI(false);
+              this.layoutService.blockUI$.next(false);
             },
           });
       }
@@ -348,7 +349,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   }
 
   download(item: FileAttachmentDto) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.fileService
       .downloadFileAttachment(item.id)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -369,10 +370,10 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
             window.URL.revokeObjectURL(url); // Xóa URL tạm thời
           }
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
@@ -409,10 +410,10 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           next: () => {
             this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
             this.loadData();
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           error: () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
         });
     }
@@ -441,7 +442,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           this.showUpdateModal(this.actionItem);
           this.actionItem = null;
         },
-        visible: this.modeHoSo != 'view',
+        visible: this.modeHoSo != 'view' && this.hasLoggedIn,
       },
       {
         label: this.Actions.DOWNLOAD,
