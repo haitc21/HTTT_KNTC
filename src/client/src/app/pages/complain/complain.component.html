@@ -180,10 +180,10 @@
         <tr>
           <th class="row-num-column">STT</th>
           <th>Mã hồ sơ</th>
+          <th style="width: 180px">Nội dung KN/KK</th>
           <th style="width: 100px">Người đề nghị</th>
           <th style="width: 150px">Địa chỉ</th>
-          <th>Số ĐT</th>
-          <th style="width: 180px">Nội dung KN/KK</th>
+          <th>Số ĐT</th>          
           <th>Thời gian nộp</th>
           <th style="width: 150px">Bộ phận đang XL</th>
           <th>Ngày hẹn trả KQ</th>
@@ -202,12 +202,14 @@
           </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
           <td>
-            <span class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+            <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+          </td>
+          <td>
+            <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
           </td>
           <td>{{ row.nguoiNopDon }}</td>
           <td>{{ row.diaChiLienHe }}</td>
-          <td>{{ row.dienThoai }}</td>
-          <td>{{ row.tieuDe }}</td>
+          <td>{{ row.dienThoai }}</td>          
           <td>
             {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
           </td>

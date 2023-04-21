@@ -253,12 +253,12 @@
               <tr>
                 <th class="row-num-column">STT</th>
                 <th>Mã hồ sơ</th>
+                <th style="width: 180px">Nội dung</th>
+                <th>Loại vụ việc</th>
+                <th>Lĩnh vực</th>  
                 <th style="width: 100px">Người nộp đơn</th>
                 <th>Số ĐT</th>
-                <th>Địa chỉ</th>
-                <th>Loại vụ việc</th>
-                <th>Lĩnh vực</th>
-                <th>Nội dung</th>
+                <th>Địa chỉ</th>                              
                 <th>Thời gian nộp</th>
                 <th>Ngày hẹn trả KQ</th>
                 <th>Bộ phận đang XL</th>
@@ -269,14 +269,16 @@
               <tr>
                 <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
                 <td>
-                  <span class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+                  <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
                 </td>
+                <td>
+                  <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
+                </td>
+                <td>{{ getLoaiVuViecName(row.loaiVuViec) }}</td>
+                <td>{{ getLinhVucName(row.linhVuc) }}</td>
                 <td>{{ row.nguoiNopDon }}</td>
                 <td>{{ row.dienThoai }}</td>
                 <td>{{ row.diaChiLienHe }}</td>
-                <td>{{ getLoaiVuViecName(row.loaiVuViec) }}</td>
-                <td>{{ getLinhVucName(row.linhVuc) }}</td>
-                <td>{{ row.tieuDe }}</td>
                 <td>
                   {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
                 </td>
