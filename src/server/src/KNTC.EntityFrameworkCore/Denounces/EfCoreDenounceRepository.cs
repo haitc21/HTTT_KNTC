@@ -86,7 +86,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
     public async Task<List<Denounce>> GetDataExportAsync(string sorting,
                                                    LinhVuc? linhVuc,
                                                    LoaiKetQua? ketQua,
-                                                   int? maTinhTp,
+                                                   int? maTinhTP,
                                                    int? maQuanHuyen,
                                                    int? maXaPhuongTT,
                                                    DateTime? fromDate,
@@ -101,11 +101,11 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
              )
              .WhereIf(
                 ketQua.HasValue,
-                x => x.KetQua == ketQua
+                x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
              )
              .WhereIf(
-                maTinhTp.HasValue,
-                x => x.MaTinhTP == maTinhTp
+                maTinhTP.HasValue,
+                x => x.MaTinhTP == maTinhTP
              )
              .WhereIf(
                 maQuanHuyen.HasValue,

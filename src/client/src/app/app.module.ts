@@ -24,6 +24,11 @@ import(`@/../@angular/common/locales/vi.mjs`).then(m => storeLocaleData(m.defaul
 
 import localeVi from '@angular/common/locales/vi';
 
+
+import { BlockUIModule } from 'primeng/blockui';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { PanelModule } from 'primeng/panel';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -36,6 +41,9 @@ import localeVi from '@angular/common/locales/vi';
     }),
     ConfirmDialogModule,
     ToastModule,
+    BlockUIModule,
+    ProgressSpinnerModule,
+    PanelModule
   ],
   declarations: [AppComponent],
   providers: [

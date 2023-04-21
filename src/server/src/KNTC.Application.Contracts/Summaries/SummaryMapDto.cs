@@ -14,6 +14,10 @@ public class SummaryMapCache
 
 public class SummaryMapDto
 {
+    public SummaryMapDto()
+    {
+
+    }
     public Guid Id { get; set; }
     public LoaiVuViec LoaiVuViec { get; set; }
     public string DuLieuToaDo { get; set; }

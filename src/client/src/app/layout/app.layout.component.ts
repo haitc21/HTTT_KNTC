@@ -13,7 +13,6 @@ export class AppLayoutComponent implements OnDestroy {
   overlayMenuOpenSubscription: Subscription;
 
   menuOutsideClickListener: any;
-  blockedLayout = false;
 
   profileMenuOutsideClickListener: any;
 
@@ -26,17 +25,6 @@ export class AppLayoutComponent implements OnDestroy {
     public renderer: Renderer2,
     public router: Router
   ) {
-    this.layoutService.blockUI$.subscribe(block => {
-      if (block == true) {
-        setTimeout(() => {
-          this.blockedLayout = true;
-        }, 300);
-      } else {
-        setTimeout(() => {
-          this.blockedLayout = false;
-        }, 300);
-      }
-    });
     this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
       if (!this.menuOutsideClickListener) {
         this.menuOutsideClickListener = this.renderer.listen('document', 'click', event => {

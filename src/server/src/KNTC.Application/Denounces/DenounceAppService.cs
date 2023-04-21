@@ -180,7 +180,7 @@ public class DenounceAppService : CrudAppService<
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
         }
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         return result;
     }
     [Authorize(KNTCPermissions.DenouncesPermission.Default)]
@@ -232,7 +232,7 @@ public class DenounceAppService : CrudAppService<
                                           ketQua: input.KetQua,
                                           congKhai: input.CongKhai);
         await _denounceRepo.UpdateAsync(denounce);
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }
 
@@ -245,7 +245,7 @@ public class DenounceAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         await _denounceRepo.DeleteAsync(id);
     }
 
@@ -258,7 +258,7 @@ public class DenounceAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(SummaryMapCache));
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         await _denounceRepo.DeleteManyAsync(ids);
     }
 

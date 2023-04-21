@@ -72,7 +72,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.data && changes.data.currentValue && !changes.data.isFirstChange()) {
+    if (changes.data && !changes.data.isFirstChange()) {
       this.renderMarkers(changes.data.currentValue);
     }
 
@@ -249,7 +249,6 @@ export class MapComponent implements AfterViewInit, OnChanges {
   }
 
   renderMarkers(data: SummaryMapDto[]) {
-    if (!data || data.length == 0) return;
     this.map.eachLayer(layer => {
       if (!(layer instanceof L.TileLayer)) {
         this.map.removeLayer(layer);
