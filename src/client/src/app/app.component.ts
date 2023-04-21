@@ -45,14 +45,13 @@ export class AppComponent {
     private router: Router
   ) {
     this.layoutService.blockUI$.subscribe(block => {
-      if (block == true) {
-        setTimeout(() => {
+      if (block === true) {
           this.blockedLayout = true;
-        }, 300);
-      } else {
+      }
+      if (block === false) {
         setTimeout(() => {
           this.blockedLayout = false;
-        }, 300);
+        }, 500);
       }
     });
   }

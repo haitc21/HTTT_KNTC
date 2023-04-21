@@ -3,6 +3,7 @@ import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms'
 import { RoleDto, RolesService } from '@proxy/roles';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
@@ -24,7 +25,8 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private roleService: RolesService,
     private utilService: UtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   }
 
   loadDetail(id: any) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.roleService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -60,16 +62,16 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
         next: (response: RoleDto) => {
           this.selectedEntity = response;
           this.form.patchValue(this.selectedEntity);
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   saveChange() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) return;
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
@@ -77,11 +79,11 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
       : this.roleService.update(this.config.data.id, this.form.value);
     obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       () => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
         this.ref.close(this.form.value);
       },
       err => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       }
     );
   }
@@ -96,17 +98,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
   close() {
     if (this.ref) {
       this.ref.close();

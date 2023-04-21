@@ -12,6 +12,7 @@ import {
 import { SelectItemGroup } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { ROLE_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
 
 @Component({
@@ -37,7 +38,8 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private roleService: RolesService,
     private fb: FormBuilder,
-    protected localizationService: LocalizationService
+    protected localizationService: LocalizationService,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -45,7 +47,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
   }
 
   loadDetail(providerName: string, providerKey: string) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     let grs = [];
     this.roleService
       .getPermissions(providerName, providerKey)
@@ -74,16 +76,16 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
 
           this.groupedPermisssions = grs;
           this.fillValue();
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   saveChange() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     let permissions: UpdatePermissionDto[] = [];
     for (let index = 0; index < this.permissions.length; index++) {
       const isGranted =
@@ -97,7 +99,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
       .updatePermissions(this.config.data.providerName, this.config.data.providerKey, updateValues)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
         this.ref.close('ok');
       });
   }
@@ -115,17 +117,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
     }
   }
 
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
   
 
   close() {

@@ -16,6 +16,7 @@ import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-type
 import { ListResultDto } from '@abp/ng.core';
 import { CreateAndUpdateFileAttachmentDto, FileAttachmentDto } from '@proxy/file-attachments';
 import { LoaiVuViec } from '@proxy';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   selector: 'app-file-attachment-detail',
@@ -77,7 +78,8 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   constructor(
     private utilService: UtilityService,
     private fb: FormBuilder,
-    private documentTypeService: DocumentTypeService
+    private documentTypeService: DocumentTypeService,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -86,17 +88,17 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   }
 
   getOptions() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.documentTypeService
       .getLookup()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<DocumentTypeLookupDto>) => {
           this.documentTypeOptions = res.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
@@ -170,17 +172,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   closeModal() {
     this.close.emit();
   }
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

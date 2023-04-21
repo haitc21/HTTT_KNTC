@@ -53,9 +53,8 @@
               ></p-dropdown>
               <label for="phoneNumber">Hình thức tài liệu</label>
             </span>
-            <span class="p-float-label flex-1">
+            <span class="p-float-label flex-1" *ngIf="hasLoggedIn">
               <p-dropdown
-                *ngIf="hasLoggedIn"
                 [options]="congKhaiOptions"
                 [(ngModel)]="congKhai"
                 optionLabel="text"
@@ -93,7 +92,7 @@
           <th>Ngày nhận</th>
           <th>Thời gian ban hành</th>
           <th>Thứ tự bút lục</th>
-          <th class="action-column">{{Actions.ACTION}}</th>
+          <th class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
 
@@ -183,7 +182,7 @@
               ></p-dropdown>
               <label for="phoneNumber">Hình thức tài liệu</label>
             </span>
-            <span class="p-float-label flex-1">
+            <span class="p-float-label flex-1" *ngIf="hasLoggedIn">
               <p-dropdown
                 [options]="congKhaiOptions"
                 [(ngModel)]="congKhai"
@@ -209,7 +208,7 @@
                 (click)="showAddModal()"
               ></button>
               <button
-                *ngIf="hasLoggedIn && modeHoSo != 'create'"
+                *ngIf="modeHoSo != 'create'"
                 type="button"
                 pButton
                 pRipple
@@ -232,7 +231,7 @@
           <th>Ngày nhận</th>
           <th>Thời gian ban hành</th>
           <th>Thứ tự bút lục</th>
-          <th class="action-column">{{Actions.ACTION}}</th>
+          <th class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -258,7 +257,7 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-           <button
+            <button
               #btn
               pButton
               pRipple
@@ -267,7 +266,7 @@
               [pTooltip]="Actions.ACTION"
               tooltipPosition="top"
               (click)="menu.toggle($event); setActionItem(row)"
-              style="height: 2rem;"
+              style="height: 2rem"
             ></button>
           </td>
         </tr>

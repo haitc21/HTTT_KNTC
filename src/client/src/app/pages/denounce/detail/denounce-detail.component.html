@@ -383,7 +383,8 @@
                       id="noiDungVuViec"
                       formControlName="noiDungVuViec"
                       class="w-full"
-                      [style]="{ height: '150px' }"
+                      [style]="{ height: '320px' }"
+                      [readonly]="mode == 'view'"
                     ></p-editor>
                     <app-validation-message
                       [entityControl]="formControls.noiDungVuViec"
@@ -465,7 +466,7 @@
                         filterBy="landTypeName"
                         styleClass="w-full"
                       ></p-dropdown>
-                      <label for="loaiDat">Loại đất <span class="required">*</span></label>
+                      <label for="loaiDat">loại đất <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.loaiDat"
@@ -856,12 +857,6 @@
       </div>
     </ng-template>
 
-    <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
-      <p-progressSpinner
-        [style]="{ width: '100px', height: '100px', position: 'absolute', top: '25%', left: '50%' }"
-        strokeWidth="2"
-        animationDuration=".5s"
-      ></p-progressSpinner>
-    </p-blockUI>
+   
   </p-panel>
 </form>

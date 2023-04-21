@@ -4,6 +4,7 @@ import { Status } from '@proxy';
 import { DocumentTypeDto, DocumentTypeService } from '@proxy/document-types';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
@@ -29,7 +30,8 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private documentTypeService: DocumentTypeService,
     private utilService: UtilityService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -69,7 +71,7 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
   }
 
   loadDetail(id: any) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.documentTypeService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -77,16 +79,16 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
         next: (response: DocumentTypeDto) => {
           this.selectedEntity = response;
           this.form.patchValue(this.selectedEntity);
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   saveChange() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) return;
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
@@ -94,11 +96,11 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
       : this.documentTypeService.update(this.config.data.id, this.form.value);
     obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       () => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
         this.ref.close(this.form.value);
       },
       err => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       }
     );
   }
@@ -120,17 +122,7 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
   close() {
     if (this.ref) {
       this.ref.close();

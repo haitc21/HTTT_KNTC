@@ -6,6 +6,7 @@ import { UnitTypeLookupDto, UnitTypeService } from '@proxy/category-unit-types';
 import { UnitDto, UnitLookupDto, UnitService } from '@proxy/units';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
@@ -71,7 +72,8 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     private unitService: UnitService,
     private utilService: UtilityService,
     private fb: FormBuilder,
-    private unitTypeService: UnitTypeService
+    private unitTypeService: UnitTypeService,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -83,23 +85,23 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   }
 
   getOptions() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.unitTypeService
       .getLookup()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (res: ListResultDto<UnitTypeLookupDto>) => {
           this.unitTypeOptions = res.items;
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         }
       );
   }
 
   loadDetail(id: any) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.unitService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -108,16 +110,16 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
           this.selectedEntity = response;
           this.unitTypeChange(this.selectedEntity.unitTypeId, true);
           this.form.patchValue(this.selectedEntity);
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   saveChange() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) return;
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
@@ -125,11 +127,11 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       : this.unitService.update(this.config.data.id, this.form.value);
     obs$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       () => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
         this.ref.close(this.form.value);
       },
       err => {
-        this.toggleBlockUI(false);
+        this.layoutService.blockUI$.next(false);
       }
     );
   }
@@ -164,17 +166,17 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     if (id > 1) {
       parentControl.enable();
       parentControl.setValidators([Validators.required]);
-      this.toggleBlockUI(true);
+      this.layoutService.blockUI$.next(true);
       this.unitService
         .getLookup(id - 1)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
             this.parentUnitOptions = res.items;
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
           },
           () => {
-            this.toggleBlockUI(false);
+            this.layoutService.blockUI$.next(false);
             this.parentUnitOptions = [];
           }
         );
@@ -184,17 +186,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       parentControl.setValidators([]);
     }
   }
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
   close() {
     if (this.ref) {
       this.ref.close();

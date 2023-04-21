@@ -24,7 +24,7 @@ interface LayoutState {
     providedIn: 'root',
 })
 export class LayoutService {
-    public blockUI$ = new BehaviorSubject<boolean>(false);
+    public blockUI$ = new BehaviorSubject<boolean>(null);
     
     config: AppConfig = {
         ripple: false,

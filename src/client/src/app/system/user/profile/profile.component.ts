@@ -7,6 +7,7 @@ import { UserDto, UsersService } from '@proxy/users';
 import { FileService } from 'src/app/shared/services/file.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
   templateUrl: './profile.component.html',
@@ -54,7 +55,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private fileService: FileService,
     private notificationService: NotificationService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
@@ -70,7 +72,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
   loadFormDetails(id: string) {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.userService
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -83,10 +85,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
             .setValue(this.utilService.convertDateToLocal(this.selectedEntity.userInfo.dob));
 
           this.setMode('update');
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -94,7 +96,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   saveChange() {
 this.utilService.markAllControlsAsDirty([this.form]);
     if(this.form.invalid) return;;
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     let user = this.form.value;
     user.userName = this.selectedEntity.userName;
     user.email = this.selectedEntity.email;
@@ -104,26 +106,26 @@ this.utilService.markAllControlsAsDirty([this.form]);
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
           this.ref.close(this.form.value);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
 
   uploadAvatar() {
-    this.toggleBlockUI(true);
+    this.layoutService.blockUI$.next(true);
     this.fileService
       .uploadAvatar(this.avatarContent)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: string) => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
         error: () => {
-          this.toggleBlockUI(false);
+          this.layoutService.blockUI$.next(false);
         },
       });
   }
@@ -160,17 +162,7 @@ this.utilService.markAllControlsAsDirty([this.form]);
       }
     });
   }
-  private toggleBlockUI(enabled: boolean) {
-    if (enabled == true) {
-      this.btnDisabled = true;
-      this.blockedPanelDetail = true;
-    } else {
-      setTimeout(() => {
-        this.btnDisabled = false;
-        this.blockedPanelDetail = false;
-      }, 300);
-    }
-  }
+  
   close() {
     if (this.ref) {
       this.ref.close();

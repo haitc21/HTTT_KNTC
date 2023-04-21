@@ -87,7 +87,8 @@ export class AppTopBarComponent implements OnInit {
         // icon: 'pi pi-sign-out',
         command: event => {
           this.oAuthService.logOut();
-          this.router.navigate(['/']);
+          window.location.reload();
+          // this.router.navigate(['/']);
         },
       },
     ];
