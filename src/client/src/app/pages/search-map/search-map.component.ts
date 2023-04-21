@@ -79,7 +79,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   public totalCount: number;
 
   // filter
-  geo = true;
+  geo = false;
   //filter: GetSpatialDataListDto;
   //filter: GetComplainListDto;
 
@@ -245,6 +245,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   loadGeo() {
     if (this.geo) {
       this.layoutService.blockUI$.next(true);
+      debugger
       let filter = {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,

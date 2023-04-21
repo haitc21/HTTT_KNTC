@@ -47,6 +47,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
   @Input() duLieuToaDo: string;
   @Input() loaiVuViec: LoaiVuViec = LoaiVuViec.KhieuNai;
 
+  public geojsonFeature = {
+    "type": "FeatureCollection",
+    "features": []
+  };
+  
   idMap: string = uuidv4();
   map: L.Map;
 
@@ -278,15 +283,29 @@ export class MapComponent implements AfterViewInit, OnChanges {
   }
 
   renderSpatialData(khonggian: any[]) {
+    debugger
     //Add polygons
-    //this.spatialData
-    /*
     let myStyle = {
       "color": "#ff7800",
       "weight": 5,
       "opacity": 0.65
     };
-    */
+    
+    var features = [];
+    khonggian.forEach(feat => {
+      features.push(
+      {
+        "geometry": JSON.parse(feat.geoJson),
+        "type": "Feature",
+        "properties": {
+            "popupContent": "<p>Tên tổ chức: " + feat.tenToChuc + "</p><p>Quyển: " + feat.quyen + "</p><p>Số tờ bản đồ: " + feat.soToBD + "</p>",
+        },
+        "id": feat.id
+      })
+    });
+
+    this.geojsonFeature.features = features;
+    this.quyhoach.addData(this.geojsonFeature);
   }
   convertStringCoordiate(cor: string): [number, number] {
     let point = cor.split(',');
