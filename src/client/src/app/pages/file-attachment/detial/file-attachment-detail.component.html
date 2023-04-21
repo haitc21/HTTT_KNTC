@@ -137,6 +137,7 @@
           formControlName="noiDungChinh"
           class="w-full"
           [style]="{ height: '320px' }"
+          [readonly]="isView"
         ></p-editor>
         <app-validation-message
           [entityControl]="formControls.noiDungChinh"
@@ -202,7 +203,5 @@
         ></button>
       </div>
     </ng-template>
-
-   
   </p-panel>
 </form>

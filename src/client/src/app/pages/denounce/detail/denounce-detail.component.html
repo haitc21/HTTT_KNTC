@@ -384,6 +384,7 @@
                       formControlName="noiDungVuViec"
                       class="w-full"
                       [style]="{ height: '320px' }"
+                      [readonly]="mode == 'view'"
                     ></p-editor>
                     <app-validation-message
                       [entityControl]="formControls.noiDungVuViec"
