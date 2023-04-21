@@ -32,12 +32,14 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     private readonly IComplainRepository _complainRepo;
     private readonly IDenounceRepository _denounceRepo;
     private readonly IDistributedCache<SummaryMapCache, GetSumaryMapDto> _cache;
+    private readonly IDistributedCache<SummaryChartDto> _cacheChart;
     public SummaryAppService(ISummaryRepository summaryRepo,
         IHostEnvironment env,
         IRepository<Unit, int> unitRepo,
         IComplainRepository complainRepo,
         IDenounceRepository denounceRepo,
-        IDistributedCache<SummaryMapCache, GetSumaryMapDto> cache)
+        IDistributedCache<SummaryMapCache, GetSumaryMapDto> cache,
+        IDistributedCache<SummaryChartDto> cacheChart = null)
     {
         _summaryRepo = summaryRepo;
         _env = env;
@@ -45,6 +47,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         _complainRepo = complainRepo;
         _denounceRepo = denounceRepo;
         _cache = cache;
+        _cacheChart = cacheChart;
     }
 
     public async Task<PagedResultDto<SummaryDto>> GetListAsync(GetSummaryListDto input)
@@ -94,14 +97,14 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         var cacheItem = await _cache.GetOrAddAsync(
         input,
-        async () => await GetDataMap(input),
+        async () => await LoadDataMapAsync(input),
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
         });
         return cacheItem.Items;
     }
-    private async Task<SummaryMapCache> GetDataMap(GetSumaryMapDto input)
+    private async Task<SummaryMapCache> LoadDataMapAsync(GetSumaryMapDto input)
     {
         var query = await _summaryRepo.GetListAsync(input.LandComplain,
                                                     input.EnviromentComplain,
@@ -119,11 +122,15 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                                                     input.FromDate,
                                                     input.ToDate,
                                                     input.CongKhai);
-        var entities = await AsyncExecuter.ToListAsync(query);
-        return new SummaryMapCache()
+        var querDtoy = query.Select(x => new SummaryMapDto()
         {
-            Items = ObjectMapper.Map<List<Summary>, List<SummaryMapDto>>(entities)
-        };
+            Id = x.Id,
+            LoaiVuViec = x.LoaiVuViec,
+            DuLieuToaDo = x.DuLieuToaDo,
+            DuLieuHinhHoc = x.DuLieuHinhHoc,
+        });
+        var entities = await AsyncExecuter.ToListAsync(querDtoy);
+        return new SummaryMapCache() { Items = entities };
     }
 
     public async Task<byte[]> GetExcelAsync(GetSummaryListDto input)
@@ -277,6 +284,17 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
     }
     public async Task<SummaryChartDto> GetChartAsync()
+    {
+        var result = await _cacheChart.GetOrAddAsync(
+        nameof(SummaryChartDto),
+        async () => await LoadDataChartAsync(),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+        });
+        return result;
+    }
+    private async Task<SummaryChartDto> LoadDataChartAsync()
     {
         var result = new SummaryChartDto();
 

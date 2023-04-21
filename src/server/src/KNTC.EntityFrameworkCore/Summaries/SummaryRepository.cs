@@ -30,7 +30,7 @@ public class SummaryRepository :  ISummaryRepository
                                                         bool mineralDenounce,
                                                         string keyword,
                                                         LoaiKetQua? ketQua,
-                                                        int? maTinhTp,
+                                                        int? maTinhTP,
                                                         int? maQuanHuyen,
                                                         int? maXaPhuongTT,
                                                         DateTime? fromDate,
@@ -52,11 +52,11 @@ public class SummaryRepository :  ISummaryRepository
                          )
                          .WhereIf(
                             ketQua.HasValue,
-                            x => x.KetQua == ketQua
+                            x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
                          )
                          .WhereIf(
-                            maTinhTp.HasValue,
-                            x => x.MaTinhTP == maTinhTp
+                            maTinhTP.HasValue,
+                            x => x.MaTinhTP == maTinhTP
                          )
                          .WhereIf(
                             maQuanHuyen.HasValue,
@@ -108,11 +108,11 @@ public class SummaryRepository :  ISummaryRepository
                          )
                          .WhereIf(
                             ketQua.HasValue,
-                            x => x.KetQua == ketQua
+                            x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
                          )
                          .WhereIf(
-                            maTinhTp.HasValue,
-                            x => x.MaTinhTP == maTinhTp
+                            maTinhTP.HasValue,
+                            x => x.MaTinhTP == maTinhTP
                          )
                          .WhereIf(
                             maQuanHuyen.HasValue,
