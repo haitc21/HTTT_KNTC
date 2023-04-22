@@ -69,7 +69,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   dataChart: SummaryChartDto;
 
   blockedPanel = false;
-  items: SummaryDto[] = [];
+  // items: SummaryDto[] = [];
   dataMap: SummaryDto[] = [];
 
   spatialData: SpatialDataDto[];
@@ -157,7 +157,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   loadData(isFirst: boolean = false) {
     this.getDataChart();
-    this.getDataTable();
+    // this.getDataTable();
     this.getDataMap();
   }
 
@@ -223,50 +223,50 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  private getDataTable() {
-    this.layoutService.blockUI$.next(true);
-    this.filter = {
-      skipCount: this.skipCount,
-      maxResultCount: this.maxResultCount,
-      keyword: this.keyword,
+  // private getDataTable() {
+  //   this.layoutService.blockUI$.next(true);
+  //   this.filter = {
+  //     skipCount: this.skipCount,
+  //     maxResultCount: this.maxResultCount,
+  //     keyword: this.keyword,
 
-      landComplain: this.landComplain,
-      enviromentComplain: this.enviromentComplain,
-      waterComplain: this.waterComplain,
-      mineralComplain: this.mineralComplain,
-      landDenounce: this.landDenounce,
-      enviromentDenounce: this.enviromentDenounce,
-      waterDenounce: this.waterDenounce,
-      mineralDenounce: this.mineralDenounce,
+  //     landComplain: this.landComplain,
+  //     enviromentComplain: this.enviromentComplain,
+  //     waterComplain: this.waterComplain,
+  //     mineralComplain: this.mineralComplain,
+  //     landDenounce: this.landDenounce,
+  //     enviromentDenounce: this.enviromentDenounce,
+  //     waterDenounce: this.waterDenounce,
+  //     mineralDenounce: this.mineralDenounce,
 
-      maTinhTP: this.maTinh,
-      maQuanHuyen: this.maHuyen,
-      maXaPhuongTT: this.maXa,
-      fromDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
-      toDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-          ? this.thoiGianTiepNhanRange[1].toUTCString()
-          : null,
-      ketQua: this.tinhTrang,
-      congKhai: this.hasLoggedIn ? this.congKhai : true,
-    } as GetSummaryListDto;
-    this.summaryService
-      .getList(this.filter)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (res: PagedResultDto<SummaryDto>) => {
-          this.items = res.items;
-          this.totalCount = res.totalCount;
-          this.layoutService.blockUI$.next(false);
-        },
-        error: () => {
-          this.layoutService.blockUI$.next(false);
-        },
-      });
-  }
+  //     maTinhTP: this.maTinh,
+  //     maQuanHuyen: this.maHuyen,
+  //     maXaPhuongTT: this.maXa,
+  //     fromDate:
+  //       this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
+  //         ? this.thoiGianTiepNhanRange[0].toUTCString()
+  //         : null,
+  //     toDate:
+  //       this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
+  //         ? this.thoiGianTiepNhanRange[1].toUTCString()
+  //         : null,
+  //     ketQua: this.tinhTrang,
+  //     congKhai: this.hasLoggedIn ? this.congKhai : true,
+  //   } as GetSummaryListDto;
+  //   this.summaryService
+  //     .getList(this.filter)
+  //     .pipe(takeUntil(this.ngUnsubscribe))
+  //     .subscribe({
+  //       next: (res: PagedResultDto<SummaryDto>) => {
+  //         this.items = res.items;
+  //         this.totalCount = res.totalCount;
+  //         this.layoutService.blockUI$.next(false);
+  //       },
+  //       error: () => {
+  //         this.layoutService.blockUI$.next(false);
+  //       },
+  //     });
+  // }
 
   loadGeo() {
     if (this.geo) {
@@ -530,7 +530,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;
-    this.getDataTable();
+    // this.getDataTable();
   }
 
   toggleMenuLeft() {
