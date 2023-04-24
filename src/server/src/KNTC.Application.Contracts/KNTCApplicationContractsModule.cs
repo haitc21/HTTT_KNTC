@@ -32,7 +32,7 @@ public class KNTCApplicationContractsModule : AbpModule
 
         Configure<AbpClockOptions>(options =>
         {
-            options.Kind = DateTimeKind.Local;
+            options.Kind = DateTimeKind.Utc;
         });
     }
 }

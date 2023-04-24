@@ -29,7 +29,7 @@ public class KNTCHttpApiModule : AbpModule
         ConfigureLocalization();
         Configure<AbpClockOptions>(options =>
         {
-            options.Kind = DateTimeKind.Local;
+            options.Kind = DateTimeKind.Utc;
         });
     }
 

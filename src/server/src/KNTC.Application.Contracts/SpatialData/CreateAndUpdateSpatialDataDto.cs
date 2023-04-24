@@ -1,6 +1,4 @@
-﻿using Microsoft.SqlServer.Types;
-using NetTopologySuite.Geometries;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
 

@@ -105,10 +105,10 @@ public class KNTCDbMigrationService : ITransientDependency
         Logger.LogInformation($"Executing {(tenant == null ? "host" : tenant.Name + " tenant")} database seed...");
         var AdminEmailDefaultValue = _configuration.GetSection("UserDefault:AdminEmailDefaultValue").Value ?? IdentityDataSeedContributor.AdminEmailDefaultValue;
         var AdminPasswordDefaultValue = _configuration.GetSection("UserDefault:AdminPasswordDefaultValue").Value ?? IdentityDataSeedContributor.AdminPasswordDefaultValue;
-        await _dataSeeder.SeedAsync(new DataSeedContext(tenant?.Id)
+        await _dataSeeder.SeedAsync(new DataSeedContext()
             .WithProperty(IdentityDataSeedContributor.AdminEmailPropertyName, AdminEmailDefaultValue)
             .WithProperty(IdentityDataSeedContributor.AdminPasswordPropertyName, AdminPasswordDefaultValue)
-        ); ;
+        );
     }
 
     private bool AddInitialMigrationIfNotExist()

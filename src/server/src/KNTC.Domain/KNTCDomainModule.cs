@@ -41,7 +41,7 @@ public class KNTCDomainModule : AbpModule
 
         Configure<AbpClockOptions>(options =>
         {
-            options.Kind = DateTimeKind.Local;
+            options.Kind = DateTimeKind.Utc;
         });
         //Configure<AbpMultiTenancyOptions>(options =>
         //{
