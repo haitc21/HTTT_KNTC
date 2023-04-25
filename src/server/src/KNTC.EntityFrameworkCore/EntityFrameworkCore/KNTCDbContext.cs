@@ -272,8 +272,8 @@ public class KNTCDbContext :
             b.ToTable("Units", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(p => p.Id).ValueGeneratedOnAdd();
-            b.Property(x => x.UnitCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
-            b.Property(x => x.UnitName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
+            b.Property(x => x.UnitCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
+            b.Property(x => x.UnitName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
             b.Property(x => x.ShortName).HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
             b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
