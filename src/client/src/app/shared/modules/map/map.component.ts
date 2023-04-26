@@ -48,10 +48,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
   @Input() loaiVuViec: LoaiVuViec = LoaiVuViec.KhieuNai;
 
   public geojsonFeature = {
-    "type": "FeatureCollection",
-    "features": []
+    type: 'FeatureCollection',
+    features: [],
   };
-  
+
   idMap: string = uuidv4();
   map: L.Map;
 
@@ -242,14 +242,13 @@ export class MapComponent implements AfterViewInit, OnChanges {
   buildEventMapClick() {
     this.map.on('click', e => {
       this.duLieuToaDo = `${e.latlng.lat}, ${e.latlng.lng}`;
-      
+
       L.tooltip()
         .setLatLng(e.latlng)
         .setContent(
           `<h5>Vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
         )
         .addTo(this.map);
-      
     });
   }
 
@@ -259,49 +258,57 @@ export class MapComponent implements AfterViewInit, OnChanges {
         this.map.removeLayer(layer);
       }
     });
-    let customOptions = {
-      minWidth: 500,
-      maxWidth: 800,      
-      maxHeight: 400,
-      className: 'popupCustom',
-      closeOnEscapeKey: true,
-    };
-    //Add markers
-    data
-      .filter(x => x.duLieuToaDo != null)
-      .forEach(dataMap => {
-        const marker = L.marker(this.convertStringCoordiate(dataMap.duLieuToaDo), {
-          icon: dataMap.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
+    if (data) {
+      let customOptions = {
+        minWidth: 500,
+        maxWidth: 800,
+        maxHeight: 400,
+        className: 'popupCustom',
+        closeOnEscapeKey: true,
+      };
+      //Add markers
+      data
+        .filter(x => x.duLieuToaDo != null)
+        .forEach(dataMap => {
+          const marker = L.marker(this.convertStringCoordiate(dataMap.duLieuToaDo), {
+            icon: dataMap.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
+          });
+
+          marker.bindPopup(this.getPopup(dataMap), customOptions);
+
+          marker.addTo(this.map);
+          // if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) marker.addTo(this.khieunai);
+          // else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) marker.addTo(this.tocao);
         });
-
-        marker.bindPopup(this.getPopup(dataMap), customOptions);
-
-        marker.addTo(this.map);
-        // if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) marker.addTo(this.khieunai);
-        // else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) marker.addTo(this.tocao);
-      });
+    }
   }
 
   renderSpatialData(khonggian: any[]) {
-    debugger
+    if(!khonggian) return;
     //Add polygons
     let myStyle = {
-      "color": "#ff7800",
-      "weight": 5,
-      "opacity": 0.65
+      color: '#ff7800',
+      weight: 5,
+      opacity: 0.65,
     };
-    
+
     var features = [];
     khonggian.forEach(feat => {
-      features.push(
-      {
-        "geometry": JSON.parse(feat.geoJson),
-        "type": "Feature",
-        "properties": {
-            "popupContent": "<p>Tên tổ chức: " + feat.tenToChuc + "</p><p>Quyển: " + feat.quyen + "</p><p>Số tờ bản đồ: " + feat.soToBD + "</p>",
+      features.push({
+        geometry: JSON.parse(feat.geoJson),
+        type: 'Feature',
+        properties: {
+          popupContent:
+            '<p>Tên tổ chức: ' +
+            feat.tenToChuc +
+            '</p><p>Quyển: ' +
+            feat.quyen +
+            '</p><p>Số tờ bản đồ: ' +
+            feat.soToBD +
+            '</p>',
         },
-        "id": feat.id
-      })
+        id: feat.id,
+      });
     });
 
     this.geojsonFeature.features = features;
