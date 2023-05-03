@@ -19,6 +19,7 @@
     }
   },
   "angularCompilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "enableI18nLegacyMessageIdFormat": false
   }
 }

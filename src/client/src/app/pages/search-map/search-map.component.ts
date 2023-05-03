@@ -76,6 +76,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   //Paging variables
   public skipCount: number = 0;
   public maxResultCount: number = 10;
+  public maxGeoCount: number = 500;
   public totalCount: number;
 
   // filter
@@ -245,10 +246,10 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   loadGeo() {
     if (this.geo) {
       this.layoutService.blockUI$.next(true);
-      debugger
+
       let filter = {
         skipCount: this.skipCount,
-        maxResultCount: this.maxResultCount,
+        maxResultCount: this.maxGeoCount,
         keyword: this.keyword,
       } as GetSpatialDataListDto;
       //this.spatialData
