@@ -40,13 +40,13 @@ export class AppComponent {
 
   constructor(
     private primengConfig: PrimeNGConfig,
-    public layoutService: LayoutService,
-    private oAuthService: OAuthService,
-    private router: Router
+    public layoutService: LayoutService
   ) {
     this.layoutService.blockUI$.subscribe(block => {
       if (block === true) {
+        setTimeout(() => {
           this.blockedLayout = true;
+        }, 1);
       }
       if (block === false) {
         setTimeout(() => {
@@ -97,8 +97,5 @@ export class AppComponent {
       dateFormat: 'dd/mm/yy',
       weekHeader: 'Tuần',
     });
-    // if (!this.oAuthService.hasValidAccessToken()) {
-    //   this.router.navigate([LOGIN_URL]);
-    // }
   }
 }

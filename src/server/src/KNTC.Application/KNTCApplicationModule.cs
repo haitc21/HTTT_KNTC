@@ -1,4 +1,6 @@
 ﻿using KNTC.Localization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
@@ -32,6 +34,8 @@ public class KNTCApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
+        var basePath = configuration["FileSystemBasePath"];
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<KNTCApplicationModule>();
@@ -47,7 +51,7 @@ public class KNTCApplicationModule : AbpModule
             {
                 container.UseFileSystem(fileSys =>
                 {
-                    fileSys.BasePath = "C:\\HTTT_KNTC";
+                    fileSys.BasePath = basePath;
                 });
             });
         });
