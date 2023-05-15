@@ -17,6 +17,7 @@ import { ListResultDto } from '@abp/ng.core';
 import { CreateAndUpdateFileAttachmentDto, FileAttachmentDto } from '@proxy/file-attachments';
 import { LoaiVuViec } from '@proxy';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { FileService } from 'src/app/shared/services/file.service';
 
 @Component({
   selector: 'app-file-attachment-detail',
@@ -79,7 +80,8 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     private utilService: UtilityService,
     private fb: FormBuilder,
     private documentTypeService: DocumentTypeService,
-    private layoutService: LayoutService,
+    private fileService: FileService,
+    private layoutService: LayoutService
   ) {}
 
   ngOnInit() {
@@ -172,7 +174,29 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   closeModal() {
     this.close.emit();
   }
-  
+
+  download() {
+    this.layoutService.blockUI$.next(true);
+    this.fileService
+      .downloadFileAttachment(this.item.id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (data: any) => {
+          if (data) {
+            const uint8Array = this.utilService.saveFile(
+              data,
+              this.item.contentType,
+              this.item.fileName
+            );
+          }
+          this.layoutService.blockUI$.next(false);
+        },
+        () => {
+          this.layoutService.blockUI$.next(false);
+        }
+      );
+  }
+
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

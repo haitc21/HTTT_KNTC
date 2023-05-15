@@ -84,7 +84,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
     private fileAttachmentService: FileAttachmentService,
     private fileService: FileService,
     private oAuthService: OAuthService,
-    public layoutService: LayoutService,
+    public layoutService: LayoutService
   ) {}
 
   ngOnInit() {
@@ -148,20 +148,9 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: any) => {
           if (data) {
-            const uint8Array = this.utilService.base64ToArrayBuffer(data);
-            const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
-
-            const url = window.URL.createObjectURL(blob); // Tạo URL tạm thời
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download =
+            let fileName =
               this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') + '_Tệp gắn kèm.xlsx';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            window.URL.revokeObjectURL(url); // Xóa URL tạm thời
+            const uint8Array = this.utilService.saveFile(data, TYPE_EXCEL, fileName);
           }
           this.layoutService.blockUI$.next(false);
         },
@@ -356,19 +345,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: any) => {
           if (data) {
-            const uint8Array = this.utilService.base64ToArrayBuffer(data);
-            const blob = new Blob([uint8Array], { type: item.contentType });
-
-            const url = window.URL.createObjectURL(blob); // Tạo URL tạm thời
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = item.fileName;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            window.URL.revokeObjectURL(url); // Xóa URL tạm thời
+            const uint8Array = this.utilService.saveFile(data, item.contentType, item.fileName);
           }
           this.layoutService.blockUI$.next(false);
         },

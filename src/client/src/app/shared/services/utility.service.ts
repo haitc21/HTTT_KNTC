@@ -168,7 +168,7 @@ export class UtilityService {
     return roman;
   }
 
-  base64ToArrayBuffer(base64) {
+  saveFile(base64: any, fileType: string, fileName: string) {
     let binaryString = window.atob(base64);
     let binaryLen = binaryString.length;
     let bytes = new Uint8Array(binaryLen);
@@ -176,7 +176,19 @@ export class UtilityService {
       let ascii = binaryString.charCodeAt(i);
       bytes[i] = ascii;
     }
-    return bytes;
+
+    const blob = new Blob([bytes], { type: fileType });
+
+    const url = window.URL.createObjectURL(blob); // Tạo URL tạm thời
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    window.URL.revokeObjectURL(url); // Xóa URL tạm thời
   }
 
   /**

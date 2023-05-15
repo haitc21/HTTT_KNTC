@@ -94,7 +94,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   enviromentDenounce = true;
   waterDenounce = true;
   mineralDenounce = true;
- 
+
   keyword: string = '';
   congKhai: boolean | null;
   maTinh: number = 24;
@@ -309,21 +309,10 @@ export class SearchMapComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: any) => {
           if (data) {
-            const uint8Array = this.utilService.base64ToArrayBuffer(data);
-            const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
-
-            const url = window.URL.createObjectURL(blob); // Tạo URL tạm thời
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download =
+            let fileName =
               this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +
               '_Khiếu nại Tố cáo.xlsx';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            window.URL.revokeObjectURL(url); // Xóa URL tạm thời
+            const uint8Array = this.utilService.saveFile(data, TYPE_EXCEL, fileName);
           }
           this.layoutService.blockUI$.next(false);
         },
@@ -349,18 +338,18 @@ export class SearchMapComponent implements OnInit, OnDestroy {
       );
     if (this.maTinh) {
       this.layoutService.blockUI$.next(true);
-    this.unitService
-      .getLookup(2, this.maTinh)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        (res: ListResultDto<UnitLookupDto>) => {
-          this.huyenOptions = res.items;
-          this.layoutService.blockUI$.next(false);
-        },
-        () => {
-          this.layoutService.blockUI$.next(false);
-        }
-      );
+      this.unitService
+        .getLookup(2, this.maTinh)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<UnitLookupDto>) => {
+            this.huyenOptions = res.items;
+            this.layoutService.blockUI$.next(false);
+          },
+          () => {
+            this.layoutService.blockUI$.next(false);
+          }
+        );
     }
   }
 
@@ -493,7 +482,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     }
   }
 
- ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

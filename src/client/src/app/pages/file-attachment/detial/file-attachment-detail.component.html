@@ -181,9 +181,10 @@
       <!-- ---------------------------------------------------------------------------------- -->
     </div>
 
-    <ng-template *ngIf="!isView" pTemplate="footer">
+    <ng-template pTemplate="footer">
       <div class="flex justify-content-end">
         <button
+          *ngIf="!isView"
           pButton
           pRipples
           type="submit"
@@ -191,6 +192,16 @@
           label="Lưu"
           class="p-button-info mr-2"
           icon="pi pi-check"
+        ></button>
+        <button
+          *ngIf="item"
+          pButton
+          pRipples
+          type="submit"
+          (click)="download()"
+          label="Xem"
+          class="p-button-info mr-2"
+          icon="pi pi-eye"
         ></button>
         <button
           pButton
