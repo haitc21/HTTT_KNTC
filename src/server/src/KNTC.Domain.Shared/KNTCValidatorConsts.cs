@@ -11,8 +11,8 @@ public static class KNTCValidatorConsts
     public const int MaxEmailLength = 100;
     public const int MaxDiaChiLength = 250;
     public const int MaxBoPhanXLLength = 250;
-    public const int MaxToaDoLength = 100;
-    public const int MaxHinhHocLength = 500;
+    public const int MaxToaDoLength = 128;
+    public const int MaxHinhHocLength = 1024;
     public const int MaxSoThuaLength = 50;
     public const int MaxToBanDoLength = 255;
     public const int MaxThamQuyenLength = 250;

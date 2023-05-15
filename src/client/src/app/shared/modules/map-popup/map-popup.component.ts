@@ -1,8 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LoaiKetQua, LoaiVuViec } from '@proxy';
-import { SummaryDto, SummaryMapDto } from '@proxy/summaries';
-import { UnitService } from '@proxy/units';
+import { SummaryDto} from '@proxy/summaries';
 import { DialogService } from 'primeng/dynamicdialog';
 import { NotificationService } from '../../services/notification.service';
 import { MessageConstants } from '../../constants/messages.const';
@@ -24,7 +23,7 @@ export class MapPopupComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject<void>();
   public blockedPanelDetail: boolean = false;
 
-  @Input() dataMap!: SummaryMapDto;
+  @Input() dataMap!: SummaryDto;
   public form: FormGroup;
   hoSo!: SummaryDto;
 
@@ -118,6 +117,7 @@ export class MapPopupComponent implements OnInit, OnDestroy {
     });
     this.form.disable();
   }
+
   viewDetail() {
     if (!this.hoSo) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
@@ -150,6 +150,7 @@ export class MapPopupComponent implements OnInit, OnDestroy {
       });
     }
   }
+
   private toggleBlockUI(enabled: boolean) {
     if (enabled == true) {
       this.blockedPanelDetail = true;

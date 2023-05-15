@@ -7,7 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
-import { LinhVuc, LoaiKetQua, LoaiVuViec, SpatialDatas } from '@proxy';
+import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
 import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryChartDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
@@ -71,12 +71,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   blockedPanel = false;
   // items: SummaryDto[] = [];
   dataMap: SummaryDto[] = [];
-
   spatialData: SpatialDataDto[];
 
   //Paging variables
   public skipCount: number = 0;
-  public maxResultCount: number = 10;
+  public maxResultCount: number = 20;
   public totalCount: number;
 
   // filter
@@ -209,12 +208,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
     } as GetSummaryListDto;
+    
     this.summaryService
-      .getMap(this.filter)
+      .getList(this.filter)
+      //.getMap(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: SummaryDto[]) => {
-          this.dataMap = response;
+        next: (response: PagedResultDto<SummaryDto>) => {
+          this.dataMap = response.items;
           this.layoutService.blockUI$.next(false);
         },
         error: () => {

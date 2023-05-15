@@ -12,18 +12,23 @@ import {
 } from '@angular/core';
 import { LoaiVuViec } from '@proxy';
 import * as L from 'leaflet';
-//import 'leaflet.locatecontrol';
 import { v4 as uuidv4 } from 'uuid';
-import { SummaryMapDto } from '@proxy/summaries';
+import { SummaryDto} from '@proxy/summaries';
 import { MapPopupComponent } from '../map-popup/map-popup.component';
-//change projection
+import "leaflet.markercluster/dist/leaflet.markercluster";
+import 'leaflet.markercluster.layersupport';
+//import "leaflet-draw/dist/leaflet.draw.css";
+//import "leaflet-draw/dist/leaflet.draw.js";
+import "leaflet-draw";
+import { format } from 'date-fns';
+//import 'leaflet.locatecontrol';
+//change projection - 0 cần projection nữa
 //import "leaflet/dist/leaflet.css";
-import "proj4leaflet";
-import "proj4/dist/proj4.js";
-import "proj4leaflet/src/proj4leaflet.js";
-import { Proj4GeoJSONFeature } from 'proj4leaflet';
-import proj4 from 'proj4'
-
+//import "proj4leaflet";
+//import "proj4/dist/proj4.js";
+//import "proj4leaflet/src/proj4leaflet.js";
+//import { Proj4GeoJSONFeature } from 'proj4leaflet';
+//import proj4 from 'proj4'
 const blueIcon = new L.Icon({
   iconUrl: 'assets/images/map/marker-icon.png',
   iconSize: [25, 41],
@@ -45,20 +50,26 @@ const redIcon = new L.Icon({
   styleUrls: ['./map.component.scss'],
 })
 export class MapComponent implements AfterViewInit, OnChanges {
-  @Input() data: SummaryMapDto[] = [];
+  @Input() data: SummaryDto[] = [];
   @Input() spatialData: any[];
   @Input() heightMap: string = '600px';
   @Input() zoomLv: number = 10;
-  @Input() duLieuToaDo: string;
+  @Input() duLieuToaDo: string;  
+  @Input() duLieuHinhhoc: string;  
   @Input() loaiVuViec: LoaiVuViec = LoaiVuViec.KhieuNai;
 
   idMap: string = uuidv4();
   map: L.Map;
+
   myStyle: any;
 
+  //Cac layer tren ban do
+  markers: any;
+  info: any;
   khieunai: any;
   tocao: any;
   quyhoach: any;
+  drawningBoard: any;
 
   // @ViewChild('popup', { read: ViewContainerRef }) popupContainer: ViewContainerRef;
   private popupComponentRef: ComponentRef<MapPopupComponent>;
@@ -72,7 +83,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   ngAfterViewInit() {
     this.initMap();
     //this.buildLocateBtn();
-    this.buildEventMapClick();
+    //this.buildEventMapClick();
     this.renderMarkers(this.data);
     this.renderSpatialData(this.spatialData);
   }
@@ -92,15 +103,15 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
   initMap() {
     //Khoi tao ban do
-    let center = this.duLieuToaDo
+    var center: L.LatLng = this.duLieuToaDo
       ? this.convertStringCoordiate(this.duLieuToaDo)
-      : [21.5928, 105.8442];
+      : L.latLng(21.6825, 105.8442);
     
     this.map = L.map(this.idMap, {
     }).setView(center, this.zoomLv);
 
     // GeoJSON layer (UTM15)
-    proj4.defs("EPSG:9213","+proj=tmerc +lat_0=0 +lon_0=106.5 +k=0.9999 +x_0=500000 +y_0=0 +ellps=WGS84 +towgs84=-191.90441429,-39.30318279,-111.45032835,-0.00928836,0.01975479,-0.00427372,0.252906278 +units=m +no_defs +type=crs");
+    //proj4.defs("EPSG:9213","+proj=tmerc +lat_0=0 +lon_0=106.5 +k=0.9999 +x_0=500000 +y_0=0 +ellps=WGS84 +towgs84=-191.90441429,-39.30318279,-111.45032835,-0.00928836,0.01975479,-0.00427372,0.252906278 +units=m +no_defs +type=crs");
     
     const mbAttr =
       'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
@@ -141,10 +152,31 @@ export class MapComponent implements AfterViewInit, OnChanges {
     
     this.khieunai = L.layerGroup().addTo(this.map);
     this.tocao = L.layerGroup().addTo(this.map);    
-    this.quyhoach = L.layerGroup();//empty layer
+    this.quyhoach = L.layerGroup().addTo(this.map);//empty layer
 
+    var mcgLayerSupportGroup = L.markerClusterGroup.layerSupport({
+      maxClusterRadius: 10,
+      iconCreateFunction: function (cluster) {
+				//var markers = cluster.getAllChildMarkers();
+
+				return L.divIcon({ html: cluster.getChildCount(), className: 'mycluster', iconSize: L.point(40, 40) });
+			},
+			//Disable all of the defaults:
+			spiderfyOnMaxZoom: false, showCoverageOnHover: false, zoomToBoundsOnClick: false,
+      animate: true,
+      animateAddingMarkers: false,
+      spiderfyDistanceMultiplier: 1,
+      //Options to pass to the L.Polygon constructor
+		  polygonOptions: {}
+    });
+    mcgLayerSupportGroup.addLayer(this.khieunai);
+    mcgLayerSupportGroup.addLayer(this.tocao);
+    mcgLayerSupportGroup.addTo(this.map);
+
+    mcgLayerSupportGroup.checkIn([this.khieunai, this.tocao]);
     //set boundary of Tỉnh Thái Nguyên
-    const overlay_ThaiNguyen: Proj4GeoJSONFeature = {
+    //const overlay_ThaiNguyen: Proj4GeoJSONFeature = {
+    const overlay_ThaiNguyen = {
       "type":"Feature",
       //"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}},
       "properties":{"COUNTRY":"Vietnam","NAME":"Thái Nguyên","VARNAME":"ThaiNguyen"},
@@ -164,26 +196,199 @@ export class MapComponent implements AfterViewInit, OnChanges {
     //load base map and KN, TC first
     const layerControl = L.control.layers(baseMaps, KNTC).addTo(this.map);
     //load layer Thai Nguyen province's boundary
-    var overlay_TN = L.Proj.geoJson(overlay_ThaiNguyen).addTo(this.map);
+    //var overlay_TN = L.Proj.geoJson(overlay_ThaiNguyen).addTo(this.map);
+    var overlay_TN = L.geoJson(overlay_ThaiNguyen).addTo(this.map);
     //add layer quy hoach (if any)
-    this.quyhoach.addTo(this.map);
+    //this.quyhoach.addTo(this.map);
+
+    //Bổ sung các custom control cho Map: 
+    //info control layer
+    this.info = L.control();
+    this.info.onAdd = function (map) {
+      this._div = L.DomUtil.create('div', 'leaflet-control-info'); // create a div with a class "info"
+      this.update();
+      return this._div;
+    };
+    
+    // method that we will use to update the control based on feature properties passed
+    this.info.update = function () {
+        //buildInfoContent
+        var infoContent = '<h5>Thông tin Khiếu nại/Tố cáo</h5>';
+        if (this.data){        
+          infoContent += this.buildInfoContent(this.data);
+        }else {
+          infoContent += '<h6>Bạn cần di chuyển con trỏ vào khu vực KN/TC để xem thông tin!</h6>';
+        }
+        this._div.innerHTML = infoContent;
+    };
+    
+    this.info.buildInfoContent = function(props: any){
+      var type = ((props.loaiVuViec==1)?'Khiếu nại':'Tố cáo');
+      var infoContent = '<h6>Loại vụ việc: <span color="blue"><strong>' + type +  '</strong></span></h6>';
+      infoContent += '<table>\
+        <tr>\
+          <th scope="row">\
+          <td>Tiêu đề:</td><td>' + props.tieuDe + '</td>\
+        </tr>\
+        <tr>\
+          <th scope="row">\
+          <td>Mã hồ sơ:</td><td>' + props.maHoSo + '</td>\
+        </tr>\
+        <tr>\
+          <th scope="row">\
+          <td>Người ' + type +  ':</td><td>' + props.nguoiNopDon + '</td>\
+        </tr>\
+        <tr>\
+          <th scope="row">\
+          <td>Ngày nhận đơn:</td><td>' + props.thoiGianTiepNhan + '</td>\
+        </tr>\
+        <tr>\
+          <th scope="row">\
+          <td>Ngày hẹn trả kết quả:</td><td>' + props.thoiGianHenTraKQ + '</td>\
+        </tr>\
+        <tr>\
+          <th scope="row">\
+          <td>Bộ phận đang XL:</td><td>' + props.boPhanDangXL + '</td>\
+        </tr>\
+      </table>';
+      return infoContent;
+    }
+
+    this.info.addTo(this.map);
+
+    //tạo Custom legend layer
+    var legend = L.control({position: 'bottomright'});
+
+    legend.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'leaflet-control-info legend'),
+            types = [1, 2],
+            labels = ['Khiếu nại', 'Tố cáo'],
+            bgColors = ['#2880ca' , '#ed5565']
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < types.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + bgColors[i] + '"></i> ' +
+                labels[i] + '<br>';
+        }
+
+        return div;
+    };
+
+    legend.addTo(this.map);
+
+    // Thêm layer cho Leaflet.Draw
+    this.drawningBoard = new L.FeatureGroup();
+    this.drawningBoard.addTo(this.map);
+    //this.map.addLayer(this.drawningBoard);
   }
 
-  buildEventMapClick() {
+  letCoordinate() {
     this.map.on('click', e => {
       this.duLieuToaDo = `${e.latlng.lat}, ${e.latlng.lng}`;
       
       L.tooltip()
         .setLatLng(e.latlng)
         .setContent(
-          `<h5>Vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
+          `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
         )
         .addTo(this.map);
       
     });
+
   }
 
-  renderMarkers(data: SummaryMapDto[]) {
+  letDraw() {
+    var editableLayer = this.drawningBoard;
+    var options = {
+      position: 'topleft',
+      draw: {
+        polyline: {
+          shapeOptions: {
+            color: '#f357a1',
+            weight: 10
+          }
+        },
+        polygon: {
+          allowIntersection: false, // Restricts shapes to simple polygons
+          drawError: {
+            color: '#e1e100', // Color the shape will turn when intersects
+            message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+          },
+          shapeOptions: {
+            color: '#bada55'
+          }
+        },
+        circle: {
+          shapeOptions: {
+            clickable: false
+          }
+        },
+        rectangle: {
+          showArea: false,
+          shapeOptions: {
+            clickable: false
+          }
+        },
+  
+      },
+      edit: {
+        featureGroup: editableLayer, //REQUIRED!!
+        remove: false
+      }
+    };
+    var drawControl = new L.Control.Draw(options);
+    this.map.addControl(drawControl);
+    
+    // Bắt sự kiện khi người dùng kết thúc vẽ một hình dạng
+    this.map.on("draw:created", (e) => {
+      var type = e.layerType;
+      var layer = e.layer;
+
+      if (type != 'marker' && type != 'circlemarker') {
+        editableLayer.addLayer(layer);
+
+        // Chuyển đổi layer sang GeoJSON và trả về cho người dùng
+        var geojson = layer.toGeoJSON();
+        this.duLieuHinhhoc = JSON.stringify(geojson);
+        var point: any;
+        if (type == "circle")
+          point = layer.getLatLng();
+        else{
+          var latlngs  = layer.getLatLngs();
+
+          if(!L.LineUtil.isFlat(latlngs)){
+            latlngs = latlngs[0];
+          }
+          point = latlngs[0];
+        }
+
+        L.tooltip()
+          .setLatLng(point)
+          .setContent(
+            `<h5>Đã xác nhận dữ liệu hình học mới: </h5> </br> <p>${this.duLieuHinhhoc}</p>`
+          )
+          .addTo(this.map);
+        //console.log(geojson);
+      }
+      else{//Chỉ cho duy nhất 1 marker
+        var e = layer.getLatLng();
+        this.duLieuToaDo = `${e.latlng.lat}, ${e.latlng.lng}`;
+      
+        L.tooltip()
+          .setLatLng(e.latlng)
+          .setContent(
+            `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
+          )
+          .addTo(this.map);
+      }
+    });
+    //map.on("draw:created", function (e) { //L.Draw.Event.CREATED
+    //map.on('draw:drawstop',  (e) => { console.log("end");
+  }
+
+  renderMarkers(data: SummaryDto[]) {
     //clear all markers
     this.khieunai.clearLayers();
     this.tocao.clearLayers();
@@ -199,36 +404,86 @@ export class MapComponent implements AfterViewInit, OnChanges {
     data
       .filter(x => x.duLieuToaDo != null || x.duLieuHinhHoc != null)
       .forEach(dataMap => {
-        let toado = [0 , 0];
+        let toado: L.LatLng = new L.LatLng(0 , 0);
         let geometry: any;
+        let geojson: any;
         if (dataMap.duLieuToaDo != null)//Có tọa độ thì lấy tọa độ
           toado = this.convertStringCoordiate(dataMap.duLieuToaDo);
         else{//Không có tọa độ thì lấy điểm đầu tiên trong hình học
-          geometry = JSON.parse(dataMap.duLieuHinhHoc);
-          var coordinates = geometry.coordinates;
+          //geometry = JSON.parse(dataMap.duLieuHinhHoc);
+          geojson = JSON.parse(dataMap.duLieuHinhHoc);
+          var coordinates = geojson.geometry.coordinates;
+          //var coordinates = geometry.coordinates;
           toado = coordinates[0];
         }
 
         //always add marker
-        const marker = L.marker(toado, {
-          icon: dataMap.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
-        });
+        var info = this.info;
+        //var pros = this.buildProperties(dataMap);
+        //var infoContent = this.buildInfoContent(pros);
 
+        const marker = L.marker(toado, {
+          icon: dataMap.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon
+        });
+        
+        //marker.data = dataMap;
+        marker.on('mouseover',function(e) {
+          info.data = dataMap;
+          info.update();
+        });
+        
         marker.bindPopup(this.getPopup(dataMap), customOptions);
 
         if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) marker.addTo(this.khieunai);
         else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) marker.addTo(this.tocao);
         
         //Add duLieuHinhHoc if any
-        if (dataMap.duLieuHinhHoc != null){   
-          let geojson: Proj4GeoJSONFeature = 
+        if (dataMap.duLieuHinhHoc != null){
+          //this.quyhoach.clearLayers();
+          //if (geometry==undefined)
+          //  geometry = JSON.parse(dataMap.duLieuHinhHoc);
+          if (geojson==undefined)
+            geojson = JSON.parse(dataMap.duLieuHinhHoc);
+          //let geojson: Proj4GeoJSONFeature = 
+          /*
+          let geojson = 
           { 
+            "id": dataMap.id,
             "type": "Feature", 
-            "crs": {"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::9213"}},
-            "properties": {}, 
-            "geometry": geometry
-          }        
-          L.Proj.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
+            //"properties": pros, 
+            "geometry": geometry,
+            //"crs": {"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::9213"}},
+          }
+          */
+          /*
+          if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) L.geoJson(geojson, {style: this.myStyle}).addTo(this.khieunai);
+          else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) L.geoJson(geojson, {style: this.myStyle}).addTo(this.tocao);  
+          */
+         
+          //let newlayer = L.Proj.geoJson(geojson,
+          let newlayer = L.geoJson(geojson,
+          {
+            style: (feature) => ({
+              weight: 3,
+              opacity: 0.5,
+              color: '#008f68',
+              fillOpacity: 0.8,
+              fillColor: (dataMap.loaiVuViec==1)? '#2880ca': '#ed5565',
+            }),
+            onEachFeature: (feature, layer) => (
+            layer.on({
+              mouseover: (e) => (this.highlightFeature(layer, dataMap)),
+              mouseout: (e) => (this.resetFeature(layer, dataMap.loaiVuViec)),
+              onclick: (e) => (this.zoomToFeature(layer))
+            })
+          )
+          });
+          
+          if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) 
+            newlayer.addTo(this.khieunai);
+          else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) 
+            newlayer.addTo(this.tocao);  
+          //L.Proj.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
         }
       });
   }
@@ -239,7 +494,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
     if (khonggian!=undefined)
       khonggian.forEach(feat => {
-        let geojson: Proj4GeoJSONFeature = 
+        //let geojson: Proj4GeoJSONFeature = 
+        let geojson = 
         {     
         "id": feat.id,
         "type": "Feature",
@@ -247,21 +503,71 @@ export class MapComponent implements AfterViewInit, OnChanges {
             "popupContent": "<p>Tên tổ chức: " + feat.tenToChuc + "</p><p>Quyển: " + feat.quyen + "</p><p>Số tờ bản đồ: " + feat.soToBD + "</p>",
         },
         "geometry": JSON.parse(feat.geoJson),
-        "crs": {"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::9213"}},
+        //"crs": {"type":"name","properties":{"name":"urn:ogc:def:crs:EPSG::9213"}},
         }
-        L.Proj.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
+        //L.Proj.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
+        L.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
       });
   }
 
-  convertStringCoordiate(cor: string): [number, number] {
-    let point = cor.split(',');
-    return [+point[0], +point[1]];
+  buildProperties(dataMap: SummaryDto){
+    return {
+      "tieuDe": "<p>" + dataMap.tieuDe + "</p>",
+      "maHoSo": dataMap.maHoSo,
+      "type": (dataMap.loaiVuViec == 1)?"Khiếu nại":"Tố cáo",
+      "loaiVuViec": dataMap.loaiVuViec,
+      "nguoiNopDon": dataMap.nguoiNopDon,
+      "thoiGianTiepNhan": format(new Date(dataMap.thoiGianTiepNhan),'dd/MM/yyyy HH:mm'),
+      "thoiGianHenTraKQ": format(new Date(dataMap.thoiGianHenTraKQ),'dd/MM/yyyy HH:mm'),
+      "boPhanDangXL": dataMap.boPhanDangXL
+    }
   }
-  getPopup(dataMap: SummaryMapDto): HTMLElement {
+
+  convertStringCoordiate(cor: string): L.LatLng {
+    let point = cor.split(',');
+    return new L.LatLng(+point[0], +point[1]);
+  }
+
+  getPopup(dataMap: SummaryDto): HTMLElement {
     const factory = this.componentFactoryResolver.resolveComponentFactory(MapPopupComponent);
     this.popupComponentRef = factory.create(this.popupContainer.injector);
     this.popupComponentRef.instance.dataMap = dataMap;
     this.appRef.attachView(this.popupComponentRef.hostView); // Đính kèm view của component
     return this.popupComponentRef.location.nativeElement;
+  }
+
+  private highlightFeature(layer, data) {
+      //var layer = e.target;
+
+      layer.setStyle({
+          weight: 10,
+          color: '#666',
+          dashArray: '',
+          fillOpacity: 0.7
+      });
+
+      layer.bringToFront();
+
+      this.info.data = data;
+      this.info.update();
+  }
+
+  private resetFeature(layer, type) {
+    //const layer = e.target;
+  
+    layer.setStyle({
+      weight: 3,
+      opacity: 0.5,
+      color: '#008f68',
+      fillOpacity: 0.8,
+      fillColor: (type==1)? '#2880ca': '#ed5565'
+    });
+
+    //info.update();
+    //this.info.update();
+  }
+
+  private zoomToFeature(e) {
+      this.map.fitBounds(e.target.getBounds());
   }
 }

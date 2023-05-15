@@ -8,8 +8,8 @@ export class KNTCValidatorConsts {
   public static MaxEmailLength = 100;
   public static MaxDiaChiLength = 250;
   public static MaxBoPhanXLLength = 250;
-  public static MaxToaDoLength = 100;
-  public static MaxHinhHocLength = 500;
+  public static MaxToaDoLength = 128;
+  public static MaxHinhHocLength = 1024;
   public static MaxSoThuaLength = 50;
   public static MaxToBanDoLength = 50;
   public static MaxThamQuyenLength = 250;

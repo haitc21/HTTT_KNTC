@@ -40,7 +40,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   // default
   blockedPanel = false;
   skipCount: number = 0;
-  maxResultCount: number = 10;
+  maxResultCount: number = 20;
   totalCount: number;
 
   // filter
@@ -111,7 +111,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   }
   private resetFilter() {
     this.skipCount = 0;
-    this.maxResultCount = 10;
+    this.maxResultCount = 20;
     this.totalCount = 0;
     this.keyword = '';
     this.maTinh = null;

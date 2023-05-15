@@ -23,7 +23,7 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       />
-                      <label for="name">Mã hồ sơ <span class="required">*</span></label>
+                      <label for="maHoSo">Mã hồ sơ <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.maHoSo"
@@ -96,7 +96,7 @@
                         [showClear]="true"
                         inputId="dob"
                       ></p-calendar>
-                      <label for="ngaySinh">Ngày sinh <span class="required">*</span></label>
+                      <label>Ngày sinh <span class="required">*</span></label>
                       <app-validation-message
                         [entityControl]="formControls.ngaySinh"
                         [validationMessages]="validationMessages.ngaySinh"
@@ -114,7 +114,7 @@
                         pInputText
                         class="w-full"
                       />
-                      <label for="phoneNumber">Số ĐT <span class="required">*</span></label>
+                      <label for="dienThoai">Số ĐT <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.dienThoai"
@@ -156,7 +156,7 @@
                         styleClass="w-full"
                         (onChange)="tinhChange($event?.value)"
                       ></p-dropdown>
-                      <label for="maTinhTP">Tỉnh/TP <span class="required">*</span></label>
+                      <label>Tỉnh/TP <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.maTinhTP"
@@ -180,7 +180,7 @@
                         styleClass="w-full"
                         (onChange)="huyenChange($event?.value)"
                       ></p-dropdown>
-                      <label for="maQuanHuyen">Quận/Huyện <span class="required">*</span></label>
+                      <label>Quận/Huyện <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.maQuanHuyen"
@@ -203,7 +203,7 @@
                         filterBy="unitName"
                         styleClass="w-full"
                       ></p-dropdown>
-                      <label for="maXaPhuongTT">Xã/Phường/TT <span class="required">*</span></label>
+                      <label>Xã/Phường/TT <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.maXaPhuongTT"
@@ -221,9 +221,7 @@
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiThuongTru"
-                        >Địa chỉ thường trú <span class="required">*</span></label
-                      >
+                      <label for="diaChiThuongTru">Địa chỉ thường trú <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiThuongTru"
@@ -241,9 +239,7 @@
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiLienHe"
-                        >Địa chỉ liên hệ <span class="required">*</span></label
-                      >
+                      <label for="diaChiLienHe">Địa chỉ liên hệ <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiLienHe"
@@ -263,9 +259,7 @@
                         showTime="true"
                         [hourFormat]="24"
                       ></p-calendar>
-                      <label for="thoiGianTiepNhan"
-                        >Thời gian tiếp nhận <span class="required">*</span></label
-                      >
+                      <label>Thời gian tiếp nhận <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.thoiGianTiepNhan"
@@ -285,9 +279,7 @@
                         showTime="true"
                         [hourFormat]="24"
                       ></p-calendar>
-                      <label for="thoiGianHenTraKQ"
-                        >Thời gian hẹn trả kết quả <span class="required">*</span></label
-                      >
+                      <label>Thời gian hẹn trả kết quả <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.thoiGianHenTraKQ"
@@ -305,9 +297,7 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       />
-                      <label for="nguoiNopDon"
-                        >Người bị tố cáo <span class="required">*</span></label
-                      >
+                      <label for="nguoiNopDon">Người bị tố cáo <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.nguoiBiToCao"
@@ -325,9 +315,7 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       />
-                      <label for="boPhanDangXL"
-                        >Bộ phận đang XL <span class="required">*</span></label
-                      >
+                      <label for="boPhanDangXL">Bộ phận đang XL <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.boPhanDangXL"
@@ -376,9 +364,7 @@
                         pInputTextarea
                         class="w-full"
                       ></textarea> -->
-                    <label for="noiDungVuViec"
-                      >Nội dung vụ việc <span class="required">*</span></label
-                    >
+                    <label>Nội dung vụ việc <span class="required">*</span></label>
                     <p-editor
                       id="noiDungVuViec"
                       formControlName="noiDungVuViec"
@@ -466,7 +452,7 @@
                         filterBy="landTypeName"
                         styleClass="w-full"
                       ></p-dropdown>
-                      <label for="loaiDat">Loại đất <span class="required">*</span></label>
+                      <label>Loại đất <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.loaiDat"
@@ -490,7 +476,7 @@
                         styleClass="w-full"
                         (onChange)="tinhThuaDatChange($event?.value)"
                       ></p-dropdown>
-                      <label for="tinhThuaDat">Tỉnh/TP <span class="required">*</span></label>
+                      <label>Tỉnh/TP <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.tinhThuaDat"
@@ -514,7 +500,7 @@
                         styleClass="w-full"
                         (onChange)="huyenThuaDatChange($event?.value)"
                       ></p-dropdown>
-                      <label for="huyenThuaDat">Quận/Huyện <span class="required">*</span></label>
+                      <label>Quận/Huyện <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.huyenThuaDat"
@@ -537,7 +523,7 @@
                         filterBy="unitName"
                         styleClass="w-full"
                       ></p-dropdown>
-                      <label for="xaThuaDat">Xã/Phường/TT <span class="required">*</span></label>
+                      <label>Xã/Phường/TT <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.xaThuaDat"
@@ -555,9 +541,7 @@
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiThuaDat"
-                        >Địa chỉ thửa đất <span class="required">*</span></label
-                      >
+                      <label for="diaChiThuaDat">Địa chỉ thửa đất <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiThuaDat"
@@ -580,7 +564,7 @@
                         dateFormat="dd/mm/yy"
                         [showClear]="true"
                       ></p-calendar>
-                      <label for="ngayGQTC">Ngày GQTC </label>
+                      <label>Ngày GQTC </label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.ngayGQTC"
@@ -634,7 +618,7 @@
                         dateFormat="dd/mm/yy"
                         [showClear]="true"
                       ></p-calendar>
-                      <label for="ngayQDGQTC">Ngày QĐ GQTC </label>
+                      <label>Ngày QĐ GQTC </label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.ngayQDGQTC"
@@ -670,7 +654,7 @@
                         dateFormat="dd/mm/yy"
                         [showClear]="true"
                       ></p-calendar>
-                      <label for="giaHanGQTC1">Ngày gia hạn GQTC 1</label>
+                      <label>Ngày gia hạn GQTC 1</label>
                     </span>
                   </div>
                   <!-- ---------------------------------giaHanGQTC2------------------------------------------------- -->
@@ -683,7 +667,7 @@
                         dateFormat="dd/mm/yy"
                         [showClear]="true"
                       ></p-calendar>
-                      <label for="giaHanGQTC2">Ngày gia hạn GQTC 2</label>
+                      <label>Ngày gia hạn GQTC 2</label>
                     </span>
                   </div>
                   <!-- -------------------------------soVBKLNDTC--------------------------------------------------- -->
@@ -714,7 +698,7 @@
                         dateFormat="dd/mm/yy"
                         [showClear]="true"
                       ></p-calendar>
-                      <label for="ngayGQTC">Ngày nhận TB KQXLKLTC </label>
+                      <label>Ngày nhận TB KQXLKLTC </label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.ngayNhanTBKQXLKLTC"
@@ -735,7 +719,7 @@
                         [autoDisplayFirst]="false"
                         styleClass="w-full"
                       ></p-dropdown>
-                      <label for="ketQua">Kết luận nội dung tố cáo </label>
+                      <label>Kết luận nội dung tố cáo </label>
                       <app-validation-message
                         [entityControl]="formControls.ketQua"
                         [validationMessages]="validationMessages.ketQua"
@@ -786,7 +770,7 @@
                     pInputText
                     [style]="{ width: '100%' }"
                   />
-                  <label for="name">Dữ liệu tọa độ</label>
+                  <label for="duLieuToaDo">Dữ liệu tọa độ</label>
                 </span>
                 <app-validation-message
                   [entityControl]="formControls.duLieuToaDo"
@@ -801,12 +785,12 @@
                   pRipples
                   type="button"
                   (click)="getCoordiate()"
-                  label="Lấy tọa độ"
+                  label="{{coordinateLabel}}"
                   class="p-button-info mr-2"
                   icon="pi pi-map-marker"
                 ></button>
               </div>
-              <div class="field col-12 md:col-12">
+              <div class="field col-12 md:col-8">
                 <span class="p-float-label">
                   <textarea
                     id="duLieuHinhHoc"
@@ -815,13 +799,26 @@
                     pInputTextarea
                     class="w-full"
                   ></textarea>
-                  <label for="name">Dữ liệu hình học</label>
+                  <label for="duLieuHinhHoc">Dữ liệu hình học</label>
                 </span>
                 <app-validation-message
                   [entityControl]="formControls.duLieuHinhHoc"
                   [validationMessages]="validationMessages.duLieuHinhHoc"
                 >
                 </app-validation-message>
+              </div>
+              <!-- -------------------------------getDraw--------------------------------------------------- -->
+              <div class="field col-12 md:col-4">
+                <button
+                  *ngIf="mode != 'view'"
+                  pButton
+                  pRipples
+                  type="button"
+                  (click)="letDraw()"
+                  label="{{drawLabel}}"
+                  class="p-button-info mr-2"
+                  icon="pi pi-map-marker"
+                ></button>
               </div>
             </div>
           </p-card>
@@ -856,7 +853,36 @@
         ></button>
       </div>
     </ng-template>
-
-   
+    <ng-template *ngIf="(mode == 'view') && hasPermissionUpdate" pTemplate="footer">
+      <div class="flex justify-content-end">
+        <button *ngIf="(mode == 'view')"
+          pButton
+          pRipples
+          type="submit"
+          (click)="changeEditMode()"
+          label="Sửa"
+          class="p-button-info mr-2"
+          icon="pi pi-check"
+        ></button>
+        <button *ngIf="(mode != 'view')"
+          pButton
+          pRipples
+          type="submit"
+          (click)="saveChange()"
+          label="Lưu"
+          class="p-button-info mr-2"
+          icon="pi pi-check"
+        ></button>
+        <button
+          pButton
+          pRipples
+          type="button"
+          (click)="close()"
+          label="Đóng"
+          class="p-button-danger"
+          icon="pi pi-times"
+        ></button>
+      </div>
+    </ng-template>
   </p-panel>
 </form>

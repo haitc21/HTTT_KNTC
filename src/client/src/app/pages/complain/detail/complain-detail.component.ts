@@ -1,7 +1,7 @@
-import { ListResultDto } from '@abp/ng.core';
+import { ListResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { LinhVuc, LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
+import { LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
 import {
   ComplainDto,
   ComplainService,
@@ -32,6 +32,10 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   complainId: string;
   mode: 'create' | 'update' | 'view' = 'view';
+    
+  // Permissions
+  hasPermissionUpdate = false;
+
   loaiVuViec = LoaiVuViec.KhieuNai;
   fileUploads: FileUploadDto[] = [];
   // Default
@@ -58,6 +62,10 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     { value: LoaiKhieuNai.KhieuKien, text: 'Khiếu kiện' },
   ];
   LoaiVuViec = LoaiVuViec;
+
+  //
+  coordinateLabel = "Lấy tọa độ";
+  drawLabel = "Vẽ trên bản đồ";
 
   // Validate
   validationMessages = {
@@ -201,11 +209,13 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private unitService: UnitService,
     private landTypeService: LandTypeService,
+    private permissionService: PermissionService,
     private notificationService: NotificationService,
     private layoutService: LayoutService,
   ) {}
 
   ngOnInit() {
+    this.getPermission();
     this.loadOptions();
     this.buildForm();
     if (this.utilService.isEmpty(this.config.data?.mode) == false) {
@@ -268,6 +278,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         );
     } else this.huyenOptions = [];
   }
+
   huyenChange(id: number, isFirst: boolean = false) {
     if (id) {
       this.layoutService.blockUI$.next(true);
@@ -310,6 +321,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         );
     } else this.huyenThuaDateOptions = [];
   }
+
   huyenThuaDatChange(id: number, isFirst: boolean = false) {
     if (id) {
       this.layoutService.blockUI$.next(true);
@@ -344,6 +356,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
           this.dataMap.push(response);
           this.dataMap[0].loaiVuViec = LoaiVuViec.KhieuNai;
+
           this.tinhChange(this.selectedEntity.maTinhTP, true);
           this.huyenChange(this.selectedEntity.maQuanHuyen, true);
           this.tinhThuaDatChange(this.selectedEntity.tinhThuaDat, true);
@@ -434,7 +447,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         );
     } else {
       let value = this.form.value as UpdateComplainDto;
-      console.log('cong khai', value.congKhai);
+      //console.log('cong khai', value.congKhai);
 
       this.complainService
         .update(this.config.data.id, value)
@@ -537,20 +550,58 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       concurrencyStamp: [],
     });
   }
-  getCoordiate() {
-    if (this.mapComponent?.duLieuToaDo) {
+
+  getPermission() {
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Complains.Edit');
+  }
+  
+  changeEditMode(){
+    this.mode = 'update';
+    this.form.enable();
+  }
+
+  getCoordiate() {    
+    if (this.coordinateLabel=="Hủy"){
+      this.form.get('duLieuToaDo').setValue(this.selectedEntity?.duLieuToaDo);
+      this.coordinateLabel = "Lấy tọa độ";
+    }
+    else if (this.mapComponent?.duLieuToaDo) {
+      //Đã có -> Lấy tọa độ      
       this.form.get('duLieuToaDo').setValue(this.mapComponent?.duLieuToaDo);
-    } else {
-      this.notificationService.showWarn('Vui lòng chọn tọa độ trên bản đồ');
+      this.coordinateLabel = "Hủy";
+    }
+    else{//Chưa có -> Cho phép chọn tọa độ      
+      this.mapComponent?.letCoordinate();
+      this.notificationService.showSuccess('Bạn hãy chọn một điểm trên bản đồ để thay đổi vị trí có khiếu nại!');
+      this.coordinateLabel = "Cập nhật!";
     }
   }
 
-  
+  letDraw() {
+    //Cho phép vẽ
+    if (this.drawLabel=="Hủy"){
+      this.form.get('duLieuToaDo').setValue(this.selectedEntity?.duLieuHinhHoc);
+      this.drawLabel = "Vẽ trên bản đồ";
+    }
+    else if (this.mapComponent?.duLieuHinhhoc) {
+      //get dữ liệu hình học   
+      this.form.get('duLieuHinhHoc').setValue(this.mapComponent?.duLieuHinhhoc);
+      this.drawLabel = "Hủy";
+    } else {
+      //Cho phép vẽ
+      this.mapComponent?.letDraw();
+      
+      this.notificationService.showSuccess('Bạn hãy Sử dụng công cụ vẽ trên bản đồ để thể hiện thửa đất có khiếu nại!');
+      this.drawLabel = "Cập nhật!";
+    }
+  }  
+
   close() {
     if (this.ref) {
       this.ref.close();
     }
   }
+
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();

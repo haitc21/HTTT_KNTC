@@ -1,16 +1,17 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
+//import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
 import { Subject, takeUntil } from 'rxjs';
-import { UnitLookupDto } from '@proxy/units/models';
-import { GetSummaryListDto, SummaryDto, SummaryMapDto } from '../../proxy/summaries/models';
+//import { UnitLookupDto } from '@proxy/units/models';
+import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
-import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
+//import { MessageConstants } from 'src/app/shared/constants/messages.const';
+//import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
+//import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 import { MenuItem } from 'primeng/api';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { PagedResultDto } from '@abp/ng.core';
 
 @Component({
   selector: 'app-home',
@@ -59,7 +60,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   home: MenuItem;
 
   blockedPanel = false;
-  dataMap: SummaryMapDto[] = [];
+  maxResultCount: number = 20;
+  
+  //dataMap: SummaryMapDto[] = [];
+  dataMap: SummaryDto[] = [];
 
   filter: GetSummaryListDto;
 
@@ -85,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     public layoutService: LayoutService,
     private oAuthService: OAuthService,
-    private spatialDataService: SpatialDataService,
+    //private spatialDataService: SpatialDataService,
     private summaryService: SummaryService
   ) {}
 
@@ -106,13 +110,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       waterDenounce: this.waterDenounce,
       mineralDenounce: this.mineralDenounce,
       congKhai: this.hasLoggedIn ? null : true,
+      maxResultCount: this.maxResultCount,
     } as GetSummaryListDto;
     this.summaryService
-      .getMap(this.filter)
+      .getList(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: SummaryMapDto[]) => {
-          this.dataMap = response;
+        next: (res: PagedResultDto<SummaryDto>) => {
+          this.dataMap = res.items;//response;
           this.layoutService.blockUI$.next(false);
         },
         error: () => {

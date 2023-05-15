@@ -1,6 +1,6 @@
 <form [formGroup]="form">
   <p-panel #pnlDetail [collapsed]="false">
-    <div class="formgrid grid">
+    <div class="formgrid grid card">
       <!-- -----------------------------------tenTaiLieu----------------------------------------------- -->
       <div class="field col-12 md:col-6">
         <span class="p-float-label">
@@ -11,7 +11,7 @@
             pInputText
             [style]="{ width: '100%' }"
           />
-          <label for="name">Tên tài liệu <span class="required">*</span></label>
+          <label for="tenTaiLieu">Tên tài liệu <span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.tenTaiLieu"
@@ -31,7 +31,7 @@
             [autoDisplayFirst]="false"
             styleClass="w-full"
           ></p-dropdown>
-          <label for="phoneNumber">Giai đoạn <span class="required">*</span></label>
+          <label>Giai đoạn <span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.giaiDoan"
@@ -53,7 +53,7 @@
             filterBy="documentTypeName"
             styleClass="w-full"
           ></p-dropdown>
-          <label for="phoneNumber">Hình thức <span class="required">*</span></label>
+          <label>Hình thức <span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.hinhThuc"
@@ -73,7 +73,7 @@
             showTime="true"
             [hourFormat]="24"
           ></p-calendar>
-          <label for="dob">Ngày nhận <span class="required">*</span></label>
+          <label>Ngày nhận <span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.ngayNhan"
@@ -93,7 +93,7 @@
             showTime="true"
             [hourFormat]="24"
           ></p-calendar>
-          <label for="dob">Thời gian ban hành <span class="required">*</span></label>
+          <label>Thời gian ban hành <span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.thoiGianBanHanh"
@@ -111,7 +111,7 @@
             formControlName="thuTuButLuc"
             [style]="{ width: '100%' }"
           />
-          <label for="description">Thứ tự bút lục <span class="required">*</span></label>
+          <label for="thuTuButLuc">Thứ tự bút lục <span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.thuTuButLuc"
@@ -131,7 +131,7 @@
 
       <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
       <div class="field col-12 md:col-12">
-        <label for="noiDungVuViec">Nội dung chính <span class="required">*</span></label>
+        <label>Nội dung chính <span class="required">*</span></label>
         <p-editor
           id="noiDungChinh"
           formControlName="noiDungChinh"
@@ -156,7 +156,7 @@
             [style]="{ width: '100%' }"
             readonly
           />
-          <label for="name">Tên File <span class="required">*</span></label>
+          <label for="fileName">Tên File <span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.fileName"

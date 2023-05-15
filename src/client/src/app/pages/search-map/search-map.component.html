@@ -56,15 +56,14 @@
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
-          <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
-        </div>
-        <!-- ----------------------------------------------------------------------- -->
-        <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
           <p-inputSwitch [(ngModel)]="mineralDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Tài nguyên nước</span>
+          <p-inputSwitch [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
+        </div>        
       </div>
     </p-card>
   </div>
@@ -133,6 +132,7 @@
             <div class="field col-12 md:col-3">
               <span class="p-float-label">
                 <p-dropdown
+                  id="maquan"
                   [options]="huyenOptions"
                   [(ngModel)]="maHuyen"
                   optionLabel="unitName"
@@ -151,6 +151,7 @@
             <div class="field col-12 md:col-3">
               <span class="p-float-label">
                 <p-dropdown
+                  id="maXaPhuongTT"
                   [options]="xaOptions"
                   [(ngModel)]="maXa"
                   optionLabel="unitName"
@@ -162,7 +163,7 @@
                   styleClass="w-full"
                   (onChange)="loadData()"
                 ></p-dropdown>
-                <label for="phoneNumber">Phường/Xã</label>
+                <label>Phường/Xã</label>
               </span>
             </div>
 
@@ -170,6 +171,7 @@
             <div class="field col-12 md:col-3">
               <span class="p-float-label">
                 <p-calendar
+                  id="thoigiantiepnhan"
                   appendTo="body"
                   [(ngModel)]="thoiGianTiepNhanRange"
                   selectionMode="range"
@@ -179,7 +181,7 @@
                   (onSelect)="thoiGiantiepNhanChange()"
                   (onClear)="thoiGiantiepNhanChange()"
                 ></p-calendar>
-                <label for="phoneNumber">Thời gian tiếp nhận</label>
+                <label>Thời gian tiếp nhận</label>
               </span>
             </div>
 
@@ -187,6 +189,7 @@
             <div *ngIf="hasLoggedIn" class="field col-12 md:col-3">
               <span class="p-float-label">
                 <p-dropdown
+                  id="congkhai"
                   [options]="congKhaiOptions"
                   [(ngModel)]="congKhai"
                   optionLabel="text"
@@ -196,13 +199,14 @@
                   styleClass="w-full"
                   (onChange)="loadData()"
                 ></p-dropdown>
-                <label for="phoneNumber">Công khai</label>
+                <label>Công khai</label>
               </span>
             </div>
             <!-- --------------------------------------------------------------------------------- -->
             <div class="field col-12 md:col-3">
               <span class="p-float-label">
                 <p-dropdown
+                  id="tinhtrang"
                   [options]="loaiKQOptions"
                   [(ngModel)]="tinhTrang"
                   optionLabel="text"
@@ -212,13 +216,13 @@
                   styleClass="w-full"
                   (onChange)="loadData()"
                 ></p-dropdown>
-                <label for="phoneNumber">Tình trạng</label>
+                <label>Tình trạng</label>
               </span>
             </div>
           </div>
         </p-toolbar>
         <p-card>
-          <app-map [data]="dataMap" [spatialData]="spatialData"></app-map>
+          <app-map [data]="items" [spatialData]="spatialData"></app-map>
         </p-card>
         <!-- ----------------------------------------------------------------------- -->
         <p-card>

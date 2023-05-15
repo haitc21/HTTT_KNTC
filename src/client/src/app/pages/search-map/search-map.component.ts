@@ -7,7 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
-import { LinhVuc, LoaiKetQua, LoaiVuViec, SpatialDatas } from '@proxy';
+import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
 import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
@@ -69,18 +69,19 @@ export class SearchMapComponent implements OnInit, OnDestroy {
 
   blockedPanel = false;
   items: SummaryDto[] = [];
-  dataMap: SummaryDto[] = [];
+  //dataMap: SummaryDto[] = [];
 
   spatialData: SpatialDataDto[];
 
   //Paging variables
   public skipCount: number = 0;
-  public maxResultCount: number = 10;
-  public maxGeoCount: number = 500;
+  public maxResultCount: number = 20;
+  public maxGeoCount: number = 1000;
   public totalCount: number;
 
   // filter
   geo = false;
+  filter: GetSummaryListDto;
   //filter: GetSpatialDataListDto;
   //filter: GetComplainListDto;
 
@@ -93,7 +94,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   enviromentDenounce = true;
   waterDenounce = true;
   mineralDenounce = true;
-  filter: GetSummaryListDto;
+ 
   keyword: string = '';
   congKhai: boolean | null;
   maTinh: number = 24;
@@ -144,6 +145,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     this.loadGeo();
     this.loadData(true);
   }
+
   private buildBreadcumb() {
     this.breadcrumb = [{ label: 'Bản đồ' }];
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
@@ -151,9 +153,10 @@ export class SearchMapComponent implements OnInit, OnDestroy {
 
   loadData(isFirst: boolean = false) {
     this.getDataTable();
-    this.getDataMap();
+    //this.getDataMap();//Đoạn này code thừa! 0 cần thiết load lại 1 lần nữa
   }
 
+  /*
   private getDataMap() {
     this.layoutService.blockUI$.next(true);
     this.filter = {
@@ -197,7 +200,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         },
       });
   }
-
+  */
   private getDataTable() {
     this.layoutService.blockUI$.next(true);
     this.filter = {
