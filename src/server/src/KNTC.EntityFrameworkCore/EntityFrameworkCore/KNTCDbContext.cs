@@ -144,7 +144,10 @@ public class KNTCDbContext :
             b.Property(x => x.KetQua2).HasColumnName("ket_qua_2");
 
             b.Property(x => x.DuLieuToaDo).HasColumnName("du_lieu_toa_do").HasMaxLength(KNTCValidatorConsts.MaxToaDoLength);
-            b.Property(x => x.DuLieuHinhHoc).HasColumnName("du_lieu_hinh_hoc").HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);
+            b.Property(x => x.DuLieuHinhHoc)
+             .HasColumnName("du_lieu_hinh_hoc")
+             .HasColumnType("TEXT");
+            //.HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);
 
             b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
@@ -187,7 +190,10 @@ public class KNTCDbContext :
             b.Property(x => x.XaThuaDat).IsRequired().HasColumnName("xa_thua_dat");
 
             b.Property(x => x.DuLieuToaDo).HasColumnName("du_lieu_toa_do").HasMaxLength(KNTCValidatorConsts.MaxToaDoLength);
-            b.Property(x => x.DuLieuHinhHoc).HasColumnName("du_lieu_hinh_hoc").HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);
+            b.Property(x => x.DuLieuHinhHoc)
+             .HasColumnName("du_lieu_hinh_hoc")
+             .HasColumnType("TEXT");
+            //.HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);
 
             b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
             b.Property(x => x.KetQua).HasColumnName("ket_qua");

@@ -173,10 +173,10 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       },
     ],
     duLieuHinhHoc: [
-      {
-        type: 'maxLength',
-        message: `Dữ liệu hình học không vượt quá ${KNTCValidatorConsts.MaxHinhHocLength} kí tự`,
-      },
+      // {
+      //   type: 'maxLength',
+      //   message: `Dữ liệu hình học không vượt quá ${KNTCValidatorConsts.MaxHinhHocLength} kí tự`,
+      // },
     ],
     ghiChu: [
       {
@@ -558,7 +558,8 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       xaThuaDat: [null, [Validators.required]],
 
       duLieuToaDo: [null, [Validators.maxLength(KNTCValidatorConsts.MaxToaDoLength)]],
-      duLieuHinhHoc: [null, [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
+      // duLieuHinhHoc: [null, [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
+      duLieuHinhHoc: [null],
       ghiChu: [null, Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
 
       ngayGQTC: [null],

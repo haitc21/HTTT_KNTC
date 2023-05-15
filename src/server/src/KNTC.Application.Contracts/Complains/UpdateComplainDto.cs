@@ -81,7 +81,7 @@ public class UpdateComplainDto : EntityDto<Guid>, IHasConcurrencyStamp
     public int xaThuaDat { get; set; }
     [MaxLength(KNTCValidatorConsts.MaxToaDoLength)]
     public string DuLieuToaDo { get; set; }
-    [MaxLength(KNTCValidatorConsts.MaxHinhHocLength)]
+    //[MaxLength(KNTCValidatorConsts.MaxHinhHocLength)]
     public string DuLieuHinhHoc { get; set; }
     public string GhiChu { get; set; }
     public LoaiKhieuNai? loaiKhieuNai1 { get; set; }
