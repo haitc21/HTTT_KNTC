@@ -17,6 +17,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
        : base(dbContextProvider)
     {
     }
+
     public async Task<List<Denounce>> GetListAsync(int skipCount,
                                                int maxResultCount,
                                                string sorting,

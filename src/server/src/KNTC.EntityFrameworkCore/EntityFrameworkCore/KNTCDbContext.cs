@@ -1,15 +1,14 @@
-﻿using KNTC.Configs;
+﻿using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
+using KNTC.Configs;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
 using KNTC.LandTypes;
-using KNTC.Units;
-using KNTC.CategoryUnitTypes;
-using KNTC.Users;
 using KNTC.SpatialDatas;
+using KNTC.Units;
+using KNTC.Users;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -22,9 +21,9 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+
 //using Volo.Abp.TenantManagement;
 //using Volo.Abp.TenantManagement.EntityFrameworkCore;
-
 
 namespace KNTC.EntityFrameworkCore;
 
@@ -34,10 +33,10 @@ namespace KNTC.EntityFrameworkCore;
 public class KNTCDbContext :
     AbpDbContext<KNTCDbContext>,
     IIdentityDbContext
-    //ITenantManagementDbContext
+//ITenantManagementDbContext
 {
-
     #region Entities from the modules
+
     public DbSet<IdentityUser> Users { get; set; }
 
     public DbSet<IdentityRole> Roles { get; set; }
@@ -270,7 +269,6 @@ public class KNTCDbContext :
              .WithOne(c => c.LandType)
              .HasForeignKey(c => c.LoaiDat)
              .OnDelete(DeleteBehavior.Restrict);
-
         });
 
         builder.Entity<Unit>(b =>

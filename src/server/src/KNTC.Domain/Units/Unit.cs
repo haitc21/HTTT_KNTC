@@ -1,5 +1,4 @@
 ﻿using JetBrains.Annotations;
-using KNTC.Configs;
 using KNTC.CategoryUnitTypes;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -10,22 +9,24 @@ public class Unit : AuditedAggregateRoot<int>
 {
     public Unit()
     {
-
     }
+
     public Unit(int id) : base(id)
     {
-
     }
+
     public Unit(string code, string name)
     {
         ChangeCode(code);
         ChangeName(name);
     }
+
     public Unit(int id, string code, string name) : base(id)
     {
         ChangeCode(code);
         ChangeName(name);
     }
+
     public string UnitCode { get; private set; }
     public string UnitName { get; private set; }
     public string ShortName { get; set; }
@@ -36,6 +37,7 @@ public class Unit : AuditedAggregateRoot<int>
     public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public UnitType UnitType { get; set; }
+
     private void SetCode([NotNull] string code)
     {
         UnitCode = Check.NotNullOrWhiteSpace(
@@ -65,5 +67,4 @@ public class Unit : AuditedAggregateRoot<int>
         SetName(name);
         return this;
     }
-
 }

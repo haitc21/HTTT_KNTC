@@ -14,14 +14,15 @@ public class DocumentTypeSeedContributor : IDataSeedContributor, ITransientDepen
     public ILogger<UserInfoSeedContributor> Logger { get; set; }
 
     private readonly IRepository<DocumentType, int> _DocumentTypeRepo;
+
     public DocumentTypeSeedContributor(IRepository<DocumentType, int> DocumentTypeRepo)
     {
         _DocumentTypeRepo = DocumentTypeRepo;
         Logger = NullLogger<UserInfoSeedContributor>.Instance;
     }
+
     public async Task SeedAsync(DataSeedContext context)
     {
-
         Logger.LogInformation($"Seeding document type start...");
         if (await _DocumentTypeRepo.GetCountAsync() > 0)
         {

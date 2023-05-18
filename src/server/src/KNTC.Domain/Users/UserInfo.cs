@@ -7,8 +7,8 @@ public class UserInfo : Entity<Guid>
 {
     public UserInfo(Guid id) : base(id)
     {
-
     }
+
     public Guid UserId { get; set; }
     public DateTime Dob { get; set; }
 }

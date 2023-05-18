@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace KNTC.NPOI;
 
@@ -253,7 +249,6 @@ public class Validate
 
     public static DateTime? MinDate(DateTime? date1, DateTime? date2)
     {
-
         if (date1.HasValue && date2.HasValue)
         {
             if (date1.Value > date2.Value)

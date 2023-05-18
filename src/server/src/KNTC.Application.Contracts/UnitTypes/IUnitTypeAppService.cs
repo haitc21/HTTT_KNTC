@@ -12,5 +12,6 @@ public interface IUnitTypeAppService :
         CreateAndUpdateUnitTypeDto>
 {
     Task<ListResultDto<UnitTypeLookupDto>> GetLookupAsync();
+
     Task DeleteMultipleAsync(IEnumerable<int> ids);
 }

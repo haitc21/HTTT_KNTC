@@ -17,6 +17,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
        : base(dbContextProvider)
     {
     }
+
     public async Task<List<Complain>> GetListAsync(int skipCount,
                                                int maxResultCount,
                                                string sorting,

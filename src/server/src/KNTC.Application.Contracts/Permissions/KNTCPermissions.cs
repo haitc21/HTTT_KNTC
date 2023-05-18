@@ -42,7 +42,6 @@ public static class KNTCPermissions
         public const string Delete = Default + ".Delete";
     }
 
-
     public const string LandTypeGroupName = "LandType";
 
     public static class LandTypePermission

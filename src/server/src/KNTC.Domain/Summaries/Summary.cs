@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KNTC.Summaries;
+
 [NotMapped]
 public class Summary
 {
@@ -24,4 +21,3 @@ public class Summary
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
 }
-

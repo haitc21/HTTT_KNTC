@@ -9,17 +9,18 @@ namespace KNTC.CategoryUnitTypes;
 public class UnitTypeManager : DomainService
 {
     private readonly IRepository<UnitType, int> _unitTypeRepo;
+
     public UnitTypeManager(IRepository<UnitType, int> unitTypeRepo)
     {
         _unitTypeRepo = unitTypeRepo;
     }
+
     public async Task<UnitType> CreateAsync([NotNull] string code,
                                                 [NotNull] string name,
                                                 string description,
                                                 int orderIndex,
                                                 Status status)
     {
-
         Check.NotNullOrWhiteSpace(code, nameof(code));
         Check.NotNullOrWhiteSpace(name, nameof(name));
         await CheckCode(code);
@@ -31,6 +32,7 @@ public class UnitTypeManager : DomainService
             Status = status
         };
     }
+
     public async Task UpdateAsync([NotNull] UnitType unitType,
                                    [NotNull] string code,
                                    [NotNull] string name,
@@ -53,6 +55,7 @@ public class UnitTypeManager : DomainService
         unitType.OrderIndex = orderIndex;
         unitType.Status = status;
     }
+
     private async Task ChangeName(UnitType unitType, string name)
     {
         var existedName = await _unitTypeRepo.FindAsync(x => x.UnitTypeName == name, false);
@@ -62,6 +65,7 @@ public class UnitTypeManager : DomainService
         }
         unitType.ChangeName(name);
     }
+
     private async Task CheckName(string name)
     {
         var existedName = await _unitTypeRepo.FindAsync(x => x.UnitTypeName == name, false);
@@ -70,6 +74,7 @@ public class UnitTypeManager : DomainService
             throw new BusinessException(KNTCDomainErrorCodes.NameAlreadyExist).WithData("name", name);
         }
     }
+
     private async Task ChangeCode(UnitType unitType, string code)
     {
         var existedCode = await _unitTypeRepo.FindAsync(x => x.UnitTypeCode == code, false);
@@ -79,6 +84,7 @@ public class UnitTypeManager : DomainService
         }
         unitType.ChangeCode(code);
     }
+
     private async Task CheckCode(string code)
     {
         var existedCode = await _unitTypeRepo.FindAsync(x => x.UnitTypeCode == code, false);

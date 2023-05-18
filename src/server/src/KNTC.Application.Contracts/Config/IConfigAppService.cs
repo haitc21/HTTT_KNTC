@@ -12,5 +12,6 @@ public interface IConfigAppService :
         CreateAndUpdateConfigDto>
 {
     Task<ListResultDto<ConfigLookupDto>> GetLookupAsync();
+
     Task DeleteMultipleAsync(IEnumerable<int> ids);
 }

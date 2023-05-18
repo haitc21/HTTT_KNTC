@@ -1,9 +1,7 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
-using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
-using NPOI.POIFS.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +12,6 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.ObjectMapping;
 
 namespace KNTC.CategoryUnitTypes;
 
@@ -27,6 +24,7 @@ public class UnitTypeAppService : CrudAppService<
 {
     private readonly UnitTypeManager _unitTypeManager;
     private readonly IDistributedCache<UnitTypeLookupCache> _cache;
+
     public UnitTypeAppService(IRepository<UnitType, int> repository,
         UnitTypeManager unitTypeManager,
         IDistributedCache<UnitTypeLookupCache> cache) : base(repository)
@@ -39,7 +37,7 @@ public class UnitTypeAppService : CrudAppService<
         _cache = cache;
     }
 
-    public async override Task<PagedResultDto<UnitTypeDto>> GetListAsync(GetUnitTypeListDto input)
+    public override async Task<PagedResultDto<UnitTypeDto>> GetListAsync(GetUnitTypeListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -61,7 +59,6 @@ public class UnitTypeAppService : CrudAppService<
 
         var queryResult = await AsyncExecuter.ToListAsync(queryable);
 
-
         var totalCount = await Repository.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.UnitTypeCode.ToUpper().Contains(input.Keyword) || x.UnitTypeName.ToUpper().Contains(input.Keyword)))
@@ -73,6 +70,7 @@ public class UnitTypeAppService : CrudAppService<
             ObjectMapper.Map<List<UnitType>, List<UnitTypeDto>>(queryResult)
         );
     }
+
     public async Task<ListResultDto<UnitTypeLookupDto>> GetLookupAsync()
     {
         var cacheItem = await _cache.GetOrAddAsync(
@@ -90,7 +88,8 @@ public class UnitTypeAppService : CrudAppService<
 
         return new ListResultDto<UnitTypeLookupDto>(cacheItem.Items);
     }
-    public async override Task<UnitTypeDto> CreateAsync(CreateAndUpdateUnitTypeDto input)
+
+    public override async Task<UnitTypeDto> CreateAsync(CreateAndUpdateUnitTypeDto input)
     {
         var entity = await _unitTypeManager.CreateAsync(input.UnitTypeCode,
                                                           input.UnitTypeName,
@@ -102,7 +101,7 @@ public class UnitTypeAppService : CrudAppService<
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
 
-    public async override Task<UnitTypeDto> UpdateAsync(int id, CreateAndUpdateUnitTypeDto input)
+    public override async Task<UnitTypeDto> UpdateAsync(int id, CreateAndUpdateUnitTypeDto input)
     {
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -116,6 +115,7 @@ public class UnitTypeAppService : CrudAppService<
         await _cache.RemoveAsync("All");
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
+
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);
@@ -129,4 +129,3 @@ public class UnitTypeAppService : CrudAppService<
         await _cache.RemoveAsync("All");
     }
 }
-

@@ -11,5 +11,4 @@ public class LandTypeDto : FullAuditedEntityDto<int>, IHasConcurrencyStamp
     public int OrderIndex { get; set; }
     public Status Status { get; set; }
     public string ConcurrencyStamp { get; set; }
-
 }

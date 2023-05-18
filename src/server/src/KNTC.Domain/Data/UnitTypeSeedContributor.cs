@@ -14,14 +14,15 @@ public class UnitTypeSeedContributor : IDataSeedContributor, ITransientDependenc
     public ILogger<UserInfoSeedContributor> Logger { get; set; }
 
     private readonly IRepository<UnitType, int> _unitTypeRepo;
+
     public UnitTypeSeedContributor(IRepository<UnitType, int> unitTypeRepo)
     {
         _unitTypeRepo = unitTypeRepo;
         Logger = NullLogger<UserInfoSeedContributor>.Instance;
     }
+
     public async Task SeedAsync(DataSeedContext context)
     {
-
         Logger.LogInformation($"Seeding unit type start...");
         if (await _unitTypeRepo.GetCountAsync() > 0)
         {

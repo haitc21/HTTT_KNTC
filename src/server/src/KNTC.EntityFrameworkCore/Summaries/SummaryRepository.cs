@@ -7,19 +7,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace KNTC.Summaries;
 
-public class SummaryRepository :  ISummaryRepository
+public class SummaryRepository : ISummaryRepository
 {
     private readonly IDbContextProvider<KNTCDbContext> _dbContextProvider;
+
     public SummaryRepository(IDbContextProvider<KNTCDbContext> dbContextProvider)
     {
         _dbContextProvider = dbContextProvider;
     }
+
     public async Task<IQueryable<Summary>> GetListAsync(bool landComplain,
                                                         bool enviromentComplain,
                                                         bool waterComplain,
@@ -37,7 +37,6 @@ public class SummaryRepository :  ISummaryRepository
                                                         DateTime? toDate,
                                                         bool? congKhai)
     {
-
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
         var dbContext = await _dbContextProvider.GetDbContextAsync();
         var complainQuery = dbContext.Set<Complain>()

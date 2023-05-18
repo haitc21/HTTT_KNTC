@@ -1,5 +1,4 @@
-﻿using KNTC.Denounces;
-using KNTC.Extenssions;
+﻿using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Localization;
 using KNTC.NPOI;
@@ -8,7 +7,6 @@ using KNTC.RedisCache;
 using KNTC.Summaries;
 using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using NPOI.SS.UserModel;
 using System;
@@ -16,7 +14,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
@@ -24,6 +21,7 @@ using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 
 namespace KNTC.Denounces;
+
 public class DenounceAppService : CrudAppService<
             Denounce,
             DenounceDto,
@@ -109,6 +107,7 @@ public class DenounceAppService : CrudAppService<
             ObjectMapper.Map<List<Denounce>, List<DenounceDto>>(denounces)
         );
     }
+
     [Authorize(KNTCPermissions.DenouncesPermission.Create)]
     public override async Task<DenounceDto> CreateAsync(CreateDenounceDto input)
     {
@@ -183,6 +182,7 @@ public class DenounceAppService : CrudAppService<
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         return result;
     }
+
     [Authorize(KNTCPermissions.DenouncesPermission.Default)]
     public override async Task<DenounceDto> UpdateAsync(Guid id, UpdateDenounceDto input)
     {
@@ -352,7 +352,6 @@ public class DenounceAppService : CrudAppService<
             tuNgay = fromDateGmt7.ToString(FormatType.FormatDateVN);
         }
 
-
         string denNgay = "";
         if (input.ToDate.HasValue)
         {
@@ -383,7 +382,6 @@ public class DenounceAppService : CrudAppService<
         if (input.CongKhai.HasValue)
         {
             congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
-
         }
         row = sheet.GetCreateRow(10);
         cell = row.GetCreateCell(4);

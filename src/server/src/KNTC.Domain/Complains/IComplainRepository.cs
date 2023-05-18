@@ -23,7 +23,9 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                      DateTime? toDate,
                      bool? congKhai,
                      bool includeDetails = false);
+
     Task<Complain> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
+
     Task<List<Complain>> GetDataExportAsync(
                  string sorting,
                  LinhVuc? linhVuc,

@@ -10,5 +10,4 @@ public class UnitTypeDto : FullAuditedEntityDto<int>
     public int OrderIndex { get; set; }
     public Status Status { get; set; }
     public string ConcurrencyStamp { get; set; }
-
 }

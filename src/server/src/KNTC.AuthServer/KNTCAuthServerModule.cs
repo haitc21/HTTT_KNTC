@@ -1,5 +1,6 @@
 using KNTC.EntityFrameworkCore;
 using KNTC.Localization;
+
 //using KNTC.MultiTenancy;
 using Localization.Resources.AbpUi;
 using Medallion.Threading;

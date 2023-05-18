@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -13,6 +12,8 @@ public interface ISpatialDataAppService :
         CreateAndUpdateSpatialDataDto>
 {
     Task<ListResultDto<SpatialDataLookupDto>> GetLookupAsync();
+
     Task DeleteMultipleAsync(IEnumerable<int> ids);
+
     Task<List<string>> GetGeoJsonAsync();
 }

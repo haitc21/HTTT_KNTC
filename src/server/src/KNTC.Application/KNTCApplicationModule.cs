@@ -1,13 +1,10 @@
 ﻿using KNTC.Localization;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.BlobStoring.FileSystem;
-using Volo.Abp.Caching;
-using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization.ExceptionHandling;
@@ -15,6 +12,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Timing;
+
 //using Volo.Abp.TenantManagement;
 
 namespace KNTC;

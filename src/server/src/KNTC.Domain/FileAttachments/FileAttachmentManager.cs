@@ -1,15 +1,11 @@
 ﻿using KNTC.Complains;
 using KNTC.Denounces;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.Guids;
 
 namespace KNTC.FileAttachments;
 
@@ -18,6 +14,7 @@ public class FileAttachmentManager : DomainService
     private readonly IComplainRepository _complainRepo;
     private readonly IDenounceRepository _dunounceRepo;
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
+
     public FileAttachmentManager(IRepository<FileAttachment, Guid> fileAttachmentRepo,
         IDenounceRepository denounceRepo,
         IComplainRepository complainRepo)
@@ -26,6 +23,7 @@ public class FileAttachmentManager : DomainService
         _dunounceRepo = denounceRepo;
         _complainRepo = complainRepo;
     }
+
     public async Task<FileAttachment> CreateAsync([NotNull] LoaiVuViec loaiVuViec,
                                                    Guid? complainId,
                                                    Guid? denounceId,
@@ -33,7 +31,7 @@ public class FileAttachmentManager : DomainService
                                                    [NotNull] string tenTaiLieu,
                                                    [NotNull] int hinhThuc,
                                                    [NotNull] DateTime thoiGianBanHanh,
-                                                   [NotNull ]DateTime ngayNhan,
+                                                   [NotNull] DateTime ngayNhan,
                                                    [NotNull] string thuTuButLuc,
                                                    [NotNull] string noiDungChinh,
                                                    [NotNull] string fileName,
@@ -62,7 +60,7 @@ public class FileAttachmentManager : DomainService
         if (existTepDinhKem != null)
         {
             string maHoSo = "";
-            if(loaiVuViec == LoaiVuViec.KhieuNai)
+            if (loaiVuViec == LoaiVuViec.KhieuNai)
             {
                 var complain = await _complainRepo.GetAsync(complainId.Value, false);
                 maHoSo = complain.MaHoSo;
@@ -78,7 +76,7 @@ public class FileAttachmentManager : DomainService
         }
         return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
         {
-            ComplainId= complainId,
+            ComplainId = complainId,
             DenounceId = denounceId,
             GiaiDoan = giaiDoan,
             HinhThuc = hinhThuc,
@@ -93,6 +91,7 @@ public class FileAttachmentManager : DomainService
             CongKhai = congKhai
         };
     }
+
     public async Task UpdateAsync([NotNull] FileAttachment fileAttachment,
                                    [NotNull] LoaiVuViec loaiVuViec,
                                    [NotNull] int giaiDoan,
@@ -162,4 +161,3 @@ public class FileAttachmentManager : DomainService
         }
     }
 }
-

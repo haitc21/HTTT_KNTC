@@ -18,6 +18,7 @@ public class UserInfoSeedContributor : IDataSeedContributor, ITransientDependenc
     private readonly IRepository<UserInfo, Guid> _userInfoRepo;
     private readonly IRepository<IdentityUser, Guid> _userRepo;
     private readonly IGuidGenerator _guidGenerator;
+
     public UserInfoSeedContributor(IRepository<UserInfo, Guid> userInfoRepo,
         IGuidGenerator guidGenerator,
         IRepository<IdentityUser, Guid> userRepo)
@@ -27,9 +28,9 @@ public class UserInfoSeedContributor : IDataSeedContributor, ITransientDependenc
         _userRepo = userRepo;
         Logger = NullLogger<UserInfoSeedContributor>.Instance;
     }
+
     public async Task SeedAsync(DataSeedContext context)
     {
-
         Logger.LogInformation($"Seeding user info start...");
         if (await _userInfoRepo.GetCountAsync() > 0)
         {

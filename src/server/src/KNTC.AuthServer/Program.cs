@@ -34,10 +34,10 @@ public class Program
             var builder = WebApplication.CreateBuilder(args);
             builder.Host.ConfigureAppConfiguration((context, config) =>
                  {
-                    var env = context.HostingEnvironment;
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                        .AddEnvironmentVariables();
+                     var env = context.HostingEnvironment;
+                     config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                         .AddEnvironmentVariables();
                  })
                 .AddAppSettingsSecretsJson()
                 .UseAutofac()

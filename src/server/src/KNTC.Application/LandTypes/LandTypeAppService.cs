@@ -12,7 +12,6 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.ObjectMapping;
 
 namespace KNTC.LandTypes;
 
@@ -25,6 +24,7 @@ public class LandTypeAppService : CrudAppService<
 {
     private readonly LandTypeManager _landTypeManager;
     private readonly IDistributedCache<LandTypeLookupCache> _cache;
+
     public LandTypeAppService(IRepository<LandType, int> repository, LandTypeManager landTypeManager, IDistributedCache<LandTypeLookupCache> cache) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
@@ -34,7 +34,8 @@ public class LandTypeAppService : CrudAppService<
         _landTypeManager = landTypeManager;
         _cache = cache;
     }
-    public async override Task<PagedResultDto<LandTypeDto>> GetListAsync(GetLandTypeListDto input)
+
+    public override async Task<PagedResultDto<LandTypeDto>> GetListAsync(GetLandTypeListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -56,7 +57,6 @@ public class LandTypeAppService : CrudAppService<
 
         var queryResult = await AsyncExecuter.ToListAsync(queryable);
 
-
         var totalCount = await Repository.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.LandTypeCode.ToUpper().Contains(input.Keyword) || x.LandTypeName.ToUpper().Contains(input.Keyword)))
@@ -68,6 +68,7 @@ public class LandTypeAppService : CrudAppService<
             ObjectMapper.Map<List<LandType>, List<LandTypeDto>>(queryResult)
         );
     }
+
     public async Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync()
     {
         var cacheItem = await _cache.GetOrAddAsync(
@@ -86,7 +87,7 @@ public class LandTypeAppService : CrudAppService<
         return new ListResultDto<LandTypeLookupDto>(cacheItem.Items);
     }
 
-    public async override Task<LandTypeDto> CreateAsync(CreateAndUpdateLandTypeDto input)
+    public override async Task<LandTypeDto> CreateAsync(CreateAndUpdateLandTypeDto input)
     {
         var entity = await _landTypeManager.CreateAsync(input.LandTypeCode,
                                                           input.LandTypeName,
@@ -98,7 +99,7 @@ public class LandTypeAppService : CrudAppService<
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
 
-    public async override Task<LandTypeDto> UpdateAsync(int id, CreateAndUpdateLandTypeDto input)
+    public override async Task<LandTypeDto> UpdateAsync(int id, CreateAndUpdateLandTypeDto input)
     {
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -112,6 +113,7 @@ public class LandTypeAppService : CrudAppService<
         await _cache.RemoveAsync("All");
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
+
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);
@@ -125,4 +127,3 @@ public class LandTypeAppService : CrudAppService<
         await _cache.RemoveAsync("All");
     }
 }
-

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KNTC.Extenssions;
 
@@ -15,16 +11,21 @@ public static class EnumExtensions
         {
             case LoaiKetQua.Dung:
                 return "Đúng";
+
             case LoaiKetQua.Sai:
                 return "Sai";
+
             case LoaiKetQua.CoDungCoSai:
                 return "Có đúng, có sai";
+
             case LoaiKetQua.ChuaCoKQ:
                 return "Chưa có KQ";
+
             default:
                 throw new ArgumentException("Giá trị không hợp lệ");
         }
     }
+
     public static string ToVNString(this LinhVuc linhVuc)
     {
         if (linhVuc == null) return string.Empty;
@@ -32,16 +33,21 @@ public static class EnumExtensions
         {
             case LinhVuc.DatDai:
                 return "Đất đai";
+
             case LinhVuc.MoiTruong:
                 return "Môi trường";
+
             case LinhVuc.TaiNguyenNuoc:
                 return "Tài nguyên nước";
+
             case LinhVuc.KhoangSan:
                 return "Khoáng sản";
+
             default:
                 throw new ArgumentException("Giá trị không hợp lệ");
         }
     }
+
     public static string ToVNString(this LoaiVuViec loaiVuViec)
     {
         if (loaiVuViec == null) return string.Empty;
@@ -49,11 +55,12 @@ public static class EnumExtensions
         {
             case LoaiVuViec.KhieuNai:
                 return "Khiếu nại/Khiếu kiện";
+
             case LoaiVuViec.ToCao:
                 return "Tố cáo";
+
             default:
                 throw new ArgumentException("Giá trị không hợp lệ");
         }
     }
 }
-

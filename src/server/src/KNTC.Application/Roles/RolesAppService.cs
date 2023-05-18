@@ -75,6 +75,7 @@ public class RolesAppService : CrudAppService<
 
         return ObjectMapper.Map<List<IdentityRole>, List<RoleDto>>(data);
     }
+
     public async Task<ListResultDto<RoleLookupDto>> GetRoleLookupAsync()
     {
         var query = await Repository.GetQueryableAsync();

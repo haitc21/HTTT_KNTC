@@ -1,7 +1,6 @@
 ﻿using KNTC.FileAttachments;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
@@ -13,11 +12,13 @@ public class ComplainManager : DomainService
 {
     private readonly IComplainRepository _hoSoRepo;
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
+
     public ComplainManager(IComplainRepository hoSoRepo, IRepository<FileAttachment, Guid> fileAttachmentRepo)
     {
         _hoSoRepo = hoSoRepo;
         _fileAttachmentRepo = fileAttachmentRepo;
     }
+
     public async Task<Complain> CreateAsync([NotNull] string maHoSo,
                                               [NotNull] LinhVuc linhVuc,
                                               [NotNull] string tieuDe,
@@ -141,6 +142,7 @@ public class ComplainManager : DomainService
             CongKhai = congKhai
         };
     }
+
     public async Task ChangeMaHoSoAsync([NotNull] Complain hoSo, [NotNull] string maHoSo)
     {
         Check.NotNull(hoSo, nameof(hoSo));
@@ -152,6 +154,7 @@ public class ComplainManager : DomainService
         }
         hoSo.ChangeMaHoSo(maHoSo);
     }
+
     public async Task UpdateAsync([NotNull] Complain complain,
                                   [NotNull] string maHoSo,
                                   [NotNull] LinhVuc linhVuc,
