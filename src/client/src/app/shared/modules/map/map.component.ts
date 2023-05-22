@@ -53,7 +53,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   @Input() data: SummaryDto[] = [];
   
   //Show/Hide layer Quy hoach tren ban do
-  @Input() bShowSpatial = false;
+  @Input() bShowSpatial: boolean = false;
   
   //@Input() spatialData: any[];
   @Input() heightMap: string = '600px';
@@ -104,8 +104,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
       !changes.spatialData.isFirstChange())
         this.renderSpatialData(changes.spatialData.currentValue);
     */
-    if (!changes.bShowSpatial.isFirstChange())
-        this.renderSpatialData(changes.bShowSpatial.currentValue);
+    //if (!changes.bShowSpatial.isFirstChange())
+    this.renderSpatialData(this.bShowSpatial);
     
   }
 
@@ -248,11 +248,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
         </tr>\
         <tr>\
           <th scope="row">\
-          <td>Ngày nhận đơn:</td><td>' + props.thoiGianTiepNhan + '</td>\
+          <td>Ngày nhận đơn:</td><td>' + format(new Date(props.thoiGianTiepNhan),'dd/MM/yyyy HH:mm') + '</td>\
         </tr>\
         <tr>\
           <th scope="row">\
-          <td>Ngày hẹn trả kết quả:</td><td>' + props.thoiGianHenTraKQ + '</td>\
+          <td>Ngày hẹn trả kết quả:</td><td>' + format(new Date(props.thoiGianHenTraKQ),'dd/MM/yyyy HH:mm') + '</td>\
         </tr>\
         <tr>\
           <th scope="row">\
@@ -413,7 +413,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       .filter(x => x.duLieuToaDo != null || x.duLieuHinhHoc != null)
       .forEach(dataMap => {
         let toado: L.LatLng = new L.LatLng(0 , 0);
-        let geometry: any;
+        //let geometry: any;
         let geojson: any;
         if (dataMap.duLieuToaDo != null)//Có tọa độ thì lấy tọa độ
           toado = this.convertStringCoordiate(dataMap.duLieuToaDo);
@@ -474,9 +474,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
             style: (feature) => ({
               weight: 3,
               opacity: 0.5,
-              color: '#008f68',
-              fillOpacity: 0.8,
-              fillColor: (dataMap.loaiVuViec==1)? '#2880ca': '#ed5565',
+              color: (dataMap.loaiVuViec==1)? '#2880ca': '#ed5565',
+              fillOpacity: 0.6,
+              fillColor: '#29b6f6',
             }),
             onEachFeature: (feature, layer) => (
             layer.on({
@@ -532,7 +532,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
         this.quyhoach.addTo(this.map);
     }
     else
-      this.quyhoach.removeFrom(this.map);
+      if (this.quyhoach!=undefined)
+        this.quyhoach.removeFrom(this.map);
   }
 
   buildProperties(dataMap: SummaryDto){
@@ -565,10 +566,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
       //var layer = e.target;
 
       layer.setStyle({
-          weight: 10,
-          color: '#666',
+          weight: 8,
+          color: '#FF0000',
           dashArray: '',
-          fillOpacity: 0.7
+          fillOpacity: 0.8,
+          fillColor: (data.loaiVuViec==1)? '#2880ca': '#ed5565'
       });
 
       layer.bringToFront();
@@ -583,9 +585,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
     layer.setStyle({
       weight: 3,
       opacity: 0.5,
-      color: '#008f68',
-      fillOpacity: 0.8,
-      fillColor: (type==1)? '#2880ca': '#ed5565'
+      color: (type==1)? '#2880ca': '#ed5565',
+      fillOpacity: 0.6,
+      fillColor: '#29b6f6'
     });
 
     //info.update();
