@@ -65,6 +65,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   //dataMap: SummaryMapDto[] = [];
   dataMap: SummaryDto[] = [];
 
+  geo = false;
   filter: GetSummaryListDto;
 
   landComplain = true;

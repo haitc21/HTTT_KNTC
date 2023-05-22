@@ -51,7 +51,11 @@ const redIcon = new L.Icon({
 })
 export class MapComponent implements AfterViewInit, OnChanges {
   @Input() data: SummaryDto[] = [];
-  @Input() spatialData: any[];
+  
+  //Show/Hide layer Quy hoach tren ban do
+  @Input() bShowSpatial = false;
+  
+  //@Input() spatialData: any[];
   @Input() heightMap: string = '600px';
   @Input() zoomLv: number = 10;
   @Input() duLieuToaDo: string;  
@@ -63,7 +67,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
   myStyle: any;
 
-  //Cac layer tren ban do
+  bSpatialLoaded: boolean = false;
   markers: any;
   info: any;
   khieunai: any;
@@ -85,7 +89,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     //this.buildLocateBtn();
     //this.buildEventMapClick();
     this.renderMarkers(this.data);
-    this.renderSpatialData(this.spatialData);
+    //this.renderSpatialData(this.spatialData);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -94,11 +98,15 @@ export class MapComponent implements AfterViewInit, OnChanges {
       !changes.data.isFirstChange()) 
         this.renderMarkers(changes.data.currentValue);
 
-
+    /*
     if (changes.spatialData &&
       changes.spatialData.currentValue &&
       !changes.spatialData.isFirstChange())
         this.renderSpatialData(changes.spatialData.currentValue);
+    */
+    if (!changes.bShowSpatial.isFirstChange())
+        this.renderSpatialData(changes.bShowSpatial.currentValue);
+    
   }
 
   initMap() {
@@ -488,10 +496,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
       });
   }
 
-  renderSpatialData(khonggian: any[]) {
+  renderSpatialData(visible: boolean){
+  //renderSpatialData(khonggian: any[]) {
     //clear all layers
-    this.quyhoach.clearLayers();
-
+    //this.quyhoach.clearLayers();
+    /*Commented by Duongdx - 20/05/2023 - Load từ GeoServer thay cho DB->Không cần đoạn này nữa
     if (khonggian!=undefined)
       khonggian.forEach(feat => {
         //let geojson: Proj4GeoJSONFeature = 
@@ -508,6 +517,22 @@ export class MapComponent implements AfterViewInit, OnChanges {
         //L.Proj.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
         L.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
       });
+    */
+    if (visible){
+      if (!this.bSpatialLoaded){
+        this.quyhoach = L.tileLayer.wms("http://localhost:8080/geoserver/kntc/wms", {
+          layers: "kntc:phoyen",
+          format: "image/png",
+          transparent: true,
+        });
+        this.bSpatialLoaded = true;
+        this.quyhoach.addTo(this.map);
+      }
+      else
+        this.quyhoach.addTo(this.map);
+    }
+    else
+      this.quyhoach.removeFrom(this.map);
   }
 
   buildProperties(dataMap: SummaryDto){

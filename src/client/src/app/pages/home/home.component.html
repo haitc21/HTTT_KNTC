@@ -7,6 +7,14 @@
       </ng-template>
       <!-- ----------------------------------------------------------------------- -->
       <div class="grid col-12 md:col-12">
+        <div id="quyhoach" class="group-header ml-3">
+          <img src="assets/images/map/quyhoach_icon.png" alt="Bản đồ quy hoạch" />
+          <span>Bản đồ quy hoạch</span>
+          <p-inputSwitch [(ngModel)]="geo"></p-inputSwitch>
+        </div>
+      </div>
+      <!-- ----------------------------------------------------------------------- -->
+      <div class="grid col-12 md:col-12">
         <div class="group-header ml-3">
           <img src="assets/images/map/marker-icon.png" alt="Khiếu nại" />
           <span>Khiếu nại</span>
@@ -19,27 +27,18 @@
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch
-            [(ngModel)]="enviromentComplain"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="enviromentComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch
-            [(ngModel)]="mineralComplain"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="mineralComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch
-            [(ngModel)]="waterComplain"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
-        </div>
+          <p-inputSwitch [(ngModel)]="waterComplain" (onChange)="loadData()"></p-inputSwitch>
+        </div>        
         <!-- ----------------------------------------------------------------------- -->
         <div class="group-header ml-3 mt-5">
           <img src="assets/images/map/marker-icon-red.png" class="icon-red" alt="Tố cáo" />
@@ -53,27 +52,18 @@
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch
-            [(ngModel)]="enviromentDenounce"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="enviromentDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch
-            [(ngModel)]="mineralDenounce"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
+          <p-inputSwitch [(ngModel)]="mineralDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch
-            [(ngModel)]="waterDenounce"
-            (onChange)="loadData()"
-          ></p-inputSwitch>
-        </div>
+          <p-inputSwitch [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
+        </div>        
       </div>
     </p-card>
   </div>
@@ -105,7 +95,7 @@
     <div style="width: 99%">
       <p-breadcrumb [home]="home"></p-breadcrumb>
       <p-card>
-        <app-map [data]="dataMap" heightMap="80vh" [zoomLv]="10"></app-map>
+        <app-map [data]="dataMap" [bShowSpatial]="geo" heightMap="80vh" [zoomLv]="10"></app-map>
       </p-card>
     </div>
   </div>

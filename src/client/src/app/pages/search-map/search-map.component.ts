@@ -142,7 +142,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     this.buildBreadcumb();
     //this.mockData = this.mockService.mockData();
     this.loadOptions();
-    this.loadGeo();
+    //this.loadGeo();
     this.loadData(true);
   }
 
@@ -248,8 +248,9 @@ export class SearchMapComponent implements OnInit, OnDestroy {
 
   loadGeo() {
     if (this.geo) {
-      this.layoutService.blockUI$.next(true);
+      //this.layoutService.blockUI$.next(true);
 
+      /*Commented by Duongdx - 20/05/2023 - Load từ GeoServer thay cho DB->Không cần đoạn này nữa
       let filter = {
         skipCount: this.skipCount,
         maxResultCount: this.maxGeoCount,
@@ -269,6 +270,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
             this.layoutService.blockUI$.next(false);
           }
         );
+        */      
     }
   }
 
