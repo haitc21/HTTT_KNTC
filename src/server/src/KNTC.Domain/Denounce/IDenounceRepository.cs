@@ -21,6 +21,7 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
                      DateTime? toDate,
                      bool? CongKhai,
                      bool includeDetails = false);
+
     Task<Denounce> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
 
     Task<List<Denounce>> GetDataExportAsync(

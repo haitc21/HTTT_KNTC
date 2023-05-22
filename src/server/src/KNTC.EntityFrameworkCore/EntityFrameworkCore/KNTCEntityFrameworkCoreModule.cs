@@ -12,7 +12,6 @@ using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Timing;
 
 namespace KNTC.EntityFrameworkCore;
@@ -25,7 +24,6 @@ namespace KNTC.EntityFrameworkCore;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-    typeof(AbpTenantManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCorePostgreSqlModule)
     )]

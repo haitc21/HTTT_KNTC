@@ -1,6 +1,4 @@
-﻿using NetTopologySuite.Geometries;
-using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
@@ -11,11 +9,13 @@ namespace KNTC.SpatialDatas;
 public class SpatialDataManager : DomainService
 {
     private readonly IRepository<SpatialData, int> _spatialDataRepo;
+
     public SpatialDataManager(IRepository<SpatialData, int> spatialDataRepo)
     {
         _spatialDataRepo = spatialDataRepo;
     }
-    public async Task<SpatialData> CreateAsync([NotNull]string geoJson)
+
+    public async Task<SpatialData> CreateAsync([NotNull] string geoJson)
     {
         Check.NotNullOrWhiteSpace(geoJson, nameof(geoJson));
         return new SpatialData()

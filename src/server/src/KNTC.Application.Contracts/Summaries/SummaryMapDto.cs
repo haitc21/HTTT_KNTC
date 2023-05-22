@@ -1,11 +1,9 @@
-﻿using KNTC.Units;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 
 namespace KNTC.Summaries;
+
 [CacheName("SummaryMap")]
 public class SummaryMapCache
 {
@@ -16,11 +14,10 @@ public class SummaryMapDto
 {
     public SummaryMapDto()
     {
-
     }
+
     public Guid Id { get; set; }
     public LoaiVuViec LoaiVuViec { get; set; }
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
-
 }

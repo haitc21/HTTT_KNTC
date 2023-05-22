@@ -12,5 +12,6 @@ public interface ILandTypeAppService
         CreateAndUpdateLandTypeDto>
 {
     Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync();
+
     Task DeleteMultipleAsync(IEnumerable<int> ids);
 }

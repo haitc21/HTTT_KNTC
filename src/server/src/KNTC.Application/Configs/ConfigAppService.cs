@@ -1,6 +1,5 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
-using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +20,7 @@ public class ConfigAppService : CrudAppService<
             CreateAndUpdateConfigDto>, IConfigAppService
 {
     private readonly ConfigManager _configManager;
+
     public ConfigAppService(IRepository<Config, int> repository, ConfigManager configManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
@@ -30,7 +30,7 @@ public class ConfigAppService : CrudAppService<
         _configManager = configManager;
     }
 
-    public async override Task<PagedResultDto<ConfigDto>> GetListAsync(GetConfigListDto input)
+    public override async Task<PagedResultDto<ConfigDto>> GetListAsync(GetConfigListDto input)
     {
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
@@ -47,7 +47,6 @@ public class ConfigAppService : CrudAppService<
 
         var queryResult = await AsyncExecuter.ToListAsync(queryable);
 
-
         var totalCount = await Repository.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.OrganizationCode.ToUpper().Contains(input.Keyword) || x.OrganizationName.ToUpper().Contains(input.Keyword)))
@@ -59,6 +58,7 @@ public class ConfigAppService : CrudAppService<
             ObjectMapper.Map<List<Config>, List<ConfigDto>>(queryResult)
         );
     }
+
     public async Task<ListResultDto<ConfigLookupDto>> GetLookupAsync()
     {
         var configs = await Repository.GetListAsync();
@@ -68,7 +68,7 @@ public class ConfigAppService : CrudAppService<
         );
     }
 
-    public async override Task<ConfigDto> CreateAsync(CreateAndUpdateConfigDto input)
+    public override async Task<ConfigDto> CreateAsync(CreateAndUpdateConfigDto input)
     {
         var entity = await _configManager.CreateAsync(input.OrganizationCode,
                                                           input.OrganizationName,
@@ -80,7 +80,7 @@ public class ConfigAppService : CrudAppService<
         return ObjectMapper.Map<Config, ConfigDto>(entity);
     }
 
-    public async override Task<ConfigDto> UpdateAsync(int id, CreateAndUpdateConfigDto input)
+    public override async Task<ConfigDto> UpdateAsync(int id, CreateAndUpdateConfigDto input)
     {
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -100,4 +100,3 @@ public class ConfigAppService : CrudAppService<
         await Repository.DeleteManyAsync(ids);
     }
 }
-

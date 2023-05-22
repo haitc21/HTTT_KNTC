@@ -1,26 +1,19 @@
-﻿using System;
+﻿using KNTC.Complains;
+using KNTC.Denounces;
+using KNTC.NPOI;
+using KNTC.Units;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Hosting;
+using NPOI.SS.UserModel;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using System.Linq.Dynamic.Core;
-using KNTC.DocumentTypes;
-using KNTC.SpatialDatas;
-using KNTC.Units;
-using Microsoft.Extensions.Hosting;
-using Volo.Abp.Domain.Repositories;
-using KNTC.NPOI;
-using NPOI.SS.UserModel;
-using System.IO;
-using Volo.Abp.ObjectMapping;
-using Microsoft.AspNetCore.Authorization;
-using KNTC.Complains;
-using KNTC.Denounces;
 using Volo.Abp.Caching;
-using KNTC.CategoryUnitTypes;
-using Microsoft.Extensions.Caching.Distributed;
-using NPOI.POIFS.Properties;
+using Volo.Abp.Domain.Repositories;
 
 namespace KNTC.Summaries;
 
@@ -33,6 +26,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     private readonly IDenounceRepository _denounceRepo;
     private readonly IDistributedCache<SummaryMapCache, GetSumaryMapDto> _cache;
     private readonly IDistributedCache<SummaryChartDto> _cacheChart;
+
     public SummaryAppService(ISummaryRepository summaryRepo,
         IHostEnvironment env,
         IRepository<Unit, int> unitRepo,
@@ -89,7 +83,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     }
 
     public async Task<List<SummaryMapDto>> GetMapAsync(GetSumaryMapDto input)
-    
+
     {
         var userId = CurrentUser.Id;
         if (userId == null)
@@ -105,6 +99,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         });
         return cacheItem.Items;
     }
+
     private async Task<SummaryMapCache> LoadDataMapAsync(GetSumaryMapDto input)
     {
         var query = await _summaryRepo.GetListAsync(input.LandComplain,
@@ -179,8 +174,6 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         font.FontName = "Times New Roman";
         cellStyle.SetFont(font);
 
-
-
         string tenTinh = "Tất cả";
         if (input.maTinhTP != null)
         {
@@ -224,7 +217,6 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             tuNgay = fromDateGmt7.ToString(FormatType.FormatDateVN);
         }
 
-
         string denNgay = "";
         if (input.ToDate.HasValue)
         {
@@ -248,12 +240,15 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                 case LoaiKetQua.Dung:
                     ketQua = "Đúng";
                     break;
+
                 case LoaiKetQua.Sai:
                     ketQua = "Sai";
                     break;
+
                 case LoaiKetQua.CoDungCoSai:
                     ketQua = "Có đúng có sai";
                     break;
+
                 default:
                     ketQua = "";
                     break;
@@ -269,7 +264,6 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         if (input.CongKhai.HasValue)
         {
             congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
-
         }
         row = sheet.GetCreateRow(10);
         cell = row.GetCreateCell(4);
@@ -284,6 +278,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             return stream.ToArray();
         }
     }
+
     public async Task<SummaryChartDto> GetChartAsync()
     {
         var result = await _cacheChart.GetOrAddAsync(
@@ -295,6 +290,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         });
         return result;
     }
+
     private async Task<SummaryChartDto> LoadDataChartAsync()
     {
         var result = new SummaryChartDto();

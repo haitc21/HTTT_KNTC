@@ -9,7 +9,7 @@ export class KNTCValidatorConsts {
   public static MaxDiaChiLength = 250;
   public static MaxBoPhanXLLength = 250;
   public static MaxToaDoLength = 128;
-  public static MaxHinhHocLength = 1024;
+  // public static MaxHinhHocLength = 1024;
   public static MaxSoThuaLength = 50;
   public static MaxToBanDoLength = 50;
   public static MaxThamQuyenLength = 250;

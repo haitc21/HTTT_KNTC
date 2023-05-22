@@ -12,5 +12,6 @@ public interface IDocumentTypeAppService
         CreateAndUpdateDocumentTypeDto>
 {
     Task<ListResultDto<DocumentTypeLookupDto>> GetLookupAsync();
+
     Task DeleteMultipleAsync(IEnumerable<int> ids);
 }

@@ -22,7 +22,6 @@ public class KNTCPermissionDefinitionProvider : PermissionDefinitionProvider
         denouncesPermission.AddChild(KNTCPermissions.DenouncesPermission.Edit, L("Permission:Denounces.Edit"));
         denouncesPermission.AddChild(KNTCPermissions.DenouncesPermission.Delete, L("Permission:Denounces.Delete"));
 
-
         var documentTypeGroup = context.AddGroup(KNTCPermissions.DocumentTypeGroupName, L("Permission:DocumentTypeGr"));
 
         var documentTypePermission = documentTypeGroup.AddPermission(KNTCPermissions.DocumentTypePermission.Default, L("Permission:DocumentType"));
@@ -36,7 +35,6 @@ public class KNTCPermissionDefinitionProvider : PermissionDefinitionProvider
         landTypePermission.AddChild(KNTCPermissions.LandTypePermission.Create, L("Permission:LandType.Create"));
         landTypePermission.AddChild(KNTCPermissions.LandTypePermission.Edit, L("Permission:LandType.Edit"));
         landTypePermission.AddChild(KNTCPermissions.LandTypePermission.Delete, L("Permission:LandType.Delete"));
-
 
         var unitGroup = context.AddGroup(KNTCPermissions.UnitGroupName, L("Permission:UnitGr"));
 

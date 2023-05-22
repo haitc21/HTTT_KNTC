@@ -7,16 +7,12 @@ using NPOI.XSSF.UserModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KNTC.NPOI;
-
 
 public static class ExcelNpoi
 {
@@ -86,6 +82,7 @@ public static class ExcelNpoi
         result.DataFormat = inputCellType.DataFormat;
         return result;
     }
+
     /// <summary>
     /// Tao font
     /// </summary>
@@ -471,6 +468,7 @@ public static class ExcelNpoi
         }
         return result;
     }
+
     public enum ExcelValueType
     {
         String,
@@ -478,6 +476,7 @@ public static class ExcelNpoi
         Number,
         Boolean
     }
+
     public static ExcelValueType GetCellValueType(this IRow row, int column)
     {
         ExcelValueType result = ExcelValueType.String;
@@ -488,6 +487,7 @@ public static class ExcelNpoi
         }
         return result;
     }
+
     public static ExcelValueType GetCellValueType(this ICell cell)
     {
         ExcelValueType result = ExcelValueType.String;
@@ -501,12 +501,14 @@ public static class ExcelNpoi
                 else
                     result = ExcelValueType.Number;
                 break;
+
             case CellType.Boolean:
                 result = ExcelValueType.Boolean;
                 break;
         }
         return result;
     }
+
     public static string GetValueCell(this IRow row, int column, IFormulaEvaluator evaluator)
     {
         string result = string.Empty;
@@ -870,6 +872,7 @@ public static class ExcelNpoi
         }
         return wb;
     }
+
     public static IWorkbook WriteExcelByTemp<T>(List<T> dataList, string filePath, int rowStart, int colStart, bool isCount = false) where T : class
     {
         if (!File.Exists(filePath))
@@ -1318,4 +1321,3 @@ public static class ExcelNpoi
         return dt;
     }
 }
-

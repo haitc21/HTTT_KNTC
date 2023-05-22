@@ -1,7 +1,5 @@
-﻿using KNTC.FileAttachments;
-using KNTC.LandTypes;
+﻿using KNTC.LandTypes;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -13,21 +11,26 @@ public class Complain : AuditedAggregateRoot<Guid>
     public Complain()
     {
     }
+
     public Complain(Guid id) : base(id)
     {
     }
+
     public Complain(Guid id, string maHoSo) : base(id)
     {
         SetMaHoSo(maHoSo);
     }
+
     public string MaHoSo { get; private set; }
     public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
     public string NguoiNopDon { get; set; }
     public string CccdCmnd { get; set; }
+
     //public DateTime NgayCapCccdCmnd { get; set; }
     //public string NoiCapCccdCmnd { get; set; }
     public DateTime NgaySinh { get; set; }
+
     public string DienThoai { get; set; }
     public string Email { get; set; }
     public string DiaChiThuongTru { get; set; }
@@ -65,6 +68,7 @@ public class Complain : AuditedAggregateRoot<Guid>
     public LoaiKetQua? KetQua { get; set; }
     public bool CongKhai { get; set; }
     public LandType LandType { get; set; }
+
     private void SetMaHoSo([NotNull] string maHoSo)
     {
         MaHoSo = Check.NotNullOrWhiteSpace(

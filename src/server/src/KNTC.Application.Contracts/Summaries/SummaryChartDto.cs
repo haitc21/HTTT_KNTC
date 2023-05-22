@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KNTC.Summaries;
+﻿namespace KNTC.Summaries;
 
 public class SummaryChartDto
 {

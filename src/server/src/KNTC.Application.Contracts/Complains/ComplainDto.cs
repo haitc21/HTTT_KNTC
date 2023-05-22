@@ -11,14 +11,17 @@ public class ComplainDto : AuditedEntityDto<Guid>
     {
         FileAttachments = new List<FileAttachmentDto>();
     }
+
     public string MaHoSo { get; set; }
     public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
     public string NguoiNopDon { get; set; }
     public string CccdCmnd { get; set; }
+
     //public DateTime NgayCapCccdCmnd { get; set; }
     //public string NoiCapCccdCmnd { get; set; }
     public DateTime NgaySinh { get; set; }
+
     public string DienThoai { get; set; }
     public string Email { get; set; }
     public string DiaChiThuongTru { get; set; }

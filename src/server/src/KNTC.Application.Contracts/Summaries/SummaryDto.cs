@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Volo.Abp.Application.Dtos;
 
 namespace KNTC.Summaries;
 
@@ -21,5 +18,4 @@ public class SummaryDto
     public LoaiKetQua? KetQua { get; set; }
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
-
 }

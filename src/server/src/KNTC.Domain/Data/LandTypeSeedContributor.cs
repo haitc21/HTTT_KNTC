@@ -14,14 +14,15 @@ public class LandTypeSeedContributor : IDataSeedContributor, ITransientDependenc
     public ILogger<UserInfoSeedContributor> Logger { get; set; }
 
     private readonly IRepository<LandType, int> _LandTypeRepo;
+
     public LandTypeSeedContributor(IRepository<LandType, int> LandTypeRepo)
     {
         _LandTypeRepo = LandTypeRepo;
         Logger = NullLogger<UserInfoSeedContributor>.Instance;
     }
+
     public async Task SeedAsync(DataSeedContext context)
     {
-
         Logger.LogInformation($"Seeding land type start...");
         if (await _LandTypeRepo.GetCountAsync() > 0)
         {

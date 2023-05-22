@@ -208,7 +208,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
     } as GetSummaryListDto;
-    
+
     this.summaryService
       .getList(this.filter)
       //.getMap(this.filter)
@@ -283,7 +283,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<SpatialDataDto>) => {
-            ;
             this.spatialData = res.items; //.map(item => item.geoJson);
 
             this.layoutService.blockUI$.next(false);
@@ -332,21 +331,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(
         (data: any) => {
           if (data) {
-            const uint8Array = this.utilService.base64ToArrayBuffer(data);
-            const blob = new Blob([uint8Array], { type: TYPE_EXCEL });
-
-            const url = window.URL.createObjectURL(blob); // Tạo URL tạm thời
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download =
+            let fileName =
               this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +
               '_Khiếu nại Tố cáo.xlsx';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            window.URL.revokeObjectURL(url); // Xóa URL tạm thời
+            const uint8Array = this.utilService.saveFile(data, TYPE_EXCEL, fileName);
           }
           this.layoutService.blockUI$.next(false);
         },
@@ -580,7 +568,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
- ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

@@ -10,28 +10,31 @@ public class DocumentType : AuditedAggregateRoot<int>
 {
     public DocumentType()
     {
-
     }
+
     public DocumentType(int id) : base(id)
     {
-
     }
+
     public DocumentType(string code, string name)
     {
         ChangeCode(code);
         ChangeName(name);
     }
+
     public DocumentType(int id, string code, string name) : base(id)
     {
         ChangeCode(code);
         ChangeName(name);
     }
+
     public string DocumentTypeCode { get; private set; }
     public string DocumentTypeName { get; private set; }
     public string Description { get; set; }
     public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public virtual List<FileAttachment> FileAttachments { get; set; }
+
     private void SetCode([NotNull] string code)
     {
         DocumentTypeCode = Check.NotNullOrWhiteSpace(

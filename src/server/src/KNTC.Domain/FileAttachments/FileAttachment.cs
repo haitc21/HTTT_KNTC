@@ -1,6 +1,4 @@
-﻿using KNTC.Complains;
-using KNTC.Denounces;
-using KNTC.DocumentTypes;
+﻿using KNTC.DocumentTypes;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using Volo.Abp;
@@ -12,16 +10,17 @@ public class FileAttachment : AuditedAggregateRoot<Guid>
 {
     public FileAttachment()
     {
-
     }
+
     public FileAttachment(Guid id) : base(id)
     {
-
     }
+
     public FileAttachment(Guid id, string tenTaiLieu) : base(id)
     {
         SetTenTaiLieu(tenTaiLieu);
     }
+
     public Guid? ComplainId { get; set; }
     public Guid? DenounceId { get; set; }
     public int GiaiDoan { get; set; }
@@ -37,6 +36,7 @@ public class FileAttachment : AuditedAggregateRoot<Guid>
     public DocumentType DocumentType { get; set; }
     public LoaiVuViec LoaiVuViec { get; set; }
     public bool CongKhai { get; set; }
+
     private void SetTenTaiLieu([NotNull] string tenTaiLieu)
     {
         TenTaiLieu = Check.NotNullOrWhiteSpace(

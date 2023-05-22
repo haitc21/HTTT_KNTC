@@ -1,15 +1,14 @@
-﻿using KNTC.Configs;
+﻿using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
+using KNTC.Configs;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
 using KNTC.LandTypes;
-using KNTC.Units;
-using KNTC.CategoryUnitTypes;
-using KNTC.Users;
 using KNTC.SpatialDatas;
+using KNTC.Units;
+using KNTC.Users;
 using Microsoft.EntityFrameworkCore;
-using System.Xml.Linq;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -22,9 +21,9 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+
 //using Volo.Abp.TenantManagement;
 //using Volo.Abp.TenantManagement.EntityFrameworkCore;
-
 
 namespace KNTC.EntityFrameworkCore;
 
@@ -34,10 +33,10 @@ namespace KNTC.EntityFrameworkCore;
 public class KNTCDbContext :
     AbpDbContext<KNTCDbContext>,
     IIdentityDbContext
-    //ITenantManagementDbContext
+//ITenantManagementDbContext
 {
-
     #region Entities from the modules
+
     public DbSet<IdentityUser> Users { get; set; }
 
     public DbSet<IdentityRole> Roles { get; set; }
@@ -144,7 +143,10 @@ public class KNTCDbContext :
             b.Property(x => x.KetQua2).HasColumnName("ket_qua_2");
 
             b.Property(x => x.DuLieuToaDo).HasColumnName("du_lieu_toa_do").HasMaxLength(KNTCValidatorConsts.MaxToaDoLength);
-            b.Property(x => x.DuLieuHinhHoc).HasColumnName("du_lieu_hinh_hoc").HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);
+            b.Property(x => x.DuLieuHinhHoc)
+             .HasColumnName("du_lieu_hinh_hoc")
+             .HasColumnType("TEXT");
+            //.HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);
 
             b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
@@ -187,7 +189,10 @@ public class KNTCDbContext :
             b.Property(x => x.XaThuaDat).IsRequired().HasColumnName("xa_thua_dat");
 
             b.Property(x => x.DuLieuToaDo).HasColumnName("du_lieu_toa_do").HasMaxLength(KNTCValidatorConsts.MaxToaDoLength);
-            b.Property(x => x.DuLieuHinhHoc).HasColumnName("du_lieu_hinh_hoc").HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);
+            b.Property(x => x.DuLieuHinhHoc)
+             .HasColumnName("du_lieu_hinh_hoc")
+             .HasColumnType("TEXT");
+            //.HasMaxLength(KNTCValidatorConsts.MaxHinhHocLength);
 
             b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
@@ -264,7 +269,6 @@ public class KNTCDbContext :
              .WithOne(c => c.LandType)
              .HasForeignKey(c => c.LoaiDat)
              .OnDelete(DeleteBehavior.Restrict);
-
         });
 
         builder.Entity<Unit>(b =>

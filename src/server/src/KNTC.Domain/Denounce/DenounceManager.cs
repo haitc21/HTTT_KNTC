@@ -1,8 +1,6 @@
-﻿using KNTC.Complains;
-using KNTC.FileAttachments;
+﻿using KNTC.FileAttachments;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
@@ -14,11 +12,13 @@ public class DenounceManager : DomainService
 {
     private readonly IDenounceRepository _hoSoRepo;
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
+
     public DenounceManager(IDenounceRepository hoSoRepo, IRepository<FileAttachment, Guid> fileAttachmentRepo)
     {
         _hoSoRepo = hoSoRepo;
         _fileAttachmentRepo = fileAttachmentRepo;
     }
+
     public async Task<Denounce> CreateAsync([NotNull] string maHoSo,
                                               [NotNull] LinhVuc linhVuc,
                                               [NotNull] string tieuDe,
@@ -139,6 +139,7 @@ public class DenounceManager : DomainService
             CongKhai = congKhai
         };
     }
+
     public async Task ChangeMaHoSoAsync([NotNull] Denounce hoSo, [NotNull] string maHoSo)
     {
         Check.NotNull(hoSo, nameof(hoSo));
@@ -150,6 +151,7 @@ public class DenounceManager : DomainService
         }
         hoSo.ChangeMaHoSo(maHoSo);
     }
+
     public async Task UpdateAsync([NotNull] Denounce denounce,
                                   [NotNull] string maHoSo,
                                   [NotNull] LinhVuc linhVuc,

@@ -6,6 +6,7 @@ public static class KNTCConsts
 
     public const string KNTCDbSchema = "KNTC";
 }
+
 public struct RegexDefine
 {
     public const string Email = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
@@ -34,8 +35,8 @@ public struct RegexDefine
     public const string Time12EN = "^(0?[0-9]|1[0-2]):[0-5][0-9] (AM|PM)$";
     public const string Guid = "^\\{?[a-fA-F\\d]{8}-([a-fA-F\\d]{4}-){3}[a-fA-F\\d]{12}\\}?$";
     public const string Month = "^(0?[1-9]|1[012])/\\d\\d\\d\\d";
-
 }
+
 public struct FormatType
 {
     public const string FormatDateVN = "dd/MM/yyyy";

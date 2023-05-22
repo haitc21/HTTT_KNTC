@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
 using KNTC.Configs;
 using KNTC.Denounces;
@@ -10,7 +11,6 @@ using KNTC.Roles;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
 using KNTC.Units;
-using KNTC.CategoryUnitTypes;
 using KNTC.Users;
 using Volo.Abp.Identity;
 
@@ -41,7 +41,6 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<CrateAndUpdateUserDto, UserInfo>();
         CreateMap<IdentityUser, UserInfo>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
-
 
         CreateMap<Complain, ComplainDto>();
         CreateMap<Complain, ComplainInListDto>();

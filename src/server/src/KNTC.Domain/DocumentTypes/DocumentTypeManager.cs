@@ -9,17 +9,18 @@ namespace KNTC.DocumentTypes;
 public class DocumentTypeManager : DomainService
 {
     private readonly IRepository<DocumentType, int> _documentTypeRepo;
+
     public DocumentTypeManager(IRepository<DocumentType, int> documentTypeRepo)
     {
         _documentTypeRepo = documentTypeRepo;
     }
+
     public async Task<DocumentType> CreateAsync([NotNull] string code,
                                                 [NotNull] string name,
                                                 string description,
                                                 int orderIndex,
                                                 Status status)
     {
-
         Check.NotNullOrWhiteSpace(code, nameof(code));
         Check.NotNullOrWhiteSpace(name, nameof(name));
         await CheckCode(code);
@@ -31,6 +32,7 @@ public class DocumentTypeManager : DomainService
             Status = status
         };
     }
+
     public async Task UpdateAsync([NotNull] DocumentType documentType,
                                    [NotNull] string code,
                                    [NotNull] string name,
@@ -51,8 +53,9 @@ public class DocumentTypeManager : DomainService
         }
         documentType.Description = description;
         documentType.OrderIndex = orderIndex;
-        documentType.Status = status;   
+        documentType.Status = status;
     }
+
     private async Task ChangeName(DocumentType documentType, string name)
     {
         var existedName = await _documentTypeRepo.FindAsync(x => x.DocumentTypeName == name, false);
@@ -62,6 +65,7 @@ public class DocumentTypeManager : DomainService
         }
         documentType.ChangeName(name);
     }
+
     private async Task CheckName(string name)
     {
         var existedName = await _documentTypeRepo.FindAsync(x => x.DocumentTypeName == name, false);
@@ -70,6 +74,7 @@ public class DocumentTypeManager : DomainService
             throw new BusinessException(KNTCDomainErrorCodes.NameAlreadyExist).WithData("name", name);
         }
     }
+
     private async Task ChangeCode(DocumentType documentType, string code)
     {
         var existedCode = await _documentTypeRepo.FindAsync(x => x.DocumentTypeCode == code, false);
@@ -79,6 +84,7 @@ public class DocumentTypeManager : DomainService
         }
         documentType.ChangeCode(code);
     }
+
     private async Task CheckCode(string code)
     {
         var existedCode = await _documentTypeRepo.FindAsync(x => x.DocumentTypeCode == code, false);

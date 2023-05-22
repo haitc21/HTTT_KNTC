@@ -1,6 +1,4 @@
-﻿using KNTC.Units;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
@@ -10,30 +8,33 @@ public class Config : AuditedAggregateRoot<int>
 {
     public Config()
     {
-
     }
+
     public Config(int id) : base(id)
     {
-
     }
+
     public Config(string code, string name)
     {
         ChangeCode(code);
         ChangeName(name);
     }
+
     public Config(int id, string code, string name) : base(id)
     {
         ChangeCode(code);
         ChangeName(name);
     }
+
     public string OrganizationCode { get; private set; }
     public string OrganizationName { get; private set; }
-    
+
     public string ToaDo { get; set; }
     public string Tel { get; set; }
     public string Address { get; set; }
     public string Description { get; set; }
     public Status Status { get; set; }
+
     private void SetCode([NotNull] string code)
     {
         OrganizationCode = Check.NotNullOrWhiteSpace(
@@ -63,6 +64,7 @@ public class Config : AuditedAggregateRoot<int>
         SetName(name);
         return this;
     }
+
     private void SetToaDo([NotNull] string toado)
     {
         ToaDo = Check.NotNullOrWhiteSpace(

@@ -7,24 +7,18 @@ using KNTC.RedisCache;
 using KNTC.Summaries;
 using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using NPOI.SS.UserModel;
-using NPOI.XWPF.UserModel;
-using Polly;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using static KNTC.Permissions.KNTCPermissions;
 
 namespace KNTC.Complains;
 
@@ -67,11 +61,12 @@ public class ComplainAppService : CrudAppService<
         _unitRepo = unitRepo;
         _cacheService = cacheService;
     }
+
     [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
     {
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
-        if(hasPermission.Succeeded == false)
+        if (hasPermission.Succeeded == false)
         {
             input.CongKhai = true;
         }
@@ -101,7 +96,7 @@ public class ComplainAppService : CrudAppService<
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
                 && (!input.LinhVuc.HasValue || x.LinhVuc == input.LinhVuc)
-                && (input.mangLinhVuc.IsNullOrEmpty() || input.mangLinhVuc.Contains((int) x.LinhVuc))
+                && (input.mangLinhVuc.IsNullOrEmpty() || input.mangLinhVuc.Contains((int)x.LinhVuc))
                 && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
                 && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
                 && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
@@ -119,6 +114,7 @@ public class ComplainAppService : CrudAppService<
             ObjectMapper.Map<List<Complain>, List<ComplainDto>>(complains)
         );
     }
+
     [Authorize(KNTCPermissions.ComplainsPermission.Create)]
     public override async Task<ComplainDto> CreateAsync(CreateComplainDto input)
     {
@@ -192,6 +188,7 @@ public class ComplainAppService : CrudAppService<
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         return result;
     }
+
     [Authorize(KNTCPermissions.ComplainsPermission.Default)]
     public override async Task<ComplainDto> UpdateAsync(Guid id, UpdateComplainDto input)
     {
@@ -271,7 +268,6 @@ public class ComplainAppService : CrudAppService<
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         await _complainRepo.DeleteManyAsync(ids);
     }
-
 
     //[Authorize(KNTCPermissions.ComplainsPermission.Default)]
     public async Task<byte[]> GetExcelAsync(GetComplainListDto input)
@@ -363,7 +359,6 @@ public class ComplainAppService : CrudAppService<
             tuNgay = fromDateGmt7.ToString(FormatType.FormatDateVN);
         }
 
-
         string denNgay = "";
         if (input.ToDate.HasValue)
         {
@@ -371,7 +366,7 @@ public class ComplainAppService : CrudAppService<
             denNgay = toDateGmt7.ToString(FormatType.FormatDateVN);
         }
 
-        if(!tuNgay.IsNullOrEmpty() && !denNgay.IsNullOrEmpty())
+        if (!tuNgay.IsNullOrEmpty() && !denNgay.IsNullOrEmpty())
         {
             row = sheet.GetCreateRow(8);
             cell = row.GetCreateCell(4);
@@ -409,7 +404,6 @@ public class ComplainAppService : CrudAppService<
         if (input.CongKhai.HasValue)
         {
             congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
-
         }
         row = sheet.GetCreateRow(11);
         cell = row.GetCreateCell(4);
@@ -423,6 +417,5 @@ public class ComplainAppService : CrudAppService<
             wb.Close();
             return stream.ToArray();
         }
-
     }
 }

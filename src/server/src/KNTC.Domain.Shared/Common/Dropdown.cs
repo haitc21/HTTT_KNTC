@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KNTC.Common;
-
+﻿namespace KNTC.Common;
 
 public class DropdownItem : IDropdownItem
 {
@@ -13,6 +8,7 @@ public class DropdownItem : IDropdownItem
     public bool Selected { get; set; }
     public bool Hidden { get; set; }
 }
+
 public class DropdownItem<TId> : IDropdownItem where TId : struct
 {
     public TId Id { get; set; }
@@ -21,6 +17,7 @@ public class DropdownItem<TId> : IDropdownItem where TId : struct
     public bool Selected { get; set; }
     public bool Hidden { get; set; }
 }
+
 public class DropdownItemValue : IDropdownItem
 {
     public string Id { get; set; }
@@ -30,6 +27,7 @@ public class DropdownItemValue : IDropdownItem
     public bool Selected { get; set; }
     public bool Hidden { get; set; }
 }
+
 public class DropdownItemValue<TVal> : IDropdownItem where TVal : struct
 {
     public string Id { get; set; }
@@ -39,6 +37,7 @@ public class DropdownItemValue<TVal> : IDropdownItem where TVal : struct
     public bool Selected { get; set; }
     public bool Hidden { get; set; }
 }
+
 public class DropdownItemValue<TId, TVal> : IDropdownItem where TId : struct where TVal : struct
 {
     public TId Id { get; set; }

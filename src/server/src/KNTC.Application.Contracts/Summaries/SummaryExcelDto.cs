@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Volo.Abp.Application.Dtos;
 
 namespace KNTC.Summaries;
 
@@ -18,5 +15,4 @@ public class SummaryExcelDto
     public DateTime ThoiGianHenTraKQ { get; set; }
     public string BoPhanDangXL { get; set; }
     public string KetQua { get; set; }
-
 }

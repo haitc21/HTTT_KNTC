@@ -9,17 +9,18 @@ namespace KNTC.LandTypes;
 public class LandTypeManager : DomainService
 {
     private readonly IRepository<LandType, int> _landTypeRepo;
+
     public LandTypeManager(IRepository<LandType, int> landTypeRepo)
     {
         _landTypeRepo = landTypeRepo;
     }
+
     public async Task<LandType> CreateAsync([NotNull] string code,
                                                 [NotNull] string name,
                                                 string description,
                                                 int orderIndex,
                                                 Status status)
     {
-
         Check.NotNullOrWhiteSpace(code, nameof(code));
         Check.NotNullOrWhiteSpace(name, nameof(name));
         await CheckCode(code);
@@ -31,6 +32,7 @@ public class LandTypeManager : DomainService
             Status = status
         };
     }
+
     public async Task UpdateAsync([NotNull] LandType landType,
                                   [NotNull] string code,
                                   [NotNull] string name,
@@ -53,6 +55,7 @@ public class LandTypeManager : DomainService
         landType.OrderIndex = orderIndex;
         landType.Status = status;
     }
+
     private async Task ChangeName(LandType landType, string name)
     {
         var existedName = await _landTypeRepo.FindAsync(x => x.LandTypeName == name, false);
@@ -62,6 +65,7 @@ public class LandTypeManager : DomainService
         }
         landType.ChangeName(name);
     }
+
     private async Task CheckName(string name)
     {
         var existedName = await _landTypeRepo.FindAsync(x => x.LandTypeName == name, false);
@@ -70,6 +74,7 @@ public class LandTypeManager : DomainService
             throw new BusinessException(KNTCDomainErrorCodes.NameAlreadyExist).WithData("name", name);
         }
     }
+
     private async Task ChangeCode(LandType landType, string code)
     {
         var existedCode = await _landTypeRepo.FindAsync(x => x.LandTypeCode == code, false);
@@ -79,6 +84,7 @@ public class LandTypeManager : DomainService
         }
         landType.ChangeCode(code);
     }
+
     private async Task CheckCode(string code)
     {
         var existedCode = await _landTypeRepo.FindAsync(x => x.LandTypeCode == code, false);

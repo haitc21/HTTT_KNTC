@@ -1,5 +1,4 @@
-﻿using KNTC.LandTypes;
-using KNTC.Localization;
+﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
@@ -13,7 +12,6 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.ObjectMapping;
 
 namespace KNTC.DocumentTypes;
 
@@ -26,6 +24,7 @@ public class DocumentTypeAppService : CrudAppService<
 {
     private readonly DocumentTypeManager _documentTypeManager;
     private readonly IDistributedCache<DocumentTypeLookupCache> _cache;
+
     public DocumentTypeAppService(IRepository<DocumentType, int> repository, DocumentTypeManager documentTypeManager, IDistributedCache<DocumentTypeLookupCache> cache) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
@@ -36,7 +35,7 @@ public class DocumentTypeAppService : CrudAppService<
         _cache = cache;
     }
 
-    public async override Task<PagedResultDto<DocumentTypeDto>> GetListAsync(GetDocumentTypesListDto input)
+    public override async Task<PagedResultDto<DocumentTypeDto>> GetListAsync(GetDocumentTypesListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -57,7 +56,6 @@ public class DocumentTypeAppService : CrudAppService<
 
         var queryResult = await AsyncExecuter.ToListAsync(queryable);
 
-
         var totalCount = await Repository.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.DocumentTypeCode.ToUpper().Contains(input.Keyword) || x.DocumentTypeName.ToUpper().Contains(input.Keyword)))
@@ -68,8 +66,8 @@ public class DocumentTypeAppService : CrudAppService<
             totalCount,
             ObjectMapper.Map<List<DocumentType>, List<DocumentTypeDto>>(queryResult)
         );
-
     }
+
     public async Task<ListResultDto<DocumentTypeLookupDto>> GetLookupAsync()
     {
         var cacheItem = await _cache.GetOrAddAsync(
@@ -88,7 +86,7 @@ public class DocumentTypeAppService : CrudAppService<
         return new ListResultDto<DocumentTypeLookupDto>(cacheItem.Items);
     }
 
-    public async override Task<DocumentTypeDto> CreateAsync(CreateAndUpdateDocumentTypeDto input)
+    public override async Task<DocumentTypeDto> CreateAsync(CreateAndUpdateDocumentTypeDto input)
     {
         var entity = await _documentTypeManager.CreateAsync(input.DocumentTypeCode,
                                                             input.DocumentTypeName,
@@ -98,10 +96,9 @@ public class DocumentTypeAppService : CrudAppService<
         await Repository.InsertAsync(entity);
         await _cache.RemoveAsync("All");
         return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
-
     }
 
-    public async override Task<DocumentTypeDto> UpdateAsync(int id, CreateAndUpdateDocumentTypeDto input)
+    public override async Task<DocumentTypeDto> UpdateAsync(int id, CreateAndUpdateDocumentTypeDto input)
     {
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -121,6 +118,7 @@ public class DocumentTypeAppService : CrudAppService<
         await Repository.DeleteAsync(id);
         await _cache.RemoveAsync("All");
     }
+
     [Authorize(KNTCPermissions.DocumentTypePermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
@@ -128,4 +126,3 @@ public class DocumentTypeAppService : CrudAppService<
         await _cache.RemoveAsync("All");
     }
 }
-

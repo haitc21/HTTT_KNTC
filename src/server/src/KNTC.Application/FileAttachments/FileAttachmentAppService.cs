@@ -4,11 +4,9 @@ using KNTC.DocumentTypes;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
-using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
-using NPOI.OpenXmlFormats.Wordprocessing;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
@@ -56,7 +54,8 @@ public class FileAttachmentAppService : CrudAppService<
         _complainRepo = complainRepo;
         _denounceRepo = denounceRepo;
     }
-    public async override Task<PagedResultDto<FileAttachmentDto>> GetListAsync(GetFileAttachmentListDto input)
+
+    public override async Task<PagedResultDto<FileAttachmentDto>> GetListAsync(GetFileAttachmentListDto input)
     {
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
         if (hasPermission.Succeeded == false)
@@ -87,7 +86,6 @@ public class FileAttachmentAppService : CrudAppService<
 
         var queryResult = await AsyncExecuter.ToListAsync(queryable);
 
-
         var totalCount = await Repository.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.TenTaiLieu.ToUpper().Contains(input.Keyword) || x.FileName.ToUpper().Contains(input.Keyword)))
@@ -101,7 +99,7 @@ public class FileAttachmentAppService : CrudAppService<
         );
     }
 
-    public async override Task<FileAttachmentDto> CreateAsync(CreateAndUpdateFileAttachmentDto input)
+    public override async Task<FileAttachmentDto> CreateAsync(CreateAndUpdateFileAttachmentDto input)
     {
         var entity = await _fileAttachmentManager.CreateAsync(loaiVuViec: input.LoaiVuViec,
                                                              complainId: input.ComplainId,
@@ -121,7 +119,7 @@ public class FileAttachmentAppService : CrudAppService<
         return ObjectMapper.Map<FileAttachment, FileAttachmentDto>(entity);
     }
 
-    public async override Task<FileAttachmentDto> UpdateAsync(Guid id, CreateAndUpdateFileAttachmentDto input)
+    public override async Task<FileAttachmentDto> UpdateAsync(Guid id, CreateAndUpdateFileAttachmentDto input)
     {
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -141,11 +139,13 @@ public class FileAttachmentAppService : CrudAppService<
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<FileAttachment, FileAttachmentDto>(entity);
     }
+
     public override async Task DeleteAsync(Guid id)
     {
         await Repository.DeleteAsync(id);
         await _blobContainer.DeleteAsync(id.ToString());
     }
+
     public async Task<Guid> UploadAsync(Guid fileAttachmentId, IFormFile file)
     {
         if (file == null) throw new UserFriendlyException("Vui lòng chọn tệp");
@@ -157,7 +157,6 @@ public class FileAttachmentAppService : CrudAppService<
                 await _blobContainer.SaveAsync(fileAttachmentId.ToString(), stream, overrideExisting: true);
             }
             return fileAttachmentId;
-
         }
         catch (Exception ex)
         {
@@ -266,7 +265,6 @@ public class FileAttachmentAppService : CrudAppService<
         if (input.CongKhai.HasValue)
         {
             congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
-
         }
         row = sheet.GetCreateRow(8);
         cell = row.GetCreateCell(4);
@@ -288,7 +286,6 @@ public class FileAttachmentAppService : CrudAppService<
         cell.CellStyle.WrapText = false;
         cell.CellStyle.SetFont(font);
 
-
         using (var stream = new MemoryStream())
         {
             wb.Write(stream);
@@ -297,4 +294,3 @@ public class FileAttachmentAppService : CrudAppService<
         }
     }
 }
-

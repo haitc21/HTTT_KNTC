@@ -9,10 +9,12 @@ namespace KNTC.Units;
 public class UnitManager : DomainService
 {
     private readonly IRepository<Unit, int> _unitRepo;
+
     public UnitManager(IRepository<Unit, int> unitRepo)
     {
         _unitRepo = unitRepo;
     }
+
     public async Task<Unit> CreateAsync([NotNull] string code,
                                                 [NotNull] string name,
                                                 [NotNull] string shortName,
@@ -21,12 +23,10 @@ public class UnitManager : DomainService
                                                 int orderIndex,
                                                 Status status)
     {
-
         Check.NotNullOrWhiteSpace(code, nameof(code));
         Check.NotNullOrWhiteSpace(name, nameof(name));
         Check.NotNullOrWhiteSpace(shortName, nameof(shortName));
         Check.NotNull(unitTypeId, nameof(unitTypeId));
-
 
         await CheckCode(code);
         await CheckName(name);
@@ -39,6 +39,7 @@ public class UnitManager : DomainService
             Status = status
         };
     }
+
     public async Task UpdateAsync([NotNull] Unit unit,
                                    [NotNull] string code,
                                    [NotNull] string name,
@@ -68,6 +69,7 @@ public class UnitManager : DomainService
         unit.OrderIndex = orderIndex;
         unit.Status = status;
     }
+
     private async Task ChangeName(Unit unit, string name)
     {
         var existedName = await _unitRepo.FindAsync(x => x.UnitName == name, false);
@@ -77,6 +79,7 @@ public class UnitManager : DomainService
         }
         unit.ChangeName(name);
     }
+
     private async Task CheckName(string name)
     {
         var existedName = await _unitRepo.FindAsync(x => x.UnitName == name, false);
@@ -85,6 +88,7 @@ public class UnitManager : DomainService
             throw new BusinessException(KNTCDomainErrorCodes.NameAlreadyExist).WithData("name", name);
         }
     }
+
     private async Task ChangeCode(Unit unit, string code)
     {
         var existedCode = await _unitRepo.FindAsync(x => x.UnitCode == code, false);
@@ -94,6 +98,7 @@ public class UnitManager : DomainService
         }
         unit.ChangeCode(code);
     }
+
     private async Task CheckCode(string code)
     {
         var existedCode = await _unitRepo.FindAsync(x => x.UnitCode == code, false);

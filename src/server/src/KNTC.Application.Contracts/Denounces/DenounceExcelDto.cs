@@ -1,7 +1,4 @@
-﻿using KNTC.FileAttachments;
-using System;
-using System.Collections.Generic;
-using Volo.Abp.Application.Dtos;
+﻿using System;
 
 namespace KNTC.Denounces;
 

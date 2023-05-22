@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using KNTC.Localization;
+﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
@@ -9,10 +8,7 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.AutoMapper;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace KNTC.SpatialDatas;
 
@@ -24,6 +20,7 @@ public class SpatialDataAppService : CrudAppService<
             CreateAndUpdateSpatialDataDto>, ISpatialDataAppService
 {
     private readonly SpatialDataManager _spatialDataManager;
+
     public SpatialDataAppService(IRepository<SpatialData, int> repository, SpatialDataManager spatialDataManager) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
@@ -33,9 +30,8 @@ public class SpatialDataAppService : CrudAppService<
         _spatialDataManager = spatialDataManager;
     }
 
-    public async override Task<PagedResultDto<SpatialDataDto>> GetListAsync(GetSpatialDataListDto input)
+    public override async Task<PagedResultDto<SpatialDataDto>> GetListAsync(GetSpatialDataListDto input)
     {
-
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = nameof(SpatialData.Id);
@@ -63,8 +59,8 @@ public class SpatialDataAppService : CrudAppService<
         );
 
         return result;
-
     }
+
     public async Task<ListResultDto<SpatialDataLookupDto>> GetLookupAsync()
     {
         var spatialDatas = await Repository.GetListAsync();
@@ -74,14 +70,14 @@ public class SpatialDataAppService : CrudAppService<
         );
     }
 
-    public async override Task<SpatialDataDto> CreateAsync(CreateAndUpdateSpatialDataDto input)
+    public override async Task<SpatialDataDto> CreateAsync(CreateAndUpdateSpatialDataDto input)
     {
         var entity = await _spatialDataManager.CreateAsync(input.GeoJson);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<SpatialData, SpatialDataDto>(entity);
     }
 
-    public async override Task<SpatialDataDto> UpdateAsync(int id, CreateAndUpdateSpatialDataDto input)
+    public override async Task<SpatialDataDto> UpdateAsync(int id, CreateAndUpdateSpatialDataDto input)
     {
         var entity = await Repository.GetAsync(id, false);
         //entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
@@ -95,6 +91,7 @@ public class SpatialDataAppService : CrudAppService<
     {
         await Repository.DeleteManyAsync(ids);
     }
+
     public async Task<List<string>> GetGeoJsonAsync()
     {
         var query = await Repository.GetQueryableAsync();

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using Volo.Abp.Application.Dtos;
 
 namespace KNTC.Summaries;
 
@@ -9,8 +7,8 @@ public class GetSumaryMapDto
 {
     public GetSumaryMapDto()
     {
-
     }
+
     public bool LandComplain { get; set; }
     public bool EnviromentComplain { get; set; }
     public bool WaterComplain { get; set; }
@@ -69,5 +67,4 @@ public class GetSumaryMapDto
 
         return stringBuilder.ToString();
     }
-
 }

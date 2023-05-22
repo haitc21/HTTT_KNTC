@@ -10,28 +10,31 @@ public class UnitType : AuditedAggregateRoot<int>
 {
     public UnitType()
     {
-
     }
+
     public UnitType(int id) : base(id)
     {
-
     }
+
     public UnitType(string code, string name)
     {
         ChangeCode(code);
         ChangeName(name);
     }
+
     public UnitType(int id, string code, string name) : base(id)
     {
         ChangeCode(code);
         ChangeName(name);
     }
+
     public string UnitTypeCode { get; private set; }
     public string UnitTypeName { get; private set; }
     public string Description { get; set; }
     public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public virtual List<Unit> Units { get; set; }
+
     private void SetCode([NotNull] string code)
     {
         UnitTypeCode = Check.NotNullOrWhiteSpace(

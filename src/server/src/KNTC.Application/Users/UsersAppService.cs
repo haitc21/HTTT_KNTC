@@ -57,7 +57,6 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         return result;
     }
 
-
     [Authorize(IdentityPermissions.Users.Default)]
     public virtual async Task<PagedResultDto<UserListDto>> GetListAsync(GetUserListDto input)
     {
@@ -114,6 +113,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         return new ListResultDto<IdentityRoleDto>(
             ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles));
     }
+
     [Authorize]
     public async Task<UserDto> GetUserInfoAsync(Guid userId)
     {
@@ -125,6 +125,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         result.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
         return result;
     }
+
     [Authorize(IdentityPermissions.Users.Create)]
     public virtual async Task<IdentityUserDto> CreateAsync(CrateAndUpdateUserDto input)
     {
@@ -185,6 +186,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         await CurrentUnitOfWork.SaveChangesAsync();
         return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
     }
+
     [Authorize]
     public async Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CrateAndUpdateUserDto input)
     {
@@ -214,7 +216,6 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
         await UserRepository.UpdateAsync(user);
     }
-
 
     [Authorize(IdentityPermissions.Users.Delete)]
     public virtual async Task DeleteAsync(Guid id)
@@ -296,8 +297,8 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         {
             throw new UserFriendlyException(ex.Message);
         }
-
     }
+
     [Authorize]
     public async Task<byte[]> GetAvatarAsync(Guid? userId)
     {
@@ -306,6 +307,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     #region private method
+
     private async Task hasViewUserInfo(Guid userId)
     {
         var curUserId = CurrentUser.GetId();
@@ -316,7 +318,6 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
             {
                 throw new AbpException("bạn không có quyền xem thông tin cá nhân của ngời khác");
             }
-
         }
     }
 
@@ -343,6 +344,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
             (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
         }
     }
+
     private static string GetFileExtension(string fileName)
     {
         if (string.IsNullOrEmpty(fileName))
@@ -358,5 +360,6 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         return fileName.Substring(lastDotIndex + 1);
     }
-    #endregion
+
+    #endregion private method
 }
