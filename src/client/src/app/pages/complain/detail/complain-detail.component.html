@@ -242,7 +242,9 @@
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiLienHe">Địa chỉ liên hệ <span class="required">*</span></label>
+                      <label for="diaChiLienHe"
+                        >Địa chỉ liên hệ <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiLienHe"
@@ -300,7 +302,8 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       />
-                      <label for="boPhanDangXL">Bộ phận đang XL <span class="required">*</span>
+                      <label for="boPhanDangXL"
+                        >Bộ phận đang XL <span class="required">*</span>
                       </label>
                     </span>
                     <app-validation-message
@@ -557,6 +560,22 @@
                       <label>Khiếu nại/Khiếu kiện</label>
                     </span>
                   </div>
+                  <!-- ----------------------------ketQua1---------------------------=----------------------------- -->
+                  <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                      <p-dropdown
+                        id="ketQua1"
+                        formControlName="ketQua1"
+                        [options]="loaiKQOPtions"
+                        optionLabel="text"
+                        optionValue="value"
+                        [showClear]="true"
+                        [autoDisplayFirst]="false"
+                        styleClass="w-full"
+                      ></p-dropdown>
+                      <label>Kết quả GQKN</label>
+                    </span>
+                  </div>
                   <!-- ---------------------------------ngayKhieuNai1------------------------------------------------- -->
                   <div class="field col-12 md:col-6">
                     <span class="p-float-label">
@@ -619,22 +638,6 @@
                     >
                     </app-validation-message>
                   </div>
-                  <!-- ----------------------------ketQua1---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                      <p-dropdown
-                        id="ketQua1"
-                        formControlName="ketQua1"
-                        [options]="loaiKQOPtions"
-                        optionLabel="text"
-                        optionValue="value"
-                        [showClear]="true"
-                        [autoDisplayFirst]="false"
-                        styleClass="w-full"
-                      ></p-dropdown>
-                      <label>Kết quả GQKN</label>
-                    </span>
-                  </div>
                 </div>
               </p-accordionTab>
               <!-- -------------------------------Thông tin giải quyết lần II--------------------------------------------------- -->
@@ -654,6 +657,22 @@
                         styleClass="w-full"
                       ></p-dropdown>
                       <label>Khiếu nại/Khiếu kiện</label>
+                    </span>
+                  </div>
+                  <!-- ----------------------------ketQua2---------------------------=----------------------------- -->
+                  <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                      <p-dropdown
+                        id="ketQua2"
+                        formControlName="ketQua2"
+                        [options]="loaiKQOPtions"
+                        optionLabel="text"
+                        optionValue="value"
+                        [showClear]="true"
+                        [autoDisplayFirst]="false"
+                        styleClass="w-full"
+                      ></p-dropdown>
+                      <label>Kết quả GQKN</label>
                     </span>
                   </div>
                   <!-- ---------------------------------ngayKhieuNai2------------------------------------------------- -->
@@ -718,22 +737,6 @@
                     >
                     </app-validation-message>
                   </div>
-                  <!-- ----------------------------ketQua2---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                      <p-dropdown
-                        id="ketQua2"
-                        formControlName="ketQua2"
-                        [options]="loaiKQOPtions"
-                        optionLabel="text"
-                        optionValue="value"
-                        [showClear]="true"
-                        [autoDisplayFirst]="false"
-                        styleClass="w-full"
-                      ></p-dropdown>
-                      <label>Kết quả GQKN</label>
-                    </span>
-                  </div>
                 </div>
               </p-accordionTab>
             </p-accordion>
@@ -791,7 +794,7 @@
                   pRipples
                   type="button"
                   (click)="getCoordiate()"
-                  label="{{coordinateLabel}}"
+                  label="{{ coordinateLabel }}"
                   class="p-button-info mr-2"
                   icon="pi pi-map-marker"
                 ></button>
@@ -822,7 +825,7 @@
                   pRipples
                   type="button"
                   (click)="letDraw()"
-                  label="{{drawLabel}}"
+                  label="{{ drawLabel }}"
                   class="p-button-info mr-2"
                   icon="pi pi-map-marker"
                 ></button>
@@ -859,9 +862,10 @@
         ></button>
       </div>
     </ng-template>
-    <ng-template *ngIf="(mode == 'view') && hasPermissionUpdate" pTemplate="footer">
+    <ng-template *ngIf="mode == 'view' && hasPermissionUpdate" pTemplate="footer">
       <div class="flex justify-content-end">
-        <button *ngIf="(mode == 'view')"
+        <button
+          *ngIf="mode == 'view'"
           pButton
           pRipples
           type="submit"
@@ -870,7 +874,8 @@
           class="p-button-info mr-2"
           icon="pi pi-check"
         ></button>
-        <button *ngIf="(mode != 'view')"
+        <button
+          *ngIf="mode != 'view'"
           pButton
           pRipples
           type="submit"
