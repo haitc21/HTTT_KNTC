@@ -8,6 +8,7 @@ using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,6 +18,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
@@ -33,6 +35,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -63,6 +66,39 @@ public class KNTCAuthServerModule : AbpModule
                 options.UseAspNetCore();
             });
         });
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+
+        // Development environment
+        if (hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                // This is default value, you can remove this line.
+                options.AddDevelopmentEncryptionAndSigningCertificate = true;
+            });
+        }
+
+        // Production or Staging environment
+        if (!hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            });
+
+            PreConfigure<OpenIddictServerBuilder>(builder =>
+            {
+                builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
+                builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
+
+                //...
+            });
+        }
+    }
+
+    private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)
+    {
+        return new X509Certificate2(Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx"), "HTTTKNTC@VNUA2023");
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -175,7 +211,6 @@ public class KNTCAuthServerModule : AbpModule
             app.UseDeveloperExceptionPage();
         }
 
-        //app.UseAbpRequestLocalization();
         var supportedCultures = new[]
         {
             new CultureInfo("vi"),
@@ -204,12 +239,6 @@ public class KNTCAuthServerModule : AbpModule
         app.UseCors();
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
-
-        //if (MultiTenancyConsts.IsEnabled)
-        //{
-        //    app.UseMultiTenancy();
-        //}
-
         app.UseUnitOfWork();
         app.UseAuthorization();
         app.UseAuditing();
