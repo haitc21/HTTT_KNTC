@@ -21,6 +21,7 @@ import 'leaflet.markercluster.layersupport';
 //import "leaflet-draw/dist/leaflet.draw.js";
 import "leaflet-draw";
 import { format } from 'date-fns';
+import { environment } from 'src/environments/environment';
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
 //import "leaflet/dist/leaflet.css";
@@ -104,8 +105,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
       !changes.spatialData.isFirstChange())
         this.renderSpatialData(changes.spatialData.currentValue);
     */
-    if (!changes.bShowSpatial.isFirstChange())
-        this.renderSpatialData(changes.bShowSpatial.currentValue);
+    if (!changes.bShowSpatial?.isFirstChange())
+        this.renderSpatialData(changes.bShowSpatial?.currentValue);
     
   }
 
@@ -520,7 +521,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     */
     if (visible){
       if (!this.bSpatialLoaded){
-        this.quyhoach = L.tileLayer.wms("http://localhost:8080/geoserver/kntc/wms", {
+        this.quyhoach = L.tileLayer.wms(`${environment.apis.geoserver.url}/geoserver/kntc/wms`, {
           layers: "kntc:phoyen",
           format: "image/png",
           transparent: true,
