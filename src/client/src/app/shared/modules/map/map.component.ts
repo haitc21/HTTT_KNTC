@@ -20,6 +20,9 @@ import 'leaflet.markercluster.layersupport';
 //import "leaflet-draw/dist/leaflet.draw.css";
 //import "leaflet-draw/dist/leaflet.draw.js";
 import "leaflet-draw";
+import "leaflet-loading";
+//import "leaflet-measure";
+import "leaflet.measurecontrol";
 import { format } from 'date-fns';
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
@@ -68,6 +71,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
   myStyle: any;
 
   bSpatialLoaded: boolean = false;
+  bLoading: boolean = false;
+
   markers: any;
   info: any;
   khieunai: any;
@@ -116,6 +121,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
       : L.latLng(21.6825, 105.8442);
     
     this.map = L.map(this.idMap, {
+      measureControl:true,
+      loadingControl: true
     }).setView(center, this.zoomLv);
 
     // GeoJSON layer (UTM15)
@@ -208,6 +215,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
     var overlay_TN = L.geoJson(overlay_ThaiNguyen).addTo(this.map);
     //add layer quy hoach (if any)
     //this.quyhoach.addTo(this.map);
+
+    //Bổ sung measure control
+    var measureControl = new L.Control.Measure({ position: 'topright', primaryLengthUnit: 'meters', primaryAreaUnit: 'hectares' });
+    measureControl.addTo(this.map);
 
     //Bổ sung các custom control cho Map: 
     //info control layer
@@ -469,29 +480,32 @@ export class MapComponent implements AfterViewInit, OnChanges {
           */
          
           //let newlayer = L.Proj.geoJson(geojson,
-          let newlayer = L.geoJson(geojson,
-          {
-            style: (feature) => ({
-              weight: 3,
-              opacity: 0.5,
-              color: (dataMap.loaiVuViec==1)? '#2880ca': '#ed5565',
-              fillOpacity: 0.6,
-              fillColor: '#29b6f6',
-            }),
-            onEachFeature: (feature, layer) => (
-            layer.on({
-              mouseover: (e) => (this.highlightFeature(layer, dataMap)),
-              mouseout: (e) => (this.resetFeature(layer, dataMap.loaiVuViec)),
-              onclick: (e) => (this.zoomToFeature(layer))
-            })
-          )
-          });
-          
-          if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) 
-            newlayer.addTo(this.khieunai);
-          else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) 
-            newlayer.addTo(this.tocao);  
-          //L.Proj.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
+          //Bỏ qua nếu là Point hay
+          if (geojson.geometry.type != "Point"){
+            let newlayer = L.geoJson(geojson,
+            {
+              style: (feature) => ({
+                weight: 3,
+                opacity: 0.5,
+                color: (dataMap.loaiVuViec==1)? '#2880ca': '#ed5565',
+                fillOpacity: 0.6,
+                fillColor: '#29b6f6',
+              }),
+              onEachFeature: (feature, layer) => (
+              layer.on({
+                mouseover: (e) => (this.highlightFeature(layer, dataMap)),
+                mouseout: (e) => (this.resetFeature(layer, dataMap.loaiVuViec)),
+                onclick: (e) => (this.zoomToFeature(layer))
+              })
+            )
+            });
+            
+            if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) 
+              newlayer.addTo(this.khieunai);
+            else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) 
+              newlayer.addTo(this.tocao);  
+            //L.Proj.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
+          }
         }
       });
   }
@@ -524,6 +538,14 @@ export class MapComponent implements AfterViewInit, OnChanges {
           layers: "kntc:phoyen",
           format: "image/png",
           transparent: true,
+        });
+        this.quyhoach.on('loading', function (event) {
+          console.log('loading')
+          this.bLoading = true;
+        });
+        this.quyhoach.on('load', function (event) {
+          console.log('loaded')
+          this.bLoading = false;
         });
         this.bSpatialLoaded = true;
         this.quyhoach.addTo(this.map);

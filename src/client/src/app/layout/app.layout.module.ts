@@ -16,14 +16,13 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { ButtonModule } from 'primeng/button';
 import { MenubarModule } from 'primeng/menubar';
-import {AvatarModule} from 'primeng/avatar';
+import { AvatarModule } from 'primeng/avatar';
 import { AppFooterComponent } from './footer/app.footer.component';
 import { AppMenuComponent } from './sidebar/app.menu.component';
 import { AppSidebarComponent } from './sidebar/app.sidebar.component';
 import { AppMenuitemComponent } from './sidebar/app.menuitem.component';
 import { AppTopBarComponent } from './topbar/app.topbar.component';
 import { BlockUIModule } from 'primeng/blockui';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
 
 @NgModule({
@@ -54,7 +53,6 @@ import { PanelModule } from 'primeng/panel';
     MenubarModule,
     AvatarModule,
     BlockUIModule,
-    ProgressSpinnerModule,
     PanelModule
   ],
   exports: [AppLayoutComponent],
