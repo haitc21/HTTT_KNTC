@@ -217,8 +217,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
     //this.quyhoach.addTo(this.map);
 
     //Bổ sung measure control
-    var measureControl = new L.Control.Measure({ position: 'topright', primaryLengthUnit: 'meters', primaryAreaUnit: 'hectares' });
-    measureControl.addTo(this.map);
+    //var measureControl = new L.Control.Measure({ position: 'topright', primaryLengthUnit: 'meters', primaryAreaUnit: 'hectares' });
+    //measureControl.addTo(this.map);
 
     //Bổ sung các custom control cho Map: 
     //info control layer
