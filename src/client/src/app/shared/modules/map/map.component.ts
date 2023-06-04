@@ -414,9 +414,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.tocao.clearLayers();
 
     let customOptions = {
-      minWidth: 500,
-      maxWidth: 800,      
-      maxHeight: 400,
+      minWidth: 600,
+      maxWidth: 800,
+      minHeight: 350, 
+      maxHeight: 450,
       className: 'popupCustom',
       closeOnEscapeKey: true,
     };
@@ -541,11 +542,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
           transparent: true,
         });
         this.quyhoach.on('loading', function (event) {
-          console.log('loading')
           this.bLoading = true;
         });
         this.quyhoach.on('load', function (event) {
-          console.log('loaded')
           this.bLoading = false;
         });
         this.bSpatialLoaded = true;
