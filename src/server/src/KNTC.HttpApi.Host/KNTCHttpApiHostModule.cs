@@ -224,12 +224,6 @@ public class KNTCHttpApiHostModule : AbpModule
         app.UseRouting();
         app.UseCors();
         app.UseAuthentication();
-
-        //if (MultiTenancyConsts.IsEnabled)
-        //{
-        //    app.UseMultiTenancy();
-        //}
-
         app.UseAuthorization();
 
         app.UseSwagger();

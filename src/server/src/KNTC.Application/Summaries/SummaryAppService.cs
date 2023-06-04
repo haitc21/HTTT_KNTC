@@ -92,7 +92,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         var cacheItem = await _cache.GetOrAddAsync(
         input,
-        async () => await LoadDataMapAsync(input),
+        async () => await GetMapFromDBAsync(input),
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
@@ -100,7 +100,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         return cacheItem.Items;
     }
 
-    private async Task<SummaryMapCache> LoadDataMapAsync(GetSumaryMapDto input)
+    private async Task<SummaryMapCache> GetMapFromDBAsync(GetSumaryMapDto input)
     {
         var query = await _summaryRepo.GetListAsync(input.LandComplain,
                                                     input.EnviromentComplain,
