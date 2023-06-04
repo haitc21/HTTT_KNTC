@@ -5276,11 +5276,6 @@ leaflet-draw@^0.3.2:
   resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-0.3.2.tgz#717ee8fed4c2a9679c12162e1f922d2da503d109"
   integrity sha512-0O8kEVtOvir+y4ltJAbuR7Q4jM0iGz6+Zw/T1yCdUUeReyrMn89bo/9XbfwP964Qe1szvdDDnosMKaSC8wBn9g==
 
-leaflet-loading@0.1.24:
-  version "0.1.24"
-  resolved "https://registry.yarnpkg.com/leaflet-loading/-/leaflet-loading-0.1.24.tgz#eafdfc188718eb13d3cf7b9226c4c06b16e92919"
-  integrity sha512-svOFGs01hbjJpRVY6L6HpaQeLuHIFOmXtGARg3cUzH/lYu2xpRtkYScmDgsQa4vUw4qKS0XvZck0u1E/rRliQQ==
-
 leaflet.markercluster.layersupport@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/leaflet.markercluster.layersupport/-/leaflet.markercluster.layersupport-2.0.1.tgz#8d2d3d2e8c09f3a23c472de595cb759dfa448b96"

@@ -766,7 +766,7 @@
           <span>Bản đồ</span>
         </ng-template>
         <ng-template pTemplate="content">
-          <p-card header="Dữ liệu không gian" class="w-full">
+          <p-card header="Dữ liệu không gian" class="w-full" *ngIf="mode != 'view'">
             <div class="grid">
               <!-- -------------------------------duLieuToaDo--------------------------------------------------- -->
               <div class="field col-12 md:col-6">
@@ -832,7 +832,7 @@
               </div>
             </div>
           </p-card>
-          <p-card header="Bản đồ">
+          <p-card>
             <!-- -------------------------------Bản đồ--------------------------------------------------- -->
             <app-map [data]="dataMap"></app-map>
           </p-card>

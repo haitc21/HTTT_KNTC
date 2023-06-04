@@ -117,7 +117,6 @@
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/leaflet-draw/dist/leaflet.draw.css",
               "node_modules/leaflet.measurecontrol/docs/leaflet.measurecontrol.css",
-              "node_modules/leaflet-loading/src/Control.Loading.css",
               "src/styles.scss"
             ],
             "scripts": [

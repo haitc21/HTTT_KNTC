@@ -20,7 +20,7 @@ import 'leaflet.markercluster.layersupport';
 //import "leaflet-draw/dist/leaflet.draw.css";
 //import "leaflet-draw/dist/leaflet.draw.js";
 import "leaflet-draw";
-import "leaflet-loading";
+//import "leaflet-loading";
 //import "leaflet-measure";
 import "leaflet.measurecontrol";
 import { format } from 'date-fns';
@@ -121,8 +121,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       : L.latLng(21.6825, 105.8442);
     
     this.map = L.map(this.idMap, {
-      measureControl:true,
-      loadingControl: true
+      measureControl:true
     }).setView(center, this.zoomLv);
 
     // GeoJSON layer (UTM15)
@@ -223,15 +222,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
     //Bổ sung các custom control cho Map: 
     //info control layer
     this.info = L.control();
-    this.info.onAdd = function (map) {
+    this.info.onAdd = function () {      
       this._div = L.DomUtil.create('div', 'leaflet-control-info'); // create a div with a class "info"
+      L.DomEvent.disableClickPropagation(this._div);
       this.update();
       return this._div;
     };
-    
+
     // method that we will use to update the control based on feature properties passed
     this.info.update = function () {
-        //buildInfoContent
+        //buildInfoContent        
         var infoContent = '<h5>Thông tin Khiếu nại/Tố cáo</h5>';
         if (this.data){        
           infoContent += this.buildInfoContent(this.data);
@@ -269,6 +269,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
           <th scope="row">\
           <td>Bộ phận đang XL:</td><td>' + props.boPhanDangXL + '</td>\
         </tr>\
+        <tr>\
       </table>';
       return infoContent;
     }
