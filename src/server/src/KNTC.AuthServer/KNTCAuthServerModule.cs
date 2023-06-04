@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -93,6 +94,12 @@ public class KNTCAuthServerModule : AbpModule
 
                 //...
             });
+
+            // disable https
+            //Configure<OpenIddictServerAspNetCoreBuilder>(configure =>
+            //{
+            //    configure.DisableTransportSecurityRequirement();
+            //});
         }
     }
 
