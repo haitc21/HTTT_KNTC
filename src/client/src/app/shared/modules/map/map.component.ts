@@ -243,7 +243,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     
     this.info.buildInfoContent = function(props: any){
       var type = ((props.loaiVuViec==1)?'Khiếu nại':'Tố cáo');
-      var infoContent = '<h6>Loại vụ việc: <span color="blue"><strong>' + type +  '</strong></span></h6>';
+      var infoContent = '<h6>Loại vụ việc: <font color="#0277bd"><strong>' + type +  '</strong></font></h6>';
       infoContent += '<table>\
         <tr>\
           <th scope="row">\
@@ -326,18 +326,18 @@ export class MapComponent implements AfterViewInit, OnChanges {
       draw: {
         polyline: {
           shapeOptions: {
-            color: '#f357a1',
+            color: '#0277bd',
             weight: 10
           }
         },
         polygon: {
           allowIntersection: false, // Restricts shapes to simple polygons
           drawError: {
-            color: '#e1e100', // Color the shape will turn when intersects
-            message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+            color: '#ff0000', // Color the shape will turn when intersects
+            message: '<strong>Dữ liệu hình học không hợp lệ!<strong> Không được phép giao cắt!' // Message that will show when intersect
           },
           shapeOptions: {
-            color: '#bada55'
+            color: '#0277bd'
           }
         },
         circle: {
@@ -417,7 +417,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       minWidth: 600,
       maxWidth: 800,
       minHeight: 350, 
-      maxHeight: 450,
+      maxHeight: 440,
       className: 'popupCustom',
       closeOnEscapeKey: true,
     };
