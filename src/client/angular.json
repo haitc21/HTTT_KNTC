@@ -116,6 +116,7 @@
               "node_modules/quill/dist/quill.snow.css",
               "node_modules/leaflet/dist/leaflet.css",
               "node_modules/leaflet-draw/dist/leaflet.draw.css",
+              "node_modules/leaflet.measurecontrol/docs/leaflet.measurecontrol.css",
               "src/styles.scss"
             ],
             "scripts": [

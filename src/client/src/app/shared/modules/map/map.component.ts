@@ -20,8 +20,10 @@ import 'leaflet.markercluster.layersupport';
 //import "leaflet-draw/dist/leaflet.draw.css";
 //import "leaflet-draw/dist/leaflet.draw.js";
 import "leaflet-draw";
+//import "leaflet-loading";
+//import "leaflet-measure";
+import "leaflet.measurecontrol";
 import { format } from 'date-fns';
-import { environment } from 'src/environments/environment';
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
 //import "leaflet/dist/leaflet.css";
@@ -54,7 +56,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
   @Input() data: SummaryDto[] = [];
   
   //Show/Hide layer Quy hoach tren ban do
-  @Input() bShowSpatial = false;
+  @Input() bShowSpatial: boolean = false;
   
   //@Input() spatialData: any[];
   @Input() heightMap: string = '600px';
@@ -69,6 +71,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
   myStyle: any;
 
   bSpatialLoaded: boolean = false;
+  bLoading: boolean = false;
+
   markers: any;
   info: any;
   khieunai: any;
@@ -105,8 +109,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
       !changes.spatialData.isFirstChange())
         this.renderSpatialData(changes.spatialData.currentValue);
     */
-    if (!changes.bShowSpatial?.isFirstChange())
-        this.renderSpatialData(changes.bShowSpatial?.currentValue);
+    //if (!changes.bShowSpatial.isFirstChange())
+    this.renderSpatialData(this.bShowSpatial);
     
   }
 
@@ -117,6 +121,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       : L.latLng(21.6825, 105.8442);
     
     this.map = L.map(this.idMap, {
+      measureControl:true
     }).setView(center, this.zoomLv);
 
     // GeoJSON layer (UTM15)
@@ -210,18 +215,23 @@ export class MapComponent implements AfterViewInit, OnChanges {
     //add layer quy hoach (if any)
     //this.quyhoach.addTo(this.map);
 
+    //Bổ sung measure control
+    //var measureControl = new L.Control.Measure({ position: 'topright', primaryLengthUnit: 'meters', primaryAreaUnit: 'hectares' });
+    //measureControl.addTo(this.map);
+
     //Bổ sung các custom control cho Map: 
     //info control layer
     this.info = L.control();
-    this.info.onAdd = function (map) {
+    this.info.onAdd = function () {      
       this._div = L.DomUtil.create('div', 'leaflet-control-info'); // create a div with a class "info"
+      L.DomEvent.disableClickPropagation(this._div);
       this.update();
       return this._div;
     };
-    
+
     // method that we will use to update the control based on feature properties passed
     this.info.update = function () {
-        //buildInfoContent
+        //buildInfoContent        
         var infoContent = '<h5>Thông tin Khiếu nại/Tố cáo</h5>';
         if (this.data){        
           infoContent += this.buildInfoContent(this.data);
@@ -233,7 +243,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     
     this.info.buildInfoContent = function(props: any){
       var type = ((props.loaiVuViec==1)?'Khiếu nại':'Tố cáo');
-      var infoContent = '<h6>Loại vụ việc: <span color="blue"><strong>' + type +  '</strong></span></h6>';
+      var infoContent = '<h6>Loại vụ việc: <font color="#0277bd"><strong>' + type +  '</strong></font></h6>';
       infoContent += '<table>\
         <tr>\
           <th scope="row">\
@@ -249,16 +259,17 @@ export class MapComponent implements AfterViewInit, OnChanges {
         </tr>\
         <tr>\
           <th scope="row">\
-          <td>Ngày nhận đơn:</td><td>' + props.thoiGianTiepNhan + '</td>\
+          <td>Ngày nhận đơn:</td><td>' + format(new Date(props.thoiGianTiepNhan),'dd/MM/yyyy HH:mm') + '</td>\
         </tr>\
         <tr>\
           <th scope="row">\
-          <td>Ngày hẹn trả kết quả:</td><td>' + props.thoiGianHenTraKQ + '</td>\
+          <td>Ngày hẹn trả kết quả:</td><td>' + format(new Date(props.thoiGianHenTraKQ),'dd/MM/yyyy HH:mm') + '</td>\
         </tr>\
         <tr>\
           <th scope="row">\
           <td>Bộ phận đang XL:</td><td>' + props.boPhanDangXL + '</td>\
         </tr>\
+        <tr>\
       </table>';
       return infoContent;
     }
@@ -315,18 +326,18 @@ export class MapComponent implements AfterViewInit, OnChanges {
       draw: {
         polyline: {
           shapeOptions: {
-            color: '#f357a1',
+            color: '#0277bd',
             weight: 10
           }
         },
         polygon: {
           allowIntersection: false, // Restricts shapes to simple polygons
           drawError: {
-            color: '#e1e100', // Color the shape will turn when intersects
-            message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
+            color: '#ff0000', // Color the shape will turn when intersects
+            message: '<strong>Dữ liệu hình học không hợp lệ!<strong> Không được phép giao cắt!' // Message that will show when intersect
           },
           shapeOptions: {
-            color: '#bada55'
+            color: '#0277bd'
           }
         },
         circle: {
@@ -403,9 +414,10 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.tocao.clearLayers();
 
     let customOptions = {
-      minWidth: 500,
-      maxWidth: 800,      
-      maxHeight: 400,
+      minWidth: 600,
+      maxWidth: 800,
+      minHeight: 350, 
+      maxHeight: 440,
       className: 'popupCustom',
       closeOnEscapeKey: true,
     };
@@ -414,7 +426,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
       .filter(x => x.duLieuToaDo != null || x.duLieuHinhHoc != null)
       .forEach(dataMap => {
         let toado: L.LatLng = new L.LatLng(0 , 0);
-        let geometry: any;
+        //let geometry: any;
         let geojson: any;
         if (dataMap.duLieuToaDo != null)//Có tọa độ thì lấy tọa độ
           toado = this.convertStringCoordiate(dataMap.duLieuToaDo);
@@ -470,29 +482,32 @@ export class MapComponent implements AfterViewInit, OnChanges {
           */
          
           //let newlayer = L.Proj.geoJson(geojson,
-          let newlayer = L.geoJson(geojson,
-          {
-            style: (feature) => ({
-              weight: 3,
-              opacity: 0.5,
-              color: '#008f68',
-              fillOpacity: 0.8,
-              fillColor: (dataMap.loaiVuViec==1)? '#2880ca': '#ed5565',
-            }),
-            onEachFeature: (feature, layer) => (
-            layer.on({
-              mouseover: (e) => (this.highlightFeature(layer, dataMap)),
-              mouseout: (e) => (this.resetFeature(layer, dataMap.loaiVuViec)),
-              onclick: (e) => (this.zoomToFeature(layer))
-            })
-          )
-          });
-          
-          if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) 
-            newlayer.addTo(this.khieunai);
-          else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) 
-            newlayer.addTo(this.tocao);  
-          //L.Proj.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
+          //Bỏ qua nếu là Point hay
+          if (geojson.geometry.type != "Point"){
+            let newlayer = L.geoJson(geojson,
+            {
+              style: (feature) => ({
+                weight: 3,
+                opacity: 0.5,
+                color: (dataMap.loaiVuViec==1)? '#2880ca': '#ed5565',
+                fillOpacity: 0.6,
+                fillColor: '#29b6f6',
+              }),
+              onEachFeature: (feature, layer) => (
+              layer.on({
+                mouseover: (e) => (this.highlightFeature(layer, dataMap)),
+                mouseout: (e) => (this.resetFeature(layer, dataMap.loaiVuViec)),
+                onclick: (e) => (this.zoomToFeature(layer))
+              })
+            )
+            });
+            
+            if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) 
+              newlayer.addTo(this.khieunai);
+            else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) 
+              newlayer.addTo(this.tocao);  
+            //L.Proj.geoJson(geojson, {style: this.myStyle}).addTo(this.quyhoach);
+          }
         }
       });
   }
@@ -521,10 +536,16 @@ export class MapComponent implements AfterViewInit, OnChanges {
     */
     if (visible){
       if (!this.bSpatialLoaded){
-        this.quyhoach = L.tileLayer.wms(`${environment.apis.geoserver.url}/geoserver/kntc/wms`, {
+        this.quyhoach = L.tileLayer.wms("http://localhost:8080/geoserver/kntc/wms", {
           layers: "kntc:phoyen",
           format: "image/png",
           transparent: true,
+        });
+        this.quyhoach.on('loading', function (event) {
+          this.bLoading = true;
+        });
+        this.quyhoach.on('load', function (event) {
+          this.bLoading = false;
         });
         this.bSpatialLoaded = true;
         this.quyhoach.addTo(this.map);
@@ -533,7 +554,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
         this.quyhoach.addTo(this.map);
     }
     else
-      this.quyhoach.removeFrom(this.map);
+      if (this.quyhoach!=undefined)
+        this.quyhoach.removeFrom(this.map);
   }
 
   buildProperties(dataMap: SummaryDto){
@@ -566,10 +588,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
       //var layer = e.target;
 
       layer.setStyle({
-          weight: 10,
-          color: '#666',
+          weight: 8,
+          color: '#FF0000',
           dashArray: '',
-          fillOpacity: 0.7
+          fillOpacity: 0.8,
+          fillColor: (data.loaiVuViec==1)? '#2880ca': '#ed5565'
       });
 
       layer.bringToFront();
@@ -584,9 +607,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
     layer.setStyle({
       weight: 3,
       opacity: 0.5,
-      color: '#008f68',
-      fillOpacity: 0.8,
-      fillColor: (type==1)? '#2880ca': '#ed5565'
+      color: (type==1)? '#2880ca': '#ed5565',
+      fillOpacity: 0.6,
+      fillColor: '#29b6f6'
     });
 
     //info.update();
