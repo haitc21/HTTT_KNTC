@@ -2,7 +2,7 @@ import { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
+//import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
 import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { UnitService } from '@proxy/units';
@@ -71,7 +71,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   items: SummaryDto[] = [];
   //dataMap: SummaryDto[] = [];
 
-  spatialData: SpatialDataDto[];
+  //spatialData: SpatialDataDto[];
 
   //Paging variables
   public skipCount: number = 0;
@@ -109,11 +109,33 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   xaOptions: UnitLookupDto[] = [];
 
   loaiKQOptions = [
-    { value: LoaiKetQua.Dung, text: 'Đúng' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
     { value: LoaiKetQua.ChuaCoKQ, text: 'Chưa có KQ' },
+    { value: LoaiKetQua.Dung, text: 'Đúng' },    
+    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
+    { value: LoaiKetQua.Sai, text: 'Sai' },
   ];
+  
+  LoaiVuViecOptions = [
+    '',
+    'Khiếu nại/Khiếu kiện',
+    'Tố cáo',
+  ]
+
+  LinhVucNameOptions = [
+    '',
+    'Đất đai',
+    'Môi trường',
+    'Khoáng sản',
+    'Tài nguyên nước',
+  ]
+
+  KetquaOptions = [
+    'Chưa có KQ',
+    'Đúng',
+    'Có Đúng/Có Sai',
+    'Sai',
+  ]
+
   congKhaiOptions = [
     { value: true, text: 'Công khai' },
     { value: false, text: 'Không công khai' },
@@ -132,7 +154,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private notificationService: NotificationService,
     private oAuthService: OAuthService,
-    private spatialDataService: SpatialDataService,
+    //private spatialDataService: SpatialDataService,
     private unitService: UnitService,
     private utilService: UtilityService,
     private summaryService: SummaryService
@@ -153,54 +175,8 @@ export class SearchMapComponent implements OnInit, OnDestroy {
 
   loadData(isFirst: boolean = false) {
     this.getDataTable();
-    //this.getDataMap();//Đoạn này code thừa! 0 cần thiết load lại 1 lần nữa
   }
 
-  /*
-  private getDataMap() {
-    this.layoutService.blockUI$.next(true);
-    this.filter = {
-      skipCount: this.skipCount,
-      maxResultCount: this.maxResultCount,
-      keyword: this.keyword,
-
-      landComplain: this.landComplain,
-      enviromentComplain: this.enviromentComplain,
-      waterComplain: this.waterComplain,
-      mineralComplain: this.mineralComplain,
-      landDenounce: this.landDenounce,
-      enviromentDenounce: this.enviromentDenounce,
-      waterDenounce: this.waterDenounce,
-      mineralDenounce: this.mineralDenounce,
-
-      maTinhTP: this.maTinh,
-      maQuanHuyen: this.maHuyen,
-      maXaPhuongTT: this.maXa,
-      fromDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
-      toDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-          ? this.thoiGianTiepNhanRange[1].toUTCString()
-          : null,
-      ketQua: this.tinhTrang,
-      congKhai: this.hasLoggedIn ? this.congKhai : true,
-    } as GetSummaryListDto;
-    this.summaryService
-      .getMap(this.filter)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response: SummaryDto[]) => {
-          this.dataMap = response;
-          this.layoutService.blockUI$.next(false);
-        },
-        error: () => {
-          this.layoutService.blockUI$.next(false);
-        },
-      });
-  }
-  */
   private getDataTable() {
     this.layoutService.blockUI$.next(true);
     this.filter = {
@@ -446,41 +422,6 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     } else {
       this.hideColumnState = 'visible';
       this.expandColumnState = 'normal';
-    }
-  }
-  getLoaiKetQua(kq: any): string {
-    if (!kq) return 'Chưa có KQ';
-    return this.loaiKQOptions.find(x => x.value == kq).text;
-  }
-
-  getLoaiVuViecName(loaiVuViec: LoaiVuViec) {
-    switch (loaiVuViec) {
-      case LoaiVuViec.KhieuNai:
-        return 'Khiếu nại/Khiếu kiện';
-        break;
-      case LoaiVuViec.ToCao:
-        return 'Tố cáo';
-        break;
-      default:
-        return '';
-    }
-  }
-  getLinhVucName(linhVuc: LinhVuc) {
-    switch (linhVuc) {
-      case LinhVuc.DatDai:
-        return 'Đất đai';
-        break;
-      case LinhVuc.MoiTruong:
-        return 'Môi trường';
-        break;
-      case LinhVuc.TaiNguyenNuoc:
-        return 'Tài nguyên nước';
-        break;
-      case LinhVuc.KhoangSan:
-        return 'Khoáng sản';
-        break;
-      default:
-        return '';
     }
   }
 
