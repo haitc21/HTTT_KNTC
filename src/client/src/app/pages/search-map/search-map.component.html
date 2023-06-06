@@ -279,8 +279,8 @@
                 <td>
                   <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
                 </td>
-                <td>{{ getLoaiVuViecName(row.loaiVuViec) }}</td>
-                <td>{{ getLinhVucName(row.linhVuc) }}</td>
+                <td>{{ LoaiVuViecOptions[row.loaiVuViec] }}</td>
+                <td>{{ LinhVucNameOptions[row.linhVuc] }}</td>
                 <td>{{ row.nguoiNopDon }}</td>
                 <td>{{ row.dienThoai }}</td>
                 <td>{{ row.diaChiLienHe }}</td>
@@ -291,7 +291,7 @@
                   {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
                 </td>
                 <td>{{ row.boPhanDangXL }}</td>
-                <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
+                <td>{{ KetquaOptions[(row?.ketQua)? row?.ketQua : 0]}}</td>
               </tr>
             </ng-template>
             <ng-template pTemplate="summary">

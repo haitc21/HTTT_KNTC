@@ -220,12 +220,12 @@
           <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
             {{ row?.ngayTraKQ1 | date : 'dd-MM-yyyy' }}
           </td>
-          <td>{{ getLoaiKetQua(row?.ketQua1) }}</td>
+          <td>{{ KetquaOptions[(row?.ketQua1)? row?.ketQua1 : 0] }}</td>
           <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
             {{ row?.ngayTraKQ2 | date : 'dd-MM-yyyy' }}
           </td>
-          <td>{{ getLoaiKetQua(row?.ketQua2) }}</td>
-          <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
+          <td>{{ KetquaOptions[(row?.ketQua2)? row?.ketQua2 : 0] }}</td>
+          <td>{{ KetquaOptions[(row?.ketQua)? row?.ketQua : 0] }}</td>
           <td *ngIf="visibleActionColumn">
             <p-tieredMenu
               [showTransitionOptions]="'300ms'"

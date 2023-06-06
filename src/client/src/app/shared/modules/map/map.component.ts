@@ -230,24 +230,37 @@ export class MapComponent implements AfterViewInit, OnChanges {
     };
 
     // method that we will use to update the control based on feature properties passed
+    
+    this.info.LinhVucNameOptions = [
+    '',
+    'Đất đai',
+    'Môi trường',
+    'Khoáng sản',
+    'Tài nguyên nước',
+    ]
+    
     this.info.update = function () {
         //buildInfoContent        
-        var infoContent = '<h5>Thông tin Khiếu nại/Tố cáo</h5>';
-        if (this.data){        
-          infoContent += this.buildInfoContent(this.data);
+        var infoContent = '';
+        if (this.data){
+          var type = (this.data.loaiVuViec==1)?'Khiếu nại':'Tố cáo';
+          infoContent = '<h5 class=\'' + ((this.data.loaiVuViec==1)?'kn':'tc') + '\'>Thông tin ' + type + '</h5>';
+          infoContent += this.buildInfoContent(this.data, type);
         }else {
-          infoContent += '<h6>Bạn cần di chuyển con trỏ vào khu vực KN/TC để xem thông tin!</h6>';
+          infoContent = '<h6>Bạn cần di chuyển con trỏ vào khu vực KN/TC để xem thông tin!</h6>';
         }
         this._div.innerHTML = infoContent;
     };
     
-    this.info.buildInfoContent = function(props: any){
-      var type = ((props.loaiVuViec==1)?'Khiếu nại':'Tố cáo');
-      var infoContent = '<h6>Loại vụ việc: <font color="#0277bd"><strong>' + type +  '</strong></font></h6>';
-      infoContent += '<table>\
+    this.info.buildInfoContent = function(props: any, type: any){      
+      var infoContent = '<table cellpadding=2>\
         <tr>\
           <th scope="row">\
-          <td>Tiêu đề:</td><td>' + props.tieuDe + '</td>\
+          <td><b>Lĩnh vực:</b></td><td><b><font color="#0277bd">' + this.LinhVucNameOptions[props.linhVuc] + '</font></b></td>\
+        </tr>\
+        <tr>\
+          <th scope="row">\
+          <td><b>Tiêu đề:</b></td><td><b>' + props.tieuDe + '</b></td>\
         </tr>\
         <tr>\
           <th scope="row">\
