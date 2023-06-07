@@ -108,6 +108,7 @@ export interface GetComplainListDto extends BaseListFilterDto {
   ketQua?: LoaiKetQua;
   giaiDoan?: number;
   congKhai?: boolean;
+  nguoiNopDon?: string;
 }
 
 export interface UpdateComplainDto extends EntityDto<string> {

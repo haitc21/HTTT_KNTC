@@ -46,6 +46,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   // filter
   filter: GetDenounceListDto;
   keyword: string = '';
+  nguoiNopDon = '';
   maTinh: number;
   maHuyen: number;
   maXa: number;
@@ -109,6 +110,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.maxResultCount = 20;
     this.totalCount = 0;
     this.keyword = '';
+    this.nguoiNopDon = '';
     this.maTinh = null;
     this.maHuyen = null;
     this.maXa = null;
@@ -201,6 +203,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,
         keyword: this.keyword,
+        nguoiNopDon: this.nguoiNopDon,
         maTinhTP: this.maTinh,
         maQuanHuyen: this.maHuyen,
         maXaPhuongTT: this.maXa,
@@ -242,6 +245,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
       keyword: this.keyword,
+      nguoiNopDon: this.nguoiNopDon,
       maTinhTP: this.maTinh,
       maQuanHuyen: this.maHuyen,
       maXaPhuongTT: this.maXa,

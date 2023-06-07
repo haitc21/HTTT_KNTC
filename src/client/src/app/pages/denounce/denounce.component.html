@@ -16,6 +16,21 @@
             />
           </span>
         </div>
+
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-user"></i>
+            <input
+              pInputText
+              type="text"
+              (keyup.enter)="loadData()"
+              [(ngModel)]="nguoiNopDon"
+              placeholder="Người nộp đơn"
+              class="w-full"
+            />
+          </span>
+        </div>
         <!-- --------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-3">
           <span class="p-float-label">
@@ -169,12 +184,12 @@
           <th>Số ĐT</th>
           <th style="width: 150px">Địa chỉ</th>
           <th style="width: 100px">Người bị tố cáo</th>
-          <th>Người giải quyết</th>          
+          <th>Người giải quyết</th>
           <th>Thời gian nộp</th>
           <th>Ngày hẹn trả KQ</th>
           <th style="width: 150px">Bộ phận đang XL</th>
           <th style="width: 100px">Kết luận</th>
-          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -184,17 +199,21 @@
           </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
           <td>
-            <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+            <span [ngStyle]="{ color: '#ed5565' }" class="p-link" (click)="viewDetail(row)">{{
+              row.maHoSo
+            }}</span>
           </td>
           <td>
-            <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
+            <span [ngStyle]="{ color: '#ed5565' }" class="p-link" (click)="viewDetail(row)">{{
+              row.tieuDe
+            }}</span>
           </td>
           <td>{{ row.nguoiNopDon }}</td>
           <td>{{ row.dienThoai }}</td>
           <td>{{ row.diaChiLienHe }}</td>
           <td>{{ row.nguoiBiToCao }}</td>
           <td>{{ row.nguoiGQTC }}</td>
-          
+
           <td>
             {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
           </td>
@@ -212,7 +231,7 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-           <button
+            <button
               #btn
               pButton
               pRipple
@@ -239,7 +258,6 @@
       </ng-template>
     </p-table>
     <!-- ----------------------------------------------------------------------- -->
-
   </p-panel>
 </div>
 <ng-template #emptyTpl><td></td></ng-template>

@@ -35,9 +35,11 @@ public class SummaryRepository : ISummaryRepository
                                                         int? maXaPhuongTT,
                                                         DateTime? fromDate,
                                                         DateTime? toDate,
-                                                        bool? congKhai)
+                                                        bool? congKhai,
+                                                        string nguoiNopDon)
     {
-        var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
+        var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper().Trim() : keyword;
+        nguoiNopDon = !nguoiNopDon.IsNullOrEmpty() ? nguoiNopDon.ToUpper().Trim() : "";
         var dbContext = await _dbContextProvider.GetDbContextAsync();
         var complainQuery = dbContext.Set<Complain>()
                         .WhereIf(landComplain == false, x => x.LinhVuc != LinhVuc.DatDai)
@@ -77,6 +79,10 @@ public class SummaryRepository : ISummaryRepository
                             congKhai.HasValue,
                             x => x.CongKhai == congKhai
                          )
+                         .WhereIf(
+                            !string.IsNullOrEmpty(nguoiNopDon),
+                            x => (x.NoiDungVuViec.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon)
+                         )
                         .Select(c => new Summary()
                         {
                             Id = c.Id,
@@ -92,7 +98,9 @@ public class SummaryRepository : ISummaryRepository
                             BoPhanDangXL = c.BoPhanDangXL,
                             KetQua = c.KetQua,
                             DuLieuToaDo = c.DuLieuToaDo,
-                            DuLieuHinhHoc = c.DuLieuHinhHoc
+                            DuLieuHinhHoc = c.DuLieuHinhHoc,
+                            SoThua = c.SoThua,
+                            ToBanDo= c.ToBanDo
                         });
 
         var denounceQuery = dbContext.Set<Denounce>()
@@ -133,6 +141,10 @@ public class SummaryRepository : ISummaryRepository
                             congKhai.HasValue,
                             x => x.CongKhai == congKhai
                          )
+                         .WhereIf(
+                            !string.IsNullOrEmpty(nguoiNopDon),
+                            x => (x.NoiDungVuViec.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon)
+                         )
                         .Select(d => new Summary()
                         {
                             Id = d.Id,
@@ -148,7 +160,9 @@ public class SummaryRepository : ISummaryRepository
                             BoPhanDangXL = d.BoPhanDangXL,
                             KetQua = d.KetQua,
                             DuLieuToaDo = d.DuLieuToaDo,
-                            DuLieuHinhHoc = d.DuLieuHinhHoc
+                            DuLieuHinhHoc = d.DuLieuHinhHoc,
+                            SoThua = d.SoThua,
+                            ToBanDo = d.ToBanDo
                         });
         var query = complainQuery.Union(denounceQuery);
         return query;

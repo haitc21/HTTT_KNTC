@@ -21,5 +21,6 @@ public interface ISummaryRepository
                                            int? maXaPhuongTT,
                                            DateTime? fromDate,
                                            DateTime? toDate,
-                                           bool? congKhai);
+                                           bool? congKhai,
+                                           string nguoiNopDon);
 }

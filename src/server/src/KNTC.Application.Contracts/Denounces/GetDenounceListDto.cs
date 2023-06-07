@@ -12,4 +12,5 @@ public class GetDenounceListDto : BaseListFilterDto
     public LinhVuc? LinhVuc { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public bool? CongKhai { get; set; }
+    public string NguoiNopDon { get; set; }
 }

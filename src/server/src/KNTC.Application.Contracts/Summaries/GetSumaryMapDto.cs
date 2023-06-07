@@ -27,6 +27,7 @@ public class GetSumaryMapDto
     public LoaiKetQua? KetQua { get; set; }
     public bool? CongKhai { get; set; }
     public string Keyword { get; set; }
+    public string NguoiNopDon { get; set; }
 
     public override string ToString()
     {
@@ -63,7 +64,9 @@ public class GetSumaryMapDto
             .Append("_")
             .Append(CongKhai.HasValue ? CongKhai.ToString() : string.Empty)
             .Append("_")
-            .Append(Keyword);
+            .Append(Keyword)
+            .Append("_")
+            .Append(NguoiNopDon);
 
         return stringBuilder.ToString();
     }

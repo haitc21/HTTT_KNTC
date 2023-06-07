@@ -22,7 +22,7 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                      DateTime? fromDate,
                      DateTime? toDate,
                      bool? congKhai,
-                     bool includeDetails = false);
+                     string nguoiNopDon);
 
     Task<Complain> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
 

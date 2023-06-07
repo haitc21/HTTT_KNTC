@@ -105,6 +105,7 @@ export interface GetDenounceListDto extends BaseListFilterDto {
   linhVuc?: LinhVuc;
   ketQua?: LoaiKetQua;
   congKhai?: boolean;
+  nguoiNopDon?: string;
 }
 
 export interface UpdateDenounceDto extends EntityDto<string> {

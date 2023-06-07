@@ -74,12 +74,13 @@ public class ComplainAppService : CrudAppService<
         {
             input.Sorting = nameof(Complain.MaHoSo);
         }
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        string filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper().Trim() : "";
+        string nguoiNopDon = !input.NguoiNopDon.IsNullOrEmpty() ? input.NguoiNopDon.ToUpper().Trim() : "";
         var complains = await _complainRepo.GetListAsync(
             input.SkipCount,
             input.MaxResultCount,
             input.Sorting,
-            input.Keyword,
+            filter,
             input.LinhVuc,
             input.mangLinhVuc,
             input.KetQua,
@@ -89,12 +90,13 @@ public class ComplainAppService : CrudAppService<
             input.GiaiDoan,
             input.FromDate,
             input.ToDate,
-            input.CongKhai
+            input.CongKhai,
+            nguoiNopDon
         );
 
         var totalCount = await _complainRepo.CountAsync(
                 x => (input.Keyword.IsNullOrEmpty()
-                    || (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
+                    || (x.MaHoSo.ToUpper().Contains(filter) || x.TieuDe.ToUpper().Contains(filter)))
                 && (!input.LinhVuc.HasValue || x.LinhVuc == input.LinhVuc)
                 && (input.mangLinhVuc.IsNullOrEmpty() || input.mangLinhVuc.Contains((int)x.LinhVuc))
                 && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
@@ -107,6 +109,8 @@ public class ComplainAppService : CrudAppService<
                 && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                 && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
                 && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
+                && (input.NguoiNopDon.IsNullOrEmpty()
+                    || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon))
                 );
 
         return new PagedResultDto<ComplainDto>(

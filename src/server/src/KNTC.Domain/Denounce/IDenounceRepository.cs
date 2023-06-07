@@ -20,7 +20,7 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
                      DateTime? fromDate,
                      DateTime? toDate,
                      bool? CongKhai,
-                     bool includeDetails = false);
+                     string nguoiNopDon);
 
     Task<Denounce> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
 

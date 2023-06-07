@@ -20,6 +20,7 @@ export interface GetSumaryMapDto {
   ketQua?: LoaiKetQua;
   congKhai?: boolean;
   keyword?: string;
+  nguoiNopDon?: string;
 }
 
 export interface GetSummaryListDto extends BaseListFilterDto {
@@ -38,6 +39,7 @@ export interface GetSummaryListDto extends BaseListFilterDto {
   toDate?: string;
   ketQua?: LoaiKetQua;
   congKhai?: boolean;
+  nguoiNopDon?: string;
 }
 
 export interface SummaryChartDto {
@@ -62,12 +64,12 @@ export interface SummaryDto {
   tieuDe?: string;
   thoiGianTiepNhan?: string;
   thoiGianHenTraKQ?: string;
-  soThua?: string;
-  toBanDo?: string;
   boPhanDangXL?: string;
   ketQua?: LoaiKetQua;
   duLieuToaDo?: string;
   duLieuHinhHoc?: string;
+  soThua?: string;
+  toBanDo?: string;
 }
 
 export interface SummaryMapDto {

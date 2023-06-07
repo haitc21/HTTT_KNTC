@@ -18,4 +18,6 @@ public class SummaryDto
     public LoaiKetQua? KetQua { get; set; }
     public string DuLieuToaDo { get; set; }
     public string DuLieuHinhHoc { get; set; }
+    public string SoThua { get; set; }
+    public string ToBanDo { get; set; }
 }

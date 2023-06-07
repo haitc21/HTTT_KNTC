@@ -70,7 +70,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                                                     input.maXaPhuongTT,
                                                     input.FromDate,
                                                     input.ToDate,
-                                                    input.CongKhai);
+                                                    input.CongKhai,
+                                                    input.NguoiNopDon);
         var totalCount = await AsyncExecuter.CountAsync(query);
         query = query.OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
@@ -117,7 +118,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                                                     input.MaXaPhuongTT,
                                                     input.FromDate,
                                                     input.ToDate,
-                                                    input.CongKhai);
+                                                    input.CongKhai,
+                                                    input.NguoiNopDon);
         var querDtoy = query.Select(x => new SummaryMapDto()
         {
             Id = x.Id,
@@ -155,7 +157,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                                                     input.maXaPhuongTT,
                                                     input.FromDate,
                                                     input.ToDate,
-                                                    input.CongKhai);
+                                                    input.CongKhai,
+                                                    input.NguoiNopDon);
         var summaries = await AsyncExecuter.ToListAsync(query);
         if (summaries == null) return null;
         var summaryDto = ObjectMapper.Map<List<Summary>, List<SummaryExcelDto>>(summaries);

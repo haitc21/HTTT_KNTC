@@ -32,15 +32,14 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                DateTime? fromDate,
                                                DateTime? toDate,
                                                bool? congKhai,
-                                               bool includeDetails = false)
+                                               string nguoiNopDon)
     {
-        var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(
-                !filter.IsNullOrWhiteSpace(),
-                x => x.MaHoSo.ToUpper().Contains(filter)
-                || x.TieuDe.ToUpper().Contains(filter)
+                !keyword.IsNullOrWhiteSpace(),
+                x => x.MaHoSo.ToUpper().Contains(keyword)
+                || x.TieuDe.ToUpper().Contains(keyword)
              )
             .WhereIf(
                 linhVuc.HasValue,
@@ -74,6 +73,14 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              .WhereIf(
                 toDate.HasValue,
                 x => x.ThoiGianTiepNhan <= toDate
+             )
+             .WhereIf(
+                congKhai.HasValue,
+                x => x.CongKhai == congKhai
+             )
+             .WhereIf(
+                !string.IsNullOrEmpty(nguoiNopDon),
+                x => (x.NoiDungVuViec.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon)
              )
             .OrderBy(sorting)
             .Skip(skipCount)

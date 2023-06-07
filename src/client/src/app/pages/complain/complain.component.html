@@ -18,6 +18,20 @@
         </div>
         <!-- --------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-3">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-user"></i>
+            <input
+              pInputText
+              type="text"
+              (keyup.enter)="loadData()"
+              [(ngModel)]="nguoiNopDon"
+              placeholder="Người nộp đơn"
+              class="w-full"
+            />
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
           <span class="p-float-label">
             <p-dropdown
               [options]="tinhOptions"
@@ -183,7 +197,7 @@
           <th style="width: 180px">Nội dung KN/KK</th>
           <th style="width: 100px">Người đề nghị</th>
           <th style="width: 150px">Địa chỉ</th>
-          <th>Số ĐT</th>          
+          <th>Số ĐT</th>
           <th>Thời gian nộp</th>
           <th style="width: 150px">Bộ phận đang XL</th>
           <th>Ngày hẹn trả KQ</th>
@@ -192,7 +206,7 @@
           <th style="width: 100px">Ngày trả KQ lần II</th>
           <th>KQ GQKN lần II</th>
           <th style="width: 100px">Trạng thái</th>
-          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -202,14 +216,18 @@
           </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
           <td>
-            <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+            <span [ngStyle]="{ color: '#ed5565' }" class="p-link" (click)="viewDetail(row)">{{
+              row.maHoSo
+            }}</span>
           </td>
           <td>
-            <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
+            <span [ngStyle]="{ color: '#ed5565' }" class="p-link" (click)="viewDetail(row)">{{
+              row.tieuDe
+            }}</span>
           </td>
           <td>{{ row.nguoiNopDon }}</td>
           <td>{{ row.diaChiLienHe }}</td>
-          <td>{{ row.dienThoai }}</td>          
+          <td>{{ row.dienThoai }}</td>
           <td>
             {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
           </td>
@@ -220,12 +238,12 @@
           <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
             {{ row?.ngayTraKQ1 | date : 'dd-MM-yyyy' }}
           </td>
-          <td>{{ KetquaOptions[(row?.ketQua1)? row?.ketQua1 : 0] }}</td>
+          <td>{{ KetquaOptions[row?.ketQua1 ? row?.ketQua1 : 0] }}</td>
           <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
             {{ row?.ngayTraKQ2 | date : 'dd-MM-yyyy' }}
           </td>
-          <td>{{ KetquaOptions[(row?.ketQua2)? row?.ketQua2 : 0] }}</td>
-          <td>{{ KetquaOptions[(row?.ketQua)? row?.ketQua : 0] }}</td>
+          <td>{{ KetquaOptions[row?.ketQua2 ? row?.ketQua2 : 0] }}</td>
+          <td>{{ KetquaOptions[row?.ketQua ? row?.ketQua : 0] }}</td>
           <td *ngIf="visibleActionColumn">
             <p-tieredMenu
               [showTransitionOptions]="'300ms'"
@@ -262,7 +280,6 @@
       </ng-template>
     </p-table>
     <!-- ----------------------------------------------------------------------- -->
-
   </p-panel>
 </div>
 <ng-template #emptyTpl><td></td></ng-template>

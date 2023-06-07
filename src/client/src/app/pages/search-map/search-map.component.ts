@@ -96,6 +96,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   mineralDenounce = true;
 
   keyword: string = '';
+  nguoiNopDon: string = '';
   congKhai: boolean | null;
   maTinh: number = 24;
   maHuyen: number;
@@ -206,6 +207,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
           : null,
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
+      nguoiNopDon: this.nguoiNopDon
     } as GetSummaryListDto;
     this.summaryService
       .getList(this.filter)

@@ -73,12 +73,13 @@ public class DenounceAppService : CrudAppService<
         {
             input.Sorting = nameof(Denounce.MaHoSo);
         }
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        string filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper().Trim() : "";
+        string nguoiNopDon = !input.NguoiNopDon.IsNullOrEmpty() ? input.NguoiNopDon.ToUpper().Trim() : "";
         var denounces = await _denounceRepo.GetListAsync(
             input.SkipCount,
             input.MaxResultCount,
             input.Sorting,
-            input.Keyword,
+            filter,
             input.LinhVuc,
             input.KetQua,
             input.maTinhTP,
@@ -86,12 +87,13 @@ public class DenounceAppService : CrudAppService<
             input.maXaPhuongTT,
             input.FromDate,
             input.ToDate,
-            input.CongKhai
+            input.CongKhai,
+            nguoiNopDon
         );
 
         var totalCount = await _denounceRepo.CountAsync(
                        x => (input.Keyword.IsNullOrEmpty()
-                           || (x.MaHoSo.ToUpper().Contains(input.Keyword) || x.TieuDe.ToUpper().Contains(input.Keyword)))
+                           || (x.MaHoSo.ToUpper().Contains(filter) || x.TieuDe.ToUpper().Contains(filter)))
                        && (!input.LinhVuc.HasValue || x.LinhVuc == input.LinhVuc)
                        && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
                        && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
@@ -100,6 +102,8 @@ public class DenounceAppService : CrudAppService<
                        && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                        && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
                        && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
+                       && (input.NguoiNopDon.IsNullOrEmpty()
+                           || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon))
                        );
 
         return new PagedResultDto<DenounceDto>(
