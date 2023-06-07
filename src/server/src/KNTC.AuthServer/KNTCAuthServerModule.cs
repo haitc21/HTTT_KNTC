@@ -91,8 +91,6 @@ public class KNTCAuthServerModule : AbpModule
             {
                 builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
                 builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
-
-                //...
             });
 
             // disable https
