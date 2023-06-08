@@ -19,6 +19,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { KetquaOptions, congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
 
 @Component({
   selector: 'app-denounce',
@@ -60,16 +61,9 @@ export class DenounceComponent implements OnInit, OnDestroy {
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
 
-  loaiKQOptions = [
-    { value: LoaiKetQua.Dung, text: 'Đúng' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
-    { value: LoaiKetQua.ChuaCoKQ, text: 'Chưa có KQ' },
-  ];
-  congKhaiOptions = [
-    { value: true, text: 'Công khai' },
-    { value: false, text: 'Không công khai' },
-  ];
+  loaiKQOptions = loaiKQOptions;
+  congKhaiOptions = congKhaiOptions;
+  KetquaOptions = KetquaOptions;
 
   // Permissions
   hasPermissionUpdate = false;

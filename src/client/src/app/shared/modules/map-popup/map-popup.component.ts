@@ -13,6 +13,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { ComplainDto, ComplainService } from '@proxy/complains';
 import { DenounceDto, DenounceService } from '@proxy/denounces';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { loaiKQOptions } from '../../constants/consts';
 
 @Component({
   selector: 'app-map-popup',
@@ -26,12 +27,8 @@ export class MapPopupComponent implements OnInit, OnDestroy {
   @Input() dataMap!: SummaryDto;
   public form: FormGroup;
   hoSo!: SummaryDto;
+  loaiKQOPtions = loaiKQOptions;
 
-  loaiKQOPtions = [
-    { value: LoaiKetQua.Dung, text: 'Đúng' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
-  ];
   constructor(
     private fb: FormBuilder,
     private dialogService: DialogService,

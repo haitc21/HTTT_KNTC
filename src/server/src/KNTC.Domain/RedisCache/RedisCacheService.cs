@@ -18,9 +18,17 @@ public class RedisCacheService : IRedisCacheService
 
     public async Task DeleteCacheKeysSContainAsync(string keyword)
     {
-        string host = configuration["Redis:Configuration"];
-        string port = "6379";
-        var connection = ConnectionMultiplexer.Connect(host);
+        string host = configuration["Redis:Host"];
+        string port = configuration["Redis:Port"];
+        string password = configuration["Redis:Password"];
+
+        ConfigurationOptions configOptions = new ConfigurationOptions
+        {
+            EndPoints = { $"{host}:{port}" },
+            Password = password
+        };
+
+        var connection = ConnectionMultiplexer.Connect(configOptions);
         var keys = connection.GetServer($"{host}:{port}").Keys(pattern: $"*{keyword}*");
 
         foreach (var key in keys)

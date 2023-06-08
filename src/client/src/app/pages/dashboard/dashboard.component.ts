@@ -19,6 +19,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
 
 @Component({
   selector: 'app-dashboard',
@@ -106,16 +107,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
 
-  loaiKQOptions = [
-    { value: LoaiKetQua.Dung, text: 'Đúng' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
-    { value: LoaiKetQua.ChuaCoKQ, text: 'Chưa có KQ' },
-  ];
-  congKhaiOptions = [
-    { value: true, text: 'Công khai' },
-    { value: false, text: 'Không công khai' },
-  ];
+  loaiKQOptions = loaiKQOptions;
+  congKhaiOptions = congKhaiOptions;
   // ẩn hiện menu trái
   visibleFilterLeff = true;
   hideColumnState = 'visible';

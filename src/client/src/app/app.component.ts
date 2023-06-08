@@ -51,7 +51,7 @@ export class AppComponent {
       if (block === false) {
         setTimeout(() => {
           this.blockedLayout = false;
-        }, 500);
+        }, 300);
       }
     });
   }

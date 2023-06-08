@@ -78,7 +78,7 @@ public class FileAttachmentAppService : CrudAppService<
                                  || x.FileName.ToUpper().Contains(filter)
                              )
                     .WhereIf(input.HinhThuc.HasValue, x => x.HinhThuc == input.HinhThuc)
-                    .WhereIf(input.GiaiDoan.HasValue, x => x.GiaiDoan == input.GiaiDoan)
+                    .WhereIf(input.GiaiDoan.HasValue && input.GiaiDoan != 0, x => x.GiaiDoan == input.GiaiDoan)
                     .WhereIf(input.CongKhai.HasValue, x => x.CongKhai == input.CongKhai)
                     .OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
@@ -90,7 +90,10 @@ public class FileAttachmentAppService : CrudAppService<
                 x => (input.Keyword.IsNullOrEmpty()
                     || (x.TenTaiLieu.ToUpper().Contains(input.Keyword) || x.FileName.ToUpper().Contains(input.Keyword)))
                 && (!input.HinhThuc.HasValue || x.HinhThuc == input.HinhThuc)
-                && (!input.GiaiDoan.HasValue || x.HinhThuc == input.GiaiDoan)
+                && (!input.GiaiDoan.HasValue || input.GiaiDoan == 0 || x.HinhThuc == input.GiaiDoan)
+                && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
+                && (!input.ComplainId.HasValue || (x.LoaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == input.ComplainId))
+                && (!input.DenounceId.HasValue || (x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId))
                 );
 
         return new PagedResultDto<FileAttachmentDto>(
@@ -190,7 +193,7 @@ public class FileAttachmentAppService : CrudAppService<
                     .WhereIf(input.DenounceId.HasValue, x => x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId)
                     .WhereIf(input.HinhThuc.HasValue, x => x.HinhThuc == input.HinhThuc)
                     .WhereIf(input.GiaiDoan.HasValue, x => x.GiaiDoan == input.GiaiDoan)
-                    .WhereIf(input.CongKhai.HasValue, x => x.CongKhai == input.CongKhai);
+                    .WhereIf(input.CongKhai.HasValue && input.GiaiDoan != 0, x => x.CongKhai == input.CongKhai);
         var query = from f in fileQuery
                     join dt in await _documentTypeRepo.GetQueryableAsync()
                     on f.HinhThuc equals dt.Id
@@ -273,7 +276,7 @@ public class FileAttachmentAppService : CrudAppService<
         cell.CellStyle.SetFont(font);
 
         string giaiDoan = "Tất cả";
-        if (input.GiaiDoan.HasValue)
+        if (input.GiaiDoan.HasValue && input.GiaiDoan != 0)
         {
             if (input.GiaiDoan == 1)
                 giaiDoan = "Khiếu nại/Khiếu kiện lần 1";

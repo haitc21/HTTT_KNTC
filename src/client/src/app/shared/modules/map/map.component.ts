@@ -26,6 +26,7 @@ import 'leaflet-draw';
 import 'leaflet.measurecontrol';
 import { format } from 'date-fns';
 import { environment } from 'src/environments/environment';
+import { LinhVucNameOptions } from '../../constants/consts';
 // import { environment as environmentProd } from 'src/environments/environment.prod';
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
@@ -740,7 +741,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
     // method that we will use to update the control based on feature properties passed
 
-    this.info.LinhVucNameOptions = ['', 'Đất đai', 'Môi trường', 'Khoáng sản', 'Tài nguyên nước'];
+    this.info.LinhVucNameOptions = LinhVucNameOptions;
 
     this.info.update = function () {
       //buildInfoContent

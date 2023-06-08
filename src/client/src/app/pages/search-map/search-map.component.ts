@@ -19,6 +19,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { KetquaOptions, LinhVucNameOptions, LoaiVuViecOptions, congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
 
 @Component({
   selector: 'app-search-map',
@@ -109,38 +110,12 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
 
-  loaiKQOptions = [
-    { value: LoaiKetQua.ChuaCoKQ, text: 'Chưa có KQ' },
-    { value: LoaiKetQua.Dung, text: 'Đúng' },    
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-  ];
-  
-  LoaiVuViecOptions = [
-    '',
-    'Khiếu nại/Khiếu kiện',
-    'Tố cáo',
-  ]
+  loaiKQOptions = loaiKQOptions;
+  LoaiVuViecOptions = LoaiVuViecOptions;
+  LinhVucNameOptions = LinhVucNameOptions;
+  KetquaOptions = KetquaOptions;
 
-  LinhVucNameOptions = [
-    '',
-    'Đất đai',
-    'Môi trường',
-    'Khoáng sản',
-    'Tài nguyên nước',
-  ]
-
-  KetquaOptions = [
-    'Chưa có KQ',
-    'Đúng',
-    'Có Đúng/Có Sai',
-    'Sai',
-  ]
-
-  congKhaiOptions = [
-    { value: true, text: 'Công khai' },
-    { value: false, text: 'Không công khai' },
-  ];
+  congKhaiOptions = congKhaiOptions;
   // ẩn hiện menu trái
   visibleFilterLeff = true;
   hideColumnState = 'visible';

@@ -20,6 +20,7 @@ import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.c
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { congKhaiOptions, giaiDoanOptions } from 'src/app/shared/constants/consts';
 
 @Component({
   selector: 'app-file-attachment',
@@ -51,15 +52,8 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   selectedItem: FileAttachmentDto;
 
   documentTypeOptions: DocumentTypeLookupDto[] = [];
-  giaiDoanOptions = [
-    { value: 0, text: 'Tất cả' },
-    { value: 1, text: 'Khiếu nại lần I' },
-    { value: 2, text: 'Khiếu nại lần II' },
-  ];
-  congKhaiOptions = [
-    { value: true, text: 'Công khai' },
-    { value: false, text: 'Không công khai' },
-  ];
+  giaiDoanOptions = giaiDoanOptions;
+  congKhaiOptions = congKhaiOptions;
 
   giaiDoan: number;
   hinhThuc: number;

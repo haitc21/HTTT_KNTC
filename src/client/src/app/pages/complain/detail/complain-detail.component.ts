@@ -20,6 +20,7 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
 import { MapComponent } from 'src/app/shared/modules/map/map.component';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { loaiKQOptions, loaiKhieuNaiOptions } from 'src/app/shared/constants/consts';
 
 @Component({
   templateUrl: './complain-detail.component.html',
@@ -52,15 +53,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   huyenThuaDateOptions: UnitLookupDto[] = [];
   xaThuaDatOptions: UnitLookupDto[] = [];
   landTypeOptions: LandTypeLookupDto[];
-  loaiKQOPtions = [
-    { value: LoaiKetQua.Dung, text: 'Đúng' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
-  ];
-  loaiKhieuNaiOptions = [
-    { value: LoaiKhieuNai.KhieuNai, text: 'Khiếu nại' },
-    { value: LoaiKhieuNai.KhieuKien, text: 'Khiếu kiện' },
-  ];
+  loaiKQOPtions = loaiKQOptions;
+  loaiKhieuNaiOptions = loaiKhieuNaiOptions;
   LoaiVuViec = LoaiVuViec;
 
   //

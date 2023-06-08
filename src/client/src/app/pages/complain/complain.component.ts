@@ -19,6 +19,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { KetquaOptions, congKhaiOptions, giaiDoanOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
 
 @Component({
   selector: 'app-complain',
@@ -60,20 +61,10 @@ export class ComplainComponent implements OnInit, OnDestroy {
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
 
-  giaiDoanOptions = [
-    { value: 1, text: 'Khiếu nại lần I' },
-    { value: 2, text: 'Khiếu nại lần II' },
-  ];
-  loaiKQOptions = [
-    { value: LoaiKetQua.Dung, text: 'Đúng' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
-    { value: LoaiKetQua.ChuaCoKQ, text: 'Chưa có KQ' },
-  ];
-  congKhaiOptions = [
-    { value: true, text: 'Công khai' },
-    { value: false, text: 'Không công khai' },
-  ];
+  giaiDoanOptions = giaiDoanOptions;
+  loaiKQOptions = loaiKQOptions;
+  congKhaiOptions = congKhaiOptions;
+  KetquaOptions = KetquaOptions;
 
   // Permissions
   hasPermissionUpdate = false;

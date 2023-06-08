@@ -20,6 +20,7 @@ import { UtilityService } from 'src/app/shared/services/utility.service';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
 import { MapComponent } from 'src/app/shared/modules/map/map.component';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { loaiKQOptions } from 'src/app/shared/constants/consts';
 
 @Component({
   templateUrl: './denounce-detail.component.html',
@@ -51,11 +52,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   huyenThuaDateOptions: UnitLookupDto[] = [];
   xaThuaDatOptions: UnitLookupDto[] = [];
   landTypeOptions: LandTypeLookupDto[];
-  loaiKQOPtions = [
-    { value: LoaiKetQua.Dung, text: 'Đúng' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
-  ];
+  loaiKQOPtions = loaiKQOptions;
   LoaiVuViec = LoaiVuViec;
 
   //

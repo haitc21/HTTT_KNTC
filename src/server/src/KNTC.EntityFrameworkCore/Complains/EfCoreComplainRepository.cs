@@ -62,7 +62,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 x => x.MaXaPhuongTT == maXaPhuongTT
              )
              .WhereIf(
-                giaiDoan.HasValue,
+                giaiDoan.HasValue && giaiDoan != 0,
                 x => (giaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) ||
                 (giaiDoan == 2 && x.NgayKhieuNai2 != null)
              )
@@ -128,7 +128,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 x => x.MaXaPhuongTT == maXaPhuongTT
              )
              .WhereIf(
-                giaiDoan.HasValue,
+                giaiDoan.HasValue && giaiDoan != 0,
                 x => (giaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) ||
                 (giaiDoan == 2 && x.NgayKhieuNai2 != null)
              )

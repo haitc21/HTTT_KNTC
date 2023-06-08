@@ -103,7 +103,7 @@ public class ComplainAppService : CrudAppService<
                 && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
                 && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
                 && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
-                && (!input.GiaiDoan.HasValue ||
+                && (!input.GiaiDoan.HasValue || input.GiaiDoan == 0 ||
                     (input.GiaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) ||
                     (input.GiaiDoan == 2 && x.NgayKhieuNai2 != null))
                 && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
@@ -380,7 +380,7 @@ public class ComplainAppService : CrudAppService<
         }
 
         string giaiDoan = "Tất cả";
-        if (input.GiaiDoan.HasValue)
+        if (input.GiaiDoan.HasValue && input.GiaiDoan != 0)
         {
             if (input.GiaiDoan == 1)
                 giaiDoan = "Khiếu nại/Khiếu kiện lần 1";
