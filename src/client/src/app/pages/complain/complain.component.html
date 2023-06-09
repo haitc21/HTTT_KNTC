@@ -216,12 +216,12 @@
           </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
           <td>
-            <span [ngStyle]="{ color: '#ed5565' }" class="p-link" (click)="viewDetail(row)">{{
+            <span [ngStyle]="{ color: '#2880ca' }" class="p-link" (click)="viewDetail(row)">{{
               row.maHoSo
             }}</span>
           </td>
           <td>
-            <span [ngStyle]="{ color: '#ed5565' }" class="p-link" (click)="viewDetail(row)">{{
+            <span [ngStyle]="{ color: '#2880ca' }" class="p-link" (click)="viewDetail(row)">{{
               row.tieuDe
             }}</span>
           </td>
@@ -238,12 +238,12 @@
           <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
             {{ row?.ngayTraKQ1 | date : 'dd-MM-yyyy' }}
           </td>
-          <td>{{ KetquaOptions[row?.ketQua1 ? row?.ketQua1 : 0] }}</td>
+          <td>{{ KetquaOptions[(row?.ketQua1) ? row?.ketQua1 : 0] }}</td>
           <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
             {{ row?.ngayTraKQ2 | date : 'dd-MM-yyyy' }}
           </td>
-          <td>{{ KetquaOptions[row?.ketQua2 ? row?.ketQua2 : 0] }}</td>
-          <td>{{ KetquaOptions[row?.ketQua ? row?.ketQua : 0] }}</td>
+          <td>{{ KetquaOptions[(row?.ketQua2) ? row?.ketQua2 : 0] }}</td>
+          <td>{{ KetquaOptions[(row?.ketQua) ? row?.ketQua : 0] }}</td>
           <td *ngIf="visibleActionColumn">
             <p-tieredMenu
               [showTransitionOptions]="'300ms'"

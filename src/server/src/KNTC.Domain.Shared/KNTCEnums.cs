@@ -16,10 +16,10 @@ public enum LinhVuc
 
 public enum LoaiKetQua
 {
+    ChuaCoKQ = 0,
     Dung = 1,
-    Sai = -1,
     CoDungCoSai = 2,
-    ChuaCoKQ = 0
+    Sai = 3,
 }
 
 public enum LoaiKhieuNai

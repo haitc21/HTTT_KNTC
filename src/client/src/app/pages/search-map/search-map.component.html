@@ -288,12 +288,12 @@
               <tr>
                 <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
                 <td>
-                  <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+                  <span [ngClass]="p-link" (click)="viewDetail(row)"><strong>{{ row.maHoSo }}</strong></span>
                 </td>
                 <td>
-                  <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
+                  <span [ngClass]="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
                 </td>
-                <td>{{ LoaiVuViecOptions[row.loaiVuViec] }}</td>
+                <td [ngClass]="(row.loaiVuViec == 1)?'kn':'tc'">{{ LoaiVuViecOptions[row.loaiVuViec] }}</td>
                 <td>{{ LinhVucNameOptions[row.linhVuc] }}</td>
                 <td>{{ row.nguoiNopDon }}</td>
                 <td>{{ row.dienThoai }}</td>
