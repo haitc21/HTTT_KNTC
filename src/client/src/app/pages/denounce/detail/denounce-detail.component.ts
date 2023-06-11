@@ -76,10 +76,10 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       },
     ],
     nguoiNopDon: [
-      { type: 'required', message: 'Người tố cáo không được để trống' },
+      { type: 'required', message: 'Người nộp đơn không được để trống' },
       {
         type: 'maxLength',
-        message: `Người tố cáo không vượt quá ${KNTCValidatorConsts.MaxTenNguoiLength} kí tự`,
+        message: `Người nộp đơn không vượt quá ${KNTCValidatorConsts.MaxTenNguoiLength} kí tự`,
       },
     ],
     cccdCmnd: [

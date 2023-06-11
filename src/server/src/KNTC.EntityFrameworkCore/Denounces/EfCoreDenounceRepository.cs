@@ -73,7 +73,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
              )
              .WhereIf(
                 !string.IsNullOrEmpty(nguoiNopDon),
-                x => (x.NoiDungVuViec.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon)
+                x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
              )
             .OrderBy(sorting)
             .Skip(skipCount)

@@ -80,7 +80,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              )
              .WhereIf(
                 !string.IsNullOrEmpty(nguoiNopDon),
-                x => (x.NoiDungVuViec.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon)
+                x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
              )
             .OrderBy(sorting)
             .Skip(skipCount)
@@ -103,7 +103,8 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                int? maXaPhuongTT,
                                                int? giaiDoan,
                                                DateTime? fromDate,
-                                               DateTime? toDate)
+                                               DateTime? toDate,
+                                               bool? CongKhai)
     {
         var dbSet = await GetDbSetAsync();
         return await dbSet
@@ -139,6 +140,10 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              .WhereIf(
                 toDate.HasValue,
                 x => x.ThoiGianTiepNhan <= toDate
+             )
+             .WhereIf(
+                CongKhai.HasValue,
+                x => x.CongKhai == CongKhai
              )
             .OrderBy(sorting)
             .ToListAsync();

@@ -103,7 +103,7 @@ public class DenounceAppService : CrudAppService<
                        && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
                        && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
                        && (input.NguoiNopDon.IsNullOrEmpty()
-                           || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon))
+                           || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon))
                        );
 
         return new PagedResultDto<DenounceDto>(

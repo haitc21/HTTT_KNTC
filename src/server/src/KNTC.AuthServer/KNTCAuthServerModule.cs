@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Serilog;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -78,8 +79,7 @@ public class KNTCAuthServerModule : AbpModule
                 options.AddDevelopmentEncryptionAndSigningCertificate = true;
             });
         }
-
-        // Production or Staging environment
+        //    Production or Staging environment
         if (!hostingEnvironment.IsDevelopment())
         {
             PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
@@ -103,7 +103,11 @@ public class KNTCAuthServerModule : AbpModule
 
     private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)
     {
-        return new X509Certificate2(Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx"), "HTTTKNTC@VNUA2023");
+        string fileName = Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx");
+        string password = "KNTC@Vnua2023";
+        Log.Information($"X509Certificate2 fileName: {fileName}");
+        Log.Information($"X509Certificate2 password: {password}");
+        return new X509Certificate2(fileName, password);
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

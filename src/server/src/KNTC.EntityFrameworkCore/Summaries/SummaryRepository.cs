@@ -81,7 +81,7 @@ public class SummaryRepository : ISummaryRepository
                          )
                          .WhereIf(
                             !string.IsNullOrEmpty(nguoiNopDon),
-                            x => (x.NoiDungVuViec.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon)
+                            x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
                          )
                         .Select(c => new Summary()
                         {
@@ -100,7 +100,7 @@ public class SummaryRepository : ISummaryRepository
                             DuLieuToaDo = c.DuLieuToaDo,
                             DuLieuHinhHoc = c.DuLieuHinhHoc,
                             SoThua = c.SoThua,
-                            ToBanDo= c.ToBanDo
+                            ToBanDo = c.ToBanDo
                         });
 
         var denounceQuery = dbContext.Set<Denounce>()
@@ -143,7 +143,7 @@ public class SummaryRepository : ISummaryRepository
                          )
                          .WhereIf(
                             !string.IsNullOrEmpty(nguoiNopDon),
-                            x => (x.NoiDungVuViec.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon)
+                            x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
                          )
                         .Select(d => new Summary()
                         {
