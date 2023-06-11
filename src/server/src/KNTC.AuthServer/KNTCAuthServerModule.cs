@@ -67,38 +67,38 @@ public class KNTCAuthServerModule : AbpModule
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
+
+            //    // disable https
+            builder.AddServer(options =>
+            {
+                options.UseAspNetCore().DisableTransportSecurityRequirement();
+            });
         });
-        var hostingEnvironment = context.Services.GetHostingEnvironment();
 
+        //var hostingEnvironment = context.Services.GetHostingEnvironment();
         // Development environment
-        if (hostingEnvironment.IsDevelopment())
-        {
-            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-            {
-                // This is default value, you can remove this line.
-                options.AddDevelopmentEncryptionAndSigningCertificate = true;
-            });
-        }
+        //if (hostingEnvironment.IsDevelopment())
+        //{
+        //PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+        //{
+        //    // This is default value, you can remove this line.
+        //    options.AddDevelopmentEncryptionAndSigningCertificate = true;
+        //});
+        //   }
         //    Production or Staging environment
-        if (!hostingEnvironment.IsDevelopment())
-        {
-            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-            {
-                options.AddDevelopmentEncryptionAndSigningCertificate = false;
-            });
+        //if (!hostingEnvironment.IsDevelopment())
+        //{
+        //    PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+        //    {
+        //        options.AddDevelopmentEncryptionAndSigningCertificate = false;
+        //    });
 
-            PreConfigure<OpenIddictServerBuilder>(builder =>
-            {
-                builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
-                builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
-            });
+        //    PreConfigure<OpenIddictServerBuilder>(builder =>
+        //    {
+        //        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
+        //        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
+        //    });
 
-            // disable https
-            //Configure<OpenIddictServerAspNetCoreBuilder>(configure =>
-            //{
-            //    configure.DisableTransportSecurityRequirement();
-            //});
-        }
     }
 
     private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)

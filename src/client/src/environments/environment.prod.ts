@@ -11,12 +11,10 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://localhost:5101/',
-    // redirectUri: baseUrl,
+    issuer: 'http://localhost:5101/',
     clientId: 'KNTC_App',
-    // responseType: 'code',
     scope: 'offline_access KNTC',
-    requireHttps: true,
+    requireHttps: false,
   },
   apis: {
     default: {
