@@ -35,5 +35,6 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                  int? maXaPhuongTT,
                  int? giaiDoan,
                  DateTime? FromDate,
-                 DateTime? ToDate);
+                 DateTime? ToDate,
+                 bool? CongKhai);
 }

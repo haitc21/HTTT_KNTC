@@ -192,8 +192,8 @@ public class FileAttachmentAppService : CrudAppService<
                     .WhereIf(input.ComplainId.HasValue, x => x.LoaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == input.ComplainId)
                     .WhereIf(input.DenounceId.HasValue, x => x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId)
                     .WhereIf(input.HinhThuc.HasValue, x => x.HinhThuc == input.HinhThuc)
-                    .WhereIf(input.GiaiDoan.HasValue, x => x.GiaiDoan == input.GiaiDoan)
-                    .WhereIf(input.CongKhai.HasValue && input.GiaiDoan != 0, x => x.CongKhai == input.CongKhai);
+                    .WhereIf(input.GiaiDoan.HasValue && input.GiaiDoan != 0, x => x.GiaiDoan == input.GiaiDoan)
+                    .WhereIf(input.CongKhai.HasValue, x => x.CongKhai == input.CongKhai);
         var query = from f in fileQuery
                     join dt in await _documentTypeRepo.GetQueryableAsync()
                     on f.HinhThuc equals dt.Id

@@ -110,7 +110,7 @@ public class ComplainAppService : CrudAppService<
                 && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
                 && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
                 && (input.NguoiNopDon.IsNullOrEmpty()
-                    || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon))
+                    || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon))
                 );
 
         return new PagedResultDto<ComplainDto>(
@@ -289,7 +289,8 @@ public class ComplainAppService : CrudAppService<
             input.maXaPhuongTT,
             input.GiaiDoan,
             input.FromDate,
-            input.ToDate
+            input.ToDate,
+            input.CongKhai
         );
         if (complains == null) return null;
 

@@ -82,16 +82,16 @@ public class KNTCAuthServerModule : AbpModule
         // Production or Staging environment
         if (!hostingEnvironment.IsDevelopment())
         {
-            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-            {
-                options.AddDevelopmentEncryptionAndSigningCertificate = false;
-            });
+            //PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            //{
+            //    options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            //});
 
-            PreConfigure<OpenIddictServerBuilder>(builder =>
-            {
-                builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
-                builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
-            });
+            //PreConfigure<OpenIddictServerBuilder>(builder =>
+            //{
+            //    builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
+            //    builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
+            //});
 
             // disable https
             //Configure<OpenIddictServerAspNetCoreBuilder>(configure =>
@@ -101,10 +101,10 @@ public class KNTCAuthServerModule : AbpModule
         }
     }
 
-    private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)
-    {
-        return new X509Certificate2(Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx"), "HTTTKNTC@VNUA2023");
-    }
+    //private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)
+    //{
+    //    return new X509Certificate2(Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx"), "HTTTKNTC@VNUA2023");
+    //}
 
     public override void ConfigureServices(ServiceConfigurationContext context)
     {

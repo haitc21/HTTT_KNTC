@@ -59,7 +59,7 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       />
-                      <label for="nguoiNopDon">Người tố cáo <span class="required">*</span></label>
+                      <label for="nguoiNopDon">Người nộp đơn <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.nguoiNopDon"
@@ -836,7 +836,7 @@
         <button
           pButton
           pRipples
-          type="submit"
+          type="button"
           (click)="saveChange()"
           label="Lưu"
           class="p-button-info mr-2"
@@ -858,7 +858,7 @@
         <button *ngIf="(mode == 'view')"
           pButton
           pRipples
-          type="submit"
+          type="button"
           (click)="changeEditMode()"
           label="Sửa"
           class="p-button-info mr-2"
@@ -867,7 +867,7 @@
         <button *ngIf="(mode != 'view')"
           pButton
           pRipples
-          type="submit"
+          type="button"
           (click)="saveChange()"
           label="Lưu"
           class="p-button-info mr-2"

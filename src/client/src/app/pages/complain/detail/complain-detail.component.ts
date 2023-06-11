@@ -78,10 +78,10 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       },
     ],
     nguoiNopDon: [
-      { type: 'required', message: 'Người đề nghị không được để trống' },
+      { type: 'required', message: 'Người nộp đơn không được để trống' },
       {
         type: 'maxLength',
-        message: `Người đề nghị không vượt quá ${KNTCValidatorConsts.MaxTenNguoiLength} kí tự`,
+        message: `Người nộp đơn không vượt quá ${KNTCValidatorConsts.MaxTenNguoiLength} kí tự`,
       },
     ],
     cccdCmnd: [
