@@ -17,7 +17,7 @@
       <ng-template pTemplate="caption">
         <div class="flex align-items-center justify-content-between">
           <div class="grid flex-start col-8">
-            <span class="p-input-icon-left flex-1">
+            <span class="p-input-icon-left flex-1 mr-2">
               <i class="pi pi-search"></i>
               <input
                 pInputText
@@ -27,7 +27,7 @@
                 placeholder="Tìm kiếm"
               />
             </span>
-            <span *ngIf="loaiVuViec == LoaiVuViec.KhieuNai" class="p-float-label flex-1">
+            <span *ngIf="loaiVuViec == LoaiVuViec.KhieuNai" class="p-float-label flex-1 mr-2">
               <p-dropdown
                 [options]="giaiDoanOptions"
                 [(ngModel)]="giaiDoan"
@@ -40,7 +40,7 @@
               ></p-dropdown>
               <label>Giai đoạn</label>
             </span>
-            <span class="p-float-label flex-1">
+            <span class="p-float-label flex-1 mr-2">
               <p-dropdown
                 [options]="documentTypeOptions"
                 [(ngModel)]="hinhThuc"
@@ -53,7 +53,7 @@
               ></p-dropdown>
               <label>Hình thức tài liệu</label>
             </span>
-            <span class="p-float-label flex-1" *ngIf="hasLoggedIn">
+            <span class="p-float-label flex-1 mr-2" *ngIf="hasLoggedIn">
               <p-dropdown
                 [options]="congKhaiOptions"
                 [(ngModel)]="congKhai"
@@ -85,7 +85,7 @@
       <ng-template pTemplate="header">
         <tr>
           <th class="row-num-column">STT</th>
-          <th>File gắn kèm</th>
+          <th>Tệp gắn kèm</th>
           <th>Tên tài liệu</th>
           <th *ngIf="loaiVuViec == LoaiVuViec.KhieuNai">Giai đoạn</th>
           <th>Hình thức</th>
