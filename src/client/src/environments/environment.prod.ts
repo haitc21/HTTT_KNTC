@@ -18,7 +18,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://localhost:5102',
+      url: 'http://localhost:5102',
       rootNamespace: 'KNTC',
     },
     geoserver: {
