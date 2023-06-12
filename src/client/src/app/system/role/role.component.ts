@@ -52,8 +52,12 @@ export class RoleComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.breadcrumb = [{ label: 'Quản lý vai trò' }];
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [{ label: ' Quản trị hệ thống', icon: 'pi pi-cog', disabled: true }];
+    this.breadcrumb.push({
+      label: ' Quản lý vai trò',
+      icon: 'pi pi-id-card',
+    });
     this.getPermission();
     this.buildActionMenu();
     this.loadData();

@@ -410,11 +410,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       labels: [
         'KN Đất đai',
         'KN Môi trường',
-        'KN tài nguyên ngước',
+        'KN tài nguyên nước',
         'KN Khoáng sản',
         'TC Đất đai',
         'TC Môi trường',
-        'TC tài nguyên ngước',
+        'TC tài nguyên nước',
         'TC Khoáng sản',
       ],
       datasets: [
