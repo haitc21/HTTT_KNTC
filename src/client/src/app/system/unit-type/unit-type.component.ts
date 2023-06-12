@@ -49,8 +49,13 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.breadcrumb = [{ label: 'Danh mục loại địa danh' }];
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [{ label: ' Quản trị hệ thống', icon: 'pi pi-cog', disabled: true }];
+    this.breadcrumb.push({
+      label: ' Danh mục loại địa danh',
+      icon: 'pi pi-star',
+    });
+
     this.getPermission();
     this.buildActionMenu();
     this.loadData();

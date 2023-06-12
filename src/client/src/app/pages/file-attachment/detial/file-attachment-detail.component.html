@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <p-panel #pnlDetail [collapsed]="false">
+  <p-panel #pnlDetail [collapsed]="false" [showHeader]="false">
     <div class="formgrid grid card">
       <!-- -----------------------------------tenTaiLieu----------------------------------------------- -->
       <div class="field col-12 md:col-6">
@@ -119,6 +119,10 @@
         >
         </app-validation-message>
       </div>
+      <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
+      <div class="field col-12 md:col-6">
+        <label>Mô tả nội dung <span class="required">*</span></label>
+      </div>
       <!-- ----------------------------congKhai---------------------------=----------------------------- -->
       <div class="field col-12 md:col-6">
         <p-checkbox binary="true" label="Công khai" formControlName="congKhai"></p-checkbox>
@@ -127,16 +131,14 @@
           [validationMessages]="validationMessages.congKhai"
         >
         </app-validation-message>
-      </div>
-
+      </div>      
       <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
       <div class="field col-12 md:col-12">
-        <label>Nội dung chính <span class="required">*</span></label>
         <p-editor
           id="noiDungChinh"
           formControlName="noiDungChinh"
           class="w-full"
-          [style]="{ height: '150px' }"
+          [style]="{ height: '80px' }"
           [readonly]="isView"
         ></p-editor>
         <app-validation-message

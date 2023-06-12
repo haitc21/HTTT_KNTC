@@ -30,7 +30,7 @@
             styleClass="w-full"
             (onChange)="unitTypeChange($event?.value); loadData()"
           ></p-dropdown>
-          <label for="loaiDat">loại địa danh</label>
+          <label for="loaiDat">Loại địa danh</label>
         </span>
       </div>
       <div class="col-12 md:col-4">
@@ -48,7 +48,7 @@
             styleClass="w-full"
             (onChange)="loadData()"
           ></p-dropdown>
-          <label for="loaiDat">DDịa danh cha</label>
+          <label for="loaiDat">Địa danh cha</label>
         </span>
       </div>
     </div>
@@ -96,9 +96,9 @@
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
         <th class="row-num-column">Id</th>
-        <th pSortableColumn="unitCode">Mã</th>
-        <th pSortableColumn="unitName">Tên</th>
-        <th pSortableColumn="shortName">Tên thu gọn</th>
+        <th pSortableColumn="unitCode">Mã địa danh</th>
+        <th pSortableColumn="unitName">Tên địa danh</th>
+        <th pSortableColumn="shortName">Tên ngắn gọn</th>
         <th pSortableColumn="status">Trạng thái</th>
         <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
       </tr>

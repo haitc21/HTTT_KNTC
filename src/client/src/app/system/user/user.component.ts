@@ -69,9 +69,13 @@ export class UserComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer
   ) {}
 
-  ngOnInit() {
-    this.breadcrumb = [{ label: 'Quản lý người dùng' }];
+  ngOnInit() {    
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [{ label: ' Quản trị hệ thống', icon: 'pi pi-cog', disabled: true }];
+    this.breadcrumb.push({
+      label: ' Quản lý người dùng',
+      icon: 'pi pi-users',
+    });
     this.getPermission();
     this.buildActionMenu();
     this.loadOptions();

@@ -172,7 +172,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
   showAddModal() {
     this.visibleAddModal = true;
-    this.headerModal = 'Thêm mới tệp gắn kèm';
+    this.headerModal = 'Thêm mới Hồ sơ gắn kèm';
   }
   submitAdd(dto: any) {
     if (dto) {
@@ -242,7 +242,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   }
   showUpdateModal(item: FileAttachmentDto) {
     this.selectedItem = item;
-    this.headerModal = `Cập nhật tệp gắn kèm "${item.tenTaiLieu}"`;
+    this.headerModal = `Cập nhật Hồ sơ gắn kèm "${item.tenTaiLieu}"`;
     this.visibleUpdateModal = true;
   }
   submitUpdate(dto: any) {
@@ -322,7 +322,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   }
   viewDetail(item: FileAttachmentDto) {
     this.selectedItem = item;
-    this.headerModal = `Chi tiết tệp gắn kèm "${item.tenTaiLieu}"`;
+    this.headerModal = `Chi tiết Hồ sơ gắn kèm "${item.tenTaiLieu}"`;
     this.visibleViewModal = true;
   }
   closeViewModal() {

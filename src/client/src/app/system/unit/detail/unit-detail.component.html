@@ -11,7 +11,7 @@
             pInputText
             [style]="{ width: '100%' }"
           />
-          <label for="name">Mã <span class="required">*</span></label>
+          <label for="name">Mã địa danh<span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.unitCode"
@@ -29,7 +29,7 @@
             pInputText
             [style]="{ width: '100%' }"
           />
-          <label for="name">Tên <span class="required">*</span></label>
+          <label for="name">Tên địa danh<span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.unitName"
@@ -47,7 +47,7 @@
             pInputText
             [style]="{ width: '100%' }"
           />
-          <label for="name">Tên thu gọn<span class="required">*</span></label>
+          <label for="name">Tên ngắn gọn<span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.shortName"
@@ -71,7 +71,7 @@
             styleClass="w-full"
             (onChange)="unitTypeChange($event?.value)"
           ></p-dropdown>
-          <label for="loaiDat">loại địa danh <span class="required">*</span></label>
+          <label for="loaiDat">Loại địa danh <span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.unitTypeId"
@@ -97,7 +97,7 @@
             filterBy="unitName"
             styleClass="w-full"
           ></p-dropdown>
-          <label for="loaiDat">DDịa danh cha <span class="required">*</span></label>
+          <label for="loaiDat">Địa danh cha <span class="required">*</span></label>
         </span>
         <app-validation-message
           [entityControl]="formControls.parentId"
