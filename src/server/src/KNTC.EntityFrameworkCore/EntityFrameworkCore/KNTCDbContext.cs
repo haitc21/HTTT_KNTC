@@ -98,8 +98,9 @@ public class KNTCDbContext :
             b.ToTable("Complains", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasIndex(x => x.MaHoSo);
-            b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.HasIndex(x => x.LinhVuc);
+            b.HasIndex(x => x.ThoiGianTiepNhan);
+            b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
             b.Property(x => x.NguoiNopDon).IsRequired().HasColumnName("nguoi_nop_don").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
@@ -158,8 +159,9 @@ public class KNTCDbContext :
             b.ToTable("Denounces", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.HasIndex(x => x.MaHoSo);
-            b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
+            b.HasIndex(x => x.ThoiGianTiepNhan);
             b.HasIndex(x => x.LinhVuc);
+            b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
             b.Property(x => x.NguoiNopDon).IsRequired().HasColumnName("nguoi_nop_don").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);

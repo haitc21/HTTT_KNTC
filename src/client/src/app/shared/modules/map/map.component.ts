@@ -12,10 +12,12 @@ import {
   isDevMode,
 } from '@angular/core';
 import { LoaiVuViec } from '@proxy';
-import * as L from 'leaflet';
 import { v4 as uuidv4 } from 'uuid';
 import { SummaryDto } from '@proxy/summaries';
 import { MapPopupComponent } from '../map-popup/map-popup.component';
+
+
+import * as L from 'leaflet';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
 import 'leaflet.markercluster.layersupport';
 //import "leaflet-draw/dist/leaflet.draw.css";
@@ -24,10 +26,12 @@ import 'leaflet-draw';
 //import "leaflet-loading";
 //import "leaflet-measure";
 import 'leaflet.measurecontrol';
+
 import { format } from 'date-fns';
 import { environment } from 'src/environments/environment';
 import { LinhVucNameOptions } from '../../constants/consts';
-// import { environment as environmentProd } from 'src/environments/environment.prod';
+import { environment as environmentProd } from 'src/environments/environment.prod';
+
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
 //import "leaflet/dist/leaflet.css";
@@ -93,10 +97,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
     private popupContainer: ViewContainerRef,
     private appRef: ApplicationRef
   ) {
-    // this.geoserverUrl = isDevMode()
-    //   ? environment.apis.geoserver.url
-    //   : environmentProd.apis.geoserver.url;
-      this.geoserverUrl = environment.apis.geoserver.url;
+    this.geoserverUrl = isDevMode()
+      ? environment.apis.geoserver.url
+      : environmentProd.apis.geoserver.url;
   }
 
   ngAfterViewInit() {
@@ -1065,7 +1068,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     if (visible) {
       if (!this.bSpatialLoaded) {
         this.quyhoach = L.tileLayer.wms(`${this.geoserverUrl}/geoserver/kntc/wms?`, {
-          layers: 'kntc:dongtien_polyline',
+          layers: 'kntc:phoyen',
           format: 'image/png',
           transparent: true,
         });

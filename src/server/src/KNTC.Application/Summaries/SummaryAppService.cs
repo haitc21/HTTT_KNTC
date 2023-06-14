@@ -53,7 +53,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = $"{nameof(SummaryDto.MaHoSo)}";
+            input.Sorting = $"{nameof(SummaryDto.ThoiGianTiepNhan)} DESC";
         }
         var query = await _summaryRepo.GetListAsync(input.LandComplain,
                                                     input.EnviromentComplain,
