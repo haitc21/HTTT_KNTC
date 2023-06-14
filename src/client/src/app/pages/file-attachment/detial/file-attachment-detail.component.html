@@ -102,36 +102,72 @@
         </app-validation-message>
       </div>
       <!-- ---------------------------------thuTuButLuc----------------------=----------------------------- -->
-      <div class="field col-12 md:col-6">
-        <span class="p-float-label">
-          <input
-            id="thuTuButLuc"
-            type="text"
-            pInputText
-            formControlName="thuTuButLuc"
-            [style]="{ width: '100%' }"
-          />
-          <label for="thuTuButLuc">Thứ tự bút lục <span class="required">*</span></label>
-        </span>
-        <app-validation-message
-          [entityControl]="formControls.thuTuButLuc"
-          [validationMessages]="validationMessages.thuTuButLuc"
-        >
-        </app-validation-message>
-      </div>
-      <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
-      <div class="field col-12 md:col-6">
-        <label>Mô tả nội dung <span class="required">*</span></label>
-      </div>
-      <!-- ----------------------------congKhai---------------------------=----------------------------- -->
-      <div class="field col-12 md:col-6">
-        <p-checkbox binary="true" label="Công khai" formControlName="congKhai"></p-checkbox>
-        <app-validation-message
-          [entityControl]="formControls.congKhai"
-          [validationMessages]="validationMessages.congKhai"
-        >
-        </app-validation-message>
-      </div>      
+      <ng-template [ngIf]="loaiVuViec == LoaiVuViec.KhieuNai" [ngIfElse]="elseBlock">
+        <div class="field col-12 md:col-6">
+          <span class="p-float-label">
+            <input
+              id="thuTuButLuc"
+              type="text"
+              pInputText
+              formControlName="thuTuButLuc"
+              [style]="{ width: '100%' }"
+            />
+            <label for="thuTuButLuc">Thứ tự bút lục <span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.thuTuButLuc"
+            [validationMessages]="validationMessages.thuTuButLuc"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
+        <div class="field col-12 md:col-6">
+          <label><strong>Mô tả nội dung</strong> <span class="required">*</span></label>
+        </div>
+        <!-- ----------------------------congKhai---------------------------=----------------------------- -->
+        <div class="field col-12 md:col-6">
+          <p-checkbox binary="true" label="Công khai" formControlName="congKhai"></p-checkbox>
+          <app-validation-message
+            [entityControl]="formControls.congKhai"
+            [validationMessages]="validationMessages.congKhai"
+          >
+          </app-validation-message>
+        </div>
+       </ng-template>
+       
+       <ng-template #elseBlock>
+        <div class="field col-12 md:col-6">
+          <span class="p-float-label">
+            <input
+              id="thuTuButLuc"
+              type="text"
+              pInputText
+              formControlName="thuTuButLuc"
+              [style]="{ width: '100%' }"
+            />
+            <label for="thuTuButLuc">Thứ tự bút lục <span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.thuTuButLuc"
+            [validationMessages]="validationMessages.thuTuButLuc"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ----------------------------congKhai---------------------------=----------------------------- -->
+        <div class="field col-12 md:col-6">
+          <p-checkbox binary="true" label="Công khai" formControlName="congKhai"></p-checkbox>
+          <app-validation-message
+            [entityControl]="formControls.congKhai"
+            [validationMessages]="validationMessages.congKhai"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
+        <div class="field col-12 md:col-6">
+          <label><strong>Mô tả nội dung</strong> <span class="required">*</span></label>
+        </div>   
+       </ng-template>
+      
       <!-- ----------------------------noiDungChinh---------------------------=----------------------------- -->
       <div class="field col-12 md:col-12">
         <p-editor
