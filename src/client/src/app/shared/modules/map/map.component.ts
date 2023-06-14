@@ -97,7 +97,6 @@ export class MapComponent implements AfterViewInit, OnChanges {
     //   ? environment.apis.geoserver.url
     //   : environmentProd.apis.geoserver.url;
       this.geoserverUrl = environment.apis.geoserver.url;
-    console.log('geoserverUrl :',this.geoserverUrl);
   }
 
   ngAfterViewInit() {
