@@ -1065,8 +1065,8 @@ export class MapComponent implements AfterViewInit, OnChanges {
     */
     if (visible) {
       if (!this.bSpatialLoaded) {
-        this.quyhoach = L.tileLayer.wms(`${this.geoserverUrl}/geoserver/kntc/wms`, {
-          layers: 'kntc:phoyen',
+        this.quyhoach = L.tileLayer.wms(`${this.geoserverUrl}/geoserver/kntc/wms?`, {
+          layers: 'kntc:dongtien_polyline',
           format: 'image/png',
           transparent: true,
         });

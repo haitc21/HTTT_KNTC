@@ -1,6 +1,6 @@
 import { Environment } from '@abp/ng.core';
 
-const baseUrl = 'http://localhost:4201';
+const baseUrl = 'http://10.4.1.9:4201';
 
 
 export const environment = {
@@ -11,18 +11,18 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'http://localhost:5101/',
+    issuer: 'http://10.4.1.9:5101/',
     clientId: 'KNTC_App',
     scope: 'offline_access KNTC',
     requireHttps: false,
   },
   apis: {
     default: {
-      url: 'http://localhost:5102',
+      url: 'http://10.4.1.9:5102',
       rootNamespace: 'KNTC',
     },
     geoserver: {
-      url: 'http://localhost:8080',
+      url: 'http://10.4.1.9:8080',
       rootNamespace: 'KNTC',
     },
   },
