@@ -167,6 +167,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         }
       );
   }
+  
   tinhChange(event) {
     this.loadData();
     if (event.value) {
