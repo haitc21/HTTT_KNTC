@@ -105,8 +105,8 @@ public class KNTCAuthServerModule : AbpModule
     {
         string fileName = Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx");
         string password = "KNTC@Vnua2023";
-        Log.Information($"X509Certificate2 fileName: {fileName}");
-        Log.Information($"X509Certificate2 password: {password}");
+        //Log.Information($"X509Certificate2 fileName: {fileName}");
+        //Log.Information($"X509Certificate2 password: {password}");
         return new X509Certificate2(fileName, password);
     }
 
