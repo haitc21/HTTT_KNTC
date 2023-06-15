@@ -64,7 +64,7 @@ public class FileAttachmentAppService : CrudAppService<
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(FileAttachmentDto.TenTaiLieu);
+            input.Sorting = nameof(FileAttachmentDto.ThuTuButLuc);
         }
 
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";

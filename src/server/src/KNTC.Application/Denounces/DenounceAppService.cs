@@ -71,7 +71,7 @@ public class DenounceAppService : CrudAppService<
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(Denounce.MaHoSo);
+            input.Sorting = $"{nameof(Denounce.ThoiGianTiepNhan)} DESC";
         }
         string filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper().Trim() : "";
         string nguoiNopDon = !input.NguoiNopDon.IsNullOrEmpty() ? input.NguoiNopDon.ToUpper().Trim() : "";

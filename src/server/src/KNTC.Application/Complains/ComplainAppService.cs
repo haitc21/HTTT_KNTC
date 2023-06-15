@@ -72,7 +72,7 @@ public class ComplainAppService : CrudAppService<
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(Complain.MaHoSo);
+            input.Sorting = $"{nameof(Complain.ThoiGianTiepNhan)} DESC";
         }
         string filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper().Trim() : "";
         string nguoiNopDon = !input.NguoiNopDon.IsNullOrEmpty() ? input.NguoiNopDon.ToUpper().Trim() : "";
