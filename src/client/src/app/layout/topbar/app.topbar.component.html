@@ -20,20 +20,10 @@
 
   <ng-template pTemplate="end">
     <span class="flex align-items-center">
-      <!-- <button
-        *ngIf="isAutenticated"
-        pButton
-        pRipple
-        type="button"
-        label="Hệ thống"
-        icon="fa fa-cogs"
-        class="p-button-lg p-button-info mr-2"
-        (click)="systemMenu.toggle($event)"
-      ></button> -->
-      <a class="user-profile mr-2" *ngIf="isAutenticated" (click)="systemMenu.toggle($event)">
-        <span class="username"><i class="fa fa-cogs"></i> Hệ thống</span>
-      </a>
 
+      <!-- <a class="user-profile mr-2" *ngIf="isAutenticated" (click)="systemMenu.toggle($event)">
+        <span class="username"><i class="fa fa-cogs"></i> Hệ thống</span>
+      </a> -->
 
       <a class="user-profile" *ngIf="isAutenticated" (click)="userMenu.toggle($event)">
         <img
@@ -65,10 +55,10 @@
   [hideTransitionOptions]="'300ms'"
 ></p-tieredMenu>
 
-<p-tieredMenu
+<!-- <p-tieredMenu
   #systemMenu
   [model]="systemMenuItems"
   [popup]="true"
   [showTransitionOptions]="'300ms'"
   [hideTransitionOptions]="'300ms'"
-></p-tieredMenu>
+></p-tieredMenu> -->

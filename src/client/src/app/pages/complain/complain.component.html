@@ -236,11 +236,11 @@
             {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
           </td>
           <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
-            {{ row?.ngayTraKQ1 | date : 'dd-MM-yyyy' }}
+            {{ row?.ngayTraKQ1 | date : 'dd/MM/yyyy' }}
           </td>
           <td>{{ KetquaOptions[(row?.ketQua1) ? row?.ketQua1 : 0] }}</td>
           <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
-            {{ row?.ngayTraKQ2 | date : 'dd-MM-yyyy' }}
+            {{ row?.ngayTraKQ2 | date : 'dd/MM/yyyy' }}
           </td>
           <td>{{ KetquaOptions[(row?.ketQua2) ? row?.ketQua2 : 0] }}</td>
           <td>{{ KetquaOptions[(row?.ketQua) ? row?.ketQua : 0] }}</td>

@@ -28,8 +28,8 @@ import 'leaflet-draw';
 import 'leaflet.measurecontrol';
 
 import { format } from 'date-fns';
-import { environment } from 'src/environments/environment';
 import { LinhVucNameOptions } from '../../constants/consts';
+import { environment } from 'src/environments/environment';
 import { environment as environmentProd } from 'src/environments/environment.prod';
 
 //import 'leaflet.locatecontrol';

@@ -86,7 +86,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   onSubmit() {
     this.utilService.markAllControlsAsDirty([this.form]);
-    if (this.form.invalid) return;
+      if (this.form.invalid) 
+    {
+      this.layoutService.blockUI$.next(false);
+      return;
+    }
     this.layoutService.blockUI$.next(true);
 
     const { username, password, rememberMe } = this.form.value;

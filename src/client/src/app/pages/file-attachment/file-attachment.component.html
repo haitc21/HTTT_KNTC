@@ -104,8 +104,8 @@
           <td>{{ row.tenTaiLieu }}</td>
           <td *ngIf="loaiVuViec == LoaiVuViec.KhieuNai">{{ getGiaiDoan(row.giaiDoan) }}</td>
           <td>{{ getHinhThuc(row.hinhThuc) }}</td>
-          <td>{{ row?.ngayNhan | date : 'dd-MM-yyyy' }}</td>
-          <td>{{ row?.thoiGianBanHanh | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row?.ngayNhan | date : 'dd/MM/yyyy' }}</td>
+          <td>{{ row?.thoiGianBanHanh | date : 'dd/MM/yyyy' }}</td>
           <td>{{ row.thuTuButLuc }}</td>
           <td>
             <p-tieredMenu
@@ -247,8 +247,8 @@
           </td>
           <td *ngIf="loaiVuViec == LoaiVuViec.KhieuNai">{{ getGiaiDoan(row.giaiDoan) }}</td>
           <td>{{ getHinhThuc(row.hinhThuc) }}</td>
-          <td>{{ row?.ngayNhan | date : 'dd-MM-yyyy' }}</td>
-          <td>{{ row?.thoiGianBanHanh | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row?.ngayNhan | date : 'dd/MM/yyyy' }}</td>
+          <td>{{ row?.thoiGianBanHanh | date : 'dd/MM/yyyy' }}</td>
           <td>{{ row.thuTuButLuc }}</td>
           <td>
             <p-tieredMenu

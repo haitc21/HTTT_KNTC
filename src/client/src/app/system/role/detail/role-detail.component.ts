@@ -26,7 +26,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     private roleService: RolesService,
     private utilService: UtilityService,
     private fb: FormBuilder,
-    private layoutService: LayoutService,
+    private layoutService: LayoutService
   ) {}
 
   ngOnInit() {
@@ -71,9 +71,13 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
+    debugger;
     this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.layoutService.blockUI$.next(false);
+      return;
+    }
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
       ? this.roleService.create(this.form.value)
       : this.roleService.update(this.config.data.id, this.form.value);
@@ -98,7 +102,6 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  
   close() {
     if (this.ref) {
       this.ref.close();

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -15,6 +15,8 @@ import { UserInfoDto } from '@proxy/users';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SetPasswordComponent } from 'src/app/system/user/set-password/set-password.component';
 import { LinhVuc } from '@proxy';
+import { environment } from 'src/environments/environment';
+import { environment as environmentProd } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-topbar',
@@ -35,6 +37,7 @@ export class AppTopBarComponent implements OnInit {
   userName = '';
   userId = '';
   avatarUrl: any;
+  geoserverUrl: string;
 
   get isAutenticated() {
     return this.oAuthService.hasValidAccessToken();
@@ -51,6 +54,9 @@ export class AppTopBarComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
   ngOnInit(): void {
+    this.geoserverUrl = isDevMode()
+      ? environment.apis.geoserver.url
+      : environmentProd.apis.geoserver.url;
     if (this.isAutenticated) {
       const accessToken = this.oAuthService.getAccessToken();
       let decodedAccessToken = atob(accessToken.split('.')[1]);
@@ -170,51 +176,59 @@ export class AppTopBarComponent implements OnInit {
           },
         ],
       },
-    ];
-  }
-
-  initMenuSystem() {
-    this.systemMenuItems = [
       {
-        label: 'Cấu hình hệ thống',
-        routerLink: ['/system/config'],
-        //visible: this.permissionService.getGrantedPolicy('AbpIdentity.Config'),
-      },
-      {
-        label: 'Quản lý người dùng',
-        // icon: 'pi pi-fw pi-users',
-        routerLink: ['/system/user'],
-        visible: this.permissionService.getGrantedPolicy('AbpIdentity.Users'),
-      },
-      {
-        label: 'Quản trị phân quyền',
-        // icon: 'pi pi-fw pi-user-edit',
-        routerLink: ['/system/role'],
-        visible: this.permissionService.getGrantedPolicy('AbpIdentity.Roles'),
-      },
-      {
-        label: 'Danh mục',
+        label: 'Hệ thống',
+        icon: 'fa fa-cogs',
+        visible: this.isAutenticated,
         items: [
           {
-            label: 'Loại địa danh',
-            routerLink: [`/system/unit-type`],
+            label: 'Cấu hình hệ thống',
+            routerLink: ['/system/config'],
+            //visible: this.permissionService.getGrantedPolicy('AbpIdentity.Config'),
           },
           {
-            label: 'Địa danh',
-            routerLink: [`/system/unit`],
+            label: 'Quản lý bản đồ quy hoạch',
+            url: `${this.geoserverUrl}/geoserver/web/`
           },
           {
-            label: 'Phân loại đất',
-            routerLink: [`/system/land-type`],
+            label: 'Quản lý người dùng',
+            // icon: 'pi pi-fw pi-users',
+            routerLink: ['/system/user'],
+            visible: this.permissionService.getGrantedPolicy('AbpIdentity.Users'),
           },
           {
-            label: 'Hình thức tệp',
-            routerLink: [`/system/document-type`],
-          }
+            label: 'Quản trị phân quyền',
+            // icon: 'pi pi-fw pi-user-edit',
+            routerLink: ['/system/role'],
+            visible: this.permissionService.getGrantedPolicy('AbpIdentity.Roles'),
+          },
+          {
+            label: 'Danh mục',
+            items: [
+              {
+                label: 'Loại địa danh',
+                routerLink: [`/system/unit-type`],
+              },
+              {
+                label: 'Địa danh',
+                routerLink: [`/system/unit`],
+              },
+              {
+                label: 'Phân loại đất',
+                routerLink: [`/system/land-type`],
+              },
+              {
+                label: 'Hình thức tệp',
+                routerLink: [`/system/document-type`],
+              },
+            ],
+          },
         ],
       },
     ];
   }
+
+  initMenuSystem() {}
 
   login() {
     this.router.navigate([LOGIN_URL, this.router.url]);
