@@ -32,7 +32,7 @@ public static class KNTCPermissions
         public const string Delete = Default + ".Delete";
     }
 
-    public const string DocumentTypeGroupName = "DocumentType";
+    public const string DocumentTypeGroupName = "DocumentTypes";
 
     public static class DocumentTypePermission
     {
@@ -42,7 +42,7 @@ public static class KNTCPermissions
         public const string Delete = Default + ".Delete";
     }
 
-    public const string LandTypeGroupName = "LandType";
+    public const string LandTypeGroupName = "LandTypes";
 
     public static class LandTypePermission
     {
@@ -52,7 +52,7 @@ public static class KNTCPermissions
         public const string Delete = Default + ".Delete";
     }
 
-    public const string UnitGroupName = "Unit";
+    public const string UnitGroupName = "Units";
 
     public static class UnitPermission
     {
@@ -62,7 +62,7 @@ public static class KNTCPermissions
         public const string Delete = Default + ".Delete";
     }
 
-    public const string UnitTypeGroupName = "UnitType";
+    public const string UnitTypeGroupName = "UnitTypes";
 
     public static class UnitTypePermission
     {
@@ -80,5 +80,12 @@ public static class KNTCPermissions
         public const string Create = Default + ".Create";
         public const string Edit = Default + ".Edit";
         public const string Delete = Default + ".Delete";
+    }
+
+
+    public const string GeoServerGroupName = "GeoServesrs";
+    public static class GeoServerPermission
+    {
+        public const string Default = GeoServerGroupName;
     }
 }

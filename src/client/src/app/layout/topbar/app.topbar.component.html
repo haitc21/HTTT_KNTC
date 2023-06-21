@@ -10,7 +10,6 @@
         #menubutton
         pButton
         pRipple
-        
         icon="pi pi-bars"
         class="p-button-info"
         (click)="layoutService.onMenuToggle()"
@@ -20,7 +19,6 @@
 
   <ng-template pTemplate="end">
     <span class="flex align-items-center">
-
       <!-- <a class="user-profile mr-2" *ngIf="isAutenticated" (click)="systemMenu.toggle($event)">
         <span class="username"><i class="fa fa-cogs"></i> Hệ thống</span>
       </a> -->
@@ -34,15 +32,9 @@
         <span class="username">{{ userName }} <i class="pi pi-angle-down"></i></span>
       </a>
 
-      <button
-        *ngIf="!isAutenticated"
-        pButton
-        pRipple
-        type="button"
-        label="!Đăng nhập"
-        class="p-button-info"
-        (click)="login()"
-      ></button>
+      <a class="user-profile mr-2" *ngIf="!isAutenticated" (click)="login()">
+        <span class="username">Đăng nhập</span>
+      </a>
     </span>
   </ng-template>
 </p-menubar>
