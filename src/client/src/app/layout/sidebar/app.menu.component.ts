@@ -16,29 +16,6 @@ export class AppMenuComponent implements OnInit {
   constructor(public layoutService: LayoutService, private permissionService: PermissionService) {}
 
   ngOnInit() {
-    // this.model = [
-    //   {
-    //     label: 'Trang chủ',
-    //     items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }],
-    //   },
-    //   {
-    //     label: 'Hệ thống',
-    //     items: [
-    //       {
-    //         label: 'Danh sách quyền',
-    //         icon: 'pi pi-fw pi-circle',
-    //         routerLink: ['/system/role'],
-    //         permission: 'AbpIdentity.Roles',
-    //       },
-    //       {
-    //         label: 'Danh sách người dùng',
-    //         icon: 'pi pi-fw pi-circle',
-    //         routerLink: ['/system/user'],
-    //         permission: 'AbpIdentity.Users',
-    //       },
-    //     ],
-    //   },
-    // ];
     this.items = [
       {
         label: 'Trang chủ',

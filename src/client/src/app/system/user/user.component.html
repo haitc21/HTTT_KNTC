@@ -95,7 +95,7 @@
           <td>{{ row.surname ? row.surname + ' ' + row.name : row.name }}</td>
           <td>{{ row.email }}</td>
           <td>{{ row.phoneNumber }}</td>
-          <td>{{ row?.dob | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row?.dob | date : 'dd/MM/yyyy' }}</td>
           <td>
             <p-tag
               [severity]="row.isActive ? 'info' : 'warning'"

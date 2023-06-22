@@ -390,7 +390,11 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.utilService.markAllControlsAsDirty([this.form]);
-    if (this.form.invalid) return;
+      if (this.form.invalid) 
+    {
+      this.layoutService.blockUI$.next(false);
+      return;
+    }
     this.layoutService.blockUI$.next(true);
     if (this.utilService.isEmpty(this.complainId)) {
       let value = this.form.value as CreateComplainDto;

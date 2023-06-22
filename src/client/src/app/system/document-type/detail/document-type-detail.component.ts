@@ -90,7 +90,11 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
   saveChange() {
     this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
-    if (this.form.invalid) return;
+      if (this.form.invalid) 
+    {
+      this.layoutService.blockUI$.next(false);
+      return;
+    }
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
       ? this.documentTypeService.create(this.form.value)
       : this.documentTypeService.update(this.config.data.id, this.form.value);
