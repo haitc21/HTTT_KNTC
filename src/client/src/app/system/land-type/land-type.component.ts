@@ -61,8 +61,8 @@ export class LandTypeComponent implements OnInit, OnDestroy {
     this.loadData();
   }
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('LandType.Edit');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('LandType.Delete');
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('LandTypes.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('LandTypes.Delete');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 

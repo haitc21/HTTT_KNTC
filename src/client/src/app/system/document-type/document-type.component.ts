@@ -61,8 +61,8 @@ export class DocumentTypeComponent implements OnInit, OnDestroy {
     this.loadData();
   }
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('DocumentType.Edit');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('DocumentType.Delete');
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('DocumentTypes.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('DocumentTypes.Delete');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 

@@ -31,7 +31,7 @@ const routes: Routes = [
     component: DocumentTypeComponent,
     canActivate: [PermissionGuard],
     data: {
-      requiredPolicy: 'DocumentType',
+      requiredPolicy: 'DocumentTypes',
     },
   },
   {
@@ -39,7 +39,7 @@ const routes: Routes = [
     component: LandTypeComponent,
     canActivate: [PermissionGuard],
     data: {
-      requiredPolicy: 'LandType',
+      requiredPolicy: 'LandTypes',
     },
   },
   {
@@ -47,7 +47,7 @@ const routes: Routes = [
     component: UnitTypeComponent,
     canActivate: [PermissionGuard],
     data: {
-      requiredPolicy: 'UnitType',
+      requiredPolicy: 'UnitTypes',
     },
   },
   {
@@ -55,7 +55,7 @@ const routes: Routes = [
     component: UnitComponent,
     canActivate: [PermissionGuard],
     data: {
-      requiredPolicy: 'Unit',
+      requiredPolicy: 'Units',
     },
   },
 ];

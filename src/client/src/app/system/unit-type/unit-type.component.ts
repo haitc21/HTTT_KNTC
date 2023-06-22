@@ -61,8 +61,8 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
     this.loadData();
   }
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('UnitType.Edit');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('UnitType.Delete');
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('UnitTypes.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('UnitTypes.Delete');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 

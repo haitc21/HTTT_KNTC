@@ -184,11 +184,12 @@ export class AppTopBarComponent implements OnInit {
           {
             label: 'Cấu hình hệ thống',
             routerLink: ['/system/config'],
-            //visible: this.permissionService.getGrantedPolicy('AbpIdentity.Config'),
+            visible: this.permissionService.getGrantedPolicy('Configs'),
           },
           {
             label: 'Quản lý bản đồ quy hoạch',
-            url: `${this.geoserverUrl}/geoserver/web/`
+            url: `${this.geoserverUrl}/geoserver/web/`,
+            visible: this.permissionService.getGrantedPolicy('GeoServesrs'),
           },
           {
             label: 'Quản lý người dùng',
@@ -204,22 +205,27 @@ export class AppTopBarComponent implements OnInit {
           },
           {
             label: 'Danh mục',
+            visible: this.isAutenticated,
             items: [
               {
                 label: 'Loại địa danh',
                 routerLink: [`/system/unit-type`],
+                visible: this.permissionService.getGrantedPolicy('UnitTypes'),
               },
               {
                 label: 'Địa danh',
                 routerLink: [`/system/unit`],
+                visible: this.permissionService.getGrantedPolicy('Units'),
               },
               {
                 label: 'Phân loại đất',
                 routerLink: [`/system/land-type`],
+                visible: this.permissionService.getGrantedPolicy('LandTypes'),
               },
               {
                 label: 'Hình thức tệp',
                 routerLink: [`/system/document-type`],
+                visible: this.permissionService.getGrantedPolicy('DocumentTypes'),
               },
             ],
           },
