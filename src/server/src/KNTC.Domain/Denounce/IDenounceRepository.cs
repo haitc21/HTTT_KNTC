@@ -26,6 +26,7 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
 
     Task<List<Denounce>> GetDataExportAsync(
                  string sorting,
+                 string keyword,
                  LinhVuc? linhVuc,
                  LoaiKetQua? ketQua,
                  int? maTinhTp,
@@ -33,5 +34,6 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
                  int? maXaPhuongTT,
                  DateTime? FromDate,
                  DateTime? ToDate,
-                 bool? CongKhai);
+                 bool? CongKhai,
+                 string nguoiNopDon);
 }

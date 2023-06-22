@@ -97,9 +97,11 @@ public class KNTCDbContext :
         {
             b.ToTable("Complains", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
+
             b.HasIndex(x => x.MaHoSo);
             b.HasIndex(x => x.LinhVuc);
-            b.HasIndex(x => x.ThoiGianTiepNhan);
+            b.HasIndex(x => new { x.ThoiGianTiepNhan, x.MaHoSo });
+
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
@@ -158,9 +160,11 @@ public class KNTCDbContext :
         {
             b.ToTable("Denounces", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
+
             b.HasIndex(x => x.MaHoSo);
-            b.HasIndex(x => x.ThoiGianTiepNhan);
             b.HasIndex(x => x.LinhVuc);
+            b.HasIndex(x => new { x.ThoiGianTiepNhan, x.MaHoSo });
+
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
@@ -218,8 +222,12 @@ public class KNTCDbContext :
         {
             b.ToTable("FileAttachments", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
+
             b.HasIndex(x => x.ComplainId);
             b.HasIndex(x => x.DenounceId);
+            b.HasIndex(x => new { x.LoaiVuViec, x.ComplainId });
+            b.HasIndex(x => new { x.LoaiVuViec, x.DenounceId });
+
             b.Property(x => x.GiaiDoan).HasColumnName("giai_doan");
             b.Property(x => x.TenTaiLieu).IsRequired().HasColumnName("ten_tai_lieu").HasMaxLength(KNTCValidatorConsts.MaxTenTaiLieuLength);
             b.Property(x => x.HinhThuc).IsRequired().HasColumnName("hinh_thuc").HasMaxLength(KNTCValidatorConsts.MaxHinhThucLength);
@@ -232,8 +240,6 @@ public class KNTCDbContext :
             b.Property(x => x.ContentLength).IsRequired().HasColumnName("content_length");
             b.Property(x => x.LoaiVuViec).IsRequired().HasColumnName("loai_vu_viec");
             b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
-            b.HasIndex(x => new { x.LoaiVuViec, x.ComplainId });
-            b.HasIndex(x => new { x.LoaiVuViec, x.DenounceId });
         });
 
         builder.Entity<DocumentType>(b =>
