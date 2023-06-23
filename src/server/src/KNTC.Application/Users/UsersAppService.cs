@@ -138,7 +138,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         );
         // add default roles
         var roleDefault = await RoleRepository.GetListAsync(x => x.IsDefault);
-        if (roleDefault != null)
+        if (roleDefault != null && roleDefault.Count > 0)
         {
             input.RoleNames = roleDefault.Select(x => x.Name).ToArray();
         }
@@ -150,7 +150,8 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         var userInfo = new UserInfo(GuidGenerator.Create())
         {
-            UserId = user.Id
+            UserId = user.Id,
+            Dob = input.Dob,
         };
         await _userInfoRepo.InsertAsync(userInfo);
 

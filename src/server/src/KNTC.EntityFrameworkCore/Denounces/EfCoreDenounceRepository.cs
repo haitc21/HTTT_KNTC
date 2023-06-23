@@ -32,6 +32,8 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                bool? CongKhai,
                                                string nguoiNopDon)
     {
+        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(
@@ -88,6 +90,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
     }
 
     public async Task<List<Denounce>> GetDataExportAsync(string sorting,
+                                                   string keyword,
                                                    LinhVuc? linhVuc,
                                                    LoaiKetQua? ketQua,
                                                    int? maTinhTP,
@@ -95,10 +98,18 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                    int? maXaPhuongTT,
                                                    DateTime? fromDate,
                                                    DateTime? toDate,
-                                                   bool? CongKhai)
-    {
+                                                   bool? CongKhai,
+                                                   string nguoiNopDon)
+    {                                            
+        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();
         return await dbSet
+            .WhereIf(
+                !keyword.IsNullOrWhiteSpace(),
+                x => x.MaHoSo.ToUpper().Contains(keyword)
+                || x.TieuDe.ToUpper().Contains(keyword)
+             )
             .WhereIf(
                 linhVuc.HasValue,
                 x => x.LinhVuc == linhVuc
@@ -130,6 +141,10 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
              .WhereIf(
                 CongKhai.HasValue,
                 x => x.CongKhai == CongKhai
+             )
+             .WhereIf(
+                !string.IsNullOrEmpty(nguoiNopDon),
+                x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
              )
             .OrderBy(sorting)
             .ToListAsync();

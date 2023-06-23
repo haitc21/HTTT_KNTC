@@ -20,6 +20,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using static System.Net.WebRequestMethods;
 
 namespace KNTC.FileAttachments;
 
@@ -186,11 +187,14 @@ public class FileAttachmentAppService : CrudAppService<
         {
             input.Sorting = nameof(FileAttachmentDto.TenTaiLieu);
         }
-
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var fileQuery = await Repository.GetQueryableAsync();
         fileQuery = fileQuery
                     .WhereIf(input.ComplainId.HasValue, x => x.LoaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == input.ComplainId)
-                    .WhereIf(input.DenounceId.HasValue, x => x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId)
+                    .WhereIf(input.DenounceId.HasValue, x => x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId).WhereIf(!filter.IsNullOrEmpty(),
+                             x => x.TenTaiLieu.ToUpper().Contains(filter)
+                                 || x.FileName.ToUpper().Contains(filter)
+                             )
                     .WhereIf(input.HinhThuc.HasValue, x => x.HinhThuc == input.HinhThuc)
                     .WhereIf(input.GiaiDoan.HasValue && input.GiaiDoan != 0, x => x.GiaiDoan == input.GiaiDoan)
                     .WhereIf(input.CongKhai.HasValue, x => x.CongKhai == input.CongKhai);
@@ -212,7 +216,7 @@ public class FileAttachmentAppService : CrudAppService<
 
         var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "FileAttachment.xlsx");
 
-        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<FileAttachmentExcelDto>(fileAttachments, templatePath, 14, 0, true);
+        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<FileAttachmentExcelDto>(fileAttachments, templatePath, 12, 0, true);
         if (wb == null) return null;
 
         ISheet sheet = wb.GetSheetAt(0);
@@ -224,6 +228,12 @@ public class FileAttachmentAppService : CrudAppService<
         font.IsBold = false;
         font.FontName = "Times New Roman";
         cellStyle.SetFont(font);
+
+        IRow row = sheet.GetCreateRow(5);
+        var cell = row.GetCreateCell(4);
+        cell.SetCellValue(input.Keyword);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
 
         string maHoSo = "";
         string tieuDe = "";
@@ -240,13 +250,13 @@ public class FileAttachmentAppService : CrudAppService<
             tieuDe = denounce.TieuDe;
         }
 
-        IRow row = sheet.GetCreateRow(5);
-        var cell = row.GetCreateCell(4);
+        row = sheet.GetCreateRow(6);
+        cell = row.GetCreateCell(4);
         cell.SetCellValue(maHoSo);
         cell.CellStyle.WrapText = false;
         cell.CellStyle.SetFont(font);
 
-        row = sheet.GetCreateRow(6);
+        row = sheet.GetCreateRow(7);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(tieuDe);
         cell.CellStyle.WrapText = false;
@@ -258,7 +268,7 @@ public class FileAttachmentAppService : CrudAppService<
             var coType = await _documentTypeRepo.GetAsync(input.HinhThuc.Value);
             hinhThuc = coType.DocumentTypeName;
         }
-        row = sheet.GetCreateRow(7);
+        row = sheet.GetCreateRow(8);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(hinhThuc);
         cell.CellStyle.WrapText = false;
@@ -269,7 +279,7 @@ public class FileAttachmentAppService : CrudAppService<
         {
             congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
         }
-        row = sheet.GetCreateRow(8);
+        row = sheet.GetCreateRow(9);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(congKhai);
         cell.CellStyle.WrapText = false;
@@ -283,7 +293,7 @@ public class FileAttachmentAppService : CrudAppService<
             if (input.GiaiDoan == 2)
                 giaiDoan = "Khiếu nại/Khiếu kiện lần 2";
         }
-        row = sheet.GetCreateRow(9);
+        row = sheet.GetCreateRow(10);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(giaiDoan);
         cell.CellStyle.WrapText = false;

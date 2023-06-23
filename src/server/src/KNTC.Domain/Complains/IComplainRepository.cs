@@ -28,6 +28,7 @@ public interface IComplainRepository : IRepository<Complain, Guid>
 
     Task<List<Complain>> GetDataExportAsync(
                  string sorting,
+                 string keyword,
                  LinhVuc? linhVuc,
                  LoaiKetQua? ketQua,
                  int? maTinhTp,
@@ -36,5 +37,6 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                  int? giaiDoan,
                  DateTime? FromDate,
                  DateTime? ToDate,
-                 bool? CongKhai);
+                 bool? CongKhai,
+                string nguoiNopDon);
 }

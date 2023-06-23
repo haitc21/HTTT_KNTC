@@ -53,7 +53,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = $"{nameof(SummaryDto.ThoiGianTiepNhan)} DESC";
+            input.Sorting = $"{nameof(SummaryDto.ThoiGianTiepNhan)} DESC, {nameof(SummaryDto.MaHoSo)}";
         }
         var query = await _summaryRepo.GetListAsync(input.LandComplain,
                                                     input.EnviromentComplain,
@@ -140,7 +140,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = $"{nameof(SummaryDto.MaHoSo)}";
+            input.Sorting = $"{nameof(SummaryDto.ThoiGianTiepNhan)} DESC, {nameof(SummaryDto.MaHoSo)}";
         }
         var query = await _summaryRepo.GetListAsync(input.LandComplain,
                                                     input.EnviromentComplain,
@@ -177,14 +177,27 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         font.FontName = "Times New Roman";
         cellStyle.SetFont(font);
 
+
+        IRow row = sheet.GetCreateRow(4);
+        var cell = row.GetCreateCell(4);
+        cell.SetCellValue(input.Keyword);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        row = sheet.GetCreateRow(5);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(input.NguoiNopDon);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
         string tenTinh = "Tất cả";
         if (input.maTinhTP != null)
         {
             var tinh = await _unitRepo.GetAsync(x => x.Id == input.maTinhTP);
             tenTinh = tinh.UnitName;
         }
-        IRow row = sheet.GetCreateRow(5);
-        var cell = row.GetCreateCell(4);
+        row = sheet.GetCreateRow(6);
+        cell = row.GetCreateCell(4);
         cell.SetCellValue(tenTinh);
         cell.CellStyle.WrapText = false;
         cell.CellStyle.SetFont(font);
@@ -195,7 +208,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var huyen = await _unitRepo.GetAsync(x => x.Id == input.maQuanHuyen);
             tenHuyen = huyen.UnitName;
         }
-        row = sheet.GetCreateRow(6);
+        row = sheet.GetCreateRow(7);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(tenHuyen);
         cell.CellStyle.WrapText = false;
@@ -207,7 +220,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var xa = await _unitRepo.GetAsync(x => x.Id == input.maXaPhuongTT);
             tenXa = xa.UnitName;
         }
-        row = sheet.GetCreateRow(7);
+        row = sheet.GetCreateRow(8);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(tenXa);
         cell.CellStyle.WrapText = false;
@@ -228,7 +241,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         if (!tuNgay.IsNullOrEmpty() && !denNgay.IsNullOrEmpty())
         {
-            row = sheet.GetCreateRow(8);
+            row = sheet.GetCreateRow(9);
             cell = row.GetCreateCell(4);
             cell.SetCellValue(tuNgay + " - " + denNgay);
             cell.CellStyle.WrapText = false;
@@ -257,7 +270,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                     break;
             }
         }
-        row = sheet.GetCreateRow(9);
+        row = sheet.GetCreateRow(10);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(ketQua);
         cell.CellStyle.WrapText = false;
@@ -268,7 +281,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         {
             congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
         }
-        row = sheet.GetCreateRow(10);
+        row = sheet.GetCreateRow(11);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(congKhai);
         cell.CellStyle.WrapText = false;
@@ -286,7 +299,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     {
         var result = await _cacheChart.GetOrAddAsync(
         nameof(SummaryChartDto),
-        async () => await LoadDataChartAsync(),
+        async () => await GetDataChartFromDbAsync(),
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
@@ -294,7 +307,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         return result;
     }
 
-    private async Task<SummaryChartDto> LoadDataChartAsync()
+    private async Task<SummaryChartDto> GetDataChartFromDbAsync()
     {
         var result = new SummaryChartDto();
 
