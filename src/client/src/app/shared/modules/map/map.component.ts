@@ -28,8 +28,8 @@ import 'leaflet-draw';
 import 'leaflet.measurecontrol';
 
 import { format } from 'date-fns';
-import { LinhVucNameOptions } from '../../constants/consts';
 import { environment } from 'src/environments/environment';
+import { LinhVucNameOptions } from '../../constants/consts';
 import { environment as environmentProd } from 'src/environments/environment.prod';
 
 //import 'leaflet.locatecontrol';
@@ -736,17 +736,25 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.info = L.control();
     this.info.onAdd = function () {
       this._div = L.DomUtil.create('div', 'leaflet-control-info'); // create a div with a class "info"
-      L.DomEvent.disableClickPropagation(this._div);
+      L.DomEvent.disableClickPropagation(this._div);      
       this.update();
       return this._div;
     };
-
+    this.info._addButton = function () {
+      var button = L.DomUtil.create('button', 'button-close', this._div);
+      button.textContent = 'Đóng';
+      L.DomEvent.on(button, 'click', function(e){
+        L.DomEvent.stop(e);
+        this._div.style.display = 'none'
+      }, this);
+    }
     // method that we will use to update the control based on feature properties passed
 
     this.info.LinhVucNameOptions = LinhVucNameOptions;
 
     this.info.update = function () {
       //buildInfoContent
+      this._div.style.display = '';
       var infoContent = '';
       if (this.data) {
         var type = this.data.loaiVuViec == 1 ? 'Khiếu nại' : 'Tố cáo';
@@ -761,6 +769,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
         infoContent = '<h6>Bạn cần di chuyển con trỏ vào khu vực KN/TC để xem thông tin!</h6>';
       }
       this._div.innerHTML = infoContent;
+      this._addButton();
     };
 
     this.info.buildInfoContent = function (props: any, type: any) {

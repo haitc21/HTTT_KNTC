@@ -6301,3 +6301,9 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 .tc{
   color:#ed5565;
 }
+
+.button-close{
+  color: #FFFFFF;
+  background: #ed5565;
+  border-radius: 5px;
+}

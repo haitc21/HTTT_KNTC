@@ -43,14 +43,54 @@ export interface GetSummaryListDto extends BaseListFilterDto {
 }
 
 export interface SummaryChartDto {
+  //landComplain
   landComplain: number;
+  landComplain_ChuaCoKQ: number;
+  landComplain_Dung: number;
+  landComplain_CoDungCoSai: number;
+  landComplain_Sai: number;
+  //enviromentComplain
   enviromentComplain: number;
+  enviromentComplain_ChuaCoKQ: number;
+  enviromentComplain_Dung: number;
+  enviromentComplain_CoDungCoSai: number;
+  enviromentComplain_Sai: number;
+  //waterComplain
   waterComplain: number;
+  waterComplain_ChuaCoKQ: number;
+  waterComplain_Dung: number;
+  waterComplain_CoDungCoSai: number;
+  waterComplain_Sai: number;
+  //mineralComplain
   mineralComplain: number;
+  mineralComplain_ChuaCoKQ: number;
+  mineralComplain_Dung: number;
+  mineralComplain_CoDungCoSai: number;
+  mineralComplain_Sai: number;
+  //landDenounce
   landDenounce: number;
+  landDenounce_ChuaCoKQ: number;
+  landDenounce_Dung: number;
+  landDenounce_CoDungCoSai: number;
+  landDenounce_Sai: number;
+  //enviromentDenounce
   enviromentDenounce: number;
+  enviromentDenounce_ChuaCoKQ: number;
+  enviromentDenounce_Dung: number;
+  enviromentDenounce_CoDungCoSai: number;
+  enviromentDenounce_Sai: number;
+  //waterDenounce
   waterDenounce: number;
+  waterDenounce_ChuaCoKQ: number;
+  waterDenounce_Dung: number;
+  waterDenounce_CoDungCoSai: number;
+  waterDenounce_Sai: number;
+  //mineralDenounce
   mineralDenounce: number;
+  mineralDenounce_ChuaCoKQ: number;
+  mineralDenounce_Dung: number;
+  mineralDenounce_CoDungCoSai: number;
+  mineralDenounce_Sai: number;
 }
 
 export interface SummaryDto {

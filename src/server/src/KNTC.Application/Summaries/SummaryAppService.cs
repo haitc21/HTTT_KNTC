@@ -298,15 +298,61 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     {
         var result = new SummaryChartDto();
 
-        result.LandComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai);
-        result.EnviromentComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong);
-        result.WaterComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc);
-        result.MineralComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan);
+        //LandComplain
+        result.LandComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai);        
+        result.LandComplain_Dung = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai && (x.KetQua == LoaiKetQua.Dung || x.KetQua2 == LoaiKetQua.Dung || x.KetQua1 == LoaiKetQua.Dung));
+        result.LandComplain_CoDungCoSai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai && (x.KetQua == LoaiKetQua.CoDungCoSai || x.KetQua2 == LoaiKetQua.CoDungCoSai || x.KetQua1 == LoaiKetQua.CoDungCoSai));
+        result.LandComplain_Sai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai && (x.KetQua == LoaiKetQua.Sai || x.KetQua2 == LoaiKetQua.Sai || x.KetQua1 == LoaiKetQua.Sai));
+        result.LandComplain_ChuaCoKQ = result.LandComplain - result.LandComplain_Dung - result.LandComplain_CoDungCoSai - result.LandComplain_Sai;
 
+        //EnviromentComplain
+        result.EnviromentComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong);
+        result.EnviromentComplain_Dung = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong && (x.KetQua == LoaiKetQua.Dung || x.KetQua2 == LoaiKetQua.Dung || x.KetQua1 == LoaiKetQua.Dung));
+        result.EnviromentComplain_CoDungCoSai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong && (x.KetQua == LoaiKetQua.CoDungCoSai || x.KetQua2 == LoaiKetQua.CoDungCoSai || x.KetQua1 == LoaiKetQua.CoDungCoSai));
+        result.EnviromentComplain_Sai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong && (x.KetQua == LoaiKetQua.Sai || x.KetQua2 == LoaiKetQua.Sai || x.KetQua1 == LoaiKetQua.Sai));
+        result.EnviromentComplain_ChuaCoKQ = result.EnviromentComplain - result.EnviromentComplain_Dung - result.EnviromentComplain_CoDungCoSai - result.EnviromentComplain_Sai;
+
+        //WaterComplain
+        result.WaterComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc);
+        result.WaterComplain_Dung = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc && (x.KetQua == LoaiKetQua.Dung || x.KetQua2 == LoaiKetQua.Dung || x.KetQua1 == LoaiKetQua.Dung));
+        result.WaterComplain_CoDungCoSai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc && (x.KetQua == LoaiKetQua.CoDungCoSai || x.KetQua2 == LoaiKetQua.CoDungCoSai || x.KetQua1 == LoaiKetQua.CoDungCoSai));
+        result.WaterComplain_Sai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc && (x.KetQua == LoaiKetQua.Sai || x.KetQua2 == LoaiKetQua.Sai || x.KetQua1 == LoaiKetQua.Sai));
+        result.WaterComplain_ChuaCoKQ = result.WaterComplain - result.WaterComplain_Dung - result.WaterComplain_CoDungCoSai - result.WaterComplain_Sai;
+
+        //MineralComplain
+        result.MineralComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan);
+        result.MineralComplain_Dung = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan && (x.KetQua == LoaiKetQua.Dung || x.KetQua2 == LoaiKetQua.Dung || x.KetQua1 == LoaiKetQua.Dung));
+        result.MineralComplain_CoDungCoSai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan && (x.KetQua == LoaiKetQua.CoDungCoSai || x.KetQua2 == LoaiKetQua.CoDungCoSai || x.KetQua1 == LoaiKetQua.CoDungCoSai));
+        result.MineralComplain_Sai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan && (x.KetQua == LoaiKetQua.Sai || x.KetQua2 == LoaiKetQua.Sai || x.KetQua1 == LoaiKetQua.Sai));
+        result.MineralComplain_ChuaCoKQ = result.MineralComplain - result.MineralComplain_Dung - result.MineralComplain_CoDungCoSai - result.MineralComplain_Sai;
+
+        //LandDenounce
         result.LandDenounce = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai);
+        result.LandDenounce_Dung = await _denounceRepo.CountAsync(x => (x.LinhVuc == LinhVuc.DatDai) && (x.KetQua == LoaiKetQua.Dung));
+        result.LandDenounce_CoDungCoSai = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai && (x.KetQua == LoaiKetQua.CoDungCoSai));
+        result.LandDenounce_Sai = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai && (x.KetQua == LoaiKetQua.Sai));
+        result.LandDenounce_ChuaCoKQ = result.LandDenounce - result.LandDenounce_Dung - result.LandDenounce_CoDungCoSai - result.LandDenounce_Sai;
+
+        //EnviromentDenounce
         result.EnviromentDenounce = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong);
+        result.EnviromentDenounce_Dung = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong && (x.KetQua == LoaiKetQua.Dung));
+        result.EnviromentDenounce_CoDungCoSai = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong && (x.KetQua == LoaiKetQua.CoDungCoSai));
+        result.EnviromentDenounce_Sai = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.MoiTruong && (x.KetQua == LoaiKetQua.Sai));
+        result.EnviromentDenounce_ChuaCoKQ = result.EnviromentDenounce - result.EnviromentDenounce_Dung - result.EnviromentDenounce_CoDungCoSai - result.EnviromentDenounce_Sai;
+
+        //WaterDenounce
         result.WaterDenounce = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc);
+        result.WaterDenounce_Dung = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc && (x.KetQua == LoaiKetQua.Dung));
+        result.WaterDenounce_CoDungCoSai = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc && (x.KetQua == LoaiKetQua.CoDungCoSai));
+        result.WaterDenounce_Sai = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.TaiNguyenNuoc && (x.KetQua == LoaiKetQua.Sai));
+        result.WaterDenounce_ChuaCoKQ = result.WaterDenounce - result.WaterDenounce_Dung - result.WaterDenounce_CoDungCoSai - result.WaterDenounce_Sai;
+
+        //MineralDenounce
         result.MineralDenounce = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan);
+        result.MineralDenounce_Dung = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan && (x.KetQua == LoaiKetQua.Dung));
+        result.MineralDenounce_CoDungCoSai = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan && (x.KetQua == LoaiKetQua.CoDungCoSai));
+        result.MineralDenounce_Sai = await _denounceRepo.CountAsync(x => x.LinhVuc == LinhVuc.KhoangSan && (x.KetQua == LoaiKetQua.Sai));
+        result.MineralDenounce_ChuaCoKQ = result.MineralDenounce - result.MineralDenounce_Dung - result.MineralDenounce_CoDungCoSai - result.MineralDenounce_Sai;
 
         return result;
     }

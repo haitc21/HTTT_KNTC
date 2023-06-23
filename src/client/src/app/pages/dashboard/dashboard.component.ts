@@ -1,26 +1,21 @@
-import { ListResultDto, PagedResultDto } from '@abp/ng.core';
+import { PagedResultDto } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
+import { SpatialDataDto, SpatialDataService } from '@proxy/spatial-datas';
 import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
-import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
 import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryChartDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
-import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
-import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 import { DialogService } from 'primeng/dynamicdialog';
 import { NotificationService } from 'src/app/shared/services/notification.service';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
-
+import {Chart} from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -138,10 +133,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.buildBreadcumb();
     //this.mockData = this.mockService.mockData();
-    this.loadOptions();
-    this.loadGeo();
+    //this.loadGeo();
     this.loadData(true);
   }
+
   private buildBreadcumb() {
     this.breadcrumb = [{ label: 'Dash Board' }];
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
@@ -154,7 +149,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private getDataChart() {
+    Chart.register(ChartDataLabels);
     this.layoutService.blockUI$.next(true);
+
     this.summaryService
       .getChart()
       .pipe(takeUntil(this.ngUnsubscribe))
@@ -217,194 +214,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  // private getDataTable() {
-  //   this.layoutService.blockUI$.next(true);
-  //   this.filter = {
-  //     skipCount: this.skipCount,
-  //     maxResultCount: this.maxResultCount,
-  //     keyword: this.keyword,
-
-  //     landComplain: this.landComplain,
-  //     enviromentComplain: this.enviromentComplain,
-  //     waterComplain: this.waterComplain,
-  //     mineralComplain: this.mineralComplain,
-  //     landDenounce: this.landDenounce,
-  //     enviromentDenounce: this.enviromentDenounce,
-  //     waterDenounce: this.waterDenounce,
-  //     mineralDenounce: this.mineralDenounce,
-
-  //     maTinhTP: this.maTinh,
-  //     maQuanHuyen: this.maHuyen,
-  //     maXaPhuongTT: this.maXa,
-  //     fromDate:
-  //       this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-  //         ? this.thoiGianTiepNhanRange[0].toUTCString()
-  //         : null,
-  //     toDate:
-  //       this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-  //         ? this.thoiGianTiepNhanRange[1].toUTCString()
-  //         : null,
-  //     ketQua: this.tinhTrang,
-  //     congKhai: this.hasLoggedIn ? this.congKhai : true,
-  //   } as GetSummaryListDto;
-  //   this.summaryService
-  //     .getList(this.filter)
-  //     .pipe(takeUntil(this.ngUnsubscribe))
-  //     .subscribe({
-  //       next: (res: PagedResultDto<SummaryDto>) => {
-  //         this.items = res.items;
-  //         this.totalCount = res.totalCount;
-  //         this.layoutService.blockUI$.next(false);
-  //       },
-  //       error: () => {
-  //         this.layoutService.blockUI$.next(false);
-  //       },
-  //     });
-  // }
-
-  loadGeo() {
-    if (this.geo) {
-      this.layoutService.blockUI$.next(true);
-      let filter = {
-        skipCount: this.skipCount,
-        maxResultCount: this.maxResultCount,
-        keyword: this.keyword,
-      } as GetSpatialDataListDto;
-      //this.spatialData
-      this.spatialDataService
-        .getList(filter)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<SpatialDataDto>) => {
-            this.spatialData = res.items; //.map(item => item.geoJson);
-
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );
-    }
-  }
-
-  exportExcel() {
-    this.layoutService.blockUI$.next(true);
-    this.filter = {
-      skipCount: this.skipCount,
-      maxResultCount: this.maxResultCount,
-      keyword: this.keyword,
-
-      landComplain: this.landComplain,
-      enviromentComplain: this.enviromentComplain,
-      waterComplain: this.waterComplain,
-      mineralComplain: this.mineralComplain,
-      landDenounce: this.landDenounce,
-      enviromentDenounce: this.enviromentDenounce,
-      waterDenounce: this.waterDenounce,
-      mineralDenounce: this.mineralDenounce,
-
-      maTinhTP: this.maTinh,
-      maQuanHuyen: this.maHuyen,
-      maXaPhuongTT: this.maXa,
-      fromDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
-      toDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-          ? this.thoiGianTiepNhanRange[1].toUTCString()
-          : null,
-      ketQua: this.tinhTrang,
-      congKhai: this.hasLoggedIn ? this.congKhai : true,
-    } as GetSummaryListDto;
-
-    this.summaryService
-      .getExcel(this.filter)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        (data: any) => {
-          if (data) {
-            let fileName =
-              this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +
-              '_Khiếu nại Tố cáo.xlsx';
-            const uint8Array = this.utilService.saveFile(data, TYPE_EXCEL, fileName);
-          }
-          this.layoutService.blockUI$.next(false);
-        },
-        () => {
-          this.layoutService.blockUI$.next(false);
-        }
-      );
-  }
-
-  loadOptions() {
-    this.layoutService.blockUI$.next(true);
-    this.unitService
-      .getLookup(1)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        (res: ListResultDto<UnitLookupDto>) => {
-          this.tinhOptions = res.items;
-          this.layoutService.blockUI$.next(false);
-        },
-        () => {
-          this.layoutService.blockUI$.next(false);
-        }
-      );
-  }
-
-  tinhChange(event) {
-    this.loadData();
-    if (event.value) {
-      this.layoutService.blockUI$.next(true);
-      this.unitService
-        .getLookup(2, event.value)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.huyenOptions = res.items;
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );
-    } else this.huyenOptions = [];
-  }
-
-  viewDetail(row) {
-    if (!row) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
-      return;
-    }
-    if (row.loaiVuViec == LoaiVuViec.KhieuNai) {
-      const ref = this.dialogService.open(ComplainDetailComponent, {
-        height: '80vh',
-        data: {
-          id: row.id,
-          loaiVuViec: LoaiVuViec.KhieuNai,
-          linhVuc: row.linhVuc,
-          mode: 'view',
-        },
-        header: `Chi tiết khiếu nại/khiếu kiện "${row.tieuDe}"`,
-        width: DIALOG_BG,
-      });
-    }
-    if (row.loaiVuViec == LoaiVuViec.ToCao) {
-      const ref = this.dialogService.open(DenounceDetailComponent, {
-        height: '80vh',
-        data: {
-          id: row.id,
-          loaiVuViec: LoaiVuViec.ToCao,
-          linhVuc: row.linhVuc,
-          mode: 'view',
-        },
-        header: `Chi tiết đơn tố cáo "${row.tieuDe}"`,
-        width: DIALOG_BG,
-      });
-    }
-  }
-
   private buildBarChart() {
     this.dataBarChart = {
       labels: [
@@ -419,18 +228,67 @@ export class DashboardComponent implements OnInit, OnDestroy {
       ],
       datasets: [
         {
-          label: 'Hồ sơ',
-          backgroundColor: '#2196f3',
+          type: 'bar',
+          label: 'Chưa có KQ',
+          backgroundColor: '#3b82f6',
           data: [
-            this.dataChart.landComplain,
-            this.dataChart.enviromentComplain,
-            this.dataChart.waterComplain,
-            this.dataChart.mineralComplain,
+            this.dataChart.landComplain_ChuaCoKQ,
+            this.dataChart.enviromentComplain_ChuaCoKQ,
+            this.dataChart.waterComplain_ChuaCoKQ,
+            this.dataChart.mineralComplain_ChuaCoKQ,
 
-            this.dataChart.landDenounce,
-            this.dataChart.enviromentDenounce,
-            this.dataChart.waterDenounce,
-            this.dataChart.mineralDenounce,
+            this.dataChart.landDenounce_ChuaCoKQ,
+            this.dataChart.enviromentDenounce_ChuaCoKQ,
+            this.dataChart.waterDenounce_ChuaCoKQ,
+            this.dataChart.mineralDenounce_ChuaCoKQ,
+          ],
+        },
+        {
+          type: 'bar',
+          label: 'Đúng',
+          backgroundColor: '#ff3d32',
+          data: [
+            this.dataChart.landComplain_Dung,
+            this.dataChart.enviromentComplain_Dung,
+            this.dataChart.waterComplain_Dung,
+            this.dataChart.mineralComplain_Dung,
+
+            this.dataChart.landDenounce_Dung,
+            this.dataChart.enviromentDenounce_Dung,
+            this.dataChart.waterDenounce_Dung,
+            this.dataChart.mineralDenounce_Dung,
+          ],
+        },
+        {
+          type: 'bar',
+          label: 'Có Đúng/Có Sai',
+          backgroundColor: '#f97316',
+          data: [
+            this.dataChart.landComplain_CoDungCoSai,
+            this.dataChart.enviromentComplain_CoDungCoSai,
+            this.dataChart.waterComplain_CoDungCoSai,
+            this.dataChart.mineralComplain_CoDungCoSai,
+
+            this.dataChart.landDenounce_CoDungCoSai,
+            this.dataChart.enviromentDenounce_CoDungCoSai,
+            this.dataChart.waterDenounce_CoDungCoSai,
+            this.dataChart.mineralDenounce_CoDungCoSai,
+          ],
+        },
+        {
+          type: 'bar',
+          label: 'Sai',
+          backgroundColor: '#22c55e',
+          data: [
+            this.dataChart.landComplain_Sai,
+            this.dataChart.enviromentComplain_Sai,
+            this.dataChart.waterComplain_Sai,
+            this.dataChart.mineralComplain_Sai,
+
+            this.dataChart.landDenounce_Sai,
+            this.dataChart.enviromentDenounce_Sai,
+            this.dataChart.waterDenounce_Sai,
+            this.dataChart.mineralDenounce_Sai,
           ],
         },
       ],
@@ -444,9 +302,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
             color: '#495057',
           },
         },
+        // Change options for ALL labels of THIS CHART
+        datalabels: {
+          color: '#000000',
+          font: {
+            size: 14,
+          }
+        }
       },
       scales: {
         x: {
+          stacked: true,
           ticks: {
             color: '#495057',
           },
@@ -455,6 +321,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           },
         },
         y: {
+          stacked: true,
           ticks: {
             color: '#495057',
           },
@@ -484,37 +351,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
   }
 
-  huyenChange(event) {
-    this.loadData();
-    if (event.value) {
-      this.layoutService.blockUI$.next(true);
-      this.unitService
-        .getLookup(3, event.value)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.xaOptions = res.items;
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );
-    } else this.xaOptions = [];
-  }
-
-  thoiGiantiepNhanChange() {
-    if (this.thoiGianTiepNhanRange == null || this.thoiGianTiepNhanRange[1]) {
-      this.loadData();
-    }
-  }
-
-  pageChanged(event: any): void {
-    this.skipCount = event.page * this.maxResultCount;
-    this.maxResultCount = event.rows;
-    // this.getDataTable();
-  }
-
   toggleMenuLeft() {
     this.visibleFilterLeff = !this.visibleFilterLeff;
     if (!this.visibleFilterLeff) {
@@ -523,41 +359,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } else {
       this.hideColumnState = 'visible';
       this.expandColumnState = 'normal';
-    }
-  }
-  getLoaiKetQua(kq: any): string {
-    if (!kq) return 'Chưa có KQ';
-    return this.loaiKQOptions.find(x => x.value == kq).text;
-  }
-
-  getLoaiVuViecName(loaiVuViec: LoaiVuViec) {
-    switch (loaiVuViec) {
-      case LoaiVuViec.KhieuNai:
-        return 'Khiếu nại/Khiếu kiện';
-        break;
-      case LoaiVuViec.ToCao:
-        return 'Tố cáo';
-        break;
-      default:
-        return '';
-    }
-  }
-  getLinhVucName(linhVuc: LinhVuc) {
-    switch (linhVuc) {
-      case LinhVuc.DatDai:
-        return 'Đất đai';
-        break;
-      case LinhVuc.MoiTruong:
-        return 'Môi trường';
-        break;
-      case LinhVuc.TaiNguyenNuoc:
-        return 'Tài nguyên nước';
-        break;
-      case LinhVuc.KhoangSan:
-        return 'Khoáng sản';
-        break;
-      default:
-        return '';
     }
   }
 
