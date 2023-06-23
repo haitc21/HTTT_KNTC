@@ -33,6 +33,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                string nguoiNopDon)
     {
         keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(
@@ -101,6 +102,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                    string nguoiNopDon)
     {                                            
         keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(

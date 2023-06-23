@@ -5,7 +5,7 @@ namespace KNTC.Denounces;
 public class DenounceExcelDto
 {
     public string MaHoSo { get; set; }
-    public string NguoiToCao { get; set; }
+    public string NguoiNopDon { get; set; }
     public string DienThoai { get; set; }
     public string DiaChiLienHe { get; set; }
     public string NguoiBiToCao { get; set; }

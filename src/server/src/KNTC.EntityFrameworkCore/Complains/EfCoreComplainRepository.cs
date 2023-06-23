@@ -37,7 +37,8 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                bool? congKhai,
                                                string nguoiNopDon)
     {
-        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";     
+        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(
@@ -112,7 +113,8 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                bool? CongKhai,
                                                string nguoiNopDon)
     {
-        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";   
+        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(
