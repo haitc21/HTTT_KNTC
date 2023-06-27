@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
-using KNTC.Configs;
+using KNTC.SysConfigs;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.Extenssions;
@@ -77,9 +77,9 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<UnitType, UnitTypeLookupDto>();
         CreateMap<CreateAndUpdateUnitTypeDto, UnitType>();
 
-        CreateMap<Config, ConfigDto>();
-        CreateMap<Config, ConfigLookupDto>();
-        CreateMap<CreateAndUpdateConfigDto, Config>();
+        CreateMap<SysConfig, SysConfigDto>();
+        CreateMap<CreateSysConfigDto, SysConfig>();
+        CreateMap<UpdateSysConfigDto, SysConfig>();
 
         CreateMap<SpatialData, SpatialDataDto>();
         CreateMap<SpatialData, SpatialDataLookupDto>();

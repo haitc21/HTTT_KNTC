@@ -55,10 +55,10 @@
     "Permission:GeoServerGr": "Quản lý bản đồ quy hoạch",
     "Permission:GeoServesrs": "Quản lý bản đồ quy hoạch",
     // Config
-    "Permission:ConfigGr": "Cấu hình hệ thống",
-    "Permission:Configs": "Cấu hình hệ thống",
-    "Permission:Configs.Create": "Thêm cấu hình hệ thống",
-    "Permission:Configs.Edit": "Sửa cấu hình hệ thống",
-    "Permission:Configs.Delete": "Xóa cấu hình hệ thống"
+    "Permission:SysConfigGr": "Cấu hình hệ thống",
+    "Permission:SysConfigs": "Cấu hình hệ thống",
+    "Permission:SysConfigs.Create": "Thêm cấu hình hệ thống",
+    "Permission:SysConfigs.Edit": "Sửa cấu hình hệ thống",
+    "Permission:SysConfigs.Delete": "Xóa cấu hình hệ thống"
   }
 }

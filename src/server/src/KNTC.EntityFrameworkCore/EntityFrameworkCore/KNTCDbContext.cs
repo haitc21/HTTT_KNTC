@@ -1,6 +1,6 @@
 ﻿using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
-using KNTC.Configs;
+using KNTC.SysConfigs;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
@@ -60,7 +60,7 @@ public class KNTCDbContext :
     public DbSet<LandType> LandTypes { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<UnitType> UnitTypes { get; set; }
-    public DbSet<Config> Configs { get; set; }
+    public DbSet<SysConfig> SysConfigs { get; set; }
     public DbSet<SpatialData> SpatialDatas { get; set; }
 
     public KNTCDbContext(DbContextOptions<KNTCDbContext> options)
@@ -310,18 +310,14 @@ public class KNTCDbContext :
              .OnDelete(DeleteBehavior.Restrict);
         });
 
-        builder.Entity<Config>(b =>
+        builder.Entity<SysConfig>(b =>
         {
-            b.ToTable("Configs", KNTCConsts.KNTCDbSchema);
+            b.ToTable(KNTCConsts.DbTablePrefix + "SysConfigs");
+            b.HasIndex(x => x.Name);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(p => p.Id).ValueGeneratedOnAdd();
-            b.Property(x => x.OrganizationCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
-            b.Property(x => x.OrganizationName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
-            b.Property(x => x.ToaDo);
-            b.Property(x => x.Tel);
-            b.Property(x => x.Address).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
+            b.Property(x => x.Name).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
-            b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
         });
 
         builder.Entity<SpatialData>(b =>

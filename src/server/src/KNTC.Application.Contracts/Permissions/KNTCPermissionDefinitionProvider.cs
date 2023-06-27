@@ -48,11 +48,11 @@ public class KNTCPermissionDefinitionProvider : PermissionDefinitionProvider
         var geoServerPermission = geoServerGroup.AddPermission(KNTCPermissions.GeoServerPermission.Default, L("Permission:GeoServesrs"));
 
 
-        var configGroup = context.AddGroup(KNTCPermissions.ConfigGroupName, L("Permission:ConfigGr"));
-        var configPermission = configGroup.AddPermission(KNTCPermissions.ConfigsPermission.Default, L("Permission:Cònigs"));
-        configPermission.AddChild(KNTCPermissions.ConfigsPermission.Create, L("Permission:Cònigs.Create"));
-        configPermission.AddChild(KNTCPermissions.ConfigsPermission.Edit, L("Permission:Cònigs.Edit"));
-        configPermission.AddChild(KNTCPermissions.ConfigsPermission.Delete, L("Permission:Cònigs.Delete"));
+        var configGroup = context.AddGroup(KNTCPermissions.SysConfigGroupName, L("Permission:SAysConfigGr"));
+        var configPermission = configGroup.AddPermission(KNTCPermissions.SysConfigsPermission.Default, L("Permission:SysConfigs"));
+        configPermission.AddChild(KNTCPermissions.SysConfigsPermission.Create, L("Permission:SysConfigs.Create"));
+        configPermission.AddChild(KNTCPermissions.SysConfigsPermission.Edit, L("Permission:SysConfigs.Edit"));
+        configPermission.AddChild(KNTCPermissions.SysConfigsPermission.Delete, L("Permission:SysConfigs.Delete"));
     }
 
     private static LocalizableString L(string name)
