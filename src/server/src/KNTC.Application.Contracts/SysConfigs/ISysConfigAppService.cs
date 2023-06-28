@@ -12,5 +12,6 @@ public interface ISysConfigAppService :
         CreateSysConfigDto,
         UpdateSysConfigDto>
 {
+    Task<SysConfigCacheItem> GetByNameAsync(string name);
     Task DeleteMultipleAsync(IEnumerable<int> ids);
 }
