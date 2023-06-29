@@ -2,16 +2,10 @@ import { PagedResultDto } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { SpatialDataDto, SpatialDataService } from '@proxy/spatial-datas';
 import { Subject, takeUntil } from 'rxjs';
-import { UtilityService } from 'src/app/shared/services/utility.service';
-import { UnitService } from '@proxy/units';
-import { UnitLookupDto } from '@proxy/units/models';
 import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryChartDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
-import { DialogService } from 'primeng/dynamicdialog';
-import { NotificationService } from 'src/app/shared/services/notification.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
 import {Chart} from 'chart.js';
@@ -67,7 +61,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   blockedPanel = false;
   // items: SummaryDto[] = [];
   dataMap: SummaryDto[] = [];
-  spatialData: SpatialDataDto[];
 
   //Paging variables
   public skipCount: number = 0;
@@ -75,10 +68,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public totalCount: number;
 
   // filter
-  geo = true;
-  //filter: GetSpatialDataListDto;
-  //filter: GetComplainListDto;
-
   landComplain = true;
   enviromentComplain = true;
   waterComplain = true;
@@ -97,11 +86,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   thoiGianTiepNhanRange: Date[];
   tinhTrang: number;
 
-  // option
-  tinhOptions: UnitLookupDto[] = [];
-  huyenOptions: UnitLookupDto[] = [];
-  xaOptions: UnitLookupDto[] = [];
-
   loaiKQOptions = loaiKQOptions;
   congKhaiOptions = congKhaiOptions;
   // ẩn hiện menu trái
@@ -110,8 +94,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   expandColumnState = 'normal';
 
   // Chart
-  dataPieChart: any;
-  pieChartOptions: any;
+  dataPieChart_KN: any;
+  pieChartOptions_KN: any;
+  dataPieChart_TC: any;
+  pieChartOptions_TC: any;
+
   dataBarChart: any;
   barChartOptions: any;
 
@@ -121,12 +108,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     public layoutService: LayoutService,
-    private dialogService: DialogService,
-    private notificationService: NotificationService,
     private oAuthService: OAuthService,
-    private spatialDataService: SpatialDataService,
-    private unitService: UnitService,
-    private utilService: UtilityService,
     private summaryService: SummaryService
   ) {}
 
@@ -158,8 +140,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: SummaryChartDto) => {
           this.dataChart = res;
-          this.buildBarChart();
           this.buildPieChart();
+
+          this.buildBarChart();
+          
           this.layoutService.blockUI$.next(false);
         },
         error: () => {
@@ -213,6 +197,96 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
       });
   }
+
+  
+  buildPieChart() {
+    this.dataPieChart_KN = {
+      labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
+      datasets: [
+        {
+          data: [
+            this.dataChart.landComplain,
+            this.dataChart.enviromentComplain,
+            this.dataChart.waterComplain,
+            this.dataChart.mineralComplain,
+          ],
+          backgroundColor: ['#2196f3', '#fccc55', '#6ebe71', '#f9ae61'],
+          hoverBackgroundColor: ['#1c80cf', '#d5a326', '#419544', '#f79530'],
+        },
+      ],
+    };
+
+    this.pieChartOptions_KN = {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Khiếu nại',
+          font:{
+            size: 16,
+            weight: 'bold'
+          }
+        },
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+          labels: {
+            color: '#495057',
+          },
+        },
+        // Change options for ALL labels of THIS CHART
+        datalabels: {
+          color: '#000000',
+          font: {
+            size: 14,
+          }
+        }
+      }
+    };
+
+    this.dataPieChart_TC = {
+      labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
+      datasets: [
+        {
+          data: [            
+            this.dataChart.landDenounce,
+            this.dataChart.enviromentDenounce,
+            this.dataChart.waterDenounce,
+            this.dataChart.mineralDenounce,
+          ],
+          backgroundColor: ['#2196f3', '#fccc55', '#6ebe71', '#f9ae61'],
+          hoverBackgroundColor: ['#1c80cf', '#d5a326', '#419544', '#f79530'],
+        },
+      ],
+    };
+
+    this.pieChartOptions_TC = {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Tố cáo',
+          font:{
+            size: 16,
+            weight: 'bold'
+          }
+        },
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+          labels: {
+            color: '#495057',
+          },
+        },
+        // Change options for ALL labels of THIS CHART
+        datalabels: {
+          color: '#000000',
+          font: {
+            size: 14,
+          }
+        }
+      }
+    };
+  }
+
 
   private buildBarChart() {
     this.dataBarChart = {
@@ -330,24 +404,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           },
         },
       },
-    };
-  }
-
-  buildPieChart() {
-    this.dataPieChart = {
-      labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
-      datasets: [
-        {
-          data: [
-            this.dataChart.landComplain + this.dataChart.landDenounce,
-            this.dataChart.enviromentComplain + this.dataChart.enviromentDenounce,
-            this.dataChart.waterComplain + this.dataChart.waterDenounce,
-            this.dataChart.mineralComplain + this.dataChart.mineralDenounce,
-          ],
-          backgroundColor: ['#2196f3', '#fccc55', '#6ebe71', '#f9ae61'],
-          hoverBackgroundColor: ['#1c80cf', '#d5a326', '#419544', '#f79530'],
-        },
-      ],
     };
   }
 

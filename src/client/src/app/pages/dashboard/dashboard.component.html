@@ -94,9 +94,15 @@
               <div class="flex justify-content-center">
                 <p-chart
                   type="pie"
-                  [data]="dataPieChart"
-                  [options]="pieChartOptions"
-                  [style]="{ width: '60%' }"
+                  [data]="dataPieChart_KN"
+                  [options]="pieChartOptions_KN"
+                  [style]="{ width: '50%' }"
+                ></p-chart>
+                <p-chart
+                  type="pie"
+                  [data]="dataPieChart_TC"
+                  [options]="pieChartOptions_TC"
+                  [style]="{ width: '50%' }"
                 ></p-chart>
               </div>
             </p-card>
