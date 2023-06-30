@@ -183,7 +183,7 @@ export class AppTopBarComponent implements OnInit {
         items: [
           {
             label: 'Cấu hình hệ thống',
-            routerLink: ['/system/config'],
+            routerLink: ['/system/sys-config'],
             visible: this.permissionService.getGrantedPolicy('SysConfigs'),
           },
           {

@@ -1,23 +1,23 @@
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RoleDto, RolesService } from '@proxy/roles';
+import { SysConfigDto, SysConfigService } from '@proxy/sys-configs';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { PermissionGrantComponent } from '../permission-grant/permission-grant.component';
-import { RoleDetailComponent } from './detail/role-detail.component';
+import { SysConfigDetailComponent } from './detail/sys-config-detail.component';
 import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
 import { ROLE_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
 import { Actions } from 'src/app/shared/enums/actions.enum';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
-  selector: 'app-role',
-  templateUrl: './role.component.html',
+  selector: 'app-sys-config',
+  templateUrl: './sys-config.component.html',
 })
-export class RoleComponent implements OnInit, OnDestroy {
+export class SysConfigComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   public blockedPanel: boolean = false;
@@ -31,20 +31,19 @@ export class RoleComponent implements OnInit, OnDestroy {
   Actions = Actions;
 
   //Business variables
-  public items: RoleDto[];
-  public selectedItems: RoleDto[] = [];
-  actionItem: RoleDto;
+  public items: SysConfigDto[];
+  public selectedItems: SysConfigDto[] = [];
+  actionItem: SysConfigDto;
   public keyword: string = '';
 
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
-  hasPermissionManagementPermionsion = false;
   visibleActionColumn = false;
   actionMenu: MenuItem[];
 
   constructor(
     public layoutService: LayoutService,
-    private roleService: RolesService,
+    private sysConfigService: SysConfigService,
     public dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
@@ -55,37 +54,31 @@ export class RoleComponent implements OnInit, OnDestroy {
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
     this.breadcrumb = [{ label: ' Quản trị hệ thống', icon: 'pi pi-cog', disabled: true }];
     this.breadcrumb.push({
-      label: ' Quản lý vai trò',
-      icon: 'pi pi-id-card',
+      label: ' Cấu hình hệ thống',
+      icon: 'pi pi-id-cog',
     });
     this.getPermission();
     this.buildActionMenu();
     this.loadData();
   }
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('AbpIdentity.Roles.Update');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('AbpIdentity.Roles.Delete');
-    this.hasPermissionManagementPermionsion = this.permissionService.getGrantedPolicy(
-      'AbpIdentity.Roles.ManagePermissions'
-    );
-    this.visibleActionColumn =
-      this.hasPermissionUpdate ||
-      this.hasPermissionDelete ||
-      this.hasPermissionManagementPermionsion;
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('SysConfigs.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('SysConfigs.Delete');
+    this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 
   loadData() {
     this.layoutService.blockUI$.next(true);
 
-    this.roleService
-      .getListFilter({
+    this.sysConfigService
+      .getList({
         maxResultCount: this.maxResultCount,
         skipCount: this.skipCount,
         keyword: this.keyword,
       })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: PagedResultDto<RoleDto>) => {
+        next: (response: PagedResultDto<SysConfigDto>) => {
           this.items = response.items;
           this.totalCount = response.totalCount;
           this.layoutService.blockUI$.next(false);
@@ -97,12 +90,12 @@ export class RoleComponent implements OnInit, OnDestroy {
   }
 
   showAddModal() {
-    const ref = this.dialogService.open(RoleDetailComponent, {
-      header: 'Thêm vai trò',
+    const ref = this.dialogService.open(SysConfigDetailComponent, {
+      header: 'Thêm cấu hình',
       width: DIALOG_SM,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: RoleDto) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: SysConfigDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.selectedItems = [];
@@ -122,37 +115,15 @@ export class RoleComponent implements OnInit, OnDestroy {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    const ref = this.dialogService.open(RoleDetailComponent, {
+    const ref = this.dialogService.open(SysConfigDetailComponent, {
       data: {
         id: row.id,
       },
-      header: `Cập nhật vai trò '${row.name}'`,
+      header: `Cập nhật cấu hình '${row.name}'`,
       width: DIALOG_SM,
     });
 
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: RoleDto) => {
-      if (data) {
-        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
-        this.selectedItems = [];
-        this.loadData();
-      }
-    });
-  }
-  showPermissionModal(row) {
-    if (!row) {
-      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
-      return;
-    }
-    const ref = this.dialogService.open(PermissionGrantComponent, {
-      data: {
-        providerKey: row.name,
-        providerName: ROLE_PROVIDER,
-      },
-      header: `Phân quyền cho vai trò '${row.name}'`,
-      width: DIALOG_SM,
-    });
-
-    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: any) => {
+    ref.onClose.pipe(takeUntil(this.ngUnsubscribe)).subscribe((data: SysConfigDto) => {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
@@ -179,7 +150,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   deleteItemsConfirm(ids: any[]) {
     this.layoutService.blockUI$.next(true);
 
-    this.roleService
+    this.sysConfigService
       .deleteMultiple(ids)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -210,7 +181,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   deleteRowConfirm(id) {
     this.layoutService.blockUI$.next(true);
 
-    this.roleService
+    this.sysConfigService
       .delete(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
@@ -240,15 +211,6 @@ export class RoleComponent implements OnInit, OnDestroy {
         visible: this.hasPermissionUpdate,
       },
       {
-        label: this.Actions.MANAGE_PERMISSIONS,
-        icon: 'pi pi-fw pi-wrench',
-        command: event => {
-          this.showPermissionModal(this.actionItem);
-          this.actionItem = null;
-        },
-        visible: this.hasPermissionManagementPermionsion,
-      },
-      {
         label: this.Actions.DELETE,
         icon: 'pi pi-fw pi-trash',
         command: event => {
@@ -258,7 +220,8 @@ export class RoleComponent implements OnInit, OnDestroy {
         visible: this.hasPermissionDelete,
       },
     ];
-  } ngOnDestroy(): void {
+  }
+  ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

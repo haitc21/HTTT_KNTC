@@ -62,6 +62,10 @@ public class SysConfigAppService : CrudAppService<
     [Authorize(KNTCPermissions.SysConfigsPermission.Default)]
     public override async Task<PagedResultDto<SysConfigDto>> GetListAsync(GetSysConfigListDto input)
     {
+        if (input.Sorting.IsNullOrEmpty())
+        {
+            input.Sorting = $"{nameof(SysConfig.Name)}";
+        }
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 

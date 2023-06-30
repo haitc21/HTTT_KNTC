@@ -7,6 +7,7 @@ import { DocumentTypeComponent } from './document-type/document-type.component';
 import { LandTypeComponent } from './land-type/land-type.component';
 import { UnitTypeComponent } from './unit-type/unit-type.component';
 import { UnitComponent } from './unit/unit.component';
+import { SysConfigComponent } from './sys-config/sys-config.component';
 
 const routes: Routes = [
   {
@@ -56,6 +57,14 @@ const routes: Routes = [
     canActivate: [PermissionGuard],
     data: {
       requiredPolicy: 'Units',
+    },
+  },
+  {
+    path: 'sys-config',
+    component: SysConfigComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      requiredPolicy: 'SysConfigs',
     },
   },
 ];
