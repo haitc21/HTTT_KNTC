@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, isDevMode } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -17,13 +17,17 @@ import { SetPasswordComponent } from 'src/app/system/user/set-password/set-passw
 import { LinhVuc } from '@proxy';
 import { environment } from 'src/environments/environment';
 import { environment as environmentProd } from 'src/environments/environment.prod';
+import { GetSysConfigService } from 'src/app/shared/services/sysconfig.services';
+import { Subject, takeUntil } from 'rxjs';
+import { SysConfigConsts } from 'src/app/shared/constants/sys-config.consts';
 
 @Component({
   selector: 'app-topbar',
   templateUrl: './app.topbar.component.html',
   styleUrls: ['./app.topbar.component.scss'],
 })
-export class AppTopBarComponent implements OnInit {
+export class AppTopBarComponent implements OnInit, OnDestroy {
+  private ngUnsubscribe = new Subject<void>();
   items!: MenuItem[];
   userMenuItems: MenuItem[];
   systemMenuItems: MenuItem[];
@@ -38,6 +42,7 @@ export class AppTopBarComponent implements OnInit {
   userId = '';
   avatarUrl: any;
   geoserverUrl: string;
+  title: string;
 
   get isAutenticated() {
     return this.oAuthService.hasValidAccessToken();
@@ -51,12 +56,15 @@ export class AppTopBarComponent implements OnInit {
     private fileService: FileService,
     private notificationService: NotificationService,
     public dialogService: DialogService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private sysConfigService: GetSysConfigService
   ) {}
   ngOnInit(): void {
-    this.geoserverUrl = isDevMode()
-      ? environment.apis.geoserver.url
-      : environmentProd.apis.geoserver.url;
+    this.getTitles();
+    // this.geoserverUrl = isDevMode()
+    //   ? environment.apis.geoserver.url
+    //   : environmentProd.apis.geoserver.url;
+    this.getGepServerDomain();
     if (this.isAutenticated) {
       const accessToken = this.oAuthService.getAccessToken();
       let decodedAccessToken = atob(accessToken.split('.')[1]);
@@ -71,6 +79,37 @@ export class AppTopBarComponent implements OnInit {
     this.initMenu();
     this.initMenuUser();
     this.initMenuSystem();
+  }
+
+  getGepServerDomain(){
+    this.layoutService.blockUI$.next(true);
+    this.sysConfigService
+      .getSysConfig(SysConfigConsts.GEOSERVER_DOMAIN)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        data => {
+          this.geoserverUrl = data.value;
+          this.layoutService.blockUI$.next(false);
+        },
+        err => {
+          this.layoutService.blockUI$.next(false);
+        }
+      );
+  }
+  getTitles() {
+    this.layoutService.blockUI$.next(true);
+    this.sysConfigService
+      .getSysConfig(SysConfigConsts.TITLE)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        data => {
+          this.title = data.value;
+          this.layoutService.blockUI$.next(false);
+        },
+        err => {
+          this.layoutService.blockUI$.next(false);
+        }
+      );
   }
   initMenuUser() {
     this.userMenuItems = [
@@ -240,12 +279,15 @@ export class AppTopBarComponent implements OnInit {
     this.router.navigate([LOGIN_URL, this.router.url]);
   }
   getAvatar() {
-    this.fileService.getAvatar(this.userId).subscribe(data => {
-      if (data) {
-        let objectURL = 'data:image/png;base64,' + data;
-        this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-      }
-    });
+    this.fileService
+      .getAvatar(this.userId)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(data => {
+        if (data) {
+          let objectURL = 'data:image/png;base64,' + data;
+          this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        }
+      });
   }
   profileModal() {
     if (!this.userId) {
@@ -278,5 +320,9 @@ export class AppTopBarComponent implements OnInit {
       header: `Đặt lại mật khẩu`,
       width: DIALOG_SM,
     });
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
