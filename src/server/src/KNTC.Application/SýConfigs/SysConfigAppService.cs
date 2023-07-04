@@ -42,7 +42,7 @@ public class SysConfigAppService : CrudAppService<
         _configManager = configManager;
         _cache = cache;
     }
-
+    [AllowAnonymous]
     public async Task<SysConfigCacheItem> GetByNameAsync(string name)
     {
         var cacheItem = await _cache.GetOrAddAsync(
