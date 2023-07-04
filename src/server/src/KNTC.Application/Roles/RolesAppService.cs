@@ -14,6 +14,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SimpleStateChecking;
 
@@ -21,7 +22,7 @@ namespace KNTC.Roles;
 
 [Authorize(IdentityPermissions.Roles.Default)]
 public class RolesAppService : CrudAppService<
-    IdentityRole,
+    Volo.Abp.Identity.IdentityRole,
     RoleDto,
     Guid,
     PagedResultRequestDto,
@@ -36,7 +37,7 @@ public class RolesAppService : CrudAppService<
 
     protected IdentityUserManager UserManager { get; }
 
-    public RolesAppService(IRepository<IdentityRole, Guid> repository,
+    public RolesAppService(IRepository<Volo.Abp.Identity.IdentityRole, Guid> repository,
         IdentityRoleManager roleManager,
         IPermissionManager permissionManager,
         IPermissionDefinitionManager permissionDefinitionManager,
@@ -73,7 +74,7 @@ public class RolesAppService : CrudAppService<
         var query = await Repository.GetQueryableAsync();
         var data = await AsyncExecuter.ToListAsync(query);
 
-        return ObjectMapper.Map<List<IdentityRole>, List<RoleDto>>(data);
+        return ObjectMapper.Map<List<Volo.Abp.Identity.IdentityRole>, List<RoleDto>>(data);
     }
 
     public async Task<ListResultDto<RoleLookupDto>> GetRoleLookupAsync()
@@ -81,7 +82,7 @@ public class RolesAppService : CrudAppService<
         var query = await Repository.GetQueryableAsync();
         var data = await AsyncExecuter.ToListAsync(query);
         return new ListResultDto<RoleLookupDto>(
-            ObjectMapper.Map<List<IdentityRole>, List<RoleLookupDto>>(data)
+            ObjectMapper.Map<List<Volo.Abp.Identity.IdentityRole>, List<RoleLookupDto>>(data)
         );
     }
 
@@ -91,18 +92,18 @@ public class RolesAppService : CrudAppService<
         var query = await Repository.GetQueryableAsync();
         query = query.WhereIf(!string.IsNullOrWhiteSpace(input.Keyword),
                               x => x.Name.Contains(input.Keyword))
-                     .OrderBy(nameof(IdentityRole.Name));
+                     .OrderBy(nameof(Volo.Abp.Identity.IdentityRole.Name));
 
         var totalCount = await AsyncExecuter.LongCountAsync(query);
         var data = await AsyncExecuter.ToListAsync(query.Skip(input.SkipCount).Take(input.MaxResultCount));
 
-        return new PagedResultDto<RoleDto>(totalCount, ObjectMapper.Map<List<IdentityRole>, List<RoleDto>>(data));
+        return new PagedResultDto<RoleDto>(totalCount, ObjectMapper.Map<List<Volo.Abp.Identity.IdentityRole>, List<RoleDto>>(data));
     }
 
     [Authorize(IdentityPermissions.Roles.Create)]
     public override async Task<RoleDto> CreateAsync(CreateUpdateRoleDto input)
     {
-        var role = new IdentityRole(GuidGenerator.Create(), input.Name)
+        var role = new Volo.Abp.Identity.IdentityRole(GuidGenerator.Create(), input.Name)
         {
             IsDefault = input.IsDefault,
             IsPublic = input.IsPublic
@@ -110,7 +111,7 @@ public class RolesAppService : CrudAppService<
         role.SetProperty(RoleConsts.DescriptionFieldName, input.Description);
         (await RoleManager.CreateAsync(role)).CheckErrors();
         await CurrentUnitOfWork.SaveChangesAsync();
-        return ObjectMapper.Map<IdentityRole, RoleDto>(role);
+        return ObjectMapper.Map<Volo.Abp.Identity.IdentityRole, RoleDto>(role);
     }
 
     [Authorize(IdentityPermissions.Roles.Update)]
@@ -128,7 +129,7 @@ public class RolesAppService : CrudAppService<
 
         (await RoleManager.UpdateAsync(role)).CheckErrors();
         await CurrentUnitOfWork.SaveChangesAsync();
-        return ObjectMapper.Map<IdentityRole, RoleDto>(role);
+        return ObjectMapper.Map<Volo.Abp.Identity.IdentityRole, RoleDto>(role);
     }
 
     public async Task<GetPermissionListResultDto> GetPermissionsAsync(string providerName, string providerKey)

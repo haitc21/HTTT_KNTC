@@ -23,7 +23,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 {
     protected IdentityUserManager UserManager { get; }
     protected IIdentityUserRepository UserRepository { get; }
-    protected IRepository<IdentityRole, Guid> RoleRepository { get; }
+    protected IRepository<Volo.Abp.Identity.IdentityRole, Guid> RoleRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected IBlobContainer<AvatarContainer> _blobContainer { get; }
     protected IRepository<UserInfo> _userInfoRepo { get; }
@@ -31,7 +31,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     public UsersAppService(
         IdentityUserManager userManager,
         IIdentityUserRepository userRepository,
-        IRepository<IdentityRole, Guid> roleRepository,
+        IRepository<Volo.Abp.Identity.IdentityRole, Guid> roleRepository,
         IOptions<IdentityOptions> identityOptions,
         IBlobContainer<AvatarContainer> blobContainer,
         IRepository<UserInfo> userInfoRepo)
@@ -48,7 +48,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     public virtual async Task<UserDto> GetAsync(Guid id)
     {
         var identityUser = await UserManager.GetByIdAsync(id);
-        var result = ObjectMapper.Map<IdentityUser, UserDto>(
+        var result = ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, UserDto>(
             identityUser
         );
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
@@ -62,7 +62,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(IdentityUser.UserName);
+            input.Sorting = nameof(Volo.Abp.Identity.IdentityUser.UserName);
         }
         var count = await UserRepository.GetCountAsync(input.Filter,
                                                       input.roleId, null,
@@ -82,7 +82,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         var result = new PagedResultDto<UserListDto>(
             count,
-            ObjectMapper.Map<List<IdentityUser>, List<UserListDto>>(list)
+            ObjectMapper.Map<List<Volo.Abp.Identity.IdentityUser>, List<UserListDto>>(list)
         );
         foreach (var item in result.Items)
         {
@@ -101,7 +101,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         var roles = await UserRepository.GetRolesAsync(id);
 
         return new ListResultDto<IdentityRoleDto>(
-            ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
+            ObjectMapper.Map<List<Volo.Abp.Identity.IdentityRole>, List<IdentityRoleDto>>(    roles)
         );
     }
 
@@ -111,14 +111,14 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         var assignEdRoles = (await UserRepository.GetRolesAsync(id)).Select(x => x.Id);
         var roles = await RoleRepository.GetListAsync(x => !assignEdRoles.Contains(x.Id));
         return new ListResultDto<IdentityRoleDto>(
-            ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles));
+            ObjectMapper.Map<List<Volo.Abp.Identity.IdentityRole>, List<IdentityRoleDto>>(roles));
     }
 
     [Authorize]
     public async Task<UserDto> GetUserInfoAsync(Guid userId)
     {
         var identityUser = await UserManager.GetByIdAsync(userId);
-        var result = ObjectMapper.Map<IdentityUser, UserDto>(
+        var result = ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, UserDto>(
             identityUser
         );
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == userId);
@@ -131,7 +131,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     {
         await IdentityOptions.SetAsync();
 
-        var user = new IdentityUser(
+        var user = new Volo.Abp.Identity.IdentityUser(
             GuidGenerator.Create(),
             input.UserName,
             input.Email
@@ -157,7 +157,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        return ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, IdentityUserDto>(user);
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
@@ -185,7 +185,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         userInfo.Dob = input.Dob;
         await _userInfoRepo.UpdateAsync(userInfo);
         await CurrentUnitOfWork.SaveChangesAsync();
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        return ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, IdentityUserDto>(user);
     }
 
     [Authorize]
@@ -262,7 +262,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         var user = await UserManager.FindByIdAsync(userId.ToString());
         if (user == null)
         {
-            throw new EntityNotFoundException(typeof(IdentityUser), userId);
+            throw new EntityNotFoundException(typeof(Volo.Abp.Identity.IdentityUser), userId);
         }
         var token = await UserManager.GeneratePasswordResetTokenAsync(user);
         var result = await UserManager.ResetPasswordAsync(user, token, input.NewPassword);
@@ -322,7 +322,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         }
     }
 
-    protected virtual async Task UpdateUserFromInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
+    protected virtual async Task UpdateUserFromInput(Volo.Abp.Identity.IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
     {
         if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
         {
