@@ -162,18 +162,19 @@ export class AppTopBarComponent implements OnInit {
         icon: 'fa fa-chart-bar',
         items: [
           {
-            label: 'Dashboard',
+            label: 'Thống kê',
             routerLink: ['/pages/dashboard'],
           },
           {
-            label: 'Hồ sơ',
-            routerLink: ['/pages/reports'],
+            label: 'Sổ theo dõi KN/TC',
+            routerLink: ['/pages/reports/logbook'],
           },
-
+          /*
           {
-            label: 'Bảng tổng hợp',
-            routerLink: ['/pages/stats'],
+            label: 'Tổng hợp kết quả KN/TC',
+            routerLink: ['/pages/reports/summary'],
           },
+          */
         ],
       },
       {

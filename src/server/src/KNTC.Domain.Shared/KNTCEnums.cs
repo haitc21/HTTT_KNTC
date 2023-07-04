@@ -2,12 +2,14 @@
 
 public enum LoaiVuViec
 {
+    TatCa = 0,
     KhieuNai = 1,
     ToCao = 2
 }
 
 public enum LinhVuc
 {
+    TatCa = 0,
     DatDai = 1,
     MoiTruong = 2,
     TaiNguyenNuoc = 3,
@@ -24,6 +26,7 @@ public enum LoaiKetQua
 
 public enum LoaiKhieuNai
 {
+    TatCa = 0,
     KhieuNai = 1,
     KhieuKien = 2,
 }

@@ -23,7 +23,7 @@ export class AppMenuComponent implements OnInit {
         routerLink: ['/'],
       },
       {
-        label: 'Dash Board',
+        label: 'Thống kê',
         icon: 'pi pi-fw pi-calendar',
         routerLink: ['/pages/dashboard'],
       },

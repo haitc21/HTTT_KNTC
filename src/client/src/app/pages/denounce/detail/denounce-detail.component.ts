@@ -45,6 +45,8 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   public btnDisabled = false;
   selectedEntity: DenounceDto;
   dataMap: any[] = [];
+  toado: string;
+
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
@@ -374,6 +376,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: DenounceDto) => {
           this.selectedEntity = response;
+          this.toado = response.duLieuToaDo;
 
           this.dataMap.push(response);
           this.dataMap[0].loaiVuViec = LoaiVuViec.ToCao;
@@ -589,8 +592,13 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     this.form.enable()
   }
   
-  getCoordiate() {    
-    if (this.coordinateLabel=="Hủy"){
+  getCoordiate() {
+    if (this.coordinateLabel=="Lấy tọa độ"){//Chưa có -> Cho phép chọn tọa độ      
+      this.mapComponent?.letCoordinate();
+      this.notificationService.showSuccess('Bạn hãy chọn một điểm trên bản đồ để thay đổi vị trí có khiếu nại!');
+      this.coordinateLabel = "Cập nhật!"; 
+    }
+    else if (this.coordinateLabel=="Hủy"){
       this.form.get('duLieuToaDo').setValue(this.selectedEntity?.duLieuToaDo);
       this.coordinateLabel = "Lấy tọa độ";
     }
@@ -598,32 +606,27 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       //Đã có -> Lấy tọa độ      
       this.form.get('duLieuToaDo').setValue(this.mapComponent?.duLieuToaDo);
       this.coordinateLabel = "Hủy";
-    }
-    else{//Chưa có -> Cho phép chọn tọa độ      
-      this.mapComponent?.letCoordinate();
-      this.notificationService.showSuccess('Bạn hãy chọn một điểm trên bản đồ để thay đổi vị trí có khiếu nại!');
-      this.coordinateLabel = "Cập nhật!";
-    }
+    }    
   }
 
-  letDraw() {
+  getDraw() {
     //Cho phép vẽ
-    if (this.drawLabel=="Hủy"){
-      this.form.get('duLieuToaDo').setValue(this.selectedEntity?.duLieuHinhHoc);
+    if (this.coordinateLabel=="Vẽ trên bản đồ"){//Chưa có -> Cho phép vẽ 
+      this.mapComponent?.letDraw();
+      
+      this.notificationService.showSuccess('Bạn hãy Sử dụng công cụ vẽ trên bản đồ để thể hiện thửa đất có khiếu nại!');
+      this.drawLabel = "Cập nhật!";  
+    }
+    else if (this.drawLabel=="Hủy"){
+      this.form.get('duLieuHinhHoc').setValue(this.selectedEntity?.duLieuHinhHoc);
       this.drawLabel = "Vẽ trên bản đồ";
     }
     else if (this.mapComponent?.duLieuHinhhoc) {
       //get dữ liệu hình học   
       this.form.get('duLieuHinhHoc').setValue(this.mapComponent?.duLieuHinhhoc);
       this.drawLabel = "Hủy";
-    } else {
-      //Cho phép vẽ
-      this.mapComponent?.letDraw();
-      
-      this.notificationService.showSuccess('Bạn hãy Sử dụng công cụ vẽ trên bản đồ để thể hiện thửa đất có khiếu nại!');
-      this.drawLabel = "Cập nhật!";
     }
-  }  
+  }
 
   close() {
     if (this.ref) {

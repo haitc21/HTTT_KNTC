@@ -7,7 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
-import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
+import { LoaiVuViec } from '@proxy';
 import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
@@ -19,7 +19,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KetquaOptions, LinhVucNameOptions, LoaiVuViecOptions, congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
+import { KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
 
 @Component({
   selector: 'app-search-map',
@@ -82,6 +82,8 @@ export class SearchMapComponent implements OnInit, OnDestroy {
 
   // filter
   geo = false;
+  toado: string;
+
   filter: GetSummaryListDto;
   //filter: GetSpatialDataListDto;
   //filter: GetComplainListDto;
@@ -112,7 +114,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
 
   loaiKQOptions = loaiKQOptions;
   LoaiVuViecOptions = LoaiVuViecOptions;
-  LinhVucNameOptions = LinhVucNameOptions;
+  LinhVucOptions = LinhVucOptions;
   KetquaOptions = KetquaOptions;
 
   congKhaiOptions = congKhaiOptions;
@@ -256,6 +258,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
           : null,
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
+      nguoiNopDon: this.nguoiNopDon,
     } as GetSummaryListDto;
 
     this.summaryService
@@ -383,6 +386,11 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     if (this.thoiGianTiepNhanRange == null || this.thoiGianTiepNhanRange[1]) {
       this.loadData();
     }
+  }
+
+  setPosition(duLieuToaDo){
+    if (duLieuToaDo!=null)
+      this.toado = duLieuToaDo;
   }
 
   pageChanged(event: any): void {

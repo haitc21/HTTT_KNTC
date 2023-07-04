@@ -425,7 +425,7 @@
                         mode="decimal"
                         [minFractionDigits]="2"
                       ></p-inputNumber>
-                      <label for="dienTich">Diện tích (m2) <span class="required">*</span></label>
+                      <label>Diện tích (m2) <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.dienTich"
@@ -486,7 +486,7 @@
                       <p-dropdown
                         [name]="huyenThuaDat"
                         formControlName="huyenThuaDat"
-                        [options]="huyenThuaDateOptions"
+                        [options]="huyenThuaDatOptions"
                         optionLabel="unitName"
                         optionValue="id"
                         [showClear]="true"
@@ -832,7 +832,7 @@
                   pButton
                   pRipples
                   type="button"
-                  (click)="letDraw()"
+                  (click)="getDraw()"
                   label="{{ drawLabel }}"
                   class="p-button-info mr-2"
                   icon="pi pi-map-marker"
@@ -842,7 +842,7 @@
           </p-card>
           <p-card>
             <!-- -------------------------------Bản đồ--------------------------------------------------- -->
-            <app-map [data]="dataMap"></app-map>
+            <app-map [data]="dataMap" [duLieuToaDo]="toado"></app-map>
           </p-card>
         </ng-template>
       </p-tabPanel>

@@ -10,6 +10,8 @@ public interface ISummaryAppService
 
     Task<byte[]> GetExcelAsync(GetSummaryListDto input);
 
+    Task<byte[]> GetLogBookExcelAsync(GetSummaryListDto input);
+
     Task<List<SummaryMapDto>> GetMapAsync(GetSumaryMapDto input);
 
     Task<SummaryChartDto> GetChartAsync();

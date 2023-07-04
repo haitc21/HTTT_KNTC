@@ -9,6 +9,9 @@ public class GetSumaryMapDto
     {
     }
 
+    public LoaiVuViec? loaiVuViec { get; set; }
+    public LinhVuc? linhVuc { get; set; }
+
     public bool LandComplain { get; set; }
     public bool EnviromentComplain { get; set; }
     public bool WaterComplain { get; set; }

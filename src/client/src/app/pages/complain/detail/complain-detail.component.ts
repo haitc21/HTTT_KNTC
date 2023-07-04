@@ -1,7 +1,7 @@
 import { ListResultDto, PermissionService } from '@abp/ng.core';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Validators, FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { LoaiKetQua, LoaiKhieuNai, LoaiVuViec } from '@proxy';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { LoaiVuViec } from '@proxy';
 import {
   ComplainDto,
   ComplainService,
@@ -46,11 +46,13 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   public btnDisabled = false;
   selectedEntity: ComplainDto;
   dataMap: any[] = [];
+  toado: string;
+
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
-  huyenThuaDateOptions: UnitLookupDto[] = [];
+  huyenThuaDatOptions: UnitLookupDto[] = [];
   xaThuaDatOptions: UnitLookupDto[] = [];
   landTypeOptions: LandTypeLookupDto[];
   loaiKQOPtions = loaiKQOptions;
@@ -302,7 +304,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
-            this.huyenThuaDateOptions = res.items;
+            this.huyenThuaDatOptions = res.items;
             if (!isFirst) {
               this.form.get('huyenThuaDat').reset();
               this.form.get('xaThuaDat').reset();
@@ -313,7 +315,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
             this.layoutService.blockUI$.next(false);
           }
         );
-    } else this.huyenThuaDateOptions = [];
+    } else this.huyenThuaDatOptions = [];
   }
 
   huyenThuaDatChange(id: number, isFirst: boolean = false) {
@@ -350,7 +352,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
           this.dataMap.push(response);
           this.dataMap[0].loaiVuViec = LoaiVuViec.KhieuNai;
-
+          this.toado = response.duLieuToaDo;
+          
           this.tinhChange(this.selectedEntity.maTinhTP, true);
           this.huyenChange(this.selectedEntity.maQuanHuyen, true);
           this.tinhThuaDatChange(this.selectedEntity.tinhThuaDat, true);
@@ -390,9 +393,13 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.utilService.markAllControlsAsDirty([this.form]);
-      if (this.form.invalid) 
+    if (this.form.invalid) 
     {
       this.layoutService.blockUI$.next(false);
+      return;
+    }
+    if (!this.checkToado(this.form.get('duLieuToaDo'))){
+      this.notificationService.showError('Dữ liệu tọa độ không hợp lệ. Bạn hãy chọn một điểm trên bản đồ hoặc gõ đúng địa chỉ theo chuẩn tọa độ địa lý!');
       return;
     }
     this.layoutService.blockUI$.next(true);
@@ -559,41 +566,53 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     this.form.enable();
   }
 
-  getCoordiate() {    
-    if (this.coordinateLabel=="Hủy"){
+  getCoordiate() {
+    if (this.coordinateLabel=="Lấy tọa độ"){//Chưa có -> Cho phép chọn tọa độ      
+      this.mapComponent?.letCoordinate();
+      this.notificationService.showSuccess('Bạn hãy chọn một điểm trên bản đồ để thay đổi vị trí có khiếu nại!');
+      this.coordinateLabel = "Cập nhật!"; 
+    }
+    else if (this.coordinateLabel=="Hủy"){
       this.form.get('duLieuToaDo').setValue(this.selectedEntity?.duLieuToaDo);
       this.coordinateLabel = "Lấy tọa độ";
     }
     else if (this.mapComponent?.duLieuToaDo) {
-      //Đã có -> Lấy tọa độ      
+      //Đã có -> Lấy tọa độ        
       this.form.get('duLieuToaDo').setValue(this.mapComponent?.duLieuToaDo);
       this.coordinateLabel = "Hủy";
-    }
-    else{//Chưa có -> Cho phép chọn tọa độ      
-      this.mapComponent?.letCoordinate();
-      this.notificationService.showSuccess('Bạn hãy chọn một điểm trên bản đồ để thay đổi vị trí có khiếu nại!');
-      this.coordinateLabel = "Cập nhật!";
-    }
+    }    
   }
 
-  letDraw() {
+  getDraw() {
     //Cho phép vẽ
-    if (this.drawLabel=="Hủy"){
-      this.form.get('duLieuToaDo').setValue(this.selectedEntity?.duLieuHinhHoc);
-      this.drawLabel = "Vẽ trên bản đồ";
-    }
-    else if (this.mapComponent?.duLieuHinhhoc) {
-      //get dữ liệu hình học   
-      this.form.get('duLieuHinhHoc').setValue(this.mapComponent?.duLieuHinhhoc);
-      this.drawLabel = "Hủy";
-    } else {
-      //Cho phép vẽ
+    if (this.coordinateLabel=="Vẽ trên bản đồ"){//Chưa có -> Cho phép vẽ 
       this.mapComponent?.letDraw();
       
       this.notificationService.showSuccess('Bạn hãy Sử dụng công cụ vẽ trên bản đồ để thể hiện thửa đất có khiếu nại!');
-      this.drawLabel = "Cập nhật!";
+      this.drawLabel = "Cập nhật!";  
+    }
+    else if (this.drawLabel=="Hủy"){
+      this.form.get('duLieuHinhHoc').setValue(this.selectedEntity?.duLieuHinhHoc);
+      this.drawLabel = "Vẽ trên bản đồ";
+    }
+    else if (this.mapComponent?.duLieuHinhhoc) {
+      //get dữ liệu hình học
+      this.form.get('duLieuHinhHoc').setValue(this.mapComponent?.duLieuHinhhoc);
+      this.drawLabel = "Hủy";
     }
   }  
+
+  private checkToado(duLieuToaDo:any): boolean{
+    if (duLieuToaDo!=null && duLieuToaDo!=undefined){
+      var toado = duLieuToaDo.split(", ");
+      if (toado.length==2){
+        return isFinite(toado[0]) && Math.abs(toado[0]) <= 90 //valid Long
+              &&
+               isFinite(toado[1]) && Math.abs(toado[1]) <= 180;//valid Lat
+      }
+    }
+    return false;
+  }
 
   close() {
     if (this.ref) {

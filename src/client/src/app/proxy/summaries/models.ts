@@ -1,9 +1,11 @@
-import type { LoaiKetQua } from '../loai-ket-qua.enum';
-import type { BaseListFilterDto } from '../models';
 import type { LoaiVuViec } from '../loai-vu-viec.enum';
 import type { LinhVuc } from '../linh-vuc.enum';
+import type { LoaiKetQua } from '../loai-ket-qua.enum';
+import type { BaseListFilterDto } from '../models';
 
 export interface GetSumaryMapDto {
+  loaiVuViec?: LoaiVuViec;
+  linhVuc?: LinhVuc;
   landComplain: boolean;
   enviromentComplain: boolean;
   waterComplain: boolean;
@@ -24,6 +26,8 @@ export interface GetSumaryMapDto {
 }
 
 export interface GetSummaryListDto extends BaseListFilterDto {
+  loaiVuViec?: LoaiVuViec;
+  linhVuc?: LinhVuc;
   landComplain: boolean;
   enviromentComplain: boolean;
   waterComplain: boolean;

@@ -822,7 +822,7 @@
                   pButton
                   pRipples
                   type="button"
-                  (click)="letDraw()"
+                  (click)="getDraw()"
                   label="{{drawLabel}}"
                   class="p-button-info mr-2"
                   icon="pi pi-map-marker"
@@ -832,7 +832,7 @@
           </p-card>
           <p-card>
             <!-- -------------------------------Bản đồ--------------------------------------------------- -->
-            <app-map [data]="dataMap"></app-map>
+            <app-map [data]="dataMap" [duLieuToaDo]="toado"></app-map>
           </p-card>
         </ng-template>
       </p-tabPanel>

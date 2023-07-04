@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private buildBreadcumb() {
-    this.breadcrumb = [{ label: 'Dash Board' }];
+    this.breadcrumb = [{ label: 'Thống kê' }];
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
   }
 

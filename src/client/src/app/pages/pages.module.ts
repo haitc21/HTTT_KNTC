@@ -43,10 +43,12 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { ComplainComponent } from './complain/complain.component';
 import { DenounceComponent } from './denounce/denounce.component';
+import { LogBookComponent } from './reports/logbook.component';
 import { DenounceDetailComponent } from './denounce/detail/denounce-detail.component';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
 import { AccordionModule } from 'primeng/accordion';
+import { SelectButtonModule } from 'primeng/selectbutton';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -56,6 +58,7 @@ import { AccordionModule } from 'primeng/accordion';
     ComplainDetailComponent,
     DenounceComponent,
     DenounceDetailComponent,
+    LogBookComponent,
     FileAttachmentComponent,
     FileAttachmentDetailComponent
   ],
@@ -98,6 +101,7 @@ import { AccordionModule } from 'primeng/accordion';
     BreadcrumbModule,
     DividerModule,
     AccordionModule,
+    SelectButtonModule,
     DialogModule
   ],
   exports: [HomeComponent],
