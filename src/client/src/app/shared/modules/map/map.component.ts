@@ -6,6 +6,7 @@ import {
   ComponentRef,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
   ViewContainerRef,
@@ -15,7 +16,6 @@ import { LoaiVuViec } from '@proxy';
 import { v4 as uuidv4 } from 'uuid';
 import { SummaryDto } from '@proxy/summaries';
 import { MapPopupComponent } from '../map-popup/map-popup.component';
-
 
 import * as L from 'leaflet';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
@@ -31,6 +31,10 @@ import { format } from 'date-fns';
 import { environment } from 'src/environments/environment';
 import { LinhVucNameOptions } from '../../constants/consts';
 import { environment as environmentProd } from 'src/environments/environment.prod';
+import { GetSysConfigService } from '../../services/sysconfig.services';
+import { Subject, forkJoin, takeUntil } from 'rxjs';
+import { SysConfigConsts } from '../../constants/sys-config.consts';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
@@ -60,7 +64,8 @@ const redIcon = new L.Icon({
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements AfterViewInit, OnChanges {
+export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
+  private ngUnsubscribe = new Subject<void>();
   @Input() data: SummaryDto[] = [];
 
   //Show/Hide layer Quy hoach tren ban do
@@ -74,13 +79,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
   @Input() loaiVuViec: LoaiVuViec = LoaiVuViec.KhieuNai;
 
   idMap: string = uuidv4();
+  center: number[] = [];
   map: L.Map;
-
   myStyle: any;
-
   bSpatialLoaded: boolean = false;
   bLoading: boolean = false;
-
   markers: any;
   info: any;
   khieunai: any;
@@ -88,14 +91,13 @@ export class MapComponent implements AfterViewInit, OnChanges {
   quyhoach: any;
   drawningBoard: any;
   geoserverUrl: string;
-
-  // @ViewChild('popup', { read: ViewContainerRef }) popupContainer: ViewContainerRef;
   private popupComponentRef: ComponentRef<MapPopupComponent>;
-
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private popupContainer: ViewContainerRef,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private sysConfigService: GetSysConfigService,
+    public layoutService: LayoutService
   ) {
     this.geoserverUrl = isDevMode()
       ? environment.apis.geoserver.url
@@ -103,17 +105,36 @@ export class MapComponent implements AfterViewInit, OnChanges {
   }
 
   ngAfterViewInit() {
-    this.initMap();
-    //this.buildLocateBtn();
-    //this.buildEventMapClick();
-    this.renderMarkers(this.data);
-    //this.renderSpatialData(this.spatialData);
+    this.getSysConfigAndInitMap();
+  }
+  private getSysConfigAndInitMap() {
+    this.layoutService.blockUI$.next(true);
+    let getGeoServerDomain$ = this.sysConfigService.getSysConfig(SysConfigConsts.GEOSERVER_DOMAIN);
+    let getMapCenter$ = this.sysConfigService.getSysConfig(SysConfigConsts.MAP_CENTER);
+
+    forkJoin([getGeoServerDomain$, getMapCenter$])
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        ([geoServerDomain, mapCenter]) => {
+          if (geoServerDomain) this.geoserverUrl = geoServerDomain.value;
+          if (mapCenter) this.center = mapCenter.value.split(',').map(num => Number(num.trim()));
+
+          this.initMap();
+          //this.buildLocateBtn();
+          //this.buildEventMapClick();
+          this.renderMarkers(this.data);
+          //this.renderSpatialData(this.spatialData);
+          this.layoutService.blockUI$.next(false);
+        },
+        err => {
+          this.layoutService.blockUI$.next(false);
+        }
+      );
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.data && changes.data.currentValue && !changes.data.isFirstChange())
       this.renderMarkers(changes.data.currentValue);
-
     /*
     if (changes.spatialData &&
       changes.spatialData.currentValue &&
@@ -128,7 +149,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
     //Khoi tao ban do
     var center: L.LatLng = this.duLieuToaDo
       ? this.convertStringCoordiate(this.duLieuToaDo)
-      : L.latLng(21.6825, 105.8442);
+      : L.latLng(this.center[0], this.center[1]);
 
     this.map = L.map(this.idMap, {
       measureControl: true,
@@ -736,18 +757,23 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.info = L.control();
     this.info.onAdd = function () {
       this._div = L.DomUtil.create('div', 'leaflet-control-info'); // create a div with a class "info"
-      L.DomEvent.disableClickPropagation(this._div);      
+      L.DomEvent.disableClickPropagation(this._div);
       this.update();
       return this._div;
     };
     this.info._addButton = function () {
       var button = L.DomUtil.create('button', 'button-close', this._div);
       button.textContent = 'Đóng';
-      L.DomEvent.on(button, 'click', function(e){
-        L.DomEvent.stop(e);
-        this._div.style.display = 'none'
-      }, this);
-    }
+      L.DomEvent.on(
+        button,
+        'click',
+        function (e) {
+          L.DomEvent.stop(e);
+          this._div.style.display = 'none';
+        },
+        this
+      );
+    };
     // method that we will use to update the control based on feature properties passed
 
     this.info.LinhVucNameOptions = LinhVucNameOptions;
@@ -1153,5 +1179,9 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
   private zoomToFeature(e) {
     this.map.fitBounds(e.target.getBounds());
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

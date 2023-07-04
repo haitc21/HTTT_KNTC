@@ -31,13 +31,13 @@ public class SysConfigSeedContributor : IDataSeedContributor, ITransientDependen
         }
         List<SysConfig> sysConfigs = new List<SysConfig>()
         {
-            new(SysConfigConsts.Prefix + nameof(SysConfigConsts.TITLE),SysConfigConsts.TITLE){
+            new(nameof(SysConfigConsts.TITLE),SysConfigConsts.TITLE){
                 Description = "Tiêu đề Website"
             },
-            new(SysConfigConsts.Prefix + nameof(SysConfigConsts.GEOSERVER_DOMAIN),SysConfigConsts.GEOSERVER_DOMAIN){
+            new(nameof(SysConfigConsts.GEOSERVER_DOMAIN),SysConfigConsts.GEOSERVER_DOMAIN){
                 Description = "Địa chỉ trang quản lý bản đồ quy hoạch"
             },
-            new(SysConfigConsts.Prefix + nameof(SysConfigConsts.MAP_CENTER),SysConfigConsts.MAP_CENTER){
+            new(nameof(SysConfigConsts.MAP_CENTER),SysConfigConsts.MAP_CENTER){
                 Description = "Tọa độ Tỉnh/TP"
             }
         };

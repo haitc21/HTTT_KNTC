@@ -143,13 +143,14 @@ public class UnitAppService : CrudAppService<
     [Authorize(KNTCPermissions.UnitPermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
-        var lstCache = new List<UnitCacheKey>();
-        foreach (var id in ids)
+        if (ids.Count() <= 0) return;
+        var lstCacheKey = new List<UnitCacheKey>();
+        var entities = await Repository.GetListAsync(x => ids.Contains(x.Id), false);
+        foreach (var entity in entities)
         {
-            var entity = await Repository.GetAsync(id, false);
-            lstCache.Add(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
+            lstCacheKey.Add(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
         }
-        await _cache.RemoveManyAsync(lstCache);
+        await _cache.RemoveManyAsync(lstCacheKey);
         await Repository.DeleteManyAsync(ids);
     }
 }

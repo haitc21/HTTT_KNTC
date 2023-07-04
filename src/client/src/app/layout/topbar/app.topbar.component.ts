@@ -18,7 +18,7 @@ import { LinhVuc } from '@proxy';
 import { environment } from 'src/environments/environment';
 import { environment as environmentProd } from 'src/environments/environment.prod';
 import { GetSysConfigService } from 'src/app/shared/services/sysconfig.services';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, forkJoin, takeUntil } from 'rxjs';
 import { SysConfigConsts } from 'src/app/shared/constants/sys-config.consts';
 
 @Component({
@@ -60,11 +60,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     private sysConfigService: GetSysConfigService
   ) {}
   ngOnInit(): void {
-    this.getTitles();
-    // this.geoserverUrl = isDevMode()
-    //   ? environment.apis.geoserver.url
-    //   : environmentProd.apis.geoserver.url;
-    this.getGepServerDomain();
+    this.getSysConfigAmdInitMenu();
     if (this.isAutenticated) {
       const accessToken = this.oAuthService.getAccessToken();
       let decodedAccessToken = atob(accessToken.split('.')[1]);
@@ -76,19 +72,20 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         if (url) this.avatarUrl = url; // Cập nhật đường dẫn tới avatar của người dùng
       });
     }
-    this.initMenu();
-    this.initMenuUser();
-    this.initMenuSystem();
   }
 
-  getGepServerDomain(){
+  getSysConfigAmdInitMenu() {
     this.layoutService.blockUI$.next(true);
-    this.sysConfigService
-      .getSysConfig(SysConfigConsts.GEOSERVER_DOMAIN)
+    let getGeoServerDomain$ = this.sysConfigService.getSysConfig(SysConfigConsts.GEOSERVER_DOMAIN);
+    let getTitle$ = this.sysConfigService.getSysConfig(SysConfigConsts.TITLE);
+
+    forkJoin([getGeoServerDomain$, getTitle$])
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
-        data => {
-          this.geoserverUrl = data.value;
+        ([geoServerDomain, title]) => {
+          if (geoServerDomain) this.geoserverUrl = geoServerDomain.value;
+          if (title) this.title = title.value;
+          this.initMenu();
           this.layoutService.blockUI$.next(false);
         },
         err => {
@@ -96,22 +93,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         }
       );
   }
-  getTitles() {
-    this.layoutService.blockUI$.next(true);
-    this.sysConfigService
-      .getSysConfig(SysConfigConsts.TITLE)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        data => {
-          this.title = data.value;
-          this.layoutService.blockUI$.next(false);
-        },
-        err => {
-          this.layoutService.blockUI$.next(false);
-        }
-      );
-  }
-  initMenuUser() {
+  initMenu() {
     this.userMenuItems = [
       {
         label: 'Thông tin cá nhân',
@@ -137,9 +119,6 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         },
       },
     ];
-  }
-
-  initMenu() {
     this.items = [
       {
         icon: 'pi pi-fw pi-home',
@@ -272,9 +251,6 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
       },
     ];
   }
-
-  initMenuSystem() {}
-
   login() {
     this.router.navigate([LOGIN_URL, this.router.url]);
   }
