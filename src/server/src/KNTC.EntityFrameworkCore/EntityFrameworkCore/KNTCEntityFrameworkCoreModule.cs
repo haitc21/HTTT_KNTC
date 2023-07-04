@@ -54,8 +54,8 @@ public class KNTCEntityFrameworkCoreModule : AbpModule
         {
             /* The main point to change your DBMS.
              * See also KNTCMigrationsDbContextFactory for EF Core tooling. */
-            options.UseNpgsql(x => x.UseNetTopologySuite());
-            //options.UseNpgsql();
+            //options.UseNpgsql(x => x.UseNetTopologySuite());
+            options.UseNpgsql();
         });
         context.Services.AddTransient<ISummaryRepository, SummaryRepository>();
     }

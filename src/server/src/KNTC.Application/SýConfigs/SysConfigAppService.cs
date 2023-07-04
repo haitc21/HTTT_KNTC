@@ -46,7 +46,7 @@ public class SysConfigAppService : CrudAppService<
     public async Task<SysConfigCacheItem> GetByNameAsync(string name)
     {
         var cacheItem = await _cache.GetOrAddAsync(
-        $"SysConfig_{name}",
+        $"{name}",
         async () =>
         {
             var entity = await Repository.GetAsync(x => x.Name == name);
@@ -62,6 +62,10 @@ public class SysConfigAppService : CrudAppService<
     [Authorize(KNTCPermissions.SysConfigsPermission.Default)]
     public override async Task<PagedResultDto<SysConfigDto>> GetListAsync(GetSysConfigListDto input)
     {
+        if (input.Sorting.IsNullOrEmpty())
+        {
+            input.Sorting = $"{nameof(SysConfig.Name)}";
+        }
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
@@ -83,7 +87,7 @@ public class SysConfigAppService : CrudAppService<
         var entity = await _configManager.CreateAsync(input.Name, input.Value, input.Description);
         await Repository.InsertAsync(entity);
         await _cache.SetAsync(
-            $"SysConfig_{entity.Name}",
+            $"{entity.Name}",
             new SysConfigCacheItem() { Name = entity.Name, Value = entity.Value },
             new DistributedCacheEntryOptions
             {
@@ -100,6 +104,7 @@ public class SysConfigAppService : CrudAppService<
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _configManager.UpdateAsync(entity, input.Value, input.Description);
         await Repository.UpdateAsync(entity);
+        await _cache.RemoveAsync($"{entity.Name}");
         return ObjectMapper.Map<SysConfig, SysConfigDto>(entity);
     }
 
@@ -108,12 +113,20 @@ public class SysConfigAppService : CrudAppService<
     {
         var entity  = await Repository.GetAsync(id, false);
         await Repository.DeleteAsync(entity);
-        await _cache.RemoveAsync($"SysConfig_{entity.Name}");
+        await _cache.RemoveAsync($"{entity.Name}");
     }
 
     [Authorize(KNTCPermissions.SysConfigsPermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<int> ids)
     {
+        if (ids.Count() <= 0) return;
+        var lstCacheKey = new List<string>();
+        var entities = await Repository.GetListAsync(x => ids.Contains(x.Id),false);
+        foreach (var entity in entities)
+        {
+            lstCacheKey.Add($"{entity.Name}");
+        }
+        await _cache.RemoveManyAsync(lstCacheKey);
         await Repository.DeleteManyAsync(ids);
     }
 }

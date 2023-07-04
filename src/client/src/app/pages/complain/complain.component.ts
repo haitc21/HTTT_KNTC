@@ -19,7 +19,12 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
 import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KetquaOptions, congKhaiOptions, giaiDoanOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
+import {
+  KetquaOptions,
+  congKhaiOptions,
+  giaiDoanOptions,
+  loaiKQOptions,
+} from 'src/app/shared/constants/consts';
 
 @Component({
   selector: 'app-complain',
@@ -167,7 +172,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         }
       );
   }
-  
+
   tinhChange(event) {
     this.loadData();
     if (event.value) {
@@ -347,19 +352,22 @@ export class ComplainComponent implements OnInit, OnDestroy {
   deleteRowConfirm(id) {
     this.layoutService.blockUI$.next(true);
 
-    this.complainService.delete(id).subscribe({
-      next: () => {
-        this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
-        this.resetFilter();
-        this.loadData();
-        this.selectedItems = [];
-        this.actionItem = null;
-        this.layoutService.blockUI$.next(false);
-      },
-      error: () => {
-        this.layoutService.blockUI$.next(false);
-      },
-    });
+    this.complainService
+      .delete(id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+          this.resetFilter();
+          this.loadData();
+          this.selectedItems = [];
+          this.actionItem = null;
+          this.layoutService.blockUI$.next(false);
+        },
+        error: () => {
+          this.layoutService.blockUI$.next(false);
+        },
+      });
   }
 
   setActionItem(item) {
@@ -485,18 +493,21 @@ export class ComplainComponent implements OnInit, OnDestroy {
 
   deleteItemsConfirm(ids: any[]) {
     this.layoutService.blockUI$.next(true);
-    this.complainService.deleteMultiple(ids).subscribe({
-      next: () => {
-        this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
-        this.resetFilter();
-        this.loadData();
-        this.selectedItems = [];
-        this.layoutService.blockUI$.next(false);
-      },
-      error: () => {
-        this.layoutService.blockUI$.next(false);
-      },
-    });
+    this.complainService
+      .deleteMultiple(ids)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+          this.resetFilter();
+          this.loadData();
+          this.selectedItems = [];
+          this.layoutService.blockUI$.next(false);
+        },
+        error: () => {
+          this.layoutService.blockUI$.next(false);
+        },
+      });
   }
 
   thoiGiantiepNhanChange() {

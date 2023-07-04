@@ -48,6 +48,8 @@ import { UnitComponent } from './unit/unit.component';
 import { UnitDetailComponent } from './unit/detail/unit-detail.component';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
+import { SysConfigComponent } from './sys-config/sys-config.component';
+import { SysConfigDetailComponent } from './sys-config/detail/sys-config-detail.component';
 
 const COMPONENT = [
   RoleComponent,
@@ -65,7 +67,9 @@ const COMPONENT = [
   UnitTypeComponent,
   UnitTypeDetailComponent,
   UnitComponent,
-  UnitDetailComponent
+  UnitDetailComponent,
+  SysConfigComponent,
+  SysConfigDetailComponent
 ];
 
 @NgModule({
