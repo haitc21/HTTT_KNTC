@@ -184,8 +184,8 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
             routerLink: ['/pages/dashboard'],
           },
           {
-            label: 'Sổ theo dõi KN/TC',
-            routerLink: ['/pages/reports/logbook'],
+            label: 'Báo cáo KN/TC',
+            routerLink: ['/pages/reports/report'],
           },
           /*
           {

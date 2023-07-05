@@ -120,7 +120,7 @@ export class ReportComponent implements OnInit, OnDestroy {
     switch (this.loaiVuViec) {
       case LoaiVuViec.KhieuNai:{
         this.breadcrumb.push({
-          label: ' Sổ theo dõi Khiếu nại',
+          label: ' Báo cáo Khiếu nại',
           icon: 'pi pi-envelope',
           disabled: true,
         });
@@ -128,7 +128,7 @@ export class ReportComponent implements OnInit, OnDestroy {
       }
       case LoaiVuViec.ToCao:{
         this.breadcrumb.push({
-          label: ' Sổ theo dõi Tố cáo',
+          label: ' Báo cáo Tố cáo',
           icon: 'fa fa-balance-scale',
           disabled: true,
         });
@@ -292,7 +292,7 @@ export class ReportComponent implements OnInit, OnDestroy {
           if (data) {
             let fileName =
               this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +
-              '_Sổ theo dõi Đơn thư Khiếu nại - Tố cáo.xlsx';
+              '_Theo dõi Đơn thư Khiếu nại - Tố cáo.xlsx';
             const uint8Array = this.utilService.saveFile(data, TYPE_EXCEL, fileName);
           }
           this.layoutService.blockUI$.next(false);
