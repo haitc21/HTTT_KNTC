@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,25 +27,13 @@ namespace KNTC.ApplicationConfigurations;
 [ExposeServices(typeof(IAbpApplicationConfigurationAppService), typeof(AbpApplicationConfigurationAppService), typeof(ApplicationConfigurationAppService))]
 public class ApplicationConfigurationAppService : AbpApplicationConfigurationAppService
 {
-    private readonly AbpLocalizationOptions _localizationOptions;
-    private readonly AbpMultiTenancyOptions _multiTenancyOptions;
     private readonly IServiceProvider _serviceProvider;
-    private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
-    private readonly IPermissionDefinitionManager _permissionDefinitionManager;
-    private readonly DefaultAuthorizationPolicyProvider _defaultAuthorizationPolicyProvider;
-    private readonly IPermissionChecker _permissionChecker;
-    private readonly IAuthorizationService _authorizationService;
-    private readonly ICurrentUser _currentUser;
     private readonly ISettingProvider _settingProvider;
     private readonly ISettingDefinitionManager _settingDefinitionManager;
-    private readonly IFeatureDefinitionManager _featureDefinitionManager;
-    private readonly ILanguageProvider _languageProvider;
-    private readonly ITimezoneProvider _timezoneProvider;
-    private readonly AbpClockOptions _abpClockOptions;
-    private readonly ICachedObjectExtensionsDtoService _cachedObjectExtensionsDtoService;
     private readonly AbpApplicationConfigurationOptions _options;
 
-    public ApplicationConfigurationAppService(IOptions<AbpLocalizationOptions> localizationOptions,
+    public ApplicationConfigurationAppService(
+        IOptions<AbpLocalizationOptions> localizationOptions,
         IOptions<AbpMultiTenancyOptions> multiTenancyOptions,
         IServiceProvider serviceProvider,
         IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
@@ -60,46 +49,82 @@ public class ApplicationConfigurationAppService : AbpApplicationConfigurationApp
         ITimezoneProvider timezoneProvider,
         IOptions<AbpClockOptions> abpClockOptions,
         ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService,
-        IOptions<AbpApplicationConfigurationOptions> options) 
+        IOptions<AbpApplicationConfigurationOptions> options)
         : base(localizationOptions, multiTenancyOptions, serviceProvider, abpAuthorizationPolicyProvider, permissionDefinitionManager, defaultAuthorizationPolicyProvider, permissionChecker, authorizationService, currentUser, settingProvider, settingDefinitionManager, featureDefinitionManager, languageProvider, timezoneProvider, abpClockOptions, cachedObjectExtensionsDtoService, options)
     {
         _serviceProvider = serviceProvider;
-        _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
-        _permissionDefinitionManager = permissionDefinitionManager;
-        _defaultAuthorizationPolicyProvider = defaultAuthorizationPolicyProvider;
-        _permissionChecker = permissionChecker;
-        _authorizationService = authorizationService;
-        _currentUser = currentUser;
         _settingProvider = settingProvider;
         _settingDefinitionManager = settingDefinitionManager;
-        _featureDefinitionManager = featureDefinitionManager;
-        _languageProvider = languageProvider;
-        _timezoneProvider = timezoneProvider;
-        _abpClockOptions = abpClockOptions.Value;
-        _cachedObjectExtensionsDtoService = cachedObjectExtensionsDtoService;
         _options = options.Value;
-        _localizationOptions = localizationOptions.Value;
-        _multiTenancyOptions = multiTenancyOptions.Value;
     }
 
     public override async Task<ApplicationConfigurationDto> GetAsync()
     {
         //TODO: Optimize & cache..?
 
-        Logger.LogDebug("Executing AbpApplicationConfigurationAppService.GetAsync()...");
+        Logger.LogInformation("Executing AbpApplicationConfigurationAppService.GetAsync()...");
+        var stopwatch = new Stopwatch();
+
+        stopwatch.Start();
+        var authConfig = await GetAuthConfigAsync();
+        stopwatch.Stop();
+        Logger.LogInformation($"GetAuthConfigAsync time: {stopwatch.Elapsed}");
+        stopwatch.Reset();
+
+        stopwatch.Start();
+        var featureConfig = await GetFeaturesConfigAsync();
+        stopwatch.Stop();
+        Logger.LogInformation($"GetFeaturesConfigAsync time: {stopwatch.Elapsed}");
+        stopwatch.Reset();
+
+        stopwatch.Start();
+        var globalFeatureConfig = await GetGlobalFeaturesConfigAsync();
+        stopwatch.Stop();
+        Logger.LogInformation($"GetGlobalFeaturesConfigAsync time: {stopwatch.Elapsed}");
+        stopwatch.Reset();
+
+        stopwatch.Start();
+        var localizationConfig = await GetLocalizationConfigAsync();
+        stopwatch.Stop();
+        Logger.LogInformation($"GetLocalizationConfigAsync elapsed time: {stopwatch.Elapsed}");
+        stopwatch.Reset();
+
+        stopwatch.Start();
+        var curUser = GetCurrentUser();
+        stopwatch.Stop();
+        Logger.LogInformation($"GetCurrentUser elapsed time: {stopwatch.Elapsed}");
+        stopwatch.Reset();
+
+        stopwatch.Start();
+        var setting = await GetSettingConfigAsync();
+        stopwatch.Stop();
+        Logger.LogInformation($"GetSettingConfigAsync elapsed time: {stopwatch.Elapsed}");
+        stopwatch.Reset();
+
+        stopwatch.Start();
+        var timingConfig = await GetTimingConfigAsync();
+        stopwatch.Stop();
+        Logger.LogInformation($"GetTimingConfigAsync elapsed time: {stopwatch.Elapsed}");
+        stopwatch.Reset();
+
+        stopwatch.Start();
+        var clockConfig = GetClockConfig();
+        stopwatch.Stop();
+        Logger.LogInformation($"GetClockConfig elapsed time: {stopwatch.Elapsed}");
+        stopwatch.Reset();
 
         var result = new ApplicationConfigurationDto
         {
-            Auth = await GetAuthConfigAsync(),
-            //Features = await GetFeaturesConfigAsync(),
-            //GlobalFeatures = await GetGlobalFeaturesConfigAsync(),
-            Localization = await GetLocalizationConfigAsync(),
-            CurrentUser = GetCurrentUser(),
-            Setting = await GetSettingConfigAsync(),
+            Auth = authConfig,
+            Features = featureConfig,
+            GlobalFeatures = globalFeatureConfig,
+            Localization = localizationConfig,
+            CurrentUser = curUser,
+            Setting = setting,
             //MultiTenancy = GetMultiTenancy(),
             //CurrentTenant = GetCurrentTenant(),
-            Timing = await GetTimingConfigAsync(),
-            Clock = GetClockConfig(),
+            Timing = timingConfig,
+            Clock = clockConfig,
             //ObjectExtensions = _cachedObjectExtensionsDtoService.Get(),
             //ExtraProperties = new ExtraPropertyDictionary()
         };
