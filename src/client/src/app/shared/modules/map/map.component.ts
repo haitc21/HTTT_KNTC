@@ -28,9 +28,7 @@ import 'leaflet-draw';
 import 'leaflet.measurecontrol';
 
 import { format } from 'date-fns';
-import { environment } from 'src/environments/environment';
 import { LinhVucOptions } from '../../constants/consts';
-import { environment as environmentProd } from 'src/environments/environment.prod';
 import { GetSysConfigService } from '../../services/sysconfig.services';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { SysConfigConsts } from '../../constants/sys-config.consts';
@@ -81,12 +79,11 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   idMap: string = uuidv4();
   map: L.Map;
 
-  center: L.LatLng = L.latLng(21.6825, 105.8442);
+  center: any = L.latLng(21.6825, 105.8442);
 
   myStyle: any;
 
   bSpatialLoaded: boolean = false;
-  bLoading: boolean = false;
 
   markers: any;
   info: any;
@@ -125,7 +122,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
           //this.buildLocateBtn();
           //this.buildEventMapClick();
           this.renderMarkers(this.data);
-          //this.renderSpatialData(this.spatialData);
+          // this.renderSpatialData(this.spatialData);
           this.layoutService.blockUI$.next(false);
         },
         err => {
@@ -135,7 +132,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.data && changes.data.currentValue && !changes.data.isFirstChange())
+    if (this.map && changes.data && changes.data?.currentValue && !changes.data?.isFirstChange())
       this.renderMarkers(changes.data.currentValue);
 
     if (changes.duLieuToaDo) {
@@ -144,15 +141,17 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         this.letZoom(new_center);
       }
     }
-    //if (!changes.bShowSpatial.isFirstChange())
-    //this.renderSpatialData(this.bShowSpatial);
+    if (!changes.bShowSpatial?.isFirstChange()) {
+      this.renderSpatialData(this.bShowSpatial);
+    }
   }
 
   initMap() {
     //Khoi tao ban do
+    debugger
     this.map = L.map(this.idMap, {
       measureControl: true,
-    }).setView(this.center, this.zoomLv);
+    }).setView([this.center.lat, this.center.lng], this.zoomLv);
 
     //Neu co dulieutoado->zooming
     if (this.checkToado(this.duLieuToaDo)) {
@@ -1114,21 +1113,26 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     */
     if (visible) {
       if (!this.bSpatialLoaded) {
+        this.layoutService.blockUI$.next(true);
         this.quyhoach = L.tileLayer.wms(`${this.geoserverUrl}/geoserver/kntc/wms?`, {
           layers: 'kntc:phoyen',
           format: 'image/png',
           transparent: true,
         });
-        this.quyhoach.on('loading', function (event) {
-          this.bLoading = true;
+
+        this.quyhoach.on('tileload', () => {
+          if (!this.bSpatialLoaded) {
+            this.bSpatialLoaded = true;
+            this.layoutService.blockUI$.next(false);
+          }
         });
-        this.quyhoach.on('load', function (event) {
-          this.bLoading = false;
+        this.quyhoach.on('tileerror', error => {
+          console.log('WMS tiles failed to load:', error);
+          this.layoutService.blockUI$.next(false);
         });
-        this.bSpatialLoaded = true;
         this.quyhoach.addTo(this.map);
       } else this.quyhoach.addTo(this.map);
-    } else if (this.quyhoach != undefined) this.quyhoach.removeFrom(this.map);
+    } else if (this.quyhoach) this.quyhoach.removeFrom(this.map);
   }
 
   buildProperties(dataMap: SummaryDto) {

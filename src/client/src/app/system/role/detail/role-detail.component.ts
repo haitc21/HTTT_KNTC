@@ -71,7 +71,6 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
-    debugger;
     this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) {
