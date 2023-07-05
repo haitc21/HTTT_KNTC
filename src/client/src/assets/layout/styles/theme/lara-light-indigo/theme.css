@@ -6307,3 +6307,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
   background: #ed5565;
   border-radius: 5px;
 }
+
+.heading{
+  font-weight: bold;
+  color: #6366F1;
+}

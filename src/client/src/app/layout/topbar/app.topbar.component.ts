@@ -174,7 +174,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         ],
       },
       {
-        label: 'Thống kê',
+        label: 'Báo cáo/Thống kê',
         icon: 'fa fa-chart-bar',
         items: [
           {
