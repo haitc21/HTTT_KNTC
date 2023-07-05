@@ -15,8 +15,6 @@ import { UserInfoDto } from '@proxy/users';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SetPasswordComponent } from 'src/app/system/user/set-password/set-password.component';
 import { LinhVuc } from '@proxy';
-import { environment } from 'src/environments/environment';
-import { environment as environmentProd } from 'src/environments/environment.prod';
 import { GetSysConfigService } from 'src/app/shared/services/sysconfig.services';
 import { Subject, forkJoin, takeUntil } from 'rxjs';
 import { SysConfigConsts } from 'src/app/shared/constants/sys-config.consts';

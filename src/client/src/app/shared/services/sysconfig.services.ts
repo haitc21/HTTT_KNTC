@@ -10,20 +10,25 @@ export class GetSysConfigService {
   constructor(private sysConfigService: SysConfigService) {}
 
   getSysConfig(name: string): Observable<any> {
-    const cacheKey = `${SysConfigConsts.Prefix}${name}`
+    const cacheKey = `${SysConfigConsts.Prefix}${name}`;
     const storedConfig = localStorage.getItem(cacheKey);
 
     if (storedConfig) {
-      const { value, expiry } = JSON.parse(storedConfig);
-      const currentTime = new Date().getTime();
+      try {
+        const { value, expiry } = JSON.parse(storedConfig);
+        const currentTime = new Date().getTime();
 
-      if (currentTime < expiry) {
-        return new Observable(observer => {
-          observer.next(value);
-          observer.complete();
-        });
-      } else {
-        localStorage.removeItem(cacheKey);
+        if (currentTime < expiry) {
+          return new Observable(observer => {
+            observer.next(value);
+            observer.complete();
+          });
+        } else {
+          localStorage.removeItem(cacheKey);
+        }
+      } catch (error) {
+        console.error('Lỗi phân tích chuỗi JSON:', error);
+        console.log('storedConfig:', storedConfig);
       }
     }
     return this.sysConfigService.getByName(name).pipe(

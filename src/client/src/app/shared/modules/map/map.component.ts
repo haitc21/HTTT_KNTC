@@ -6,6 +6,7 @@ import {
   ComponentRef,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
   ViewContainerRef,
@@ -15,7 +16,6 @@ import { LoaiVuViec } from '@proxy';
 import { v4 as uuidv4 } from 'uuid';
 import { SummaryDto } from '@proxy/summaries';
 import { MapPopupComponent } from '../map-popup/map-popup.component';
-
 
 import * as L from 'leaflet';
 import 'leaflet.markercluster/dist/leaflet.markercluster';
@@ -28,9 +28,11 @@ import 'leaflet-draw';
 import 'leaflet.measurecontrol';
 
 import { format } from 'date-fns';
-import { environment } from 'src/environments/environment';
 import { LinhVucOptions } from '../../constants/consts';
-import { environment as environmentProd } from 'src/environments/environment.prod';
+import { GetSysConfigService } from '../../services/sysconfig.services';
+import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { SysConfigConsts } from '../../constants/sys-config.consts';
+import { Subject, forkJoin, takeUntil } from 'rxjs';
 
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
@@ -60,7 +62,8 @@ const redIcon = new L.Icon({
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements AfterViewInit, OnChanges {
+export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
+  private ngUnsubscribe = new Subject<void>();
   @Input() data: SummaryDto[] = [];
 
   //Show/Hide layer Quy hoach tren ban do
@@ -76,13 +79,12 @@ export class MapComponent implements AfterViewInit, OnChanges {
   idMap: string = uuidv4();
   map: L.Map;
 
-  center: L.LatLng = L.latLng(21.6825, 105.8442);
+  center: any = L.latLng(21.6825, 105.8442);
 
   myStyle: any;
 
   bSpatialLoaded: boolean = false;
-  bLoading: boolean = false;
-  
+
   markers: any;
   info: any;
   khieunai: any;
@@ -97,48 +99,66 @@ export class MapComponent implements AfterViewInit, OnChanges {
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private popupContainer: ViewContainerRef,
-    private appRef: ApplicationRef
-  ) {
-    this.geoserverUrl = isDevMode()
-      ? environment.apis.geoserver.url
-      : environmentProd.apis.geoserver.url;
-  }
-
+    private appRef: ApplicationRef,
+    private sysConfigService: GetSysConfigService,
+    public layoutService: LayoutService
+  ) {}
   ngAfterViewInit() {
-    this.initMap();
-    //this.buildLocateBtn();
-    //this.buildEventMapClick();
-    this.renderMarkers(this.data);
-    //this.renderSpatialData(this.spatialData);
+    this.getSysConfigAndInitMap();
+  }
+  private getSysConfigAndInitMap() {
+    this.layoutService.blockUI$.next(true);
+    let getGeoServerDomain$ = this.sysConfigService.getSysConfig(SysConfigConsts.GEOSERVER_DOMAIN);
+    let getMapCenter$ = this.sysConfigService.getSysConfig(SysConfigConsts.MAP_CENTER);
+
+    forkJoin([getGeoServerDomain$, getMapCenter$])
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        ([geoServerDomain, mapCenter]) => {
+          if (geoServerDomain) this.geoserverUrl = geoServerDomain.value;
+          if (mapCenter) this.center = this.convertStringCoordiate(mapCenter.value);
+
+          this.initMap();
+          //this.buildLocateBtn();
+          //this.buildEventMapClick();
+          this.renderMarkers(this.data);
+          // this.renderSpatialData(this.spatialData);
+          this.layoutService.blockUI$.next(false);
+        },
+        err => {
+          this.layoutService.blockUI$.next(false);
+        }
+      );
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.data && changes.data.currentValue && !changes.data.isFirstChange())
+    if (this.map && changes.data && changes.data?.currentValue && !changes.data?.isFirstChange())
       this.renderMarkers(changes.data.currentValue);
 
-    if (changes.duLieuToaDo){
-      if (this.checkToado(this.duLieuToaDo)){
-        var new_center: L.LatLng = this.convertStringCoordiate(this.duLieuToaDo)
+    if (changes.duLieuToaDo) {
+      if (this.checkToado(this.duLieuToaDo)) {
+        var new_center: L.LatLng = this.convertStringCoordiate(this.duLieuToaDo);
         this.letZoom(new_center);
       }
     }
-    //if (!changes.bShowSpatial.isFirstChange())
-    //this.renderSpatialData(this.bShowSpatial);
+    if (!changes.bShowSpatial?.isFirstChange()) {
+      this.renderSpatialData(this.bShowSpatial);
+    }
   }
 
   initMap() {
     //Khoi tao ban do
     this.map = L.map(this.idMap, {
       measureControl: true,
-    }).setView(this.center, this.zoomLv);
+    }).setView([this.center.lat, this.center.lng], this.zoomLv);
 
     //Neu co dulieutoado->zooming
-    if (this.checkToado(this.duLieuToaDo)){
-      var new_center: L.LatLng = this.convertStringCoordiate(this.duLieuToaDo)
+    if (this.checkToado(this.duLieuToaDo)) {
+      var new_center: L.LatLng = this.convertStringCoordiate(this.duLieuToaDo);
 
       this.letZoom(new_center);
     }
-    
+
     // GeoJSON layer (UTM15)
     //proj4.defs("EPSG:9213","+proj=tmerc +lat_0=0 +lon_0=106.5 +k=0.9999 +x_0=500000 +y_0=0 +ellps=WGS84 +towgs84=-191.90441429,-39.30318279,-111.45032835,-0.00928836,0.01975479,-0.00427372,0.252906278 +units=m +no_defs +type=crs");
 
@@ -249,18 +269,23 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.info = L.control();
     this.info.onAdd = function () {
       this._div = L.DomUtil.create('div', 'leaflet-control-info'); // create a div with a class "info"
-      L.DomEvent.disableClickPropagation(this._div);      
+      L.DomEvent.disableClickPropagation(this._div);
       this.update();
       return this._div;
     };
     this.info._addButton = function () {
       var button = L.DomUtil.create('button', 'button-close', this._div);
       button.textContent = 'Đóng';
-      L.DomEvent.on(button, 'click', function(e){
-        L.DomEvent.stop(e);
-        this._div.style.display = 'none'
-      }, this);
-    }
+      L.DomEvent.on(
+        button,
+        'click',
+        function (e) {
+          L.DomEvent.stop(e);
+          this._div.style.display = 'none';
+        },
+        this
+      );
+    };
     // method that we will use to update the control based on feature properties passed
 
     this.info.LinhVucNameOptions = LinhVucOptions;
@@ -466,8 +491,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
 
   letZoom(center) {
     var zoom = 15;
-    if (this.map)
-      this.map.flyTo(center, zoom);  // pan and zoom to positions as well;
+    if (this.map) this.map.flyTo(center, zoom); // pan and zoom to positions as well;
   }
 
   renderMarkers(data: SummaryDto[]) {
@@ -491,19 +515,17 @@ export class MapComponent implements AfterViewInit, OnChanges {
         //let geometry: any;
         let geojson: any;
         if (dataMap.duLieuToaDo != null)
-          //Có tọa độ thì lấy tọa độ
-          if (this.checkToado(dataMap.duLieuToaDo)){
+          if (this.checkToado(dataMap.duLieuToaDo)) {
+            //Có tọa độ thì lấy tọa độ
             toado = this.convertStringCoordiate(dataMap.duLieuToaDo);
           }
         else {
           //Không có tọa độ thì lấy điểm đầu tiên trong hình học
           //geometry = JSON.parse(dataMap.duLieuHinhHoc);
-          if (dataMap.duLieuHinhHoc!=null && dataMap.duLieuHinhHoc.trim()!=""){
-            geojson = JSON.parse(dataMap.duLieuHinhHoc);
-            var coordinates = geojson.geometry.coordinates;
-            //var coordinates = geometry.coordinates;
-            toado = coordinates[0];
-          }
+          geojson = JSON.parse(dataMap.duLieuHinhHoc);
+          var coordinates = geojson.geometry.coordinates;
+          //var coordinates = geometry.coordinates;
+          toado = coordinates[0];
         }
 
         //always add marker
@@ -599,21 +621,26 @@ export class MapComponent implements AfterViewInit, OnChanges {
     */
     if (visible) {
       if (!this.bSpatialLoaded) {
+        this.layoutService.blockUI$.next(true);
         this.quyhoach = L.tileLayer.wms(`${this.geoserverUrl}/geoserver/kntc/wms?`, {
           layers: 'kntc:phoyen',
           format: 'image/png',
           transparent: true,
         });
-        this.quyhoach.on('loading', function (event) {
-          this.bLoading = true;
+
+        this.quyhoach.on('tileload', () => {
+          if (!this.bSpatialLoaded) {
+            this.bSpatialLoaded = true;
+            this.layoutService.blockUI$.next(false);
+          }
         });
-        this.quyhoach.on('load', function (event) {
-          this.bLoading = false;
+        this.quyhoach.on('tileerror', error => {
+          console.log('WMS tiles failed to load:', error);
+          this.layoutService.blockUI$.next(false);
         });
-        this.bSpatialLoaded = true;
         this.quyhoach.addTo(this.map);
       } else this.quyhoach.addTo(this.map);
-    } else if (this.quyhoach != undefined) this.quyhoach.removeFrom(this.map);
+    } else if (this.quyhoach) this.quyhoach.removeFrom(this.map);
   }
 
   buildProperties(dataMap: SummaryDto) {
@@ -678,15 +705,22 @@ export class MapComponent implements AfterViewInit, OnChanges {
     this.map.fitBounds(e.target.getBounds());
   }
 
-  private checkToado(duLieuToaDo:any): boolean{
-    if (duLieuToaDo!=null && duLieuToaDo!=undefined){
-      var toado = duLieuToaDo.split(", ");
-      if (toado.length==2){
-        return isFinite(toado[0]) && Math.abs(toado[0]) <= 90 //valid Long
-              &&
-               isFinite(toado[1]) && Math.abs(toado[1]) <= 180;//valid Lat
+  private checkToado(duLieuToaDo: any): boolean {
+    if (duLieuToaDo != null && duLieuToaDo != undefined) {
+      var toado = duLieuToaDo.split(', ');
+      if (toado.length == 2) {
+        return (
+          isFinite(toado[0]) &&
+          Math.abs(toado[0]) <= 90 && //valid Long
+          isFinite(toado[1]) &&
+          Math.abs(toado[1]) <= 180
+        ); //valid Lat
       }
     }
     return false;
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
