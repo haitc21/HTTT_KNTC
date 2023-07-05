@@ -43,7 +43,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { ComplainComponent } from './complain/complain.component';
 import { DenounceComponent } from './denounce/denounce.component';
-import { LogBookComponent } from './reports/logbook.component';
+import { ReportComponent } from './reports/report.component';
 import { DenounceDetailComponent } from './denounce/detail/denounce-detail.component';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
@@ -58,7 +58,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     ComplainDetailComponent,
     DenounceComponent,
     DenounceDetailComponent,
-    LogBookComponent,
+    ReportComponent,
     FileAttachmentComponent,
     FileAttachmentDetailComponent
   ],

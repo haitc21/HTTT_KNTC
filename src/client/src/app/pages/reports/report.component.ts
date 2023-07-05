@@ -22,11 +22,11 @@ import { SummaryService } from '@proxy/summaries';
 import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 
 @Component({
-  selector: 'app-logbook',
-  templateUrl: './logbook.component.html',
-  styleUrls: ['./logbook.component.scss'],
+  selector: 'app-report',
+  templateUrl: './report.component.html',
+  styleUrls: ['./report.component.scss'],
 })
-export class LogBookComponent implements OnInit, OnDestroy {
+export class ReportComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   home: MenuItem;
