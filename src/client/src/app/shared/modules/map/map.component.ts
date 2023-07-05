@@ -510,22 +510,24 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     let toado: L.LatLng = new L.LatLng(0, 0);
     //Add markers
     data
-      .filter(x => x.duLieuToaDo != null || x.duLieuHinhHoc != null)
+      .filter(x => (x.duLieuToaDo != null && x.duLieuToaDo.trim() != "") || (x.duLieuHinhHoc != null && x.duLieuHinhHoc.trim() != ""))
       .forEach(dataMap => {        
         //let geometry: any;
         let geojson: any;
-        if (dataMap.duLieuToaDo != null)
-          if (this.checkToado(dataMap.duLieuToaDo)) {
-            //Có tọa độ thì lấy tọa độ
-            toado = this.convertStringCoordiate(dataMap.duLieuToaDo);
-          }
+        
+        if (this.checkToado(dataMap.duLieuToaDo)) {
+          //Có tọa độ hợp lệ thì lấy tọa độ 
+          toado = this.convertStringCoordiate(dataMap.duLieuToaDo);
+        }
         else {
           //Không có tọa độ thì lấy điểm đầu tiên trong hình học
           //geometry = JSON.parse(dataMap.duLieuHinhHoc);
-          geojson = JSON.parse(dataMap.duLieuHinhHoc);
-          var coordinates = geojson.geometry.coordinates;
-          //var coordinates = geometry.coordinates;
-          toado = coordinates[0];
+          if (dataMap.duLieuHinhHoc != null && dataMap.duLieuHinhHoc.trim() != ""){
+            geojson = JSON.parse(dataMap.duLieuHinhHoc);
+            var coordinates = geojson.geometry.coordinates;
+            //var coordinates = geometry.coordinates;
+            toado = coordinates[0];
+          }
         }
 
         //always add marker
