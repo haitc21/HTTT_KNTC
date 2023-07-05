@@ -483,11 +483,11 @@ export class MapComponent implements AfterViewInit, OnChanges {
       className: 'popupCustom',
       closeOnEscapeKey: true,
     };
+    let toado: L.LatLng = new L.LatLng(0, 0);
     //Add markers
     data
       .filter(x => x.duLieuToaDo != null || x.duLieuHinhHoc != null)
-      .forEach(dataMap => {
-        let toado: L.LatLng = new L.LatLng(0, 0);
+      .forEach(dataMap => {        
         //let geometry: any;
         let geojson: any;
         if (dataMap.duLieuToaDo != null)
@@ -498,10 +498,12 @@ export class MapComponent implements AfterViewInit, OnChanges {
         else {
           //Không có tọa độ thì lấy điểm đầu tiên trong hình học
           //geometry = JSON.parse(dataMap.duLieuHinhHoc);
-          geojson = JSON.parse(dataMap.duLieuHinhHoc);
-          var coordinates = geojson.geometry.coordinates;
-          //var coordinates = geometry.coordinates;
-          toado = coordinates[0];
+          if (dataMap.duLieuHinhHoc!=null && dataMap.duLieuHinhHoc.trim()!=""){
+            geojson = JSON.parse(dataMap.duLieuHinhHoc);
+            var coordinates = geojson.geometry.coordinates;
+            //var coordinates = geometry.coordinates;
+            toado = coordinates[0];
+          }
         }
 
         //always add marker
@@ -525,7 +527,7 @@ export class MapComponent implements AfterViewInit, OnChanges {
         else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) marker.addTo(this.tocao);
 
         //Add duLieuHinhHoc if any
-        if (dataMap.duLieuHinhHoc != null) {
+        if (dataMap.duLieuHinhHoc!=null && dataMap.duLieuHinhHoc.trim()!=""){
           //this.quyhoach.clearLayers();
           //if (geometry==undefined)
           //  geometry = JSON.parse(dataMap.duLieuHinhHoc);
