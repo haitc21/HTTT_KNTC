@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using KNTC.SysConfigs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,6 +14,7 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ObjectExtending;
 using Volo.Abp.Authorization;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
@@ -31,6 +34,8 @@ public class ApplicationConfigurationAppService : AbpApplicationConfigurationApp
     private readonly ISettingProvider _settingProvider;
     private readonly ISettingDefinitionManager _settingDefinitionManager;
     private readonly AbpApplicationConfigurationOptions _options;
+    private readonly IDistributedCache<ApplicationLocalizationConfigurationDto, string> _cacheLocalization;
+    private readonly IDistributedCache<ApplicationSettingConfigurationDto, string> _cacheSetting;
 
     public ApplicationConfigurationAppService(
         IOptions<AbpLocalizationOptions> localizationOptions,
@@ -49,82 +54,96 @@ public class ApplicationConfigurationAppService : AbpApplicationConfigurationApp
         ITimezoneProvider timezoneProvider,
         IOptions<AbpClockOptions> abpClockOptions,
         ICachedObjectExtensionsDtoService cachedObjectExtensionsDtoService,
-        IOptions<AbpApplicationConfigurationOptions> options)
+        IOptions<AbpApplicationConfigurationOptions> options,
+        IDistributedCache<ApplicationLocalizationConfigurationDto, string> cacheLocalization,
+        IDistributedCache<ApplicationSettingConfigurationDto, string> cacheSetting)
         : base(localizationOptions, multiTenancyOptions, serviceProvider, abpAuthorizationPolicyProvider, permissionDefinitionManager, defaultAuthorizationPolicyProvider, permissionChecker, authorizationService, currentUser, settingProvider, settingDefinitionManager, featureDefinitionManager, languageProvider, timezoneProvider, abpClockOptions, cachedObjectExtensionsDtoService, options)
     {
         _serviceProvider = serviceProvider;
         _settingProvider = settingProvider;
         _settingDefinitionManager = settingDefinitionManager;
         _options = options.Value;
+        _cacheLocalization = cacheLocalization;
+        _cacheSetting = cacheSetting;
     }
 
     public override async Task<ApplicationConfigurationDto> GetAsync()
     {
-        //TODO: Optimize & cache..?
+        //Logger.LogInformation("Executing AbpApplicationConfigurationAppService.GetAsync()...");
+        //var stopwatch = new Stopwatch();
 
-        Logger.LogInformation("Executing AbpApplicationConfigurationAppService.GetAsync()...");
-        var stopwatch = new Stopwatch();
-
-        stopwatch.Start();
+        //stopwatch.Start();
         var authConfig = await GetAuthConfigAsync();
-        stopwatch.Stop();
-        Logger.LogInformation($"GetAuthConfigAsync time: {stopwatch.Elapsed}");
-        stopwatch.Reset();
+        //stopwatch.Stop();
+        //Logger.LogInformation($"GetAuthConfigAsync time: {stopwatch.Elapsed}");
+        //stopwatch.Reset();
 
-        stopwatch.Start();
-        var featureConfig = await GetFeaturesConfigAsync();
-        stopwatch.Stop();
-        Logger.LogInformation($"GetFeaturesConfigAsync time: {stopwatch.Elapsed}");
-        stopwatch.Reset();
+        //stopwatch.Start();
+        //var featureConfig = await GetFeaturesConfigAsync();
+        //stopwatch.Stop();
+        //Logger.LogInformation($"GetFeaturesConfigAsync time: {stopwatch.Elapsed}");
+        //stopwatch.Reset();
 
-        stopwatch.Start();
-        var globalFeatureConfig = await GetGlobalFeaturesConfigAsync();
-        stopwatch.Stop();
-        Logger.LogInformation($"GetGlobalFeaturesConfigAsync time: {stopwatch.Elapsed}");
-        stopwatch.Reset();
+        //stopwatch.Start();
+        //var globalFeatureConfig = await GetGlobalFeaturesConfigAsync();
+        //stopwatch.Stop();
+        //Logger.LogInformation($"GetGlobalFeaturesConfigAsync time: {stopwatch.Elapsed}");
+        //stopwatch.Reset();
 
-        stopwatch.Start();
-        var localizationConfig = await GetLocalizationConfigAsync();
-        stopwatch.Stop();
-        Logger.LogInformation($"GetLocalizationConfigAsync elapsed time: {stopwatch.Elapsed}");
-        stopwatch.Reset();
+        //stopwatch.Start();
+        var localizationConfig = await _cacheLocalization.GetOrAddAsync(
+        "AppConfigLocalization",
+        async () => await GetLocalizationConfigAsync(),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddHours(24)
+        });
+        //stopwatch.Stop();
+        //Logger.LogInformation($"GetLocalizationConfigAsync elapsed time: {stopwatch.Elapsed}");
+        //stopwatch.Reset();
 
-        stopwatch.Start();
+        //stopwatch.Start();
         var curUser = GetCurrentUser();
-        stopwatch.Stop();
-        Logger.LogInformation($"GetCurrentUser elapsed time: {stopwatch.Elapsed}");
-        stopwatch.Reset();
+        //stopwatch.Stop();
+        //Logger.LogInformation($"GetCurrentUser elapsed time: {stopwatch.Elapsed}");
+        //stopwatch.Reset();
 
-        stopwatch.Start();
-        var setting = await GetSettingConfigAsync();
-        stopwatch.Stop();
-        Logger.LogInformation($"GetSettingConfigAsync elapsed time: {stopwatch.Elapsed}");
-        stopwatch.Reset();
+        //stopwatch.Start();
+        var setting = await _cacheSetting.GetOrAddAsync(
+        "AppConfigSetting",
+        async () => await GetSettingConfigAsync(),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddHours(24)
+        });
+        //stopwatch.Stop();
+        //Logger.LogInformation($"GetSettingConfigAsync elapsed time: {stopwatch.Elapsed}");
+        //stopwatch.Reset();
 
-        stopwatch.Start();
-        var timingConfig = await GetTimingConfigAsync();
-        stopwatch.Stop();
-        Logger.LogInformation($"GetTimingConfigAsync elapsed time: {stopwatch.Elapsed}");
-        stopwatch.Reset();
+        //stopwatch.Start();
+        //var timingConfig = await GetTimingConfigAsync();
+        //stopwatch.Stop();
+        //Logger.LogInformation($"GetTimingConfigAsync elapsed time: {stopwatch.Elapsed}");
+        //stopwatch.Reset();
 
-        stopwatch.Start();
-        var clockConfig = GetClockConfig();
-        stopwatch.Stop();
-        Logger.LogInformation($"GetClockConfig elapsed time: {stopwatch.Elapsed}");
-        stopwatch.Reset();
+        //stopwatch.Start();
+        //var clockConfig = GetClockConfig();
+        //stopwatch.Stop();
+        //Logger.LogInformation($"GetClockConfig elapsed time: {stopwatch.Elapsed}");
+        //stopwatch.Reset();
 
         var result = new ApplicationConfigurationDto
         {
             Auth = authConfig,
-            Features = featureConfig,
-            GlobalFeatures = globalFeatureConfig,
+            //Features = featureConfig,
+            //GlobalFeatures = globalFeatureConfig,
             Localization = localizationConfig,
             CurrentUser = curUser,
             Setting = setting,
             //MultiTenancy = GetMultiTenancy(),
             //CurrentTenant = GetCurrentTenant(),
-            Timing = timingConfig,
-            Clock = clockConfig,
+            //Timing = timingConfig,
+            //Clock = clockConfig,
             //ObjectExtensions = _cachedObjectExtensionsDtoService.Get(),
             //ExtraProperties = new ExtraPropertyDictionary()
         };
@@ -141,7 +160,7 @@ public class ApplicationConfigurationAppService : AbpApplicationConfigurationApp
             }
         }
 
-        Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetAsync().");
+        //Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetAsync().");
 
         return result;
     }
