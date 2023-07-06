@@ -2,7 +2,7 @@
 using Localization.Resources.AbpUi;
 using System;
 using Volo.Abp.Account;
-using Volo.Abp.FeatureManagement;
+//using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -20,7 +20,7 @@ namespace KNTC;
     typeof(AbpIdentityHttpApiModule),
     typeof(AbpPermissionManagementHttpApiModule),
     //typeof(AbpTenantManagementHttpApiModule),
-    typeof(AbpFeatureManagementHttpApiModule),
+    //typeof(AbpFeatureManagementHttpApiModule),
     typeof(AbpSettingManagementHttpApiModule)
     )]
 public class KNTCHttpApiModule : AbpModule
