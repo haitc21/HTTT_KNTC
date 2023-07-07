@@ -14,21 +14,16 @@ export class GetSysConfigService {
     const storedConfig = localStorage.getItem(cacheKey);
 
     if (storedConfig) {
-      try {
-        const { value, expiry } = JSON.parse(storedConfig);
-        const currentTime = new Date().getTime();
+      const { value, expiry } = JSON.parse(storedConfig);
+      const currentTime = new Date().getTime();
 
-        if (currentTime < expiry) {
-          return new Observable(observer => {
-            observer.next(value);
-            observer.complete();
-          });
-        } else {
-          localStorage.removeItem(cacheKey);
-        }
-      } catch (error) {
-        console.error('Lỗi phân tích chuỗi JSON:', error);
-        console.log('storedConfig:', storedConfig);
+      if (currentTime < expiry) {
+        return new Observable(observer => {
+          observer.next(value);
+          observer.complete();
+        });
+      } else {
+        localStorage.removeItem(cacheKey);
       }
     }
     return this.sysConfigService.getByName(name).pipe(

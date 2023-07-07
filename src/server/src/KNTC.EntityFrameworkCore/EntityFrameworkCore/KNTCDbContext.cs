@@ -15,7 +15,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
-using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+//using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
@@ -80,7 +80,7 @@ public class KNTCDbContext :
         builder.ConfigureAuditLogging();
         builder.ConfigureIdentity();
         builder.ConfigureOpenIddict();
-        builder.ConfigureFeatureManagement();
+        //builder.ConfigureFeatureManagement();
         //builder.ConfigureTenantManagement();
 
         builder.Entity<UserInfo>(b =>
