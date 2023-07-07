@@ -585,7 +585,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   getDraw() {
     //Cho phép vẽ
-    if (this.coordinateLabel=="Vẽ trên bản đồ"){//Chưa có -> Cho phép vẽ 
+    if (this.drawLabel=="Vẽ trên bản đồ"){//Chưa có -> Cho phép vẽ 
       this.mapComponent?.letDraw();
       
       this.notificationService.showSuccess('Bạn hãy Sử dụng công cụ vẽ trên bản đồ để thể hiện thửa đất có khiếu nại!');

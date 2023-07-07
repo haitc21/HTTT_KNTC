@@ -423,17 +423,15 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
             color: '#0277bd',
           },
         },
-        circle: {
-          shapeOptions: {
-            clickable: false,
-          },
-        },
         rectangle: {
           showArea: false,
           shapeOptions: {
             clickable: false,
           },
         },
+        circle: false,
+        marker: false,
+        
       },
       edit: {
         featureGroup: editableLayer, //REQUIRED!!
