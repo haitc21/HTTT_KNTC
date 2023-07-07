@@ -9,8 +9,10 @@ import { AuthGuard, PermissionGuard } from '@abp/ng.core';
 import { ReportComponent } from './reports/report.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
+  {
+    path: '',
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+  },
   { path: 'map', component: SearchMapComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'reports/logbook', component: ReportComponent, canActivate: [AuthGuard] },
@@ -23,4 +25,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class HomeRoutingModule {}
+export class PagesRoutingModule {}

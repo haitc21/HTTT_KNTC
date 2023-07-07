@@ -27,13 +27,11 @@ import { CoreModule } from '@abp/ng.core';
 import { PasswordModule } from 'primeng/password';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CardModule } from 'primeng/card';
-import { HomeRoutingModule as PagesRoutingModule } from './pages-routing.module';
+import { PagesRoutingModule } from './pages-routing.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
-import { HomeComponent } from './home/home.component';
 import { SearchMapComponent } from './search-map/search-map.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartModule } from 'primeng/chart';
-import { KNTCSharedModule } from '../shared/modules/shared.module';
 import { FieldsetModule } from 'primeng/fieldset';
 import { ComplainDetailComponent } from './complain/detail/complain-detail.component';
 import { TabViewModule } from 'primeng/tabview';
@@ -49,9 +47,10 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
 import { AccordionModule } from 'primeng/accordion';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { MapModule } from '../shared/modules/map/map.module';
+import { ValidationMessagedModule } from '../shared/modules/validation-message/validation-message.module';
 @NgModule({
   declarations: [
-    HomeComponent,
     SearchMapComponent,
     DashboardComponent,
     ComplainComponent,
@@ -78,7 +77,8 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     CheckboxModule,
     InputTextareaModule,
     EditorModule,
-    KNTCSharedModule,
+    ValidationMessagedModule,
+    MapModule,
     BadgeModule,
     ImageModule,
     ConfirmDialogModule,
@@ -104,6 +104,5 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     SelectButtonModule,
     DialogModule
   ],
-  exports: [HomeComponent],
 })
 export class PagesModule {}

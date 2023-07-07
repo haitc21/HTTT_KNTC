@@ -1,19 +1,19 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LoaiKetQua, LoaiVuViec } from '@proxy';
-import { SummaryDto} from '@proxy/summaries';
+import { SummaryDto } from '@proxy/summaries';
 import { DialogService } from 'primeng/dynamicdialog';
-import { NotificationService } from '../../services/notification.service';
-import { MessageConstants } from '../../constants/messages.const';
+import { NotificationService } from '../../../services/notification.service';
+import { MessageConstants } from '../../../constants/messages.const';
 import { ComplainDetailComponent } from 'src/app/pages/complain/detail/complain-detail.component';
-import { DIALOG_BG } from '../../constants/sizes.const';
+import { DIALOG_BG } from '../../../constants/sizes.const';
 import { DenounceDetailComponent } from 'src/app/pages/denounce/detail/denounce-detail.component';
-import { UtilityService } from '../../services/utility.service';
+import { UtilityService } from '../../../services/utility.service';
 import { Subject, takeUntil } from 'rxjs';
 import { ComplainDto, ComplainService } from '@proxy/complains';
 import { DenounceDto, DenounceService } from '@proxy/denounces';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { loaiKQOptions } from '../../constants/consts';
+import { loaiKQOptions } from '../../../constants/consts';
 
 @Component({
   selector: 'app-map-popup',
@@ -26,7 +26,6 @@ export class MapPopupComponent implements OnInit, OnDestroy {
 
   @Input() dataMap!: SummaryDto;
   public form: FormGroup;
-  hoSo!: SummaryDto;
   loaiKQOPtions = loaiKQOptions;
 
   constructor(
@@ -36,87 +35,74 @@ export class MapPopupComponent implements OnInit, OnDestroy {
     private utilService: UtilityService,
     private complainService: ComplainService,
     private denounceService: DenounceService,
-    private layoutService: LayoutService,
+    private layoutService: LayoutService
   ) {}
 
   ngOnInit() {
+    this.buildForm();
     if (this.dataMap.loaiVuViec == LoaiVuViec.KhieuNai) this.loadComplain();
     else this.loadDenounce();
   }
 
   loadComplain() {
-    this.layoutService.blockUI$.next(true);
+    this.toggleBlockUI(true);
     this.complainService
       .get(this.dataMap.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
-        res => {
-          this.mapData(res, LoaiVuViec.KhieuNai);
-          this.buildForm();
-          this.layoutService.blockUI$.next(false);
+        (res: ComplainDto) => {
+          this.setValueForm(res);
+          this.toggleBlockUI(false);
         },
         err => {
-          this.layoutService.blockUI$.next(false);
+          this.toggleBlockUI(false);
         }
       );
   }
 
   loadDenounce() {
-    this.layoutService.blockUI$.next(true);
+    this.toggleBlockUI(true);
     this.denounceService
       .get(this.dataMap.id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
-        res => {
-          this.mapData(res, LoaiVuViec.ToCao);
-          this.buildForm();
-          this.layoutService.blockUI$.next(false);
+        (res: DenounceDto) => {
+          this.setValueForm(res);
+          this.toggleBlockUI(false);
         },
         err => {
-          this.layoutService.blockUI$.next(false);
+          this.toggleBlockUI(false);
         }
       );
   }
-
-  mapData(res: ComplainDto | DenounceDto, loaiVuViec: LoaiVuViec) {
-    let item = {
-      id: this.dataMap.id,
-      maHoSo: res.maHoSo,
-      nguoiNopDon: res.nguoiNopDon,
-      dienThoai: res.dienThoai,
-      diaChiLienHe: res.diaChiLienHe,
-      loaiVuViec: loaiVuViec,
-      tieuDe: res.tieuDe,
-      thoiGianTiepNhan: res.thoiGianTiepNhan,
-      thoiGianHenTraKQ: res.thoiGianHenTraKQ,
-      soThua: res.soThua,
-      toBanDo: res.toBanDo,
-      boPhanDangXL: res.boPhanDangXL,
-      ketQua: res.ketQua,
-      duLieuToaDo: res.duLieuToaDo,
-      duLieuHinhHoc: res.duLieuHinhHoc,
-    } as SummaryDto;
-    this.hoSo = item;
+  setValueForm(hoSo: ComplainDto | DenounceDto) {
+    this.form.patchValue(hoSo);
+    this.form
+      .get('thoiGianTiepNhan')
+      .setValue(this.utilService.convertDateToLocal(hoSo.thoiGianTiepNhan));
+    this.form
+      .get('thoiGianHenTraKQ')
+      .setValue(this.utilService.convertDateToLocal(hoSo.thoiGianHenTraKQ));
+    this.form.disable();
   }
-
   buildForm() {
     this.form = this.fb.group({
-      maHoSo: [this.hoSo.maHoSo],
-      tieuDe: [this.hoSo.tieuDe],
-      nguoiNopDon: [this.hoSo.nguoiNopDon],
-      dienThoai: [this.hoSo.dienThoai],
-      thoiGianTiepNhan: [this.utilService.convertDateToLocal(this.hoSo.thoiGianTiepNhan)],
-      thoiGianHenTraKQ: [this.utilService.convertDateToLocal(this.hoSo.thoiGianHenTraKQ)],
-      soThua: [this.hoSo.soThua],
-      toBanDo: [this.hoSo.toBanDo],
-      boPhanDangXL: [this.hoSo.boPhanDangXL],
-      ketQua: [this.hoSo.ketQua],
+      id: [null],
+      maHoSo: [null],
+      tieuDe: [null],
+      nguoiNopDon: [null],
+      dienThoai: [null],
+      thoiGianTiepNhan: [null],
+      thoiGianHenTraKQ: [null],
+      soThua: [null],
+      toBanDo: [null],
+      boPhanDangXL: [null],
+      ketQua: [null],
     });
-    this.form.disable();
   }
 
   viewDetail() {
-    if (!this.hoSo) {
+    if (!this.form.value?.id) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
@@ -124,12 +110,12 @@ export class MapPopupComponent implements OnInit, OnDestroy {
       const ref = this.dialogService.open(ComplainDetailComponent, {
         height: '92vh',
         data: {
-          id: this.hoSo.id,
+          id: this.form.value?.id,
           loaiVuViec: LoaiVuViec.KhieuNai,
-          linhVuc: this.hoSo.linhVuc,
+          linhVuc: this.form.value?.linhVuc,
           mode: 'view',
         },
-        header: `Chi tiết khiếu nại/khiếu kiện "${this.hoSo.tieuDe}"`,
+        header: `Chi tiết khiếu nại/khiếu kiện "${this.form.value?.tieuDe}"`,
         width: DIALOG_BG,
       });
     }
@@ -137,12 +123,12 @@ export class MapPopupComponent implements OnInit, OnDestroy {
       const ref = this.dialogService.open(DenounceDetailComponent, {
         height: '92vh',
         data: {
-          id: this.hoSo.id,
+          id: this.form.value?.id,
           loaiVuViec: LoaiVuViec.ToCao,
-          linhVuc: this.hoSo.linhVuc,
+          linhVuc: this.form.value?.linhVuc,
           mode: 'view',
         },
-        header: `Chi tiết đơn tố cáo "${this.hoSo.tieuDe}"`,
+        header: `Chi tiết đơn tố cáo "${this.form.value?.tieuDe}"`,
         width: DIALOG_BG,
       });
     }
