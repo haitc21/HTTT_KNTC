@@ -12,8 +12,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
-using Serilog;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -37,7 +35,6 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.OpenIddict;
 using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -98,7 +95,6 @@ public class KNTCAuthServerModule : AbpModule
         //        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
         //        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
         //    });
-
     }
 
     private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)

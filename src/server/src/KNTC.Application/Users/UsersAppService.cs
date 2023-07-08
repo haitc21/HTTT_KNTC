@@ -101,7 +101,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         var roles = await UserRepository.GetRolesAsync(id);
 
         return new ListResultDto<IdentityRoleDto>(
-            ObjectMapper.Map<List<Volo.Abp.Identity.IdentityRole>, List<IdentityRoleDto>>(    roles)
+            ObjectMapper.Map<List<Volo.Abp.Identity.IdentityRole>, List<IdentityRoleDto>>(roles)
         );
     }
 

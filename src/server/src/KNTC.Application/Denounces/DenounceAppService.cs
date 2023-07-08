@@ -1,5 +1,4 @@
-﻿using KNTC.Complains;
-using KNTC.Extenssions;
+﻿using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Localization;
 using KNTC.NPOI;
@@ -322,8 +321,8 @@ public class DenounceAppService : CrudAppService<
         {
             linhVuc = input.LinhVuc.Value.ToVNString();
         }
-         row = sheet.GetCreateRow(6);
-         cell = row.GetCreateCell(4);
+        row = sheet.GetCreateRow(6);
+        cell = row.GetCreateCell(4);
         cell.SetCellValue(linhVuc);
         cell.CellStyle.WrapText = false;
         cell.CellStyle.SetFont(font);

@@ -183,7 +183,6 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         font.FontName = "Times New Roman";
         cellStyle.SetFont(font);
 
-
         IRow row = sheet.GetCreateRow(5);
         var cell = row.GetCreateCell(4);
         cell.SetCellValue(input.Keyword);
@@ -376,7 +375,6 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         font.FontName = "Times New Roman";
         cellStyle.SetFont(font);
 
-
         IRow row = sheet.GetCreateRow(4);
         var cell = row.GetCreateCell(4);
         cell.SetCellValue(input.Keyword);
@@ -511,7 +509,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         var result = new SummaryChartDto();
 
         //LandComplain
-        result.LandComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai);        
+        result.LandComplain = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai);
         result.LandComplain_Dung = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai && (x.KetQua == LoaiKetQua.Dung || x.KetQua2 == LoaiKetQua.Dung || x.KetQua1 == LoaiKetQua.Dung));
         result.LandComplain_CoDungCoSai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai && (x.KetQua == LoaiKetQua.CoDungCoSai || x.KetQua2 == LoaiKetQua.CoDungCoSai || x.KetQua1 == LoaiKetQua.CoDungCoSai));
         result.LandComplain_Sai = await _complainRepo.CountAsync(x => x.LinhVuc == LinhVuc.DatDai && (x.KetQua == LoaiKetQua.Sai || x.KetQua2 == LoaiKetQua.Sai || x.KetQua1 == LoaiKetQua.Sai));

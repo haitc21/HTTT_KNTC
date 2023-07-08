@@ -1,10 +1,7 @@
 ﻿using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using NPOI.OpenXmlFormats.Vml.Office;
-using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;

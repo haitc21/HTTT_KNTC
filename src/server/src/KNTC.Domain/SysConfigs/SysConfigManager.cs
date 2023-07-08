@@ -22,7 +22,7 @@ public class SysConfigManager : DomainService
         await CheckName(name);
         return new SysConfig(name, value)
         {
-            Description= description
+            Description = description
         };
     }
 
@@ -33,7 +33,7 @@ public class SysConfigManager : DomainService
         Check.NotNull(sysConfig, nameof(sysConfig));
         Check.NotNullOrWhiteSpace(value, nameof(value));
         sysConfig.Value = value;
-        sysConfig.Description= description;
+        sysConfig.Description = description;
     }
 
     private async Task ChangeName(SysConfig sysConfig, string name)

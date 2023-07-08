@@ -8,7 +8,9 @@ public class UpdateSysConfigDto : EntityDto<int>, IHasConcurrencyStamp
 {
     [Required]
     public string Value { get; set; }
+
     [MaxLength(KNTCValidatorConsts.MaxDescriptionLength)]
     public string Description { get; set; }
+
     public string ConcurrencyStamp { get; set; }
 }

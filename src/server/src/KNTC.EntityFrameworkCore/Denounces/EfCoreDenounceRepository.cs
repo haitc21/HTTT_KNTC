@@ -100,7 +100,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                    DateTime? toDate,
                                                    bool? CongKhai,
                                                    string nguoiNopDon)
-    {                                            
+    {
         keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
         nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();

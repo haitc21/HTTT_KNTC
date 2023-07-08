@@ -19,6 +19,7 @@ public class SysConfig : AuditedAggregateRoot<int>
         ChangeName(name);
         Value = value;
     }
+
     public string Name { get; private set; }
     public string Value { get; set; }
     public string Description { get; set; }

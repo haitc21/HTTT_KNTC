@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace KNTC.SysConfigs;
@@ -13,5 +12,6 @@ public interface ISysConfigAppService :
         UpdateSysConfigDto>
 {
     Task<SysConfigCacheItem> GetByNameAsync(string name);
+
     Task DeleteMultipleAsync(IEnumerable<int> ids);
 }

@@ -2,8 +2,6 @@
 using KNTC.Denounces;
 using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using NPOI.SS.Formula.Functions;
-using Scriban.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +43,7 @@ public class SummaryRepository : ISummaryRepository
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper().Trim() : keyword;
         nguoiNopDon = !nguoiNopDon.IsNullOrEmpty() ? nguoiNopDon.ToUpper().Trim() : "";
         var dbContext = await _dbContextProvider.GetDbContextAsync();
-        
+
         IQueryable<Summary> complainQuery = Enumerable.Empty<Summary>().AsQueryable();
         IQueryable<Summary> denounceQuery = Enumerable.Empty<Summary>().AsQueryable();
 
@@ -110,7 +108,7 @@ public class SummaryRepository : ISummaryRepository
                             SoThua = c.SoThua,
                             ToBanDo = c.ToBanDo
                         });
-            else            
+            else
                 complainQuery = dbContext.Set<Complain>()
                         .WhereIf(landComplain == false, x => x.LinhVuc != LinhVuc.DatDai)
                         .WhereIf(enviromentComplain == false, x => x.LinhVuc != LinhVuc.MoiTruong)
@@ -173,7 +171,6 @@ public class SummaryRepository : ISummaryRepository
                             ToBanDo = c.ToBanDo
                         });
         }
-            
 
         if (!loaiVuViec.HasValue || loaiVuViec.Equals(LoaiVuViec.TatCa) || loaiVuViec.Equals(LoaiVuViec.ToCao))
         {
