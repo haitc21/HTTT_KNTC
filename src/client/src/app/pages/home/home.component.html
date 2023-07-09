@@ -10,7 +10,7 @@
         <div id="quyhoach" class="group-header ml-3">
           <img src="assets/images/map/quyhoach_icon.png" alt="Bản đồ quy hoạch" />
           <span>Bản đồ quy hoạch</span>
-          <p-inputSwitch [(ngModel)]="geo"></p-inputSwitch>
+          <p-inputSwitch class="pl-7" [(ngModel)]="geo"></p-inputSwitch>
         </div>
       </div>
       <!-- ----------------------------------------------------------------------- -->
@@ -38,7 +38,7 @@
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
           <p-inputSwitch [(ngModel)]="waterComplain" (onChange)="loadData()"></p-inputSwitch>
-        </div>        
+        </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="group-header ml-3 mt-5">
           <img src="assets/images/map/marker-icon-red.png" class="icon-red" alt="Tố cáo" />
@@ -63,7 +63,7 @@
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
           <p-inputSwitch [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
-        </div>        
+        </div>
       </div>
     </p-card>
   </div>

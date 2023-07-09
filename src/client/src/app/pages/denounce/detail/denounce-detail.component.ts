@@ -58,8 +58,8 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   LoaiVuViec = LoaiVuViec;
 
   //
-  coordinateLabel = "Lấy tọa độ";
-  drawLabel = "Vẽ trên bản đồ";
+  coordinateLabel = 'Lấy tọa độ';
+  drawLabel = 'Vẽ trên bản đồ';
 
   // Validate
   validationMessages = {
@@ -233,7 +233,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     private landTypeService: LandTypeService,
     private permissionService: PermissionService,
     private notificationService: NotificationService,
-    private layoutService: LayoutService,
+    private layoutService: LayoutService
   ) {}
 
   ngOnInit() {
@@ -423,9 +423,14 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
 
   saveChange() {
     this.utilService.markAllControlsAsDirty([this.form]);
-      if (this.form.invalid) 
-    {
+    if (this.form.invalid) {
       this.layoutService.blockUI$.next(false);
+      return;
+    }
+    if (!this.checkToado(this.form.get('duLieuToaDo').value)) {
+      this.notificationService.showWarn(
+        'Dữ liệu tọa độ không hợp lệ. Bạn hãy chọn một điểm trên bản đồ hoặc gõ đúng địa chỉ theo chuẩn tọa độ địa lý!'
+      );
       return;
     }
     this.layoutService.blockUI$.next(true);
@@ -582,49 +587,51 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       concurrencyStamp: [],
     });
   }
-  
+
   getPermission() {
     this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Complains.Edit');
   }
-  
-  changeEditMode(){
+
+  changeEditMode() {
     this.mode = 'update';
-    this.form.enable()
+    this.form.enable();
   }
-  
+
   getCoordiate() {
-    if (this.coordinateLabel=="Lấy tọa độ"){//Chưa có -> Cho phép chọn tọa độ      
+    if (this.coordinateLabel == 'Lấy tọa độ') {
+      //Chưa có -> Cho phép chọn tọa độ
       this.mapComponent?.letCoordinate();
-      this.notificationService.showSuccess('Bạn hãy chọn một điểm trên bản đồ để thay đổi vị trí có khiếu nại!');
-      this.coordinateLabel = "Cập nhật!"; 
-    }
-    else if (this.coordinateLabel=="Hủy"){
+      this.notificationService.showWarn(
+        'Bạn hãy chọn một điểm trên bản đồ để thay đổi vị trí có tố cáo!'
+      );
+      this.coordinateLabel = 'Cập nhật!';
+    } else if (this.coordinateLabel == 'Hủy') {
       this.form.get('duLieuToaDo').setValue(this.selectedEntity?.duLieuToaDo);
-      this.coordinateLabel = "Lấy tọa độ";
-    }
-    else if (this.mapComponent?.duLieuToaDo) {
-      //Đã có -> Lấy tọa độ      
+      this.coordinateLabel = 'Lấy tọa độ';
+    } else if (this.mapComponent?.duLieuToaDo) {
+      //Đã có -> Lấy tọa độ
       this.form.get('duLieuToaDo').setValue(this.mapComponent?.duLieuToaDo);
-      this.coordinateLabel = "Hủy";
-    }    
+      this.coordinateLabel = 'Hủy';
+    }
   }
 
   getDraw() {
     //Cho phép vẽ
-    if (this.drawLabel=="Vẽ trên bản đồ"){//Chưa có -> Cho phép vẽ 
+    if (this.drawLabel == 'Vẽ trên bản đồ') {
+      //Chưa có -> Cho phép vẽ
       this.mapComponent?.letDraw();
-      
-      this.notificationService.showSuccess('Bạn hãy Sử dụng công cụ vẽ trên bản đồ để thể hiện thửa đất có khiếu nại!');
-      this.drawLabel = "Cập nhật!";  
-    }
-    else if (this.drawLabel=="Hủy"){
+
+      this.notificationService.showInfo(
+        'Bạn hãy Sử dụng công cụ vẽ trên bản đồ để thể hiện thửa đất có tố cáo!'
+      );
+      this.drawLabel = 'Cập nhật!';
+    } else if (this.drawLabel == 'Hủy') {
       this.form.get('duLieuHinhHoc').setValue(this.selectedEntity?.duLieuHinhHoc);
-      this.drawLabel = "Vẽ trên bản đồ";
-    }
-    else if (this.mapComponent?.duLieuHinhhoc) {
-      //get dữ liệu hình học   
+      this.drawLabel = 'Vẽ trên bản đồ';
+    } else if (this.mapComponent?.duLieuHinhhoc) {
+      //get dữ liệu hình học
       this.form.get('duLieuHinhHoc').setValue(this.mapComponent?.duLieuHinhhoc);
-      this.drawLabel = "Hủy";
+      this.drawLabel = 'Hủy';
     }
   }
 
@@ -633,7 +640,20 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       this.ref.close();
     }
   }
-  
+  private checkToado(duLieuToaDo: any): boolean {
+    if (duLieuToaDo) {
+      var toado = duLieuToaDo.split(', ');
+      if (toado.length == 2) {
+        return (
+          isFinite(toado[0]) &&
+          Math.abs(toado[0]) <= 90 && //valid Long
+          isFinite(toado[1]) &&
+          Math.abs(toado[1]) <= 180
+        ); //valid Lat
+      }
+    }
+    return false;
+  }
   ngOnDestroy(): void {
     if (this.ref) {
       this.ref.close();

@@ -69,28 +69,8 @@ public class ApplicationConfigurationAppService : AbpApplicationConfigurationApp
 
     public override async Task<ApplicationConfigurationDto> GetAsync()
     {
-        //Logger.LogInformation("Executing AbpApplicationConfigurationAppService.GetAsync()...");
-        //var stopwatch = new Stopwatch();
-
-        //stopwatch.Start();
         var authConfig = await GetAuthConfigAsync();
-        //stopwatch.Stop();
-        //Logger.LogInformation($"GetAuthConfigAsync time: {stopwatch.Elapsed}");
-        //stopwatch.Reset();
 
-        //stopwatch.Start();
-        //var featureConfig = await GetFeaturesConfigAsync();
-        //stopwatch.Stop();
-        //Logger.LogInformation($"GetFeaturesConfigAsync time: {stopwatch.Elapsed}");
-        //stopwatch.Reset();
-
-        //stopwatch.Start();
-        //var globalFeatureConfig = await GetGlobalFeaturesConfigAsync();
-        //stopwatch.Stop();
-        //Logger.LogInformation($"GetGlobalFeaturesConfigAsync time: {stopwatch.Elapsed}");
-        //stopwatch.Reset();
-
-        //stopwatch.Start();
         var localizationConfig = await _cacheLocalization.GetOrAddAsync(
         "AppConfigLocalization",
         async () => await GetLocalizationConfigAsync(),
@@ -98,17 +78,9 @@ public class ApplicationConfigurationAppService : AbpApplicationConfigurationApp
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddHours(24)
         });
-        //stopwatch.Stop();
-        //Logger.LogInformation($"GetLocalizationConfigAsync elapsed time: {stopwatch.Elapsed}");
-        //stopwatch.Reset();
 
-        //stopwatch.Start();
         var curUser = GetCurrentUser();
-        //stopwatch.Stop();
-        //Logger.LogInformation($"GetCurrentUser elapsed time: {stopwatch.Elapsed}");
-        //stopwatch.Reset();
 
-        //stopwatch.Start();
         var setting = await _cacheSetting.GetOrAddAsync(
         "AppConfigSetting",
         async () => await GetSettingConfigAsync(),
@@ -116,36 +88,13 @@ public class ApplicationConfigurationAppService : AbpApplicationConfigurationApp
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddHours(24)
         });
-        //stopwatch.Stop();
-        //Logger.LogInformation($"GetSettingConfigAsync elapsed time: {stopwatch.Elapsed}");
-        //stopwatch.Reset();
-
-        //stopwatch.Start();
-        //var timingConfig = await GetTimingConfigAsync();
-        //stopwatch.Stop();
-        //Logger.LogInformation($"GetTimingConfigAsync elapsed time: {stopwatch.Elapsed}");
-        //stopwatch.Reset();
-
-        //stopwatch.Start();
-        //var clockConfig = GetClockConfig();
-        //stopwatch.Stop();
-        //Logger.LogInformation($"GetClockConfig elapsed time: {stopwatch.Elapsed}");
-        //stopwatch.Reset();
 
         var result = new ApplicationConfigurationDto
         {
             Auth = authConfig,
-            //Features = featureConfig,
-            //GlobalFeatures = globalFeatureConfig,
             Localization = localizationConfig,
             CurrentUser = curUser,
-            Setting = setting,
-            //MultiTenancy = GetMultiTenancy(),
-            //CurrentTenant = GetCurrentTenant(),
-            //Timing = timingConfig,
-            //Clock = clockConfig,
-            //ObjectExtensions = _cachedObjectExtensionsDtoService.Get(),
-            //ExtraProperties = new ExtraPropertyDictionary()
+            Setting = setting
         };
 
         if (_options.Contributors.Any())
@@ -159,9 +108,6 @@ public class ApplicationConfigurationAppService : AbpApplicationConfigurationApp
                 }
             }
         }
-
-        //Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetAsync().");
-
         return result;
     }
     private async Task<ApplicationSettingConfigurationDto> GetSettingConfigAsync()
