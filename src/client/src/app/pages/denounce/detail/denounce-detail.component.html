@@ -221,7 +221,9 @@
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiThuongTru">Địa chỉ thường trú <span class="required">*</span></label>
+                      <label for="diaChiThuongTru"
+                        >Địa chỉ thường trú <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiThuongTru"
@@ -239,7 +241,9 @@
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiLienHe">Địa chỉ liên hệ <span class="required">*</span></label>
+                      <label for="diaChiLienHe"
+                        >Địa chỉ liên hệ <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiLienHe"
@@ -297,7 +301,9 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       />
-                      <label for="nguoiNopDon">Người bị tố cáo <span class="required">*</span></label>
+                      <label for="nguoiNopDon"
+                        >Người bị tố cáo <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.nguoiBiToCao"
@@ -315,7 +321,9 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       />
-                      <label for="boPhanDangXL">Bộ phận đang XL <span class="required">*</span></label>
+                      <label for="boPhanDangXL"
+                        >Bộ phận đang XL <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.boPhanDangXL"
@@ -429,7 +437,7 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       /> -->
-                      
+
                       <p-inputNumber
                         formControlName="dienTich"
                         class="w-full"
@@ -549,7 +557,9 @@
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiThuaDat">Địa chỉ thửa đất <span class="required">*</span></label>
+                      <label for="diaChiThuaDat"
+                        >Địa chỉ thửa đất <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiThuaDat"
@@ -768,66 +778,73 @@
           <p-card header="Dữ liệu không gian" class="w-full" *ngIf="mode != 'view'">
             <!-- -------------------------------Dữ liệu--------------------------------------------------- -->
             <div class="grid">
-              <!-- -------------------------------maHoSo--------------------------------------------------- -->
-              <div class="field col-12 md:col-6">
-                <span class="p-float-label">
-                  <input
-                    id="duLieuToaDo"
-                    formControlName="duLieuToaDo"
-                    type="text"
-                    pInputText
-                    [style]="{ width: '100%' }"
-                  />
-                  <label for="duLieuToaDo">Dữ liệu tọa độ</label>
-                </span>
-                <app-validation-message
-                  [entityControl]="formControls.duLieuToaDo"
-                  [validationMessages]="validationMessages.duLieuToaDo"
-                >
-                </app-validation-message>
+              <!-- -------------------------------duLieuToaDo--------------------------------------------------- -->
+              <div class="field grid col-12 md:col-12">
+                <div class="field col-10 md:col-10">
+                  <span class="p-float-label">
+                    <input
+                      id="duLieuToaDo"
+                      formControlName="duLieuToaDo"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="duLieuToaDo">Dữ liệu tọa độ</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.duLieuToaDo"
+                    [validationMessages]="validationMessages.duLieuToaDo"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- -------------------------------getCoordiate--------------------------------------------------- -->
+                <div class="field col-2 md:col-2">
+                  <button
+                    *ngIf="mode != 'view'"
+                    pButton
+                    pRipples
+                    type="button"
+                    (click)="getCoordiate()"
+                    label="{{ coordinateLabel }}"
+                    class="p-button-info mr-2"
+                    icon="pi pi-map-marker"
+                  ></button>
+                </div>
               </div>
-              <div class="field col-12 md:col-6">
-                <button
-                  *ngIf="mode != 'view'"
-                  pButton
-                  pRipples
-                  type="button"
-                  (click)="getCoordiate()"
-                  label="{{coordinateLabel}}"
-                  class="p-button-info mr-2"
-                  icon="pi pi-map-marker"
-                ></button>
+              <!-- -------------------------------duLieuHinhHoc--------------------------------------------------- -->
+              <div class="field grid col-12 md:col-12">
+                <div class="field col-10 md:col-10">
+                  <span class="p-float-label">
+                    <textarea
+                      id="duLieuHinhHoc"
+                      formControlName="duLieuHinhHoc"
+                      [rows]="5"
+                      pInputTextarea
+                      class="w-full"
+                    ></textarea>
+                    <label for="duLieuHinhHoc">Dữ liệu hình học</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.duLieuHinhHoc"
+                    [validationMessages]="validationMessages.duLieuHinhHoc"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- -------------------------------getDraw--------------------------------------------------- -->
+                <div class="field col-2 md:col-2">
+                  <button
+                    *ngIf="mode != 'view'"
+                    pButton
+                    pRipples
+                    type="button"
+                    (click)="getDraw()"
+                    label="{{ drawLabel }}"
+                    class="p-button-info mr-2"
+                    icon="pi pi-map-marker"
+                  ></button>
+                </div>
               </div>
-              <div class="field col-12 md:col-8">
-                <span class="p-float-label">
-                  <textarea
-                    id="duLieuHinhHoc"
-                    formControlName="duLieuHinhHoc"
-                    [rows]="5"
-                    pInputTextarea
-                    class="w-full"
-                  ></textarea>
-                  <label for="duLieuHinhHoc">Dữ liệu hình học</label>
-                </span>
-                <app-validation-message
-                  [entityControl]="formControls.duLieuHinhHoc"
-                  [validationMessages]="validationMessages.duLieuHinhHoc"
-                >
-                </app-validation-message>
-              </div>
-              <!-- -------------------------------getDraw--------------------------------------------------- -->
-              <div class="field col-12 md:col-4">
-                <button
-                  *ngIf="mode != 'view'"
-                  pButton
-                  pRipples
-                  type="button"
-                  (click)="getDraw()"
-                  label="{{drawLabel}}"
-                  class="p-button-info mr-2"
-                  icon="pi pi-map-marker"
-                ></button>
-              </div>
+              <!-- ---------------------------------------------------------------- -->
             </div>
           </p-card>
           <p-card>
@@ -861,9 +878,10 @@
         ></button>
       </div>
     </ng-template>
-    <ng-template *ngIf="(mode == 'view') && hasPermissionUpdate" pTemplate="footer">
+    <ng-template *ngIf="mode == 'view' && hasPermissionUpdate" pTemplate="footer">
       <div class="flex justify-content-end">
-        <button *ngIf="(mode == 'view')"
+        <button
+          *ngIf="mode == 'view'"
           pButton
           pRipples
           type="button"
@@ -872,7 +890,8 @@
           class="p-button-info mr-2"
           icon="pi pi-check"
         ></button>
-        <button *ngIf="(mode != 'view')"
+        <button
+          *ngIf="mode != 'view'"
           pButton
           pRipples
           type="button"

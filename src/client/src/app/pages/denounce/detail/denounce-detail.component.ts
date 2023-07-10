@@ -173,7 +173,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         message: `Dữ liệu tọa độ không vượt quá ${KNTCValidatorConsts.MaxToaDoLength} kí tự`,
       },
       {
-        type: 'coordiateInvalid',
+        type: 'invalidCoordiate',
         message: MessageConstants.COORDIATE_INVALID,
       },
     ],
@@ -182,6 +182,10 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       //   type: 'maxLength',
       //   message: `Dữ liệu hình học không vượt quá ${KNTCValidatorConsts.MaxHinhHocLength} kí tự`,
       // },
+      {
+        type: 'invalidGeoJson',
+        message: MessageConstants.GEOJSON_INVALID,
+      },
     ],
     ghiChu: [
       {
@@ -572,7 +576,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         ],
       ],
       // duLieuHinhHoc: [null, [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
-      duLieuHinhHoc: [null],
+      duLieuHinhHoc: [null, [AppValidatorFn.geoJsonValidator()]],
       ghiChu: [null, Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
 
       ngayGQTC: [null],
