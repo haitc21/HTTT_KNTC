@@ -21,6 +21,8 @@ import { FileAttachmentComponent } from '../../file-attachment/file-attachment.c
 import { MapComponent } from 'src/app/shared/modules/map/map.component';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { loaiKQOptions, loaiKhieuNaiOptions } from 'src/app/shared/constants/consts';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { AppValidatorFn } from 'src/app/shared/functions/validator-fn';
 
 @Component({
   templateUrl: './complain-detail.component.html',
@@ -66,104 +68,108 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   // Validate
   validationMessages = {
     maHoSo: [
-      { type: 'required', message: 'Mã hồ sơ không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Mã hồ sơ không vượt quá ${KNTCValidatorConsts.MaxMaHoSoLength} kí tự`,
       },
     ],
     tieuDe: [
-      { type: 'required', message: 'Tiêu đề không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Tiêu đề không vượt quá ${KNTCValidatorConsts.MaxTieuDeLength} kí tự`,
       },
     ],
     nguoiNopDon: [
-      { type: 'required', message: 'Người nộp đơn không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Người nộp đơn không vượt quá ${KNTCValidatorConsts.MaxTenNguoiLength} kí tự`,
       },
     ],
     cccdCmnd: [
-      { type: 'required', message: 'CCCD/CMND không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `CCCD/CMND không vượt quá ${KNTCValidatorConsts.MaxCccdCmndLength} kí tự`,
       },
     ],
-    // ngayCapCccdCmnd: [{ type: 'required', message: 'Ngày cấp CCCD/CMND không được để trống' }],
+    // ngayCapCccdCmnd: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  }],
     // noiCapCccdCmnd: [
-    //   { type: 'required', message: 'Nơi cấp CCCD/CMND không được để trống' },
+    //   { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  },
     //   {
     //     type: 'maxLength',
     //     message: `Nơi cấp CCCD/CMND không vượt quá ${KNTCValidatorConsts.MaxNoiCapCccdCmnd} kí tự`,
     //   },
     // ],
-    ngaySinh: [{ type: 'required', message: 'Ngày sinh không được để trống' }],
+    ngaySinh: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     dienThoai: [
-      { type: 'required', message: 'Số điện thoại không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       { type: 'pattern', message: 'Số điện thoại không chính xác' },
     ],
     email: [{ type: 'email', message: 'Địa chỉ email không chính xác' }],
     diaChiThuongTru: [
-      { type: 'required', message: 'Địa chỉ thường trú không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Địa chỉ thường trú không vượt quá ${KNTCValidatorConsts.MaxDiaChiLength} kí tự`,
       },
     ],
     diaChiLienHe: [
-      { type: 'required', message: 'Địa chỉ liên hệ không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Địa chỉ liên hệ không vượt quá ${KNTCValidatorConsts.MaxDiaChiLength} kí tự`,
       },
     ],
-    maTinhTP: [{ type: 'required', message: 'Tỉnh/TP không được để trống' }],
-    maQuanHuyen: [{ type: 'required', message: 'Quận/huyện không được để trống' }],
-    maXaPhuongTT: [{ type: 'required', message: 'Xã/phường/TT không được để trống' }],
-    thoiGianTiepNhan: [{ type: 'required', message: 'Mgày tiếp nhận không được để trống' }],
-    thoiGianHenTraKQ: [{ type: 'required', message: 'Ngày hẹn trả kết quả không được để trống' }],
-    noiDungVuViec: [{ type: 'required', message: 'Nội dung vụ việc không được để trống' }],
+    maTinhTP: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    maQuanHuyen: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    maXaPhuongTT: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    thoiGianTiepNhan: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    thoiGianHenTraKQ: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    noiDungVuViec: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     boPhanDangXL: [
-      { type: 'required', message: 'Bộ phận đang XL không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Bộ phận đang XL không vượt quá ${KNTCValidatorConsts.MaxBoPhanXLLength} kí tự`,
       },
     ],
     soThua: [
-      { type: 'required', message: 'Số thửa không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Số thửa không vượt quá ${KNTCValidatorConsts.MaxSoThuaLength} kí tự`,
       },
     ],
     toBanDo: [
-      { type: 'required', message: 'Tờ bản đồ không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Tờ bản đồ không vượt quá ${KNTCValidatorConsts.MaxToBanDoLength} kí tự`,
       },
     ],
-    dienTich: [{ type: 'required', message: 'Diện tích không được để trống' }],
-    loaiDat: [{ type: 'required', message: 'Loại đất không được để trống' }],
+    dienTich: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    loaiDat: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     diaChiThuaDat: [
-      { type: 'required', message: 'Địa chỉ thửa đất không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Địa chỉ thửa đất không vượt quá ${KNTCValidatorConsts.MaxDiaChiLength} kí tự`,
       },
     ],
-    tinhThuaDat: [{ type: 'required', message: 'Tỉnh/TP thửa đất không được để trống' }],
-    huyenThuaDat: [{ type: 'required', message: 'Quận/Huyện thửa đất không được để trống' }],
-    xaThuaDat: [{ type: 'required', message: 'Xã/Phường/TT  thửa đất không được để trống' }],
+    tinhThuaDat: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    huyenThuaDat: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    xaThuaDat: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     duLieuToaDo: [
       {
         type: 'maxLength',
         message: `Dữ liệu tọa độ không vượt quá ${KNTCValidatorConsts.MaxToaDoLength} kí tự`,
+      },
+      {
+        type: 'coordiateInvalid',
+        message: MessageConstants.COORDIATE_INVALID,
       },
     ],
     duLieuHinhHoc: [
@@ -190,7 +196,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         message: `Ghi chú không vượt quá ${KNTCValidatorConsts.MaxGhiChuLength} kí tự`,
       },
     ],
-    congKhai: [{ type: 'required', message: 'Không được để trống' }],
+    congKhai: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
   };
 
   get formControls() {
@@ -394,13 +400,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
   saveChange() {
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) {
+      this.notificationService.showWarn(MessageConstants.FORM_INVALID);
       this.layoutService.blockUI$.next(false);
-      return;
-    }
-    if (!this.checkToado(this.form.get('duLieuToaDo').value)) {
-      this.notificationService.showWarn(
-        'Dữ liệu tọa độ không hợp lệ. Bạn hãy chọn một điểm trên bản đồ hoặc gõ đúng địa chỉ theo chuẩn tọa độ địa lý!'
-      );
       return;
     }
     this.layoutService.blockUI$.next(true);
@@ -532,8 +533,13 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       tinhThuaDat: [null, [Validators.required]],
       huyenThuaDat: [null, [Validators.required]],
       xaThuaDat: [null, [Validators.required]],
-
-      duLieuToaDo: [null, [Validators.maxLength(KNTCValidatorConsts.MaxToaDoLength)]],
+      duLieuToaDo: [
+        null,
+        [
+          Validators.maxLength(KNTCValidatorConsts.MaxToaDoLength),
+          AppValidatorFn.oordiateValidator(),
+        ],
+      ],
       // duLieuHinhHoc: [null, [Validators.maxLength(KNTCValidatorConsts.MaxHinhHocLength)]],
       duLieuHinhHoc: [null],
       ghiChu: [null, Validators.maxLength(KNTCValidatorConsts.MaxGhiChuLength)],
@@ -571,9 +577,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     if (this.coordinateLabel == 'Lấy tọa độ') {
       //Chưa có -> Cho phép chọn tọa độ
       this.mapComponent?.letCoordinate();
-      this.notificationService.showInfo(
-        'Bạn hãy chọn một điểm trên bản đồ để thay đổi vị trí có khiếu nại!'
-      );
+      this.notificationService.showInfo(MessageConstants.CHOSE_COORDIATE);
       this.coordinateLabel = 'Cập nhật!';
     } else if (this.coordinateLabel == 'Hủy') {
       this.form.get('duLieuToaDo').setValue(this.selectedEntity?.duLieuToaDo);
@@ -590,10 +594,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     if (this.drawLabel == 'Vẽ trên bản đồ') {
       //Chưa có -> Cho phép vẽ
       this.mapComponent?.letDraw();
-
-      this.notificationService.showInfo(
-        'Bạn hãy Sử dụng công cụ vẽ trên bản đồ để thể hiện thửa đất có khiếu nại!'
-      );
+      this.notificationService.showInfo(MessageConstants.USE_MAP_DRAW);
       this.drawLabel = 'Cập nhật!';
     } else if (this.drawLabel == 'Hủy') {
       this.form.get('duLieuHinhHoc').setValue(this.selectedEntity?.duLieuHinhHoc);
@@ -603,21 +604,6 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       this.form.get('duLieuHinhHoc').setValue(this.mapComponent?.duLieuHinhhoc);
       this.drawLabel = 'Hủy';
     }
-  }
-
-  private checkToado(duLieuToaDo: any): boolean {
-    if (duLieuToaDo) {
-      var toado = duLieuToaDo.split(', ');
-      if (toado.length == 2) {
-        return (
-          isFinite(toado[0]) &&
-          Math.abs(toado[0]) <= 90 && //valid Long
-          isFinite(toado[1]) &&
-          Math.abs(toado[1]) <= 180
-        ); //valid Lat
-      }
-    }
-    return false;
   }
 
   close() {

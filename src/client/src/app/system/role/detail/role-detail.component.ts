@@ -4,6 +4,8 @@ import { RoleDto, RolesService } from '@proxy/roles';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
@@ -26,6 +28,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     private roleService: RolesService,
     private utilService: UtilityService,
     private fb: FormBuilder,
+    private notificationService: NotificationService,
     private layoutService: LayoutService
   ) {}
 
@@ -39,7 +42,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
   // Validate
   validationMessages = {
     name: [
-      { type: 'required', message: 'Tên vai trò không được để trống!' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       { type: 'minlength', message: 'Bạn phải nhập ít nhất 3 kí tự' },
       { type: 'maxlength', message: 'Bạn không được nhập quá 255 kí tự' },
     ],
@@ -74,6 +77,7 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
     this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) {
+      this.notificationService.showWarn(MessageConstants.FORM_INVALID);
       this.layoutService.blockUI$.next(false);
       return;
     }

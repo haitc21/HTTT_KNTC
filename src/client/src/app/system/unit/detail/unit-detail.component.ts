@@ -7,7 +7,9 @@ import { UnitDto, UnitLookupDto, UnitService } from '@proxy/units';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
@@ -32,29 +34,29 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   // Validate
   validationMessages = {
     unitCode: [
-      { type: 'required', message: 'Mã không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Mã không vượt quá ${KNTCValidatorConsts.MaxMaHoSoLength} kí tự`,
       },
     ],
     unitName: [
-      { type: 'required', message: 'Tên không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Tên không vượt quá ${KNTCValidatorConsts.MaxNameLength} kí tự`,
       },
     ],
     shortName: [
-      { type: 'required', message: 'Tên thu gọn không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Tên thu gọn không vượt quá ${KNTCValidatorConsts.MaxNameLength} kí tự`,
       },
     ],
-    unitTypeId: [{ type: 'required', message: 'Loại địa danh không được để trống' }],
-    parentId: [{ type: 'required', message: 'Địa danh cha không được để trống' }],
-    status: [{ type: 'required', message: 'Tên không được để trống' }],
+    unitTypeId: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    parentId: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    status: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     description: [
       {
         type: 'maxLength',
@@ -73,7 +75,8 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
     private utilService: UtilityService,
     private fb: FormBuilder,
     private unitTypeService: UnitTypeService,
-    private layoutService: LayoutService,
+    private notificationService: NotificationService,
+    private layoutService: LayoutService
   ) {}
 
   ngOnInit() {
@@ -121,8 +124,8 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   saveChange() {
     this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
-      if (this.form.invalid) 
-    {
+    if (this.form.invalid) {
+      this.notificationService.showWarn(MessageConstants.FORM_INVALID);
       this.layoutService.blockUI$.next(false);
       return;
     }
@@ -164,7 +167,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
   }
   unitTypeChange(id, isFirst: boolean = false) {
     if (!id) return;
-    
+
     let parentControl = this.form.get('parentId');
     if (isFirst) parentControl.reset();
     if (id > 1) {
@@ -190,7 +193,7 @@ export class UnitDetailComponent implements OnInit, OnDestroy {
       parentControl.setValidators([]);
     }
   }
-  
+
   close() {
     if (this.ref) {
       this.ref.close();

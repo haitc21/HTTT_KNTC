@@ -4,6 +4,8 @@ import { SysConfigDto, SysConfigService } from '@proxy/sys-configs';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
@@ -25,6 +27,7 @@ export class SysConfigDetailComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private sysConfigService: SysConfigService,
     private utilService: UtilityService,
+    private notificationService: NotificationService,
     private fb: FormBuilder,
     private layoutService: LayoutService
   ) {}
@@ -39,11 +42,11 @@ export class SysConfigDetailComponent implements OnInit, OnDestroy {
   // Validate
   validationMessages = {
     name: [
-      { type: 'required', message: 'Tên cấu hình không được để trống!' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       { type: 'minlength', message: 'Bạn phải nhập ít nhất 3 kí tự' },
       { type: 'maxlength', message: 'Bạn không được nhập quá 255 kí tự' },
     ],
-    value: [{ type: 'required', message: 'Giá trị không được để trống!' }],
+    value: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     description: [
       { type: 'required', message: 'Bạn phải mô tả' },
       { type: 'minlength', message: 'Bạn phải nhập ít nhất 3 kí tự' },
@@ -79,6 +82,7 @@ export class SysConfigDetailComponent implements OnInit, OnDestroy {
     this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) {
+      this.notificationService.showWarn(MessageConstants.FORM_INVALID);
       this.layoutService.blockUI$.next(false);
       return;
     }

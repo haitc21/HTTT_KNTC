@@ -18,6 +18,7 @@ import { CreateAndUpdateFileAttachmentDto, FileAttachmentDto } from '@proxy/file
 import { LoaiVuViec } from '@proxy';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { FileService } from 'src/app/shared/services/file.service';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
 
 @Component({
   selector: 'app-file-attachment-detail',
@@ -50,26 +51,26 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
   // Validate
   validationMessages = {
     tenTaiLieu: [
-      { type: 'required', message: 'Tên tài liệu không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxlength',
         message: `Tên tài liệu tối đa ${KNTCValidatorConsts.MaxTenTaiLieuLength} ký tự`,
       },
     ],
-    giaiDoan: [{ type: 'required', message: 'Giai đoạn không được để trống' }],
-    hinhThuc: [{ type: 'required', message: 'Hình thức không được để trống' }],
+    giaiDoan: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    hinhThuc: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     thuTuButLuc: [
-      { type: 'required', message: 'Thứ tự bút lục không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxlength',
         message: `Thứ tự bút lục tối đa ${KNTCValidatorConsts.MaxThuTuButLucLength} ký tự`,
       },
     ],
-    noiDungChinh: [{ type: 'required', message: 'Nội dung chính không được để trống' }],
+    noiDungChinh: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     fileName: [{ type: 'required', message: 'Vui lòng chọn tệp' }],
-    thoiGianBanHanh: [{ type: 'required', message: 'Thời gian ban hành không được để trống' }],
-    ngayNhan: [{ type: 'required', message: 'Ngày nhận không được để trống' }],
-    congKhai: [{ type: 'required', message: 'Không được để trống' }],
+    thoiGianBanHanh: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    ngayNhan: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    congKhai: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
   };
 
   get formControls() {

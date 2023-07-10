@@ -5,7 +5,9 @@ import { DocumentTypeDto, DocumentTypeService } from '@proxy/document-types';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
 import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { UtilityService } from 'src/app/shared/services/utility.service';
 
 @Component({
@@ -30,8 +32,9 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private documentTypeService: DocumentTypeService,
     private utilService: UtilityService,
+    private notificationService: NotificationService,
     private fb: FormBuilder,
-    private layoutService: LayoutService,
+    private layoutService: LayoutService
   ) {}
 
   ngOnInit() {
@@ -44,20 +47,20 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
   // Validate
   validationMessages = {
     documentTypeCode: [
-      { type: 'required', message: 'Mã không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Mã không vượt quá ${KNTCValidatorConsts.MaxMaHoSoLength} kí tự`,
       },
     ],
     documentTypeName: [
-      { type: 'required', message: 'Tên không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Tên không vượt quá ${KNTCValidatorConsts.MaxNameLength} kí tự`,
       },
     ],
-    status: [{ type: 'required', message: 'Tên không được để trống' }],
+    status: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     description: [
       {
         type: 'maxLength',
@@ -90,8 +93,8 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
   saveChange() {
     this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
-      if (this.form.invalid) 
-    {
+    if (this.form.invalid) {
+      this.notificationService.showWarn(MessageConstants.FORM_INVALID);
       this.layoutService.blockUI$.next(false);
       return;
     }
@@ -126,7 +129,6 @@ export class DocumentTypeDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  
   close() {
     if (this.ref) {
       this.ref.close();
