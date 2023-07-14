@@ -178,12 +178,16 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         icon: 'fa fa-chart-bar',
         items: [
           {
+            label: 'Báo cáo',
+            routerLink: ['/pages/reports/report'],
+          },
+          {
             label: 'Thống kê',
             routerLink: ['/pages/dashboard'],
           },
           {
-            label: 'Báo cáo KN/TC',
-            routerLink: ['/pages/reports/report'],
+            label: 'Sổ theo dõi KN/TC',
+            routerLink: ['/pages/reports/logbook'],
           },
           /*
           {

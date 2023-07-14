@@ -1,4 +1,5 @@
-﻿using KNTC.Complains;
+﻿using AutoMapper;
+using KNTC.Complains;
 using KNTC.Denounces;
 using KNTC.NPOI;
 using KNTC.Units;
@@ -167,10 +168,204 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                                                     input.NguoiNopDon);
         var summaries = await AsyncExecuter.ToListAsync(query);
         if (summaries == null) return null;
-        var summaryDto = ObjectMapper.Map<List<Summary>, List<SummaryExcelDto>>(summaries);
+
+        var summaryDto = ObjectMapper.Map<List<Summary>, List<LogBookExcelDto>>(summaries);
 
         var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "LogBook.xlsx");
-        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<SummaryExcelDto>(summaryDto, templatePath, 17, 0, true);
+        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<LogBookExcelDto>(summaryDto, templatePath, 13, 0, true);
+        if (wb == null) return null;
+
+        ISheet sheet = wb.GetSheetAt(0);
+        ICellStyle cellStyle = wb.CreateCellStyle();
+        cellStyle.BorderLeft = BorderStyle.Thin;
+        cellStyle.BorderBottom = BorderStyle.Thin;
+        cellStyle.BorderRight = BorderStyle.Thin;
+        var font = wb.CreateFont();
+        font.IsBold = false;
+        font.FontName = "Times New Roman";
+        cellStyle.SetFont(font);
+
+        /*
+        IRow row = sheet.GetCreateRow(5);
+        var cell = row.GetCreateCell(4);
+        cell.SetCellValue(input.Keyword);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        row = sheet.GetCreateRow(6);
+        cell = row.GetCreateCell(4);
+        if (input.loaiVuViec == LoaiVuViec.TatCa)
+            cell.SetCellValue("Tất cả");
+        else if (input.loaiVuViec == LoaiVuViec.KhieuNai)
+            cell.SetCellValue("Khiếu nại");
+        else
+            cell.SetCellValue("Tố cáo");
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        row = sheet.GetCreateRow(7);
+        cell = row.GetCreateCell(4);
+        if (input.linhVuc == LinhVuc.TatCa)
+            cell.SetCellValue("Tất cả");
+        else if (input.linhVuc == LinhVuc.DatDai)
+            cell.SetCellValue("Đất đai");
+        else if (input.linhVuc == LinhVuc.KhoangSan)
+            cell.SetCellValue("Khoáng sản");
+        else if (input.linhVuc == LinhVuc.MoiTruong)
+            cell.SetCellValue("Môi trường");
+        else
+            cell.SetCellValue("Tài nguyên nước");
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        //
+        row = sheet.GetCreateRow(8);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(input.NguoiNopDon);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tenTinh = "Tất cả";
+        if (input.maTinhTP != null)
+        {
+            var tinh = await _unitRepo.GetAsync(x => x.Id == input.maTinhTP);
+            tenTinh = tinh.UnitName;
+        }
+        row = sheet.GetCreateRow(9);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tenTinh);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tenHuyen = "Tất cả";
+        if (input.maQuanHuyen != null)
+        {
+            var huyen = await _unitRepo.GetAsync(x => x.Id == input.maQuanHuyen);
+            tenHuyen = huyen.UnitName;
+        }
+        row = sheet.GetCreateRow(10);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tenHuyen);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tenXa = "Tất cả";
+        if (input.maXaPhuongTT != null)
+        {
+            var xa = await _unitRepo.GetAsync(x => x.Id == input.maXaPhuongTT);
+            tenXa = xa.UnitName;
+        }
+        row = sheet.GetCreateRow(11);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(tenXa);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string tuNgay = "";
+        if (input.FromDate.HasValue)
+        {
+            var fromDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.FromDate.Value, TimeZoneInfo.Local);
+            tuNgay = fromDateGmt7.ToString(FormatType.FormatDateVN);
+        }
+
+        string denNgay = "";
+        if (input.ToDate.HasValue)
+        {
+            var toDateGmt7 = TimeZoneInfo.ConvertTimeFromUtc(input.ToDate.Value, TimeZoneInfo.Local);
+            denNgay = toDateGmt7.ToString(FormatType.FormatDateVN);
+        }
+        if (!tuNgay.IsNullOrEmpty() && !denNgay.IsNullOrEmpty())
+        {
+            row = sheet.GetCreateRow(12);
+            cell = row.GetCreateCell(4);
+            cell.SetCellValue(tuNgay + " - " + denNgay);
+            cell.CellStyle.WrapText = false;
+            cell.CellStyle.SetFont(font);
+        }
+
+        string ketQua = "Tất cả";
+        if (input.KetQua.HasValue)
+        {
+            switch (input.KetQua)
+            {
+                case LoaiKetQua.Dung:
+                    ketQua = "Đúng";
+                    break;
+
+                case LoaiKetQua.Sai:
+                    ketQua = "Sai";
+                    break;
+
+                case LoaiKetQua.CoDungCoSai:
+                    ketQua = "Có đúng có sai";
+                    break;
+
+                default:
+                    ketQua = "";
+                    break;
+            }
+        }
+        row = sheet.GetCreateRow(13);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(ketQua);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        string congKhai = "Tất cả";
+        if (input.CongKhai.HasValue)
+        {
+            congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
+        }
+        row = sheet.GetCreateRow(14);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(congKhai);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+        */
+        using (var stream = new MemoryStream())
+        {
+            wb.Write(stream);
+            wb.Close();
+            return stream.ToArray();
+        }
+    }
+
+    public async Task<byte[]> GetReportExcelAsync(GetSummaryListDto input)
+    {
+        var userId = CurrentUser.Id;
+        if (userId == null)
+        {
+            input.CongKhai = true;
+        }
+        if (input.Sorting.IsNullOrWhiteSpace())
+        {
+            input.Sorting = $"{nameof(SummaryDto.ThoiGianTiepNhan)} DESC, {nameof(SummaryDto.MaHoSo)}";
+        }
+        var query = await _summaryRepo.GetListAsync(input.loaiVuViec,
+                                                    input.linhVuc,
+                                                    input.LandComplain,
+                                                    input.EnviromentComplain,
+                                                    input.WaterComplain,
+                                                    input.MineralComplain,
+                                                    input.LandDenounce,
+                                                    input.EnviromentDenounce,
+                                                    input.WaterDenounce,
+                                                    input.MineralDenounce,
+                                                    input.Keyword,
+                                                    input.KetQua,
+                                                    input.maTinhTP,
+                                                    input.maQuanHuyen,
+                                                    input.maXaPhuongTT,
+                                                    input.FromDate,
+                                                    input.ToDate,
+                                                    input.CongKhai,
+                                                    input.NguoiNopDon);
+        var summaries = await AsyncExecuter.ToListAsync(query);
+        if (summaries == null) return null;
+        var summaryDto = ObjectMapper.Map<List<Summary>, List<SummaryExcelDto>>(summaries);
+
+        var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "Report.xlsx");
+        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<SummaryExcelDto>(summaryDto, templatePath, 18, 0, true);
         if (wb == null) return null;
 
         ISheet sheet = wb.GetSheetAt(0);
@@ -363,7 +558,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         var summaryDto = ObjectMapper.Map<List<Summary>, List<SummaryExcelDto>>(summaries);
 
         var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "Summary.xlsx");
-        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<SummaryExcelDto>(summaryDto, templatePath, 15, 0, true);
+        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<SummaryExcelDto>(summaryDto, templatePath, 16, 0, true);
         if (wb == null) return null;
 
         ISheet sheet = wb.GetSheetAt(0);

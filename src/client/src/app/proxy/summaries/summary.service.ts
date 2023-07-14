@@ -44,8 +44,15 @@ export class SummaryService {
     },
     { apiName: this.apiName });
   
+    getReportExcel = (input: GetSummaryListDto) =>
+    this.restService.request<any, number[]>({
+      method: 'GET',
+      url: '/api/app/summary/report-excel',
+      params: { loaiVuViec: input.loaiVuViec, linhVuc: input.linhVuc, landComplain: input.landComplain, enviromentComplain: input.enviromentComplain, waterComplain: input.waterComplain, mineralComplain: input.mineralComplain, landDenounce: input.landDenounce, enviromentDenounce: input.enviromentDenounce, waterDenounce: input.waterDenounce, mineralDenounce: input.mineralDenounce, maTinhTP: input.maTinhTP, maQuanHuyen: input.maQuanHuyen, maXaPhuongTT: input.maXaPhuongTT, fromDate: input.fromDate, toDate: input.toDate, ketQua: input.ketQua, congKhai: input.congKhai, nguoiNopDon: input.nguoiNopDon, keyword: input.keyword, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+    },
+    { apiName: this.apiName });
 
-  getMap = (input: GetSumaryMapDto) =>
+    getMap = (input: GetSumaryMapDto) =>
     this.restService.request<any, SummaryMapDto[]>({
       method: 'GET',
       url: '/api/app/summary/map',

@@ -398,7 +398,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       this.layoutService.blockUI$.next(false);
       return;
     }
-    if (!this.checkToado(this.form.get('duLieuToaDo'))){
+    if (!this.checkToado(this.form.get('duLieuToaDo').value)){
       this.notificationService.showError('Dữ liệu tọa độ không hợp lệ. Bạn hãy chọn một điểm trên bản đồ hoặc gõ đúng địa chỉ theo chuẩn tọa độ địa lý!');
       return;
     }

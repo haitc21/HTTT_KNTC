@@ -49,6 +49,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
 import { AccordionModule } from 'primeng/accordion';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { LogBookComponent } from './reports/logbook.component';
 @NgModule({
   declarations: [
     HomeComponent,
@@ -58,6 +59,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     ComplainDetailComponent,
     DenounceComponent,
     DenounceDetailComponent,
+    LogBookComponent,
     ReportComponent,
     FileAttachmentComponent,
     FileAttachmentDetailComponent

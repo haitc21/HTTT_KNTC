@@ -26,7 +26,7 @@ import 'leaflet-draw';
 //import "leaflet-loading";
 //import "leaflet-measure";
 import 'leaflet.measurecontrol';
-
+import 'leaflet.locatecontrol';
 import { format } from 'date-fns';
 import { LinhVucOptions } from '../../constants/consts';
 import { GetSysConfigService } from '../../services/sysconfig.services';
@@ -263,8 +263,11 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     //Bổ sung measure control
     //var measureControl = new L.Control.Measure({ position: 'topright', primaryLengthUnit: 'meters', primaryAreaUnit: 'hectares' });
     //measureControl.addTo(this.map);
-
+    
     //Bổ sung các custom control cho Map:
+    //Bổ sung location control
+    L.control.locate({strings: {title: "Vị trí của bạn!"}}).addTo(this.map);
+    
     //info control layer
     this.info = L.control();
     this.info.onAdd = function () {

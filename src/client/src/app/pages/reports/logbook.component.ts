@@ -22,11 +22,11 @@ import { SummaryService } from '@proxy/summaries';
 import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 
 @Component({
-  selector: 'app-report',
-  templateUrl: './report.component.html',
-  styleUrls: ['./report.component.scss'],
+  selector: 'app-logbook',
+  templateUrl: './logbook.component.html',
+  styleUrls: ['./logbook.component.scss'],
 })
-export class ReportComponent implements OnInit, OnDestroy {
+export class LogBookComponent implements OnInit, OnDestroy {
   //System variables
   private ngUnsubscribe = new Subject<void>();
   home: MenuItem;
@@ -120,7 +120,7 @@ export class ReportComponent implements OnInit, OnDestroy {
     switch (this.loaiVuViec) {
       case LoaiVuViec.KhieuNai:{
         this.breadcrumb.push({
-          label: ' Báo cáo Khiếu nại',
+          label: ' Sổ theo dõi Khiếu nại',
           icon: 'pi pi-envelope',
           disabled: true,
         });
@@ -128,7 +128,7 @@ export class ReportComponent implements OnInit, OnDestroy {
       }
       case LoaiVuViec.ToCao:{
         this.breadcrumb.push({
-          label: ' Báo cáo Tố cáo',
+          label: ' Sổ theo dõi Tố cáo',
           icon: 'fa fa-balance-scale',
           disabled: true,
         });
@@ -136,7 +136,7 @@ export class ReportComponent implements OnInit, OnDestroy {
       }   
       default:{
         this.breadcrumb.push({
-          label: ' Báo cáo tổng hợp Khiếu nại/Tố cáo',
+          label: ' Sổ theo dõi tổng hợp Khiếu nại/Tố cáo',
           icon: 'pi pi-send',
           disabled: true,
         });
@@ -285,12 +285,13 @@ export class ReportComponent implements OnInit, OnDestroy {
     } as GetSummaryListDto;
 
     this.summaryService
-      .getReportExcel(this.filter)//GetLogBookExcel
+      .getLogBookExcel(this.filter)//GetLogBookExcel
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         (data: any) => {
           if (data) {
-            let fileName = 'Báo cáo Đơn thư Khiếu nại - Tố cáo_' + this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +'.xlsx';
+            let fileName = 'Sổ theo dõi Đơn thư Khiếu nại - Tố cáo_' + this.utilService.formatDate(new Date(), 'dd/MM/yyyy HH:mm') +'.xlsx';
+          
             const uint8Array = this.utilService.saveFile(data, TYPE_EXCEL, fileName);
           }
           this.layoutService.blockUI$.next(false);

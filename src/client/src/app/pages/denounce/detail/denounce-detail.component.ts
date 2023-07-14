@@ -428,6 +428,10 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       this.layoutService.blockUI$.next(false);
       return;
     }
+    if (!this.checkToado(this.form.get('duLieuToaDo').value)){
+      this.notificationService.showError('Dữ liệu tọa độ không hợp lệ. Bạn hãy chọn một điểm trên bản đồ hoặc gõ đúng địa chỉ theo chuẩn tọa độ địa lý!');
+      return;
+    }
     this.layoutService.blockUI$.next(true);
     if (this.utilService.isEmpty(this.denounceId)) {
       let value = this.form.value as CreateDenounceDto;
@@ -627,7 +631,19 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       this.drawLabel = "Hủy";
     }
   }
-
+  
+  private checkToado(duLieuToaDo:any): boolean{
+    if (duLieuToaDo!=null && duLieuToaDo!=undefined){
+      var toado = duLieuToaDo.split(", ");
+      if (toado.length==2){
+        return isFinite(toado[0]) && Math.abs(toado[0]) <= 90 //valid Long
+              &&
+               isFinite(toado[1]) && Math.abs(toado[1]) <= 180;//valid Lat
+      }
+    }
+    return false;
+  }
+  
   close() {
     if (this.ref) {
       this.ref.close();

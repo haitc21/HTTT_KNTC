@@ -292,7 +292,7 @@ public class DenounceAppService : CrudAppService<
         var denounceDto = ObjectMapper.Map<List<Denounce>, List<DenounceExcelDto>>(denounces);
 
         var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "Denounce.xlsx");
-        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<DenounceExcelDto>(denounceDto, templatePath, 16, 0, true);
+        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<DenounceExcelDto>(denounceDto, templatePath, 17, 0, true);
         if (wb == null) return null;
 
         ISheet sheet = wb.GetSheetAt(0);

@@ -108,7 +108,9 @@ public class SummaryRepository : ISummaryRepository
                             DuLieuToaDo = c.DuLieuToaDo,
                             DuLieuHinhHoc = c.DuLieuHinhHoc,
                             SoThua = c.SoThua,
-                            ToBanDo = c.ToBanDo
+                            ToBanDo = c.ToBanDo,
+                            //DienTich = c.DienTich,
+                            //DiaChiThuaDat = c.DiaChiThuaDat
                         });
             else            
                 complainQuery = dbContext.Set<Complain>()
@@ -170,7 +172,9 @@ public class SummaryRepository : ISummaryRepository
                             DuLieuToaDo = c.DuLieuToaDo,
                             DuLieuHinhHoc = c.DuLieuHinhHoc,
                             SoThua = c.SoThua,
-                            ToBanDo = c.ToBanDo
+                            ToBanDo = c.ToBanDo,
+                            //DienTich = c.DienTich,
+                            //DiaChiThuaDat = c.DiaChiThuaDat
                         });
         }
             
