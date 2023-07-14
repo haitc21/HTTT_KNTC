@@ -1,11 +1,7 @@
-﻿using KNTC.CategoryUnitTypes;
-using KNTC.Localization;
+﻿using KNTC.Localization;
 using KNTC.Permissions;
-using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
-using NPOI.OpenXmlFormats.Dml;
-using NPOI.POIFS.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +38,7 @@ public class SysConfigAppService : CrudAppService<
         _configManager = configManager;
         _cache = cache;
     }
+
     [AllowAnonymous]
     public async Task<SysConfigCacheItem> GetByNameAsync(string name)
     {
@@ -81,6 +78,7 @@ public class SysConfigAppService : CrudAppService<
             ObjectMapper.Map<List<SysConfig>, List<SysConfigDto>>(queryResult)
         );
     }
+
     [Authorize(KNTCPermissions.SysConfigsPermission.Create)]
     public override async Task<SysConfigDto> CreateAsync(CreateSysConfigDto input)
     {
@@ -111,7 +109,7 @@ public class SysConfigAppService : CrudAppService<
     [Authorize(KNTCPermissions.SysConfigsPermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
-        var entity  = await Repository.GetAsync(id, false);
+        var entity = await Repository.GetAsync(id, false);
         await Repository.DeleteAsync(entity);
         await _cache.RemoveAsync($"{entity.Name}");
     }
@@ -121,7 +119,7 @@ public class SysConfigAppService : CrudAppService<
     {
         if (ids.Count() <= 0) return;
         var lstCacheKey = new List<string>();
-        var entities = await Repository.GetListAsync(x => ids.Contains(x.Id),false);
+        var entities = await Repository.GetListAsync(x => ids.Contains(x.Id), false);
         foreach (var entity in entities)
         {
             lstCacheKey.Add($"{entity.Name}");

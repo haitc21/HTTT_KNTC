@@ -8,6 +8,7 @@ import { FileService } from 'src/app/shared/services/file.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
 
 @Component({
   templateUrl: './profile.component.html',
@@ -30,15 +31,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   // Validate
   validationMessages = {
-    name: [{ type: 'required', message: 'Tên không được để trống' }],
-    surname: [{ type: 'required', message: 'Họ không được để trống' }],
+    name: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  }],
+    surname: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  }],
     email: [
-      { type: 'required', message: 'Email không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  },
       { type: 'email', message: 'Địa chỉ email không chính xác' },
     ],
-    userName: [{ type: 'required', message: 'Tên tài khoản không được để trống' }],
+    userName: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  }],
     phoneNumber: [
-      { type: 'required', message: 'Số ĐT không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  },
       { type: 'pattern', message: 'Số ĐT không chính xác' },
     ],
   };

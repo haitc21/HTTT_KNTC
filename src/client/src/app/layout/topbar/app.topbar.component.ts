@@ -125,7 +125,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
       {
         label: 'Bản đồ',
         icon: 'pi pi-fw pi-map-marker',
-        routerLink: ['/pages/map'],
+        routerLink: ['/map'],
       },
       {
         label: 'Khiếu nại',
@@ -133,20 +133,20 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         items: [
           {
             label: 'Đất đai',
-            routerLink: [`/pages/complain/${LinhVuc.DatDai}`],
+            routerLink: [`/complain/${LinhVuc.DatDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`],
+            routerLink: [`/complain/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`],
+            routerLink: [`/complain/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`],
+            routerLink: [`/complain/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },
@@ -156,20 +156,20 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         items: [
           {
             label: 'Đất đai',
-            routerLink: [`/pages/denounce/${LinhVuc.DatDai}`],
+            routerLink: [`/denounce/${LinhVuc.DatDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: [`/pages/denounce/${LinhVuc.MoiTruong}`],
+            routerLink: [`/denounce/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: [`/pages/denounce/${LinhVuc.KhoangSan}`],
+            routerLink: [`/denounce/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: [`/pages/denounce/${LinhVuc.TaiNguyenNuoc}`],
+            routerLink: [`/denounce/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },
@@ -178,21 +178,17 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         icon: 'fa fa-chart-bar',
         items: [
           {
-            label: 'Báo cáo',
-            routerLink: ['/pages/reports/report'],
-          },
-          {
             label: 'Thống kê',
-            routerLink: ['/pages/dashboard'],
+            routerLink: ['/dashboard'],
           },
           {
-            label: 'Sổ theo dõi KN/TC',
-            routerLink: ['/pages/reports/logbook'],
+            label: 'Báo cáo KN/TC',
+            routerLink: ['/reports/report'],
           },
           /*
           {
             label: 'Tổng hợp kết quả KN/TC',
-            routerLink: ['/pages/reports/summary'],
+            routerLink: ['/reports/summary'],
           },
           */
         ],

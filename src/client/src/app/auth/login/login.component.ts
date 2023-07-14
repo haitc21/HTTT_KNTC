@@ -7,6 +7,7 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { UtilityService } from 'src/app/shared/services/utility.service';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
 
 @Component({
   selector: 'app-login',
@@ -42,14 +43,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   public blockedPanel: boolean = false;
   validationMessages = {
     username: [
-      { type: 'required', message: 'Tên tài khoàn không được để trống!' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxlength',
         message: 'Tên tài khoản không quá 255 ký tự',
       },
     ],
     password: [
-      { type: 'required', message: 'Mật khẩukhông được để trống!' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxlength',
         message: 'Mật khẩu không quá 255 ký tự',
@@ -86,8 +87,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   onSubmit() {
     this.utilService.markAllControlsAsDirty([this.form]);
-      if (this.form.invalid) 
-    {
+    if (this.form.invalid) {
+      this.notificationService.showWarn(MessageConstants.FORM_INVALID);
       this.layoutService.blockUI$.next(false);
       return;
     }
@@ -121,7 +122,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
- ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

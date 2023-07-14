@@ -15,7 +15,7 @@ import {
 import { LoaiVuViec } from '@proxy';
 import { v4 as uuidv4 } from 'uuid';
 import { SummaryDto } from '@proxy/summaries';
-import { MapPopupComponent } from '../map-popup/map-popup.component';
+import { MapPopupComponent } from './map-popup/map-popup.component';
 
 import * as L from 'leaflet';
 import 'leaflet.markercluster/dist/leaflet.markercluster';

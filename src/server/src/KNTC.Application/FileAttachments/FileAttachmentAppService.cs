@@ -20,7 +20,6 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using static System.Net.WebRequestMethods;
 
 namespace KNTC.FileAttachments;
 

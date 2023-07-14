@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
-using KNTC.SysConfigs;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.Extenssions;
@@ -10,6 +9,7 @@ using KNTC.LandTypes;
 using KNTC.Roles;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
+using KNTC.SysConfigs;
 using KNTC.Units;
 using KNTC.Users;
 using Volo.Abp.Identity;

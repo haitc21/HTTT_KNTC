@@ -4,9 +4,8 @@ import { AppLayoutComponent } from './layout/app.layout.component';
 import { AuthGuard } from '@abp/ng.core';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'pages/home', pathMatch: 'full' },
   {
-    path: 'pages',
+    path: '',
     loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
     component: AppLayoutComponent,
   },

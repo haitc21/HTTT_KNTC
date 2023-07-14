@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Volo.Abp.Caching;
+﻿using Volo.Abp.Caching;
 
 namespace KNTC.SysConfigs;
 

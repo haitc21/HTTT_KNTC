@@ -16,4 +16,7 @@ export class NotificationService {
   showWarn(message: string) {
     this.messageService.add({ severity: 'warn', summary: 'Cảnh báo', detail: message });
   }
+  showInfo(message: string) {
+    this.messageService.add({ severity: 'info', summary: 'Thoong tin', detail: message });
+  }
 }

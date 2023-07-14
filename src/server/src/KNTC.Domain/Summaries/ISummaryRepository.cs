@@ -7,7 +7,7 @@ namespace KNTC.Summaries;
 public interface ISummaryRepository
 {
     Task<IQueryable<Summary>> GetListAsync(LoaiVuViec? loaiVuViec,
-                                           LinhVuc? linhVuc, 
+                                           LinhVuc? linhVuc,
                                            bool landComplain,
                                            bool enviromentComplain,
                                            bool waterComplain,

@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Volo.Abp.Application.Dtos;
-using Volo.Abp.Caching;
+﻿using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
 namespace KNTC.SysConfigs;
+
 public class SysConfigDto : EntityDto<int>, IHasConcurrencyStamp
 {
     public string Name { get; set; }

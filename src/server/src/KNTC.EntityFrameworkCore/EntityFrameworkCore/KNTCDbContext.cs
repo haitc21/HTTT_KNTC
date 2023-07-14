@@ -1,11 +1,11 @@
 ﻿using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
-using KNTC.SysConfigs;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
 using KNTC.LandTypes;
 using KNTC.SpatialDatas;
+using KNTC.SysConfigs;
 using KNTC.Units;
 using KNTC.Users;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +15,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+
 //using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;

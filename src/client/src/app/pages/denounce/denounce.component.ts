@@ -489,28 +489,28 @@ export class DenounceComponent implements OnInit, OnDestroy {
         this.breadcrumb.push({
           label: ' Đất đai',
           icon: 'pi pi-image',
-          routerLink: [`/pages/denounce/${LinhVuc.DatDai}`],
+          routerLink: [`/denounce/${LinhVuc.DatDai}`],
         });
         break;
       case LinhVuc.MoiTruong:
         this.breadcrumb.push({
           label: ' Môi trường',
           icon: 'pi pi-sun',
-          routerLink: [`/pages/denounce/${LinhVuc.MoiTruong}`],
+          routerLink: [`/denounce/${LinhVuc.MoiTruong}`],
         });
         break;
       case LinhVuc.TaiNguyenNuoc:
         this.breadcrumb.push({
           label: ' Tài nguyên nước',
           icon: 'pi pi-flag-fill',
-          routerLink: [`/pages/denounce/${LinhVuc.TaiNguyenNuoc}`],
+          routerLink: [`/denounce/${LinhVuc.TaiNguyenNuoc}`],
         });
         break;
       case LinhVuc.KhoangSan:
         this.breadcrumb.push({
           label: ' Khoáng sản',
           icon: 'pi pi-bitcoin',
-          routerLink: [`/pages/denounce/${LinhVuc.KhoangSan}`],
+          routerLink: [`/denounce/${LinhVuc.KhoangSan}`],
         });
         break;
       default:

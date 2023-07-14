@@ -47,7 +47,6 @@ public class KNTCPermissionDefinitionProvider : PermissionDefinitionProvider
         var geoServerGroup = context.AddGroup(KNTCPermissions.GeoServerGroupName, L("Permission:GeoServerGr"));
         var geoServerPermission = geoServerGroup.AddPermission(KNTCPermissions.GeoServerPermission.Default, L("Permission:GeoServesrs"));
 
-
         var configGroup = context.AddGroup(KNTCPermissions.SysConfigGroupName, L("Permission:SysConfigGr"));
         var configPermission = configGroup.AddPermission(KNTCPermissions.SysConfigsPermission.Default, L("Permission:SysConfigs"));
         configPermission.AddChild(KNTCPermissions.SysConfigsPermission.Create, L("Permission:SysConfigs.Create"));

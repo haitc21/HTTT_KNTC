@@ -1,5 +1,4 @@
-﻿using KNTC.DocumentTypes;
-using KNTC.SysConfigs;
+﻿using KNTC.SysConfigs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Collections.Generic;

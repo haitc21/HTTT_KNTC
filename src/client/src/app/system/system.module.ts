@@ -36,7 +36,6 @@ import { PasswordModule } from 'primeng/password';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CardModule } from 'primeng/card';
 import { FileUploadModule } from 'primeng/fileupload';
-import { KNTCSharedModule } from '../shared/modules/shared.module';
 import { ProfileComponent } from './user/profile/profile.component';
 import { DocumentTypeComponent } from './document-type/document-type.component';
 import { DocumentTypeDetailComponent } from './document-type/detail/document-type-detail.component';
@@ -50,6 +49,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { DividerModule } from 'primeng/divider';
 import { SysConfigComponent } from './sys-config/sys-config.component';
 import { SysConfigDetailComponent } from './sys-config/detail/sys-config-detail.component';
+import { ValidationMessagedModule } from '../shared/modules/validation-message/validation-message.module';
 
 const COMPONENT = [
   RoleComponent,
@@ -89,7 +89,7 @@ const COMPONENT = [
     CheckboxModule,
     InputTextareaModule,
     EditorModule,
-    KNTCSharedModule,
+    ValidationMessagedModule,
     BadgeModule,
     ImageModule,
     ConfirmDialogModule,

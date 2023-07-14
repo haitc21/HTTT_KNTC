@@ -14,6 +14,8 @@ import { UserDto, UsersService } from '@proxy/users';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 
 @Component({
   templateUrl: './user-detail.component.html',
@@ -34,15 +36,15 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   avatarUrl: any;
   // Validate
   validationMessages = {
-    name: [{ type: 'required', message: 'Tên không được để trống' }],
-    surname: [{ type: 'required', message: 'Họ không được để trống' }],
+    name: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    surname: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     email: [
-      { type: 'required', message: 'Email không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       { type: 'email', message: 'Địa chỉ email không chính xác' },
     ],
-    userName: [{ type: 'required', message: 'Tên tài khoản không được để trống' }],
+    userName: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     password: [
-      { type: 'required', message: 'Mật khẩu không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'pattern',
         message: 'Mật khẩu ít nhất 8 ký tự, ít nhất 1 số, 1 ký tự đặc biệt, và một chữ hoa',
@@ -53,7 +55,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       { type: 'passwordMismatch', message: 'Xác nhận mật khẩu không chính xác' },
     ],
     phoneNumber: [
-      { type: 'required', message: 'Số ĐT không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       { type: 'pattern', message: 'Số ĐT không chính xác' },
     ],
   };
@@ -68,7 +70,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     private utilService: UtilityService,
     private fb: FormBuilder,
     private sanitizer: DomSanitizer,
-    private layoutService: LayoutService,
+    private notificationService: NotificationService,
+    private layoutService: LayoutService
   ) {}
 
   ngOnInit() {
@@ -107,8 +110,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
-this.utilService.markAllControlsAsDirty([this.form]);
-    if(this.form.invalid) return;;
+    this.utilService.markAllControlsAsDirty([this.form]);
+    if (this.form.invalid) {
+      this.notificationService.showWarn(MessageConstants.FORM_INVALID);
+      return;
+    }
     this.layoutService.blockUI$.next(true);
     if (this.utilService.isEmpty(this.config.data?.id)) {
       this.userService
@@ -143,7 +149,6 @@ this.utilService.markAllControlsAsDirty([this.form]);
         });
     }
   }
-  
 
   setMode(mode: string) {
     this.mode = mode;

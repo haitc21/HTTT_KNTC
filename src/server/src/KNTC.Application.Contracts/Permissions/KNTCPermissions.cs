@@ -82,8 +82,8 @@ public static class KNTCPermissions
         public const string Delete = Default + ".Delete";
     }
 
-
     public const string GeoServerGroupName = "GeoServesrs";
+
     public static class GeoServerPermission
     {
         public const string Default = GeoServerGroupName;

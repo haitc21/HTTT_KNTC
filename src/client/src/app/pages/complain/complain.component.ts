@@ -128,28 +128,28 @@ export class ComplainComponent implements OnInit, OnDestroy {
         this.breadcrumb.push({
           label: ' Đất đai',
           icon: 'pi pi-image',
-          routerLink: [`/pages/complain/${LinhVuc.DatDai}`],
+          routerLink: [`/complain/${LinhVuc.DatDai}`],
         });
         break;
       case LinhVuc.MoiTruong:
         this.breadcrumb.push({
           label: ' Môi trường',
           icon: 'pi pi-sun',
-          routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`],
+          routerLink: [`/complain/${LinhVuc.MoiTruong}`],
         });
         break;
       case LinhVuc.TaiNguyenNuoc:
         this.breadcrumb.push({
           label: ' Tài nguyên nước',
           icon: 'pi pi-flag-fill',
-          routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`],
+          routerLink: [`/complain/${LinhVuc.TaiNguyenNuoc}`],
         });
         break;
       case LinhVuc.KhoangSan:
         this.breadcrumb.push({
           label: ' Khoáng sản',
           icon: 'pi pi-bitcoin',
-          routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`],
+          routerLink: [`/complain/${LinhVuc.KhoangSan}`],
         });
         break;
       default:

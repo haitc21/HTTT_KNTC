@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
@@ -14,7 +13,9 @@ public class CreateSysConfigDto : EntityDto<int>, IHasConcurrencyStamp
 
     [Required]
     public string Value { get; set; }
+
     [MaxLength(KNTCValidatorConsts.MaxDescriptionLength)]
     public string Description { get; set; }
+
     public string ConcurrencyStamp { get; set; }
 }

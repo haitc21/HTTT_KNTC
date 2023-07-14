@@ -10,7 +10,7 @@
         <div id="quyhoach" class="group-header ml-3">
           <img src="assets/images/map/quyhoach_icon.png" alt="Bản đồ quy hoạch" />
           <span>Bản đồ quy hoạch</span>
-          <p-inputSwitch [(ngModel)]="geo" (onChange)="loadGeo()"></p-inputSwitch>
+          <p-inputSwitch class="pl-7" [(ngModel)]="geo" (onChange)="loadGeo()"></p-inputSwitch>
         </div>
       </div>
       <!-- ----------------------------------------------------------------------- -->
@@ -38,7 +38,7 @@
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
           <p-inputSwitch [(ngModel)]="waterComplain" (onChange)="loadData()"></p-inputSwitch>
-        </div>        
+        </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="group-header ml-3 mt-5">
           <img src="assets/images/map/marker-icon-red.png" class="icon-red" alt="Tố cáo" />
@@ -63,7 +63,7 @@
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
           <p-inputSwitch [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
-        </div>        
+        </div>
       </div>
     </p-card>
   </div>
@@ -274,10 +274,10 @@
                 <th>Mã hồ sơ</th>
                 <th style="width: 180px">Nội dung</th>
                 <th>Loại vụ việc</th>
-                <th>Lĩnh vực</th>  
+                <th>Lĩnh vực</th>
                 <th style="width: 120px">Người nộp đơn</th>
                 <th>Số ĐT</th>
-                <th>Địa chỉ</th>                              
+                <th>Địa chỉ</th>
                 <th>Thời gian nộp</th>
                 <th>Ngày hẹn trả KQ</th>
                 <th style="width: 150px">Bộ phận đang XL</th>
@@ -289,12 +289,16 @@
               <tr>
                 <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
                 <td>
-                  <span [ngClass]="p-link" (click)="viewDetail(row)"><strong>{{ row.maHoSo }}</strong></span>
+                  <span [ngClass]="p - link" (click)="viewDetail(row)"
+                    ><strong>{{ row.maHoSo }}</strong></span
+                  >
                 </td>
                 <td>
-                  <span [ngClass]="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
+                  <span [ngClass]="p - link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
                 </td>
-                <td [ngClass]="(row.loaiVuViec == 1)?'kn':'tc'">{{ LoaiVuViecOptions[row.loaiVuViec] }}</td>
+                <td [ngClass]="row.loaiVuViec == 1 ? 'kn' : 'tc'">
+                  {{ LoaiVuViecOptions[row.loaiVuViec] }}
+                </td>
                 <td>{{ LinhVucOptions[row.linhVuc] }}</td>
                 <td>{{ row.nguoiNopDon }}</td>
                 <td>{{ row.dienThoai }}</td>
@@ -306,11 +310,14 @@
                   {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
                 </td>
                 <td>{{ row.boPhanDangXL }}</td>
-                <td>{{ KetquaOptions[(row?.ketQua)? row?.ketQua : 0]}}</td>
+                <td>{{ KetquaOptions[row?.ketQua ? row?.ketQua : 0] }}</td>
                 <td>
-                  <p-button icon="pi pi-map-marker" [styleClass]="(row?.duLieuToaDo)?'p-button-success': 'p-button-warning'"
-                    (click)="setPosition((row?.duLieuToaDo)? row?.duLieuToaDo : null)"
-                    [disabled]="(row?.duLieuToaDo)?false:true">
+                  <p-button
+                    icon="pi pi-map-marker"
+                    [styleClass]="row?.duLieuToaDo ? 'p-button-success' : 'p-button-warning'"
+                    (click)="setPosition(row?.duLieuToaDo ? row?.duLieuToaDo : null)"
+                    [disabled]="row?.duLieuToaDo ? false : true"
+                  >
                   </p-button>
                 </td>
               </tr>
