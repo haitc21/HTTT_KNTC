@@ -1,10 +1,5 @@
-<form
-  class="form-horizontal form-label-left"
-  skipValidation
-  [formGroup]="form"
-  
->
-  <p-panel #pnlDetail   [collapsed]="false">
+<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
+  <p-panel #pnlDetail [collapsed]="false">
     <div class="formgrid grid">
       <!-- ---------------------------------------------------------------------------------- -->
       <div class="field col-12 md:col-12">
@@ -43,17 +38,19 @@
         </app-validation-message>
       </div>
       <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-12">
-        <p-checkbox binary="true" label="Công khai" formControlName="isPublic"></p-checkbox>
+      <div class="col-12 md:col-6 flex align-items-center">
+        <p-inputSwitch formControlName="isPublic"></p-inputSwitch>
+        <label class="ml-3" for="isPublic">Công khai</label>
       </div>
       <!-- ---------------------------------------------------------------------------------- -->
-      <div class="field col-12 md:col-12">
-        <p-checkbox binary="true" label="Mặc định" formControlName="isDefault"></p-checkbox>
+      <div class="col-12 md:col-6 flex align-items-center">
+        <p-inputSwitch formControlName="isDefault"></p-inputSwitch>
+        <label class="ml-3" for="isDefault">Mặc định</label>
       </div>
       <!-- ---------------------------------------------------------------------------------- -->
     </div>
 
-       <ng-template pTemplate="footer">
+    <ng-template pTemplate="footer">
       <div class="flex justify-content-end">
         <button
           pButton
@@ -75,7 +72,5 @@
         ></button>
       </div>
     </ng-template>
-
-   
   </p-panel>
 </form>

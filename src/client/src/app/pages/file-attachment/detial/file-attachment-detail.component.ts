@@ -10,15 +10,15 @@ import {
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { UtilityService } from 'src/app/shared/services/utility.service';
-import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
+import { KNTCValidatorConsts } from 'src/app/_shared/constants/validator.const';
 import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
 import { ListResultDto } from '@abp/ng.core';
 import { CreateAndUpdateFileAttachmentDto, FileAttachmentDto } from '@proxy/file-attachments';
 import { LoaiVuViec } from '@proxy';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { FileService } from 'src/app/shared/services/file.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { FileService } from 'src/app/_shared/services/file.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 
 @Component({
   selector: 'app-file-attachment-detail',

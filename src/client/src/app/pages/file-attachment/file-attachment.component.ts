@@ -10,17 +10,17 @@ import {
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
-import { Actions } from 'src/app/shared/enums/actions.enum';
-import { FileService } from 'src/app/shared/services/file.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { DIALOG_MD } from 'src/app/_shared/constants/sizes.const';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
+import { FileService } from 'src/app/_shared/services/file.service';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.component';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { congKhaiOptions, giaiDoanOptions } from 'src/app/shared/constants/consts';
+import { congKhaiOptions, giaiDoanOptions } from 'src/app/_shared/constants/consts';
 
 @Component({
   selector: 'app-file-attachment',

@@ -333,17 +333,9 @@
                   </div>
 
                   <!-- ----------------------------congKhai---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
-                    <p-checkbox
-                      binary="true"
-                      label="Công khai *"
-                      formControlName="congKhai"
-                    ></p-checkbox>
-                    <app-validation-message
-                      [entityControl]="formControls.congKhai"
-                      [validationMessages]="validationMessages.congKhai"
-                    >
-                    </app-validation-message>
+                  <div class="col-12 md:col-6 flex align-items-center">
+                    <p-inputSwitch formControlName="congKhai"></p-inputSwitch>
+                    <label class="ml-3" for="congKhai">Công khai</label>
                   </div>
                   <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
                   <div class="field col-12 md:col-12">

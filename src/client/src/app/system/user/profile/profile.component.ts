@@ -2,13 +2,13 @@ import { Component, OnInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { UserDto, UsersService } from '@proxy/users';
-import { FileService } from 'src/app/shared/services/file.service';
+import { FileService } from 'src/app/_shared/services/file.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 
 @Component({
   templateUrl: './profile.component.html',

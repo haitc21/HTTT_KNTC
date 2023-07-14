@@ -4,20 +4,20 @@ import { MenuItem } from 'primeng/api';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { PermissionService } from '@abp/ng.core';
 import { LayoutService } from '../service/app.layout.service';
-import { LOGIN_URL } from 'src/app/shared/constants/urls.const';
+import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FileService } from 'src/app/shared/services/file.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { FileService } from 'src/app/_shared/services/file.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { ProfileComponent } from 'src/app/system/user/profile/profile.component';
-import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
+import { DIALOG_MD, DIALOG_SM } from 'src/app/_shared/constants/sizes.const';
 import { UserInfoDto } from '@proxy/users';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SetPasswordComponent } from 'src/app/system/user/set-password/set-password.component';
 import { LinhVuc } from '@proxy';
-import { GetSysConfigService } from 'src/app/shared/services/sysconfig.services';
+import { GetSysConfigService } from 'src/app/_shared/services/sysconfig.services';
 import { Subject, forkJoin, takeUntil } from 'rxjs';
-import { SysConfigConsts } from 'src/app/shared/constants/sys-config.consts';
+import { SysConfigConsts } from 'src/app/_shared/constants/sys-config.consts';
 
 @Component({
   selector: 'app-topbar',
@@ -185,12 +185,10 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
             label: 'Báo cáo KN/TC',
             routerLink: ['/reports/report'],
           },
-          /*
           {
-            label: 'Tổng hợp kết quả KN/TC',
-            routerLink: ['/reports/summary'],
+            label: 'Sổ theo dõi KN/TC',
+            routerLink: ['/reports/logbook'],
           },
-          */
         ],
       },
       {

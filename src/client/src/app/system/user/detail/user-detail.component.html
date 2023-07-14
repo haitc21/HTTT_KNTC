@@ -1,9 +1,4 @@
-<form
-  class="form-horizontal form-label-left"
-  skipValidation
-  [formGroup]="form"
-  
->
+<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
   <p-panel #pnlDetail [collapsed]="false">
     <div class="grid">
       <!-- --------------------------------AVATAR-------------------------------------------------- -->
@@ -139,8 +134,9 @@
           </span>
         </div>
         <!-- ---------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <p-checkbox binary="true" label="Kích hoạt" formControlName="isActive"></p-checkbox>
+        <div class="col-12 md:col-6 flex align-items-center">
+          <p-inputSwitch formControlName="isActive"></p-inputSwitch>
+          <label class="ml-3" for="isActive">Kích hoạt</label>
         </div>
         <!-- ---------------------------------------------------------------------------------- -->
       </div>
@@ -148,7 +144,7 @@
 
     <!-- ---------------------------------------------------------------------------------- -->
 
-       <ng-template pTemplate="footer">
+    <ng-template pTemplate="footer">
       <div class="flex justify-content-end">
         <button
           pButton
@@ -170,7 +166,5 @@
         ></button>
       </div>
     </ng-template>
-
-   
   </p-panel>
 </form>

@@ -13,16 +13,16 @@ import { LandTypeLookupDto, LandTypeService } from '@proxy/land-types';
 import { UnitLookupDto, UnitService } from '@proxy/units';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
-import { FileUploadDto } from 'src/app/shared/models/file-upload.class';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { KNTCValidatorConsts } from 'src/app/_shared/constants/validator.const';
+import { FileUploadDto } from 'src/app/_shared/models/file-upload.class';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { FileAttachmentComponent } from '../../file-attachment/file-attachment.component';
-import { MapComponent } from 'src/app/shared/modules/map/map.component';
+import { MapComponent } from 'src/app/_shared/modules/map/map.component';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { loaiKQOptions, loaiKhieuNaiOptions } from 'src/app/shared/constants/consts';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { AppValidatorFn } from 'src/app/shared/functions/validator-fn';
+import { loaiKQOptions, loaiKhieuNaiOptions } from 'src/app/_shared/constants/consts';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { AppValidatorFn } from 'src/app/_shared/functions/validator-fn';
 
 @Component({
   templateUrl: './complain-detail.component.html',

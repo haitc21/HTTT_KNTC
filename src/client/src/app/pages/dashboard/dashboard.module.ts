@@ -4,7 +4,7 @@ import { CoreModule } from '@abp/ng.core';
 import { CardModule } from 'primeng/card';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { MapModule } from 'src/app/shared/modules/map/map.module';
+import { MapModule } from 'src/app/_shared/modules/map/map.module';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CalendarModule } from 'primeng/calendar';

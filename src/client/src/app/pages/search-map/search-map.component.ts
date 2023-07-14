@@ -3,22 +3,22 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Subject, takeUntil } from 'rxjs';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
 import { LoaiVuViec } from '@proxy';
 import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
-import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
+import { DIALOG_BG } from 'src/app/_shared/constants/sizes.const';
 import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 import { DialogService } from 'primeng/dynamicdialog';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
+import { KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
 
 @Component({
   selector: 'app-search-map',

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -56,6 +58,7 @@ public class KNTCAuthServerModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
@@ -66,22 +69,24 @@ public class KNTCAuthServerModule : AbpModule
             });
 
             //    // disable https
-            builder.AddServer(options =>
+            if (!hostingEnvironment.IsDevelopment())
             {
-                options.UseAspNetCore().DisableTransportSecurityRequirement();
-            });
+                builder.AddServer(options =>
+                {
+                    options.UseAspNetCore().DisableTransportSecurityRequirement();
+                });
+            }
         });
 
-        //var hostingEnvironment = context.Services.GetHostingEnvironment();
-        // Development environment
-        //if (hostingEnvironment.IsDevelopment())
-        //{
-        //PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-        //{
-        //    // This is default value, you can remove this line.
-        //    options.AddDevelopmentEncryptionAndSigningCertificate = true;
-        //});
-        //   }
+        //   Development environment
+        if (hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                // This is default value, you can remove this line.
+                options.AddDevelopmentEncryptionAndSigningCertificate = true;
+            });
+        }
         //    Production or Staging environment
         //if (!hostingEnvironment.IsDevelopment())
         //{

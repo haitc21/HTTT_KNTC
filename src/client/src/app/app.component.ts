@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { PrimeNGConfig } from 'primeng/api';
-import { LOGIN_URL } from './shared/constants/urls.const';
+import { LOGIN_URL } from './_shared/constants/urls.const';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { LayoutService } from './layout/service/app.layout.service';
 

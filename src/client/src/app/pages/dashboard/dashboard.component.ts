@@ -7,7 +7,7 @@ import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryChartDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
+import { congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
 import {Chart} from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 @Component({

@@ -2,24 +2,23 @@ import { ListResultDto } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PagedResultDto } from '@abp/ng.core';
 import { MenuItem } from 'primeng/api';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 import { Subject, takeUntil } from 'rxjs';
-import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
 import { LinhVuc, LoaiVuViec } from '@proxy';
-import { UtilityService } from 'src/app/shared/services/utility.service';
-import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
+import { DIALOG_BG } from 'src/app/_shared/constants/sizes.const';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, giaiDoanOptions, linhVucNameOptions, loaiKQOptions, loaiVuViecNameOptions } from 'src/app/shared/constants/consts';
-import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
+import { KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, giaiDoanOptions, linhVucNameOptions, loaiKQOptions, loaiVuViecNameOptions } from 'src/app/_shared/constants/consts';
+import { ComplainDetailComponent } from '../../complain/detail/complain-detail.component';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { SummaryService } from '@proxy/summaries';
-import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
+import { GetSummaryListDto, SummaryDto, SummaryService } from '@proxy/summaries';
+import { DenounceDetailComponent } from '../../denounce/detail/denounce-detail.component';
 
 @Component({
   selector: 'app-logbook',

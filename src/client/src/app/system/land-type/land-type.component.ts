@@ -4,10 +4,10 @@ import { LandTypeDto, LandTypeService } from '@proxy/land-types';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
-import { Actions } from 'src/app/shared/enums/actions.enum';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { DIALOG_MD } from 'src/app/_shared/constants/sizes.const';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { LandTypeDetailComponent } from './detail/land-type-detail.component';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 

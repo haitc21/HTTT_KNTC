@@ -6,7 +6,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
-import { MapModule } from 'src/app/shared/modules/map/map.module';
+import { MapModule } from 'src/app/_shared/modules/map/map.module';
 import { ButtonModule } from 'primeng/button';
 @NgModule({
   declarations: [

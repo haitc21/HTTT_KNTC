@@ -12,7 +12,7 @@ import { UsersService } from '@proxy/users';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 
 @Component({
   templateUrl: './set-password.component.html',

@@ -1,30 +1,30 @@
 import { ListResultDto } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
-import { Actions } from 'src/app/shared/enums/actions.enum';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { ComplainDto, ComplainService, GetComplainListDto } from '@proxy/complains';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
 import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { ComplainDetailComponent } from './detail/complain-detail.component';
-import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
-import { FileUploadDto as FileUploadDto } from 'src/app/shared/models/file-upload.class';
-import { FileService } from 'src/app/shared/services/file.service';
+import { DIALOG_BG } from 'src/app/_shared/constants/sizes.const';
+import { FileUploadDto as FileUploadDto } from 'src/app/_shared/models/file-upload.class';
+import { FileService } from 'src/app/_shared/services/file.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import {
   KetquaOptions,
   congKhaiOptions,
   giaiDoanOptions,
   loaiKQOptions,
-} from 'src/app/shared/constants/consts';
+} from 'src/app/_shared/constants/consts';
 
 @Component({
   selector: 'app-complain',

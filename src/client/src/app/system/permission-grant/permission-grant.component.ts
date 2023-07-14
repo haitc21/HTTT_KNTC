@@ -13,7 +13,7 @@ import { SelectItemGroup } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { ROLE_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
+import { ROLE_PROVIDER } from 'src/app/_shared/constants/provider-namex.const';
 
 @Component({
   templateUrl: 'permission-grant.component.html',

@@ -9,9 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { EditorModule } from 'primeng/editor';
 import { BadgeModule } from 'primeng/badge';
 import { ImageModule } from 'primeng/image';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -22,7 +20,6 @@ import { PermissionGrantComponent } from './permission-grant/permission-grant.co
 import { UserComponent } from './user/user.component';
 import { SystemRoutingModule } from './system-routing.module';
 import { PickListModule } from 'primeng/picklist';
-import { KeyFilterModule } from 'primeng/keyfilter';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TagModule } from 'primeng/tag';
 import { ListboxModule } from 'primeng/listbox';
@@ -46,10 +43,10 @@ import { UnitTypeDetailComponent } from './unit-type/detail/unit-type-detail.com
 import { UnitComponent } from './unit/unit.component';
 import { UnitDetailComponent } from './unit/detail/unit-detail.component';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { DividerModule } from 'primeng/divider';
 import { SysConfigComponent } from './sys-config/sys-config.component';
 import { SysConfigDetailComponent } from './sys-config/detail/sys-config-detail.component';
-import { ValidationMessagedModule } from '../shared/modules/validation-message/validation-message.module';
+import { ValidationMessagedModule } from '../_shared/modules/validation-message/validation-message.module';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 const COMPONENT = [
   RoleComponent,
@@ -69,7 +66,7 @@ const COMPONENT = [
   UnitComponent,
   UnitDetailComponent,
   SysConfigComponent,
-  SysConfigDetailComponent
+  SysConfigDetailComponent,
 ];
 
 @NgModule({
@@ -86,9 +83,7 @@ const COMPONENT = [
     ProgressSpinnerModule,
     DynamicDialogModule,
     InputNumberModule,
-    CheckboxModule,
     InputTextareaModule,
-    EditorModule,
     ValidationMessagedModule,
     BadgeModule,
     ImageModule,
@@ -96,7 +91,6 @@ const COMPONENT = [
     CalendarModule,
     SystemRoutingModule,
     PickListModule,
-    KeyFilterModule,
     ToolbarModule,
     TagModule,
     ListboxModule,
@@ -107,7 +101,7 @@ const COMPONENT = [
     CardModule,
     FileUploadModule,
     BreadcrumbModule,
-    DividerModule
+    InputSwitchModule
   ],
   entryComponents: [...COMPONENT],
 })

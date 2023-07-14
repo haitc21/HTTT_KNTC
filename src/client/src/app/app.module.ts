@@ -10,14 +10,14 @@ import { AppComponent } from './app.component';
 import { AppLayoutModule } from './layout/app.layout.module';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 import { MessageService } from 'primeng/api';
-import { NotificationService } from './shared/services/notification.service';
-import { UtilityService } from './shared/services/utility.service';
+import { NotificationService } from './_shared/services/notification.service';
+import { UtilityService } from './_shared/services/utility.service';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { TokenInterceptor } from './shared/interceptors/token.interceptor';
-import { GlobalHttpInterceptorService } from './shared/interceptors/error-handler.interceptor';
+import { TokenInterceptor } from './_shared/interceptors/token.interceptor';
+import { GlobalHttpInterceptorService } from './_shared/interceptors/error-handler.interceptor';
 
 import { storeLocaleData } from '@abp/ng.core/locale';
 import(`@/../@angular/common/locales/vi.mjs`).then(m => storeLocaleData(m.default, 'vi'));

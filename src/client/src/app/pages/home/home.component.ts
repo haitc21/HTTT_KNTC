@@ -6,7 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 //import { UnitLookupDto } from '@proxy/units/models';
 import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
-//import { MessageConstants } from 'src/app/shared/constants/messages.const';
+//import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 //import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
 //import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 import { MenuItem } from 'primeng/api';

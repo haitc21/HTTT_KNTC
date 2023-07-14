@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ReportComponent } from './report.component';
+import { LogBookComponent } from './logbook/logbook.component';
 
 const routes: Routes = [
-  { path: '', component: ReportComponent },
+  { path: '', redirectTo: 'report', pathMatch: 'full' },
+  { path: 'report', component: ReportComponent },
+  { path: 'logbook', component: LogBookComponent },
 ];
 
 @NgModule({

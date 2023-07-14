@@ -5,10 +5,10 @@ import { LandTypeDto, LandTypeService } from '@proxy/land-types';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { KNTCValidatorConsts } from 'src/app/_shared/constants/validator.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 
 @Component({
   templateUrl: './land-type-detail.component.html',

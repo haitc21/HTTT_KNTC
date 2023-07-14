@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { UtilityService } from 'src/app/shared/services/utility.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 
 @Component({
   selector: 'app-login',

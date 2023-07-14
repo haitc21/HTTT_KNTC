@@ -4,13 +4,13 @@ import { SysConfigDto, SysConfigService } from '@proxy/sys-configs';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { PermissionGrantComponent } from '../permission-grant/permission-grant.component';
 import { SysConfigDetailComponent } from './detail/sys-config-detail.component';
-import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
-import { ROLE_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
-import { Actions } from 'src/app/shared/enums/actions.enum';
+import { DIALOG_MD, DIALOG_SM } from 'src/app/_shared/constants/sizes.const';
+import { ROLE_PROVIDER } from 'src/app/_shared/constants/provider-namex.const';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({

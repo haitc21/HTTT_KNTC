@@ -9,13 +9,13 @@ import {
 } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { UserDto, UsersService } from '@proxy/users';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
 
 @Component({
   templateUrl: './user-detail.component.html',
