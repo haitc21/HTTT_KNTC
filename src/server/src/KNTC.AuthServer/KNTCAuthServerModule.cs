@@ -78,6 +78,15 @@ public class KNTCAuthServerModule : AbpModule
             }
         });
 
+        //   Development environment
+        if (hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                // This is default value, you can remove this line.
+                options.AddDevelopmentEncryptionAndSigningCertificate = true;
+            });
+        }
         //    Production or Staging environment
         //if (!hostingEnvironment.IsDevelopment())
         //{
@@ -119,7 +128,7 @@ public class KNTCAuthServerModule : AbpModule
                     typeof(AbpUiResource)
                 );
 
-            //options.Languages.Add(new LanguageInfo("vi", "vi", "Tiếng Việt"));
+            options.Languages.Add(new LanguageInfo("vi", "vi", "Tiếng Việt"));
             //options.Languages.Add(new LanguageInfo("en", "en", "English"));
         });
 
@@ -212,23 +221,22 @@ public class KNTCAuthServerModule : AbpModule
             app.UseDeveloperExceptionPage();
         }
 
-        app.UseAbpRequestLocalization();
-        //var supportedCultures = new[]
-        //{
-        //    new CultureInfo("vi"),
-        //    //new CultureInfo("en")
-        //};
-        //app.UseAbpRequestLocalization(options =>
-        //{
-        //    options.DefaultRequestCulture = new RequestCulture("vi");
-        //    options.SupportedCultures = supportedCultures;
-        //    options.SupportedUICultures = supportedCultures;
-        //    options.RequestCultureProviders = new List<IRequestCultureProvider>
-        //    {
-        //        new QueryStringRequestCultureProvider(),
-        //        new CookieRequestCultureProvider()
-        //    };
-        //});
+        var supportedCultures = new[]
+        {
+            new CultureInfo("vi"),
+            //new CultureInfo("en")
+        };
+        app.UseAbpRequestLocalization(options =>
+        {
+            options.DefaultRequestCulture = new RequestCulture("vi");
+            options.SupportedCultures = supportedCultures;
+            options.SupportedUICultures = supportedCultures;
+            options.RequestCultureProviders = new List<IRequestCultureProvider>
+            {
+                new QueryStringRequestCultureProvider(),
+                new CookieRequestCultureProvider()
+            };
+        });
 
         if (!env.IsDevelopment())
         {

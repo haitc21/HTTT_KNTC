@@ -231,6 +231,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       this.complainId = this.config.data?.id;
       this.loadDetail(this.complainId);
     }
+
+    if (this.mode == 'view' && this.hasPermissionUpdate) this.changeEditMode();
   }
 
   //#region load options
@@ -392,7 +394,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
             .get('ngayTraKQ2')
             .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
 
-          if (this.mode == 'view') this.form.disable();
+          if (this.mode == 'view' && !this.hasPermissionUpdate) this.form.disable();
           this.layoutService.blockUI$.next(false);
         },
         error: () => {

@@ -19,7 +19,7 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
         switch (ex.status) {
           case 401:
             InternalServerErrorMessage = this.localizationService.instant(
-              'AbpFeatureManagement::DefaultErrorMessage401Detail'
+              'AbpIdentity::DefaultErrorMessage401Detail'
             );
             this.notificationService.showError(InternalServerErrorMessage);
             break;
@@ -28,26 +28,26 @@ export class GlobalHttpInterceptorService implements HttpInterceptor {
               this.notificationService.showError(ex.error.error.message);
             } else {
               InternalServerErrorMessage = this.localizationService.instant(
-                'AbpFeatureManagement::DefaultErrorMessage403Detail'
+                'AbpIdentity::DefaultErrorMessage403Detail'
               );
               this.notificationService.showError(InternalServerErrorMessage);
             }
             break;
           case 404:
             InternalServerErrorMessage = this.localizationService.instant(
-              'AbpFeatureManagement::DefaultErrorMessage404Detail'
+              'AbpIdentity::DefaultErrorMessage404Detail'
             );
             this.notificationService.showError(InternalServerErrorMessage);
             break;
           case 500:
             InternalServerErrorMessage = this.localizationService.instant(
-              'AbpFeatureManagement::InternalServerErrorMessage'
+              'AbpIdentity::InternalServerErrorMessage'
             );
             this.notificationService.showError(InternalServerErrorMessage);
             break;
           default:
             InternalServerErrorMessage = this.localizationService.instant(
-              'AbpFeatureManagement::InternalServerErrorMessage'
+              'AbpIdentity::InternalServerErrorMessage'
             );
             this.notificationService.showError(InternalServerErrorMessage);
             break;
