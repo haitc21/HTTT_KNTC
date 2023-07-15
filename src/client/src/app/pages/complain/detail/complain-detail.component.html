@@ -845,60 +845,65 @@
       </p-tabPanel>
     </p-tabView>
 
-    <ng-template *ngIf="mode != 'view'" pTemplate="footer">
-      <div class="flex justify-content-end">
-        <button
-          pButton
-          pRipples
-          type="button"
-          (click)="saveChange()"
-          label="Lưu"
-          class="p-button-info mr-2"
-          icon="pi pi-check"
-        ></button>
-        <button
-          pButton
-          pRipples
-          type="button"
-          (click)="close()"
-          label="Đóng"
-          class="p-button-danger"
-          icon="pi pi-times"
-        ></button>
-      </div>
-    </ng-template>
-    <ng-template *ngIf="mode == 'view' && hasPermissionUpdate" pTemplate="footer">
-      <div class="flex justify-content-end">
-        <button
-          *ngIf="mode == 'view'"
-          pButton
-          pRipples
-          type="button"
-          (click)="changeEditMode()"
-          label="Sửa"
-          class="p-button-info mr-2"
-          icon="pi pi-check"
-        ></button>
-        <button
-          *ngIf="mode != 'view'"
-          pButton
-          pRipples
-          type="button"
-          (click)="saveChange()"
-          label="Lưu"
-          class="p-button-info mr-2"
-          icon="pi pi-check"
-        ></button>
-        <button
-          pButton
-          pRipples
-          type="button"
-          (click)="close()"
-          label="Đóng"
-          class="p-button-danger"
-          icon="pi pi-times"
-        ></button>
-      </div>
-    </ng-template>
+    <ng-container *ngIf="mode != 'view'">
+      <ng-template pTemplate="footer">
+        <div class="flex justify-content-end">
+          <button
+            pButton
+            pRipples
+            type="button"
+            (click)="saveChange()"
+            label="Lưu"
+            class="p-button-info mr-2"
+            icon="pi pi-check"
+          ></button>
+          <button
+            pButton
+            pRipples
+            type="button"
+            (click)="close()"
+            label="Đóng"
+            class="p-button-danger"
+            icon="pi pi-times"
+          ></button>
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <ng-container *ngIf="mode == 'view' && hasPermissionUpdate">
+      <ng-template pTemplate="footer">
+        <div class="flex justify-content-end">
+          <button
+            *ngIf="mode == 'view'"
+            pButton
+            pRipples
+            type="button"
+            (click)="changeEditMode()"
+            label="Sửa"
+            class="p-button-info mr-2"
+            icon="pi pi-check"
+          ></button>
+          <button
+            *ngIf="mode != 'view'"
+            pButton
+            pRipples
+            type="button"
+            (click)="saveChange()"
+            label="Lưu"
+            class="p-button-info mr-2"
+            icon="pi pi-check"
+          ></button>
+          <button
+            pButton
+            pRipples
+            type="button"
+            (click)="close()"
+            label="Đóng"
+            class="p-button-danger"
+            icon="pi pi-times"
+          ></button>
+        </div>
+      </ng-template>
+    </ng-container>
   </p-panel>
 </form>

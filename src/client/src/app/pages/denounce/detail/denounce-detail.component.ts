@@ -256,6 +256,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       this.denounceId = this.config.data?.id;
       this.loadDetail(this.denounceId);
     }
+    if (this.mode == 'view' && this.hasPermissionUpdate) this.changeEditMode();
   }
 
   //#region load options
@@ -420,7 +421,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
             .get('ngayNhanTBKQXLKLTC')
             .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayNhanTBKQXLKLTC));
 
-          if (this.mode == 'view') this.form.disable();
+          if (this.mode == 'view' && !this.hasPermissionUpdate) this.form.disable();
           this.layoutService.blockUI$.next(false);
         },
         error: () => {
@@ -430,14 +431,11 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
+    console.log(this.form.value);
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) {
       this.notificationService.showWarn(MessageConstants.FORM_INVALID);
       this.layoutService.blockUI$.next(false);
-      return;
-    }
-    if (!this.checkToado(this.form.get('duLieuToaDo').value)){
-      this.notificationService.showError('Dữ liệu tọa độ không hợp lệ. Bạn hãy chọn một điểm trên bản đồ hoặc gõ đúng địa chỉ theo chuẩn tọa độ địa lý!');
       return;
     }
     this.layoutService.blockUI$.next(true);
@@ -641,19 +639,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       this.drawLabel = 'Hủy';
     }
   }
-  
-  private checkToado(duLieuToaDo:any): boolean{
-    if (duLieuToaDo!=null && duLieuToaDo!=undefined){
-      var toado = duLieuToaDo.split(", ");
-      if (toado.length==2){
-        return isFinite(toado[0]) && Math.abs(toado[0]) <= 90 //valid Long
-              &&
-               isFinite(toado[1]) && Math.abs(toado[1]) <= 180;//valid Lat
-      }
-    }
-    return false;
-  }
-  
+
   close() {
     if (this.ref) {
       this.ref.close();

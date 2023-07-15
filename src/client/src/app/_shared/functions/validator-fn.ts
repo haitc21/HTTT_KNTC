@@ -14,7 +14,7 @@ export class AppValidatorFn {
           isFinite(toado[1]) &&
           Math.abs(toado[1]) <= 180
         )
-          return { invalidCoordiate: false };
+          return null
         else return { invalidCoordiate: true };
       }
     };
