@@ -73,6 +73,8 @@ public class UnitTypeAppService : CrudAppService<
 
     public async Task<ListResultDto<UnitTypeLookupDto>> GetLookupAsync()
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var cacheItem = await _cache.GetOrAddAsync(
         "All",
         async () =>
@@ -83,7 +85,7 @@ public class UnitTypeAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
         });
 
         return new ListResultDto<UnitTypeLookupDto>(cacheItem.Items);

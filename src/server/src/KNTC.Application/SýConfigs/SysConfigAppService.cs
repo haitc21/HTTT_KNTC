@@ -42,6 +42,8 @@ public class SysConfigAppService : CrudAppService<
     [AllowAnonymous]
     public async Task<SysConfigCacheItem> GetByNameAsync(string name)
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var cacheItem = await _cache.GetOrAddAsync(
         $"{name}",
         async () =>
@@ -51,7 +53,7 @@ public class SysConfigAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
         });
         return cacheItem;
     }
@@ -82,6 +84,8 @@ public class SysConfigAppService : CrudAppService<
     [Authorize(KNTCPermissions.SysConfigsPermission.Create)]
     public override async Task<SysConfigDto> CreateAsync(CreateSysConfigDto input)
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var entity = await _configManager.CreateAsync(input.Name, input.Value, input.Description);
         await Repository.InsertAsync(entity);
         await _cache.SetAsync(
@@ -89,7 +93,7 @@ public class SysConfigAppService : CrudAppService<
             new SysConfigCacheItem() { Name = entity.Name, Value = entity.Value },
             new DistributedCacheEntryOptions
             {
-                AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
             }
         );
         return ObjectMapper.Map<SysConfig, SysConfigDto>(entity);

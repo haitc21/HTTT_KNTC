@@ -70,6 +70,8 @@ public class DocumentTypeAppService : CrudAppService<
 
     public async Task<ListResultDto<DocumentTypeLookupDto>> GetLookupAsync()
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var cacheItem = await _cache.GetOrAddAsync(
         "All",
         async () =>
@@ -80,7 +82,7 @@ public class DocumentTypeAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
         });
 
         return new ListResultDto<DocumentTypeLookupDto>(cacheItem.Items);

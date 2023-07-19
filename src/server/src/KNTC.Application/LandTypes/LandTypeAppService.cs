@@ -71,6 +71,8 @@ public class LandTypeAppService : CrudAppService<
 
     public async Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync()
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var cacheItem = await _cache.GetOrAddAsync(
         "All",
         async () =>
@@ -81,7 +83,7 @@ public class LandTypeAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
         });
 
         return new ListResultDto<LandTypeLookupDto>(cacheItem.Items);

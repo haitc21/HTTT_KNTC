@@ -87,8 +87,9 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     }
 
     public async Task<List<SummaryMapDto>> GetMapAsync(GetSumaryMapDto input)
-
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var userId = CurrentUser.Id;
         if (userId == null)
         {
@@ -99,7 +100,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         async () => await GetMapFromDBAsync(input),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
         });
         return cacheItem.Items;
     }
@@ -689,12 +690,14 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
 
     public async Task<SummaryChartDto> GetChartAsync()
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var result = await _cacheChart.GetOrAddAsync(
         nameof(SummaryChartDto),
         async () => await GetDataChartFromDbAsync(),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
         });
         return result;
     }
