@@ -202,10 +202,12 @@
           <th style="width: 150px">Bộ phận đang XL</th>
           <th>Ngày hẹn trả KQ</th>
           <th style="width: 100px">Ngày trả KQ lần I</th>
+          <th>TQ GQKN lần I</th>
           <th>KQ GQKN lần I</th>
           <th style="width: 100px">Ngày trả KQ lần II</th>
+          <th>TQ GQKN lần II</th>
           <th>KQ GQKN lần II</th>
-          <th style="width: 100px">Trạng thái</th>
+          <!--th style="width: 100px">Trạng thái</th-->
           <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
@@ -238,12 +240,18 @@
           <td *ngIf="row?.ngayTraKQ1; else emptyTpl">
             {{ row?.ngayTraKQ1 | date : 'dd/MM/yyyy' }}
           </td>
+          <td *ngIf="row?.thamQuyen1; else emptyTpl">
+            {{ row?.thamQuyen1 }}
+          </td>          
           <td>{{ KetquaOptions[(row?.ketQua1) ? row?.ketQua1 : 0] }}</td>
           <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
             {{ row?.ngayTraKQ2 | date : 'dd/MM/yyyy' }}
           </td>
-          <td>{{ KetquaOptions[(row?.ketQua2) ? row?.ketQua2 : 0] }}</td>
-          <td>{{ KetquaOptions[(row?.ketQua) ? row?.ketQua : 0] }}</td>
+          <td *ngIf="row?.thamQuyen2; else emptyTpl">
+            {{ row?.thamQuyen2 }}
+          </td>
+          <td>{{ (row?.ketQua2 || (row?.ketQua2!=0))?KetquaOptions[row?.ketQua2]: '' }}</td>
+          <!--td>{{ KetquaOptions[(row?.ketQua) ? row?.ketQua : 0] }}</td-->
           <td *ngIf="visibleActionColumn">
             <p-tieredMenu
               [showTransitionOptions]="'300ms'"

@@ -19,7 +19,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
 import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KetquaOptions, congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
+import { KetquaOptions, LinhVucOptions, congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
 
 @Component({
   selector: 'app-denounce',
@@ -63,6 +63,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
 
   loaiKQOptions = loaiKQOptions;
   congKhaiOptions = congKhaiOptions;
+  LinhVucOptions = LinhVucOptions;
   KetquaOptions = KetquaOptions;
 
   // Permissions
@@ -165,6 +166,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         );
     } else this.huyenOptions = [];
   }
+
   huyenChange(event) {
     this.loadData();
     if (event.value) {
@@ -344,10 +346,11 @@ export class DenounceComponent implements OnInit, OnDestroy {
   setActionItem(item) {
     this.actionItem = item;
   }
+
   showAddModal() {
     const ref = this.dialogService.open(DenounceDetailComponent, {
       height: '92vh',
-      header: 'Thêm tố cáo',
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + 'Thêm mới tố cáo',
       width: DIALOG_BG,
       data: {
         loaiVuViec: LoaiVuViec.ToCao,
@@ -404,7 +407,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         mode: 'update',
       },
-      header: `Cập nhật tố cáo "${row.tieuDe}"`,
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + `Cập nhật tố cáo "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
 
@@ -432,7 +435,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         mode: 'view',
       },
-      header: `Chi tiết đơn tố cáo "${row.tieuDe}"`,
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + `Chi tiết đơn tố cáo "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
   }

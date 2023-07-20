@@ -21,6 +21,7 @@ import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import {
   KetquaOptions,
+  LinhVucOptions,
   congKhaiOptions,
   giaiDoanOptions,
   loaiKQOptions,
@@ -67,6 +68,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   xaOptions: UnitLookupDto[] = [];
 
   giaiDoanOptions = giaiDoanOptions;
+  LinhVucOptions = LinhVucOptions;
   loaiKQOptions = loaiKQOptions;
   congKhaiOptions = congKhaiOptions;
   KetquaOptions = KetquaOptions;
@@ -259,6 +261,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
       });
     this.layoutService.blockUI$.next(false);
   }
+
   exportExcel() {
     this.layoutService.blockUI$.next(true);
     this.filter = {
@@ -378,7 +381,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     const ref = this.dialogService.open(ComplainDetailComponent, {
       modal: true,
       height: '92vh',
-      header: 'Thêm khiếu nại/khiếu kiện',
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - Thêm mới khiếu nại/khiếu kiện',
       width: DIALOG_BG,
       data: {
         loaiVuViec: LoaiVuViec.KhieuNai,
@@ -436,7 +439,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         mode: 'update',
       },
-      header: `Cập nhật khiếu nại/khiếu kiện "${row.tieuDe}"`,
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + `Cập nhật khiếu nại/khiếu kiện "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
 
@@ -450,6 +453,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   viewDetail(row) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
@@ -464,7 +468,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         mode: 'view',
       },
-      header: `Chi tiết khiếu nại/khiếu kiện "${row.tieuDe}"`,
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + `Chi tiết khiếu nại/khiếu kiện "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
   }
