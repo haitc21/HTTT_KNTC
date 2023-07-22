@@ -156,8 +156,8 @@ public class FileAttachmentAppService : CrudAppService<
         {
             using (var stream = new MemoryStream())
             {
-                await file.CopyToAsync(stream); // sao chép dữ liệu từ IFormFile vào MemoryStream
-                await _blobContainer.SaveAsync(fileAttachmentId.ToString(), stream, overrideExisting: true);
+                await file.CopyToAsync(stream);
+                await _blobContainer.SaveAsync(fileAttachmentId.ToString(), stream.ToArray(), overrideExisting: true);
             }
             return fileAttachmentId;
         }
@@ -172,6 +172,7 @@ public class FileAttachmentAppService : CrudAppService<
     public async Task<byte[]> DownloadAsync(Guid fileAttachmentId)
     {
         var result = await _blobContainer.GetAllBytesOrNullAsync(fileAttachmentId.ToString());
+        if (result == null) throw new UserFriendlyException("Không tìm thấy file này, có thể file đã bị xóa!");
         return result;
     }
 

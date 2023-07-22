@@ -25,6 +25,8 @@ using Volo.Abp.AspNetCore.Mvc;
 //using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
@@ -45,7 +47,8 @@ namespace KNTC;
     typeof(KNTCApplicationModule),
     typeof(KNTCEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpBlobStoringMinioModule)
 )]
 public class KNTCHttpApiHostModule : AbpModule
 {
@@ -68,6 +71,20 @@ public class KNTCHttpApiHostModule : AbpModule
         {
             options.Kind = DateTimeKind.Utc;
         });
+        Configure<AbpBlobStoringOptions>(options =>
+        {
+            options.Containers.ConfigureDefault(container =>
+            {
+                container.UseMinio(minio =>
+                {
+                    minio.EndPoint = configuration["minio:EndPoint"];
+                    minio.AccessKey = configuration["minio:AccessKey"];
+                    minio.SecretKey = configuration["minio:SecretKey"];
+                    minio.BucketName = configuration["minio:BucketName"];
+                });
+            });
+        });
+
     }
 
     private void ConfigureCache(IConfiguration configuration)

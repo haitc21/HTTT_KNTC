@@ -4,7 +4,6 @@ using System;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.BlobStoring;
-using Volo.Abp.BlobStoring.FileSystem;
 
 //using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -26,15 +25,13 @@ namespace KNTC;
     typeof(AbpPermissionManagementApplicationModule),
     //typeof(AbpTenantManagementApplicationModule),
     //typeof(AbpFeatureManagementApplicationModule),
-    typeof(AbpSettingManagementApplicationModule),
-    typeof(AbpBlobStoringFileSystemModule)
+    typeof(AbpSettingManagementApplicationModule)
     )]
 public class KNTCApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
-        var basePath = configuration["FileSystemBasePath"];
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<KNTCApplicationModule>();
@@ -43,16 +40,6 @@ public class KNTCApplicationModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("KNTC", typeof(KNTCResource));
-        });
-        Configure<AbpBlobStoringOptions>(options =>
-        {
-            options.Containers.ConfigureDefault(container =>
-            {
-                container.UseFileSystem(fileSys =>
-                {
-                    fileSys.BasePath = basePath;
-                });
-            });
         });
         Configure<AbpClockOptions>(options =>
         {

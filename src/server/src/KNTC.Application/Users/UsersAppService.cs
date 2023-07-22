@@ -285,12 +285,11 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         if (file == null) throw new UserFriendlyException("Vui lòng chộn ảnh đại diện");
         try
         {
-            //var blobName = String.Concat(CurrentUser.GetId().ToString(), ".", GetFileExtension(avatarStream.FileName));
             var blobName = CurrentUser.GetId().ToString();
             using (var stream = new MemoryStream())
             {
-                await file.CopyToAsync(stream); // sao chép dữ liệu từ IFormFile vào MemoryStream
-                await _blobContainer.SaveAsync(blobName, stream, overrideExisting: true);
+                await file.CopyToAsync(stream);
+                await _blobContainer.SaveAsync(blobName, stream.ToArray(), overrideExisting: true);
             }
             return blobName;
         }
