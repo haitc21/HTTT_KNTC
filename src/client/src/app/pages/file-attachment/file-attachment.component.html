@@ -146,7 +146,7 @@
       <ng-template pTemplate="caption">
         <div class="flex align-items-center justify-content-between">
           <div class="grid flex-start col-8">
-            <span class="p-input-icon-left flex-1">
+            <span class="p-input-icon-left flex-1 mr-2">
               <i class="pi pi-search"></i>
               <input
                 pInputText
@@ -157,7 +157,7 @@
                 class="w-full"
               />
             </span>
-            <span *ngIf="loaiVuViec == LoaiVuViec.KhieuNai" class="p-float-label flex-1">
+            <span *ngIf="loaiVuViec == LoaiVuViec.KhieuNai" class="p-float-label flex-1 mr-2">
               <p-dropdown
                 [options]="giaiDoanOptions"
                 [(ngModel)]="giaiDoan"
@@ -168,9 +168,9 @@
                 styleClass="w-full"
                 (onChange)="loadData()"
               ></p-dropdown>
-              <label for="phoneNumber">Giai đoạn</label>
+              <label>Giai đoạn</label>
             </span>
-            <span class="p-float-label flex-1">
+            <span class="p-float-label flex-1 mr-2">
               <p-dropdown
                 [options]="documentTypeOptions"
                 [(ngModel)]="hinhThuc"
@@ -181,9 +181,9 @@
                 styleClass="w-full"
                 (onChange)="loadData()"
               ></p-dropdown>
-              <label for="phoneNumber">Hình thức tài liệu</label>
+              <label>Hình thức tài liệu</label>
             </span>
-            <span class="p-float-label flex-1" *ngIf="hasLoggedIn">
+            <span class="p-float-label flex-1 mr-2" *ngIf="hasLoggedIn">
               <p-dropdown
                 [options]="congKhaiOptions"
                 [(ngModel)]="congKhai"
@@ -194,7 +194,7 @@
                 styleClass="w-full"
                 (onChange)="loadData()"
               ></p-dropdown>
-              <label for="phoneNumber">Công khai</label>
+              <label>Công khai</label>
             </span>
           </div>
           <div class="grid flex-end flex-row-reverse col-4">

@@ -3,12 +3,10 @@ import {
   OnInit,
   EventEmitter,
   OnDestroy,
-  ChangeDetectorRef,
   Input,
   Output,
 } from '@angular/core';
-import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { KNTCValidatorConsts } from 'src/app/_shared/constants/validator.const';

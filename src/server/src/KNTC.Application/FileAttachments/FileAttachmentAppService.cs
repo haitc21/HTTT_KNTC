@@ -187,7 +187,9 @@ public class FileAttachmentAppService : CrudAppService<
             input.Sorting = nameof(FileAttachmentDto.TenTaiLieu);
         }
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+
         var fileQuery = await Repository.GetQueryableAsync();
+
         fileQuery = fileQuery
                     .WhereIf(input.ComplainId.HasValue, x => x.LoaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == input.ComplainId)
                     .WhereIf(input.DenounceId.HasValue, x => x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId).WhereIf(!filter.IsNullOrEmpty(),
@@ -215,7 +217,7 @@ public class FileAttachmentAppService : CrudAppService<
 
         var templatePath = Path.Combine(_env.ContentRootPath, "wwwroot", "Exceltemplate", "FileAttachment.xlsx");
 
-        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<FileAttachmentExcelDto>(fileAttachments, templatePath, 13, 0, true);
+        IWorkbook wb = ExcelNpoi.WriteExcelByTemp<FileAttachmentExcelDto>(fileAttachments, templatePath, 16, 0, true);
         if (wb == null) return null;
 
         ISheet sheet = wb.GetSheetAt(0);
@@ -236,15 +238,21 @@ public class FileAttachmentAppService : CrudAppService<
 
         string maHoSo = "";
         string tieuDe = "";
+        string hoTen = "";
+        string noiDungKhieuNai = "";
         if (input.ComplainId.HasValue)
         {
             var complain = await _complainRepo.GetAsync(input.ComplainId.Value);
+            hoTen = complain.NguoiNopDon;
+            noiDungKhieuNai = complain.NoiDungVuViec;
             maHoSo = complain.MaHoSo;
             tieuDe = complain.TieuDe;
         }
         if (input.DenounceId.HasValue)
         {
             var denounce = await _denounceRepo.GetAsync(input.DenounceId.Value);
+            hoTen = denounce.NguoiNopDon;
+            noiDungKhieuNai = denounce.NoiDungVuViec;
             maHoSo = denounce.MaHoSo;
             tieuDe = denounce.TieuDe;
         }
@@ -261,13 +269,25 @@ public class FileAttachmentAppService : CrudAppService<
         cell.CellStyle.WrapText = false;
         cell.CellStyle.SetFont(font);
 
+        row = sheet.GetCreateRow(8);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(hoTen);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
+        row = sheet.GetCreateRow(9);
+        cell = row.GetCreateCell(4);
+        cell.SetCellValue(noiDungKhieuNai);
+        cell.CellStyle.WrapText = false;
+        cell.CellStyle.SetFont(font);
+
         string hinhThuc = "Tất cả";
         if (input.HinhThuc.HasValue)
         {
             var coType = await _documentTypeRepo.GetAsync(input.HinhThuc.Value);
             hinhThuc = coType.DocumentTypeName;
         }
-        row = sheet.GetCreateRow(8);
+        row = sheet.GetCreateRow(10);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(hinhThuc);
         cell.CellStyle.WrapText = false;
@@ -278,7 +298,7 @@ public class FileAttachmentAppService : CrudAppService<
         {
             congKhai = input.CongKhai.Value == true ? "Công khai" : "Không công khai";
         }
-        row = sheet.GetCreateRow(9);
+        row = sheet.GetCreateRow(11);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(congKhai);
         cell.CellStyle.WrapText = false;
@@ -292,7 +312,7 @@ public class FileAttachmentAppService : CrudAppService<
             if (input.GiaiDoan == 2)
                 giaiDoan = "Khiếu nại/Khiếu kiện lần 2";
         }
-        row = sheet.GetCreateRow(10);
+        row = sheet.GetCreateRow(12);
         cell = row.GetCreateCell(4);
         cell.SetCellValue(giaiDoan);
         cell.CellStyle.WrapText = false;

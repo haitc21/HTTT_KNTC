@@ -316,25 +316,7 @@
                   <div class="col-12 md:col-6 flex align-items-center">
                     <p-inputSwitch formControlName="congKhai"></p-inputSwitch>
                     <label class="ml-3" for="congKhai">Công khai</label>
-                  </div>
-                  <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-12">
-                    <span class="p-float-label">
-                      <textarea
-                        id="ghiChu"
-                        formControlName="ghiChu"
-                        [rows]="5"
-                        pInputTextarea
-                        class="w-full"
-                      ></textarea>
-                      <label for="ghiChu">Ghi chú</label>
-                    </span>
-                    <app-validation-message
-                      [entityControl]="formControls.ghiChu"
-                      [validationMessages]="validationMessages.ghiChu"
-                    >
-                    </app-validation-message>
-                  </div>
+                  </div>                  
                   <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
                   <div class="field col-12 md:col-12">
                     <!-- <textarea
@@ -743,6 +725,26 @@
               </p-accordionTab>
             </p-accordion>
             <!-- ---------------------------------------------------------------------------------- -->
+            <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
+            <div class="grid w-full mt-3">
+              <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                  <textarea
+                    id="ghiChu"
+                    formControlName="ghiChu"
+                    [rows]="5"
+                    pInputTextarea
+                    class="w-full"
+                  ></textarea>
+                  <label for="ghiChu" class="text-red-400">Ghi chú</label>
+                </span>
+                <app-validation-message
+                  [entityControl]="formControls.ghiChu"
+                  [validationMessages]="validationMessages.ghiChu"
+                >
+                </app-validation-message>
+              </div>
+            </div>
           </div>
         </ng-template>
       </p-tabPanel>
@@ -844,7 +846,7 @@
             <app-map [data]="dataMap" [duLieuToaDo]="toado"></app-map>
           </p-card>
         </ng-template>
-      </p-tabPanel>
+      </p-tabPanel>      
     </p-tabView>
 
     <ng-container *ngIf="mode != 'view'">

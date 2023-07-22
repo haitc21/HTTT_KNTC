@@ -3,20 +3,16 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { LoaiVuViec } from '@proxy';
 import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
 import {
-  CreateAndUpdateFileAttachmentDto,
   FileAttachmentDto,
   FileAttachmentService,
 } from '@proxy/file-attachments';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { MessageConstants } from 'src/app/_shared/constants/messages.const';
-import { DIALOG_MD } from 'src/app/_shared/constants/sizes.const';
 import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { FileService } from 'src/app/_shared/services/file.service';
 import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { UtilityService } from 'src/app/_shared/services/utility.service';
-import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.component';
 import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
@@ -71,7 +67,6 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
   constructor(
     private documentTypeService: DocumentTypeService,
-    private dialogService: DialogService,
     private utilService: UtilityService,
     private confirmationService: ConfirmationService,
     private notificationService: NotificationService,
@@ -174,6 +169,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
     this.visibleAddModal = true;
     this.headerModal = 'Thêm mới Hồ sơ gắn kèm';
   }
+  
   submitAdd(dto: any) {
     if (dto) {
       this.layoutService.blockUI$.next(true);

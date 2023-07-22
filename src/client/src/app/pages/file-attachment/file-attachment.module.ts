@@ -17,7 +17,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { DialogModule } from 'primeng/dialog';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FileAttachmentComponent } from './file-attachment.component';
-import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.component';
+import { FileAttachmentDetailComponent } from './detail/file-attachment-detail.component';
 import { ValidationMessagedModule } from 'src/app/_shared/modules/validation-message/validation-message.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BlockUIModule } from 'primeng/blockui';
