@@ -32,9 +32,11 @@ public class CreateAndUpdateFileAttachmentDto : IHasConcurrencyStamp
 
     [Required]
     public string NoiDungChinh { get; set; }
-    public string? FileName { get; set; }
-    public string? ContentType { get; set; }
-    public long? ContentLength { get; set; }
+
+    [Required]
+    public string FileName { get; set; }
+    public string ContentType { get; set; }
+    public long ContentLength { get; set; }
     public string? ConcurrencyStamp { get; set; }
 
     [Required]

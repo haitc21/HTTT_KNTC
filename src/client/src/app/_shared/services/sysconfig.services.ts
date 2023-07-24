@@ -10,7 +10,7 @@ export class GetSysConfigService {
   constructor(private sysConfigService: SysConfigService) { }
 
   getSysAll(): Observable<AllSysConfigCacheItem> {
-    const cacheKey = `${SysConfigConsts.Prefix}`;
+    const cacheKey = SysConfigConsts.Prefix;
     const storedConfig = localStorage.getItem(cacheKey);
 
     if (storedConfig) {

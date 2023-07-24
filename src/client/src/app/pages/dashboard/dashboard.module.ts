@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PanelModule } from 'primeng/panel';
-import { CoreModule } from '@abp/ng.core';
 import { CardModule } from 'primeng/card';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -14,13 +13,17 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import { ChartModule } from 'primeng/chart';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     DashboardComponent
   ],
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     DashboardRoutingModule,
-    CoreModule,
     PanelModule,
     CardModule,
     InputSwitchModule,

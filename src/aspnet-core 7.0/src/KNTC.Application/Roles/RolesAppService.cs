@@ -88,9 +88,10 @@ public class RolesAppService : CrudAppService<
     [Authorize(IdentityPermissions.Roles.Default)]
     public async Task<PagedResultDto<RoleDto>> GetListFilterAsync(BaseListFilterDto input)
     {
+        input.Keyword = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var query = await Repository.GetQueryableAsync();
         query = query.WhereIf(!string.IsNullOrWhiteSpace(input.Keyword),
-                              x => x.Name.Contains(input.Keyword))
+                              x => x.Name.ToUpper().Contains(input.Keyword))
                      .OrderBy(nameof(Volo.Abp.Identity.IdentityRole.Name));
 
         var totalCount = await AsyncExecuter.LongCountAsync(query);
@@ -102,7 +103,7 @@ public class RolesAppService : CrudAppService<
     [Authorize(IdentityPermissions.Roles.Create)]
     public override async Task<RoleDto> CreateAsync(CreateUpdateRoleDto input)
     {
-        var role = new Volo.Abp.Identity.IdentityRole(GuidGenerator.Create(), input.Name)
+        var role = new Volo.Abp.Identity.IdentityRole(GuidGenerator.Create(), input.Name.Trim())
         {
             IsDefault = input.IsDefault,
             IsPublic = input.IsPublic
@@ -120,7 +121,7 @@ public class RolesAppService : CrudAppService<
 
         role.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
-        (await RoleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
+        (await RoleManager.SetRoleNameAsync(role, input.Name.Trim())).CheckErrors();
 
         role.IsDefault = input.IsDefault;
         role.IsPublic = input.IsPublic;

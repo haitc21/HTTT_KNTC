@@ -489,6 +489,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         );
     } else {
       let value = this.form.value as UpdateDenounceDto;
+      
       this.denounceService
         .update(this.config.data.id, value)
         .pipe(takeUntil(this.ngUnsubscribe))

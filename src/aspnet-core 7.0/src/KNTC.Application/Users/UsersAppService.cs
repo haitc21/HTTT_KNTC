@@ -133,7 +133,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         var user = new Volo.Abp.Identity.IdentityUser(
             GuidGenerator.Create(),
-            input.UserName,
+            input.UserName.Trim(),
             input.Email
         );
         // add default roles
@@ -169,7 +169,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
-        (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+        (await UserManager.SetUserNameAsync(user, input.UserName.Trim())).CheckErrors();
 
         await UpdateUserFromInput(user, input);
         input.MapExtraPropertiesTo(user);
@@ -328,15 +328,15 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
             (await UserManager.SetEmailAsync(user, input.Email)).CheckErrors();
         }
 
-        if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
+        if (!string.Equals(user.PhoneNumber, input.PhoneNumber.Trim(), StringComparison.InvariantCultureIgnoreCase))
         {
-            (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber.Trim())).CheckErrors();
         }
 
         (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
 
-        user.Name = input.Name;
-        user.Surname = input.Surname;
+        user.Name = input.Name.Trim();
+        user.Surname = input.Surname.Trim();
         (await UserManager.UpdateAsync(user)).CheckErrors();
         user.SetIsActive(input.IsActive);
         if (input.RoleNames != null)

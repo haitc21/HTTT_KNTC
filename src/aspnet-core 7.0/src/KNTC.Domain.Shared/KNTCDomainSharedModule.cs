@@ -1,4 +1,5 @@
 ﻿using KNTC.Localization;
+using System;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -10,6 +11,7 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.Timing;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
@@ -55,6 +57,10 @@ public class KNTCDomainSharedModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("KNTCEx", typeof(KNTCResource));
+        });
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
         });
     }
 }

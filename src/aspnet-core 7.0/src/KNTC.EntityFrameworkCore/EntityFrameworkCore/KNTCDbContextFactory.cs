@@ -13,7 +13,9 @@ public class KNTCDbContextFactory : IDesignTimeDbContextFactory<KNTCDbContext>
     public KNTCDbContext CreateDbContext(string[] args)
     {
         // https://www.npgsql.org/efcore/release-notes/6.0.html#opting-out-of-the-new-timestamp-mapping-logic
-        //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        // haitc 25/07
+        // true: time without time zone -- default of abp
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
 
         KNTCEfCoreEntityExtensionMappings.Configure();
 

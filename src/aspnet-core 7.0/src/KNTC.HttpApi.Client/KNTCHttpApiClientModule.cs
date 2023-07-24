@@ -7,9 +7,10 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Timing;
+using System;
 
 namespace KNTC;
-
 [DependsOn(
     typeof(KNTCApplicationContractsModule),
     typeof(AbpAccountHttpApiClientModule),
@@ -33,6 +34,10 @@ public class KNTCHttpApiClientModule : AbpModule
         Configure<AbpVirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<KNTCHttpApiClientModule>();
+        });
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
         });
     }
 }

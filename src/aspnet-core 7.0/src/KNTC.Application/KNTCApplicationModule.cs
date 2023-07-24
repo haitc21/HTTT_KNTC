@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Account;
+﻿using System;
+using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -6,6 +7,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.Timing;
 
 namespace KNTC;
 
@@ -26,6 +28,10 @@ public class KNTCApplicationModule : AbpModule
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<KNTCApplicationModule>();
+        });
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
         });
     }
 }

@@ -19,8 +19,8 @@ public class UnitManager : DomainService
                                                 [NotNull] string name,
                                                 [NotNull] string shortName,
                                                 [NotNull] int unitTypeId,
-                                                string description,
-                                                int orderIndex,
+                                                string? description,
+                                                int? orderIndex,
                                                 Status status)
     {
         Check.NotNullOrWhiteSpace(code, nameof(code));
@@ -45,8 +45,8 @@ public class UnitManager : DomainService
                                    [NotNull] string name,
                                    [NotNull] string shortName,
                                    [NotNull] int unitTypeId,
-                                   string description,
-                                   int orderIndex,
+                                   string? description,
+                                   int? orderIndex,
                                    Status status)
     {
         Check.NotNull(unit, nameof(unit));

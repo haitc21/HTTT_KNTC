@@ -41,7 +41,7 @@ public class DocumentTypeAppService : CrudAppService<
         {
             input.Sorting = $"{nameof(DocumentType.OrderIndex)}, {nameof(DocumentType.DocumentTypeName)}";
         }
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
@@ -90,8 +90,8 @@ public class DocumentTypeAppService : CrudAppService<
 
     public override async Task<DocumentTypeDto> CreateAsync(CreateAndUpdateDocumentTypeDto input)
     {
-        var entity = await _documentTypeManager.CreateAsync(input.DocumentTypeCode,
-                                                            input.DocumentTypeName,
+        var entity = await _documentTypeManager.CreateAsync(input.DocumentTypeCode.Trim(),
+                                                            input.DocumentTypeName.Trim(),
                                                             input.Description,
                                                             input.OrderIndex,
                                                             input.Status);
@@ -105,8 +105,8 @@ public class DocumentTypeAppService : CrudAppService<
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _documentTypeManager.UpdateAsync(entity,
-                                              input.DocumentTypeCode,
-                                              input.DocumentTypeName,
+                                              input.DocumentTypeCode.Trim(),
+                                              input.DocumentTypeName.Trim(),
                                               input.Description,
                                               input.OrderIndex,
                                               input.Status);

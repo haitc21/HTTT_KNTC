@@ -17,8 +17,8 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public string TieuDe { get; set; }
     public string NguoiNopDon { get; set; }
     public string CccdCmnd { get; set; }
-    public DateTime NgayCapCccdCmnd { get; set; }
-    public string NoiCapCccdCmnd { get; set; }
+    //public DateTime NgayCapCccdCmnd { get; set; }
+    //public string NoiCapCccdCmnd { get; set; }
     public DateTime NgaySinh { get; set; }
     public string DienThoai { get; set; }
     public string? Email { get; set; }
@@ -44,13 +44,13 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public string? DuLieuHinhHoc { get; set; }
     public string? GhiChu { get; set; }
     public DateTime NgayGQTC { get; set; }
-    public string NguoiGQTC { get; set; }
-    public string QuyerDinhThuLyGQTC { get; set; }
+    public string? NguoiGQTC { get; set; }
+    public string? QuyerDinhThuLyGQTC { get; set; }
     public DateTime NgayQDGQTC { get; set; }
-    public string QuyetDinhDinhChiGQTC { get; set; }
+    public string? QuyetDinhDinhChiGQTC { get; set; }
     public DateTime? GiaHanGQTC1 { get; set; }
     public DateTime? GiaHanGQTC2 { get; set; }
-    public string SoVBKLNDTC { get; set; }
+    public string? SoVBKLNDTC { get; set; }
     public DateTime NgayNhanTBKQXLKLTC { get; set; }
     public LoaiKetQua KetQua { get; set; }
     public bool CongKhai { get; set; }

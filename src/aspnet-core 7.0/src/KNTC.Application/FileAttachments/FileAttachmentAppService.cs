@@ -67,7 +67,7 @@ public class FileAttachmentAppService : CrudAppService<
             input.Sorting = nameof(FileAttachmentDto.ThuTuButLuc);
         }
 
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
@@ -108,15 +108,15 @@ public class FileAttachmentAppService : CrudAppService<
                                                              complainId: input.ComplainId,
                                                              denounceId: input.DenounceId,
                                                              giaiDoan: input.GiaiDoan,
-                                                             tenTaiLieu: input.TenTaiLieu,
+                                                             tenTaiLieu: input.TenTaiLieu.Trim(),
                                                              hinhThuc: input.HinhThuc,
                                                              thoiGianBanHanh: input.ThoiGianBanHanh,
                                                              ngayNhan: input.NgayNhan,
-                                                             thuTuButLuc: input.ThuTuButLuc,
+                                                             thuTuButLuc: input.ThuTuButLuc.Trim(),
                                                              noiDungChinh: input.NoiDungChinh,
-                                                             fileName: input.FileName,
+                                                             fileName: input.FileName.Trim(),
                                                              contentType: input.ContentType,
-                                                             contentLength: input.ContentLength.Value,
+                                                             contentLength: input.ContentLength,
                                                              congKhai: input.CongKhai);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<FileAttachment, FileAttachmentDto>(entity);
@@ -135,9 +135,9 @@ public class FileAttachmentAppService : CrudAppService<
                                                   ngayNhan: input.NgayNhan,
                                                   thuTuButLuc: input.ThuTuButLuc,
                                                   noiDungChinh: input.NoiDungChinh,
-                                                  fileName: input.FileName,
+                                                  fileName: input.FileName.Trim(),
                                                   contentType: input.ContentType,
-                                                  contentLength: input.ContentLength.Value,
+                                                  contentLength: input.ContentLength,
                                                   congKhai: input.CongKhai);
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<FileAttachment, FileAttachmentDto>(entity);

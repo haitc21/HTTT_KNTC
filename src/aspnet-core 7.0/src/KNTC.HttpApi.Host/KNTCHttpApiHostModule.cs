@@ -32,6 +32,7 @@ using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.BlobStoring;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using Volo.Abp.Timing;
 
 namespace KNTC;
 [DependsOn(
@@ -62,6 +63,11 @@ public class KNTCHttpApiHostModule : AbpModule
         ConfigureCors(context, configuration);
         ConfigureSwaggerServices(context, configuration);
         ConfigureBlob(context, configuration);
+
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
+        });
     }
     private void ConfigureBlob(ServiceConfigurationContext context, IConfiguration configuration)
     {
@@ -200,8 +206,7 @@ public class KNTCHttpApiHostModule : AbpModule
 
         var supportedCultures = new[]
         {
-            new CultureInfo("vi"),
-            new CultureInfo("en")
+            new CultureInfo("vi")
         };
         app.UseAbpRequestLocalization(options =>
         {

@@ -336,7 +336,7 @@
                   <div class="col-12 md:col-6 flex align-items-center">
                     <p-inputSwitch formControlName="congKhai"></p-inputSwitch>
                     <label class="ml-3" for="congKhai">Công khai</label>
-                  </div>                  
+                  </div>
                   <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
                   <div class="field col-12 md:col-12">
                     <!-- <textarea
@@ -546,6 +546,27 @@
               <p-accordionTab header="Thông tin giải quyết tố cáo" class="w-full">
                 <!-- -------------------------------Thông tin giải quyết--------------------------------------------------- -->
                 <div class="grid">
+                  <!-- ----------------------------ketQua---------------------------=----------------------------- -->
+                  <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                      <p-dropdown
+                        id="ketQua"
+                        formControlName="ketQua"
+                        [options]="loaiKQOPtions"
+                        optionLabel="text"
+                        optionValue="value"
+                        [showClear]="true"
+                        [autoDisplayFirst]="false"
+                        styleClass="w-full"
+                      ></p-dropdown>
+                      <label>Kết luận nội dung tố cáo </label>
+                      <app-validation-message
+                        [entityControl]="formControls.ketQua"
+                        [validationMessages]="validationMessages.ketQua"
+                      >
+                      </app-validation-message>
+                    </span>
+                  </div>
                   <!-- ---------------------------------ngayGQTC------------------------------------------------- -->
                   <div class="field col-12 md:col-6">
                     <span class="p-float-label">
@@ -698,27 +719,7 @@
                     >
                     </app-validation-message>
                   </div>
-                  <!-- ----------------------------ketQua---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                      <p-dropdown
-                        id="ketQua"
-                        formControlName="ketQua"
-                        [options]="loaiKQOPtions"
-                        optionLabel="text"
-                        optionValue="value"
-                        [showClear]="true"
-                        [autoDisplayFirst]="false"
-                        styleClass="w-full"
-                      ></p-dropdown>
-                      <label>Kết luận nội dung tố cáo </label>
-                      <app-validation-message
-                        [entityControl]="formControls.ketQua"
-                        [validationMessages]="validationMessages.ketQua"
-                      >
-                      </app-validation-message>
-                    </span>
-                  </div>
+                  <!-- ---------------------------------------------------------------- -->
                 </div>
               </p-accordionTab>
               <!-- ---------------------------------------------------------------------------------- -->
@@ -846,7 +847,7 @@
             <app-map [data]="dataMap" [duLieuToaDo]="toado"></app-map>
           </p-card>
         </ng-template>
-      </p-tabPanel>      
+      </p-tabPanel>
     </p-tabView>
 
     <ng-container *ngIf="mode != 'view'">

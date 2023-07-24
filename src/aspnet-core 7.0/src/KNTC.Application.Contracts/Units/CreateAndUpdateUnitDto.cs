@@ -24,7 +24,7 @@ public class CreateAndUpdateUnitDto : EntityDto<int>, IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxDescriptionLength)]
     public string? Description { get; set; }
 
-    public int OrderIndex { get; set; }
+    public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public string? ConcurrencyStamp { get; set; }
 }

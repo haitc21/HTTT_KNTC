@@ -35,14 +35,12 @@
 
         <form class="w-full md:w-10 mx-auto" [formGroup]="form">
           <div class="p-field col-12 md-12" style="padding:2px !important">
-            <label for="username" class="block text-900 text-xl font-medium mb-2">{{
-              'AbpAccount::UserNameOrEmailAddress' | abpLocalization
-            }}</label>
+            <label for="username" class="block text-900 text-xl font-medium mb-2">Tên đăng nhập</label>
             <input
               id="username"
               formControlName="username"
               type="text"
-              placeholder="{{ 'AbpAccount::UserNameOrEmailAddress' | abpLocalization }}"
+              placeholder="Tài khoản hoặc mật khẩu"
               pInputText
               autofocus
               class="w-full mb-3"
@@ -54,13 +52,11 @@
             </app-validation-message>
           </div>
           <div class="p-field col-12 md-12" style="padding:2px !important">
-            <label for="password1" class="block text-900 font-medium text-xl mb-2">{{
-              'AbpIdentity::Password' | abpLocalization
-            }}</label>
+            <label for="password1" class="block text-900 font-medium text-xl mb-2">Mật hẩu</label>
             <p-password
               id="password1"
               formControlName="password"
-              placeholder="{{ 'AbpIdentity::Password' | abpLocalization }}"
+              placeholder="Mật khẩu"
               [toggleMask]="true"
               styleClass="w-full mb-3"
               inputId="inputPassword"

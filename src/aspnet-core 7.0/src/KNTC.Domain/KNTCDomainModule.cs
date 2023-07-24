@@ -14,9 +14,10 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.Timing;
+using System;
 
 namespace KNTC;
-
 [DependsOn(
     typeof(KNTCDomainSharedModule),
     typeof(AbpAuditLoggingDomainModule),
@@ -37,12 +38,17 @@ public class KNTCDomainModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Languages.Add(new LanguageInfo("vi", "vi", "Tiếng Việt"));
-            options.Languages.Add(new LanguageInfo("en", "en", "English", "gb"));
+            //options.Languages.Add(new LanguageInfo("en", "en", "English", "gb"));
         });
 
         Configure<AbpMultiTenancyOptions>(options =>
         {
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
+        });
+
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
         });
 
 #if DEBUG

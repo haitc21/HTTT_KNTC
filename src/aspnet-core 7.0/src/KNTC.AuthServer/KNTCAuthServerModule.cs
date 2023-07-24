@@ -37,6 +37,7 @@ using Volo.Abp.VirtualFileSystem;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting;
 using System.Security.Cryptography.X509Certificates;
+using Volo.Abp.Timing;
 
 namespace KNTC;
 
@@ -86,6 +87,7 @@ public class KNTCAuthServerModule : AbpModule
         //        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
         //        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
         //    });
+
     }
     private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)
     {
@@ -184,6 +186,10 @@ public class KNTCAuthServerModule : AbpModule
                     .AllowAnyMethod()
                     .AllowCredentials();
             });
+        });
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
         });
     }
 

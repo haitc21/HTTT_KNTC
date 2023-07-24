@@ -44,7 +44,7 @@ public class UnitTypeAppService : CrudAppService<
             input.Sorting = $"{nameof(UnitType.OrderIndex)}, {nameof(UnitType.UnitTypeName)}";
         }
 
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
@@ -93,8 +93,8 @@ public class UnitTypeAppService : CrudAppService<
 
     public override async Task<UnitTypeDto> CreateAsync(CreateAndUpdateUnitTypeDto input)
     {
-        var entity = await _unitTypeManager.CreateAsync(input.UnitTypeCode,
-                                                          input.UnitTypeName,
+        var entity = await _unitTypeManager.CreateAsync(input.UnitTypeCode.Trim(),
+                                                          input.UnitTypeName.Trim(),
                                                           input.Description,
                                                           input.OrderIndex,
                                                           input.Status);
@@ -108,8 +108,8 @@ public class UnitTypeAppService : CrudAppService<
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _unitTypeManager.UpdateAsync(entity,
-                                           input.UnitTypeCode,
-                                           input.UnitTypeName,
+                                           input.UnitTypeCode.Trim(),
+                                           input.UnitTypeName.Trim(),
                                            input.Description,
                                            input.OrderIndex,
                                            input.Status);

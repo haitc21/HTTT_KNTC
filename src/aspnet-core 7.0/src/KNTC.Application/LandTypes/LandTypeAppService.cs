@@ -42,7 +42,7 @@ public class LandTypeAppService : CrudAppService<
             input.Sorting = $"{nameof(LandType.OrderIndex)}, {nameof(LandType.LandTypeName)}";
         }
 
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
@@ -91,8 +91,8 @@ public class LandTypeAppService : CrudAppService<
 
     public override async Task<LandTypeDto> CreateAsync(CreateAndUpdateLandTypeDto input)
     {
-        var entity = await _landTypeManager.CreateAsync(input.LandTypeCode,
-                                                          input.LandTypeName,
+        var entity = await _landTypeManager.CreateAsync(input.LandTypeCode.Trim(),
+                                                          input.LandTypeName.Trim(),
                                                           input.Description,
                                                           input.OrderIndex,
                                                           input.Status);
@@ -106,8 +106,8 @@ public class LandTypeAppService : CrudAppService<
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _landTypeManager.UpdateAsync(entity,
-                                           input.LandTypeCode,
-                                           input.LandTypeName,
+                                           input.LandTypeCode.Trim(),
+                                           input.LandTypeName.Trim(),
                                            input.Description,
                                            input.OrderIndex,
                                            input.Status);

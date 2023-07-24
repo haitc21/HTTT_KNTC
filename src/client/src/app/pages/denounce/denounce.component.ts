@@ -224,6 +224,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: PagedResultDto<DenounceDto>) => {
           this.items = response.items;
+          
 
           this.totalCount = response.totalCount;
           this.layoutService.blockUI$.next(false);

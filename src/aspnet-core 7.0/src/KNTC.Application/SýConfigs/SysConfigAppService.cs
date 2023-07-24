@@ -69,7 +69,7 @@ public class SysConfigAppService : CrudAppService<
         {
             input.Sorting = $"{nameof(SysConfig.Name)}";
         }
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
@@ -90,7 +90,7 @@ public class SysConfigAppService : CrudAppService<
     {
         Random random = new Random();
         int randomNumber = random.Next(1, 11);
-        var entity = await _configManager.CreateAsync(input.Name, input.Value, input.Description);
+        var entity = await _configManager.CreateAsync(input.Name.Trim(), input.Value, input.Description);
         await Repository.InsertAsync(entity);
         await _cache.RemoveAsync($"{entity.Name}");
         await _cacheAll.RemoveAsync("All");
@@ -115,6 +115,7 @@ public class SysConfigAppService : CrudAppService<
         var entity = await Repository.GetAsync(id, false);
         await Repository.DeleteAsync(entity);
         await _cache.RemoveAsync($"{entity.Name}");
+        await _cacheAll.RemoveAsync("All");
     }
 
     [Authorize(KNTCPermissions.SysConfigsPermission.Delete)]
@@ -128,6 +129,7 @@ public class SysConfigAppService : CrudAppService<
             lstCacheKey.Add($"{entity.Name}");
         }
         await _cache.RemoveManyAsync(lstCacheKey);
+        await _cacheAll.RemoveAsync("All");
         await Repository.DeleteManyAsync(ids);
     }
     [AllowAnonymous]

@@ -9,7 +9,7 @@ import { LayoutService } from './layout/service/app.layout.service';
   selector: 'app-root',
   template: `
     <p-panel #layoutPnl>
-      <router-outlet></router-outlet>
+      <app-layout></app-layout>
       <p-toast position="top-right"></p-toast>
       <p-confirmDialog
         header="Xác nhận"
@@ -38,10 +38,7 @@ export class AppComponent {
   menuMode = 'static';
   blockedLayout = false;
 
-  constructor(
-    private primengConfig: PrimeNGConfig,
-    public layoutService: LayoutService
-  ) {
+  constructor(private primengConfig: PrimeNGConfig, public layoutService: LayoutService) {
     this.layoutService.blockUI$.subscribe(block => {
       if (block === true) {
         setTimeout(() => {

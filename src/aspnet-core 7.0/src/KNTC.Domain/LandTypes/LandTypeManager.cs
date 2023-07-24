@@ -17,8 +17,8 @@ public class LandTypeManager : DomainService
 
     public async Task<LandType> CreateAsync([NotNull] string code,
                                                 [NotNull] string name,
-                                                string description,
-                                                int orderIndex,
+                                                string? description,
+                                                int? orderIndex,
                                                 Status status)
     {
         Check.NotNullOrWhiteSpace(code, nameof(code));
@@ -36,8 +36,8 @@ public class LandTypeManager : DomainService
     public async Task UpdateAsync([NotNull] LandType landType,
                                   [NotNull] string code,
                                   [NotNull] string name,
-                                  string description,
-                                  int orderIndex,
+                                  string? description,
+                                  int? orderIndex,
                                   Status status)
     {
         Check.NotNull(landType, nameof(landType));

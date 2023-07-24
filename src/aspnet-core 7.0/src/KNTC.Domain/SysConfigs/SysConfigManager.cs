@@ -15,7 +15,7 @@ public class SysConfigManager : DomainService
         _configRepo = configRepo;
     }
 
-    public async Task<SysConfig> CreateAsync([NotNull] string name, [NotNull] string value, string description)
+    public async Task<SysConfig> CreateAsync([NotNull] string name, [NotNull] string value, string? description)
     {
         Check.NotNullOrWhiteSpace(name, nameof(name));
         Check.NotNullOrWhiteSpace(value, nameof(value));
@@ -28,7 +28,7 @@ public class SysConfigManager : DomainService
 
     public async Task UpdateAsync([NotNull] SysConfig sysConfig,
                                                 [NotNull] string value,
-                                                string description)
+                                                string? description)
     {
         Check.NotNull(sysConfig, nameof(sysConfig));
         Check.NotNullOrWhiteSpace(value, nameof(value));

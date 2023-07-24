@@ -8,9 +8,10 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using Volo.Abp.Timing;
+using System;
 
 namespace KNTC;
-
 [DependsOn(
     typeof(KNTCApplicationContractsModule),
     typeof(AbpAccountHttpApiModule),
@@ -36,6 +37,10 @@ public class KNTCHttpApiModule : AbpModule
                 .AddBaseTypes(
                     typeof(AbpUiResource)
                 );
+        });
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
         });
     }
 }

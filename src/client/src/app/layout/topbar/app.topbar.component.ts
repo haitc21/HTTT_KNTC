@@ -57,14 +57,15 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private sysConfigService: GetSysConfigService,
     private config: ConfigStateService
-  ) { }
+  ) {}
   ngOnInit(): void {
     this.getSysConfigAmdInitMenu();
     this.getCurrentUser();
   }
   getCurrentUser() {
     if (this.isAutenticated) {
-      this.config.getOne$("currentUser")
+      this.config
+        .getOne$('currentUser')
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(currentUser => {
           if (currentUser) {
@@ -82,18 +83,35 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
 
   getSysConfigAmdInitMenu() {
     this.layoutService.blockUI$.next(true);
+    const cacheKey = SysConfigConsts.Prefix;
+    const storedConfig = localStorage.getItem(cacheKey);
+    if (storedConfig) {
+      const { value, expiry } = JSON.parse(storedConfig);
+      const currentTime = new Date().getTime();
+      if (currentTime < expiry) {
+        let configs = value.items;
+        this.geoserverUrl = configs.find(x => x.name === SysConfigConsts.GEOSERVER_DOMAIN)?.value;
+        this.title = configs.find(x => x.name == SysConfigConsts.TITLE)?.value;
+        this.layoutService.blockUI$.next(false);
+        this.initMenu();
+        return;
+      }
+    }
     this.sysConfigService
       .getSysAll()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(data => {
-        let configs = data.items
-        if (configs) {
-          this.geoserverUrl = configs.find(x => x.name == SysConfigConsts.GEOSERVER_DOMAIN)?.value;
-          this.title = configs.find(x => x.name == SysConfigConsts.TITLE)?.value;
-        }
-        this.initMenu();
-        this.layoutService.blockUI$.next(false);
-      },
+      .subscribe(
+        data => {
+          let configs = data.items;
+          if (configs) {
+            this.geoserverUrl = configs.find(
+              x => x.name == SysConfigConsts.GEOSERVER_DOMAIN
+            )?.value;
+            this.title = configs.find(x => x.name == SysConfigConsts.TITLE)?.value;
+          }
+          this.initMenu();
+          this.layoutService.blockUI$.next(false);
+        },
         err => {
           this.layoutService.blockUI$.next(false);
         }

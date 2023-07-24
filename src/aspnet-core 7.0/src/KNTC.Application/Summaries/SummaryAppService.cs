@@ -75,7 +75,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                                                     input.ToDate,
                                                     input.CongKhai,
                                                     input.NguoiNopDon);
-        var totalCount = await AsyncExecuter.CountAsync(query);
+        var totalCount = await AsyncExecuter.LongCountAsync(query);
         query = query.OrderBy(input.Sorting)
                     .Skip(input.SkipCount)
                     .Take(input.MaxResultCount);

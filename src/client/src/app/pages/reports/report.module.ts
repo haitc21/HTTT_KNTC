@@ -23,6 +23,7 @@ import { LogBookComponent } from './logbook/logbook.component';
     LogBookComponent
   ],
   imports: [
+    CardModule,
     ReportRoutingModule,
     CoreModule,
     PanelModule,
@@ -34,7 +35,6 @@ import { LogBookComponent } from './logbook/logbook.component';
     CalendarModule,
     ToolbarModule,
     TieredMenuModule,
-    CardModule,
     InputSwitchModule,
     BreadcrumbModule,
     AccordionModule,

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PanelModule } from 'primeng/panel';
-import { CoreModule } from '@abp/ng.core';
 import { CardModule } from 'primeng/card';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
@@ -13,13 +12,17 @@ import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { TableModule } from 'primeng/table';
 import { ToolbarModule } from 'primeng/toolbar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     SearchMapComponent
   ],
   imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     SearchMapRoutingModule,
-    CoreModule,
     PanelModule,
     CardModule,
     InputSwitchModule,

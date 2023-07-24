@@ -9,7 +9,7 @@ public class DenounceExcelDto
     public string DienThoai { get; set; }
     public string DiaChiLienHe { get; set; }
     public string NguoiBiToCao { get; set; }
-    public string NguoiGQTC { get; set; }
+    public string? NguoiGQTC { get; set; }
     public string TieuDe { get; set; }
     public DateTime ThoiGianTiepNhan { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
