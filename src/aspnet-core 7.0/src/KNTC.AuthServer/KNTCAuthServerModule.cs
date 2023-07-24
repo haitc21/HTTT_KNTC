@@ -38,6 +38,7 @@ using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.AspNetCore.Hosting;
 using System.Security.Cryptography.X509Certificates;
 using Volo.Abp.Timing;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace KNTC;
 
@@ -64,7 +65,7 @@ public class KNTCAuthServerModule : AbpModule
                 options.AddAudiences("KNTC");
                 options.UseLocalServer();
                 options.UseAspNetCore();
-            });   
+            });
             //    // disable https
             if (!hostingEnvironment.IsDevelopment())
             {
@@ -123,8 +124,8 @@ public class KNTCAuthServerModule : AbpModule
 
         Configure<AbpAuditingOptions>(options =>
         {
-                //options.IsEnabledForGetRequests = true;
-                options.ApplicationName = "AuthServer";
+            //options.IsEnabledForGetRequests = true;
+            options.ApplicationName = "AuthServer";
         });
 
         if (hostingEnvironment.IsDevelopment())
@@ -152,6 +153,10 @@ public class KNTCAuthServerModule : AbpModule
 
         Configure<AbpDistributedCacheOptions>(options =>
         {
+            options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpiration =  DateTimeOffset.Now.AddHours(12)
+            };
             options.KeyPrefix = "KNTC:";
         });
 

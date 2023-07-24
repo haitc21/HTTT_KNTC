@@ -33,6 +33,7 @@ using Volo.Abp.BlobStoring;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using Volo.Abp.Timing;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace KNTC;
 [DependsOn(
@@ -87,7 +88,13 @@ public class KNTCHttpApiHostModule : AbpModule
     }
     private void ConfigureCache(IConfiguration configuration)
     {
-        Configure<AbpDistributedCacheOptions>(options => { options.KeyPrefix = "KNTC:"; });
+        Configure<AbpDistributedCacheOptions>(options => {
+            options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            };
+            options.KeyPrefix = "KNTC:"; 
+        });
     }
 
     private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)

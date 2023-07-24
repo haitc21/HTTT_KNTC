@@ -60,19 +60,17 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
   ) {}
   ngOnInit(): void {
     this.getSysConfigAmdInitMenu();
-    this.getCurrentUser();
+    setTimeout(() => {
+      this.getCurrentUser();
+    }, 3000);
   }
   getCurrentUser() {
     if (this.isAutenticated) {
-      this.config
-        .getOne$('currentUser')
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(currentUser => {
-          if (currentUser) {
-            this.userName = currentUser.name;
-            this.userId = currentUser.id;
-          }
-        });
+      let currentUser = this.config.getOne('currentUser');
+      if (currentUser) {
+        this.userName = currentUser.userName;
+        this.userId = currentUser.id;
+      }
 
       this.getAvatar();
       this.fileService.avatarUrl$.subscribe(url => {
