@@ -22,7 +22,9 @@ public class Program
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
             .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt"))
+            .WriteTo.Map(
+             evt => evt.Level,
+             (level, wt) => wt.RollingFile("Logs\\" + level + "-{Date}.log"))
             .WriteTo.Async(c => c.Console())
             .CreateLogger();
 
