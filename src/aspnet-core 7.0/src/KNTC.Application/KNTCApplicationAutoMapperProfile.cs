@@ -78,6 +78,7 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<CreateAndUpdateUnitTypeDto, UnitType>();
 
         CreateMap<SysConfig, SysConfigDto>();
+        CreateMap<SysConfig, SysConfigCacheItem>();
         CreateMap<CreateSysConfigDto, SysConfig>();
         CreateMap<UpdateSysConfigDto, SysConfig>();
 

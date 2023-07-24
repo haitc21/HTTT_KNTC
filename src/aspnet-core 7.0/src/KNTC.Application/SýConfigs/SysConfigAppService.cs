@@ -12,6 +12,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace KNTC.SysConfigs;
 
@@ -26,10 +27,12 @@ public class SysConfigAppService : CrudAppService<
 {
     private readonly SysConfigManager _configManager;
     private readonly IDistributedCache<SysConfigCacheItem, string> _cache;
+    private readonly IDistributedCache<AllSysConfigCacheItem, string> _cacheAll;
 
     public SysConfigAppService(IRepository<SysConfig, int> repository,
         SysConfigManager configManager,
-        IDistributedCache<SysConfigCacheItem, string> cache) : base(repository)
+        IDistributedCache<SysConfigCacheItem, string> cache,
+        IDistributedCache<AllSysConfigCacheItem, string> cacheAll) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.SysConfigsPermission.Create;
@@ -37,6 +40,7 @@ public class SysConfigAppService : CrudAppService<
         DeletePolicyName = KNTCPermissions.SysConfigsPermission.Delete;
         _configManager = configManager;
         _cache = cache;
+        _cacheAll = cacheAll;
     }
 
     [AllowAnonymous]
@@ -88,14 +92,8 @@ public class SysConfigAppService : CrudAppService<
         int randomNumber = random.Next(1, 11);
         var entity = await _configManager.CreateAsync(input.Name, input.Value, input.Description);
         await Repository.InsertAsync(entity);
-        await _cache.SetAsync(
-            $"{entity.Name}",
-            new SysConfigCacheItem() { Name = entity.Name, Value = entity.Value },
-            new DistributedCacheEntryOptions
-            {
-                AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
-            }
-        );
+        await _cache.RemoveAsync($"{entity.Name}");
+        await _cacheAll.RemoveAsync("All");
         return ObjectMapper.Map<SysConfig, SysConfigDto>(entity);
     }
 
@@ -107,6 +105,7 @@ public class SysConfigAppService : CrudAppService<
         await _configManager.UpdateAsync(entity, input.Value, input.Description);
         await Repository.UpdateAsync(entity);
         await _cache.RemoveAsync($"{entity.Name}");
+        await _cacheAll.RemoveAsync("All");
         return ObjectMapper.Map<SysConfig, SysConfigDto>(entity);
     }
 
@@ -130,5 +129,24 @@ public class SysConfigAppService : CrudAppService<
         }
         await _cache.RemoveManyAsync(lstCacheKey);
         await Repository.DeleteManyAsync(ids);
+    }
+    [AllowAnonymous]
+    public async Task<AllSysConfigCacheItem> GetAllConfigsAsync()
+    {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
+        var result = await _cacheAll.GetOrAddAsync(
+        "All",
+        async () =>
+        {
+            var entities = await Repository.GetListAsync();
+            var items = ObjectMapper.Map<List<SysConfig>, List<SysConfigCacheItem>>(entities);
+            return new AllSysConfigCacheItem() { Items = items };
+        },
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
+        });
+        return result;
     }
 }

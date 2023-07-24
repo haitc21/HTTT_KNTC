@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild, isDevMode } from '
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { PermissionService } from '@abp/ng.core';
+import { ConfigStateService, PermissionService } from '@abp/ng.core';
 import { LayoutService } from '../service/app.layout.service';
 import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -55,37 +55,45 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     public dialogService: DialogService,
     private sanitizer: DomSanitizer,
-    private sysConfigService: GetSysConfigService
-  ) {}
+    private sysConfigService: GetSysConfigService,
+    private config: ConfigStateService
+  ) { }
   ngOnInit(): void {
     this.getSysConfigAmdInitMenu();
+    this.getCurrentUser();
+  }
+  getCurrentUser() {
     if (this.isAutenticated) {
-      const accessToken = this.oAuthService.getAccessToken();
-      let decodedAccessToken = atob(accessToken.split('.')[1]);
-      let accessTokenJson = JSON.parse(decodedAccessToken);
-      this.userName = accessTokenJson.preferred_username ?? '';
-      this.userId = accessTokenJson.sub ?? '';
+      this.config.getOne$("currentUser")
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(currentUser => {
+          if (currentUser) {
+            this.userName = currentUser.name;
+            this.userId = currentUser.id;
+          }
+        });
+
       this.getAvatar();
       this.fileService.avatarUrl$.subscribe(url => {
-        if (url) this.avatarUrl = url; // Cập nhật đường dẫn tới avatar của người dùng
+        if (url) this.avatarUrl = url;
       });
     }
   }
 
   getSysConfigAmdInitMenu() {
     this.layoutService.blockUI$.next(true);
-    let getGeoServerDomain$ = this.sysConfigService.getSysConfig(SysConfigConsts.GEOSERVER_DOMAIN);
-    let getTitle$ = this.sysConfigService.getSysConfig(SysConfigConsts.TITLE);
-
-    forkJoin([getGeoServerDomain$, getTitle$])
+    this.sysConfigService
+      .getSysAll()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(
-        ([geoServerDomain, title]) => {
-          if (geoServerDomain) this.geoserverUrl = geoServerDomain.value;
-          if (title) this.title = title.value;
-          this.initMenu();
-          this.layoutService.blockUI$.next(false);
-        },
+      .subscribe(data => {
+        let configs = data.items
+        if (configs) {
+          this.geoserverUrl = configs.find(x => x.name == SysConfigConsts.GEOSERVER_DOMAIN)?.value;
+          this.title = configs.find(x => x.name == SysConfigConsts.TITLE)?.value;
+        }
+        this.initMenu();
+        this.layoutService.blockUI$.next(false);
+      },
         err => {
           this.layoutService.blockUI$.next(false);
         }

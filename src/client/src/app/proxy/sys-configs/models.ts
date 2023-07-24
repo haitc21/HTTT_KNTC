@@ -1,6 +1,10 @@
 import type { EntityDto } from '@abp/ng.core';
 import type { BaseListFilterDto } from '../models';
 
+export interface AllSysConfigCacheItem {
+  items: SysConfigCacheItem[];
+}
+
 export interface CreateSysConfigDto extends EntityDto<number> {
   name: string;
   value: string;

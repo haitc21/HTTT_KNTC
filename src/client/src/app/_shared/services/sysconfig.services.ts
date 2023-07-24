@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SysConfigService } from '@proxy/sys-configs';
+import { AllSysConfigCacheItem, SysConfigService } from '@proxy/sys-configs';
 import { Observable, tap } from 'rxjs';
 import { SysConfigConsts } from '../constants/sys-config.consts';
 
@@ -7,10 +7,10 @@ import { SysConfigConsts } from '../constants/sys-config.consts';
   providedIn: 'root',
 })
 export class GetSysConfigService {
-  constructor(private sysConfigService: SysConfigService) {}
+  constructor(private sysConfigService: SysConfigService) { }
 
-  getSysConfig(name: string): Observable<any> {
-    const cacheKey = `${SysConfigConsts.Prefix}${name}`;
+  getSysAll(): Observable<AllSysConfigCacheItem> {
+    const cacheKey = `${SysConfigConsts.Prefix}`;
     const storedConfig = localStorage.getItem(cacheKey);
 
     if (storedConfig) {
@@ -26,7 +26,7 @@ export class GetSysConfigService {
         localStorage.removeItem(cacheKey);
       }
     }
-    return this.sysConfigService.getByName(name).pipe(
+    return this.sysConfigService.getAllConfigs().pipe(
       tap(data => {
         const expiryTime = new Date().getTime() + 10 * 60 * 1000; // 10 minutes
         const configToStore = {

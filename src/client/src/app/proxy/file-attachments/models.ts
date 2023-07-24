@@ -13,10 +13,10 @@ export interface CreateAndUpdateFileAttachmentDto {
   thoiGianBanHanh: string;
   ngayNhan: string;
   thuTuButLuc: string;
-  noiDungChinh?: string;
+  noiDungChinh: string;
   fileName?: string;
   contentType?: string;
-  contentLength: number;
+  contentLength?: number;
   concurrencyStamp?: string;
   congKhai: boolean;
 }
@@ -33,7 +33,7 @@ export interface FileAttachmentDto extends AuditedEntityDto<string> {
   noiDungChinh?: string;
   fileName?: string;
   contentType?: string;
-  contentLength: number;
+  contentLength?: number;
   congKhai: boolean;
 }
 
