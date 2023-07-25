@@ -1,6 +1,7 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,7 @@ public class DocumentTypeAppService : CrudAppService<
         );
     }
 
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
     public async Task<ListResultDto<DocumentTypeLookupDto>> GetLookupAsync()
     {
         Random random = new Random();

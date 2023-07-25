@@ -1,6 +1,7 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,7 @@ public class LandTypeAppService : CrudAppService<
         );
     }
 
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
     public async Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync()
     {
         Random random = new Random();

@@ -64,11 +64,16 @@ public class KNTCHttpApiHostModule : AbpModule
         ConfigureCors(context, configuration);
         ConfigureSwaggerServices(context, configuration);
         ConfigureBlob(context, configuration);
+        ConfigureResponseCaching(context);
 
         Configure<AbpClockOptions>(options =>
         {
             options.Kind = DateTimeKind.Local;
         });
+    }
+    private void ConfigureResponseCaching(ServiceConfigurationContext context)
+    {
+        context.Services.AddResponseCaching();
     }
     private void ConfigureBlob(ServiceConfigurationContext context, IConfiguration configuration)
     {
@@ -139,6 +144,7 @@ public class KNTCHttpApiHostModule : AbpModule
                 options.Audience = "KNTC";
             });
     }
+
 
     private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
     {
@@ -231,6 +237,7 @@ public class KNTCHttpApiHostModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseCors();
+        app.UseResponseCaching();
         app.UseAuthentication();
 
         if (MultiTenancyConsts.IsEnabled)

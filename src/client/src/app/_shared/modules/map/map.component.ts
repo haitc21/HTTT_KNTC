@@ -127,7 +127,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
     }
     this.sysConfigService
-      .getSysAll()
+      .getAll()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         data => {

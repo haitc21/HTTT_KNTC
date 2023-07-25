@@ -59,23 +59,24 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     private config: ConfigStateService
   ) {}
   ngOnInit(): void {
-    this.getSysConfigAmdInitMenu();
     setTimeout(() => {
+      this.getSysConfigAmdInitMenu();
       this.getCurrentUser();
     }, 3000);
   }
   getCurrentUser() {
     if (this.isAutenticated) {
-      let currentUser = this.config.getOne('currentUser');
-      if (currentUser) {
-        this.userName = currentUser.userName;
-        this.userId = currentUser.id;
-      }
-
-      this.getAvatar();
-      this.fileService.avatarUrl$.subscribe(url => {
-        if (url) this.avatarUrl = url;
-      });
+      setTimeout(() => {
+        let currentUser = this.config.getOne('currentUser');
+        if (currentUser) {
+          this.userName = currentUser.userName;
+          this.userId = currentUser.id;
+        }
+        this.getAvatar();
+        this.fileService.avatarUrl$.subscribe(url => {
+          if (url) this.avatarUrl = url;
+        });
+      }, 1000);
     }
   }
 
@@ -96,7 +97,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
       }
     }
     this.sysConfigService
-      .getSysAll()
+      .getAll()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(
         data => {
@@ -136,7 +137,9 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         // icon: 'pi pi-sign-out',
         command: event => {
           this.oAuthService.logOut();
-          window.location.reload();
+          this.userId = '';
+          this.userName = '';
+          // window.location.reload();
           // this.router.navigate(['/']);
         },
       },

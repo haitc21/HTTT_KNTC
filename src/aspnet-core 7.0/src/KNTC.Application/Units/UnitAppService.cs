@@ -1,6 +1,7 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,7 @@ public class UnitAppService : CrudAppService<
         );
     }
 
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
     public async Task<ListResultDto<UnitLookupDto>> GetLookupAsync(int unitTypeId, int? parentId = null)
     {
         Random random = new Random();

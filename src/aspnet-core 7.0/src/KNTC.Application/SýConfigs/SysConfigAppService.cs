@@ -1,6 +1,7 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,7 @@ public class SysConfigAppService : CrudAppService<
     }
 
     [AllowAnonymous]
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
     public async Task<SysConfigCacheItem> GetByNameAsync(string name)
     {
         Random random = new Random();
@@ -133,6 +135,7 @@ public class SysConfigAppService : CrudAppService<
         await Repository.DeleteManyAsync(ids);
     }
     [AllowAnonymous]
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
     public async Task<AllSysConfigCacheItem> GetAllConfigsAsync()
     {
         Random random = new Random();
