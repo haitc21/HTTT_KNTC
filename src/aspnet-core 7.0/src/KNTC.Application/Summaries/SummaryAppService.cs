@@ -3,6 +3,7 @@ using KNTC.Complains;
 using KNTC.Denounces;
 using KNTC.NPOI;
 using KNTC.Units;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Hosting;
 using NPOI.SS.UserModel;
@@ -86,6 +87,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
        );
     }
 
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
     public async Task<List<SummaryMapDto>> GetMapAsync(GetSumaryMapDto input)
     {
         Random random = new Random();

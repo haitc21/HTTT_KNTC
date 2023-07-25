@@ -48,7 +48,7 @@ export class AppComponent {
       if (block === false) {
         setTimeout(() => {
           this.blockedLayout = false;
-        }, 300);
+        }, 100);
       }
     });
   }

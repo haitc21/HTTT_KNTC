@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild, isDevMode } from '
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { ConfigStateService, PermissionService } from '@abp/ng.core';
+import { PermissionService } from '@abp/ng.core';
 import { LayoutService } from '../service/app.layout.service';
 import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -55,29 +55,25 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     public dialogService: DialogService,
     private sanitizer: DomSanitizer,
-    private sysConfigService: GetSysConfigService,
-    private config: ConfigStateService
+    private sysConfigService: GetSysConfigService
   ) {}
   ngOnInit(): void {
+    if (this.isAutenticated) {
+      const accessToken = this.oAuthService.getAccessToken();
+      let decodedAccessToken = atob(accessToken.split('.')[1]);
+      let accessTokenJson = JSON.parse(decodedAccessToken);
+      this.userName = accessTokenJson.preferred_username ?? '';
+      this.userId = accessTokenJson.sub ?? '';
+    }
     setTimeout(() => {
       this.getSysConfigAmdInitMenu();
-      this.getCurrentUser();
-    }, 3000);
-  }
-  getCurrentUser() {
-    if (this.isAutenticated) {
-      setTimeout(() => {
-        let currentUser = this.config.getOne('currentUser');
-        if (currentUser) {
-          this.userName = currentUser.userName;
-          this.userId = currentUser.id;
-        }
+      if (this.isAutenticated) {
         this.getAvatar();
         this.fileService.avatarUrl$.subscribe(url => {
           if (url) this.avatarUrl = url;
         });
-      }, 100);
-    }
+      }
+    }, 300);
   }
 
   getSysConfigAmdInitMenu() {
@@ -108,8 +104,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
           }
           this.initMenu();
         },
-        err => {
-        }
+        err => {}
       );
   }
   initMenu() {
