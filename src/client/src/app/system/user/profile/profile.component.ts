@@ -75,7 +75,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   loadFormDetails(id: string) {
     this.layoutService.blockUI$.next(true);
     this.userService
-      .get(id)
+      .getUserInfo(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: UserDto) => {

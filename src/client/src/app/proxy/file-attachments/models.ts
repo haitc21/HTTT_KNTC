@@ -14,9 +14,9 @@ export interface CreateAndUpdateFileAttachmentDto {
   ngayNhan: string;
   thuTuButLuc: string;
   noiDungChinh: string;
-  fileName?: string;
+  fileName: string;
   contentType?: string;
-  contentLength?: number;
+  contentLength: number;
   concurrencyStamp?: string;
   congKhai: boolean;
 }

@@ -6,7 +6,7 @@ export interface CreateAndUpdateLandTypeDto extends EntityDto<number> {
   landTypeCode: string;
   landTypeName: string;
   description?: string;
-  orderIndex: number;
+  orderIndex?: number;
   status: Status;
   concurrencyStamp?: string;
 }
@@ -19,7 +19,7 @@ export interface LandTypeDto extends FullAuditedEntityDto<number> {
   landTypeCode?: string;
   landTypeName?: string;
   description?: string;
-  orderIndex: number;
+  orderIndex?: number;
   status: Status;
   concurrencyStamp?: string;
 }

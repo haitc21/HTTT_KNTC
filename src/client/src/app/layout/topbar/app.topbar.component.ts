@@ -76,12 +76,11 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         this.fileService.avatarUrl$.subscribe(url => {
           if (url) this.avatarUrl = url;
         });
-      }, 1000);
+      }, 100);
     }
   }
 
   getSysConfigAmdInitMenu() {
-    this.layoutService.blockUI$.next(true);
     const cacheKey = SysConfigConsts.Prefix;
     const storedConfig = localStorage.getItem(cacheKey);
     if (storedConfig) {
@@ -91,7 +90,6 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         let configs = value.items;
         this.geoserverUrl = configs.find(x => x.name === SysConfigConsts.GEOSERVER_DOMAIN)?.value;
         this.title = configs.find(x => x.name == SysConfigConsts.TITLE)?.value;
-        this.layoutService.blockUI$.next(false);
         this.initMenu();
         return;
       }
@@ -109,10 +107,8 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
             this.title = configs.find(x => x.name == SysConfigConsts.TITLE)?.value;
           }
           this.initMenu();
-          this.layoutService.blockUI$.next(false);
         },
         err => {
-          this.layoutService.blockUI$.next(false);
         }
       );
   }
@@ -137,9 +133,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         // icon: 'pi pi-sign-out',
         command: event => {
           this.oAuthService.logOut();
-          this.userId = '';
-          this.userName = '';
-          // window.location.reload();
+          window.location.reload();
           // this.router.navigate(['/']);
         },
       },

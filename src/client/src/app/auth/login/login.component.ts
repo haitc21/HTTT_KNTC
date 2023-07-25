@@ -100,6 +100,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login(loginParams).subscribe(
       () => {
         this.layoutService.blockUI$.next(false);
+        window.location.reload();
         this.router.navigate([redirectUrl]);
       },
       err => {

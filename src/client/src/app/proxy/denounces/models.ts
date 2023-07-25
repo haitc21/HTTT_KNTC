@@ -10,7 +10,6 @@ export interface CreateDenounceDto {
   tieuDe: string;
   nguoiNopDon: string;
   cccdCmnd: string;
-  noiCapCccdCmnd?: string;
   ngaySinh: string;
   dienThoai: string;
   email?: string;
@@ -55,8 +54,6 @@ export interface DenounceDto extends AuditedEntityDto<string> {
   tieuDe?: string;
   nguoiNopDon?: string;
   cccdCmnd?: string;
-  ngayCapCccdCmnd?: string;
-  noiCapCccdCmnd?: string;
   ngaySinh?: string;
   dienThoai?: string;
   email?: string;
@@ -114,7 +111,6 @@ export interface UpdateDenounceDto extends EntityDto<string> {
   tieuDe: string;
   nguoiNopDon: string;
   cccdCmnd: string;
-  noiCapCccdCmnd?: string;
   ngaySinh: string;
   dienThoai: string;
   email?: string;

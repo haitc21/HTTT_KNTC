@@ -9,7 +9,7 @@ export interface CreateAndUpdateUnitDto extends EntityDto<number> {
   unitTypeId: number;
   parentId?: number;
   description?: string;
-  orderIndex: number;
+  orderIndex?: number;
   status: Status;
   concurrencyStamp?: string;
 }
@@ -27,7 +27,7 @@ export interface UnitDto extends FullAuditedEntityDto<number> {
   unitTypeId: number;
   parentId?: number;
   description?: string;
-  orderIndex: number;
+  orderIndex?: number;
   status: Status;
   concurrencyStamp?: string;
 }
