@@ -45,7 +45,7 @@ public class SysConfigAppService : CrudAppService<
     }
 
     [AllowAnonymous]
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
     public async Task<SysConfigCacheItem> GetByNameAsync(string name)
     {
         Random random = new Random();
@@ -135,7 +135,7 @@ public class SysConfigAppService : CrudAppService<
         await Repository.DeleteManyAsync(ids);
     }
     [AllowAnonymous]
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
     public async Task<AllSysConfigCacheItem> GetAllConfigsAsync()
     {
         Random random = new Random();
