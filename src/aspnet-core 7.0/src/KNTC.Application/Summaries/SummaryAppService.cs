@@ -87,7 +87,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
        );
     }
 
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 5)]
     public async Task<List<SummaryMapDto>> GetMapAsync(GetSumaryMapDto input)
     {
         Random random = new Random();
