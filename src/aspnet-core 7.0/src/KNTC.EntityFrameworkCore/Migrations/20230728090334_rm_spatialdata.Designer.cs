@@ -3,8 +3,8 @@ using System;
 using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -13,17 +13,18 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230728090334_rm_spatialdata")]
+    partial class rmspatialdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("_Abp_DatabaseProvider", EfCoreDatabaseProvider.PostgreSql)
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("KNTC.CategoryUnitTypes.UnitType", b =>
@@ -801,25 +802,6 @@ namespace KNTC.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LandTypes", "KNTC");
-                });
-
-            modelBuilder.Entity("KNTC.SpatialDatas.SpatialData", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Geometry>("DuLieuHinhHoc")
-                        .HasColumnType("geometry");
-
-                    b.Property<Point>("DuLieuToaDo")
-                        .HasColumnType("geometry");
-
-                    b.Property<int>("LoaiVuViec")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SpatialData", "SPATIAL_DATA");
                 });
 
             modelBuilder.Entity("KNTC.SysConfigs.SysConfig", b =>

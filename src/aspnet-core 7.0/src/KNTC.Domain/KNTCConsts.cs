@@ -5,6 +5,7 @@ public static class KNTCConsts
     public const string DbTablePrefix = "App";
 
     public const string KNTCDbSchema = "KNTC";
+    public const string SpatialDataDbSchema = "SPATIAL_DATA";
 }
 
 public struct RegexDefine

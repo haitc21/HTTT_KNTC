@@ -1,23 +1,20 @@
-﻿using System;
+﻿using NetTopologySuite.Geometries;
+using System;
 using Volo.Abp.Domain.Entities;
 
 namespace KNTC.SpatialDatas;
 
-public class SpatialData : Entity<int>
+public class SpatialData : Entity<Guid>
 {
     public SpatialData()
     {
     }
 
-    public SpatialData(int Id) : base(Id)
+    public SpatialData(Guid Id) : base(Id)
     {
     }
 
-    public virtual Double ObjectId { get; set; }
-    public virtual string? TenToChuc { get; set; }
-    public virtual Single? Quyen { get; set; }
-    public virtual string? SoToBD { get; set; }
-
-    //public Geometry Geometry { get; set; }
-    public virtual string GeoJson { get; set; }
+    public LoaiVuViec LoaiVuViec { get; set; }
+    public NetTopologySuite.Geometries.Point? DuLieuToaDo { get; set; }
+    public NetTopologySuite.Geometries.Geometry? DuLieuHinhHoc { get; set; }
 }

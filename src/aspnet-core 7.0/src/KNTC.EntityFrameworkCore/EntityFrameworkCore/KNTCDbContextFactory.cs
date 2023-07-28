@@ -22,7 +22,8 @@ public class KNTCDbContextFactory : IDesignTimeDbContextFactory<KNTCDbContext>
         var configuration = BuildConfiguration();
 
         var builder = new DbContextOptionsBuilder<KNTCDbContext>()
-            .UseNpgsql(configuration.GetConnectionString("Default"));
+            .UseNpgsql(configuration.GetConnectionString("Default"),
+            x => x.UseNetTopologySuite());
 
         return new KNTCDbContext(builder.Options);
     }

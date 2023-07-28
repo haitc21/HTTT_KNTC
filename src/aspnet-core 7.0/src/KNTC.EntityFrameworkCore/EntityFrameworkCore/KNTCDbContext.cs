@@ -334,15 +334,8 @@ public class KNTCDbContext :
 
         builder.Entity<SpatialData>(b =>
         {
-            b.ToTable("SpatialData", KNTCConsts.KNTCDbSchema);
-            b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(p => p.Id).HasColumnName("Id");
-            //b.Property(p => p.Id).ValueGeneratedOnAdd();
-            //b.Property(p => p.Geometry).HasColumnName("Geometry");
-            b.Property(p => p.GeoJson).HasColumnName("GeoJson");
-            b.Property(p => p.ObjectId).HasColumnName("OBJECTID");
-            b.Property(p => p.SoToBD).HasColumnName("So_to_BD").HasMaxLength(KNTCValidatorConsts.MaxToBanDoLength);
-            b.Property(p => p.TenToChuc).HasColumnName("TenToChuc").HasMaxLength(KNTCValidatorConsts.MaxTenToChucLength);
+            b.ToTable("SpatialData", KNTCConsts.SpatialDataDbSchema);
+            b.ConfigureByConvention();
         });
     }
 }

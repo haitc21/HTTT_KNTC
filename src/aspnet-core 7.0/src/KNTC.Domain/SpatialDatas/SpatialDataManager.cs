@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Repositories;
@@ -8,9 +9,9 @@ namespace KNTC.SpatialDatas;
 
 public class SpatialDataManager : DomainService
 {
-    private readonly IRepository<SpatialData, int> _spatialDataRepo;
+    private readonly IRepository<SpatialData, Guid> _spatialDataRepo;
 
-    public SpatialDataManager(IRepository<SpatialData, int> spatialDataRepo)
+    public SpatialDataManager(IRepository<SpatialData, Guid> spatialDataRepo)
     {
         _spatialDataRepo = spatialDataRepo;
     }
