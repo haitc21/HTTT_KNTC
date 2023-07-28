@@ -6,7 +6,8 @@ import { AccessRoutingModule } from './access-routing.module';
 import { AccessComponent } from './access.component';
 
 @NgModule({
-    imports: [
+      imports: [
+    CommonModule,
         CommonModule,
         AccessRoutingModule,
         ButtonModule

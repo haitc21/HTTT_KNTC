@@ -17,12 +17,14 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { ReportRoutingModule } from './report-routing.module';
 import { ReportComponent } from './report.component';
 import { LogBookComponent } from './logbook/logbook.component';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     ReportComponent,
     LogBookComponent
   ],
-  imports: [
+    imports: [
+    CommonModule,
     CardModule,
     ReportRoutingModule,
     CoreModule,

@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   declarations: [
     HomeComponent
   ],
-  imports: [
+      imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

@@ -22,9 +22,11 @@ import { ValidationMessagedModule } from 'src/app/_shared/modules/validation-mes
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BlockUIModule } from 'primeng/blockui';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [FileAttachmentComponent, FileAttachmentDetailComponent],
   imports: [
+    CommonModule,
     CoreModule,
     PanelModule,
     TableModule,
@@ -45,7 +47,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     DialogModule,
     ProgressSpinnerModule,
     BlockUIModule,
-    InputSwitchModule
+    InputSwitchModule,
   ],
   exports: [FileAttachmentComponent, FileAttachmentDetailComponent],
 })

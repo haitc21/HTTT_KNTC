@@ -4,7 +4,8 @@ import { AuthRoutingModule } from './auth-routing.module';
 import {PasswordModule} from 'primeng/password';
 
 @NgModule({
-    imports: [
+      imports: [
+    CommonModule,
         CommonModule,
         AuthRoutingModule,
         PasswordModule

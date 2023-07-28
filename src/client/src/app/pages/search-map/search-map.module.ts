@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
   declarations: [
     SearchMapComponent
   ],
-  imports: [
+      imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

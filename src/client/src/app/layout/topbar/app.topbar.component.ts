@@ -73,7 +73,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
           if (url) this.avatarUrl = url;
         });
       }
-    }, 1000);
+    }, 2000);
   }
 
   getSysConfigAmdInitMenu() {

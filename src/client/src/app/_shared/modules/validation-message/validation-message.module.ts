@@ -5,7 +5,7 @@ import { MessageModule } from 'primeng/message';
 import { ValidationMessageComponent } from './validation-message.component';
 
 @NgModule({
-  imports: [
+      imports: [
     CommonModule,
     MessagesModule,
     MessageModule

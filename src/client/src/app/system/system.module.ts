@@ -47,6 +47,7 @@ import { SysConfigComponent } from './sys-config/sys-config.component';
 import { SysConfigDetailComponent } from './sys-config/detail/sys-config-detail.component';
 import { ValidationMessagedModule } from '../_shared/modules/validation-message/validation-message.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { CommonModule } from '@angular/common';
 
 const COMPONENT = [
   RoleComponent,
@@ -71,7 +72,8 @@ const COMPONENT = [
 
 @NgModule({
   declarations: [...COMPONENT],
-  imports: [
+    imports: [
+    CommonModule,
     CoreModule,
     PanelModule,
     TableModule,

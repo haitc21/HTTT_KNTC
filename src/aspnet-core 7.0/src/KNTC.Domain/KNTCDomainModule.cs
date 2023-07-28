@@ -46,10 +46,10 @@ public class KNTCDomainModule : AbpModule
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
         });
 
-        Configure<AbpClockOptions>(options =>
-        {
-            options.Kind = DateTimeKind.Local;
-        });
+//        Configure<AbpClockOptions>(options =>
+//        {
+//            options.Kind = DateTimeKind.Local;
+//        });
 
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());

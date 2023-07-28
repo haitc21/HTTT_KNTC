@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
   declarations: [
     DashboardComponent
   ],
-  imports: [
+      imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

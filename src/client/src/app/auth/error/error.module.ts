@@ -5,7 +5,8 @@ import { ErrorComponent } from './error.component';
 import { ButtonModule } from 'primeng/button';
 
 @NgModule({
-    imports: [
+      imports: [
+    CommonModule,
         CommonModule,
         ErrorRoutingModule,
         ButtonModule

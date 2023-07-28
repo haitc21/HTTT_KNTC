@@ -25,12 +25,14 @@ import { ValidationMessagedModule } from 'src/app/_shared/modules/validation-mes
 import { MapModule } from 'src/app/_shared/modules/map/map.module';
 import { EditorModule } from 'primeng/editor';
 import { FileAttachmentModule } from '../file-attachment/file-attachment.module';
+import { CommonModule } from '@angular/common';
 @NgModule({
   declarations: [
     DenounceComponent,
     DenounceDetailComponent,
   ],
-  imports: [
+      imports: [
+    CommonModule,
     DenounceRoutingModule,
     CoreModule,
     PanelModule,

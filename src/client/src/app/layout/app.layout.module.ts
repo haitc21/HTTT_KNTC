@@ -24,6 +24,7 @@ import { AppMenuitemComponent } from './sidebar/app.menuitem.component';
 import { AppTopBarComponent } from './topbar/app.topbar.component';
 import { BlockUIModule } from 'primeng/blockui';
 import { PanelModule } from 'primeng/panel';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { PanelModule } from 'primeng/panel';
     AppLayoutComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
@@ -53,7 +55,7 @@ import { PanelModule } from 'primeng/panel';
     MenubarModule,
     AvatarModule,
     BlockUIModule,
-    PanelModule
+    PanelModule,
   ],
   exports: [AppLayoutComponent],
 })

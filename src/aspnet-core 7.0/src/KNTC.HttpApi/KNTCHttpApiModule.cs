@@ -38,9 +38,9 @@ public class KNTCHttpApiModule : AbpModule
                     typeof(AbpUiResource)
                 );
         });
-        Configure<AbpClockOptions>(options =>
-        {
-            options.Kind = DateTimeKind.Local;
-        });
+        //Configure<AbpClockOptions>(options =>
+        //{
+        //    options.Kind = DateTimeKind.Local;
+        //});
     }
 }
