@@ -13,6 +13,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Timing;
+using Microsoft.EntityFrameworkCore;
 
 namespace KNTC.EntityFrameworkCore;
 
@@ -51,7 +52,7 @@ public class KNTCEntityFrameworkCoreModule : AbpModule
         {
                 /* The main point to change your DBMS.
                  * See also KNTCMigrationsDbContextFactory for EF Core tooling. */
-            options.UseNpgsql();
+            options.UseNpgsql(x => x.UseNetTopologySuite());
         });
         Configure<AbpClockOptions>(options =>
         {

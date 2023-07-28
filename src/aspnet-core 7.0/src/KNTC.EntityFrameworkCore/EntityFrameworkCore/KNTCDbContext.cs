@@ -334,8 +334,21 @@ public class KNTCDbContext :
 
         builder.Entity<SpatialData>(b =>
         {
-            b.ToTable("SpatialData", KNTCConsts.SpatialDataDbSchema);
+            b.ToTable("SpatialDatas", KNTCConsts.SpatialDataDbSchema);
             b.ConfigureByConvention();
+            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
+            b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
+            b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
+            b.Property(x => x.NguoiNopDon).IsRequired().HasColumnName("nguoi_nop_don").HasMaxLength(KNTCValidatorConsts.MaxTenNguoiLength);
+            b.Property(x => x.CccdCmnd).IsRequired().HasColumnName("cccd_cmnd").HasMaxLength(KNTCValidatorConsts.MaxCccdCmndLength);
+            b.Property(x => x.DienThoai).IsRequired().HasColumnName("dien_thoai").HasMaxLength(KNTCValidatorConsts.MaxSDTLength);
+            b.Property(x => x.MaTinhTP).IsRequired().HasColumnName("ma_tinh_tp");
+            b.Property(x => x.MaQuanHuyen).IsRequired().HasColumnName("ma_quan_huyen");
+            b.Property(x => x.MaXaPhuongTT).IsRequired().HasColumnName("ma_xa_phuong_tt");
+            b.Property(x => x.ThoiGianTiepNhan).IsRequired().HasColumnName("thoi_gian_tiep_nhan");
+            b.Property(x => x.KetQua).HasColumnName("ket_qua");
+            b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
         });
     }
 }

@@ -9,9 +9,9 @@ namespace KNTC.SpatialDatas;
 
 public class SpatialDataManager : DomainService
 {
-    private readonly IRepository<SpatialData, Guid> _spatialDataRepo;
+    private readonly IRepository<SpatialData, int> _spatialDataRepo;
 
-    public SpatialDataManager(IRepository<SpatialData, Guid> spatialDataRepo)
+    public SpatialDataManager(IRepository<SpatialData, int> spatialDataRepo)
     {
         _spatialDataRepo = spatialDataRepo;
     }

@@ -34,6 +34,7 @@ public class KNTCDbContextFactory : IDesignTimeDbContextFactory<KNTCDbContext>
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../KNTC.DbMigrator/"))
             .AddJsonFile("appsettings.json", optional: false);
 
+
         return builder.Build();
     }
 }
