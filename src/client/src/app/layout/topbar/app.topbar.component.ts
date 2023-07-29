@@ -58,22 +58,21 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     private sysConfigService: GetSysConfigService
   ) {}
   ngOnInit(): void {
-    if (this.isAutenticated) {
-      const accessToken = this.oAuthService.getAccessToken();
-      let decodedAccessToken = atob(accessToken.split('.')[1]);
-      let accessTokenJson = JSON.parse(decodedAccessToken);
-      this.userName = accessTokenJson.preferred_username ?? '';
-      this.userId = accessTokenJson.sub ?? '';
-    }
-    setTimeout(() => {
-      this.getSysConfigAmdInitMenu();
-      if (this.isAutenticated) {
-        this.getAvatar();
-        this.fileService.avatarUrl$.subscribe(url => {
-          if (url) this.avatarUrl = url;
-        });
-      }
-    }, 2000);
+    if (this.isAutenticated) this.getUserInfoFromToken();
+
+    this.getSysConfigAmdInitMenu();
+  }
+
+  private getUserInfoFromToken() {
+    const accessToken = this.oAuthService.getAccessToken();
+    let decodedAccessToken = atob(accessToken.split('.')[1]);
+    let accessTokenJson = JSON.parse(decodedAccessToken);
+    this.userName = accessTokenJson.preferred_username ?? '';
+    this.userId = accessTokenJson.sub ?? '';
+    this.getAvatar();
+    this.fileService.avatarUrl$.subscribe(url => {
+      if (url) this.avatarUrl = url;
+    });
   }
 
   getSysConfigAmdInitMenu() {

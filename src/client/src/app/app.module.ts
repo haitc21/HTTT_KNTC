@@ -24,14 +24,15 @@ import(`@/../@angular/common/locales/vi.mjs`).then(m => storeLocaleData(m.defaul
 
 import localeVi from '@angular/common/locales/vi';
 
-
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
 import { CommonModule } from '@angular/common';
+import { ComplainModule } from './pages/complain/complain.module';
+import { DenounceModule } from './pages/denounce/denounce.module';
 
 @NgModule({
-      imports: [
+  imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -45,7 +46,9 @@ import { CommonModule } from '@angular/common';
     ToastModule,
     BlockUIModule,
     ProgressSpinnerModule,
-    PanelModule
+    PanelModule,
+    ComplainModule,
+    DenounceModule
   ],
   declarations: [AppComponent],
   providers: [
@@ -59,7 +62,7 @@ import { CommonModule } from '@angular/common';
       useClass: GlobalHttpInterceptorService,
       multi: true,
     },
-    APP_ROUTE_PROVIDER,
+    // APP_ROUTE_PROVIDER,
     DialogService,
     MessageService,
     NotificationService,

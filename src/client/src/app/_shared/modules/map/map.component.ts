@@ -1,16 +1,10 @@
 import {
   AfterViewInit,
-  ApplicationRef,
   Component,
-  ComponentFactoryResolver,
-  ComponentRef,
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   SimpleChanges,
-  ViewContainerRef,
-  isDevMode,
 } from '@angular/core';
 import { LoaiVuViec } from '@proxy';
 import { v4 as uuidv4 } from 'uuid';
@@ -33,6 +27,12 @@ import { GetSysConfigService } from '../../services/sysconfig.services';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { SysConfigConsts } from '../../constants/sys-config.consts';
 import { Subject, forkJoin, takeUntil } from 'rxjs';
+import { NotificationService } from '../../services/notification.service';
+import { DIALOG_BG } from '../../constants/sizes.const';
+import { DenounceDetailComponent } from 'src/app/pages/denounce/detail/denounce-detail.component';
+import { ComplainDetailComponent } from 'src/app/pages/complain/detail/complain-detail.component';
+import { MessageConstants } from '../../constants/messages.const';
+import { DialogService } from 'primeng/dynamicdialog';
 
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
@@ -93,13 +93,9 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   drawningBoard: any;
   geoserverUrl: string;
 
-  // @ViewChild('popup', { read: ViewContainerRef }) popupContainer: ViewContainerRef;
-  private popupComponentRef: ComponentRef<MapPopupComponent>;
-
   constructor(
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private popupContainer: ViewContainerRef,
-    private appRef: ApplicationRef,
+    private notificationService: NotificationService,
+    private dialogService: DialogService,
     private sysConfigService: GetSysConfigService,
     public layoutService: LayoutService
   ) {}
@@ -1061,7 +1057,9 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
           info.update();
         });
 
-        marker.bindPopup(this.getPopup(dataMap), customOptions);
+        marker.on('click', e => {
+          this.viewDetail(dataMap);
+        });
 
         if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) marker.addTo(this.khieunai);
         else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) marker.addTo(this.tocao);
@@ -1179,14 +1177,6 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     return new L.LatLng(+point[0], +point[1]);
   }
 
-  getPopup(dataMap: SummaryDto): HTMLElement {
-    const factory = this.componentFactoryResolver.resolveComponentFactory(MapPopupComponent);
-    this.popupComponentRef = factory.create(this.popupContainer.injector);
-    this.popupComponentRef.instance.dataMap = dataMap;
-    this.appRef.attachView(this.popupComponentRef.hostView); // Đính kèm view của component
-    return this.popupComponentRef.location.nativeElement;
-  }
-
   private highlightFeature(layer, data) {
     //var layer = e.target;
 
@@ -1236,6 +1226,38 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
     }
     return false;
+  }
+  viewDetail(dataMap: SummaryDto) {
+    if (!dataMap.id) {
+      this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
+      return;
+    }
+    if (dataMap.loaiVuViec == LoaiVuViec.KhieuNai) {
+      const ref = this.dialogService.open(ComplainDetailComponent, {
+        height: '92vh',
+        data: {
+          id: dataMap.id,
+          loaiVuViec: LoaiVuViec.KhieuNai,
+          linhVuc: dataMap.linhVuc,
+          mode: 'view',
+        },
+        header: `Chi tiết khiếu nại/khiếu kiện "${dataMap.tieuDe}"`,
+        width: DIALOG_BG,
+      });
+    }
+    if (dataMap.loaiVuViec == LoaiVuViec.ToCao) {
+      const ref = this.dialogService.open(DenounceDetailComponent, {
+        height: '92vh',
+        data: {
+          id: dataMap.id,
+          loaiVuViec: LoaiVuViec.ToCao,
+          linhVuc: dataMap.linhVuc,
+          mode: 'view',
+        },
+        header: `Chi tiết đơn tố cáo "${dataMap.tieuDe}"`,
+        width: DIALOG_BG,
+      });
+    }
   }
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();

@@ -1,14 +1,12 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
-import { LOGIN_URL } from './_shared/constants/urls.const';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { LayoutService } from './layout/service/app.layout.service';
+import { GetSysConfigService } from './_shared/services/sysconfig.services';
 
 @Component({
   selector: 'app-root',
   template: `
-    <p-panel #layoutPnl>
+    <p-panel *ngIf="configs" #layoutPnl>
       <app-layout></app-layout>
       <p-toast position="top-right"></p-toast>
       <p-confirmDialog
@@ -34,28 +32,35 @@ import { LayoutService } from './layout/service/app.layout.service';
     </p-panel>
   `,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   menuMode = 'static';
   blockedLayout = false;
+  configs: any;
 
-  constructor(private primengConfig: PrimeNGConfig, public layoutService: LayoutService) {
-    this.layoutService.blockUI$.subscribe(block => {
-      if (block === true) {
-        setTimeout(() => {
-          this.blockedLayout = true;
-        }, 1);
-      }
-      if (block === false) {
-        setTimeout(() => {
-          this.blockedLayout = false;
-        }, 100);
-      }
-    });
-  }
+  constructor(
+    private primengConfig: PrimeNGConfig,
+    public layoutService: LayoutService,
+    private sysConfigService: GetSysConfigService
+  ) {}
 
   ngOnInit() {
-    this.primengConfig.ripple = true;
     document.documentElement.style.fontSize = '14px';
+    this.getConfigs();
+    this.setBlockUi();
+    this.configPrimeng();
+  }
+
+  private getConfigs() {
+    this.sysConfigService.getAll().subscribe(
+      data => {
+        this.configs = data;
+      },
+      err => {}
+    );
+  }
+
+  private configPrimeng() {
+    this.primengConfig.ripple = true;
     this.primengConfig.setTranslation({
       firstDayOfWeek: 0,
       dayNames: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
@@ -93,6 +98,21 @@ export class AppComponent {
       clear: 'Xóa',
       dateFormat: 'dd/mm/yy',
       weekHeader: 'Tuần',
+    });
+  }
+
+  private setBlockUi() {
+    this.layoutService.blockUI$.subscribe(block => {
+      if (block === true) {
+        setTimeout(() => {
+          this.blockedLayout = true;
+        }, 1);
+      }
+      if (block === false) {
+        setTimeout(() => {
+          this.blockedLayout = false;
+        }, 100);
+      }
     });
   }
 }

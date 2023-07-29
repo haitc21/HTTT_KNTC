@@ -72,7 +72,7 @@ const COMPONENT = [
 
 @NgModule({
   declarations: [...COMPONENT],
-    imports: [
+  imports: [
     CommonModule,
     CoreModule,
     PanelModule,
@@ -103,7 +103,7 @@ const COMPONENT = [
     CardModule,
     FileUploadModule,
     BreadcrumbModule,
-    InputSwitchModule
+    InputSwitchModule,
   ],
   entryComponents: [...COMPONENT],
 })

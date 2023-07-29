@@ -13,7 +13,7 @@ import { ValidationMessagedModule } from 'src/app/_shared/modules/validation-mes
 import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
-      imports: [
+  imports: [
     CommonModule,
     LoginRoutingModule,
     ButtonModule,
@@ -24,7 +24,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     BlockUIModule,
     ProgressSpinnerModule,
     ValidationMessagedModule,
-    InputSwitchModule
+    InputSwitchModule,
   ],
   declarations: [LoginComponent],
   providers: [MessageService],

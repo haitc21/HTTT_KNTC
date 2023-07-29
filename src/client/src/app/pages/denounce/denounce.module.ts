@@ -9,7 +9,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CalendarModule } from 'primeng/calendar';
 import { ToolbarModule } from 'primeng/toolbar';
-import { TooltipModule } from 'primeng/tooltip'
+import { TooltipModule } from 'primeng/tooltip';
 import { TieredMenuModule } from 'primeng/tieredmenu';
 import { CoreModule } from '@abp/ng.core';
 import { CardModule } from 'primeng/card';
@@ -27,11 +27,8 @@ import { EditorModule } from 'primeng/editor';
 import { FileAttachmentModule } from '../file-attachment/file-attachment.module';
 import { CommonModule } from '@angular/common';
 @NgModule({
-  declarations: [
-    DenounceComponent,
-    DenounceDetailComponent,
-  ],
-      imports: [
+  declarations: [DenounceComponent, DenounceDetailComponent],
+  imports: [
     CommonModule,
     DenounceRoutingModule,
     CoreModule,
@@ -55,7 +52,7 @@ import { CommonModule } from '@angular/common';
     BreadcrumbModule,
     AccordionModule,
     SelectButtonModule,
-    FileAttachmentModule
+    FileAttachmentModule,
   ],
 })
 export class DenounceModule {}

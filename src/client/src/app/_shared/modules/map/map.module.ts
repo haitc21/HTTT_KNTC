@@ -9,8 +9,9 @@ import { MapComponent } from './map.component';
 import { MapPopupComponent } from './map-popup/map-popup.component';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
 @NgModule({
-      imports: [
+  imports: [
     CommonModule,
     ReactiveFormsModule,
     InputTextModule,
