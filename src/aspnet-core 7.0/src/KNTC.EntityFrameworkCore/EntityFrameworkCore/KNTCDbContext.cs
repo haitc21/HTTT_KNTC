@@ -337,6 +337,8 @@ public class KNTCDbContext :
             b.ToTable("SpatialDatas", KNTCConsts.SpatialDataDbSchema);
             b.ConfigureByConvention();
             b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.HasIndex(x => x.IdHoSo);
+            b.Property(x => x.IdHoSo).HasColumnName("id_ho_so");
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
             b.Property(x => x.TieuDe).IsRequired().HasColumnName("tieu_de").HasMaxLength(KNTCValidatorConsts.MaxTieuDeLength);
