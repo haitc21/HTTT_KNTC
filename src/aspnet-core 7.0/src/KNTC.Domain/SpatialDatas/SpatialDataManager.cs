@@ -1,6 +1,7 @@
 ﻿using KNTC;
 using KNTC.Complains;
 using KNTC.Denounces;
+using NetTopologySuite;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
@@ -17,11 +18,8 @@ namespace KNTC.SpatialDatas;
 
 public class SpatialDataManager : DomainService
 {
-    public IJsonSerializer JsonSerializer { get; }
-
-    public SpatialDataManager(IJsonSerializer jsonSerializer)
+    public SpatialDataManager()
     {
-        JsonSerializer = jsonSerializer;
     }
 
     public async Task<SpatialData> CreateAsync([NotNull] Guid idHoSo,
@@ -64,14 +62,18 @@ public class SpatialDataManager : DomainService
     }
     public async Task<SpatialData> CreateAsync(CreateComplainEto complainEto)
     {
-        var gf = NetTopologySuite.NtsGeometryServices.Instance.CreateGeometryFactory(4326);
         string json = complainEto.DuLieuHinhHoc;
-        var serializer = GeoJsonSerializer.Create();
-        using (var stringReader = new StringReader(json))
-        using (var jsonReader = new JsonTextReader(stringReader))
+        var serializer = GeoJsonSerializer.Create(new Newtonsoft.Json.JsonSerializerSettings(),
+        NtsGeometryServices.Instance.CreateGeometryFactory(4326));
+        using (var stringReader = new System.IO.StringReader(json))
+        using (var jsonReader = new Newtonsoft.Json.JsonTextReader(stringReader))
         {
             Geometry result = serializer.Deserialize<Geometry>(jsonReader);
         }
+        var myModelItem2 =
+        serializer.Deserialize<Geometry>(
+        new Newtonsoft.Json.JsonTextReader(new System.IO.StringReader(json)));
+
         SpatialData spatialData = new SpatialData()
         {
             IdHoSo = complainEto.Id,
@@ -146,7 +148,7 @@ public class SpatialDataManager : DomainService
         spatialData.DuLieuHinhHoc = SpatialDataHelper.ConvertJsonToGeometry(duLieuHinhHoc);
     }
 
-    public async Task UpdateAsync([NotNull] SpatialData spatialData,[NotNull] UpdateComplainEto complainEto)
+    public async Task UpdateAsync([NotNull] SpatialData spatialData, [NotNull] UpdateComplainEto complainEto)
     {
         spatialData.MaHoSo = complainEto.MaHoSo;
         spatialData.TieuDe = complainEto.TieuDe;

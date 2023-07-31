@@ -28,6 +28,8 @@ public class SpatialData : Entity<int>
     public int MaXaPhuongTT { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public bool CongKhai { get; set; }
+    [Newtonsoft.Json.JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
     public Point? DuLieuToaDo { get; set; }
+    [Newtonsoft.Json.JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
     public Geometry? DuLieuHinhHoc { get; set; }
 }
