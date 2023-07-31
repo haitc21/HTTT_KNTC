@@ -34,6 +34,10 @@ using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using Volo.Abp.Timing;
 using Microsoft.Extensions.Caching.Distributed;
+using Volo.Abp.Json.Newtonsoft;
+using Microsoft.AspNetCore.Mvc;
+using NetTopologySuite;
+using NetTopologySuite.IO.Converters;
 
 namespace KNTC;
 [DependsOn(
@@ -46,7 +50,8 @@ namespace KNTC;
     typeof(KNTCEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule),
-    typeof(AbpBlobStoringMinioModule)
+    typeof(AbpBlobStoringMinioModule),
+    typeof(AbpJsonNewtonsoftModule)
 )]
 public class KNTCHttpApiHostModule : AbpModule
 {
@@ -65,10 +70,20 @@ public class KNTCHttpApiHostModule : AbpModule
         ConfigureSwaggerServices(context, configuration);
         ConfigureBlob(context, configuration);
         ConfigureResponseCaching(context);
+        ConfigureJsonSerialize(context);
 
         Configure<AbpClockOptions>(options =>
         {
             options.Kind = DateTimeKind.Local;
+        });
+    }
+    private void ConfigureJsonSerialize(ServiceConfigurationContext context)
+    {
+        Configure<MvcNewtonsoftJsonOptions>(options =>
+        {
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
+            options.SerializerSettings.Converters.Add(new GeometryConverter(geometryFactory));
         });
     }
     private void ConfigureResponseCaching(ServiceConfigurationContext context)
