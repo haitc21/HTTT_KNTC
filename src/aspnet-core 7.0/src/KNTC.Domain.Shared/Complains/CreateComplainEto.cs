@@ -1,22 +1,24 @@
-﻿using NetTopologySuite.Geometries;
-using System;
-using Volo.Abp.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Text;
+using Volo.Abp.EventBus;
 
-namespace KNTC.SpatialDatas;
+namespace KNTC.Complains;
 
-public class SpatialData : Entity<int>
+[EventName("CreateComplain")]
+public class CreateComplainEto
 {
-    public SpatialData()
+    public CreateComplainEto()
     {
-    }
 
-    public SpatialData(int Id) : base(Id)
+    }
+    public CreateComplainEto(Guid id)
     {
+        Id = id;
     }
-    public Guid IdHoSo { get; set; }
-
-    public LoaiVuViec LoaiVuViec { get; set; }
-    public string MaHoSo { get;  set; }
+    public Guid Id { get; set; }
+    public string MaHoSo { get; private set; }
     public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
     public string NguoiNopDon { get; set; }
@@ -28,6 +30,8 @@ public class SpatialData : Entity<int>
     public int MaXaPhuongTT { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public bool CongKhai { get; set; }
-    public Point? DuLieuToaDo { get; set; }
-    public Geometry? DuLieuHinhHoc { get; set; }
+    public string? DuLieuToaDo { get; set; }
+    public string? DuLieuHinhHoc { get; set; }
 }
+
+

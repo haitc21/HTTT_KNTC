@@ -19,6 +19,8 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.ObjectMapping;
 
 namespace KNTC.Complains;
 
@@ -38,6 +40,7 @@ public class ComplainAppService : CrudAppService<
     private readonly IHostEnvironment _env;
     private readonly IRepository<Unit, int> _unitRepo;
     private readonly IRedisCacheService _cacheService;
+    private readonly IDistributedEventBus _distributedEventBus;
 
     public ComplainAppService(IRepository<Complain, Guid> repository,
         IComplainRepository complainRepo,
@@ -47,7 +50,8 @@ public class ComplainAppService : CrudAppService<
         FileAttachmentManager fileAttachmentManager,
         IHostEnvironment env,
         IRepository<Unit, int> unitRepo,
-        IRedisCacheService cacheService = null) : base(repository)
+        IRedisCacheService cacheService,
+        IDistributedEventBus distributedEventBus) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
@@ -60,6 +64,7 @@ public class ComplainAppService : CrudAppService<
         _unitRepo = unitRepo;
         _unitRepo = unitRepo;
         _cacheService = cacheService;
+        _distributedEventBus = distributedEventBus;
     }
 
     [AllowAnonymous]
@@ -190,6 +195,9 @@ public class ComplainAppService : CrudAppService<
             }
         }
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        var createEto = ObjectMapper.Map<CreateComplainDto, CreateComplainEto>(input);
+        createEto.Id = complain.Id;
+        await _distributedEventBus.PublishAsync(createEto);
         return result;
     }
 
@@ -244,6 +252,8 @@ public class ComplainAppService : CrudAppService<
                                           KetQua2: input.KetQua2);
         await _complainRepo.UpdateAsync(complain);
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        var updateEto = ObjectMapper.Map<UpdateComplainDto, UpdateComplainEto>(input);
+        await _distributedEventBus.PublishAsync(updateEto);
         return ObjectMapper.Map<Complain, ComplainDto>(complain);
     }
 
@@ -257,6 +267,7 @@ public class ComplainAppService : CrudAppService<
             await _blobContainer.DeleteAsync(item.ToString());
         }
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _distributedEventBus.PublishAsync(new DeleteComplainEto(id));
         await _complainRepo.DeleteAsync(id);
     }
 
@@ -270,6 +281,7 @@ public class ComplainAppService : CrudAppService<
             await _blobContainer.DeleteAsync(item.ToString());
         }
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _distributedEventBus.PublishAsync(new DeleteMultipleComplainEto(ids.ToList()));
         await _complainRepo.DeleteManyAsync(ids);
     }
 

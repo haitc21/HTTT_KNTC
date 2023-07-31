@@ -25,6 +25,8 @@ import { AppTopBarComponent } from './topbar/app.topbar.component';
 import { BlockUIModule } from 'primeng/blockui';
 import { PanelModule } from 'primeng/panel';
 import { CommonModule } from '@angular/common';
+import { ComplainModule } from '../pages/complain/complain.module';
+import { DenounceModule } from '../pages/denounce/denounce.module';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { CommonModule } from '@angular/common';
     AvatarModule,
     BlockUIModule,
     PanelModule,
+    ComplainModule,
+    DenounceModule
   ],
   exports: [AppLayoutComponent],
 })

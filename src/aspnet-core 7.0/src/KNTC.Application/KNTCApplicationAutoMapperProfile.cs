@@ -50,6 +50,8 @@ public class KNTCApplicationAutoMapperProfile : Profile
                  .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVNString() : string.Empty));
         CreateMap<CreateComplainDto, Complain>();
         CreateMap<UpdateComplainDto, Complain>();
+        CreateMap<CreateComplainDto, CreateComplainEto>();
+        CreateMap<UpdateComplainDto, UpdateComplainEto>();
 
         CreateMap<Denounce, DenounceDto>();
         CreateMap<Denounce, DenounceInListDto>();
@@ -57,6 +59,8 @@ public class KNTCApplicationAutoMapperProfile : Profile
                  .ForMember(dto => dto.KetQua, opt => opt.MapFrom(denounce => denounce.KetQua.Value.ToVNString()));
         CreateMap<CreateDenounceDto, Denounce>();
         CreateMap<UpdateDenounceDto, Denounce>();
+        CreateMap<CreateDenounceDto, CreateDenounceEto>();
+        CreateMap<UpdateDenounceDto, UpdateDenounceEto>();
 
         CreateMap<FileAttachment, FileAttachmentDto>();
         CreateMap<CreateAndUpdateFileAttachmentDto, FileAttachment>();

@@ -19,7 +19,8 @@ public static class SpatialDataHelper
         using (var stringReader = new StringReader(json))
         using (var jsonReader = new JsonTextReader(stringReader))
         {
-            return serializer.Deserialize<Geometry>(jsonReader);
+            Geometry result = serializer.Deserialize<Geometry>(jsonReader);
+            return result;
         }
     }
     public static string ConvertGeometryToJson(Geometry? geometry)
