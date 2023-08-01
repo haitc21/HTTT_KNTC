@@ -3,10 +3,13 @@ using NetTopologySuite.IO;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp;
 
 namespace KNTC.SpatialDatas;
 
@@ -23,6 +26,13 @@ public static class SpatialDataHelper
             return result;
         }
     }
+    public static GeoJsonData? ConvertJsonToGeoData(string? json)
+    {
+        if (json.IsNullOrEmpty()) return null;
+        var reader = new NetTopologySuite.IO.GeoJsonReader();
+        var result = reader.Read<GeoJsonData>(json);
+        return result;
+    }
     public static string ConvertGeometryToJson(Geometry? geometry)
     {
         if (geometry == null) return string.Empty;
@@ -34,19 +44,46 @@ public static class SpatialDataHelper
             return stringWriter.ToString();
         }
     }
-    public static Point? ConvertStringToPoint(string? input)
+    public static Point? ConvertStringToPoint(string? latLng)
     {
-        if (input.IsNullOrEmpty()) return null;
-        var arrCoor = input.Split(", ");
-        double lat = double.Parse(arrCoor[0]);
-        double lng = double.Parse(arrCoor[1]);
-        return new Point(lat, lng);
+        if (latLng.IsNullOrEmpty()) return null;
+        // Step 1: Split the input string
+        string[] parts = latLng.Split(',');
+
+        // Step 2: Parse latitude and longitude as decimal
+        if (parts.Length != 2 || !decimal.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out decimal latitude) ||
+            !decimal.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out decimal longitude))
+        {
+            throw new UserFriendlyException("Dữ liệu tọa độ sai định dạng 'lat, lng'");
+        }
+        // Step 3: Create Coordinate using latitude and longitude
+        Coordinate coordinate = new Coordinate((double)longitude, (double)latitude);
+
+        // Step 4: Create Point using GeometryFactory and the coordinate
+        GeometryFactory geometryFactory = new GeometryFactory();
+        Point point = geometryFactory.CreatePoint(coordinate);
+
+        return point;
     }
     public static string ConvertPointToString(Point point)
     {
         if (point == null) return string.Empty;
-        var lat = point.CoordinateSequence.First;
-        var lng = point.CoordinateSequence.Last;
-        return $"{lat}, {lng}";
+        // Step 1: Extract latitude and longitude from the Point object
+        double latitude = point.Coordinate.Y;
+        double longitude = point.Coordinate.X;
+
+        // Step 2: Format latitude and longitude as strings
+        string latString = latitude.ToString();
+        string lngString = longitude.ToString();
+
+        // Step 3: Concatenate latitude and longitude with a comma separator
+        string latLngString = $"{latString}, {lngString}";
+
+        return latLngString;
+    }
+    public static string ConvertGeoDataToJson(GeoJsonData geoJsonData)
+    {
+        if(geoJsonData == null) return string.Empty;
+        return JsonConvert.SerializeObject(geoJsonData, Formatting.Indented);
     }
 }

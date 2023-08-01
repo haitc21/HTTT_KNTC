@@ -15,9 +15,9 @@ public class DeleteComplainHandler
         : IDistributedEventHandler<DeleteComplainEto>,
           ITransientDependency
 {
-    private readonly IRepository<SpatialData, int> _spatialDataRepo;
+    private readonly ISpatialDataRepository _spatialDataRepo;
     private readonly SpatialDataManager _spatialDataManager;
-    public DeleteComplainHandler(IRepository<SpatialData, int> spatialDataRepo,
+    public DeleteComplainHandler(ISpatialDataRepository spatialDataRepo,
         SpatialDataManager spatialDataManager)
     {
         _spatialDataRepo = spatialDataRepo;
@@ -25,7 +25,7 @@ public class DeleteComplainHandler
     }
     public async Task HandleEventAsync(DeleteComplainEto eventData)
     {
-        var spatialData = await _spatialDataRepo.GetAsync(x => x.IdHoSo == eventData.Id);
+        var spatialData = await _spatialDataRepo.GetByIdHoSoAsync(eventData.Id);
         await _spatialDataRepo.DeleteAsync(spatialData);
     }
 }

@@ -15,9 +15,9 @@ public class CreateDenounceHandler
         : IDistributedEventHandler<CreateDenounceEto>,
           ITransientDependency
 {
-    private readonly IRepository<SpatialData, int> _spatialDataRepo;
+    private readonly ISpatialDataRepository _spatialDataRepo;
     private readonly SpatialDataManager _spatialDataManager;
-    public CreateDenounceHandler(IRepository<SpatialData, int> spatialDataRepo,
+    public CreateDenounceHandler(ISpatialDataRepository spatialDataRepo,
         SpatialDataManager spatialDataManager)
     {
         _spatialDataRepo = spatialDataRepo;

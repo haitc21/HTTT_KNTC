@@ -908,7 +908,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
       L.tooltip()
         .setLatLng(e.latlng)
         .setContent(
-          `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
+          `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Vĩ độ: ${e.latlng.lat}, Kinh độ: ${e.latlng.lng} </p>`
         )
         .addTo(this.map);
     });
@@ -989,7 +989,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         L.tooltip()
           .setLatLng(e.latlng)
           .setContent(
-            `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Kinh độ: ${e.latlng.lat}, Vĩ độ: ${e.latlng.lng} </p>`
+            `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Vĩ độ: ${e.latlng.lat}, Kinh độ: ${e.latlng.lng} </p>`
           )
           .addTo(this.map);
       }

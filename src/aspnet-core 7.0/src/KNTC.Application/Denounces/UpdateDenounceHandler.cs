@@ -15,9 +15,9 @@ public class UpdateDenounceHandler
         : IDistributedEventHandler<UpdateDenounceEto>,
           ITransientDependency
 {
-    private readonly IRepository<SpatialData, int> _spatialDataRepo;
+    private readonly ISpatialDataRepository _spatialDataRepo;
     private readonly SpatialDataManager _spatialDataManager;
-    public UpdateDenounceHandler(IRepository<SpatialData, int> spatialDataRepo,
+    public UpdateDenounceHandler(ISpatialDataRepository spatialDataRepo,
         SpatialDataManager spatialDataManager)
     {
         _spatialDataRepo = spatialDataRepo;
@@ -25,8 +25,8 @@ public class UpdateDenounceHandler
     }
     public async Task HandleEventAsync(UpdateDenounceEto eventData)
     {
-        var spatialData = await _spatialDataRepo.GetAsync(x => x.IdHoSo == eventData.Id);
+        var spatialData = await _spatialDataRepo.GetByIdHoSoAsync.Id);
         await _spatialDataManager.UpdateAsync(spatialData, eventData);
-        await _spatialDataRepo.InsertAsync(spatialData);
+        await _spatialDataRepo.UpdateAsync(spatialData);
     }
 }

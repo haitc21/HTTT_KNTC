@@ -253,6 +253,7 @@ public class ComplainAppService : CrudAppService<
         await _complainRepo.UpdateAsync(complain);
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var updateEto = ObjectMapper.Map<UpdateComplainDto, UpdateComplainEto>(input);
+        updateEto.Id = complain.Id;
         await _distributedEventBus.PublishAsync(updateEto);
         return ObjectMapper.Map<Complain, ComplainDto>(complain);
     }

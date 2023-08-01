@@ -3,8 +3,8 @@ using System;
 using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -13,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230801034404_drop_tbl_spatial")]
+    partial class droptblspatial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -801,100 +803,6 @@ namespace KNTC.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LandTypes", "KNTC");
-                });
-
-            modelBuilder.Entity("KNTC.SpatialDatas.SpatialData", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CccdCmnd")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("cccd_cmnd");
-
-                    b.Property<bool>("CongKhai")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("cong_khai");
-
-                    b.Property<string>("DienThoai")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("dien_thoai");
-
-                    b.Property<Geometry>("Geometry")
-                        .HasColumnType("geometry");
-
-                    b.Property<Guid>("IdHoSo")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id_ho_so");
-
-                    b.Property<int?>("KetQua")
-                        .HasColumnType("integer")
-                        .HasColumnName("ket_qua");
-
-                    b.Property<int>("LinhVuc")
-                        .HasColumnType("integer")
-                        .HasColumnName("linh_vuc");
-
-                    b.Property<int>("LoaiVuViec")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("MaHoSo")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("ma_ho_so");
-
-                    b.Property<int>("MaQuanHuyen")
-                        .HasColumnType("integer")
-                        .HasColumnName("ma_quan_huyen");
-
-                    b.Property<int>("MaTinhTP")
-                        .HasColumnType("integer")
-                        .HasColumnName("ma_tinh_tp");
-
-                    b.Property<int>("MaXaPhuongTT")
-                        .HasColumnType("integer")
-                        .HasColumnName("ma_xa_phuong_tt");
-
-                    b.Property<string>("NguoiNopDon")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("nguoi_nop_don");
-
-                    b.Property<Point>("Point")
-                        .HasColumnType("geometry");
-
-                    b.Property<string>("Properties")
-                        .HasColumnType("json");
-
-                    b.Property<DateTime>("ThoiGianTiepNhan")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("thoi_gian_tiep_nhan");
-
-                    b.Property<string>("TieuDe")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("tieu_de");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdHoSo");
-
-                    b.ToTable("SpatialDatas", "SPATIAL_DATA");
                 });
 
             modelBuilder.Entity("KNTC.SysConfigs.SysConfig", b =>

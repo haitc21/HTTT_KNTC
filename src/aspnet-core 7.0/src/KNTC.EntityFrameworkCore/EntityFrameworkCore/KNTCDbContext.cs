@@ -9,6 +9,9 @@ using KNTC.SysConfigs;
 using KNTC.Units;
 using KNTC.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -351,6 +354,12 @@ public class KNTCDbContext :
             b.Property(x => x.ThoiGianTiepNhan).IsRequired().HasColumnName("thoi_gian_tiep_nhan");
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
             b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
+            b.Property(x => x.Properties)
+                .HasConversion(
+                    prop => prop.ToString(),
+                    prop => JsonConvert.DeserializeObject<JObject>(prop))
+                .HasColumnType("json")
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Save);
         });
     }
 }

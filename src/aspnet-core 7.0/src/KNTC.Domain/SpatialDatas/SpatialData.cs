@@ -1,5 +1,9 @@
-﻿using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Volo.Abp.Domain.Entities;
 
 namespace KNTC.SpatialDatas;
@@ -14,7 +18,6 @@ public class SpatialData : Entity<int>
     {
     }
     public Guid IdHoSo { get; set; }
-
     public LoaiVuViec LoaiVuViec { get; set; }
     public string MaHoSo { get;  set; }
     public LinhVuc LinhVuc { get; set; }
@@ -28,8 +31,19 @@ public class SpatialData : Entity<int>
     public int MaXaPhuongTT { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public bool CongKhai { get; set; }
-    [Newtonsoft.Json.JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
-    public Point? DuLieuToaDo { get; set; }
-    [Newtonsoft.Json.JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
-    public Geometry? DuLieuHinhHoc { get; set; }
+    [JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
+    public Point? Point { get; set; }
+    [JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
+    public Geometry? Geometry { get; set; }
+    public JObject? Properties { get; set; }
+    public string? Type { get; set; }
+}
+
+[NotMapped]
+public class GeoJsonData
+{
+    public string? Type { get; set; }
+    public JObject? Properties { get; set; }
+    [JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
+    public Geometry? Geometry { get; set; }
 }

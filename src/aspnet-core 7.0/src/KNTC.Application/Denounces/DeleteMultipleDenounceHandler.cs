@@ -15,9 +15,9 @@ public class DeleteMultipleDenounceHandler
         : IDistributedEventHandler<DeleteMultipleDenounceEto>,
           ITransientDependency
 {
-    private readonly IRepository<SpatialData, int> _spatialDataRepo;
+    private readonly ISpatialDataRepository _spatialDataRepo;
     private readonly SpatialDataManager _spatialDataManager;
-    public DeleteMultipleDenounceHandler(IRepository<SpatialData, int> spatialDataRepo,
+    public DeleteMultipleDenounceHandler(ISpatialDataRepository spatialDataRepo,
         SpatialDataManager spatialDataManager)
     {
         _spatialDataRepo = spatialDataRepo;
@@ -25,7 +25,7 @@ public class DeleteMultipleDenounceHandler
     }
     public async Task HandleEventAsync(DeleteMultipleDenounceEto eventData)
     {
-        var spatialDatas = await _spatialDataRepo.GetListAsync(x => eventData.Ids.Contains(x.IdHoSo));
+        var spatialDatas = await _spatialDataRepo.GetListByIdHoSoAsync(eventData.Ids);
         await _spatialDataRepo.DeleteManyAsync(spatialDatas);
     }
 }

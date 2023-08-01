@@ -15,9 +15,9 @@ public class CreateComplainHandler
         : IDistributedEventHandler<CreateComplainEto>,
           ITransientDependency
 {
-    private readonly IRepository<SpatialData, int> _spatialDataRepo;
+    private readonly ISpatialDataRepository _spatialDataRepo;
     private readonly SpatialDataManager _spatialDataManager;
-    public CreateComplainHandler(IRepository<SpatialData, int> spatialDataRepo,
+    public CreateComplainHandler(ISpatialDataRepository spatialDataRepo,
         SpatialDataManager spatialDataManager)
     {
         _spatialDataRepo = spatialDataRepo;

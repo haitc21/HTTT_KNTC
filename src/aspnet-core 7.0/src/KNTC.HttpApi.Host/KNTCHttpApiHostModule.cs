@@ -38,6 +38,7 @@ using Volo.Abp.Json.Newtonsoft;
 using Microsoft.AspNetCore.Mvc;
 using NetTopologySuite;
 using NetTopologySuite.IO.Converters;
+using NetTopologySuite.Geometries;
 
 namespace KNTC;
 [DependsOn(
@@ -82,8 +83,15 @@ public class KNTCHttpApiHostModule : AbpModule
         Configure<MvcNewtonsoftJsonOptions>(options =>
         {
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
-            options.SerializerSettings.Converters.Add(new GeometryConverter(geometryFactory));
+            //var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
+            //options.SerializerSettings.Converters.Add(new GeometryConverter(geometryFactory));
+            var geometryFactoryEx = new GeometryFactoryEx(new PrecisionModel(), 4326)
+            {
+                OrientationOfExteriorRing = LinearRingOrientation.CounterClockwise,
+            };
+
+            options.SerializerSettings.Converters.Add(new GeometryConverter(geometryFactoryEx));
+            options.SerializerSettings.Converters.Add(new FeatureConverter());
         });
     }
     private void ConfigureResponseCaching(ServiceConfigurationContext context)
