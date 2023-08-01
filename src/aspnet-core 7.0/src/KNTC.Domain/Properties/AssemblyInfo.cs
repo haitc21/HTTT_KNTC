@@ -1,3 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-[assembly:InternalsVisibleToAttribute("KNTC.Domain.Tests")]
-[assembly:InternalsVisibleToAttribute("KNTC.TestBase")]
+
+[assembly: InternalsVisibleToAttribute("KNTC.Domain.Tests")]
+[assembly: InternalsVisibleToAttribute("KNTC.TestBase")]

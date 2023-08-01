@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using KNTC.EntityFrameworkCore;
+using KNTC.MultiTenancy;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,38 +7,39 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using KNTC.EntityFrameworkCore;
-using KNTC.MultiTenancy;
-using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
+using StackExchange.Redis;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Minio;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
-using Volo.Abp.Localization;
+using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
-using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.BlobStoring.Minio;
-using Volo.Abp.BlobStoring;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
 using Volo.Abp.Timing;
-using Microsoft.Extensions.Caching.Distributed;
-using Volo.Abp.Json.Newtonsoft;
-using Microsoft.AspNetCore.Mvc;
-using NetTopologySuite;
-using NetTopologySuite.IO.Converters;
-using NetTopologySuite.Geometries;
+using Volo.Abp.VirtualFileSystem;
 
 namespace KNTC;
+
 [DependsOn(
     typeof(KNTCHttpApiModule),
     typeof(AbpAutofacModule),
@@ -78,6 +77,7 @@ public class KNTCHttpApiHostModule : AbpModule
             options.Kind = DateTimeKind.Local;
         });
     }
+
     private void ConfigureJsonSerialize(ServiceConfigurationContext context)
     {
         Configure<MvcNewtonsoftJsonOptions>(options =>
@@ -94,10 +94,12 @@ public class KNTCHttpApiHostModule : AbpModule
             options.SerializerSettings.Converters.Add(new FeatureConverter());
         });
     }
+
     private void ConfigureResponseCaching(ServiceConfigurationContext context)
     {
         context.Services.AddResponseCaching();
     }
+
     private void ConfigureBlob(ServiceConfigurationContext context, IConfiguration configuration)
     {
         Configure<AbpBlobStoringOptions>(options =>
@@ -114,14 +116,16 @@ public class KNTCHttpApiHostModule : AbpModule
             });
         });
     }
+
     private void ConfigureCache(IConfiguration configuration)
     {
-        Configure<AbpDistributedCacheOptions>(options => {
+        Configure<AbpDistributedCacheOptions>(options =>
+        {
             options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
             {
                 AbsoluteExpiration = DateTimeOffset.Now.AddHours(24)
             };
-            options.KeyPrefix = "KNTC:"; 
+            options.KeyPrefix = "KNTC:";
         });
     }
 
@@ -167,7 +171,6 @@ public class KNTCHttpApiHostModule : AbpModule
                 options.Audience = "KNTC";
             });
     }
-
 
     private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
     {

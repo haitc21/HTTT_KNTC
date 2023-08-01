@@ -4,6 +4,7 @@ using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
 using KNTC.RedisCache;
+using KNTC.SpatialDatas;
 using KNTC.Summaries;
 using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +21,6 @@ using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.ObjectMapping;
 
 namespace KNTC.Complains;
 
@@ -41,6 +41,7 @@ public class ComplainAppService : CrudAppService<
     private readonly IRepository<Unit, int> _unitRepo;
     private readonly IRedisCacheService _cacheService;
     private readonly IDistributedEventBus _distributedEventBus;
+    private readonly ISpatialDataRepository _spatialDataRepo;
 
     public ComplainAppService(IRepository<Complain, Guid> repository,
         IComplainRepository complainRepo,
@@ -51,7 +52,8 @@ public class ComplainAppService : CrudAppService<
         IHostEnvironment env,
         IRepository<Unit, int> unitRepo,
         IRedisCacheService cacheService,
-        IDistributedEventBus distributedEventBus) : base(repository)
+        IDistributedEventBus distributedEventBus,
+        ISpatialDataRepository spatialDataRepo) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
@@ -65,7 +67,37 @@ public class ComplainAppService : CrudAppService<
         _unitRepo = unitRepo;
         _cacheService = cacheService;
         _distributedEventBus = distributedEventBus;
+        _spatialDataRepo = spatialDataRepo;
     }
+
+    //[AllowAnonymous]
+    //public override async Task<ComplainDto> GetAsync(Guid id)
+    //{
+    //    var complain = await _complainRepo.GetAsync(id);
+    //    var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
+    //    if ((hasPermission.Succeeded == false && complain.CongKhai == false)
+    //        || (CurrentUser.Id != complain.CreatorId && CurrentUser.Id != complain.LastModifierId))
+    //    {
+    //        return null;
+    //    }
+    //    var result = ObjectMapper.Map<Complain, ComplainDto>(complain);
+    //    var spatialData = await _spatialDataRepo.FindByIdHoSoAsync(id);
+    //    if (spatialData != null)
+    //    {
+    //        result.DuLieuToaDo = SpatialDataHelper.ConvertPointToString(spatialData.Point);
+    //        if (spatialData.Geometry != null)
+    //        {
+    //            result.DuLieuHinhHoc = SpatialDataHelper.ConvertGeoDataToJson(new GeoJsonData()
+    //            {
+    //                type = spatialData.Type,
+    //                properties = spatialData.Properties,
+    //                geometry = spatialData.Geometry
+    //            });
+    //        }
+
+    //    }
+    //    return result;
+    //}
 
     [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)

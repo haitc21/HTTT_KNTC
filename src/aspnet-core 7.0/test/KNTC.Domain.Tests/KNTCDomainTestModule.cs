@@ -8,5 +8,4 @@ namespace KNTC;
     )]
 public class KNTCDomainTestModule : AbpModule
 {
-
 }

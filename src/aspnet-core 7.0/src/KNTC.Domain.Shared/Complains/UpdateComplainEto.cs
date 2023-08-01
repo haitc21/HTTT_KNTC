@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
 using Volo.Abp.EventBus;
 
 namespace KNTC.Complains;
@@ -11,12 +8,13 @@ public class UpdateComplainEto
 {
     public UpdateComplainEto()
     {
-
     }
+
     public UpdateComplainEto(Guid id)
     {
         Id = id;
     }
+
     public Guid Id { get; set; }
     public string MaHoSo { get; private set; }
     public LinhVuc LinhVuc { get; set; }
@@ -33,5 +31,3 @@ public class UpdateComplainEto
     public string? DuLieuToaDo { get; set; }
     public string? DuLieuHinhHoc { get; set; }
 }
-
-

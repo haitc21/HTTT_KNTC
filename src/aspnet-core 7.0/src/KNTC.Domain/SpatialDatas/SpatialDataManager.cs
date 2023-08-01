@@ -1,20 +1,9 @@
-﻿using KNTC;
-using KNTC.Complains;
+﻿using KNTC.Complains;
 using KNTC.Denounces;
-using NetTopologySuite;
-using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
-using NetTopologySuite.IO;
-using Newtonsoft.Json;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
-using Volo.Abp.Json;
 
 namespace KNTC.SpatialDatas;
 
@@ -36,7 +25,7 @@ public class SpatialDataManager : DomainService
                                                 [NotNull] int maTinhTP,
                                                 [NotNull] int maQuanHuyen,
                                                 [NotNull] int maXaPhuongTT,
-                                                [NotNull] LoaiKetQua ketQua,
+                                                [NotNull] LoaiKetQua? ketQua,
                                                 [NotNull] bool congKhai,
                                                 string? duLieuToaDo,
                                                 string? duLieuHinhHoc)
@@ -59,11 +48,12 @@ public class SpatialDataManager : DomainService
             KetQua = ketQua,
             CongKhai = congKhai,
             Point = SpatialDataHelper.ConvertStringToPoint(duLieuToaDo),
-            Geometry = geoJsonData?.Geometry,
-            Type = geoJsonData?.Type,
-            Properties = geoJsonData?.Properties
+            Geometry = geoJsonData?.geometry,
+            Type = geoJsonData?.type,
+            Properties = geoJsonData?.properties
         };
     }
+
     public async Task<SpatialData> CreateAsync(CreateComplainEto complainEto)
     {
         var geoJsonData = SpatialDataHelper.ConvertJsonToGeoData(complainEto.DuLieuHinhHoc);
@@ -84,12 +74,13 @@ public class SpatialDataManager : DomainService
             KetQua = complainEto.KetQua,
             CongKhai = complainEto.CongKhai,
             Point = SpatialDataHelper.ConvertStringToPoint(complainEto.DuLieuToaDo),
-            Geometry = geoJsonData?.Geometry,
-            Type = geoJsonData?.Type,
-            Properties = geoJsonData?.Properties
+            Geometry = geoJsonData?.geometry,
+            Type = geoJsonData?.type,
+            Properties = geoJsonData?.properties
         };
         return spatialData;
     }
+
     public async Task<SpatialData> CreateAsync(CreateDenounceEto denouceEto)
     {
         var geoJsonData = SpatialDataHelper.ConvertJsonToGeoData(denouceEto.DuLieuHinhHoc);
@@ -110,12 +101,13 @@ public class SpatialDataManager : DomainService
             KetQua = denouceEto.KetQua,
             CongKhai = denouceEto.CongKhai,
             Point = SpatialDataHelper.ConvertStringToPoint(denouceEto.DuLieuToaDo),
-            Geometry = geoJsonData?.Geometry,
-            Type = geoJsonData?.Type,
-            Properties = geoJsonData?.Properties
+            Geometry = geoJsonData?.geometry,
+            Type = geoJsonData?.type,
+            Properties = geoJsonData?.properties
         };
         return spatialData;
     }
+
     public async Task UpdateAsync([NotNull] SpatialData spatialData,
                                   [NotNull] string maHoSo,
                                   [NotNull] string tieuDe,
@@ -144,10 +136,9 @@ public class SpatialDataManager : DomainService
         spatialData.KetQua = ketQua;
         spatialData.CongKhai = congKhai;
         spatialData.Point = SpatialDataHelper.ConvertStringToPoint(duLieuToaDo);
-        spatialData.Geometry = geoJsonData?.Geometry;
-        spatialData.Type = geoJsonData?.Type;
-        spatialData.Properties = geoJsonData?.Properties;
-
+        spatialData.Geometry = geoJsonData?.geometry;
+        spatialData.Type = geoJsonData?.type;
+        spatialData.Properties = geoJsonData?.properties;
     }
 
     public async Task UpdateAsync([NotNull] SpatialData spatialData, [NotNull] UpdateComplainEto complainEto)
@@ -165,10 +156,11 @@ public class SpatialDataManager : DomainService
         spatialData.KetQua = complainEto.KetQua;
         spatialData.CongKhai = complainEto.CongKhai;
         spatialData.Point = SpatialDataHelper.ConvertStringToPoint(complainEto.DuLieuToaDo);
-        spatialData.Geometry = geoJsonData?.Geometry;
-        spatialData.Type = geoJsonData?.Type;
-        spatialData.Properties = geoJsonData?.Properties;
+        spatialData.Geometry = geoJsonData?.geometry;
+        spatialData.Type = geoJsonData?.type;
+        spatialData.Properties = geoJsonData?.properties;
     }
+
     public async Task UpdateAsync([NotNull] SpatialData spatialData, [NotNull] UpdateDenounceEto denounceEto)
     {
         var geoJsonData = SpatialDataHelper.ConvertJsonToGeoData(denounceEto.DuLieuHinhHoc);
@@ -184,8 +176,8 @@ public class SpatialDataManager : DomainService
         spatialData.KetQua = denounceEto.KetQua;
         spatialData.CongKhai = denounceEto.CongKhai;
         spatialData.Point = SpatialDataHelper.ConvertStringToPoint(denounceEto.DuLieuToaDo);
-        spatialData.Geometry = geoJsonData?.Geometry;
-        spatialData.Type = geoJsonData?.Type;
-        spatialData.Properties = geoJsonData?.Properties;
+        spatialData.Geometry = geoJsonData?.geometry;
+        spatialData.Type = geoJsonData?.type;
+        spatialData.Properties = geoJsonData?.properties;
     }
 }

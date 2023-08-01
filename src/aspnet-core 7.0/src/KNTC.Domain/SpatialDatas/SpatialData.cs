@@ -1,5 +1,4 @@
-﻿using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -17,9 +16,10 @@ public class SpatialData : Entity<int>
     public SpatialData(int Id) : base(Id)
     {
     }
+
     public Guid IdHoSo { get; set; }
     public LoaiVuViec LoaiVuViec { get; set; }
-    public string MaHoSo { get;  set; }
+    public string MaHoSo { get; set; }
     public LinhVuc LinhVuc { get; set; }
     public string TieuDe { get; set; }
     public string NguoiNopDon { get; set; }
@@ -31,10 +31,13 @@ public class SpatialData : Entity<int>
     public int MaXaPhuongTT { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public bool CongKhai { get; set; }
+
     [JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
     public Point? Point { get; set; }
+
     [JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
     public Geometry? Geometry { get; set; }
+
     public JObject? Properties { get; set; }
     public string? Type { get; set; }
 }
@@ -42,8 +45,9 @@ public class SpatialData : Entity<int>
 [NotMapped]
 public class GeoJsonData
 {
-    public string? Type { get; set; }
-    public JObject? Properties { get; set; }
+    public string? type { get; set; }
+    public JObject? properties { get; set; }
+
     [JsonConverter(typeof(NetTopologySuite.IO.Converters.GeometryConverter))]
-    public Geometry? Geometry { get; set; }
+    public Geometry? geometry { get; set; }
 }

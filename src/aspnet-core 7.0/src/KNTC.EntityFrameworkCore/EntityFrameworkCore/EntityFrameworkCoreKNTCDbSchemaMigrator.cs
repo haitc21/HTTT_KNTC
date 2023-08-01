@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using KNTC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using KNTC.Data;
+using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace KNTC.EntityFrameworkCore;

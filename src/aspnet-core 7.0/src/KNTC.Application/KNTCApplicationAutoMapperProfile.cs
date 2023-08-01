@@ -97,7 +97,7 @@ public class KNTCApplicationAutoMapperProfile : Profile
             .ForMember(dto => dto.LinhVuc, opt => opt.MapFrom(c => c.LinhVuc.ToVNString()))
             .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVNString() : string.Empty));
         CreateMap<Summary, LogBookExcelDto>()
-            .ForMember(dto => dto.KN, opt => opt.MapFrom(c => (c.LoaiVuViec == LoaiVuViec.KhieuNai)? "☑": "☒"))
+            .ForMember(dto => dto.KN, opt => opt.MapFrom(c => (c.LoaiVuViec == LoaiVuViec.KhieuNai) ? "☑" : "☒"))
             .ForMember(dto => dto.TC, opt => opt.MapFrom(c => (c.LoaiVuViec == LoaiVuViec.ToCao) ? "☑" : "☒"))
             .ForMember(dto => dto.LinhVuc, opt => opt.MapFrom(c => c.LinhVuc.ToVNString()))
             .ForMember(dto => dto.DaGQ, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVNString() : string.Empty))

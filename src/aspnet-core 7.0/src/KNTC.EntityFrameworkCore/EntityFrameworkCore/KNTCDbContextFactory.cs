@@ -1,13 +1,14 @@
-﻿using System;
-using System.IO;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
 namespace KNTC.EntityFrameworkCore;
 
 /* This class is needed for EF Core console commands
  * (like Add-Migration and Update-Database commands) */
+
 public class KNTCDbContextFactory : IDesignTimeDbContextFactory<KNTCDbContext>
 {
     public KNTCDbContext CreateDbContext(string[] args)
@@ -31,7 +32,6 @@ public class KNTCDbContextFactory : IDesignTimeDbContextFactory<KNTCDbContext>
         var builder = new ConfigurationBuilder()
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../KNTC.DbMigrator/"))
             .AddJsonFile("appsettings.json", optional: false);
-
 
         return builder.Build();
     }

@@ -54,6 +54,7 @@ public class KNTCDbContext :
 
     //Identity
     public DbSet<IdentityUser> Users { get; set; }
+
     public DbSet<IdentityRole> Roles { get; set; }
     public DbSet<IdentityClaimType> ClaimTypes { get; set; }
     public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
@@ -63,9 +64,11 @@ public class KNTCDbContext :
 
     // Tenant Management
     public DbSet<Tenant> Tenants { get; set; }
+
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
-    #endregion
+    #endregion Entities from the modules
+
     public DbSet<UserInfo> UserInfos { get; set; }
     public DbSet<Complain> Complains { get; set; }
     public DbSet<Denounce> Denounces { get; set; }
@@ -80,7 +83,6 @@ public class KNTCDbContext :
     public KNTCDbContext(DbContextOptions<KNTCDbContext> options)
         : base(options)
     {
-
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

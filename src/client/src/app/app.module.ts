@@ -28,8 +28,6 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
 import { CommonModule } from '@angular/common';
-import { ComplainModule } from './pages/complain/complain.module';
-import { DenounceModule } from './pages/denounce/denounce.module';
 
 @NgModule({
   imports: [
@@ -46,9 +44,7 @@ import { DenounceModule } from './pages/denounce/denounce.module';
     ToastModule,
     BlockUIModule,
     ProgressSpinnerModule,
-    PanelModule,
-    ComplainModule,
-    DenounceModule
+    PanelModule
   ],
   declarations: [AppComponent],
   providers: [

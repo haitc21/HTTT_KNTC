@@ -13,7 +13,6 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.ObjectMapping;
 
 namespace KNTC.SysConfigs;
 
@@ -134,6 +133,7 @@ public class SysConfigAppService : CrudAppService<
         await _cacheAll.RemoveAsync("All");
         await Repository.DeleteManyAsync(ids);
     }
+
     [AllowAnonymous]
     [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
     public async Task<AllSysConfigCacheItem> GetAllConfigsAsync()

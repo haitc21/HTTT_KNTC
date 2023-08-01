@@ -1,23 +1,24 @@
-using System;
-using System.IO;
-using System.Linq;
+using KNTC.EntityFrameworkCore;
+using KNTC.Localization;
+using KNTC.MultiTenancy;
 using Localization.Resources.AbpUi;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using KNTC.EntityFrameworkCore;
-using KNTC.Localization;
-using KNTC.MultiTenancy;
 using StackExchange.Redis;
+using System;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
@@ -31,14 +32,9 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation.Urls;
-using Volo.Abp.UI;
-using Volo.Abp.VirtualFileSystem;
-using Microsoft.Extensions.Hosting.Internal;
-using Microsoft.AspNetCore.Hosting;
-using System.Security.Cryptography.X509Certificates;
 using Volo.Abp.Timing;
-using Microsoft.Extensions.Caching.Distributed;
+using Volo.Abp.UI.Navigation.Urls;
+using Volo.Abp.VirtualFileSystem;
 
 namespace KNTC;
 
@@ -88,8 +84,8 @@ public class KNTCAuthServerModule : AbpModule
         //        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
         //        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
         //    });
-
     }
+
     private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)
     {
         string fileName = Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx");
@@ -155,7 +151,7 @@ public class KNTCAuthServerModule : AbpModule
         {
             options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
             {
-                AbsoluteExpiration =  DateTimeOffset.Now.AddHours(12)
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
             };
             options.KeyPrefix = "KNTC:";
         });

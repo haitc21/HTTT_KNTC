@@ -5,10 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 using Volo.Abp;
 
 namespace KNTC.SpatialDatas;
@@ -26,13 +22,7 @@ public static class SpatialDataHelper
             return result;
         }
     }
-    public static GeoJsonData? ConvertJsonToGeoData(string? json)
-    {
-        if (json.IsNullOrEmpty()) return null;
-        var reader = new NetTopologySuite.IO.GeoJsonReader();
-        var result = reader.Read<GeoJsonData>(json);
-        return result;
-    }
+
     public static string ConvertGeometryToJson(Geometry? geometry)
     {
         if (geometry == null) return string.Empty;
@@ -44,6 +34,21 @@ public static class SpatialDataHelper
             return stringWriter.ToString();
         }
     }
+
+    public static string ConvertGeoDataToJson(GeoJsonData geoJsonData)
+    {
+        if (geoJsonData == null) return string.Empty;
+        return JsonConvert.SerializeObject(geoJsonData, Formatting.None);
+    }
+
+    public static GeoJsonData? ConvertJsonToGeoData(string? json)
+    {
+        if (json.IsNullOrEmpty()) return null;
+        var reader = new NetTopologySuite.IO.GeoJsonReader();
+        var result = reader.Read<GeoJsonData>(json);
+        return result;
+    }
+
     public static Point? ConvertStringToPoint(string? latLng)
     {
         if (latLng.IsNullOrEmpty()) return null;
@@ -51,10 +56,10 @@ public static class SpatialDataHelper
         string[] parts = latLng.Split(',');
 
         // Step 2: Parse latitude and longitude as decimal
-        if (parts.Length != 2 || !decimal.TryParse(parts[0], NumberStyles.Float, CultureInfo.InvariantCulture, out decimal latitude) ||
-            !decimal.TryParse(parts[1], NumberStyles.Float, CultureInfo.InvariantCulture, out decimal longitude))
+        if (parts.Length != 2 || !decimal.TryParse(parts[0], NumberStyles.Float, CultureInfo.GetCultureInfo("en-US"), out decimal latitude) ||
+            !decimal.TryParse(parts[1], NumberStyles.Float, CultureInfo.GetCultureInfo("en-US"), out decimal longitude))
         {
-            throw new UserFriendlyException("Dữ liệu tọa độ sai định dạng 'lat, lng'");
+            throw new UserFriendlyException("Dữ liệu tọa độ sai định dạng 'Vĩ độ (lat), Kinh độ (lng)'");
         }
         // Step 3: Create Coordinate using latitude and longitude
         Coordinate coordinate = new Coordinate((double)longitude, (double)latitude);
@@ -65,6 +70,7 @@ public static class SpatialDataHelper
 
         return point;
     }
+
     public static string ConvertPointToString(Point point)
     {
         if (point == null) return string.Empty;
@@ -73,17 +79,12 @@ public static class SpatialDataHelper
         double longitude = point.Coordinate.X;
 
         // Step 2: Format latitude and longitude as strings
-        string latString = latitude.ToString();
-        string lngString = longitude.ToString();
+        string latString = latitude.ToString("G", CultureInfo.GetCultureInfo("en-US"));
+        string lngString = longitude.ToString("G", CultureInfo.GetCultureInfo("en-US"));
 
         // Step 3: Concatenate latitude and longitude with a comma separator
         string latLngString = $"{latString}, {lngString}";
 
         return latLngString;
-    }
-    public static string ConvertGeoDataToJson(GeoJsonData geoJsonData)
-    {
-        if(geoJsonData == null) return string.Empty;
-        return JsonConvert.SerializeObject(geoJsonData, Formatting.Indented);
     }
 }

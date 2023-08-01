@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using KNTC.MultiTenancy;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using KNTC.MultiTenancy;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
@@ -14,10 +14,9 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
-using Volo.Abp.Timing;
-using System;
 
 namespace KNTC;
+
 [DependsOn(
     typeof(KNTCDomainSharedModule),
     typeof(AbpAuditLoggingDomainModule),
@@ -46,10 +45,10 @@ public class KNTCDomainModule : AbpModule
             options.IsEnabled = MultiTenancyConsts.IsEnabled;
         });
 
-//        Configure<AbpClockOptions>(options =>
-//        {
-//            options.Kind = DateTimeKind.Local;
-//        });
+        //        Configure<AbpClockOptions>(options =>
+        //        {
+        //            options.Kind = DateTimeKind.Local;
+        //        });
 
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());

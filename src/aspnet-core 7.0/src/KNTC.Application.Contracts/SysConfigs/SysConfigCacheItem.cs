@@ -9,6 +9,7 @@ public class SysConfigCacheItem
     public string Name { get; set; }
     public string Value { get; set; }
 }
+
 [CacheName("AllSysConfig")]
 public class AllSysConfigCacheItem
 {

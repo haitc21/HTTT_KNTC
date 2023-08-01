@@ -26,7 +26,6 @@ public class CreateDenounceDto
     [MaxLength(KNTCValidatorConsts.MaxCccdCmndLength)]
     public string CccdCmnd { get; set; }
 
-    
     //[Required]
     //public DateTime NgayCapCccdCmnd { get; set; }
     //[Required]

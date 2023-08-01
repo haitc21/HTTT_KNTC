@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Volo.Abp.EventBus;
 
 namespace KNTC.Denounces;
@@ -10,12 +8,13 @@ public class CreateDenounceEto
 {
     public CreateDenounceEto()
     {
-
     }
+
     public CreateDenounceEto(Guid id)
     {
-        Id= id;
+        Id = id;
     }
+
     public Guid Id { get; set; }
     public string MaHoSo { get; private set; }
     public LinhVuc LinhVuc { get; set; }

@@ -98,7 +98,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     private dialogService: DialogService,
     private sysConfigService: GetSysConfigService,
     public layoutService: LayoutService
-  ) {}
+  ) { }
   ngAfterViewInit() {
     this.getSysConfigAndInitMap();
   }
@@ -908,7 +908,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
       L.tooltip()
         .setLatLng(e.latlng)
         .setContent(
-          `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Vĩ độ: ${e.latlng.lat}, Kinh độ: ${e.latlng.lng} </p>`
+          `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Vĩ độ (lat): ${e.latlng.lat}, Kinh độ (lng): ${e.latlng.lng} </p>`
         )
         .addTo(this.map);
     });
@@ -989,7 +989,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         L.tooltip()
           .setLatLng(e.latlng)
           .setContent(
-            `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Vĩ độ: ${e.latlng.lat}, Kinh độ: ${e.latlng.lng} </p>`
+            `<h5>Đã xác nhận tọa độ tại vị trí: </h5> </br> <p>Vĩ độ (lat): ${e.latlng.lat}, Kinh độ (lng): ${e.latlng.lng} </p>`
           )
           .addTo(this.map);
       }
@@ -1029,12 +1029,14 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         let geojson: any;
 
         if (this.checkToado(dataMap.duLieuToaDo)) {
+          debugger
           //Có tọa độ hợp lệ thì lấy tọa độ
           toado = this.convertStringCoordiate(dataMap.duLieuToaDo);
         } else {
           //Không có tọa độ thì lấy điểm đầu tiên trong hình học
           //geometry = JSON.parse(dataMap.duLieuHinhHoc);
           if (dataMap.duLieuHinhHoc != null && dataMap.duLieuHinhHoc.trim() != '') {
+            debugger
             geojson = JSON.parse(dataMap.duLieuHinhHoc);
             var coordinates = geojson.geometry.coordinates;
             //var coordinates = geometry.coordinates;
@@ -1046,7 +1048,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         var info = this.info;
         //var pros = this.buildProperties(dataMap);
         //var infoContent = this.buildInfoContent(pros);
-
+        debugger
         const marker = L.marker(toado, {
           icon: dataMap.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
         });

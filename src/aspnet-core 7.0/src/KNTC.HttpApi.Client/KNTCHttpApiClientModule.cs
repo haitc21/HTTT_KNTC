@@ -1,16 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.SettingManagement;
-using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.Timing;
-using System;
+using Volo.Abp.VirtualFileSystem;
 
 namespace KNTC;
+
 [DependsOn(
     typeof(KNTCApplicationContractsModule),
     typeof(AbpAccountHttpApiClientModule),

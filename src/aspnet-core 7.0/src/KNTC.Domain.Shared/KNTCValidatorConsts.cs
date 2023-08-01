@@ -6,8 +6,10 @@ public static class KNTCValidatorConsts
     public const int MaxTieuDeLength = 100;
     public const int MaxTenNguoiLength = 100;
     public const int MaxCccdCmndLength = 50;
+
     //public const int MaxNoiCapCccdCmnd = 50;
     public const int MaxSDTLength = 50;
+
     public const int MaxEmailLength = 100;
     public const int MaxDiaChiLength = 250;
     public const int MaxBoPhanXLLength = 250;

@@ -15,7 +15,7 @@ public class SummaryExcelDto
     public string ToBanDo { get; set; }
     public DateTime ThoiGianTiepNhan { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
-    public string BoPhanDangXL { get; set; }    
+    public string BoPhanDangXL { get; set; }
     public string KetQua { get; set; }
     //public string? GhiChu { get; set; } = "";
 }

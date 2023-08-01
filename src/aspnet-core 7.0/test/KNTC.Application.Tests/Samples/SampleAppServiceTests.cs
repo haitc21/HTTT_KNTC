@@ -10,6 +10,7 @@ namespace KNTC.Samples;
  * (like IIdentityUserAppService here).
  * Only test your own application services.
  */
+
 public class SampleAppServiceTests : KNTCApplicationTestBase
 {
     private readonly IIdentityUserAppService _userAppService;

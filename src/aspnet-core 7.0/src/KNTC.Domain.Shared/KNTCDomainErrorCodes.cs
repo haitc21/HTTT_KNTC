@@ -2,7 +2,6 @@
 
 public static class KNTCDomainErrorCodes
 {
-
     public const string HoSoAlreadyExist = "KNTCEx:00001";
     public const string LanGQAlreadyExist = "KNTCEx:00002";
     public const string KQGQHoSoNotExist = "KNTCEx:00003";

@@ -1,5 +1,5 @@
-﻿using Localization.Resources.AbpUi;
-using KNTC.Localization;
+﻿using KNTC.Localization;
+using Localization.Resources.AbpUi;
 using Volo.Abp.Account;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -8,10 +8,9 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.HttpApi;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
-using Volo.Abp.Timing;
-using System;
 
 namespace KNTC;
+
 [DependsOn(
     typeof(KNTCApplicationContractsModule),
     typeof(AbpAccountHttpApiModule),
