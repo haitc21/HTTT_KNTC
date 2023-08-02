@@ -79,7 +79,7 @@
     "@volo/ngx-lepton-x.lite" "1.0.5"
     tslib "^2.1.0"
 
-"@abp/ng.theme.shared@~6.0.3":
+"@abp/ng.theme.shared@~6.0.0", "@abp/ng.theme.shared@~6.0.3":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@abp/ng.theme.shared/-/ng.theme.shared-6.0.3.tgz#6e2b68e7e68a19396dbaa6d3773d856009200e2b"
   integrity sha512-ZIfjmwdtjhGO0MWQ0CKDY6f37LuU6cVRGGVVLs9pS+VA4zfNwQfuAmgyQY8JV/FAswMK6lR3s4cqI1hNaxcMuQ==

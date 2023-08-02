@@ -242,7 +242,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     private permissionService: PermissionService,
     private notificationService: NotificationService,
     private layoutService: LayoutService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getPermission();
@@ -431,7 +431,6 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   }
 
   saveChange() {
-    console.log(this.form.value);
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) {
       this.notificationService.showWarn(MessageConstants.FORM_INVALID);
@@ -489,13 +488,13 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         );
     } else {
       let value = this.form.value as UpdateDenounceDto;
-      
       this.denounceService
         .update(this.config.data.id, value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           data => {
             this.layoutService.blockUI$.next(false);
+            this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
             this.ref.close(data);
           },
           err => {

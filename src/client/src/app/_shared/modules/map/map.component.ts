@@ -980,7 +980,6 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
             `<h5>Đã xác nhận dữ liệu hình học mới: </h5> </br> <p>${this.duLieuHinhhoc}</p>`
           )
           .addTo(this.map);
-        //console.log(geojson);
       } else {
         //Chỉ cho duy nhất 1 marker
         var e = layer.getLatLng();
@@ -995,7 +994,6 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
     });
     //map.on("draw:created", function (e) { //L.Draw.Event.CREATED
-    //map.on('draw:drawstop',  (e) => { console.log("end");
   }
 
   letZoom(center) {
@@ -1029,14 +1027,14 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         let geojson: any;
 
         if (this.checkToado(dataMap.duLieuToaDo)) {
-          debugger
+          
           //Có tọa độ hợp lệ thì lấy tọa độ
           toado = this.convertStringCoordiate(dataMap.duLieuToaDo);
         } else {
           //Không có tọa độ thì lấy điểm đầu tiên trong hình học
           //geometry = JSON.parse(dataMap.duLieuHinhHoc);
           if (dataMap.duLieuHinhHoc != null && dataMap.duLieuHinhHoc.trim() != '') {
-            debugger
+            
             geojson = JSON.parse(dataMap.duLieuHinhHoc);
             var coordinates = geojson.geometry.coordinates;
             //var coordinates = geometry.coordinates;
@@ -1048,7 +1046,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         var info = this.info;
         //var pros = this.buildProperties(dataMap);
         //var infoContent = this.buildInfoContent(pros);
-        debugger
+        
         const marker = L.marker(toado, {
           icon: dataMap.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
         });
@@ -1153,7 +1151,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
           }
         });
         this.quyhoach.on('tileerror', error => {
-          console.log('WMS tiles failed to load:', error);
+          console.error('WMS tiles failed to load:', error);
           this.layoutService.blockUI$.next(false);
         });
         this.quyhoach.addTo(this.map);

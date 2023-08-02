@@ -277,6 +277,7 @@ public class DenounceAppService : CrudAppService<
         await _denounceRepo.UpdateAsync(denounce);
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var updateEto = ObjectMapper.Map<UpdateDenounceDto, UpdateDenounceEto>(input);
+        updateEto.Id = denounce.Id;
         await _distributedEventBus.PublishAsync(updateEto);
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }

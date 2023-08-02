@@ -21,13 +21,13 @@ import { GlobalHttpInterceptorService } from './_shared/interceptors/error-handl
 
 import { storeLocaleData } from '@abp/ng.core/locale';
 import(`@/../@angular/common/locales/vi.mjs`).then(m => storeLocaleData(m.default, 'vi'));
-
 import localeVi from '@angular/common/locales/vi';
 
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
 import { CommonModule } from '@angular/common';
+import { ThemeSharedModule } from '@abp/ng.theme.shared';
 
 @NgModule({
   imports: [
@@ -38,8 +38,16 @@ import { CommonModule } from '@angular/common';
     AppLayoutModule,
     CoreModule.forRoot({
       environment,
-      registerLocaleFn: registerLocale(),
+      registerLocaleFn: registerLocale(
+        {
+          cultureNameLocaleFileMap: {
+            "DotnetCultureName": "AngularLocaleFileName",
+            "vi-VN": "vi"
+          },
+        },
+      )
     }),
+    ThemeSharedModule.forRoot(),
     ConfirmDialogModule,
     ToastModule,
     BlockUIModule,
@@ -68,4 +76,4 @@ import { CommonModule } from '@angular/common';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

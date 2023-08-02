@@ -218,7 +218,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     private permissionService: PermissionService,
     private notificationService: NotificationService,
     private layoutService: LayoutService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getPermission();
@@ -460,14 +460,13 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         );
     } else {
       let value = this.form.value as UpdateComplainDto;
-      //console.log('cong khai', value.congKhai);
-
       this.complainService
         .update(this.config.data.id, value)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           data => {
             this.layoutService.blockUI$.next(false);
+            this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
             this.ref.close(data);
           },
           err => {

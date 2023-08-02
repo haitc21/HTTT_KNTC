@@ -414,7 +414,6 @@ export class DenounceComponent implements OnInit, OnDestroy {
 
     ref.onClose.subscribe((data: DenounceDto) => {
       if (data) {
-        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
         this.actionItem = null;
         this.resetFilter();

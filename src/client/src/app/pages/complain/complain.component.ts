@@ -402,9 +402,6 @@ export class ComplainComponent implements OnInit, OnDestroy {
 
           forkJoin(uploadObservables).subscribe(
             results => {
-              // results.forEach(res => {
-              //   this.notificationService.showSuccess(`${res}`);
-              // });
               this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
               this.layoutService.blockUI$.next(false);
               this.selectedItems = [];
@@ -445,7 +442,6 @@ export class ComplainComponent implements OnInit, OnDestroy {
 
     ref.onClose.subscribe((data: ComplainDto) => {
       if (data) {
-        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
         this.actionItem = null;
         this.resetFilter();
