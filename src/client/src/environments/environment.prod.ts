@@ -12,7 +12,9 @@ export const environment = {
   },
   oAuthConfig: {
     issuer: 'http://gqkntc.tnmtthainguyen.gov.vn:5101/',
+    redirectUri: baseUrl,
     clientId: 'KNTC_App',
+    responseType: 'code',
     scope: 'offline_access KNTC',
     requireHttps: false,
   },

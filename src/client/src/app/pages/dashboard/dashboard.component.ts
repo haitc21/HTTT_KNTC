@@ -8,7 +8,7 @@ import { GetSummaryListDto, SummaryChartDto, SummaryDto } from '../../proxy/summ
 import { SummaryService } from '@proxy/summaries';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
-import {Chart} from 'chart.js';
+import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 @Component({
   selector: 'app-dashboard',
@@ -95,12 +95,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Chart
   dataPieChart_KN: any;
-  pieChartOptions_KN: any;
   dataPieChart_TC: any;
+  pieChartOptions_KN: any;
   pieChartOptions_TC: any;
 
   dataBarChart: any;
   barChartOptions: any;
+  plugin = ChartDataLabels;
 
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();
@@ -110,7 +111,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public layoutService: LayoutService,
     private oAuthService: OAuthService,
     private summaryService: SummaryService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.buildBreadcumb();
@@ -143,7 +144,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.buildPieChart();
 
           this.buildBarChart();
-          
+
           this.layoutService.blockUI$.next(false);
         },
         error: () => {
@@ -198,10 +199,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  
+
   buildPieChart() {
+    const labels = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
+    const totalKN = this.dataChart.landComplain +
+      this.dataChart.enviromentComplain +
+      this.dataChart.waterComplain +
+      this.dataChart.mineralComplain;
     this.dataPieChart_KN = {
-      // labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
+      labels: labels,
       datasets: [
         {
           data: [
@@ -221,7 +227,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         title: {
           display: true,
           text: 'Khiếu nại',
-          font:{
+          font: {
             size: 16,
             weight: 'bold'
           }
@@ -229,25 +235,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
         maintainAspectRatio: false,
         responsive: true,
         legend: {
+          display: false,
           labels: {
             color: '#495057',
           },
         },
-        // Change options for ALL labels of THIS CHART
         datalabels: {
-          color: '#000000',
+          // color: '#000000',
+          color: '#fff',
           font: {
             size: 14,
+          },
+          formatter: (value, ctx) => {
+            const percentage = (value * 100 / totalKN);
+            return percentage !== 0 ? `${labels[ctx.dataIndex]} ${percentage.toFixed(2)}%` : '';
           }
         }
       }
     };
 
     this.dataPieChart_TC = {
-      // labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
+      labels: labels,
       datasets: [
         {
-          data: [            
+          data: [
             this.dataChart.landDenounce,
             this.dataChart.enviromentDenounce,
             this.dataChart.waterDenounce,
@@ -258,13 +269,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
       ],
     };
-
     this.pieChartOptions_TC = {
       plugins: {
         title: {
           display: true,
           text: 'Tố cáo',
-          font:{
+          font: {
             size: 16,
             weight: 'bold'
           }
@@ -272,16 +282,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
         maintainAspectRatio: false,
         responsive: true,
         legend: {
+          display: false,
           labels: {
             color: '#495057',
           },
         },
-        // Change options for ALL labels of THIS CHART
         datalabels: {
-          color: '#000000',
+          // color: '#000000',
+          color: '#fff',
           font: {
             size: 14,
-          }
+          },
+          formatter: (value, ctx) => {
+            const percentage = (value * 100 / totalKN);
+            return percentage !== 0 ? `${labels[ctx.dataIndex]} ${percentage.toFixed(2)}%` : '';
+          },
         }
       }
     };
