@@ -70,34 +70,34 @@ public class ComplainAppService : CrudAppService<
         _spatialDataRepo = spatialDataRepo;
     }
 
-    //[AllowAnonymous]
-    //public override async Task<ComplainDto> GetAsync(Guid id)
-    //{
-    //    var complain = await _complainRepo.GetAsync(id);
-    //    var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
-    //    if ((hasPermission.Succeeded == false && complain.CongKhai == false)
-    //        || (CurrentUser.Id != complain.CreatorId && CurrentUser.Id != complain.LastModifierId))
-    //    {
-    //        return null;
-    //    }
-    //    var result = ObjectMapper.Map<Complain, ComplainDto>(complain);
-    //    var spatialData = await _spatialDataRepo.FindByIdHoSoAsync(id);
-    //    if (spatialData != null)
-    //    {
-    //        result.DuLieuToaDo = SpatialDataHelper.ConvertPointToString(spatialData.Point);
-    //        if (spatialData.Geometry != null)
-    //        {
-    //            result.DuLieuHinhHoc = SpatialDataHelper.ConvertGeoDataToJson(new GeoJsonData()
-    //            {
-    //                type = spatialData.Type,
-    //                properties = spatialData.Properties,
-    //                geometry = spatialData.Geometry
-    //            });
-    //        }
+    [AllowAnonymous]
+    public override async Task<ComplainDto> GetAsync(Guid id)
+    {
+        var complain = await _complainRepo.GetAsync(id);
+        var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
+        if ((hasPermission.Succeeded == false && complain.CongKhai == false)
+            || (CurrentUser.Id != complain.CreatorId && CurrentUser.Id != complain.LastModifierId))
+        {
+            return null;
+        }
+        var result = ObjectMapper.Map<Complain, ComplainDto>(complain);
+        var spatialData = await _spatialDataRepo.FindByIdHoSoAsync(id);
+        if (spatialData != null)
+        {
+            result.DuLieuToaDo = SpatialDataHelper.ConvertPointToString(spatialData.Point);
+            if (spatialData.Geometry != null)
+            {
+                result.DuLieuHinhHoc = SpatialDataHelper.ConvertGeoDataToJson(new GeoJsonData()
+                {
+                    type = spatialData.Type,
+                    properties = spatialData.Properties,
+                    geometry = spatialData.Geometry
+                });
+            }
 
-    //    }
-    //    return result;
-    //}
+        }
+        return result;
+    }
 
     [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)

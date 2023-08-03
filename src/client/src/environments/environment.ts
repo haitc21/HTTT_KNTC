@@ -12,9 +12,9 @@ export const environment = {
   },
   oAuthConfig: {
     issuer: 'https://localhost:5101/',
-    // redirectUri: baseUrl,
+    redirectUri: baseUrl,
     clientId: 'KNTC_App',
-    // responseType: 'code',
+    responseType: 'code',
     scope: 'offline_access KNTC',
     requireHttps: true,
   },

@@ -69,33 +69,33 @@ public class DenounceAppService : CrudAppService<
         _spatialDataRepo = spatialDataRepo;
     }
 
-    //[AllowAnonymous]
-    //public override async Task<DenounceDto> GetAsync(Guid id)
-    //{
-    //    var denounce = await _denounceRepo.GetAsync(id);
-    //    var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.DenouncesPermission.Default);
-    //    if ((hasPermission.Succeeded == false && denounce.CongKhai == false)
-    //        || (CurrentUser.Id != denounce.CreatorId && CurrentUser.Id != denounce.LastModifierId))
-    //    {
-    //        return null;
-    //    }
-    //    var result = ObjectMapper.Map<Denounce, DenounceDto>(denounce);
-    //    var spatialData = await _spatialDataRepo.FindByIdHoSoAsync(id);
-    //    if (spatialData != null)
-    //    {
-    //        result.DuLieuToaDo = SpatialDataHelper.ConvertPointToString(spatialData.Point);
-    //        if (spatialData.Geometry != null)
-    //        {
-    //            result.DuLieuHinhHoc = SpatialDataHelper.ConvertGeoDataToJson(new GeoJsonData()
-    //            {
-    //                type = spatialData.Type,
-    //                properties = spatialData.Properties,
-    //                geometry = spatialData.Geometry
-    //            });
-    //        }
-    //    }
-    //    return result;
-    //}
+    [AllowAnonymous]
+    public override async Task<DenounceDto> GetAsync(Guid id)
+    {
+        var denounce = await _denounceRepo.GetAsync(id);
+        var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.DenouncesPermission.Default);
+        if ((hasPermission.Succeeded == false && denounce.CongKhai == false)
+            || (CurrentUser.Id != denounce.CreatorId && CurrentUser.Id != denounce.LastModifierId))
+        {
+            return null;
+        }
+        var result = ObjectMapper.Map<Denounce, DenounceDto>(denounce);
+        var spatialData = await _spatialDataRepo.FindByIdHoSoAsync(id);
+        if (spatialData != null)
+        {
+            result.DuLieuToaDo = SpatialDataHelper.ConvertPointToString(spatialData.Point);
+            if (spatialData.Geometry != null)
+            {
+                result.DuLieuHinhHoc = SpatialDataHelper.ConvertGeoDataToJson(new GeoJsonData()
+                {
+                    type = spatialData.Type,
+                    properties = spatialData.Properties,
+                    geometry = spatialData.Geometry
+                });
+            }
+        }
+        return result;
+    }
 
     [AllowAnonymous]
     public override async Task<PagedResultDto<DenounceDto>> GetListAsync(GetDenounceListDto input)

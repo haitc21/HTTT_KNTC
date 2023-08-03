@@ -201,7 +201,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   
   buildPieChart() {
     this.dataPieChart_KN = {
-      labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
+      // labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
       datasets: [
         {
           data: [
@@ -210,8 +210,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dataChart.waterComplain,
             this.dataChart.mineralComplain,
           ],
-          backgroundColor: ['#2196f3', '#fccc55', '#6ebe71', '#f9ae61'],
-          hoverBackgroundColor: ['#1c80cf', '#d5a326', '#419544', '#f79530'],
+          backgroundColor: ['#c00000', '#00af50', '#01b0f1', '#f4b083'],
+          hoverBackgroundColor: ['#d24d4d', '#4dc785', '#4ec8f5', '#f7c8a8'],
         },
       ],
     };
@@ -244,7 +244,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
 
     this.dataPieChart_TC = {
-      labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
+      // labels: ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'],
       datasets: [
         {
           data: [            
@@ -253,8 +253,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dataChart.waterDenounce,
             this.dataChart.mineralDenounce,
           ],
-          backgroundColor: ['#2196f3', '#fccc55', '#6ebe71', '#f9ae61'],
-          hoverBackgroundColor: ['#1c80cf', '#d5a326', '#419544', '#f79530'],
+          backgroundColor: ['#c00000', '#00af50', '#01b0f1', '#f4b083'],
+          hoverBackgroundColor: ['#d24d4d', '#4dc785', '#4ec8f5', '#f7c8a8'],
         },
       ],
     };
@@ -304,7 +304,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         {
           type: 'bar',
           label: 'Chưa có KQ',
-          backgroundColor: '#3b82f6',
+          backgroundColor: '#a7d08c',
           data: [
             this.dataChart.landComplain_ChuaCoKQ,
             this.dataChart.enviromentComplain_ChuaCoKQ,
@@ -320,7 +320,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         {
           type: 'bar',
           label: 'Đúng',
-          backgroundColor: '#ff3d32',
+          backgroundColor: '#fe0000',
           data: [
             this.dataChart.landComplain_Dung,
             this.dataChart.enviromentComplain_Dung,
@@ -336,7 +336,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         {
           type: 'bar',
           label: 'Có Đúng/Có Sai',
-          backgroundColor: '#f97316',
+          backgroundColor: '#fed966',
           data: [
             this.dataChart.landComplain_CoDungCoSai,
             this.dataChart.enviromentComplain_CoDungCoSai,
@@ -352,7 +352,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         {
           type: 'bar',
           label: 'Sai',
-          backgroundColor: '#22c55e',
+          backgroundColor: '#aeaaa9',
           data: [
             this.dataChart.landComplain_Sai,
             this.dataChart.enviromentComplain_Sai,

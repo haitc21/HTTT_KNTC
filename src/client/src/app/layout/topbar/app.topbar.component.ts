@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild, isDevMode } from '
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { PermissionService } from '@abp/ng.core';
+import { AuthService, PermissionService } from '@abp/ng.core';
 import { LayoutService } from '../service/app.layout.service';
 import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -50,6 +50,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     public layoutService: LayoutService,
     private router: Router,
     private oAuthService: OAuthService,
+    private authService: AuthService,
     private permissionService: PermissionService,
     private fileService: FileService,
     private notificationService: NotificationService,
@@ -127,8 +128,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         // icon: 'pi pi-sign-out',
         command: event => {
           this.oAuthService.logOut();
-          window.location.reload();
-          // this.router.navigate(['/']);
+          // window.location.reload();
         },
       },
     ];
@@ -264,7 +264,8 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     ];
   }
   login() {
-    this.router.navigate([LOGIN_URL, this.router.url]);
+    // this.router.navigate([LOGIN_URL, this.router.url]);
+    this.authService.navigateToLogin();
   }
   getAvatar() {
     this.fileService
