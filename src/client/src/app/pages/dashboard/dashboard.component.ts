@@ -241,15 +241,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
           },
         },
         datalabels: {
-          // color: '#000000',
-          color: '#fff',
+          color: '#000000',
           font: {
             size: 14,
           },
           formatter: (value, ctx) => {
             const percentage = (value * 100 / totalKN);
-            return percentage !== 0 ? `${labels[ctx.dataIndex]} ${percentage.toFixed(2)}%` : '';
-          }
+            return percentage !== 0 ? `${labels[ctx.dataIndex]}\n${value}\n${percentage.toFixed(2)}%` : '';
+          },
+          textAlign: 'center',
+          anchor: 'end',
+          align: 'start',
+          offset: 4, // Tăng khoảng cách
+          overlap: true
         }
       }
     };
@@ -288,15 +292,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
           },
         },
         datalabels: {
-          // color: '#000000',
-          color: '#fff',
+          color: '#000000',
           font: {
             size: 14,
           },
           formatter: (value, ctx) => {
             const percentage = (value * 100 / totalKN);
-            return percentage !== 0 ? `${labels[ctx.dataIndex]} ${percentage.toFixed(2)}%` : '';
+            return percentage !== 0 ? `${labels[ctx.dataIndex]}\n${value}\n${percentage.toFixed(2)}%` : '';
           },
+          textAlign: 'center',
+          anchor: 'end',
+          align: 'start',
+          offset: 4, // Tăng khoảng cách
+          overlap: true
         }
       }
     };
