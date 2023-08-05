@@ -1,4 +1,5 @@
-﻿using NetTopologySuite.Geometries;
+﻿using KNTC.SpatialDatas;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
 using System;
@@ -7,7 +8,7 @@ using System.Globalization;
 using System.IO;
 using Volo.Abp;
 
-namespace KNTC.SpatialDatas;
+namespace KNTC.Helpers;
 
 public static class SpatialDataHelper
 {
@@ -44,7 +45,7 @@ public static class SpatialDataHelper
     public static GeoJsonData? ConvertJsonToGeoData(string? json)
     {
         if (json.IsNullOrEmpty()) return null;
-        var reader = new NetTopologySuite.IO.GeoJsonReader();
+        var reader = new GeoJsonReader();
         var result = reader.Read<GeoJsonData>(json);
         return result;
     }

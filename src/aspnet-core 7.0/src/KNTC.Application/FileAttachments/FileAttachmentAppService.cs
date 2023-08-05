@@ -1,6 +1,7 @@
 ﻿using KNTC.Complains;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
+using KNTC.Helpers;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
@@ -210,7 +211,7 @@ public class FileAttachmentAppService : CrudAppService<
                         NgayNhan = f.NgayNhan,
                         ThoiGianBanHanh = f.ThoiGianBanHanh,
                         ThuTuButLuc = f.ThuTuButLuc,
-                        NoiDungChinh = f.NoiDungChinh
+                        NoiDungChinh = CkEditorHelper.ConvertToPlainText(f.NoiDungChinh)
                     };
         query = query.OrderBy(input.Sorting);
         var fileAttachments = await AsyncExecuter.ToListAsync<FileAttachmentExcelDto>(query);

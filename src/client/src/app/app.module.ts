@@ -47,7 +47,7 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
         },
       )
     }),
-    ThemeSharedModule.forRoot(),
+    // ThemeSharedModule.forRoot(),
     ConfirmDialogModule,
     ToastModule,
     BlockUIModule,
