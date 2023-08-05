@@ -5496,10 +5496,10 @@ leaflet.markercluster.layersupport@2.0.1:
   resolved "https://registry.yarnpkg.com/leaflet.markercluster.layersupport/-/leaflet.markercluster.layersupport-2.0.1.tgz#8d2d3d2e8c09f3a23c472de595cb759dfa448b96"
   integrity sha512-uNiUCZq8eeg+37RskB+xSiXfts3VGRooqSkO6d7cv/T36Eqo3kKVrNb2+57z21YS7iOukYf6K++QvM4qow2ktw==
 
-leaflet.markercluster@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.0.0.tgz#1976c96c29b18b2d79d519dc24b2ab6a315a6b04"
-  integrity sha512-PCwYzXrxkP6kHuOY/h+WHzlmV3J/MUTD9hrqUn9QdbRC6Nrxl/nMRzIJtXrqZJH62CLwTgCiD4cJy46kWJeA2w==
+leaflet.markercluster@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.5.3.tgz#9cdb52a4eab92671832e1ef9899669e80efc4056"
+  integrity sha512-vPTw/Bndq7eQHjLBVlWpnGeLa3t+3zGiuM7fJwCkiMFq+nmRuG3RI3f7f4N4TDX7T4NpbAXpR2+NTRSEGfCSeA==
 
 leaflet.measurecontrol@1.1.0:
   version "1.1.0"

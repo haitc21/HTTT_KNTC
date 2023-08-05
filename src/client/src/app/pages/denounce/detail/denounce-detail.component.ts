@@ -383,11 +383,15 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
       .get(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
-        next: (response: DenounceDto) => {
-          this.selectedEntity = response;
-          this.toado = response.duLieuToaDo;
+        next: (res: DenounceDto) => {
+          if (!res) {
+            this.notificationService.showError(MessageConstants.NOT_FOUND);
+            return;
+          }
+          this.selectedEntity = res;
+          this.toado = res?.duLieuToaDo ?? '';
 
-          this.dataMap.push(response);
+          this.dataMap.push(res);
           this.dataMap[0].loaiVuViec = LoaiVuViec.ToCao;
 
           this.tinhChange(this.selectedEntity.maTinhTP, true);

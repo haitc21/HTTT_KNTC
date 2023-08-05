@@ -42,7 +42,7 @@
     "leaflet": "latest",
     "leaflet-draw": "1.0.4",
     "leaflet.locatecontrol": "latest",
-    "leaflet.markercluster": "1.0.0",
+    "leaflet.markercluster": "^1.5.3",
     "leaflet.markercluster.layersupport": "2.0.1",
     "leaflet.measurecontrol": "1.1.0",
     "ngx-date-fns": "^10.0.1",
