@@ -3,6 +3,7 @@ using System;
 using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -13,9 +14,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230806122609_create_idx_summaries")]
+    partial class createidxsummaries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

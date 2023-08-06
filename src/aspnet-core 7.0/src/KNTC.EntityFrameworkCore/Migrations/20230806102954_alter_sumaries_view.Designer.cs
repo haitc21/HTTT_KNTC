@@ -3,6 +3,7 @@ using System;
 using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -13,9 +14,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230806102954_alter_sumaries_view")]
+    partial class altersumariesview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1006,7 +1009,7 @@ namespace KNTC.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("Summaries", "KNTC");
+                    b.ToView("Summaries", "SPATIAL_DATA");
                 });
 
             modelBuilder.Entity("KNTC.SysConfigs.SysConfig", b =>

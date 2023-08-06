@@ -1,85 +1,87 @@
 <div class="animated fadeIn card">
   <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
-  <div class="flex col-12" style="height: 100px; margin: 1rem 0">
-    <div class="flex col-12 md:col-8">
-      <div class="col-12 md:col-4">
-        <span class="p-input-icon-left w-full">
-          <i class="pi pi-search"></i>
-          <input
-            pInputText
-            type="text"
-            (keyup.enter)="loadData()"
-            [(ngModel)]="keyword"
-            placeholder="Tìm kiếm"
-            [style]="{ width: '100%' }"
-          />
-        </span>
+  <p-toolbar>
+    <div class="formgrid grid col-12 ">
+      <div class="flex col-12 md:col-8">
+        <div class="col-12 md:col-4">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              (keyup.enter)="loadData()"
+              [(ngModel)]="keyword"
+              placeholder="Tìm kiếm"
+              [style]="{ width: '100%' }"
+            />
+          </span>
+        </div>
+        <div class="col-12 md:col-4">
+          <span class="p-float-label">
+            <p-dropdown
+              id="unitTypeId"
+              [(ngModel)]="unitTypeId"
+              [options]="unitTypeOptions"
+              optionLabel="unitTypeName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitTypeName"
+              styleClass="w-full"
+              (onChange)="unitTypeChange($event?.value); loadData()"
+            ></p-dropdown>
+            <label for="loaiDat">Loại địa danh</label>
+          </span>
+        </div>
+        <div class="col-12 md:col-4">
+          <span class="p-float-label">
+            <p-dropdown
+              id="parentId"
+              [(ngModel)]="parentId"
+              [options]="parentUnitOptions"
+              optionLabel="unitName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitName"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label for="loaiDat">Địa danh cha</label>
+          </span>
+        </div>
       </div>
-      <div class="col-12 md:col-4">
-        <span class="p-float-label">
-          <p-dropdown
-            id="unitTypeId"
-            [(ngModel)]="unitTypeId"
-            [options]="unitTypeOptions"
-            optionLabel="unitTypeName"
-            optionValue="id"
-            [showClear]="true"
-            [autoDisplayFirst]="false"
-            [filter]="true"
-            filterBy="unitTypeName"
-            styleClass="w-full"
-            (onChange)="unitTypeChange($event?.value); loadData()"
-          ></p-dropdown>
-          <label for="loaiDat">Loại địa danh</label>
-        </span>
-      </div>
-      <div class="col-12 md:col-4">
-        <span class="p-float-label">
-          <p-dropdown
-            id="parentId"
-            [(ngModel)]="parentId"
-            [options]="parentUnitOptions"
-            optionLabel="unitName"
-            optionValue="id"
-            [showClear]="true"
-            [autoDisplayFirst]="false"
-            [filter]="true"
-            filterBy="unitName"
-            styleClass="w-full"
-            (onChange)="loadData()"
-          ></p-dropdown>
-          <label for="loaiDat">Địa danh cha</label>
-        </span>
+      <div class="col-12 md:col-4 flex justify-content-end">
+        <button
+          *abpPermission="'Units.Create'"
+          type="button"
+          pButton
+          pRipple
+          [label]="Actions.CREATE"
+          icon="pi pi-plus"
+          class="p-button-info mr-1"
+          [pTooltip]="Actions.CREATE"
+          tooltipPosition="top"
+          (click)="showAddModal()"
+        ></button>
+        <button
+          *abpPermission="'Units.Delete'"
+          type="button"
+          pButton
+          pRipple
+          [label]="Delete"
+          icon="pi pi-trash"
+          class="p-button-danger"
+          [pTooltip]="Actions.DELETE"
+          tooltipPosition="top"
+          (click)="deleteItems()"
+          [disabled]="!selectedItems || !selectedItems.length"
+        ></button>
       </div>
     </div>
-    <div class="col-12 md:col-4 flex justify-content-end">
-      <button
-        *abpPermission="'Units.Create'"
-        type="button"
-        pButton
-        pRipple
-        [label]="Actions.CREATE"
-        icon="pi pi-plus"
-        class="p-button-info mr-1"
-        [pTooltip]="Actions.CREATE"
-        tooltipPosition="top"
-        (click)="showAddModal()"
-      ></button>
-      <button
-        *abpPermission="'Units.Delete'"
-        type="button"
-        pButton
-        pRipple
-        [label]="Delete"
-        icon="pi pi-trash"
-        class="p-button-danger"
-        [pTooltip]="Actions.DELETE"
-        tooltipPosition="top"
-        (click)="deleteItems()"
-        [disabled]="!selectedItems || !selectedItems.length"
-      ></button>
-    </div>
-  </div>
+  </p-toolbar>
 
   <p-table
     #dt
@@ -100,7 +102,7 @@
         <th pSortableColumn="unitName">Tên địa danh</th>
         <th pSortableColumn="shortName">Tên ngắn gọn</th>
         <th pSortableColumn="status">Trạng thái</th>
-        <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
+        <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -130,13 +132,13 @@
             [popup]="true"
             appendTo="body"
           ></p-tieredMenu>
+
           <button
             #btn
             pButton
             pRipple
             type="button"
             icon="pi pi-fw pi-cog"
-            [label]="Actions.ACTION"
             [pTooltip]="Actions.ACTION"
             tooltipPosition="top"
             (click)="menu.toggle($event); setActionItem(row)"

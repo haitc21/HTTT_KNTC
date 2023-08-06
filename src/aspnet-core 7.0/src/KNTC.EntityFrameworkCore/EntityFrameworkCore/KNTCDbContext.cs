@@ -5,6 +5,7 @@ using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
 using KNTC.LandTypes;
 using KNTC.SpatialDatas;
+using KNTC.Summaries;
 using KNTC.SysConfigs;
 using KNTC.Units;
 using KNTC.Users;
@@ -79,6 +80,7 @@ public class KNTCDbContext :
     public DbSet<UnitType> UnitTypes { get; set; }
     public DbSet<SysConfig> SysConfigs { get; set; }
     public DbSet<SpatialData> SpatialDatas { get; set; }
+    public DbSet<Summary> Summaries { get; set; }
 
     public KNTCDbContext(DbContextOptions<KNTCDbContext> options)
         : base(options)
@@ -364,5 +366,32 @@ public class KNTCDbContext :
                 .HasColumnType("json")
                 .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Save);
         });
+        builder.Entity<Summary>(b =>
+        {
+            b.HasNoKey();
+            b.ToView("Summaries", KNTCConsts.KNTCDbSchema);
+
+            b.Property(x => x.MaHoSo).HasColumnName("ma_ho_so");
+            b.Property(x => x.LoaiVuViec).HasColumnName("loai_vu_viec");
+            b.Property(x => x.LinhVuc).HasColumnName("linh_vuc");
+            b.Property(x => x.TieuDe).HasColumnName("tieu_de");
+            b.Property(x => x.NguoiNopDon).HasColumnName("nguoi_nop_don");
+            b.Property(x => x.DienThoai).HasColumnName("dien_thoai");
+            b.Property(x => x.DiaChiLienHe).HasColumnName("dia_chi_lien_he");
+            b.Property(x => x.ThoiGianTiepNhan).HasColumnName("thoi_gian_tiep_nhan");
+            b.Property(x => x.ThoiGianHenTraKQ).HasColumnName("thoi_gian_hen_tra_kq");
+            b.Property(x => x.BoPhanDangXL).HasColumnName("bo_phan_dang_xl");
+            b.Property(x => x.SoThua).HasColumnName("so_thua");
+            b.Property(x => x.ToBanDo).HasColumnName("to_ban_do");
+            b.Property(x => x.DuLieuToaDo).HasColumnName("du_lieu_toa_do");
+            b.Property(x => x.DuLieuHinhHoc).HasColumnName("du_lieu_hinh_hoc");
+            b.Property(x => x.KetQua).HasColumnName("ket_qua");
+            b.Property(x => x.MaTinhTP).HasColumnName("ma_tinh_tp");
+            b.Property(x => x.MaQuanHuyen).HasColumnName("ma_quan_huyen");
+            b.Property(x => x.MaXaPhuongTT).HasColumnName("ma_xa_phuong_tt");
+            b.Property(x => x.CongKhai).HasColumnName("cong_khai");
+            b.Property(x => x.CccdCmnd).HasColumnName("cccd_cmnd");
+        });
+
     }
 }

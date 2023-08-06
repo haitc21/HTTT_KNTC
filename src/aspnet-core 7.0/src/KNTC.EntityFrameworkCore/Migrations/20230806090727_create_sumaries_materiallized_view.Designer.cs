@@ -3,6 +3,7 @@ using System;
 using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -13,9 +14,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230806090727_create_sumaries_materiallized_view")]
+    partial class createsumariesmateriallizedview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -896,117 +899,6 @@ namespace KNTC.Migrations
                     b.HasIndex("IdHoSo");
 
                     b.ToTable("SpatialDatas", "SPATIAL_DATA");
-                });
-
-            modelBuilder.Entity("KNTC.Summaries.Summary", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("BoPhanDangXL")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("bo_phan_dang_xl");
-
-                    b.Property<string>("CccdCmnd")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("cccd_cmnd");
-
-                    b.Property<bool>("CongKhai")
-                        .HasColumnType("boolean")
-                        .HasColumnName("cong_khai");
-
-                    b.Property<string>("DiaChiLienHe")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("dia_chi_lien_he");
-
-                    b.Property<string>("DienThoai")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("dien_thoai");
-
-                    b.Property<string>("DuLieuHinhHoc")
-                        .HasColumnType("text")
-                        .HasColumnName("du_lieu_hinh_hoc");
-
-                    b.Property<string>("DuLieuToaDo")
-                        .HasColumnType("text")
-                        .HasColumnName("du_lieu_toa_do");
-
-                    b.Property<int?>("KetQua")
-                        .HasColumnType("integer")
-                        .HasColumnName("ket_qua");
-
-                    b.Property<int>("LinhVuc")
-                        .HasColumnType("integer")
-                        .HasColumnName("linh_vuc");
-
-                    b.Property<int>("LoaiVuViec")
-                        .HasColumnType("integer")
-                        .HasColumnName("loai_vu_viec");
-
-                    b.Property<string>("MaHoSo")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ma_ho_so");
-
-                    b.Property<int>("MaQuanHuyen")
-                        .HasColumnType("integer")
-                        .HasColumnName("ma_quan_huyen");
-
-                    b.Property<int>("MaTinhTP")
-                        .HasColumnType("integer")
-                        .HasColumnName("ma_tinh_tp");
-
-                    b.Property<int>("MaXaPhuongTT")
-                        .HasColumnType("integer")
-                        .HasColumnName("ma_xa_phuong_tt");
-
-                    b.Property<string>("NguoiNopDon")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("nguoi_nop_don");
-
-                    b.Property<string>("SoThua")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("so_thua");
-
-                    b.Property<DateTime>("ThoiGianHenTraKQ")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("thoi_gian_hen_tra_kq");
-
-                    b.Property<DateTime>("ThoiGianTiepNhan")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("thoi_gian_tiep_nhan");
-
-                    b.Property<string>("TieuDe")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("tieu_de");
-
-                    b.Property<string>("ToBanDo")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("to_ban_do");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("KetQua");
-
-                    b.HasIndex("LinhVuc");
-
-                    b.HasIndex("LoaiVuViec");
-
-                    b.HasIndex("MaHoSo");
-
-                    b.HasIndex("LoaiVuViec", "LinhVuc");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("Summaries", "KNTC");
                 });
 
             modelBuilder.Entity("KNTC.SysConfigs.SysConfig", b =>
