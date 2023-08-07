@@ -242,10 +242,10 @@ public class KNTCDbContext :
             b.ToTable("FileAttachments", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
 
-            b.HasIndex(x => x.ComplainId);
-            b.HasIndex(x => x.DenounceId);
-            b.HasIndex(x => new { x.LoaiVuViec, x.ComplainId });
-            b.HasIndex(x => new { x.LoaiVuViec, x.DenounceId });
+            b.HasIndex(x => x.LoaiVuViec);
+            b.HasIndex(x => x.IdHoSo);
+            b.HasIndex(x => new { x.LoaiVuViec, x.IdHoSo });
+            b.Property(x => x.IdHoSo).HasColumnName("id_ho_so");
 
             b.Property(x => x.GiaiDoan).HasColumnName("giai_doan");
             b.Property(x => x.TenTaiLieu).IsRequired().HasColumnName("ten_tai_lieu").HasMaxLength(KNTCValidatorConsts.MaxTenTaiLieuLength);

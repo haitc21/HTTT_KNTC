@@ -28,8 +28,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
   @Input() loaiVuViec!: LoaiVuViec;
   @Input() modeHoSo: 'create' | 'update' | 'view';
-  @Input() complainId: string | null = null;
-  @Input() denounceId: string | null = null;
+  @Input() idHoSo: string;
 
   LoaiVuViec = LoaiVuViec;
   blockedPanel = false;
@@ -90,8 +89,8 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           maxResultCount: this.maxResultCount,
           skipCount: this.skipCount,
           keyword: this.keyword,
-          complainId: this.complainId,
-          denounceId: this.denounceId,
+          idHoSo: this.idHoSo,
+          loaiVuViec: this.loaiVuViec,
           giaiDoan: this.giaiDoan,
           hinhThuc: this.hinhThuc,
           congKhai: this.hasLoggedIn ? this.congKhai : true,
@@ -127,8 +126,8 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
         maxResultCount: this.maxResultCount,
         skipCount: this.skipCount,
         keyword: this.keyword,
-        complainId: this.complainId,
-        denounceId: this.denounceId,
+        idHoSo: this.idHoSo,
+        loaiVuViec: this.loaiVuViec,
         giaiDoan: this.giaiDoan,
         hinhThuc: this.hinhThuc,
         congKhai: this.modeHoSo == 'view' ? true : this.congKhai,
@@ -176,8 +175,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       if (this.modeHoSo == 'create') {
         let fileAttachment = {
           loaiVuViec: this.loaiVuViec,
-          complainId: this.complainId,
-          denounceId: this.denounceId,
+          idHoSo: this.idHoSo,
           giaiDoan: dto.giaiDoan,
           tenTaiLieu: dto.tenTaiLieu,
           hinhThuc: dto.hinhThuc,
@@ -200,8 +198,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       }
       if (this.modeHoSo == 'update') {
         dto.loaiVuViec = this.loaiVuViec;
-        dto.complainId = this.complainId;
-        dto.denounceId = this.denounceId;
+        dto.idHoSo = this.idHoSo;
         this.fileAttachmentService
           .create(dto)
           .pipe(takeUntil(this.ngUnsubscribe))

@@ -16,13 +16,14 @@ public class FileAttachment : AuditedAggregateRoot<Guid>
     {
     }
 
-    public FileAttachment(Guid id, string tenTaiLieu) : base(id)
+    public FileAttachment(Guid id, string tenTaiLieu, Guid idHoSo) : base(id)
     {
         SetTenTaiLieu(tenTaiLieu);
+        IdHoSo = idHoSo;
     }
 
-    public Guid? ComplainId { get; set; }
-    public Guid? DenounceId { get; set; }
+    public Guid IdHoSo { get; private set; }
+    public LoaiVuViec LoaiVuViec { get; set; }
     public int GiaiDoan { get; set; }
     public string TenTaiLieu { get; private set; }
     public int HinhThuc { get; set; }
@@ -34,7 +35,6 @@ public class FileAttachment : AuditedAggregateRoot<Guid>
     public string ContentType { get; set; }
     public long ContentLength { get; set; }
     public DocumentType DocumentType { get; set; }
-    public LoaiVuViec LoaiVuViec { get; set; }
     public bool CongKhai { get; set; }
 
     private void SetTenTaiLieu([NotNull] string tenTaiLieu)

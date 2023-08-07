@@ -210,8 +210,7 @@ public class ComplainAppService : CrudAppService<
             foreach (var item in input.FileAttachments)
             {
                 var fileAttach = await _fileAttachmentManager.CreateAsync(loaiVuViec: LoaiVuViec.KhieuNai,
-                                                                     complainId: complain.Id,
-                                                                     denounceId: null,
+                                                                     idHoSo: complain.Id,
                                                                      giaiDoan: item.GiaiDoan,
                                                                      tenTaiLieu: item.TenTaiLieu.Trim(),
                                                                      hinhThuc: item.HinhThuc,
@@ -294,7 +293,7 @@ public class ComplainAppService : CrudAppService<
     [Authorize(KNTCPermissions.ComplainsPermission.Delete)]
     public override async Task DeleteAsync(Guid id)
     {
-        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.ComplainId)).Select(x => x.Id);
+        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.IdHoSo)).Select(x => x.Id);
         await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
         foreach (var item in idFileAttachs)
         {
@@ -308,7 +307,7 @@ public class ComplainAppService : CrudAppService<
     [Authorize(KNTCPermissions.ComplainsPermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
-        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Any(i => i == x.ComplainId))).Select(x => x.Id);
+        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Any(i => i == x.IdHoSo))).Select(x => x.Id);
         await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
         foreach (var item in idFileAttachs)
         {

@@ -3,6 +3,7 @@ using System;
 using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -13,9 +14,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230807013523_update_id_ho_so_fileattachments")]
+    partial class updateidhosofileattachments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -635,6 +638,9 @@ namespace KNTC.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ComplainId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
@@ -665,6 +671,9 @@ namespace KNTC.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("CreatorId");
 
+                    b.Property<Guid?>("DenounceId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
@@ -684,7 +693,7 @@ namespace KNTC.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("hinh_thuc");
 
-                    b.Property<Guid>("IdHoSo")
+                    b.Property<Guid?>("IdHoSo")
                         .HasColumnType("uuid")
                         .HasColumnName("id_ho_so");
 
@@ -727,11 +736,17 @@ namespace KNTC.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ComplainId");
+
+                    b.HasIndex("DenounceId");
+
                     b.HasIndex("HinhThuc");
 
                     b.HasIndex("IdHoSo");
 
-                    b.HasIndex("LoaiVuViec");
+                    b.HasIndex("LoaiVuViec", "ComplainId");
+
+                    b.HasIndex("LoaiVuViec", "DenounceId");
 
                     b.HasIndex("LoaiVuViec", "IdHoSo");
 
