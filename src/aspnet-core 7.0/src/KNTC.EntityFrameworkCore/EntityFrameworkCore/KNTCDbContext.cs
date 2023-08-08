@@ -1,4 +1,5 @@
-﻿using KNTC.CategoryUnitTypes;
+﻿using KNTC.BaseMaps;
+using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
@@ -75,7 +76,8 @@ public class KNTCDbContext :
     public DbSet<Denounce> Denounces { get; set; }
     public DbSet<FileAttachment> FileAttachments { get; set; }
     public DbSet<DocumentType> DocumentTypes { get; set; }
-    public DbSet<LandType> LandTypes { get; set; }
+    public DbSet<BaseMap> LandTypes { get; set; }
+    public DbSet<BaseMap> BaseMap { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<UnitType> UnitTypes { get; set; }
     public DbSet<SysConfig> SysConfigs { get; set; }
@@ -296,6 +298,17 @@ public class KNTCDbContext :
              .WithOne(c => c.LandType)
              .HasForeignKey(c => c.LoaiDat)
              .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<BaseMap>(b =>
+        {
+            b.ToTable("BaseMap", KNTCConsts.KNTCDbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(x => x.BaseMapCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
+            b.Property(x => x.BaseMapName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
+            b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
+            b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
         });
 
         builder.Entity<Unit>(b =>
