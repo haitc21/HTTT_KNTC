@@ -222,9 +222,8 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     var mcgLayerSupportGroup = L.markerClusterGroup.layerSupport({
       maxClusterRadius: 10,
-      iconCreateFunction: function (cluster) {
+      iconCreateFunction:  (cluster) => {
         //var markers = cluster.getAllChildMarkers();
-
         return L.divIcon({
           html: cluster.getChildCount(),
           className: 'mycluster',
@@ -232,14 +231,14 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         });
       },
       //Disable all of the defaults:
-      spiderfyOnMaxZoom: false,
-      showCoverageOnHover: false,
-      zoomToBoundsOnClick: false,
-      animate: true,
-      animateAddingMarkers: false,
-      spiderfyDistanceMultiplier: 1,
-      //Options to pass to the L.Polygon constructor
-      polygonOptions: {},
+      // spiderfyOnMaxZoom: false,
+      // showCoverageOnHover: false,
+      // zoomToBoundsOnClick: false,
+      // animate: true,
+      // animateAddingMarkers: false,
+      // spiderfyDistanceMultiplier: 1,
+      // //Options to pass to the L.Polygon constructor
+      // polygonOptions: {},
     });
     mcgLayerSupportGroup.addLayer(this.khieunai);
     mcgLayerSupportGroup.addLayer(this.tocao);
