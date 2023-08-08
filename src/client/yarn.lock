@@ -2,14 +2,7 @@
 # yarn lockfile v1
 
 
-"@abp/ng.account.core@~6.0.2":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@abp/ng.account.core/-/ng.account.core-6.0.3.tgz#0469e760d4ce163e40e82f7a54205b32246c0214"
-  integrity sha512-YmjxU1QEuopj50t43lOfIwKBkwS+j6FvNgckC/c/mhMjH9jscAJKNerL453JsZX5URp3thRNc+HHAiq5f+Yklw==
-  dependencies:
-    tslib "^2.0.0"
-
-"@abp/ng.components@~6.0.0", "@abp/ng.components@~6.0.3":
+"@abp/ng.components@~6.0.0":
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/@abp/ng.components/-/ng.components-6.0.3.tgz#ccb2f85b7930b91a74a5ec5901d51a6ddb84b310"
   integrity sha512-k+F3zTTzywNw4W2MHrQ5vCA1Vd4bBdQ7SCzg10jDyX9rOWo92UXDKAsmUnBQitTTAFENRd/DaxUHbAVPD+m8mQ==
@@ -59,25 +52,6 @@
     jsonc-parser "^2.3.0"
     should-quote "^1.0.0"
     typescript "5.0.4"
-
-"@abp/ng.setting-management@~6.0.0":
-  version "6.0.3"
-  resolved "https://registry.yarnpkg.com/@abp/ng.setting-management/-/ng.setting-management-6.0.3.tgz#16a4be6ea7a43f8df165a3862d6379c27c1f7df5"
-  integrity sha512-ibkTot8uWk8k6p0ziNCtyvMVDTA8Qtt33/3cVYTqth712NMHYZjWQG9LzdfzdSPMhr45c+FQfVjEZDLZQIH2VQ==
-  dependencies:
-    "@abp/ng.components" "~6.0.3"
-    "@abp/ng.theme.shared" "~6.0.3"
-    tslib "^2.0.0"
-
-"@abp/ng.theme.lepton-x@^1.0.0-rc.7":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@abp/ng.theme.lepton-x/-/ng.theme.lepton-x-1.0.5.tgz#fdd0f2f7a364a1b3ffd68b28495df73f0663f5ec"
-  integrity sha512-PFDprOX+HhUbyGdjsWuEBDaQw3N/EglTzBKx67stc0L98IEuElfqMJgy6BwQRgXS8FHI3NLIuyP9RzJa2HayGA==
-  dependencies:
-    "@abp/ng.account.core" "~6.0.2"
-    "@volo/abp.ng.lepton-x.core" "1.0.5"
-    "@volo/ngx-lepton-x.lite" "1.0.5"
-    tslib "^2.1.0"
 
 "@abp/ng.theme.shared@~6.0.0", "@abp/ng.theme.shared@~6.0.3":
   version "6.0.3"
@@ -2409,32 +2383,6 @@
     "@typescript-eslint/types" "5.59.8"
     eslint-visitor-keys "^3.3.0"
 
-"@volo/abp.ng.lepton-x.core@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@volo/abp.ng.lepton-x.core/-/abp.ng.lepton-x.core-1.0.5.tgz#138a8df70ff472356b8ab3499fc96cb743ad07e5"
-  integrity sha512-jFanO7t2jJO/YNZarVovzCrYOUaGJMIFIwCQBQQU6DMuL4zxn4qPnY66+Ze/588oZu462l3B7AicaMvSfXPnww==
-  dependencies:
-    "@volo/ngx-lepton-x.core" "1.0.5"
-    tslib "^2.3.0"
-
-"@volo/ngx-lepton-x.core@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@volo/ngx-lepton-x.core/-/ngx-lepton-x.core-1.0.5.tgz#2b4aa5c54b25a25c8796cf1437e35e16dd4c282d"
-  integrity sha512-/zf+mEvm73ZRQ5G6kPIdGd+q9RWXosZvJg8goH050zuApV7wXIcYSEzKPpoWgVlrcyFg9/PoJYF199n0T4A1pQ==
-  dependencies:
-    ts-toolbelt "^6.15.4"
-    tslib "^2.3.0"
-
-"@volo/ngx-lepton-x.lite@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@volo/ngx-lepton-x.lite/-/ngx-lepton-x.lite-1.0.5.tgz#7c237f9b6b3e11c5c7aaebae4d0270c2c16b249f"
-  integrity sha512-eL/o3gGQe3FUfhjiZJRBGSj9N8lSD4EsX8cjBFc7URZqCFcmYXxJbWyUhtuD52G0r5QEsnlPpepqT5NXKV4smQ==
-  dependencies:
-    "@volo/ngx-lepton-x.core" "1.0.5"
-    bootstrap-icons "~1.7.2"
-    ng-observe "^1.1.0"
-    tslib "^2.3.0"
-
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.11.1.tgz#2bfd767eae1a6996f432ff7e8d7fc75679c0b6a7"
@@ -2948,11 +2896,6 @@ boolbase@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==
-
-bootstrap-icons@~1.7.2:
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/bootstrap-icons/-/bootstrap-icons-1.7.2.tgz#4024e081e2c850602552e1fed6451e682d09322a"
-  integrity sha512-NiR2PqC73AQOPdVSu6GJfnk+hN2z6powcistXk1JgPnKuoV2FSdSl26w931Oz9HYbKCcKUSB6ncZTYJAYJl3QQ==
 
 bootstrap-icons@~1.8.3:
   version "1.8.3"
@@ -5553,10 +5496,10 @@ leaflet.markercluster.layersupport@2.0.1:
   resolved "https://registry.yarnpkg.com/leaflet.markercluster.layersupport/-/leaflet.markercluster.layersupport-2.0.1.tgz#8d2d3d2e8c09f3a23c472de595cb759dfa448b96"
   integrity sha512-uNiUCZq8eeg+37RskB+xSiXfts3VGRooqSkO6d7cv/T36Eqo3kKVrNb2+57z21YS7iOukYf6K++QvM4qow2ktw==
 
-leaflet.markercluster@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.0.0.tgz#1976c96c29b18b2d79d519dc24b2ab6a315a6b04"
-  integrity sha512-PCwYzXrxkP6kHuOY/h+WHzlmV3J/MUTD9hrqUn9QdbRC6Nrxl/nMRzIJtXrqZJH62CLwTgCiD4cJy46kWJeA2w==
+leaflet.markercluster@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/leaflet.markercluster/-/leaflet.markercluster-1.5.3.tgz#9cdb52a4eab92671832e1ef9899669e80efc4056"
+  integrity sha512-vPTw/Bndq7eQHjLBVlWpnGeLa3t+3zGiuM7fJwCkiMFq+nmRuG3RI3f7f4N4TDX7T4NpbAXpR2+NTRSEGfCSeA==
 
 leaflet.measurecontrol@1.1.0:
   version "1.1.0"
@@ -6079,13 +6022,6 @@ neo-async@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
-
-ng-observe@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/ng-observe/-/ng-observe-1.1.0.tgz#56714d40d33bc4bd7343d00e6db1387a53ee56b3"
-  integrity sha512-PNZwzcRmAK4dRZsR7GKirqd+kzHEi41Om3i5as+Q0jJCyrlE3Au7nLtEh4KugCroqNnG1c9UB8HMAKFHxSo4Uw==
-  dependencies:
-    tslib "^2.0.0"
 
 ng-packagr@^14.2.1:
   version "14.3.0"
@@ -8253,11 +8189,6 @@ ts-toolbelt@6.15.4:
   version "6.15.4"
   resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-6.15.4.tgz#f7fad584e197d0f495f77b5e3ee75a8f4c4dd3da"
   integrity sha512-Ifp2yNo4I8q5UwNARUBMnBiFpv5DEtTbCtS8RCjjLOz+PNcThbjUsPJCK3hRnz0dTygM1Fi3Mgvnt/DoKUTU2g==
-
-ts-toolbelt@^6.15.4:
-  version "6.15.5"
-  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-6.15.5.tgz#cb3b43ed725cb63644782c64fbcad7d8f28c0a83"
-  integrity sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==
 
 tslib@2.4.0:
   version "2.4.0"

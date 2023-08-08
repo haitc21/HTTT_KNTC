@@ -1,6 +1,7 @@
 ﻿using KNTC.Complains;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
+using KNTC.Helpers;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
@@ -71,8 +72,7 @@ public class FileAttachmentAppService : CrudAppService<
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
-                    .WhereIf(input.ComplainId.HasValue, x => x.LoaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == input.ComplainId)
-                    .WhereIf(input.DenounceId.HasValue, x => x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId)
+                    .Where(x => x.IdHoSo == input.IdHoSo)
                     .WhereIf(!filter.IsNullOrEmpty(),
                              x => x.TenTaiLieu.ToUpper().Contains(filter)
                                  || x.FileName.ToUpper().Contains(filter)
@@ -87,13 +87,13 @@ public class FileAttachmentAppService : CrudAppService<
         var queryResult = await AsyncExecuter.ToListAsync(queryable);
 
         var totalCount = await Repository.CountAsync(
-                x => (input.Keyword.IsNullOrEmpty()
+                x =>
+                x.IdHoSo == input.IdHoSo
+                && (input.Keyword.IsNullOrEmpty()
                     || (x.TenTaiLieu.ToUpper().Contains(input.Keyword) || x.FileName.ToUpper().Contains(input.Keyword)))
                 && (!input.HinhThuc.HasValue || x.HinhThuc == input.HinhThuc)
                 && (!input.GiaiDoan.HasValue || input.GiaiDoan == 0 || x.HinhThuc == input.GiaiDoan)
                 && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
-                && (!input.ComplainId.HasValue || (x.LoaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == input.ComplainId))
-                && (!input.DenounceId.HasValue || (x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId))
                 );
 
         return new PagedResultDto<FileAttachmentDto>(
@@ -105,8 +105,7 @@ public class FileAttachmentAppService : CrudAppService<
     public override async Task<FileAttachmentDto> CreateAsync(CreateAndUpdateFileAttachmentDto input)
     {
         var entity = await _fileAttachmentManager.CreateAsync(loaiVuViec: input.LoaiVuViec,
-                                                             complainId: input.ComplainId,
-                                                             denounceId: input.DenounceId,
+                                                             idHoSo: input.IdHoSo,
                                                              giaiDoan: input.GiaiDoan,
                                                              tenTaiLieu: input.TenTaiLieu.Trim(),
                                                              hinhThuc: input.HinhThuc,
@@ -192,8 +191,8 @@ public class FileAttachmentAppService : CrudAppService<
         var fileQuery = await Repository.GetQueryableAsync();
 
         fileQuery = fileQuery
-                    .WhereIf(input.ComplainId.HasValue, x => x.LoaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == input.ComplainId)
-                    .WhereIf(input.DenounceId.HasValue, x => x.LoaiVuViec == LoaiVuViec.ToCao && x.DenounceId == input.DenounceId).WhereIf(!filter.IsNullOrEmpty(),
+                    .Where(x => x.IdHoSo == input.IdHoSo && x.LoaiVuViec == input.LoaiVuViec)
+                    .WhereIf(!filter.IsNullOrEmpty(),
                              x => x.TenTaiLieu.ToUpper().Contains(filter)
                                  || x.FileName.ToUpper().Contains(filter)
                              )
@@ -210,7 +209,7 @@ public class FileAttachmentAppService : CrudAppService<
                         NgayNhan = f.NgayNhan,
                         ThoiGianBanHanh = f.ThoiGianBanHanh,
                         ThuTuButLuc = f.ThuTuButLuc,
-                        NoiDungChinh = f.NoiDungChinh
+                        NoiDungChinh = CkEditorHelper.ConvertToPlainText(f.NoiDungChinh)
                     };
         query = query.OrderBy(input.Sorting);
         var fileAttachments = await AsyncExecuter.ToListAsync<FileAttachmentExcelDto>(query);
@@ -241,17 +240,17 @@ public class FileAttachmentAppService : CrudAppService<
         string tieuDe = "";
         string hoTen = "";
         string noiDungKhieuNai = "";
-        if (input.ComplainId.HasValue)
+        if (input.LoaiVuViec == LoaiVuViec.KhieuNai)
         {
-            var complain = await _complainRepo.GetAsync(input.ComplainId.Value);
+            var complain = await _complainRepo.GetAsync(input.IdHoSo);
             hoTen = complain.NguoiNopDon;
             noiDungKhieuNai = complain.NoiDungVuViec;
             maHoSo = complain.MaHoSo;
             tieuDe = complain.TieuDe;
         }
-        if (input.DenounceId.HasValue)
+        else
         {
-            var denounce = await _denounceRepo.GetAsync(input.DenounceId.Value);
+            var denounce = await _denounceRepo.GetAsync(input.IdHoSo);
             hoTen = denounce.NguoiNopDon;
             noiDungKhieuNai = denounce.NoiDungVuViec;
             maHoSo = denounce.MaHoSo;

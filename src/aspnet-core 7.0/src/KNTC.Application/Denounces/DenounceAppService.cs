@@ -1,5 +1,6 @@
 ﻿using KNTC.Extenssions;
 using KNTC.FileAttachments;
+using KNTC.Helpers;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
@@ -202,8 +203,7 @@ public class DenounceAppService : CrudAppService<
             foreach (var item in input.FileAttachments)
             {
                 var fileAttach = await _fileAttachmentManager.CreateAsync(loaiVuViec: LoaiVuViec.ToCao,
-                                                                     complainId: null,
-                                                                     denounceId: denounce.Id,
+                                                                     idHoSo: denounce.Id,
                                                                      giaiDoan: item.GiaiDoan,
                                                                      tenTaiLieu: item.TenTaiLieu.Trim(),
                                                                      hinhThuc: item.HinhThuc,
@@ -285,7 +285,7 @@ public class DenounceAppService : CrudAppService<
     [Authorize(KNTCPermissions.DenouncesPermission.Delete)]
     public override async Task DeleteAsync(Guid id)
     {
-        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.DenounceId)).Select(x => x.Id);
+        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => id == x.IdHoSo)).Select(x => x.Id);
         await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
         foreach (var item in idFileAttachs)
         {
@@ -299,7 +299,7 @@ public class DenounceAppService : CrudAppService<
     [Authorize(KNTCPermissions.DenouncesPermission.Delete)]
     public async Task DeleteMultipleAsync(IEnumerable<Guid> ids)
     {
-        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Any(i => i == x.DenounceId))).Select(x => x.Id);
+        var idFileAttachs = (await _fileAttachmentRepo.GetListAsync(x => ids.Any(i => i == x.IdHoSo))).Select(x => x.Id);
         await _fileAttachmentRepo.DeleteManyAsync(idFileAttachs);
         foreach (var item in idFileAttachs)
         {

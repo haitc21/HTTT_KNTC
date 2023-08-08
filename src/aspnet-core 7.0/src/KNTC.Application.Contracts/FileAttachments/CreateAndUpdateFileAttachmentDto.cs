@@ -8,8 +8,7 @@ public class CreateAndUpdateFileAttachmentDto : IHasConcurrencyStamp
 {
     public Guid? Id { get; set; }
     public LoaiVuViec LoaiVuViec { get; set; }
-    public Guid? ComplainId { get; set; }
-    public Guid? DenounceId { get; set; }
+    public Guid IdHoSo { get; set; }
 
     [Required]
     public string TenTaiLieu { get; set; }

@@ -17,6 +17,7 @@ export class MessageConstants {
     public static CANNOT_EDIT_MULTIPLE = 'Bạn không thể sửa nhiều hơn 1 bản ghi.';
     public static NOT_CHOOSE_ANY_RECORD = 'Bạn phải chọn ít nhất một bản ghi.';
     public static UPLOAD_OK_MSG = 'Tải lên thành công';
+    public static NOT_FOUND = 'không tìm thấy bản ghi.';
 
     public static REQUIRED_ERROR_MSG = 'Dữ liệu không được để trống';
     public static CHANGE_PASSWORD_SUCCCESS_MSG = 'Đổi mật khẩu thành công';

@@ -5,8 +5,7 @@ import type { BaseListFilterDto } from '../models';
 export interface CreateAndUpdateFileAttachmentDto {
   id?: string;
   loaiVuViec: LoaiVuViec;
-  complainId?: string;
-  denounceId?: string;
+  idHoSo?: string;
   tenTaiLieu: string;
   giaiDoan: number;
   hinhThuc: number;
@@ -38,8 +37,8 @@ export interface FileAttachmentDto extends AuditedEntityDto<string> {
 }
 
 export interface GetFileAttachmentListDto extends BaseListFilterDto {
-  complainId?: string;
-  denounceId?: string;
+  idHoSo?: string;
+  loaiVuViec: LoaiVuViec;
   giaiDoan?: number;
   hinhThuc?: number;
   congKhai?: boolean;

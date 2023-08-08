@@ -1017,24 +1017,20 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     let toado: L.LatLng = new L.LatLng(0, 0);
     //Add markers
     data
-      .filter(
-        x =>
-          (x.duLieuToaDo != null && x.duLieuToaDo.trim() != '') ||
-          (x.duLieuHinhHoc != null && x.duLieuHinhHoc.trim() != '')
-      )
+      .filter(x => x.duLieuToaDo || x.duLieuHinhHoc)
       .forEach(dataMap => {
         //let geometry: any;
         let geojson: any;
 
         if (this.checkToado(dataMap.duLieuToaDo)) {
-          
+
           //Có tọa độ hợp lệ thì lấy tọa độ
           toado = this.convertStringCoordiate(dataMap.duLieuToaDo);
         } else {
           //Không có tọa độ thì lấy điểm đầu tiên trong hình học
           //geometry = JSON.parse(dataMap.duLieuHinhHoc);
-          if (dataMap.duLieuHinhHoc != null && dataMap.duLieuHinhHoc.trim() != '') {
-            
+          if (dataMap.duLieuHinhHoc) {
+
             geojson = JSON.parse(dataMap.duLieuHinhHoc);
             var coordinates = geojson.geometry.coordinates;
             //var coordinates = geometry.coordinates;
@@ -1046,7 +1042,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         var info = this.info;
         //var pros = this.buildProperties(dataMap);
         //var infoContent = this.buildInfoContent(pros);
-        
+
         const marker = L.marker(toado, {
           icon: dataMap.loaiVuViec === LoaiVuViec.KhieuNai ? blueIcon : redIcon,
         });
@@ -1065,7 +1061,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         else if (dataMap.loaiVuViec == LoaiVuViec.ToCao) marker.addTo(this.tocao);
 
         //Add duLieuHinhHoc if any
-        if (dataMap.duLieuHinhHoc != null && dataMap.duLieuHinhHoc.trim() != '') {
+        if (dataMap.duLieuHinhHoc) {
           //this.quyhoach.clearLayers();
           //if (geometry==undefined)
           //  geometry = JSON.parse(dataMap.duLieuHinhHoc);

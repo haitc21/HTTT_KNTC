@@ -635,9 +635,6 @@ namespace KNTC.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ComplainId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(40)
@@ -668,9 +665,6 @@ namespace KNTC.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("CreatorId");
 
-                    b.Property<Guid?>("DenounceId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("ExtraProperties")
                         .HasColumnType("text")
                         .HasColumnName("ExtraProperties");
@@ -689,6 +683,10 @@ namespace KNTC.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("integer")
                         .HasColumnName("hinh_thuc");
+
+                    b.Property<Guid>("IdHoSo")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id_ho_so");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp without time zone")
@@ -729,15 +727,13 @@ namespace KNTC.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComplainId");
-
-                    b.HasIndex("DenounceId");
-
                     b.HasIndex("HinhThuc");
 
-                    b.HasIndex("LoaiVuViec", "ComplainId");
+                    b.HasIndex("IdHoSo");
 
-                    b.HasIndex("LoaiVuViec", "DenounceId");
+                    b.HasIndex("LoaiVuViec");
+
+                    b.HasIndex("LoaiVuViec", "IdHoSo");
 
                     b.ToTable("FileAttachments", "KNTC");
                 });
@@ -896,6 +892,105 @@ namespace KNTC.Migrations
                     b.HasIndex("IdHoSo");
 
                     b.ToTable("SpatialDatas", "SPATIAL_DATA");
+                });
+
+            modelBuilder.Entity("KNTC.Summaries.Summary", b =>
+                {
+                    b.Property<string>("BoPhanDangXL")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("bo_phan_dang_xl");
+
+                    b.Property<string>("CccdCmnd")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("cccd_cmnd");
+
+                    b.Property<bool>("CongKhai")
+                        .HasColumnType("boolean")
+                        .HasColumnName("cong_khai");
+
+                    b.Property<string>("DiaChiLienHe")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("dia_chi_lien_he");
+
+                    b.Property<string>("DienThoai")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("dien_thoai");
+
+                    b.Property<string>("DuLieuHinhHoc")
+                        .HasColumnType("text")
+                        .HasColumnName("du_lieu_hinh_hoc");
+
+                    b.Property<string>("DuLieuToaDo")
+                        .HasColumnType("text")
+                        .HasColumnName("du_lieu_toa_do");
+
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("KetQua")
+                        .HasColumnType("integer")
+                        .HasColumnName("ket_qua");
+
+                    b.Property<int>("LinhVuc")
+                        .HasColumnType("integer")
+                        .HasColumnName("linh_vuc");
+
+                    b.Property<int>("LoaiVuViec")
+                        .HasColumnType("integer")
+                        .HasColumnName("loai_vu_viec");
+
+                    b.Property<string>("MaHoSo")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ma_ho_so");
+
+                    b.Property<int>("MaQuanHuyen")
+                        .HasColumnType("integer")
+                        .HasColumnName("ma_quan_huyen");
+
+                    b.Property<int>("MaTinhTP")
+                        .HasColumnType("integer")
+                        .HasColumnName("ma_tinh_tp");
+
+                    b.Property<int>("MaXaPhuongTT")
+                        .HasColumnType("integer")
+                        .HasColumnName("ma_xa_phuong_tt");
+
+                    b.Property<string>("NguoiNopDon")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("nguoi_nop_don");
+
+                    b.Property<string>("SoThua")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("so_thua");
+
+                    b.Property<DateTime>("ThoiGianHenTraKQ")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("thoi_gian_hen_tra_kq");
+
+                    b.Property<DateTime>("ThoiGianTiepNhan")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("thoi_gian_tiep_nhan");
+
+                    b.Property<string>("TieuDe")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tieu_de");
+
+                    b.Property<string>("ToBanDo")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("to_ban_do");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("Summaries", "KNTC");
                 });
 
             modelBuilder.Entity("KNTC.SysConfigs.SysConfig", b =>
