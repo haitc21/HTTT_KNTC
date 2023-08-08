@@ -9,18 +9,8 @@ import {
 import { LoaiVuViec } from '@proxy';
 import { v4 as uuidv4 } from 'uuid';
 import { SummaryDto } from '@proxy/summaries';
-import { MapPopupComponent } from './map-popup/map-popup.component';
 
-import * as L from 'leaflet';
-import 'leaflet.markercluster/dist/leaflet.markercluster';
-import 'leaflet.markercluster.layersupport';
-//import "leaflet-draw/dist/leaflet.draw.css";
-//import "leaflet-draw/dist/leaflet.draw.js";
-import 'leaflet-draw';
-//import "leaflet-loading";
-//import "leaflet-measure";
-import 'leaflet.measurecontrol';
-import 'leaflet.locatecontrol';
+
 import { format } from 'date-fns';
 import { LinhVucOptions } from '../../constants/consts';
 import { GetSysConfigService } from '../../services/sysconfig.services';
@@ -34,6 +24,17 @@ import { ComplainDetailComponent } from 'src/app/pages/complain/detail/complain-
 import { MessageConstants } from '../../constants/messages.const';
 import { DialogService } from 'primeng/dynamicdialog';
 
+import * as L from 'leaflet';
+import "leaflet.markercluster";
+import 'leaflet.markercluster.layersupport';
+import 'leaflet-draw';
+import 'leaflet.measurecontrol';
+import 'leaflet.locatecontrol';
+// import 'leaflet.markercluster/dist/leaflet.markercluster';
+//import "leaflet-draw/dist/leaflet.draw.css";
+//import "leaflet-draw/dist/leaflet.draw.js";
+//import "leaflet-loading";
+//import "leaflet-measure";
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
 //import "leaflet/dist/leaflet.css";
