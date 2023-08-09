@@ -34,7 +34,9 @@
               "fast-sha256",
               "quill",
               "leaflet.markercluster.layersupport",
-              "leaflet"
+              "leaflet",
+              "leaflet.markercluster",
+              "xml2js"
             ],
             "assets": [
               "src/favicon.ico",

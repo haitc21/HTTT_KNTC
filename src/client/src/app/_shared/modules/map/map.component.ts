@@ -9,18 +9,8 @@ import {
 import { LoaiVuViec } from '@proxy';
 import { v4 as uuidv4 } from 'uuid';
 import { SummaryDto } from '@proxy/summaries';
-import { MapPopupComponent } from './map-popup/map-popup.component';
 
-import * as L from 'leaflet';
-import 'leaflet.markercluster/dist/leaflet.markercluster';
-import 'leaflet.markercluster.layersupport';
-//import "leaflet-draw/dist/leaflet.draw.css";
-//import "leaflet-draw/dist/leaflet.draw.js";
-import 'leaflet-draw';
-//import "leaflet-loading";
-//import "leaflet-measure";
-import 'leaflet.measurecontrol';
-import 'leaflet.locatecontrol';
+
 import { format } from 'date-fns';
 import { LinhVucOptions } from '../../constants/consts';
 import { GetSysConfigService } from '../../services/sysconfig.services';
@@ -33,7 +23,20 @@ import { DenounceDetailComponent } from 'src/app/pages/denounce/detail/denounce-
 import { ComplainDetailComponent } from 'src/app/pages/complain/detail/complain-detail.component';
 import { MessageConstants } from '../../constants/messages.const';
 import { DialogService } from 'primeng/dynamicdialog';
+import xml2js from 'xml2js';
 
+import * as L from 'leaflet';
+import "leaflet.markercluster";
+import 'leaflet.markercluster.layersupport';
+import 'leaflet-draw';
+import 'leaflet.measurecontrol';
+import 'leaflet.locatecontrol';
+import { GeoServerService } from '../../services/geo-server.service';
+// import 'leaflet.markercluster/dist/leaflet.markercluster';
+//import "leaflet-draw/dist/leaflet.draw.css";
+//import "leaflet-draw/dist/leaflet.draw.js";
+//import "leaflet-loading";
+//import "leaflet-measure";
 //import 'leaflet.locatecontrol';
 //change projection - 0 cần projection nữa
 //import "leaflet/dist/leaflet.css";
@@ -92,16 +95,51 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   quyhoach: any;
   drawningBoard: any;
   geoserverUrl: string;
+  layerInfo: any[] = [];
 
   constructor(
     private notificationService: NotificationService,
     private dialogService: DialogService,
     private sysConfigService: GetSysConfigService,
-    public layoutService: LayoutService
+    public layoutService: LayoutService,
+    private geoServerService: GeoServerService
   ) { }
   ngAfterViewInit() {
     this.getSysConfigAndInitMap();
+    this.geoServerService.getFeatureTypes().subscribe(
+      xmlResponse => {
+        let parser = new xml2js.Parser(
+          {
+            trim: true,
+            explicitArray: true
+          });
+        parser.parseString(xmlResponse, (err, result) => {
+          if (err) {
+            console.error('Error parsing XML:', err);
+            return;
+          }
+          const featureTypes = result["wfs:WFS_Capabilities"]?.FeatureTypeList[0]?.FeatureType;
+          console.log('featureTypes', featureTypes);
+          featureTypes.forEach(featureType => {
+            const layerName = featureType.Name[0];
+            const title = featureType.Title[0];
+            const abstract = featureType.Abstract[0];
+
+            this.layerInfo.push({
+              name: layerName,
+              title: title,
+              abstract: abstract
+            });
+          });
+          console.log('lyers', this.layerInfo);
+        });
+      },
+      error => {
+        console.error('Error fetching data from GeoServer:', error);
+      }
+    );
   }
+
   private getSysConfigAndInitMap() {
     this.layoutService.blockUI$.next(true);
     const cacheKey = SysConfigConsts.Prefix;
@@ -222,9 +260,8 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     var mcgLayerSupportGroup = L.markerClusterGroup.layerSupport({
       maxClusterRadius: 10,
-      iconCreateFunction: function (cluster) {
+      iconCreateFunction: (cluster) => {
         //var markers = cluster.getAllChildMarkers();
-
         return L.divIcon({
           html: cluster.getChildCount(),
           className: 'mycluster',
@@ -232,14 +269,14 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         });
       },
       //Disable all of the defaults:
-      spiderfyOnMaxZoom: false,
-      showCoverageOnHover: false,
-      zoomToBoundsOnClick: false,
-      animate: true,
-      animateAddingMarkers: false,
-      spiderfyDistanceMultiplier: 1,
-      //Options to pass to the L.Polygon constructor
-      polygonOptions: {},
+      // spiderfyOnMaxZoom: false,
+      // showCoverageOnHover: false,
+      // zoomToBoundsOnClick: false,
+      // animate: true,
+      // animateAddingMarkers: false,
+      // spiderfyDistanceMultiplier: 1,
+      // //Options to pass to the L.Polygon constructor
+      // polygonOptions: {},
     });
     mcgLayerSupportGroup.addLayer(this.khieunai);
     mcgLayerSupportGroup.addLayer(this.tocao);
