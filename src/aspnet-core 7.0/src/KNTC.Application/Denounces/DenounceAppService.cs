@@ -1,4 +1,5 @@
-﻿using KNTC.Extenssions;
+﻿using KNTC.Complains;
+using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Helpers;
 using KNTC.Localization;
@@ -16,6 +17,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
@@ -75,10 +77,9 @@ public class DenounceAppService : CrudAppService<
     {
         var denounce = await _denounceRepo.GetAsync(id);
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.DenouncesPermission.Default);
-        if ((hasPermission.Succeeded == false && denounce.CongKhai == false)
-            || (CurrentUser.Id != denounce.CreatorId && CurrentUser.Id != denounce.LastModifierId))
+        if (!hasPermission.Succeeded && !denounce.CongKhai)
         {
-            return null;
+            throw new UserFriendlyException("Bạn không có quyền xem thông tin này");
         }
         var result = ObjectMapper.Map<Denounce, DenounceDto>(denounce);
         var spatialData = await _spatialDataRepo.FindByIdHoSoAsync(id);

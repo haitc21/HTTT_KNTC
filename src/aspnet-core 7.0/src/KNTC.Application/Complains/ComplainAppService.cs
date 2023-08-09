@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.BlobStoring;
@@ -76,10 +77,9 @@ public class ComplainAppService : CrudAppService<
     {
         var complain = await _complainRepo.GetAsync(id);
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
-        if ((hasPermission.Succeeded == false && complain.CongKhai == false)
-            || (CurrentUser.Id != complain.CreatorId && CurrentUser.Id != complain.LastModifierId))
+        if (!hasPermission.Succeeded && !complain.CongKhai)
         {
-            return null;
+            throw new UserFriendlyException("Bạn không có quyền xem thông tin này");
         }
         var result = ObjectMapper.Map<Complain, ComplainDto>(complain);
         var spatialData = await _spatialDataRepo.FindByIdHoSoAsync(id);

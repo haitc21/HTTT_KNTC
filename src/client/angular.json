@@ -35,7 +35,8 @@
               "quill",
               "leaflet.markercluster.layersupport",
               "leaflet",
-              "leaflet.markercluster"
+              "leaflet.markercluster",
+              "xml2js"
             ],
             "assets": [
               "src/favicon.ico",
