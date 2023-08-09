@@ -76,7 +76,7 @@ public class KNTCDbContext :
     public DbSet<Denounce> Denounces { get; set; }
     public DbSet<FileAttachment> FileAttachments { get; set; }
     public DbSet<DocumentType> DocumentTypes { get; set; }
-    public DbSet<BaseMap> LandTypes { get; set; }
+    public DbSet<LandType> LandTypes { get; set; }
     public DbSet<BaseMap> BaseMap { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<UnitType> UnitTypes { get; set; }
