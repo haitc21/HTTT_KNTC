@@ -374,37 +374,42 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           this.huyenChange(this.selectedEntity.maQuanHuyen, true);
           this.tinhThuaDatChange(this.selectedEntity.tinhThuaDat, true);
           this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
-
-          this.form.patchValue(this.selectedEntity);
-          this.form
-            .get('ngaySinh')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.ngaySinh));
-          this.form
-            .get('thoiGianTiepNhan')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianTiepNhan));
-          this.form
-            .get('thoiGianHenTraKQ')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianHenTraKQ));
-          this.form
-            .get('ngayKhieuNai1')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai1));
-          this.form
-            .get('ngayTraKQ1')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ1));
-          this.form
-            .get('ngayKhieuNai2')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai2));
-          this.form
-            .get('ngayTraKQ2')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
-
-          if (this.mode == 'view' && !this.hasPermissionUpdate) this.form.disable();
-          this.layoutService.blockUI$.next(false);
+          setTimeout(() => {
+            this.patchValueForm();
+            this.layoutService.blockUI$.next(false);
+          }, 100);
         },
         error: () => {
           this.layoutService.blockUI$.next(false);
         },
       });
+  }
+
+  patchValueForm() {
+    this.form.patchValue(this.selectedEntity);
+    this.form
+      .get('ngaySinh')
+      .setValue(this.utilService.convertDateToLocal(this.selectedEntity.ngaySinh));
+    this.form
+      .get('thoiGianTiepNhan')
+      .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianTiepNhan));
+    this.form
+      .get('thoiGianHenTraKQ')
+      .setValue(this.utilService.convertDateToLocal(this.selectedEntity.thoiGianHenTraKQ));
+    this.form
+      .get('ngayKhieuNai1')
+      .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai1));
+    this.form
+      .get('ngayTraKQ1')
+      .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ1));
+    this.form
+      .get('ngayKhieuNai2')
+      .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayKhieuNai2));
+    this.form
+      .get('ngayTraKQ2')
+      .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
+
+    if (this.mode == 'view' && !this.hasPermissionUpdate) this.form.disable();
   }
 
   saveChange() {
