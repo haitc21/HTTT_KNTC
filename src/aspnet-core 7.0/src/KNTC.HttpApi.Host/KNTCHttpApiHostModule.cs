@@ -124,9 +124,7 @@ public class KNTCHttpApiHostModule : AbpModule
             options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
             {
                 AbsoluteExpiration = DateTimeOffset.Now.AddHours(24),
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24),
-                SlidingExpiration = TimeSpan.FromHours(24),
-
+                SlidingExpiration = TimeSpan.FromHours(1),
             };
             options.KeyPrefix = "KNTC:";
         });

@@ -18,9 +18,6 @@ public static class EnumExtensions
             case LoaiKetQua.CoDungCoSai:
                 return "Có đúng, có sai";
 
-            case LoaiKetQua.ChuaCoKQ:
-                return "Chưa có KQ";
-
             default:
                 throw new ArgumentException("Giá trị không hợp lệ");
         }

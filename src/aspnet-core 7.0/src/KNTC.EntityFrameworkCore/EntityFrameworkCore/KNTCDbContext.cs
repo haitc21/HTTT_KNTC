@@ -3,6 +3,7 @@ using KNTC.Complains;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
+using KNTC.Histories;
 using KNTC.LandTypes;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
@@ -81,6 +82,7 @@ public class KNTCDbContext :
     public DbSet<SysConfig> SysConfigs { get; set; }
     public DbSet<SpatialData> SpatialDatas { get; set; }
     public DbSet<Summary> Summaries { get; set; }
+    public DbSet<History> Histories { get; set; }
 
     public KNTCDbContext(DbContextOptions<KNTCDbContext> options)
         : base(options)
@@ -120,6 +122,8 @@ public class KNTCDbContext :
             b.HasIndex(x => x.MaHoSo);
             b.HasIndex(x => x.LinhVuc);
             b.HasIndex(x => new { x.ThoiGianTiepNhan, x.MaHoSo });
+            b.HasIndex(x => x.TrangThai);
+            b.HasIndex(x => x.TinhTrang);
 
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
@@ -173,6 +177,12 @@ public class KNTCDbContext :
             b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
             b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
+            b.Property(x => x.TrangThai)
+             .HasColumnName("trang_thai")
+             .HasDefaultValue(TrangThai.TiepNhan);
+            b.Property(x => x.TinhTrang)
+             .HasColumnName("tinh_trang")
+             .HasDefaultValue(TinhTrang.ChuaXuLy);
         });
 
         builder.Entity<Denounce>(b =>
@@ -183,6 +193,8 @@ public class KNTCDbContext :
             b.HasIndex(x => x.MaHoSo);
             b.HasIndex(x => x.LinhVuc);
             b.HasIndex(x => new { x.ThoiGianTiepNhan, x.MaHoSo });
+            b.HasIndex(x => x.TrangThai);
+            b.HasIndex(x => x.TinhTrang);
 
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
@@ -233,8 +245,13 @@ public class KNTCDbContext :
             b.Property(x => x.GiaHanGQTC2).HasColumnName("gia_han_GQTC_2");
             b.Property(x => x.SoVBKLNDTC).HasColumnName("so_VB_KL_NDTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
             b.Property(x => x.NgayNhanTBKQXLKLTC).HasColumnName("ngay_nhan_TB_KQXLKLTC");
-
             b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
+            b.Property(x => x.TrangThai)
+            .HasColumnName("trang_thai")
+            .HasDefaultValue(TrangThai.TiepNhan);
+            b.Property(x => x.TinhTrang)
+             .HasColumnName("tinh_trang")
+             .HasDefaultValue(TinhTrang.ChuaXuLy);
         });
 
         builder.Entity<FileAttachment>(b =>
@@ -392,6 +409,18 @@ public class KNTCDbContext :
             b.Property(x => x.CongKhai).HasColumnName("cong_khai");
             b.Property(x => x.CccdCmnd).HasColumnName("cccd_cmnd");
         });
-
+        builder.Entity<History>(b =>
+        {
+            b.ToTable("Histories", KNTCConsts.KNTCDbSchema);
+            b.ConfigureByConvention();
+            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.HasIndex(x => x.IdHoSo);
+            b.HasIndex(x => x.LoaiVuViec);
+            b.Property(x => x.IdHoSo).HasColumnName("id_ho_so");
+            b.Property(x => x.LoaiVuViec).HasColumnName("loai_vu_viec");
+            b.Property(x => x.ThaoTac).HasColumnName("thao_tac");
+            b.Property(x => x.NguoithucHien).HasColumnName("nguoi_thuc_hien");
+            b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
+        });
     }
 }

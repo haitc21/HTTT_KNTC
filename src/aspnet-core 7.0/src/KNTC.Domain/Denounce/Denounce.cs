@@ -67,6 +67,8 @@ public class Denounce : AuditedAggregateRoot<Guid>
     public LoaiKetQua? KetQua { get; set; }
 
     public bool CongKhai { get; set; }
+    public TrangThai TrangThai { get; set; }
+    public TinhTrang TinhTrang { get; set; }
     public LandType LandType { get; set; }
 
     private void SetMaHoSo([NotNull] string maHoSo)
