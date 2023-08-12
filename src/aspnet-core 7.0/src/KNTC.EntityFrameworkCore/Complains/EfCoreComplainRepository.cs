@@ -49,7 +49,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              )
              .WhereIf(
                 ketQua.HasValue,
-                x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
+                x => x.KetQua == ketQua
              )
              .WhereIf(
                 maTinhTP.HasValue,
@@ -125,7 +125,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              )
              .WhereIf(
                 ketQua.HasValue,
-                x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
+                x => x.KetQua == ketQua
              )
              .WhereIf(
                 maTinhTP.HasValue,

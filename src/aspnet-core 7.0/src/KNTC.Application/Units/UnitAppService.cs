@@ -87,7 +87,8 @@ public class UnitAppService : CrudAppService<
         async () => await GetListLookup(unitTypeId, parentId),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+            SlidingExpiration = TimeSpan.FromMinutes(1)
         });
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }

@@ -100,7 +100,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         async () => await GetMapFromDBAsync(input),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+            SlidingExpiration = TimeSpan.FromMinutes(1)
         });
         return cacheItem.Items;
     }

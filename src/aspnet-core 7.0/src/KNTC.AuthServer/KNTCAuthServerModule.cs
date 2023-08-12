@@ -151,7 +151,8 @@ public class KNTCAuthServerModule : AbpModule
         {
             options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
             {
-                AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(24),
+                SlidingExpiration = TimeSpan.FromHours(1),
             };
             options.KeyPrefix = "KNTC:";
         });
