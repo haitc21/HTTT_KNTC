@@ -30,4 +30,6 @@ public class UpdateDenounceEto
     public bool CongKhai { get; set; }
     public string? DuLieuToaDo { get; set; }
     public string? DuLieuHinhHoc { get; set; }
+    public string GhiChu { get; set; }
+    public ThaoTac ThaoTac { get; set; }
 }

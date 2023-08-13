@@ -135,6 +135,7 @@ public class CreateComplainDto
 
     [Required]
     public bool CongKhai { get; set; }
+    public ThaoTac ThaoTac { get; set; }
 
     public virtual List<CreateAndUpdateFileAttachmentDto>? FileAttachments { get; set; }
 }

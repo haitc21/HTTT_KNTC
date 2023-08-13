@@ -38,22 +38,24 @@ public enum Status
 public enum TrangThai
 {
     TiepNhan = 0,
-    ChuyenDon = 1,
-    ThuLy = 2,
-    KetLuan = 3,
-    TraDpm = 4,
-    RutDon = 5
+    DangXuLy = 1,
+    ChuyenDon = 2,
+    ThuLy = 3,
+    KetLuan = 4,
+    TraDpm = 5,
+    RutDon = 6
 }
 public enum TinhTrang
 {
-    DangXuLy = 0,
-    DaXuLy = 1,
-    SapDenHan = 2,
-    QuaHan = 3
+    TiepNhan = 0,
+    DangXuLy = 1,
+    DaXuLy = 2,
+    SapDenHan = 3,
+    QuaHan = 4
 }
 public enum ThaoTac
 {
-    taoMoi = 0,
+    TaoMoi = 0,
     ChinhSua = 1,
     TiepNhan = 2,
     ChuyenDon = 3,

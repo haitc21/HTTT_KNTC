@@ -20,7 +20,6 @@ public class Complain : AuditedAggregateRoot<Guid>
     public Complain(Guid id, string maHoSo) : base(id)
     {
         SetMaHoSo(maHoSo);
-        TrangThai = TrangThai.TiepNhan;
     }
 
     public string MaHoSo { get; private set; }

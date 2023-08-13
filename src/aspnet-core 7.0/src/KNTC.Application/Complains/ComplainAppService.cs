@@ -234,6 +234,7 @@ public class ComplainAppService : CrudAppService<
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var createEto = ObjectMapper.Map<CreateComplainDto, CreateComplainEto>(input);
         createEto.Id = complain.Id;
+        // spatial data,  Ghi lich su
         await _distributedEventBus.PublishAsync(createEto);
         return result;
     }
@@ -285,12 +286,14 @@ public class ComplainAppService : CrudAppService<
                                           ThamQuyen2: input.ThamQuyen2,
                                           SoQD2: input.SoQD2,
                                           congKhai: input.CongKhai,
+                                          trangThai: input.TrangThai,
                                           KetQua1: input.KetQua1,
                                           KetQua2: input.KetQua2);
         await _complainRepo.UpdateAsync(complain);
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var updateEto = ObjectMapper.Map<UpdateComplainDto, UpdateComplainEto>(input);
         updateEto.Id = complain.Id;
+        // spatial data,  Ghi lich su
         await _distributedEventBus.PublishAsync(updateEto);
         return ObjectMapper.Map<Complain, ComplainDto>(complain);
     }
@@ -322,8 +325,6 @@ public class ComplainAppService : CrudAppService<
         await _distributedEventBus.PublishAsync(new DeleteMultipleComplainEto(ids.ToList()));
         await _complainRepo.DeleteManyAsync(ids);
     }
-
-    //[Authorize(KNTCPermissions.ComplainsPermission.Default)]
     public async Task<byte[]> GetExcelAsync(GetComplainListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
@@ -486,19 +487,5 @@ public class ComplainAppService : CrudAppService<
             wb.Close();
             return stream.ToArray();
         }
-    }
-
-    [Authorize(KNTCPermissions.ComplainsPermission.Edit)]
-    public async Task<ComplainDto> UpdateStageAsync(UpdateStageComplainDto input)
-    {
-        var complain = await _complainRepo.GetAsync(input.Id, false);
-        complain.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
-        complain.TrangThai = input.TrangThai;
-        _complainManager.SettinhTrang(complain);
-        await _complainRepo.UpdateAsync(complain);
-        // Ghi lai lich su thao tac
-        var history = new History(input.Id, LoaiVuViec.KhieuNai, input.TrangThai, CurrentUser.Id.Value, input.GhiChu);
-        await _historyRepo.InsertAsync(history);
-        return ObjectMapper.Map<Complain, ComplainDto>(complain);
     }
 }

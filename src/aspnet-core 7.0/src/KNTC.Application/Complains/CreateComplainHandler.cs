@@ -34,8 +34,9 @@ public class CreateComplainHandler
         var spatialData = await _spatialDataManager.CreateAsync(eventData);
         await _spatialDataRepo.InsertAsync(spatialData);
         // Ghi lich su
-        var history = new History(eventData.Id, LoaiVuViec.KhieuNai,
-                                 ThaoTac.taoMoi,
+        var history = new History(eventData.Id,
+                                 LoaiVuViec.KhieuNai,
+                                 eventData.ThaoTac,
                                  _currentUser.Id.Value,
                                  eventData.GhiChu);
         await _historyRepo.InsertAsync(history);

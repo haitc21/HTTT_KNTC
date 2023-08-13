@@ -1,4 +1,5 @@
-﻿using KNTC.FileAttachments;
+﻿using KNTC.Complains;
+using KNTC.FileAttachments;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -94,7 +95,7 @@ public class DenounceManager : DomainService
         {
             throw new BusinessException(KNTCDomainErrorCodes.HoSoAlreadyExist).WithData("maHoSo", maHoSo);
         }
-        return new Denounce(GuidGenerator.Create(), maHoSo)
+        var denounce = new Denounce(GuidGenerator.Create(), maHoSo)
         {
             TieuDe = tieuDe,
             LinhVuc = linhVuc,
@@ -136,8 +137,11 @@ public class DenounceManager : DomainService
             SoVBKLNDTC = soVBKLNDTC,
             NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC,
             KetQua = ketQua,
-            CongKhai = congKhai
+            CongKhai = congKhai,
+            TrangThai = boPhanDangXL.IsNullOrEmpty() ? TrangThai.TiepNhan : TrangThai.DangXuLy
         };
+        SettinhTrang(denounce);
+        return denounce;
     }
 
     public async Task ChangeMaHoSoAsync([NotNull] Denounce hoSo, [NotNull] string maHoSo)
@@ -194,7 +198,8 @@ public class DenounceManager : DomainService
                                    string? soVBKLNDTC,
                                    DateTime? ngayNhanTBKQXLKLTC,
                                    LoaiKetQua? ketQua,
-                                   bool congKhai
+                                   bool congKhai,
+                                   [NotNull] TrangThai trangThai
       )
     {
         Check.NotNull(denounce, nameof(denounce));
@@ -270,5 +275,32 @@ public class DenounceManager : DomainService
         denounce.NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC;
         denounce.KetQua = ketQua;
         denounce.CongKhai = congKhai;
+        denounce.TrangThai = trangThai;
+        SettinhTrang(denounce);
+    }
+
+    public void SettinhTrang(Denounce denounce)
+    {
+        if (denounce.TrangThai < TrangThai.KetLuan) // tiep nhan, da thu ly, chuyen don
+        {
+            TimeSpan timeDifference = DateTime.Now - denounce.ThoiGianHenTraKQ;
+            if (timeDifference.TotalMilliseconds < 0)
+            {
+                denounce.TinhTrang = TinhTrang.QuaHan;
+            }
+            else if (timeDifference.TotalDays <= 7)
+            {
+                denounce.TinhTrang = TinhTrang.SapDenHan;
+            }
+            else
+            {
+                denounce.TinhTrang = denounce.TrangThai == TrangThai.TiepNhan ? TinhTrang.TiepNhan : TinhTrang.DangXuLy;
+            }
+
+        }
+        else // ket luan, tra don, rut don
+        {
+            denounce.TinhTrang = TinhTrang.DaXuLy;
+        }
     }
 }

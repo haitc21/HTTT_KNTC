@@ -139,7 +139,8 @@ public class ComplainManager : DomainService
             SoQD2 = SoQD2,
             KetQua2 = KetQua2,
             KetQua = KetQua2 ?? KetQua1,
-            CongKhai = congKhai
+            CongKhai = congKhai,
+            TrangThai = boPhanDangXL.IsNullOrEmpty() ? TrangThai.TiepNhan : TrangThai.DangXuLy
         };
         SettinhTrang(complain);
         return complain;
@@ -199,6 +200,7 @@ public class ComplainManager : DomainService
                                    string? ThamQuyen2,
                                    string? SoQD2,
                                    [NotNull] bool congKhai,
+                                   [NotNull] TrangThai trangThai,
                                    LoaiKetQua? KetQua1 = null,
                                    LoaiKetQua? KetQua2 = null
       )
@@ -277,6 +279,7 @@ public class ComplainManager : DomainService
         complain.KetQua2 = KetQua2;
         complain.CongKhai = congKhai;
         complain.KetQua = KetQua2 ?? KetQua1;
+        complain.TrangThai = trangThai;
         SettinhTrang(complain);
     }
     public void SettinhTrang(Complain complain)
@@ -294,7 +297,7 @@ public class ComplainManager : DomainService
             }
             else
             {
-                complain.TinhTrang = TinhTrang.DangXuLy;
+                complain.TinhTrang = complain.TrangThai == TrangThai.TiepNhan ? TinhTrang.TiepNhan : TinhTrang.DangXuLy;
             }
 
         }

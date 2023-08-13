@@ -184,7 +184,7 @@ public class KNTCDbContext :
              .HasDefaultValue(TrangThai.TiepNhan);
             b.Property(x => x.TinhTrang)
              .HasColumnName("tinh_trang")
-             .HasDefaultValue(TinhTrang.ChuaXuLy);
+             .HasDefaultValue(TinhTrang.TiepNhan);
         });
 
         builder.Entity<Denounce>(b =>
@@ -253,7 +253,7 @@ public class KNTCDbContext :
             .HasDefaultValue(TrangThai.TiepNhan);
             b.Property(x => x.TinhTrang)
              .HasColumnName("tinh_trang")
-             .HasDefaultValue(TinhTrang.ChuaXuLy);
+             .HasDefaultValue(TinhTrang.TiepNhan);
         });
 
         builder.Entity<FileAttachment>(b =>

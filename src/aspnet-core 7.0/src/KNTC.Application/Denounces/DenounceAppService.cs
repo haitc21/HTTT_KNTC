@@ -223,6 +223,7 @@ public class DenounceAppService : CrudAppService<
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var createEto = ObjectMapper.Map<CreateDenounceDto, CreateDenounceEto>(input);
         createEto.Id = denounce.Id;
+        // spatial data,  Ghi lich su
         await _distributedEventBus.PublishAsync(createEto);
         return result;
     }
@@ -274,11 +275,13 @@ public class DenounceAppService : CrudAppService<
                                           soVBKLNDTC: input.SoVBKLNDTC,
                                           ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
                                           ketQua: input.KetQua,
-                                          congKhai: input.CongKhai);
+                                          congKhai: input.CongKhai,
+                                          trangThai: input.TrangThai);
         await _denounceRepo.UpdateAsync(denounce);
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var updateEto = ObjectMapper.Map<UpdateDenounceDto, UpdateDenounceEto>(input);
         updateEto.Id = denounce.Id;
+        // spatial data,  Ghi lich su
         await _distributedEventBus.PublishAsync(updateEto);
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }
