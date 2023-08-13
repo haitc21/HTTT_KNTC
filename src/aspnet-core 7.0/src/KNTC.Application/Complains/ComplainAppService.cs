@@ -1,6 +1,7 @@
 ﻿using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Helpers;
+using KNTC.Histories;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
@@ -10,6 +11,7 @@ using KNTC.Summaries;
 using KNTC.Units;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Hosting;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
@@ -44,6 +46,7 @@ public class ComplainAppService : CrudAppService<
     private readonly IRedisCacheService _cacheService;
     private readonly IDistributedEventBus _distributedEventBus;
     private readonly ISpatialDataRepository _spatialDataRepo;
+    private readonly IRepository<History, int> _historyRepo;
 
     public ComplainAppService(IRepository<Complain, Guid> repository,
         IComplainRepository complainRepo,
@@ -55,7 +58,8 @@ public class ComplainAppService : CrudAppService<
         IRepository<Unit, int> unitRepo,
         IRedisCacheService cacheService,
         IDistributedEventBus distributedEventBus,
-        ISpatialDataRepository spatialDataRepo) : base(repository)
+        ISpatialDataRepository spatialDataRepo,
+        IRepository<History, int> historyRepo) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
@@ -70,6 +74,7 @@ public class ComplainAppService : CrudAppService<
         _cacheService = cacheService;
         _distributedEventBus = distributedEventBus;
         _spatialDataRepo = spatialDataRepo;
+        _historyRepo = historyRepo;
     }
 
     [AllowAnonymous]
@@ -481,5 +486,19 @@ public class ComplainAppService : CrudAppService<
             wb.Close();
             return stream.ToArray();
         }
+    }
+
+    [Authorize(KNTCPermissions.ComplainsPermission.Edit)]
+    public async Task<ComplainDto> UpdateStageAsync(UpdateStageComplainDto input)
+    {
+        var complain = await _complainRepo.GetAsync(input.Id, false);
+        complain.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        complain.TrangThai = input.TrangThai;
+        _complainManager.SettinhTrang(complain);
+        await _complainRepo.UpdateAsync(complain);
+        // Ghi lai lich su thao tac
+        var history = new History(input.Id, LoaiVuViec.KhieuNai, input.TrangThai, CurrentUser.Id.Value, input.GhiChu);
+        await _historyRepo.InsertAsync(history);
+        return ObjectMapper.Map<Complain, ComplainDto>(complain);
     }
 }

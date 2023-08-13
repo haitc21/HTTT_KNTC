@@ -95,7 +95,7 @@ public class ComplainManager : DomainService
         {
             throw new BusinessException(KNTCDomainErrorCodes.HoSoAlreadyExist).WithData("maHoSo", maHoSo);
         }
-        return new Complain(GuidGenerator.Create(), maHoSo)
+        var complain =  new Complain(GuidGenerator.Create(), maHoSo)
         {
             TieuDe = tieuDe,
             LinhVuc = linhVuc,
@@ -141,6 +141,8 @@ public class ComplainManager : DomainService
             KetQua = KetQua2 ?? KetQua1,
             CongKhai = congKhai
         };
+        SettinhTrang(complain);
+        return complain;
     }
 
     public async Task ChangeMaHoSoAsync([NotNull] Complain hoSo, [NotNull] string maHoSo)
@@ -275,5 +277,30 @@ public class ComplainManager : DomainService
         complain.KetQua2 = KetQua2;
         complain.CongKhai = congKhai;
         complain.KetQua = KetQua2 ?? KetQua1;
+        SettinhTrang(complain);
+    }
+    public void SettinhTrang(Complain complain)
+    {
+        if (complain.TrangThai < TrangThai.KetLuan) // tiep nhan, da thu ly, chuyen don
+        {
+            TimeSpan timeDifference = DateTime.Now - complain.ThoiGianHenTraKQ;
+            if (timeDifference.TotalMilliseconds < 0)
+            {
+                complain.TinhTrang = TinhTrang.QuaHan;
+            }
+            else if (timeDifference.TotalDays <= 7)
+            {
+                complain.TinhTrang = TinhTrang.SapDenHan;
+            }
+            else
+            {
+                complain.TinhTrang = TinhTrang.DangXuLy;
+            }
+
+        }
+        else // ket luan, tra don, rut don
+        {
+            complain.TinhTrang = TinhTrang.DaXuLy;
+        }
     }
 }

@@ -30,4 +30,5 @@ public class CreateComplainEto
     public bool CongKhai { get; set; }
     public string? DuLieuToaDo { get; set; }
     public string? DuLieuHinhHoc { get; set; }
+    public string GhiChu { get; set; }
 }

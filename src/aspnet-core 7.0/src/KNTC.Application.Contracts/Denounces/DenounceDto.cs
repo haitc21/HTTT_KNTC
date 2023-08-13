@@ -58,4 +58,6 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public bool CongKhai { get; set; }
     public virtual List<FileAttachmentDto> FileAttachments { get; set; }
     public string? ConcurrencyStamp { get; set; }
+    public TrangThai TrangThai { get; set; }
+    public TinhTrang TinhfTrang { get; set; }
 }
