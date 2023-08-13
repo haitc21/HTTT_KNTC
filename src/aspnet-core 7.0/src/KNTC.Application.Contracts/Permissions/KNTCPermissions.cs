@@ -42,6 +42,16 @@ public static class KNTCPermissions
         public const string Delete = Default + ".Delete";
     }
 
+    public const string BaseMapGroupName = "BaseMaps";
+
+    public static class BaseMapPermission
+    {
+        public const string Default = BaseMapGroupName;
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+
     public const string LandTypeGroupName = "LandTypes";
 
     public static class LandTypePermission

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KNTC.BaseMaps;
 using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
 using KNTC.Denounces;
@@ -72,6 +73,10 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<LandType, LandTypeDto>();
         CreateMap<LandType, LandTypeLookupDto>();
         CreateMap<CreateAndUpdateLandTypeDto, LandType>();
+
+        CreateMap<BaseMap, BaseMapDto>();
+        CreateMap<BaseMap, BaseMapLookupDto>();
+        CreateMap<CreateAndUpdateBaseMapDto, BaseMap>();
 
         CreateMap<Unit, UnitDto>();
         CreateMap<Unit, UnitLookupDto>();
