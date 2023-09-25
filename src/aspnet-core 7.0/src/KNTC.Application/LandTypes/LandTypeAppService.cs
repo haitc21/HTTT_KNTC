@@ -20,7 +20,7 @@ public class LandTypeAppService : CrudAppService<
             LandType,
             LandTypeDto,
             int,
-            GetLandTypeListDto,
+            GetLandTypesListDto,
             CreateAndUpdateLandTypeDto>, ILandTypeAppService
 {
     private readonly LandTypeManager _landTypeManager;
@@ -36,7 +36,7 @@ public class LandTypeAppService : CrudAppService<
         _cache = cache;
     }
 
-    public override async Task<PagedResultDto<LandTypeDto>> GetListAsync(GetLandTypeListDto input)
+    public override async Task<PagedResultDto<LandTypeDto>> GetListAsync(GetLandTypesListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {

@@ -28,8 +28,8 @@ export class MessageConstants {
     public static FORM_INVALID = 'Kiểm tra lại thông tin';
 
     public static COORDIATE_INVALID = 'Dữ liệu tọa độ không hợp lệ. Bạn hãy chọn một điểm trên bản đồ hoặc gõ đúng địa chỉ theo chuẩn tọa độ địa lý!';
-    public static USE_MAP_DRAW = 'Bạn hãy Sử dụng công cụ vẽ trên bản đồ để thể hiện thửa đất!';
-    public static CHOSE_COORDIATE = 'Bạn hãy chọn một điểm trên bản đồ để thay đổi vị trí có khiếu nại/tố cáo!';
-    public static GEOJSON_INVALID = 'Dữ liệu hình học không hợp lệ. Bạn hãy sử dụng công cụ vẽ trên bản đồ hoặc gõ đúng dữ liệu dạng GeoJson!';
+    public static USE_MAP_DRAW = 'Bạn hãy Sử dụng công cụ Vẽ trên bản đồ để thể hiện thửa đất có Khiếu nại/Tố cáo!';
+    public static CHOSE_COORDIATE = 'Bạn hãy chọn một điểm trên bản đồ để thay đổi Vị trí có Khiếu nại/Tố cáo!';
+    public static GEOJSON_INVALID = 'Dữ liệu hình học không hợp lệ. Bạn hãy sử dụng công cụ Vẽ trên bản đồ hoặc gõ đúng dữ liệu dạng GeoJson!';
 
 }

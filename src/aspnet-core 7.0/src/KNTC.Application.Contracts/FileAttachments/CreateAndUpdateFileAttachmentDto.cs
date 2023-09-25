@@ -41,4 +41,5 @@ public class CreateAndUpdateFileAttachmentDto : IHasConcurrencyStamp
 
     [Required]
     public bool CongKhai { get; set; }
+    public bool ChoPhepDownload { get; set; }
 }

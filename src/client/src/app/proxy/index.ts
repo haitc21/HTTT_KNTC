@@ -1,3 +1,4 @@
+import * as BaseMaps from './base-maps';
 import * as CategoryUnitTypes from './category-unit-types';
 import * as Complains from './complains';
 import * as Denounces from './denounces';
@@ -17,4 +18,7 @@ export * from './loai-khieu-nai.enum';
 export * from './loai-vu-viec.enum';
 export * from './models';
 export * from './status.enum';
-export { CategoryUnitTypes, Complains, Denounces, DocumentTypes, FileAttachments, LandTypes, Microsoft, Roles, Summaries, SysConfigs, Units, Users, Volo };
+export * from './tinh-trang.enum';
+export * from './trang-thai.enum';
+export * from './user-type.enum';
+export { BaseMaps, CategoryUnitTypes, Complains, Denounces, DocumentTypes, FileAttachments, LandTypes, Microsoft, Roles, Summaries, SysConfigs, Units, Users, Volo };

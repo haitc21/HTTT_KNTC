@@ -65,9 +65,11 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
               this.permissions.push(pm);
               gr.items.push({
                 label:
-                  grPm.name != 'AbpIdentity'
+                  pm.displayName
+                  /*grPm.name != 'AbpIdentity'
                     ? pm.displayName
-                    : this.localizationService.instant(`::Permission:${pm.name}`),
+                    : this.localizationService.instant(`::Permission:${pm.name}`),*/
+                ,
                 value: pm.name,
               });
             });

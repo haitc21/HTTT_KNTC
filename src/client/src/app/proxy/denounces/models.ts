@@ -1,5 +1,6 @@
 import type { LinhVuc } from '../linh-vuc.enum';
 import type { LoaiKetQua } from '../loai-ket-qua.enum';
+import type { TrangThai } from '../trang-thai.enum';
 import type { CreateAndUpdateFileAttachmentDto, FileAttachmentDto } from '../file-attachments/models';
 import type { AuditedEntityDto, EntityDto } from '@abp/ng.core';
 import type { BaseListFilterDto } from '../models';
@@ -44,7 +45,9 @@ export interface CreateDenounceDto {
   soVBKLNDTC?: string;
   ngayNhanTBKQXLKLTC?: string;
   ketQua?: LoaiKetQua;
+  trangThai: TrangThai;
   congKhai: boolean;
+  luuTru: boolean;
   fileAttachments: CreateAndUpdateFileAttachmentDto[];
 }
 
@@ -89,6 +92,8 @@ export interface DenounceDto extends AuditedEntityDto<string> {
   ngayNhanTBKQXLKLTC?: string;
   ketQua: LoaiKetQua;
   congKhai: boolean;
+  luuTru: boolean;
+  trangThai: TrangThai;
   fileAttachments: FileAttachmentDto[];
   concurrencyStamp?: string;
 }
@@ -102,6 +107,8 @@ export interface GetDenounceListDto extends BaseListFilterDto {
   linhVuc?: LinhVuc;
   ketQua?: LoaiKetQua;
   congKhai?: boolean;
+  luuTru?: boolean;
+  trangThai?: TrangThai;
   nguoiNopDon?: string;
 }
 
@@ -146,5 +153,7 @@ export interface UpdateDenounceDto extends EntityDto<string> {
   ngayNhanTBKQXLKLTC?: string;
   ketQua?: LoaiKetQua;
   congKhai: boolean;
+  luuTru: boolean;
+  trangThai: TrangThai;
   concurrencyStamp?: string;
 }

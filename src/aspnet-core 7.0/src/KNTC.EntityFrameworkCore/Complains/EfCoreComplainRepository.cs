@@ -32,10 +32,16 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                DateTime? fromDate,
                                                DateTime? toDate,
                                                bool? congKhai,
-                                               string nguoiNopDon)
+                                               bool? LuuTru,
+                                               TrangThai? TrangThai,
+                                               string nguoiNopDon,
+                                               int? userType,
+                                               int[]? managedUnitIds
+                                               )
     {
         keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
         nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
+
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(
@@ -81,8 +87,24 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 x => x.CongKhai == congKhai
              )
              .WhereIf(
+                LuuTru.HasValue,
+                x => x.LuuTru == LuuTru
+             )
+             .WhereIf(
+                TrangThai.HasValue,
+                x => x.TrangThai == TrangThai
+             )
+             .WhereIf(
                 !string.IsNullOrEmpty(nguoiNopDon),
                 x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
+             )
+             .WhereIf(
+                (userType == 2 && !managedUnitIds.IsNullOrEmpty()),
+                x => (managedUnitIds.Contains(x.MaQuanHuyen)) || x.CongKhai
+             )
+             .WhereIf(
+                (userType == 3 && !managedUnitIds.IsNullOrEmpty()),
+                x => (managedUnitIds.Contains(x.MaXaPhuongTT)) || x.CongKhai
              )
             .OrderBy(sorting)
             .Skip(skipCount)
@@ -108,7 +130,12 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                DateTime? fromDate,
                                                DateTime? toDate,
                                                bool? CongKhai,
-                                               string nguoiNopDon)
+                                               bool? LuuTru,
+                                               TrangThai? TrangThai,
+                                               string nguoiNopDon,
+                                               int? userType,
+                                               int[]? managedUnitIds
+                                               )
     {
         keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
         nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
@@ -157,8 +184,24 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 x => x.CongKhai == CongKhai
              )
              .WhereIf(
+                LuuTru.HasValue,
+                x => x.LuuTru == LuuTru
+             )
+             .WhereIf(
+                TrangThai.HasValue,
+                x => x.TrangThai == TrangThai
+             )
+             .WhereIf(
                 !string.IsNullOrEmpty(nguoiNopDon),
                 x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
+             )
+             .WhereIf(
+                (userType == 2 && !managedUnitIds.IsNullOrEmpty()),
+                x => (managedUnitIds.Contains(x.MaQuanHuyen)) || x.CongKhai
+             )
+             .WhereIf(
+                (userType == 3 && !managedUnitIds.IsNullOrEmpty()),
+                x => (managedUnitIds.Contains(x.MaXaPhuongTT)) || x.CongKhai
              )
             .OrderBy(sorting)
             .ToListAsync();

@@ -62,6 +62,24 @@ export class UnitService {
     { apiName: this.apiName,...config });
   
 
+  getLookupByIds = (UnitIds: number[], config?: Partial<Rest.Config>) =>
+    this.restService.request<any, ListResultDto<UnitLookupDto>>({
+      method: 'GET',
+      url: '/api/app/unit/lookup-by-ids',
+      params: { unitIds: UnitIds },
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getLookupByParentIds = (unitTypeId: number, parentIds: number[], config?: Partial<Rest.Config>) =>
+    this.restService.request<any, ListResultDto<UnitLookupDto>>({
+      method: 'GET',
+      url: `/api/app/unit/lookup-by-parent-ids/${unitTypeId}`,
+      params: { parentIds },
+    },
+    { apiName: this.apiName,...config });
+  
+
   update = (id: number, input: CreateAndUpdateUnitDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, UnitDto>({
       method: 'PUT',

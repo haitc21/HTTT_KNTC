@@ -60,4 +60,35 @@ public static class EnumExtensions
                 throw new ArgumentException("Giá trị không hợp lệ");
         }
     }
+
+    public static string ToVNString(this TrangThai value)
+    {
+        if (value == null) return string.Empty;
+        switch (value)
+        {
+            case TrangThai.TiepNhan:
+                return "Tiếp nhận";
+
+            case TrangThai.DangXuLy:
+                return "Đang xử lý";
+
+            case TrangThai.DaThuLy:
+                return "Đã thụ lý";
+
+            case TrangThai.DaKetLuan:
+                return "Đã kết luận";
+
+            case TrangThai.RutDon:
+                return "Rút đơn";
+
+            case TrangThai.TraLaiDon:
+                return "Trả lại đơn";
+
+            case TrangThai.ChuyenDon:
+                return "Chuyển đơn";
+
+            default:
+                throw new ArgumentException("Giá trị không hợp lệ");
+        }
+    }
 }

@@ -187,6 +187,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           contentType: dto.contentType,
           contentLength: dto.contentLength,
           congKhai: dto.congKhai,
+          choPhepDownload: dto.choPhepDownload
         } as FileAttachmentDto;
         this.data.push(fileAttachment);
         this.files.push(dto.file);
@@ -253,6 +254,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           contentType: dto.contentType,
           contentLength: dto.contentLength,
           congKhai: dto.congKhai,
+          choPhepDownload: dto.choPhepDownload
         } as FileAttachmentDto;
         let index = this.data.indexOf(this.selectedItem);
         if (index > -1) {
@@ -308,16 +310,19 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   closeUpdateModal() {
     this.visibleUpdateModal = false;
     this.headerModal = '';
     this.selectedItem = null;
   }
+
   viewDetail(item: FileAttachmentDto) {
     this.selectedItem = item;
     this.headerModal = `Chi tiết Hồ sơ gắn kèm "${item.tenTaiLieu}"`;
     this.visibleViewModal = true;
   }
+
   closeViewModal() {
     this.visibleViewModal = false;
     this.headerModal = '';
@@ -341,6 +346,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
         }
       );
   }
+
   deleteRow(item) {
     if (!item) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
@@ -387,10 +393,12 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
     let documentType = this.documentTypeOptions.find(x => x.id === id);
     return documentType?.documentTypeName ?? '';
   }
+
   getGiaiDoan(id): string {
     let giaiDoan = this.giaiDoanOptions.find(x => x.value === id);
     return giaiDoan?.text ?? '';
   }
+  
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;

@@ -26,4 +26,5 @@ public class Summary
     public int MaXaPhuongTT { get; set; }
     public bool CongKhai { get; set; }
     public string CccdCmnd { get; set; }
+    public TrangThai TrangThai { get; set; }
 }

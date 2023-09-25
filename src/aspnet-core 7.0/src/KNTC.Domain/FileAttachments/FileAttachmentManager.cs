@@ -1,6 +1,7 @@
 ﻿using KNTC.Complains;
 using KNTC.Denounces;
 using System;
+using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -36,7 +37,8 @@ public class FileAttachmentManager : DomainService
                                                    [NotNull] string fileName,
                                                    [NotNull] string contentType,
                                                    [NotNull] long contentLength,
-                                                   [NotNull] bool congKhai)
+                                                   [NotNull] bool congKhai,
+                                                   bool chophepDownload)
     {
         Check.NotNull(loaiVuViec, nameof(loaiVuViec));
         Check.NotNull(giaiDoan, nameof(giaiDoan));
@@ -81,7 +83,8 @@ public class FileAttachmentManager : DomainService
             ContentType = contentType,
             ContentLength = contentLength,
             LoaiVuViec = loaiVuViec,
-            CongKhai = congKhai
+            CongKhai = congKhai,
+            ChoPhepDownload = chophepDownload
         };
     }
 
@@ -97,7 +100,8 @@ public class FileAttachmentManager : DomainService
                                    string fileName,
                                    string contentType,
                                    long contentLength,
-                                   [NotNull] bool congKhai)
+                                   [NotNull] bool congKhai,
+                                   bool chophepDownload)
     {
         Check.NotNull(loaiVuViec, nameof(loaiVuViec));
         Check.NotNull(giaiDoan, nameof(giaiDoan));
@@ -142,6 +146,7 @@ public class FileAttachmentManager : DomainService
         fileAttachment.ThuTuButLuc = thuTuButLuc;
         fileAttachment.NoiDungChinh = noiDungChinh;
         fileAttachment.CongKhai = congKhai;
+        fileAttachment.ChoPhepDownload = chophepDownload;
         if (!!string.IsNullOrEmpty(fileName))
         {
             fileAttachment.FileName = fileName;

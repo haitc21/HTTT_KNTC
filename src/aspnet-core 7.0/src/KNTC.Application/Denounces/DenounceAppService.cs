@@ -1,5 +1,4 @@
-﻿using KNTC.Complains;
-using KNTC.Extenssions;
+﻿using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Helpers;
 using KNTC.Localization;
@@ -9,6 +8,7 @@ using KNTC.RedisCache;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
 using KNTC.Units;
+using KNTC.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Hosting;
 using NPOI.SS.UserModel;
@@ -37,6 +37,7 @@ public class DenounceAppService : CrudAppService<
 {
     private readonly IDenounceRepository _denounceRepo;
     private readonly DenounceManager _denounceManager;
+    private readonly IRepository<UserInfo> _userInfoRepo;
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
     private readonly FileAttachmentManager _fileAttachmentManager;
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
@@ -49,6 +50,7 @@ public class DenounceAppService : CrudAppService<
     public DenounceAppService(IRepository<Denounce, Guid> repository,
         IDenounceRepository denounceRepo,
         DenounceManager denounceManager,
+        IRepository<UserInfo> userInfoRepo,
         IRepository<FileAttachment, Guid> fileAttachmentRepo,
         IBlobContainer<FileAttachmentContainer> blobContainer,
         FileAttachmentManager fileAttachmentManager,
@@ -63,6 +65,7 @@ public class DenounceAppService : CrudAppService<
         _denounceRepo = denounceRepo;
         _fileAttachmentRepo = fileAttachmentRepo;
         _denounceManager = denounceManager;
+        _userInfoRepo = userInfoRepo;
         _blobContainer = blobContainer;
         _fileAttachmentManager = fileAttachmentManager;
         _env = env;
@@ -102,10 +105,22 @@ public class DenounceAppService : CrudAppService<
     [AllowAnonymous]
     public override async Task<PagedResultDto<DenounceDto>> GetListAsync(GetDenounceListDto input)
     {
+        int[] managedUnitIds = null;
+        int userType = 0;
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.DenouncesPermission.Default);
         if (hasPermission.Succeeded == false)
         {
             input.CongKhai = true;
+        }
+        else
+        {
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
+            if (userInfo != null)
+            {
+                userType = userInfo.userType.Value;
+                managedUnitIds = userInfo.managedUnitIds;
+            }
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -126,7 +141,11 @@ public class DenounceAppService : CrudAppService<
             input.FromDate,
             input.ToDate,
             input.CongKhai,
-            nguoiNopDon
+            input.LuuTru,
+            input.TrangThai,
+            input.NguoiNopDon,
+            userType,
+            managedUnitIds
         );
 
         var totalCount = await _denounceRepo.CountAsync(
@@ -135,11 +154,15 @@ public class DenounceAppService : CrudAppService<
                        && (!input.LinhVuc.HasValue || x.LinhVuc == input.LinhVuc)
                        && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
                        && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
+                       && (!((userType == 2) && !managedUnitIds.IsNullOrEmpty()) || managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai)
                        && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
                        && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
+                       && (!((userType == 3) && !managedUnitIds.IsNullOrEmpty()) || managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai)
                        && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                        && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
                        && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
+                       && (!input.LuuTru.HasValue || x.LuuTru == input.LuuTru)
+                       && (!input.TrangThai.HasValue || x.TrangThai == input.TrangThai)
                        && (input.NguoiNopDon.IsNullOrEmpty()
                            || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon))
                        );
@@ -194,7 +217,9 @@ public class DenounceAppService : CrudAppService<
                                                   soVBKLNDTC: input.SoVBKLNDTC,
                                                   ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
                                                   ketQua: input.KetQua,
-                                                  congKhai: input.CongKhai
+                                                  congKhai: input.CongKhai,
+                                                  luuTru: input.LuuTru,
+                                                  TrangThai: input.TrangThai
                                                   );
 
         await _denounceRepo.InsertAsync(denounce);
@@ -215,7 +240,8 @@ public class DenounceAppService : CrudAppService<
                                                                      fileName: item.FileName.Trim(),
                                                                      contentType: item.ContentType,
                                                                      contentLength: item.ContentLength,
-                                                                     congKhai: item.CongKhai);
+                                                                     congKhai: item.CongKhai,
+                                                                     chophepDownload: item.ChoPhepDownload);
                 await _fileAttachmentRepo.InsertAsync(fileAttach);
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
@@ -223,7 +249,6 @@ public class DenounceAppService : CrudAppService<
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var createEto = ObjectMapper.Map<CreateDenounceDto, CreateDenounceEto>(input);
         createEto.Id = denounce.Id;
-        // spatial data,  Ghi lich su
         await _distributedEventBus.PublishAsync(createEto);
         return result;
     }
@@ -276,12 +301,12 @@ public class DenounceAppService : CrudAppService<
                                           ngayNhanTBKQXLKLTC: input.NgayNhanTBKQXLKLTC,
                                           ketQua: input.KetQua,
                                           congKhai: input.CongKhai,
-                                          trangThai: input.TrangThai);
+                                          luutru: input.LuuTru,
+                                          TrangThai: input.TrangThai);
         await _denounceRepo.UpdateAsync(denounce);
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var updateEto = ObjectMapper.Map<UpdateDenounceDto, UpdateDenounceEto>(input);
         updateEto.Id = denounce.Id;
-        // spatial data,  Ghi lich su
         await _distributedEventBus.PublishAsync(updateEto);
         return ObjectMapper.Map<Denounce, DenounceDto>(denounce);
     }
@@ -317,6 +342,23 @@ public class DenounceAppService : CrudAppService<
     //[Authorize(KNTCPermissions.DenouncesPermission.Default)]
     public async Task<byte[]> GetExcelAsync(GetDenounceListDto input)
     {
+        int[] managedUnitIds = null;
+        int userType = 0;
+        var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
+        if (hasPermission.Succeeded == false)
+        {
+            input.CongKhai = true;
+        }
+        else
+        {
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
+            if (userInfo != null)
+            {
+                userType = userInfo.userType.Value;
+                managedUnitIds = userInfo.managedUnitIds;
+            }
+        }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = $"{nameof(Denounce.ThoiGianTiepNhan)} DESC, {nameof(Denounce.MaHoSo)}";
@@ -332,7 +374,11 @@ public class DenounceAppService : CrudAppService<
             input.FromDate,
             input.ToDate,
             input.CongKhai,
-            input.NguoiNopDon
+            input.LuuTru,
+            input.TrangThai,
+            input.NguoiNopDon,
+            userType,
+            managedUnitIds
         );
         if (denounces == null) return null;
 

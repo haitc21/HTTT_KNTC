@@ -19,11 +19,11 @@ public interface IUsersAppService
 
     Task<UserDto> GetUserInfoAsync(Guid id);
 
-    Task<IdentityUserDto> CreateAsync(CrateAndUpdateUserDto input);
+    Task<IdentityUserDto> CreateAsync(CreateAndUpdateUserDto input);
 
-    Task<IdentityUserDto> UpdateAsync(Guid id, CrateAndUpdateUserDto input);
+    Task<IdentityUserDto> UpdateAsync(Guid id, CreateAndUpdateUserDto input);
 
-    Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CrateAndUpdateUserDto input);
+    Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CreateAndUpdateUserDto input);
 
     Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
 

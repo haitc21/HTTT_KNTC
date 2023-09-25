@@ -16,7 +16,7 @@
     "Permission:AbpIdentity.Users.Delete": "Xóa người dùng",
     "Permission:AbpIdentity.Users.ManagePermissions": "Phân quyền cho người dùng",
     // khiếu nại/khiếu kiện
-    "Permission:ComplainsGr": "Kkhiếu nại/Khiếu kiện",
+    "Permission:ComplainsGr": "Khiếu nại/Khiếu kiện",
     "Permission:Complains": "Xem DS khiếu nại/khiếu kiện",
     "Permission:Complains.Create": "Thêm khiếu nại/khiếu kiện",
     "Permission:Complains.Edit": "Sửa khiếu nại/khiếu kiện",
@@ -54,6 +54,12 @@
     // GeoServer
     "Permission:GeoServerGr": "Quản lý bản đồ quy hoạch",
     "Permission:GeoServesrs": "Quản lý bản đồ quy hoạch",
+    // BaseMaps
+    "Permission:BaseMapGr": "Bản đồ nền",
+    "Permission:BaseMaps": "Xem DS bản đồ nền",
+    "Permission:BaseMaps.Create": "Thêm bản đồ nền",
+    "Permission:BaseMaps.Edit": "Sửa bản đồ nền",
+    "Permission:BaseMaps.Delete": "Xóa bản đồ nền",
     // Config
     "Permission:SysConfigGr": "Cấu hình hệ thống",
     "Permission:SysConfigs": "Cấu hình hệ thống",

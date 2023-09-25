@@ -25,6 +25,8 @@ import {
   congKhaiOptions,
   giaiDoanOptions,
   loaiKQOptions,
+  trangthaiOptions,
+  TrangThaiOptions,
 } from 'src/app/_shared/constants/consts';
 
 @Component({
@@ -61,6 +63,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   giaiDoan: number;
   tinhTrang: number;
   congKhai: boolean | null;
+  trangThai: number;
 
   // option
   tinhOptions: UnitLookupDto[] = [];
@@ -72,7 +75,9 @@ export class ComplainComponent implements OnInit, OnDestroy {
   loaiKQOptions = loaiKQOptions;
   congKhaiOptions = congKhaiOptions;
   KetquaOptions = KetquaOptions;
-
+  trangThaiOPtions = trangthaiOptions;
+  TrangthaiOptions = TrangThaiOptions;
+  
   // Permissions
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
@@ -120,6 +125,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
     this.tinhTrang = null;
+    this.trangThai = null;
   }
 
   buildBreadcrumb() {
@@ -242,6 +248,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         ketQua: this.tinhTrang,
         giaiDoan: this.giaiDoan,
         congKhai: this.congKhai,
+        trangThai: this.trangThai,
       } as GetComplainListDto;
     }
 
@@ -283,6 +290,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
       linhVuc: this.linhVuc,
       ketQua: this.tinhTrang,
       giaiDoan: this.giaiDoan,
+      trangThai: this.trangThai,
     } as GetComplainListDto;
     this.complainService
       .getExcel(this.filter)

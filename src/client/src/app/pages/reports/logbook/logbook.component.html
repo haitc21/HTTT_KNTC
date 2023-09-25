@@ -52,22 +52,6 @@
           </span>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
-        <div *abpPermission="'Complains'" class="field col-12 md:col-2">
-          <span class="p-float-label">
-            <p-dropdown
-              [options]="congKhaiOptions"
-              [(ngModel)]="congKhai"
-              optionLabel="text"
-              optionValue="value"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              styleClass="w-full"
-              (onChange)="loadData()"
-            ></p-dropdown>
-            <label>Công khai</label>
-          </span>
-        </div>
-        <!-- --------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-2">
           <span class="p-float-label">
             <p-dropdown
@@ -136,23 +120,7 @@
             ></p-calendar>
             <label>Thời gian tiếp nhận</label>
           </span>
-        </div>
-        <!-- --------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-2">
-          <span class="p-float-label">
-            <p-dropdown
-              [options]="giaiDoanOptions"
-              [(ngModel)]="giaiDoan"
-              optionLabel="text"
-              optionValue="value"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              styleClass="w-full"
-              (onChange)="loadData()"
-            ></p-dropdown>
-            <label>Giai đoạn</label>
-          </span>
-        </div>        
+        </div>      
         <!-- --------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-2">
           <span class="p-float-label">
@@ -166,7 +134,40 @@
               styleClass="w-full"
               (onChange)="loadData()"
             ></p-dropdown>
-            <label>Kết quả</label>
+            <label>Kết luận</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-dropdown
+              id="trangThai"
+              [options]="trangThaiOPtions"
+              [(ngModel)]="trangThai"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label>Trạng thái</label>
+          </span>
+        </div>        
+        <!-- --------------------------------------------------------------------------------- -->
+        <div *abpPermission="'Complains'" class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="congKhaiOptions"
+              [(ngModel)]="congKhai"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label>Công khai</label>
           </span>
         </div>
       </div>
@@ -203,16 +204,17 @@
               <tr>
                 <th class="row-num-column">STT</th>
                 <th>Mã hồ sơ</th>
-                <th style="width: 180px">Nội dung</th>
+                <th style="min-width: 180px">Nội dung</th>
                 <th>Loại vụ việc</th>
                 <th>Lĩnh vực</th>  
-                <th style="width: 100px">Người nộp đơn</th>
+                <th style="min-width: 100px">Người nộp đơn</th>
                 <th>Số ĐT</th>
                 <th>Địa chỉ</th>                              
                 <th>Thời gian nộp</th>
                 <th>Ngày hẹn trả KQ</th>
-                <th style="width: 150px">Bộ phận đang XL</th>
-                <th style="width: 150px">Trạng thái</th>
+                <th style="min-width: 150px">Bộ phận thực hiện</th>
+                <th style="min-width: 150px">Trạng thái</th>
+                <th style="min-width: 150px">Kết luận</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -236,6 +238,7 @@
                   {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
                 </td>
                 <td>{{ row.boPhanDangXL }}</td>
+                <td style="color:blue">{{ TrangthaiOptions[(row?.trangThai)? row?.trangThai : 0]}}</td>
                 <td>{{ KetquaOptions[(row?.ketQua)? row?.ketQua : 0]}}</td>
               </tr>
             </ng-template>

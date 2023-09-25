@@ -20,7 +20,11 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
                      DateTime? fromDate,
                      DateTime? toDate,
                      bool? CongKhai,
-                     string nguoiNopDon);
+                     bool? LuuTru,
+                     TrangThai? TrangThai,
+                     string nguoiNopDon,
+                     int? userType,
+                     int[]? managedUnitIds);
 
     Task<Denounce> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
 
@@ -35,5 +39,9 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
                  DateTime? FromDate,
                  DateTime? ToDate,
                  bool? CongKhai,
-                 string nguoiNopDon);
+                 bool? LuuTru,
+                 TrangThai? TrangThai,
+                 string nguoiNopDon,
+                 int? userType,
+                 int[]? managedUnitIds);
 }

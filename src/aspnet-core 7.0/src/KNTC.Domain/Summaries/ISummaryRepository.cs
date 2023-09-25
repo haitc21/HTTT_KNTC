@@ -24,5 +24,8 @@ public interface ISummaryRepository
                                            DateTime? fromDate,
                                            DateTime? toDate,
                                            bool? congKhai,
-                                           string nguoiNopDon);
+                                           TrangThai? TrangThai,
+                                           string nguoiNopDon,
+                                           int? userType,
+                                           int[]? managedUnitIds);
 }

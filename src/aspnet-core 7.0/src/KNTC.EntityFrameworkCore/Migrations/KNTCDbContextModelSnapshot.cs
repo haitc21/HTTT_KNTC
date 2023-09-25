@@ -26,6 +26,67 @@ namespace KNTC.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("KNTC.BaseMaps.BaseMap", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BaseMapCode")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("BaseMapName")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<int?>("OrderIndex")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BaseMaps", "KNTC");
+                });
+
             modelBuilder.Entity("KNTC.CategoryUnitTypes.UnitType", b =>
                 {
                     b.Property<int>("Id")
@@ -202,6 +263,12 @@ namespace KNTC.Migrations
                     b.Property<int>("LoaiDat")
                         .HasColumnType("integer")
                         .HasColumnName("loai_dat");
+
+                    b.Property<bool>("LuuTru")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("luu_tru");
 
                     b.Property<string>("MaHoSo")
                         .IsRequired()
@@ -467,6 +534,12 @@ namespace KNTC.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("loai_dat");
 
+                    b.Property<bool>("LuuTru")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("luu_tru");
+
                     b.Property<string>("MaHoSo")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -666,6 +739,12 @@ namespace KNTC.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("ChoPhepDownload")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("cho_phep_download");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -1058,6 +1137,10 @@ namespace KNTC.Migrations
                         .HasColumnType("text")
                         .HasColumnName("to_ban_do");
 
+                    b.Property<int>("TrangThai")
+                        .HasColumnType("integer")
+                        .HasColumnName("trang_thai");
+
                     b.ToTable((string)null);
 
                     b.ToView("Summaries", "KNTC");
@@ -1206,6 +1289,12 @@ namespace KNTC.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
+
+                    b.Property<int[]>("managedUnitIds")
+                        .HasColumnType("integer[]");
+
+                    b.Property<int?>("userType")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 

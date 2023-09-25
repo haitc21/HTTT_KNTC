@@ -18,8 +18,10 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
-
+import { TrangThaiOptions, KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
+import { BaseMapLookupDto } from '../../proxy/base-maps/models';
+import { BaseMapService } from '@proxy/base-maps';
+import { trangthaiOptions} from 'src/app/_shared/constants/consts';
 @Component({
   selector: 'app-search-map',
   templateUrl: './search-map.component.html',
@@ -68,7 +70,8 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   breadcrumb: MenuItem[];
 
   blockedPanel = false;
-  items: SummaryDto[] = [];
+  dataMap: SummaryDto[] = [];
+  baseMapList: BaseMapLookupDto[] = [];
   //dataMap: SummaryDto[] = [];
 
   //spatialData: SpatialDataDto[];
@@ -81,6 +84,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
 
   // filter
   geo = false;
+  baseMap: string[] = [];
   toado: string;
 
   filter: GetSummaryListDto;
@@ -105,6 +109,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   maXa: number;
   thoiGianTiepNhanRange: Date[];
   tinhTrang: number;
+  trangThai: number;
 
   // option
   tinhOptions: UnitLookupDto[] = [];
@@ -115,7 +120,8 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   LoaiVuViecOptions = LoaiVuViecOptions;
   LinhVucOptions = LinhVucOptions;
   KetquaOptions = KetquaOptions;
-
+  trangThaiOPtions = trangthaiOptions;
+  TrangthaiOptions = TrangThaiOptions;
   congKhaiOptions = congKhaiOptions;
   // ẩn hiện menu trái
   visibleFilterLeff = true;
@@ -134,12 +140,14 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     //private spatialDataService: SpatialDataService,
     private unitService: UnitService,
     private utilService: UtilityService,
+    private baseMapService: BaseMapService, 
     private summaryService: SummaryService
   ) {}
 
   ngOnInit(): void {
     this.buildBreadcumb();
     //this.mockData = this.mockService.mockData();
+    this.loadBaseMapMenu();
     this.loadOptions();
     //this.loadGeo();
     this.loadData(true);
@@ -148,6 +156,24 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   private buildBreadcumb() {
     this.breadcrumb = [{ label: 'Bản đồ' }];
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+  }
+
+  loadBaseMapMenu() {//load base-map options
+    this.layoutService.blockUI$.next(true);
+    this.baseMapService
+      .getLookup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<BaseMapLookupDto>) => {
+          this.baseMapList = res.items;
+          
+          this.layoutService.blockUI$.next(false);
+        },
+        () => {
+          this.layoutService.blockUI$.next(false);
+        }
+      );
+    this.layoutService.blockUI$.next(true);
   }
 
   loadData(isFirst: boolean = false) {
@@ -183,6 +209,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
           : null,
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
+      trangThai: this.trangThai,
       nguoiNopDon: this.nguoiNopDon
     } as GetSummaryListDto;
     this.summaryService
@@ -190,7 +217,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res: PagedResultDto<SummaryDto>) => {
-          this.items = res.items;
+          this.dataMap = res.items;
           this.totalCount = res.totalCount;
           this.layoutService.blockUI$.next(false);
         },
@@ -257,6 +284,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
           : null,
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
+      trangThai: this.trangThai,
       nguoiNopDon: this.nguoiNopDon,
     } as GetSummaryListDto;
 
@@ -319,6 +347,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
+            debugger
             this.huyenOptions = res.items;
             this.layoutService.blockUI$.next(false);
           },
@@ -390,6 +419,18 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   setPosition(duLieuToaDo){
     if (duLieuToaDo!=null)
       this.toado = duLieuToaDo;
+  }
+
+  changeBaseMap(i: number, data: string, e: any){
+    if (e.checked){
+      if (this.baseMap.indexOf(data)==-1)
+        this.baseMap.push(data);
+    }
+    else{
+      if (this.baseMap.indexOf(data)!=-1)
+        this.baseMap.splice(this.baseMap.indexOf(data), 1);
+    }
+    this.baseMap = [...this.baseMap];
   }
 
   pageChanged(event: any): void {

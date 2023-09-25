@@ -22,7 +22,11 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                      DateTime? fromDate,
                      DateTime? toDate,
                      bool? congKhai,
-                     string nguoiNopDon);
+                     bool? luuTru,
+                     TrangThai? TrangThai,
+                     string nguoiNopDon,
+                     int? userType,
+                     int[]? managedUnitIds);
 
     Task<Complain> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
 
@@ -38,5 +42,9 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                  DateTime? FromDate,
                  DateTime? ToDate,
                  bool? CongKhai,
-                string nguoiNopDon);
+                 bool? luutru,
+                 TrangThai? TrangThai,
+                 string nguoiNopDon,
+                 int? userType,
+                 int[]? managedUnitIds);
 }

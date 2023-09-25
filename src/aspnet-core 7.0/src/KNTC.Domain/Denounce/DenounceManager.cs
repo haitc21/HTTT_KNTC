@@ -1,5 +1,4 @@
-﻿using KNTC.Complains;
-using KNTC.FileAttachments;
+﻿using KNTC.FileAttachments;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -61,7 +60,9 @@ public class DenounceManager : DomainService
                                               string? soVBKLNDTC,
                                               DateTime? ngayNhanTBKQXLKLTC,
                                               LoaiKetQua? ketQua,
-                                              bool congKhai
+                                              bool congKhai,
+                                              bool luuTru,
+                                              [NotNull] TrangThai TrangThai
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
@@ -89,13 +90,14 @@ public class DenounceManager : DomainService
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
+        Check.NotNull(TrangThai, nameof(TrangThai));
 
         var existedHoSo = await _hoSoRepo.FindByMaHoSoAsync(maHoSo, false);
         if (existedHoSo != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.HoSoAlreadyExist).WithData("maHoSo", maHoSo);
         }
-        var denounce = new Denounce(GuidGenerator.Create(), maHoSo)
+        return new Denounce(GuidGenerator.Create(), maHoSo)
         {
             TieuDe = tieuDe,
             LinhVuc = linhVuc,
@@ -138,10 +140,9 @@ public class DenounceManager : DomainService
             NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC,
             KetQua = ketQua,
             CongKhai = congKhai,
-            TrangThai = boPhanDangXL.IsNullOrEmpty() ? TrangThai.TiepNhan : TrangThai.DangXuLy
+            LuuTru = luuTru,
+            TrangThai = TrangThai
         };
-        SettinhTrang(denounce);
-        return denounce;
     }
 
     public async Task ChangeMaHoSoAsync([NotNull] Denounce hoSo, [NotNull] string maHoSo)
@@ -199,7 +200,8 @@ public class DenounceManager : DomainService
                                    DateTime? ngayNhanTBKQXLKLTC,
                                    LoaiKetQua? ketQua,
                                    bool congKhai,
-                                   [NotNull] TrangThai trangThai
+                                   bool luutru,
+                                   [NotNull] TrangThai TrangThai
       )
     {
         Check.NotNull(denounce, nameof(denounce));
@@ -229,6 +231,7 @@ public class DenounceManager : DomainService
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
+        Check.NotNull(TrangThai, nameof(TrangThai));
 
         if (denounce.MaHoSo != maHoSo)
         {
@@ -275,32 +278,7 @@ public class DenounceManager : DomainService
         denounce.NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC;
         denounce.KetQua = ketQua;
         denounce.CongKhai = congKhai;
-        denounce.TrangThai = trangThai;
-        SettinhTrang(denounce);
-    }
-
-    public void SettinhTrang(Denounce denounce)
-    {
-        if (denounce.TrangThai < TrangThai.KetLuan) // tiep nhan, da thu ly, chuyen don
-        {
-            TimeSpan timeDifference = DateTime.Now - denounce.ThoiGianHenTraKQ;
-            if (timeDifference.TotalMilliseconds < 0)
-            {
-                denounce.TinhTrang = TinhTrang.QuaHan;
-            }
-            else if (timeDifference.TotalDays <= 7)
-            {
-                denounce.TinhTrang = TinhTrang.SapDenHan;
-            }
-            else
-            {
-                denounce.TinhTrang = denounce.TrangThai == TrangThai.TiepNhan ? TinhTrang.TiepNhan : TinhTrang.DangXuLy;
-            }
-
-        }
-        else // ket luan, tra don, rut don
-        {
-            denounce.TinhTrang = TinhTrang.DaXuLy;
-        }
+        denounce.LuuTru = luutru;
+        denounce.TrangThai = TrangThai;
     }
 }

@@ -1,8 +1,11 @@
-﻿using KNTC.Localization;
+﻿using KNTC.CategoryUnitTypes;
+using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
+using NPOI.POIFS.Properties;
+using NPOI.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -93,6 +96,38 @@ public class UnitAppService : CrudAppService<
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
 
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    public async Task<ListResultDto<UnitLookupDto>> GetLookupByIdsAsync(int[]? UnitIds)
+    {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
+        var cacheItem = await _cache.GetOrAddAsync(
+        new UnitCacheKey(UnitIds),
+        async () => await GetListLookupByIds(UnitIds),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+            SlidingExpiration = TimeSpan.FromMinutes(1)
+        });
+        return new ListResultDto<UnitLookupDto>(cacheItem.Items);
+    }
+
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    public async Task<ListResultDto<UnitLookupDto>> GetLookupByParentIdsAsync(int unitTypeId, int[]? parentIds)
+    {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
+        var cacheItem = await _cache.GetOrAddAsync(
+        new UnitCacheKey(unitTypeId, parentIds),
+        async () => await GetListLookupByParentIds(unitTypeId, parentIds),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+            SlidingExpiration = TimeSpan.FromMinutes(1)
+        });
+        return new ListResultDto<UnitLookupDto>(cacheItem.Items);
+    }
+
     private async Task<UnitLookupCache> GetListLookup(int unitTypeId, int? parentId)
     {
         var queryable = await Repository.GetQueryableAsync();
@@ -100,6 +135,34 @@ public class UnitAppService : CrudAppService<
                     .Where(x => x.Status == Status.Active)
                     .Where(x => x.UnitTypeId == unitTypeId)
                     .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
+                    .OrderBy(nameof(UnitLookupDto.UnitName));
+        var entities = await AsyncExecuter.ToListAsync(queryable);
+        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
+        var result = new UnitLookupCache() { Items = dtos };
+        return result;
+    }
+
+    private async Task<UnitLookupCache> GetListLookupByIds(int[]? UnitIds)
+    {
+        var queryable = await Repository.GetQueryableAsync();
+        queryable = queryable
+                    .Where(x => x.Status == Status.Active)
+                    .WhereIf(!UnitIds.IsNullOrEmpty(), x => UnitIds.Contains(x.Id))
+                    .OrderBy(nameof(UnitLookupDto.UnitName));
+        var entities = await AsyncExecuter.ToListAsync(queryable);
+        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
+
+        var result = new UnitLookupCache() { Items = dtos };
+        return result;
+    }
+
+    private async Task<UnitLookupCache> GetListLookupByParentIds(int unitTypeId, int[]? ParentIds)
+    {
+        var queryable = await Repository.GetQueryableAsync();
+        queryable = queryable
+                    .Where(x => x.Status == Status.Active)
+                    .Where(x => x.UnitTypeId == unitTypeId)
+                    .WhereIf(!ParentIds.IsNullOrEmpty(), x => x.ParentId.HasValue && ParentIds.Contains(x.ParentId.Value))
                     .OrderBy(nameof(UnitLookupDto.UnitName));
         var entities = await AsyncExecuter.ToListAsync(queryable);
         var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);

@@ -11,7 +11,7 @@ export interface CreateAndUpdateLandTypeDto extends EntityDto<number> {
   concurrencyStamp?: string;
 }
 
-export interface GetLandTypeListDto extends BaseListFilterDto {
+export interface GetLandTypesListDto extends BaseListFilterDto {
   status?: Status;
 }
 

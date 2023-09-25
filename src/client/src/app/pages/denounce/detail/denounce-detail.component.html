@@ -217,7 +217,7 @@
                       <textarea
                         id="diaChiThuongTru"
                         formControlName="diaChiThuongTru"
-                        [rows]="5"
+                        [rows]="3"
                         pInputTextarea
                         class="w-full"
                       ></textarea>
@@ -237,7 +237,7 @@
                       <textarea
                         id="diaChiLienHe"
                         formControlName="diaChiLienHe"
-                        [rows]="5"
+                        [rows]="3"
                         pInputTextarea
                         class="w-full"
                       ></textarea>
@@ -311,32 +311,7 @@
                     >
                     </app-validation-message>
                   </div>
-                  <!-- ----------------------------boPhanDangXL---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                      <input
-                        id="boPhanDangXL"
-                        formControlName="boPhanDangXL"
-                        type="text"
-                        pInputText
-                        [style]="{ width: '100%' }"
-                      />
-                      <label for="boPhanDangXL"
-                        >Bộ phận đang XL <span class="required">*</span></label
-                      >
-                    </span>
-                    <app-validation-message
-                      [entityControl]="formControls.boPhanDangXL"
-                      [validationMessages]="validationMessages.boPhanDangXL"
-                    >
-                    </app-validation-message>
-                  </div>
-
-                  <!-- ----------------------------congKhai---------------------------=----------------------------- -->
-                  <div class="col-12 md:col-6 flex align-items-center">
-                    <p-inputSwitch formControlName="congKhai"></p-inputSwitch>
-                    <label class="ml-3" for="congKhai">Công khai</label>
-                  </div>
+                  
                   <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
                   <div class="field col-12 md:col-12">
                     <!-- <textarea
@@ -351,7 +326,7 @@
                       id="noiDungVuViec"
                       formControlName="noiDungVuViec"
                       class="w-full"
-                      [style]="{ height: '150px' }"
+                      [style]="{ height: '120px' }"
                       [readonly]="mode == 'view'"
                     ></p-editor>
                     <app-validation-message
@@ -480,7 +455,7 @@
                       <p-dropdown
                         id="huyenThuaDat"
                         formControlName="huyenThuaDat"
-                        [options]="huyenThuaDateOptions"
+                        [options]="huyenThuaDatOptions"
                         optionLabel="unitName"
                         optionValue="id"
                         [showClear]="true"
@@ -527,7 +502,7 @@
                       <textarea
                         id="diaChiThuaDat"
                         formControlName="diaChiThuaDat"
-                        [rows]="5"
+                        [rows]="3"
                         pInputTextarea
                         class="w-full"
                       ></textarea>
@@ -543,7 +518,7 @@
                   </div>
                 </div>
               </p-accordionTab>
-              <p-accordionTab header="Thông tin giải quyết tố cáo" class="w-full">
+              <p-accordionTab header="Thông tin giải quyết Tố cáo" class="w-full">
                 <!-- -------------------------------Thông tin giải quyết--------------------------------------------------- -->
                 <div class="grid">
                   <!-- ----------------------------ketQua---------------------------=----------------------------- -->
@@ -723,14 +698,62 @@
                 </div>
               </p-accordionTab>
               <!-- ---------------------------------------------------------------------------------- -->
-              <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
-              <div class="grid w-full mt-3">
+            </p-accordion>
+            <p-panel class="w-full" iconPos="start">
+              <ng-template pTemplate="header">
+                <span style="margin:10px" class="font-semibold text-xl"><i class="pi pi-star"></i> Tình trạng xử lý</span>
+              </ng-template>
+              <div class="grid">
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="trangThai"
+                      formControlName="trangThai"
+                      [options]="trangThaiOPtions"
+                      optionLabel="text"
+                      optionValue="value"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      styleClass="w-full"
+                    ></p-dropdown>
+                    <label>Trạng thái <span class="required">*</span></label>
+                  </span>
+                </div>
+                <!-- ----------------------------boPhanDangXL---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="boPhanDangXL"
+                      formControlName="boPhanDangXL"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="boPhanDangXL"
+                      >Bộ phận thực hiện <span class="required">*</span>
+                    </label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.boPhanDangXL"
+                    [validationMessages]="validationMessages.boPhanDangXL"
+                  >
+                  </app-validation-message>
+                </div>  
+                <div class="field col-12 md:col-6 flex align-items-center">
+                  <p-inputSwitch formControlName="congKhai"></p-inputSwitch>
+                  <label class="ml-3">Công khai</label>
+                </div>
+                <div class="field col-12 md:col-6 flex align-items-center">
+                  <p-inputSwitch formControlName="luuTru" [disabled]="true" readonly="true"></p-inputSwitch>
+                  <label class="ml-3">{{(luuTru)? "Đã khóa hồ sơ":"Hồ sơ chưa khóa"}}</label>
+                </div>
+                <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
                 <div class="field col-12 md:col-12">
                   <span class="p-float-label">
                     <textarea
                       id="ghiChu"
                       formControlName="ghiChu"
-                      [rows]="5"
+                      [rows]="4"
                       pInputTextarea
                       class="w-full"
                     ></textarea>
@@ -743,7 +766,7 @@
                   </app-validation-message>
                 </div>
               </div>
-            </p-accordion>
+            </p-panel>
           </div>
         </ng-template>
       </p-tabPanel>
@@ -850,15 +873,33 @@
       </p-tabPanel>
     </p-tabView>
 
-    <ng-container *ngIf="mode != 'view'">
+    <ng-container>
       <ng-template pTemplate="footer">
         <div class="flex justify-content-end">
-          <button
+          <button *ngIf="mode != 'view'"
             pButton
             pRipples
             type="button"
             (click)="saveChange()"
             label="Lưu"
+            class="p-button-info mr-2"
+            icon="pi pi-check"
+          ></button>
+          <button *ngIf="showBtnLuuTru"
+            pButton
+            pRipples
+            type="button"
+            (click)="Lock()"
+            label="Khóa hồ sơ"
+            class="p-button-info mr-2"
+            icon="pi pi-check"
+          ></button>
+          <button *ngIf="luuTru"
+            pButton
+            pRipples
+            type="button"
+            (click)="UnLock()"
+            label="Mở Khóa"
             class="p-button-info mr-2"
             icon="pi pi-check"
           ></button>

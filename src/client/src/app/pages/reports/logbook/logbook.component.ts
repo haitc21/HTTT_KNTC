@@ -14,7 +14,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
 import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, giaiDoanOptions, linhVucNameOptions, loaiKQOptions, loaiVuViecNameOptions } from 'src/app/_shared/constants/consts';
+import { TrangThaiOptions, KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, giaiDoanOptions, linhVucNameOptions, loaiKQOptions, loaiVuViecNameOptions, trangthaiOptions } from 'src/app/_shared/constants/consts';
 import { ComplainDetailComponent } from '../../complain/detail/complain-detail.component';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { GetSummaryListDto, SummaryDto, SummaryService } from '@proxy/summaries';
@@ -54,7 +54,7 @@ export class LogBookComponent implements OnInit, OnDestroy {
   giaiDoan: number;
   tinhTrang: number;
   congKhai: boolean | null;
-
+  trangThai: number;
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
@@ -68,7 +68,9 @@ export class LogBookComponent implements OnInit, OnDestroy {
   loaiKQOptions = loaiKQOptions;
   congKhaiOptions = congKhaiOptions;
   KetquaOptions = KetquaOptions;
-
+  trangThaiOPtions = trangthaiOptions;
+  TrangthaiOptions = TrangThaiOptions;
+  
   get hasLoggedIn(): boolean {
     return this.oAuthService.hasValidAccessToken();
   }
@@ -112,6 +114,7 @@ export class LogBookComponent implements OnInit, OnDestroy {
     this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
     this.tinhTrang = null;
+    this.trangThai = null;
   }
 
   buildBreadcrumb() {
@@ -207,15 +210,16 @@ export class LogBookComponent implements OnInit, OnDestroy {
       keyword: this.keyword,
       loaiVuViec: this.loaiVuViec,
       linhVuc: this.linhVuc,
-      // landComplain: this.linhVuc == LinhVuc.DatDai,
-      // enviromentComplain: this.linhVuc == LinhVuc.MoiTruong,
-      // mineralComplain: this.linhVuc == LinhVuc.KhoangSan,
-      // waterComplain: this.linhVuc == LinhVuc.TaiNguyenNuoc,
+
+      landComplain: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.DatDai),
+      enviromentComplain: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.MoiTruong),
+      mineralComplain: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.KhoangSan),
+      waterComplain: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.TaiNguyenNuoc),
       
-      // landDenounce: this.linhVuc == LinhVuc.DatDai,
-      // enviromentDenounce: this.linhVuc == LinhVuc.MoiTruong,
-      // mineralDenounce: this.linhVuc == LinhVuc.KhoangSan,
-      // waterDenounce: this.linhVuc == LinhVuc.TaiNguyenNuoc,
+      landDenounce: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.DatDai),
+      enviromentDenounce: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.MoiTruong),
+      mineralDenounce: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.KhoangSan),
+      waterDenounce: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.TaiNguyenNuoc),
 
       maTinhTP: this.maTinh,
       maQuanHuyen: this.maHuyen,
@@ -230,6 +234,7 @@ export class LogBookComponent implements OnInit, OnDestroy {
           : null,
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
+      trangThai: this.trangThai,
       nguoiNopDon: this.nguoiNopDon
     } as GetSummaryListDto;
 
@@ -257,15 +262,15 @@ export class LogBookComponent implements OnInit, OnDestroy {
       loaiVuViec: this.loaiVuViec,
       linhVuc: this.linhVuc,
 
-      // landComplain: this.linhVuc == LinhVuc.DatDai,
-      // enviromentComplain: this.linhVuc == LinhVuc.MoiTruong,
-      // mineralComplain: this.linhVuc == LinhVuc.KhoangSan,
-      // waterComplain: this.linhVuc == LinhVuc.TaiNguyenNuoc,
+      landComplain: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.DatDai),
+      enviromentComplain: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.MoiTruong),
+      mineralComplain: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.KhoangSan),
+      waterComplain: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.TaiNguyenNuoc),
       
-      // landDenounce: this.linhVuc == LinhVuc.DatDai,
-      // enviromentDenounce: this.linhVuc == LinhVuc.MoiTruong,
-      // mineralDenounce: this.linhVuc == LinhVuc.KhoangSan,
-      // waterDenounce: this.linhVuc == LinhVuc.TaiNguyenNuoc,
+      landDenounce: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.DatDai),
+      enviromentDenounce: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.MoiTruong),
+      mineralDenounce: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.KhoangSan),
+      waterDenounce: (this.linhVuc == LinhVuc.TatCa)? true: (this.linhVuc == LinhVuc.TaiNguyenNuoc),
 
       maTinhTP: this.maTinh,
       maQuanHuyen: this.maHuyen,
@@ -280,6 +285,7 @@ export class LogBookComponent implements OnInit, OnDestroy {
           : null,
       ketQua: this.tinhTrang,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
+      trangThai: this.trangThai,
       nguoiNopDon: this.nguoiNopDon,
     } as GetSummaryListDto;
 

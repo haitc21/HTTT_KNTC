@@ -7,9 +7,10 @@ import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryChartDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
+import { TrangThaiOptions, congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
 import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { TinhTrang, tinhTrangOptions } from '@proxy';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -99,6 +100,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   pieChartOptions_KN: any;
   pieChartOptions_TC: any;
 
+  dataPieChartByStatus_KN: any;
+  dataPieChartByStatus_TC: any;
+  pieChartByStatusOptions_KN: any;
+  pieChartByStatusOptions_TC: any;
+
   dataBarChart: any;
   barChartOptions: any;
   plugin = ChartDataLabels;
@@ -141,7 +147,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: SummaryChartDto) => {
           this.dataChart = res;
-          this.buildPieChart();
+          this.buildPieChart();          
+
+          this.buildPieChartByStatus();
 
           this.buildBarChart();
 
@@ -198,7 +206,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
       });
   }
-
 
   buildPieChart() {
     const labels = ['Đất đai', 'Môi trường', 'Tài nguyên nước', 'Khoáng sản'];
@@ -258,6 +265,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     };
 
+    const totalTC = this.dataChart.landDenounce +
+      this.dataChart.enviromentDenounce +
+      this.dataChart.waterDenounce +
+      this.dataChart.mineralDenounce;
     this.dataPieChart_TC = {
       labels: labels,
       datasets: [
@@ -297,7 +308,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             size: 14,
           },
           formatter: (value, ctx) => {
-            const percentage = (value * 100 / totalKN);
+            const percentage = (value * 100 / totalTC);
             return percentage !== 0 ? `${labels[ctx.dataIndex]}\n${value}\n${percentage.toFixed(2)}%` : '';
           },
           textAlign: 'center',
@@ -310,6 +321,107 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
   }
 
+  buildPieChartByStatus() {
+    const labels = TrangThaiOptions;
+    const totalKN = this.dataChart.landComplain +
+      this.dataChart.enviromentComplain +
+      this.dataChart.waterComplain +
+      this.dataChart.mineralComplain;
+    this.dataPieChartByStatus_KN = {
+      labels: labels,
+      datasets: [
+        {
+          data: this.dataChart.complainByStatus,
+          backgroundColor: ['#56dd98', '#eaab5c', '#13cf13', '#0277bd', '#5478c9', '#f89888', '#dc362e']
+        },
+      ],
+    };
+
+    this.pieChartByStatusOptions_KN = {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Khiếu nại',
+          font: {
+            size: 16,
+            weight: 'bold'
+          }
+        },
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+          display: false,
+          labels: {
+            color: '#495057',
+          },
+        },
+        datalabels: {
+          color: '#000000',
+          font: {
+            size: 14,
+          },
+          formatter: (value, ctx) => {
+            const percentage = (value * 100 / totalKN);
+            return percentage !== 0 ? `${labels[ctx.dataIndex]}\n${value}\n${percentage.toFixed(2)}%` : '';
+          },
+          textAlign: 'center',
+          anchor: 'end',
+          align: 'start',
+          offset: 4, // Tăng khoảng cách
+          overlap: true
+        }
+      }
+    };
+
+    const totalTC = this.dataChart.landDenounce +
+      this.dataChart.enviromentDenounce +
+      this.dataChart.waterDenounce +
+      this.dataChart.mineralDenounce;
+    this.dataPieChartByStatus_TC = {
+      labels: labels,
+      datasets: [
+        {
+          data: this.dataChart.denounceByStatus,
+          backgroundColor: ['#56dd98', '#eaab5c', '#13cf13', '#0277bd', '#5478c9', '#f89888', '#dc362e']
+        },
+      ],
+    };
+    this.pieChartByStatusOptions_TC = {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Tố cáo',
+          font: {
+            size: 16,
+            weight: 'bold'
+          }
+        },
+        maintainAspectRatio: false,
+        responsive: true,
+        legend: {
+          display: false,
+          labels: {
+            color: '#495057',
+          },
+        },
+        datalabels: {
+          color: '#000000',
+          font: {
+            size: 14,
+          },
+          formatter: (value, ctx) => {
+            const percentage = (value * 100 / totalTC);
+            return percentage !== 0 ? `${labels[ctx.dataIndex]}\n${value}\n${percentage.toFixed(2)}%` : '';
+          },
+          textAlign: 'center',
+          anchor: 'end',
+          align: 'start',
+          offset: 4, // Tăng khoảng cách
+          overlap: true
+        }
+      }
+    };
+  }
 
   private buildBarChart() {
     this.dataBarChart = {
@@ -324,7 +436,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         'TC Khoáng sản',
       ],
       datasets: [
-        {
+        /*{
           type: 'bar',
           label: 'Chưa có KQ',
           backgroundColor: '#a7d08c',
@@ -339,7 +451,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dataChart.waterDenounce_ChuaCoKQ,
             this.dataChart.mineralDenounce_ChuaCoKQ,
           ],
-        },
+        },*/
         {
           type: 'bar',
           label: 'Đúng',

@@ -19,7 +19,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
 import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KetquaOptions, LinhVucOptions, congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
+import { TrangThaiOptions, KetquaOptions, LinhVucOptions, congKhaiOptions, loaiKQOptions, trangthaiOptions } from 'src/app/_shared/constants/consts';
 
 @Component({
   selector: 'app-denounce',
@@ -55,7 +55,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   giaiDoan: number;
   tinhTrang: number;
   congKhai: boolean | null;
-
+  trangThai: number;
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
@@ -65,7 +65,9 @@ export class DenounceComponent implements OnInit, OnDestroy {
   congKhaiOptions = congKhaiOptions;
   LinhVucOptions = LinhVucOptions;
   KetquaOptions = KetquaOptions;
-
+  trangThaiOPtions = trangthaiOptions;
+  TrangthaiOptions = TrangThaiOptions;
+  
   // Permissions
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
@@ -112,6 +114,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
     this.tinhTrang = null;
+    this.trangThai = null;
   }
 
   private setHeader() {
@@ -215,6 +218,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         ketQua: this.tinhTrang,
         giaiDoan: this.giaiDoan,
         congKhai: this.congKhai,
+        trangThai: this.trangThai,
       } as GetDenounceListDto;
     }
 
@@ -258,6 +262,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
       ketQua: this.tinhTrang,
       giaiDoan: this.giaiDoan,
       congKhai: this.congKhai,
+      trangThai: this.trangThai,
     } as GetDenounceListDto;
     this.denounceService
       .getExcel(this.filter)

@@ -179,12 +179,13 @@ public class KNTCDbContext :
             b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
             b.Property(x => x.KetQua).HasColumnName("ket_qua");
             b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
+            b.Property(x => x.LuuTru).HasColumnName("luu_tru").HasDefaultValue(false);
             b.Property(x => x.TrangThai)
              .HasColumnName("trang_thai")
              .HasDefaultValue(TrangThai.TiepNhan);
             b.Property(x => x.TinhTrang)
              .HasColumnName("tinh_trang")
-             .HasDefaultValue(TinhTrang.TiepNhan);
+             .HasDefaultValue(TinhTrang.ChuaXuLy);
         });
 
         builder.Entity<Denounce>(b =>
@@ -248,12 +249,13 @@ public class KNTCDbContext :
             b.Property(x => x.SoVBKLNDTC).HasColumnName("so_VB_KL_NDTC").HasMaxLength(KNTCValidatorConsts.MaxSoQDLength);
             b.Property(x => x.NgayNhanTBKQXLKLTC).HasColumnName("ngay_nhan_TB_KQXLKLTC");
             b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
+            b.Property(x => x.LuuTru).HasColumnName("luu_tru").HasDefaultValue(false);
             b.Property(x => x.TrangThai)
             .HasColumnName("trang_thai")
             .HasDefaultValue(TrangThai.TiepNhan);
             b.Property(x => x.TinhTrang)
              .HasColumnName("tinh_trang")
-             .HasDefaultValue(TinhTrang.TiepNhan);
+             .HasDefaultValue(TinhTrang.ChuaXuLy);
         });
 
         builder.Entity<FileAttachment>(b =>
@@ -278,6 +280,7 @@ public class KNTCDbContext :
             b.Property(x => x.ContentLength).IsRequired().HasColumnName("content_length");
             b.Property(x => x.LoaiVuViec).IsRequired().HasColumnName("loai_vu_viec");
             b.Property(x => x.CongKhai).IsRequired().HasColumnName("cong_khai").HasDefaultValue(false);
+            b.Property(x => x.ChoPhepDownload).HasColumnName("cho_phep_download").HasDefaultValue(false);
         });
 
         builder.Entity<DocumentType>(b =>
@@ -319,7 +322,7 @@ public class KNTCDbContext :
 
         builder.Entity<BaseMap>(b =>
         {
-            b.ToTable("BaseMap", KNTCConsts.KNTCDbSchema);
+            b.ToTable("BaseMaps", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(p => p.Id).ValueGeneratedOnAdd();
             b.Property(x => x.BaseMapCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
@@ -396,6 +399,7 @@ public class KNTCDbContext :
                 .HasColumnType("json")
                 .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Save);
         });
+
         builder.Entity<Summary>(b =>
         {
             b.HasNoKey();
@@ -420,8 +424,10 @@ public class KNTCDbContext :
             b.Property(x => x.MaQuanHuyen).HasColumnName("ma_quan_huyen");
             b.Property(x => x.MaXaPhuongTT).HasColumnName("ma_xa_phuong_tt");
             b.Property(x => x.CongKhai).HasColumnName("cong_khai");
+            b.Property(x => x.TrangThai).HasColumnName("trang_thai");
             b.Property(x => x.CccdCmnd).HasColumnName("cccd_cmnd");
         });
+
         builder.Entity<History>(b =>
         {
             b.ToTable("Histories", KNTCConsts.KNTCDbSchema);

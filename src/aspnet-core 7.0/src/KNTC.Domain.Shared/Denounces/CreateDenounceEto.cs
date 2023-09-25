@@ -28,8 +28,7 @@ public class CreateDenounceEto
     public int MaXaPhuongTT { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public bool CongKhai { get; set; }
+    public TrangThai TrangThai { get; set; }
     public string? DuLieuToaDo { get; set; }
     public string? DuLieuHinhHoc { get; set; }
-    public ThaoTac ThaoTac { get; set; }
-    public string GhiChu { get; set; }
 }

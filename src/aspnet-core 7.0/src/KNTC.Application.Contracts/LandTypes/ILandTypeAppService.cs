@@ -8,7 +8,7 @@ namespace KNTC.LandTypes;
 public interface ILandTypeAppService
     : ICrudAppService<LandTypeDto,
         int,
-        GetLandTypeListDto,
+        GetLandTypesListDto,
         CreateAndUpdateLandTypeDto>
 {
     Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync();

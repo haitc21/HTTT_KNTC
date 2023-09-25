@@ -44,6 +44,12 @@ public class KNTCPermissionDefinitionProvider : PermissionDefinitionProvider
         unitTypePermission.AddChild(KNTCPermissions.UnitTypePermission.Edit, L("Permission:UnitTypes.Edit"));
         unitTypePermission.AddChild(KNTCPermissions.UnitTypePermission.Delete, L("Permission:UnitTypes.Delete"));
 
+        var baseMapGroup = context.AddGroup(KNTCPermissions.BaseMapGroupName, L("Permission:BaseMapGr"));
+        var baseMapPermission = baseMapGroup.AddPermission(KNTCPermissions.BaseMapPermission.Default, L("Permission:BaseMaps"));
+        baseMapPermission.AddChild(KNTCPermissions.BaseMapPermission.Create, L("Permission:BaseMaps.Create"));
+        baseMapPermission.AddChild(KNTCPermissions.BaseMapPermission.Edit, L("Permission:BaseMaps.Edit"));
+        baseMapPermission.AddChild(KNTCPermissions.BaseMapPermission.Delete, L("Permission:BaseMaps.Delete"));
+
         var geoServerGroup = context.AddGroup(KNTCPermissions.GeoServerGroupName, L("Permission:GeoServerGr"));
         var geoServerPermission = geoServerGroup.AddPermission(KNTCPermissions.GeoServerPermission.Default, L("Permission:GeoServesrs"));
 

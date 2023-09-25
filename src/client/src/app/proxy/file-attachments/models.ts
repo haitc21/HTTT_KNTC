@@ -18,6 +18,7 @@ export interface CreateAndUpdateFileAttachmentDto {
   contentLength: number;
   concurrencyStamp?: string;
   congKhai: boolean;
+  choPhepDownload: boolean;
 }
 
 export interface FileAttachmentDto extends AuditedEntityDto<string> {
@@ -34,6 +35,7 @@ export interface FileAttachmentDto extends AuditedEntityDto<string> {
   contentType?: string;
   contentLength?: number;
   congKhai: boolean;
+  choPhepDownload: boolean;
 }
 
 export interface GetFileAttachmentListDto extends BaseListFilterDto {

@@ -18,4 +18,5 @@ public class FileAttachmentDto : AuditedEntityDto<Guid>
     public string? ContentType { get; set; }
     public long? ContentLength { get; set; }
     public bool CongKhai { get; set; }
+    public bool ChoPhepDownload { get; set; }
 }

@@ -4,7 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { AuthService, PermissionService } from '@abp/ng.core';
 import { LayoutService } from '../service/app.layout.service';
-import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
+//import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FileService } from 'src/app/_shared/services/file.service';
 import { MessageConstants } from 'src/app/_shared/constants/messages.const';
@@ -16,9 +16,9 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { SetPasswordComponent } from 'src/app/system/user/set-password/set-password.component';
 import { LinhVuc } from '@proxy';
 import { GetSysConfigService } from 'src/app/_shared/services/sysconfig.services';
-import { Subject, forkJoin, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { SysConfigConsts } from 'src/app/_shared/constants/sys-config.consts';
-
+import { UserDto, UsersService } from '@proxy/users';
 @Component({
   selector: 'app-topbar',
   templateUrl: './app.topbar.component.html',
@@ -56,6 +56,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     private notificationService: NotificationService,
     public dialogService: DialogService,
     private sanitizer: DomSanitizer,
+    private userService: UsersService,
     private sysConfigService: GetSysConfigService
   ) {}
   ngOnInit(): void {
@@ -70,10 +71,23 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     let accessTokenJson = JSON.parse(decodedAccessToken);
     this.userName = accessTokenJson.preferred_username ?? '';
     this.userId = accessTokenJson.sub ?? '';
+
     this.getAvatar();
     this.fileService.avatarUrl$.subscribe(url => {
       if (url) this.avatarUrl = url;
     });
+
+    //store userinfo in storage
+    if (this.userId){
+      this.userService.getUserInfo(this.userId)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: (response: UserDto) => {
+          localStorage.setItem('userInfo', JSON.stringify(response.userInfo));          
+        },
+        error: () => {},
+      });
+    }
   }
 
   getSysConfigAmdInitMenu() {
@@ -218,8 +232,10 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
           },
           {
             label: 'Quản lý bản đồ quy hoạch',
-            url: `${this.geoserverUrl}/geoserver/web/`,
-            visible: this.permissionService.getGrantedPolicy('GeoServesrs'),
+            routerLink: ['/system/basemap'],
+            visible: this.permissionService.getGrantedPolicy('BaseMaps'),
+            //url: `${this.geoserverUrl}/geoserver/web/`,
+            //visible: this.permissionService.getGrantedPolicy('GeoServesrs'),
           },
           {
             label: 'Quản lý người dùng',

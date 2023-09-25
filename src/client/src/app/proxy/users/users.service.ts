@@ -1,4 +1,4 @@
-import type { CrateAndUpdateUserDto, GetUserListDto, SetPasswordDto, UserDto, UserInfoDto, UserListDto } from './models';
+import type { CreateAndUpdateUserDto, GetUserListDto, SetPasswordDto, UserDto, UserInfoDto, UserListDto } from './models';
 import { RestService, Rest } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -12,7 +12,7 @@ export class UsersService {
   apiName = 'Default';
   
 
-  create = (input: CrateAndUpdateUserDto, config?: Partial<Rest.Config>) =>
+  create = (input: CreateAndUpdateUserDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, IdentityUserDto>({
       method: 'POST',
       url: '/api/app/users',
@@ -96,7 +96,7 @@ export class UsersService {
     { apiName: this.apiName,...config });
   
 
-  update = (id: string, input: CrateAndUpdateUserDto, config?: Partial<Rest.Config>) =>
+  update = (id: string, input: CreateAndUpdateUserDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, IdentityUserDto>({
       method: 'PUT',
       url: `/api/app/users/${id}`,
@@ -114,7 +114,7 @@ export class UsersService {
     { apiName: this.apiName,...config });
   
 
-  updateUserInfo = (userId: string, input: CrateAndUpdateUserDto, config?: Partial<Rest.Config>) =>
+  updateUserInfo = (userId: string, input: CreateAndUpdateUserDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, UserInfoDto>({
       method: 'PUT',
       url: `/api/app/users/user-info/${userId}`,

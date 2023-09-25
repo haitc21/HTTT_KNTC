@@ -98,4 +98,13 @@ public static class KNTCPermissions
     {
         public const string Default = GeoServerGroupName;
     }
+
+    public const string UserUnitGroupName = "UserUnits";
+    public static class UserUnitPermission
+    {
+        public const string Default = UserUnitGroupName;
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }    
 }

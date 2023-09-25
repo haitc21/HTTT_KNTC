@@ -1,4 +1,4 @@
-import type { CreateAndUpdateLandTypeDto, GetLandTypeListDto, LandTypeDto, LandTypeLookupDto } from './models';
+import type { CreateAndUpdateLandTypeDto, GetLandTypesListDto, LandTypeDto, LandTypeLookupDto } from './models';
 import { RestService, Rest } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -44,7 +44,7 @@ export class LandTypeService {
     { apiName: this.apiName,...config });
   
 
-  getList = (input: GetLandTypeListDto, config?: Partial<Rest.Config>) =>
+  getList = (input: GetLandTypesListDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<LandTypeDto>>({
       method: 'GET',
       url: '/api/app/land-type',

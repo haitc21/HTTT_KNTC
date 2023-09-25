@@ -134,8 +134,11 @@ public class CreateComplainDto
     public LoaiKetQua? KetQua2 { get; set; }
 
     [Required]
+    public TrangThai TrangThai { get; set; }
+
+    [Required]
     public bool CongKhai { get; set; }
-    public ThaoTac ThaoTac { get; set; }
+    public bool LuuTru { get; set; }
 
     public virtual List<CreateAndUpdateFileAttachmentDto>? FileAttachments { get; set; }
 }

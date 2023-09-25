@@ -13,6 +13,7 @@ public class LogBookExcelDto
     public string TieuDe { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
     public string BoPhanDangXL { get; set; }
+    public string TrangThai { get; set; }
     public string DaGQ { get; set; }
-    public string DangGQ { get; set; }
+    public string DangGQ { get; set; }    
 }

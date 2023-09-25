@@ -14,7 +14,6 @@ public class Complain : AuditedAggregateRoot<Guid>
 
     public Complain(Guid id) : base(id)
     {
-        TrangThai = TrangThai.TiepNhan;
     }
 
     public Complain(Guid id, string maHoSo) : base(id)
@@ -70,6 +69,7 @@ public class Complain : AuditedAggregateRoot<Guid>
     public bool CongKhai { get; set; }
     public TrangThai TrangThai { get; set; }
     public TinhTrang TinhTrang { get; set; }
+    public bool LuuTru { get; set; }
     public LandType LandType { get; set; }
 
     private void SetMaHoSo([NotNull] string maHoSo)

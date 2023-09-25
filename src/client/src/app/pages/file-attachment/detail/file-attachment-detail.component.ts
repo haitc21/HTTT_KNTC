@@ -69,6 +69,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
     thoiGianBanHanh: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     ngayNhan: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     congKhai: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
+    choPhepDownload: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
   };
 
   get formControls() {
@@ -144,6 +145,7 @@ export class FileAttachmentDetailComponent implements OnInit, OnDestroy {
       complainId: [],
       denounceId: [],
       congKhai: [false, [Validators.required]],
+      chophepDownload: [false, [Validators.required]],
     });
     if (this.item) {
       this.form.patchValue(this.item);

@@ -56,8 +56,8 @@ public class DenounceDto : AuditedEntityDto<Guid>
     public DateTime NgayNhanTBKQXLKLTC { get; set; }
     public LoaiKetQua KetQua { get; set; }
     public bool CongKhai { get; set; }
+    public bool LuuTru { get; set; }
+    public TrangThai TrangThai { get; set; }
     public virtual List<FileAttachmentDto> FileAttachments { get; set; }
     public string? ConcurrencyStamp { get; set; }
-    public TrangThai TrangThai { get; set; }
-    public TinhTrang TinhfTrang { get; set; }
 }

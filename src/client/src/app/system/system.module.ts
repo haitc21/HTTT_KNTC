@@ -34,6 +34,8 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CardModule } from 'primeng/card';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ProfileComponent } from './user/profile/profile.component';
+import { BaseMapComponent } from './basemap/basemap.component';
+import { BaseMapDetailComponent } from './basemap/detail/basemap-detail.component';
 import { DocumentTypeComponent } from './document-type/document-type.component';
 import { DocumentTypeDetailComponent } from './document-type/detail/document-type-detail.component';
 import { LandTypeComponent } from './land-type/land-type.component';
@@ -48,7 +50,7 @@ import { SysConfigDetailComponent } from './sys-config/detail/sys-config-detail.
 import { ValidationMessagedModule } from '../_shared/modules/validation-message/validation-message.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CommonModule } from '@angular/common';
-
+import { MultiSelectModule } from 'primeng/multiselect'
 const COMPONENT = [
   RoleComponent,
   RoleDetailComponent,
@@ -58,6 +60,8 @@ const COMPONENT = [
   RoleAssignComponent,
   SetPasswordComponent,
   ProfileComponent,
+  BaseMapComponent,
+  BaseMapDetailComponent,
   DocumentTypeComponent,
   DocumentTypeDetailComponent,
   LandTypeComponent,
@@ -103,6 +107,7 @@ const COMPONENT = [
     CardModule,
     FileUploadModule,
     BreadcrumbModule,
+    MultiSelectModule,
     InputSwitchModule,
   ],
   entryComponents: [...COMPONENT],

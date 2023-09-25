@@ -65,7 +65,8 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
             input.Sorting = nameof(Volo.Abp.Identity.IdentityUser.UserName);
         }
         var count = await UserRepository.GetCountAsync(input.Filter,
-                                                      input.roleId, null,
+                                                      input.roleId,
+                                                      null,
                                                       input.PhoneNumber,
                                                       input.Email);
         var list = await UserRepository.GetListAsync(
@@ -127,7 +128,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Create)]
-    public virtual async Task<IdentityUserDto> CreateAsync(CrateAndUpdateUserDto input)
+    public virtual async Task<IdentityUserDto> CreateAsync(CreateAndUpdateUserDto input)
     {
         await IdentityOptions.SetAsync();
 
@@ -161,7 +162,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, CrateAndUpdateUserDto input)
+    public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, CreateAndUpdateUserDto input)
     {
         await IdentityOptions.SetAsync();
 
@@ -183,13 +184,15 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         }
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
         userInfo.Dob = input.Dob;
+        userInfo.userType = input.userType;
+        userInfo.managedUnitIds = input.managedUnitIds;
         await _userInfoRepo.UpdateAsync(userInfo);
         await CurrentUnitOfWork.SaveChangesAsync();
         return ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, IdentityUserDto>(user);
     }
 
     [Authorize]
-    public async Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CrateAndUpdateUserDto input)
+    public async Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CreateAndUpdateUserDto input)
     {
         await hasViewUserInfo(userId);
         var user = await UserManager.GetByIdAsync(userId);
@@ -361,5 +364,12 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         return fileName.Substring(lastDotIndex + 1);
     }
 
+    public static Guid ToGuid(int? value)
+    {
+        if (!value.HasValue) return Guid.Empty;
+        byte[] bytes = new byte[16];
+        BitConverter.GetBytes(value.Value).CopyTo(bytes, 0);
+        return new Guid(bytes);
+    }
     #endregion private method
 }

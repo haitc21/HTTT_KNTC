@@ -134,6 +134,48 @@
           </span>
         </div>
         <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <p-dropdown
+              id="userType"
+              formControlName="userType"
+              [options]="userTypeOPtions"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="getListOfUnits($event.value)"
+            ></p-dropdown>
+            <label>Loại tài khoản<span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.userType"
+            [validationMessages]="validationMessages.userType"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <p-multiSelect 
+              [(ngModel)]="selectedUnits"
+              [options]="listOfUnits" 
+              formControlName="managedUnitIds"
+              [group]="listGroup"
+              [filter]="true"
+              optionLabel="label" 
+              optionValue="value"              
+              defaultLabel="Chọn đơn vị cần quản lý" 
+              scrollHeight="250px" 
+              styleClass="w-full"
+              [disabled] = "listType==''"
+              display="chip">
+            </p-multiSelect>
+            <label>{{listType}}</label>
+          </span>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
         <div class="col-12 md:col-6 flex align-items-center">
           <p-inputSwitch formControlName="isActive"></p-inputSwitch>
           <label class="ml-3" for="isActive">Kích hoạt</label>

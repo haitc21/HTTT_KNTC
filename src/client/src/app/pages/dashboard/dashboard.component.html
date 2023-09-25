@@ -8,55 +8,54 @@
       <!-- ----------------------------------------------------------------------- -->
       <div class="grid col-12 md:col-12">
         <div class="group-header ml-3">
-          <img src="assets/images/map/marker-icon.png" alt="Khiếu nại" />
+          <i class="pi pi-envelope" style="font-size: 2rem"></i>
           <span>Khiếu nại</span>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Đất đai</span>
-          <p-inputSwitch [(ngModel)]="landComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch class="land-switch" [(ngModel)]="landComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch [(ngModel)]="enviromentComplain" (onChange)="loadData()"></p-inputSwitch>
-        </div>
-        <!-- ----------------------------------------------------------------------- -->
-        <div class="inputgroup">
-          <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch [(ngModel)]="waterComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch class="enviroment-switch" [(ngModel)]="enviromentComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch [(ngModel)]="mineralComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch class="mineral-switch" [(ngModel)]="mineralComplain" (onChange)="loadData()"></p-inputSwitch>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Tài nguyên nước</span>
+          <p-inputSwitch class="water-switch" [(ngModel)]="waterComplain" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="group-header ml-3 mt-5">
-          <img src="assets/images/map/marker-icon-red.png" class="icon-red" alt="Tố cáo" />
+          <i class="fa fa-balance-scale" style="font-size: 2rem"></i>
           <span>Tố Cáo</span>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Đất đai</span>
-          <p-inputSwitch [(ngModel)]="landDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch class="land-switch" [(ngModel)]="landDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch [(ngModel)]="enviromentDenounce" (onChange)="loadData()"></p-inputSwitch>
-        </div>
-        <!-- ----------------------------------------------------------------------- -->
-        <div class="inputgroup">
-          <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch class="enviroment-switch" [(ngModel)]="enviromentDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch [(ngModel)]="mineralDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch class="mineral-switch" [(ngModel)]="mineralDenounce" (onChange)="loadData()"></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
+        <div class="inputgroup">
+          <span class="ml-5">Tài nguyên nước</span>
+          <p-inputSwitch class="water-switch" [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
+        </div>
       </div>
     </p-card>
   </div>
@@ -103,6 +102,24 @@
                   type="pie"
                   [data]="dataPieChart_TC"
                   [options]="pieChartOptions_TC"
+                  [plugins]="plugin" 
+                  [style]="{ width: '50%' }"
+                ></p-chart>
+              </div>
+            </p-card>
+            <p-card header="Biểu đồ tình hình xử lý khiếu nại, tố cáo" class="flex-1">
+              <div class="flex justify-content-center">
+                <p-chart
+                  type="pie"
+                  [data]="dataPieChartByStatus_KN"
+                  [options]="pieChartByStatusOptions_KN"
+                  [plugins]="plugin" 
+                  [style]="{ width: '50%' }"
+                ></p-chart>
+                <p-chart
+                  type="pie"
+                  [data]="dataPieChartByStatus_TC"
+                  [options]="pieChartByStatusOptions_TC"
                   [plugins]="plugin" 
                   [style]="{ width: '50%' }"
                 ></p-chart>
@@ -162,7 +179,7 @@
                 <th>Nội dung</th>
                 <th>Thời gian nộp</th>
                 <th>Ngày hẹn trả KQ</th>
-                <th>Bộ phận đang XL</th>
+                <th>Bộ phận thực hiện</th>
                 <th style="width: 150px">Trạng thái</th>
               </tr>
             </ng-template>

@@ -60,6 +60,8 @@ public class ComplainManager : DomainService
                                               string? ThamQuyen2,
                                               string? SoQD2,
                                               [NotNull] bool congKhai,
+                                              bool luuTru,
+                                              [NotNull] TrangThai TrangThai,
                                               LoaiKetQua? KetQua1 = null,
                                               LoaiKetQua? KetQua2 = null
         )
@@ -89,13 +91,14 @@ public class ComplainManager : DomainService
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
         Check.NotNull(congKhai, nameof(congKhai));
+        Check.NotNull(TrangThai, nameof(TrangThai));
 
         var existedHoSo = await _hoSoRepo.FindByMaHoSoAsync(maHoSo, false);
         if (existedHoSo != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.HoSoAlreadyExist).WithData("maHoSo", maHoSo);
         }
-        var complain =  new Complain(GuidGenerator.Create(), maHoSo)
+        return new Complain(GuidGenerator.Create(), maHoSo)
         {
             TieuDe = tieuDe,
             LinhVuc = linhVuc,
@@ -140,10 +143,9 @@ public class ComplainManager : DomainService
             KetQua2 = KetQua2,
             KetQua = KetQua2 ?? KetQua1,
             CongKhai = congKhai,
-            TrangThai = boPhanDangXL.IsNullOrEmpty() ? TrangThai.TiepNhan : TrangThai.DangXuLy
+            TrangThai = TrangThai,
+            LuuTru = luuTru
         };
-        SettinhTrang(complain);
-        return complain;
     }
 
     public async Task ChangeMaHoSoAsync([NotNull] Complain hoSo, [NotNull] string maHoSo)
@@ -200,7 +202,8 @@ public class ComplainManager : DomainService
                                    string? ThamQuyen2,
                                    string? SoQD2,
                                    [NotNull] bool congKhai,
-                                   [NotNull] TrangThai trangThai,
+                                   bool luuTru,
+                                   [NotNull] TrangThai TrangThai,
                                    LoaiKetQua? KetQua1 = null,
                                    LoaiKetQua? KetQua2 = null
       )
@@ -231,6 +234,7 @@ public class ComplainManager : DomainService
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
         Check.NotNull(congKhai, nameof(congKhai));
+        Check.NotNull(TrangThai, nameof(TrangThai));
 
         if (complain.MaHoSo != maHoSo)
         {
@@ -278,32 +282,8 @@ public class ComplainManager : DomainService
         complain.SoQD2 = SoQD2;
         complain.KetQua2 = KetQua2;
         complain.CongKhai = congKhai;
+        complain.LuuTru = luuTru;
+        complain.TrangThai = TrangThai;
         complain.KetQua = KetQua2 ?? KetQua1;
-        complain.TrangThai = trangThai;
-        SettinhTrang(complain);
-    }
-    public void SettinhTrang(Complain complain)
-    {
-        if (complain.TrangThai < TrangThai.KetLuan) // tiep nhan, da thu ly, chuyen don
-        {
-            TimeSpan timeDifference = DateTime.Now - complain.ThoiGianHenTraKQ;
-            if (timeDifference.TotalMilliseconds < 0)
-            {
-                complain.TinhTrang = TinhTrang.QuaHan;
-            }
-            else if (timeDifference.TotalDays <= 7)
-            {
-                complain.TinhTrang = TinhTrang.SapDenHan;
-            }
-            else
-            {
-                complain.TinhTrang = complain.TrangThai == TrangThai.TiepNhan ? TinhTrang.TiepNhan : TinhTrang.DangXuLy;
-            }
-
-        }
-        else // ket luan, tra don, rut don
-        {
-            complain.TinhTrang = TinhTrang.DaXuLy;
-        }
     }
 }

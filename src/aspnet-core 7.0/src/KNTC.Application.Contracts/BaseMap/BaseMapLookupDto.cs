@@ -13,4 +13,5 @@ public class BaseMapLookupCache
 public class BaseMapLookupDto : EntityDto<int>
 {
     public string BaseMapName { get; set; }
+    public string BaseMapCode { get; set; }
 }

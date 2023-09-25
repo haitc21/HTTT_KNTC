@@ -39,29 +39,34 @@ public enum TrangThai
 {
     TiepNhan = 0,
     DangXuLy = 1,
-    ChuyenDon = 2,
-    ThuLy = 3,
-    KetLuan = 4,
-    TraDpm = 5,
-    RutDon = 6
+    DaThuLy = 2,
+    DaKetLuan = 3,
+    RutDon = 4,
+    TraLaiDon = 5,
+    ChuyenDon = 6
 }
 public enum TinhTrang
 {
-    TiepNhan = 0,
+    ChuaXuLy = 0,
     DangXuLy = 1,
     DaXuLy = 2,
     SapDenHan = 3,
     QuaHan = 4
 }
+
 public enum ThaoTac
 {
-    TaoMoi = 0,
-    ChinhSua = 1,
-    TiepNhan = 2,
-    ChuyenDon = 3,
-    ThuLy = 4,
-    KetLuan = 5,
-    TraDon = 6,
-    RutDon = 7
+    TiepNhan = 0,
+    ThuLy = 1,
+    KetLuan = 2,
+    TraDon = 3,
+    RutDon = 4,
+    ChuyenDon = 5
+}
+public enum UserType
+{
+    QuanLyTinh = 1,
+    QuanLyHuyen = 2,
+    QuanLyXa = 3,
 }
 

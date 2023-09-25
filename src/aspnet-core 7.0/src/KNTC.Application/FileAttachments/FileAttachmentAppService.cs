@@ -116,7 +116,8 @@ public class FileAttachmentAppService : CrudAppService<
                                                              fileName: input.FileName.Trim(),
                                                              contentType: input.ContentType,
                                                              contentLength: input.ContentLength,
-                                                             congKhai: input.CongKhai);
+                                                             congKhai: input.CongKhai,
+                                                             chophepDownload: input.ChoPhepDownload);
         await Repository.InsertAsync(entity);
         return ObjectMapper.Map<FileAttachment, FileAttachmentDto>(entity);
     }
@@ -137,7 +138,8 @@ public class FileAttachmentAppService : CrudAppService<
                                                   fileName: input.FileName.Trim(),
                                                   contentType: input.ContentType,
                                                   contentLength: input.ContentLength,
-                                                  congKhai: input.CongKhai);
+                                                  congKhai: input.CongKhai,
+                                                  chophepDownload: input.ChoPhepDownload);
         await Repository.UpdateAsync(entity);
         return ObjectMapper.Map<FileAttachment, FileAttachmentDto>(entity);
     }

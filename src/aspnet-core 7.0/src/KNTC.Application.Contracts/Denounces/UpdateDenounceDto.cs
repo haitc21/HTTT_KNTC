@@ -134,9 +134,13 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
 
     public DateTime? NgayNhanTBKQXLKLTC { get; set; }
     public LoaiKetQua? KetQua { get; set; }
+
     [Required]
     public bool CongKhai { get; set; }
-    public string? ConcurrencyStamp { get; set; }
+    public bool LuuTru { get; set; }
+
+    [Required]
     public TrangThai TrangThai { get; set; }
-    public ThaoTac ThaoTac { get; set; }
+
+    public string? ConcurrencyStamp { get; set; }
 }

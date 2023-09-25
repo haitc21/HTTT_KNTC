@@ -1,7 +1,6 @@
 ﻿using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Helpers;
-using KNTC.Histories;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
@@ -9,9 +8,9 @@ using KNTC.RedisCache;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
 using KNTC.Units;
+using KNTC.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Hosting;
-using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
@@ -36,8 +35,9 @@ public class ComplainAppService : CrudAppService<
             CreateComplainDto,
             UpdateComplainDto>, IComplainAppService
 {
-    private readonly IComplainRepository _complainRepo;
+    private readonly IComplainRepository _complainRepo;    
     private readonly ComplainManager _complainManager;
+    private readonly IRepository<UserInfo> _userInfoRepo;
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
     private readonly FileAttachmentManager _fileAttachmentManager;
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
@@ -46,11 +46,11 @@ public class ComplainAppService : CrudAppService<
     private readonly IRedisCacheService _cacheService;
     private readonly IDistributedEventBus _distributedEventBus;
     private readonly ISpatialDataRepository _spatialDataRepo;
-    private readonly IRepository<History, int> _historyRepo;
 
     public ComplainAppService(IRepository<Complain, Guid> repository,
         IComplainRepository complainRepo,
         ComplainManager complainManager,
+        IRepository<UserInfo> userInfoRepo,
         IRepository<FileAttachment, Guid> fileAttachmentRepo,
         IBlobContainer<FileAttachmentContainer> blobContainer,
         FileAttachmentManager fileAttachmentManager,
@@ -58,23 +58,21 @@ public class ComplainAppService : CrudAppService<
         IRepository<Unit, int> unitRepo,
         IRedisCacheService cacheService,
         IDistributedEventBus distributedEventBus,
-        ISpatialDataRepository spatialDataRepo,
-        IRepository<History, int> historyRepo) : base(repository)
+        ISpatialDataRepository spatialDataRepo) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
 
         _complainRepo = complainRepo;
         _fileAttachmentRepo = fileAttachmentRepo;
         _complainManager = complainManager;
+        _userInfoRepo = userInfoRepo;
         _blobContainer = blobContainer;
         _fileAttachmentManager = fileAttachmentManager;
         _env = env;
         _unitRepo = unitRepo;
-        _unitRepo = unitRepo;
         _cacheService = cacheService;
         _distributedEventBus = distributedEventBus;
         _spatialDataRepo = spatialDataRepo;
-        _historyRepo = historyRepo;
     }
 
     [AllowAnonymous]
@@ -108,11 +106,24 @@ public class ComplainAppService : CrudAppService<
     [AllowAnonymous]
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
     {
+        int[] managedUnitIds = null;
+        int userType = 0;
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
         if (hasPermission.Succeeded == false)
         {
             input.CongKhai = true;
         }
+        else
+        {
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
+            if (userInfo != null)
+            {
+                userType = userInfo.userType.Value;
+                managedUnitIds = userInfo.managedUnitIds;
+            }
+        }
+
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = $"{nameof(Complain.ThoiGianTiepNhan)} DESC, {nameof(Complain.MaHoSo)}";
@@ -134,7 +145,11 @@ public class ComplainAppService : CrudAppService<
             input.FromDate,
             input.ToDate,
             input.CongKhai,
-            nguoiNopDon
+            input.LuuTru,
+            input.TrangThai,
+            nguoiNopDon,
+            userType,
+            managedUnitIds
         );
 
         var totalCount = await _complainRepo.CountAsync(
@@ -144,14 +159,18 @@ public class ComplainAppService : CrudAppService<
                 && (input.mangLinhVuc.IsNullOrEmpty() || input.mangLinhVuc.Contains((int)x.LinhVuc))
                 && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
                 && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
+                && (!((userType == 2) && !managedUnitIds.IsNullOrEmpty()) || managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai)
                 && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
                 && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
+                && (!((userType == 3) && !managedUnitIds.IsNullOrEmpty()) || managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai)
                 && (!input.GiaiDoan.HasValue || input.GiaiDoan == 0 ||
                     (input.GiaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) ||
                     (input.GiaiDoan == 2 && x.NgayKhieuNai2 != null))
                 && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                 && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
                 && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
+                && (!input.LuuTru.HasValue || x.LuuTru == input.LuuTru)
+                && (!input.TrangThai.HasValue || x.TrangThai == input.TrangThai)
                 && (input.NguoiNopDon.IsNullOrEmpty()
                     || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon))
                 );
@@ -206,6 +225,8 @@ public class ComplainAppService : CrudAppService<
                                                   ThamQuyen2: input.ThamQuyen2,
                                                   SoQD2: input.SoQD2,
                                                   congKhai: input.CongKhai,
+                                                  luuTru: input.LuuTru,
+                                                  TrangThai: input.TrangThai,                                                  
                                                   KetQua1: input.KetQua1,
                                                   KetQua2: input.KetQua2);
         await _complainRepo.InsertAsync(complain);
@@ -226,7 +247,8 @@ public class ComplainAppService : CrudAppService<
                                                                      fileName: item.FileName.Trim(),
                                                                      contentType: item.ContentType,
                                                                      contentLength: item.ContentLength,
-                                                                     congKhai: item.CongKhai);
+                                                                     congKhai: item.CongKhai,
+                                                                     chophepDownload: item.ChoPhepDownload);
                 await _fileAttachmentRepo.InsertAsync(fileAttach);
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
@@ -234,7 +256,6 @@ public class ComplainAppService : CrudAppService<
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var createEto = ObjectMapper.Map<CreateComplainDto, CreateComplainEto>(input);
         createEto.Id = complain.Id;
-        // spatial data,  Ghi lich su
         await _distributedEventBus.PublishAsync(createEto);
         return result;
     }
@@ -286,14 +307,14 @@ public class ComplainAppService : CrudAppService<
                                           ThamQuyen2: input.ThamQuyen2,
                                           SoQD2: input.SoQD2,
                                           congKhai: input.CongKhai,
-                                          trangThai: input.TrangThai,
+                                          luuTru: input.LuuTru,
+                                          TrangThai: input.TrangThai,
                                           KetQua1: input.KetQua1,
                                           KetQua2: input.KetQua2);
         await _complainRepo.UpdateAsync(complain);
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var updateEto = ObjectMapper.Map<UpdateComplainDto, UpdateComplainEto>(input);
         updateEto.Id = complain.Id;
-        // spatial data,  Ghi lich su
         await _distributedEventBus.PublishAsync(updateEto);
         return ObjectMapper.Map<Complain, ComplainDto>(complain);
     }
@@ -325,8 +346,27 @@ public class ComplainAppService : CrudAppService<
         await _distributedEventBus.PublishAsync(new DeleteMultipleComplainEto(ids.ToList()));
         await _complainRepo.DeleteManyAsync(ids);
     }
+
+    //[Authorize(KNTCPermissions.ComplainsPermission.Default)]
     public async Task<byte[]> GetExcelAsync(GetComplainListDto input)
     {
+        int[] managedUnitIds = null;
+        int userType = 0;
+        var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
+        if (hasPermission.Succeeded == false)
+        {
+            input.CongKhai = true;
+        }
+        else
+        {
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
+            if (userInfo != null)
+            {
+                userType = userInfo.userType.Value;
+                managedUnitIds = userInfo.managedUnitIds;
+            }
+        }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = $"{nameof(Complain.ThoiGianTiepNhan)} DESC, {nameof(Complain.MaHoSo)}";
@@ -343,7 +383,11 @@ public class ComplainAppService : CrudAppService<
             input.FromDate,
             input.ToDate,
             input.CongKhai,
-            input.NguoiNopDon
+            input.LuuTru,
+            input.TrangThai,
+            input.NguoiNopDon,
+            userType,
+            managedUnitIds
         );
         if (complains == null) return null;
 

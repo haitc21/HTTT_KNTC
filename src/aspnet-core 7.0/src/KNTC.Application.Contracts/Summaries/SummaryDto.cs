@@ -20,4 +20,5 @@ public class SummaryDto
     public string? DuLieuHinhHoc { get; set; }
     public string SoThua { get; set; }
     public string ToBanDo { get; set; }
+    public TrangThai? TrangThai { get; set; }
 }
