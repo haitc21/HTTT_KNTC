@@ -106,7 +106,7 @@ public class DenounceAppService : CrudAppService<
     public override async Task<PagedResultDto<DenounceDto>> GetListAsync(GetDenounceListDto input)
     {
         int[] managedUnitIds = null;
-        int userType = 0;
+        UserType? userType = null;
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.DenouncesPermission.Default);
         if (hasPermission.Succeeded == false)
         {
@@ -118,8 +118,8 @@ public class DenounceAppService : CrudAppService<
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.userType.Value;
-                managedUnitIds = userInfo.managedUnitIds;
+                userType = userInfo.UserType.Value;
+                managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
         if (input.Sorting.IsNullOrWhiteSpace())
@@ -154,10 +154,8 @@ public class DenounceAppService : CrudAppService<
                        && (!input.LinhVuc.HasValue || x.LinhVuc == input.LinhVuc)
                        && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
                        && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
-                       && (!((userType == 2) && !managedUnitIds.IsNullOrEmpty()) || managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai)
                        && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
                        && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
-                       && (!((userType == 3) && !managedUnitIds.IsNullOrEmpty()) || managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai)
                        && (!input.FromDate.HasValue || x.ThoiGianTiepNhan >= input.FromDate)
                        && (!input.ToDate.HasValue || x.ThoiGianTiepNhan <= input.ToDate)
                        && (!input.CongKhai.HasValue || x.CongKhai == input.CongKhai)
@@ -165,7 +163,12 @@ public class DenounceAppService : CrudAppService<
                        && (!input.TrangThai.HasValue || x.TrangThai == input.TrangThai)
                        && (input.NguoiNopDon.IsNullOrEmpty()
                            || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon))
-                       );
+                       && (
+                       userType == UserType.QuanLyTinh || managedUnitIds.IsNullOrEmpty()
+                       || (userType == null && x.CongKhai)
+                       || (userType == UserType.QuanLyHuyen && managedUnitIds.Contains(x.MaQuanHuyen))
+                       || (userType == UserType.QuanLyXa && managedUnitIds.Contains(x.MaXaPhuongTT))
+                       ));
 
         return new PagedResultDto<DenounceDto>(
         totalCount,
@@ -343,7 +346,7 @@ public class DenounceAppService : CrudAppService<
     public async Task<byte[]> GetExcelAsync(GetDenounceListDto input)
     {
         int[] managedUnitIds = null;
-        int userType = 0;
+        UserType? userType = null;
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
         if (hasPermission.Succeeded == false)
         {
@@ -355,8 +358,8 @@ public class DenounceAppService : CrudAppService<
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.userType.Value;
-                managedUnitIds = userInfo.managedUnitIds;
+                userType = userInfo.UserType.Value;
+                managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
         if (input.Sorting.IsNullOrWhiteSpace())

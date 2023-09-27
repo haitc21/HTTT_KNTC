@@ -35,7 +35,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                bool? LuuTru,
                                                TrangThai? TrangThai,
                                                string nguoiNopDon,
-                                               int? userType,
+                                               UserType? userType,
                                                int[]? managedUnitIds
                                                )
     {
@@ -99,11 +99,11 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
              )
              .WhereIf(
-                (userType == 2 && !managedUnitIds.IsNullOrEmpty()),
+                (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
                 x => (managedUnitIds.Contains(x.MaQuanHuyen)) || x.CongKhai
              )
              .WhereIf(
-                (userType == 3 && !managedUnitIds.IsNullOrEmpty()),
+                (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
                 x => (managedUnitIds.Contains(x.MaXaPhuongTT)) || x.CongKhai
              )
             .OrderBy(sorting)
@@ -133,7 +133,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                bool? LuuTru,
                                                TrangThai? TrangThai,
                                                string nguoiNopDon,
-                                               int? userType,
+                                               UserType? userType,
                                                int[]? managedUnitIds
                                                )
     {
@@ -196,11 +196,11 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
              )
              .WhereIf(
-                (userType == 2 && !managedUnitIds.IsNullOrEmpty()),
+                (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
                 x => (managedUnitIds.Contains(x.MaQuanHuyen)) || x.CongKhai
              )
              .WhereIf(
-                (userType == 3 && !managedUnitIds.IsNullOrEmpty()),
+                (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
                 x => (managedUnitIds.Contains(x.MaXaPhuongTT)) || x.CongKhai
              )
             .OrderBy(sorting)

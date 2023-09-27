@@ -10,7 +10,7 @@ public class UserListDto : EntityDto<Guid>
     public string Surname { get; set; }
     public string? Email { get; set; }
     public string PhoneNumber { get; set; }
-    public int? userType { get; set; }
+    public int? UserType { get; set; }
     public DateTime Dob { get; set; }
     public byte[] AvatarContent { get; set; }
     public bool IsActive { get; set; }

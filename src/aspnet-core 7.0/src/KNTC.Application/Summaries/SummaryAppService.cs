@@ -55,7 +55,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     public async Task<PagedResultDto<SummaryDto>> GetListAsync(GetSummaryListDto input)
     {
         int[] managedUnitIds = null;
-        int userType = 0;
+        UserType? userType = null;
         var userId = CurrentUser.Id;
         if (userId == null)
         //var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
@@ -69,8 +69,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.userType.Value;
-                managedUnitIds = userInfo.managedUnitIds;
+                userType = userInfo.UserType.Value;
+                managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
         if (input.Sorting.IsNullOrWhiteSpace())
@@ -130,7 +130,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     private async Task<SummaryMapCache> GetMapFromDBAsync(GetSumaryMapDto input)
     {
         int[] managedUnitIds = null;
-        int userType = 0;
+        UserType? userType = null;
         var userId = CurrentUser.Id;
         if (userId == null)
         {
@@ -142,8 +142,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.userType.Value;
-                managedUnitIds = userInfo.managedUnitIds;
+                userType = userInfo.UserType.Value;
+                managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
         var query = await _summaryRepo.GetListAsync(input.loaiVuViec,
@@ -182,7 +182,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     public async Task<byte[]> GetLogBookExcelAsync(GetSummaryListDto input)
     {
         int[] managedUnitIds = null;
-        int userType = 0;
+        UserType? userType = null;
         var userId = CurrentUser.Id;
         if (userId == null)
         {
@@ -194,8 +194,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.userType.Value;
-                managedUnitIds = userInfo.managedUnitIds;
+                userType = userInfo.UserType.Value;
+                managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
         if (input.Sorting.IsNullOrWhiteSpace())
@@ -391,7 +391,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     public async Task<byte[]> GetReportExcelAsync(GetSummaryListDto input)
     {
         int[] managedUnitIds = null;
-        int userType = 0;
+        UserType? userType = null;
         var userId = CurrentUser.Id;
         if (userId == null)
         {
@@ -403,8 +403,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.userType.Value;
-                managedUnitIds = userInfo.managedUnitIds;
+                userType = userInfo.UserType.Value;
+                managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
         if (input.Sorting.IsNullOrWhiteSpace())
@@ -598,7 +598,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     public async Task<byte[]> GetExcelAsync(GetSummaryListDto input)
     {
         int[] managedUnitIds = null;
-        int userType = 0;
+        UserType? userType = null;
         var userId = CurrentUser.Id;
         if (userId == null)
         {
@@ -610,8 +610,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.userType.Value;
-                managedUnitIds = userInfo.managedUnitIds;
+                userType = userInfo.UserType.Value;
+                managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
         if (input.Sorting.IsNullOrWhiteSpace())

@@ -8,6 +8,6 @@ public class UserInfoDto : EntityDto<Guid>
 {
     public Guid UserId { get; set; }    
     public DateTime Dob { get; set; }
-    public int? userType { get; set; }
-    public int[]? managedUnitIds { get; set; }
+    public int? UserType { get; set; }
+    public int[]? ManagedUnitIds { get; set; }
 }

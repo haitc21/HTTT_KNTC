@@ -26,6 +26,6 @@ public interface ISummaryRepository
                                            bool? congKhai,
                                            TrangThai? TrangThai,
                                            string nguoiNopDon,
-                                           int? userType,
+                                           UserType? userType,
                                            int[]? managedUnitIds);
 }

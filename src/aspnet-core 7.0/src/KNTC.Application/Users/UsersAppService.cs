@@ -65,7 +65,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
             input.Sorting = nameof(Volo.Abp.Identity.IdentityUser.UserName);
         }
         var count = await UserRepository.GetCountAsync(input.Filter,
-                                                      input.roleId,
+                                                      input.RoleId,
                                                       null,
                                                       input.PhoneNumber,
                                                       input.Email);
@@ -75,7 +75,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
                                         input.SkipCount,
                                         input.Filter,
                                         false,
-                                        input.roleId,
+                                        input.RoleId,
                                         null,
                                         null,
                                         input.PhoneNumber,
@@ -153,6 +153,8 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         {
             UserId = user.Id,
             Dob = input.Dob,
+            UserType= input.UserType,
+            ManagedUnitIds= input.ManagedUnitIds,
         };
         await _userInfoRepo.InsertAsync(userInfo);
 
@@ -184,8 +186,8 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         }
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
         userInfo.Dob = input.Dob;
-        userInfo.userType = input.userType;
-        userInfo.managedUnitIds = input.managedUnitIds;
+        userInfo.UserType = input.UserType;
+        userInfo.ManagedUnitIds = input.ManagedUnitIds;
         await _userInfoRepo.UpdateAsync(userInfo);
         await CurrentUnitOfWork.SaveChangesAsync();
         return ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, IdentityUserDto>(user);
@@ -208,6 +210,8 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == userId);
         userInfo.Dob = input.Dob;
+        userInfo.UserType = input.UserType;
+        userInfo.ManagedUnitIds = input.ManagedUnitIds;
         await _userInfoRepo.UpdateAsync(userInfo);
         await UnitOfWorkManager.Current.SaveChangesAsync();
         return ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);

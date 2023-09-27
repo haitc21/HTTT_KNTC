@@ -23,7 +23,7 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
                      bool? LuuTru,
                      TrangThai? TrangThai,
                      string nguoiNopDon,
-                     int? userType,
+                     UserType? userType,
                      int[]? managedUnitIds);
 
     Task<Denounce> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
@@ -42,6 +42,6 @@ public interface IDenounceRepository : IRepository<Denounce, Guid>
                  bool? LuuTru,
                  TrangThai? TrangThai,
                  string nguoiNopDon,
-                 int? userType,
+                 UserType? userType,
                  int[]? managedUnitIds);
 }

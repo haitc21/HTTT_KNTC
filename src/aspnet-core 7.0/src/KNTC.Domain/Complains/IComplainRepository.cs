@@ -25,7 +25,7 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                      bool? luuTru,
                      TrangThai? TrangThai,
                      string nguoiNopDon,
-                     int? userType,
+                     UserType? userType,
                      int[]? managedUnitIds);
 
     Task<Complain> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
@@ -45,6 +45,6 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                  bool? luutru,
                  TrangThai? TrangThai,
                  string nguoiNopDon,
-                 int? userType,
+                 UserType? userType,
                  int[]? managedUnitIds);
 }

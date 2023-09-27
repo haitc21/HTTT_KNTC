@@ -114,6 +114,8 @@ public class KNTCDbContext :
                 .WithOne()
                 .HasForeignKey<UserInfo>(x => x.UserId)
                 .IsRequired();
+            b.Property(x => x.UserType).HasColumnName("user_type");
+            b.Property(x => x.ManagedUnitIds).HasColumnName("managed_unit_ids");
         });
 
         builder.Entity<Complain>(b =>

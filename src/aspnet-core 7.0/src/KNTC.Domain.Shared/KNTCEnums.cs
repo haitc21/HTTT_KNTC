@@ -63,7 +63,7 @@ public enum ThaoTac
     RutDon = 4,
     ChuyenDon = 5
 }
-public enum UserType
+public enum UserType : int
 {
     QuanLyTinh = 1,
     QuanLyHuyen = 2,

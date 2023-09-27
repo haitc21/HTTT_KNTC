@@ -35,7 +35,7 @@ public class ComplainAppService : CrudAppService<
             CreateComplainDto,
             UpdateComplainDto>, IComplainAppService
 {
-    private readonly IComplainRepository _complainRepo;    
+    private readonly IComplainRepository _complainRepo;
     private readonly ComplainManager _complainManager;
     private readonly IRepository<UserInfo> _userInfoRepo;
     private readonly IRepository<FileAttachment, Guid> _fileAttachmentRepo;
@@ -107,7 +107,7 @@ public class ComplainAppService : CrudAppService<
     public override async Task<PagedResultDto<ComplainDto>> GetListAsync(GetComplainListDto input)
     {
         int[] managedUnitIds = null;
-        int userType = 0;
+        UserType? userType = null;
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
         if (hasPermission.Succeeded == false)
         {
@@ -119,8 +119,8 @@ public class ComplainAppService : CrudAppService<
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.userType.Value;
-                managedUnitIds = userInfo.managedUnitIds;
+                userType = userInfo.UserType.Value;
+                managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
 
@@ -159,10 +159,8 @@ public class ComplainAppService : CrudAppService<
                 && (input.mangLinhVuc.IsNullOrEmpty() || input.mangLinhVuc.Contains((int)x.LinhVuc))
                 && (!input.KetQua.HasValue || x.KetQua == input.KetQua)
                 && (!input.maTinhTP.HasValue || x.MaTinhTP == input.maTinhTP)
-                && (!((userType == 2) && !managedUnitIds.IsNullOrEmpty()) || managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai)
                 && (!input.maQuanHuyen.HasValue || x.MaQuanHuyen == input.maQuanHuyen)
                 && (!input.maXaPhuongTT.HasValue || x.MaXaPhuongTT == input.maXaPhuongTT)
-                && (!((userType == 3) && !managedUnitIds.IsNullOrEmpty()) || managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai)
                 && (!input.GiaiDoan.HasValue || input.GiaiDoan == 0 ||
                     (input.GiaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) ||
                     (input.GiaiDoan == 2 && x.NgayKhieuNai2 != null))
@@ -173,7 +171,12 @@ public class ComplainAppService : CrudAppService<
                 && (!input.TrangThai.HasValue || x.TrangThai == input.TrangThai)
                 && (input.NguoiNopDon.IsNullOrEmpty()
                     || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon))
-                );
+                && (
+                userType == UserType.QuanLyTinh || managedUnitIds.IsNullOrEmpty() 
+                || (userType == null && x.CongKhai)
+                || (userType == UserType.QuanLyHuyen && managedUnitIds.Contains(x.MaQuanHuyen))
+                || (userType == UserType.QuanLyXa && managedUnitIds.Contains(x.MaXaPhuongTT))
+                ));
 
         return new PagedResultDto<ComplainDto>(
         totalCount,
@@ -226,7 +229,7 @@ public class ComplainAppService : CrudAppService<
                                                   SoQD2: input.SoQD2,
                                                   congKhai: input.CongKhai,
                                                   luuTru: input.LuuTru,
-                                                  TrangThai: input.TrangThai,                                                  
+                                                  TrangThai: input.TrangThai,
                                                   KetQua1: input.KetQua1,
                                                   KetQua2: input.KetQua2);
         await _complainRepo.InsertAsync(complain);
@@ -351,7 +354,7 @@ public class ComplainAppService : CrudAppService<
     public async Task<byte[]> GetExcelAsync(GetComplainListDto input)
     {
         int[] managedUnitIds = null;
-        int userType = 0;
+        UserType? userType = null;
         var hasPermission = await AuthorizationService.AuthorizeAsync(KNTCPermissions.ComplainsPermission.Default);
         if (hasPermission.Succeeded == false)
         {
@@ -363,8 +366,8 @@ public class ComplainAppService : CrudAppService<
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.userType.Value;
-                managedUnitIds = userInfo.managedUnitIds;
+                userType = userInfo.UserType.Value;
+                managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
         if (input.Sorting.IsNullOrWhiteSpace())
