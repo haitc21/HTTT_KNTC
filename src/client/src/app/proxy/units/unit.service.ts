@@ -1,4 +1,4 @@
-import type { CreateAndUpdateUnitDto, GetUnitListDto, UnitDto, UnitLookupDto } from './models';
+import type { CreateAndUpdateUnitDto, GetUnitListDto, UnitDto, UnitLookupDto, UnitTreeLookupDto } from './models';
 import { RestService, Rest } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
@@ -76,6 +76,14 @@ export class UnitService {
       method: 'GET',
       url: `/api/app/unit/lookup-by-parent-ids/${unitTypeId}`,
       params: { parentIds },
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getTreeLookup = (id: number, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, ListResultDto<UnitTreeLookupDto>>({
+      method: 'GET',
+      url: `/api/app/unit/${id}/tree-lookup`,
     },
     { apiName: this.apiName,...config });
   

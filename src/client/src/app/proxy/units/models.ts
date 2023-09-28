@@ -35,3 +35,10 @@ export interface UnitDto extends FullAuditedEntityDto<number> {
 export interface UnitLookupDto extends EntityDto<number> {
   unitName?: string;
 }
+
+export interface UnitTreeLookupDto {
+  id: number;
+  unitName?: string;
+  unitTypeId: number;
+  children: UnitTreeLookupDto[];
+}

@@ -10,17 +10,18 @@ import {
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { UtilityService } from 'src/app/_shared/services/utility.service';
-import { UserDto, UsersService } from '@proxy/users';
+import { CreateAndUpdateUserDto, UserDto, UsersService } from '@proxy/users';
 import { IdentityUserDto } from '@abp/ng.identity/proxy';
 import { DomSanitizer } from '@angular/platform-browser';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { userTypeOptions } from 'src/app/_shared/constants/consts';
-import { UnitLookupDto, UnitService } from '@proxy/units';
+import { UnitLookupDto, UnitService, UnitTreeLookupDto } from '@proxy/units';
 import { ListResultDto } from '@abp/ng.core';
-import { SelectItemGroup } from 'primeng/api';
+import { SelectItemGroup, TreeNode } from 'primeng/api';
 import { MultiSelect } from 'primeng/multiselect';
+import { UserType } from '@proxy';
 
 interface Unit {
   label: string,
@@ -44,18 +45,15 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   public provinces: any[] = [];
   selectedEntity = {} as UserDto;
 
-  listOfUnits!: any;
-  listGroup = false;
-  userType:number = 1;
-  managedUnitIds!: number[];
-  selectedUnits!: any;
   userTypeOPtions = userTypeOptions;
 
-  public avatarImage;
   mode: string;
   avatarUrl: any;
-  listType: string = '';
-  unitLoadedCount = 0;
+  unitOptionLabel: string = '';
+  unitOptions: TreeNode<UnitTreeLookupDto>[];
+  selectedNodes: TreeNode<UnitTreeLookupDto>[] = [];
+  UserType = UserType;
+
   // Validate
   validationMessages = {
     name: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
@@ -84,6 +82,9 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       { type: 'pattern', message: 'Người dùng phải thuộc một trong các loại tài khoản trong hệ thống' },
     ],
+    managedUnitIds: [
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }
+    ],
   };
   get formControls() {
     return this.form.controls;
@@ -99,7 +100,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private notificationService: NotificationService,
     private layoutService: LayoutService
-  ) {}
+  ) { }
 
   ngOnInit() {
     //Init form
@@ -109,6 +110,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       this.loadFormDetails(this.config.data?.id);
     } else {
       this.setMode('create');
+      this.getListOfUnits(UserType.QuanLyHuyen);
     }
   }
 
@@ -120,21 +122,24 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: UserDto) => {
           this.selectedEntity = response;
-          
+
           this.form.patchValue(this.selectedEntity);
-          
+
           this.form
             .get('dob')
             .setValue(this.utilService.convertDateToLocal(this.selectedEntity.userInfo.dob));
           this.form
             .get('userType')
             .setValue(this.selectedEntity.userInfo.userType);
-          
+
+          let managedUnitIds = this.selectedEntity.userInfo.managedUnitIds.map(x => String(x));
+          this.form.get('managedUnitIds').setValue(managedUnitIds);
+
           //set list of units
-          this.getListOfUnits(this.selectedEntity.userInfo.userType);
-          
+          this.getListOfUnits(this.selectedEntity.userInfo.userType, managedUnitIds);
+
           this.setMode('update');
-          
+
           if (response.avatarContent) {
             let objectURL = 'data:image/png;base64,' + response.avatarContent;
             this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
@@ -188,11 +193,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       confirmPassword: new FormControl(null, [this.matchPasswordValidator(password)]),
       isActive: [true],
       dob: [null],
-      userType: [1],
+      userType: [UserType.QuanLyTinh],
       managedUnitIds: [null]
     });
   }
-  
+
   saveChange() {
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) {
@@ -201,8 +206,11 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     }
     this.layoutService.blockUI$.next(true);
     if (this.utilService.isEmpty(this.config.data?.id)) {
+      debugger
+      let user = this.form.value as CreateAndUpdateUserDto;
+      user.managedUnitIds = this.form.value?.managedUnitIds?.map(x => Number(x.key));
       this.userService
-        .create(this.form.value)
+        .create(user)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe({
           next: () => {
@@ -214,9 +222,10 @@ export class UserDetailComponent implements OnInit, OnDestroy {
           },
         });
     } else {
-      let user = this.form.value;
+      let user = this.form.value as CreateAndUpdateUserDto;
       user.userName = this.selectedEntity.userName;
       user.email = this.selectedEntity.email;
+      user.managedUnitIds = this.form.value?.managedUnitIds?.map(x => Number(x.key));
 
       this.userService
         .update(this.config.data?.id, user)
@@ -233,86 +242,44 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         });
     }
   }
-
-  getListOfUnits(type: number){
-    //set the caption
-    switch (type){
-      case 2: { 
-        this.listGroup = false;
-        this.listType = "Chọn danh sách TP (thuộc Tỉnh)/Quận/Huyện người dùng được quản lý";
-        break; 
-      } 
-      case 3: { 
-          this.listGroup = true;
-          this.listType = "Chọn danh sách Xã/Phường người dùng được quản lý";
-          break; 
-      } 
-      default: { 
-          this.listGroup = false;
-          this.listType = "";
-          break; 
-      }       
-    }
-    //get the list of Units tree
-    if (this.listGroup){//Phường/Xã
-      this.listOfUnits = [] as SelectItemGroup[];
-      this.unitService
-        .getLookup(2, 24) //Tìm tất cả các Quận/Huyện của Thái Nguyên
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          async (res: ListResultDto<UnitLookupDto>) => {
-            this.listOfUnits = res.items.map(x => {
-              return {
-                label: x?.unitName,
-                value: x?.id,
-                items: [],
-              }
-            })
-            this.unitLoadedCount = res.items.length;
-            
-            this.listOfUnits.forEach((x, i) => {
-              this.unitService.getLookup(3, x?.value)
-              .pipe(takeUntil(this.ngUnsubscribe)).subscribe(
-                (res2: ListResultDto<UnitLookupDto>) => {
-                    res2.items.forEach((y, j) => {
-                      x.items.push(
-                        {
-                          label: y?.unitName,
-                          value: y?.id,
-                        } as Unit
-                      );
-                    });
-                    this.unitLoadedCount --;
-                    //Only set the unit when load completed
-                    if (this.unitLoadedCount == 0)
-                      this.setListOfUnits();     
-              });
-            })            
-          });        
-    }
-    else 
-    {//Quận/Huyện/TP trực thuộc
-      this.unitService
-        .getLookup(type, 24) //Fix cứng 24 là Tỉnh Thái Nguyên
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => 
-          {
-            this.listOfUnits = [] as Unit[];
-            this.listOfUnits = res.items.map((x, i) => {
-              return {
-                label: x?.unitName,
-                value: x?.id,
-              }
-            });
-            this.setListOfUnits();
-          });
-    }
+  changeUserType(userType: number) {
+    this.unitOptions = this.resetSelectable(this.unitOptions, userType);
+    this.form.get('managedUnitIds').reset();
+    this.selectedNodes = [];
+    this.setUnitOptionsLabel(userType);
+    if (userType != UserType.QuanLyTinh)
+      this.form.get('managedUnitIds').setValidators([Validators.required]);
   }
 
-  setListOfUnits(){
-    //Set selected MultiSelect by managedUnitIds
-    this.selectedUnits = this.selectedEntity.userInfo.managedUnitIds; 
+  getListOfUnits(userType: number, managedUnitIds: string[] = []) {
+    this.layoutService.blockUI$.next(true);
+    this.setUnitOptionsLabel(userType);
+    this.unitService
+      .getTreeLookup(24) // Thái Nguyên
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        res => {
+          if (res)
+            this.unitOptions = this.convertToTreeNodeList(res.items, userType, null, managedUnitIds);
+          this.layoutService.blockUI$.next(false);
+        });
+  }
+
+  setUnitOptionsLabel(userType: number) {
+    switch (userType) {
+      case UserType.QuanLyHuyen: {
+        this.unitOptionLabel = "TP (thuộc Tỉnh)/Quận/Huyện người dùng được quản lý";
+        break;
+      }
+      case UserType.QuanLyXa: {
+        this.unitOptionLabel = "Xã/Phường người dùng được quản lý";
+        break;
+      }
+      default: {
+        this.unitOptionLabel = "";
+        break;
+      }
+    }
   }
 
   matchPasswordValidator(otherControl: AbstractControl): ValidatorFn {
@@ -320,6 +287,48 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       const match = otherControl.value === control.value;
       return match ? null : { passwordMismatch: true };
     };
+  }
+
+  resetSelectable(unitOptions: TreeNode<UnitTreeLookupDto>[], unitTypeId: number, parent: TreeNode<UnitTreeLookupDto> = null): TreeNode<UnitTreeLookupDto>[] {
+    return unitOptions.map(unit => {
+      const treeNode: TreeNode<UnitTreeLookupDto> = {
+        ...unit,
+        selectable: unit.data.unitTypeId == unitTypeId
+      };
+
+      if (unit.children && unit.children.length > 0) {
+        treeNode.children = this.resetSelectable(unit.children, unitTypeId, treeNode);
+      }
+
+      return treeNode;
+    });
+  }
+
+  convertToTreeNodeList(
+    unitList: UnitTreeLookupDto[],
+    unitTypeId: number,
+    parent: TreeNode<UnitTreeLookupDto> = null,
+    managedUnitIds: string[] = []): TreeNode<UnitTreeLookupDto>[] {
+    return unitList.map(unit => {
+      const treeNode: TreeNode<UnitTreeLookupDto> = {
+        label: unit.unitName,
+        key: String(unit.id),
+        expanded: false,
+        selectable: unit.unitTypeId == unitTypeId,
+        data: unit,
+        parent: parent,
+        children: []
+      };
+
+      if (unit.children && unit.children.length > 0) {
+        treeNode.children = this.convertToTreeNodeList(unit.children, unitTypeId, treeNode, managedUnitIds);
+      }
+      if (managedUnitIds.includes(treeNode.key)) {
+        this.selectedNodes.push(treeNode);
+      }
+
+      return treeNode;
+    });
   }
 
   close() {

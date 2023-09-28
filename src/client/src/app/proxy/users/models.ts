@@ -1,9 +1,10 @@
 import type { GetIdentityUsersInput, IdentityUserDto, IdentityUserUpdateDto } from '../volo/abp/identity/models';
+import type { UserType } from '../user-type.enum';
 import type { EntityDto } from '@abp/ng.core';
 
 export interface CreateAndUpdateUserDto extends IdentityUserUpdateDto {
   dob?: string;
-  userType?: number;
+  userType?: UserType;
   managedUnitIds: number[];
 }
 

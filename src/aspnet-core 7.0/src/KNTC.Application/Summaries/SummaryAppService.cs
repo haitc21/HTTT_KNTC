@@ -121,8 +121,8 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         async () => await GetMapFromDBAsync(input),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            SlidingExpiration = TimeSpan.FromMinutes(1)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber),
+            SlidingExpiration = TimeSpan.FromSeconds(30)
         });
         return cacheItem.Items;
     }
@@ -785,7 +785,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         async () => await GetDataChartFromDbAsync(),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber)
         });
         return result;
     }

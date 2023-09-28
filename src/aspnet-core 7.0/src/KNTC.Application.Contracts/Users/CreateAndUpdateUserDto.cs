@@ -6,7 +6,7 @@ namespace KNTC.Users;
 
 public class CreateAndUpdateUserDto : IdentityUserUpdateDto
 {
-    public DateTime Dob { get; set; }
+    public DateTime? Dob { get; set; }
     public UserType? UserType { get; set; }
     public int[]? ManagedUnitIds { get; set; }
 }

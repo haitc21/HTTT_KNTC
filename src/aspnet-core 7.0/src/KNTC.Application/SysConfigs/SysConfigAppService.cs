@@ -58,8 +58,8 @@ public class SysConfigAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            SlidingExpiration = TimeSpan.FromMinutes(1)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber),
+            SlidingExpiration = TimeSpan.FromSeconds(30)
         });
         return cacheItem;
     }
@@ -151,8 +151,8 @@ public class SysConfigAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            SlidingExpiration = TimeSpan.FromMinutes(1)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber),
+            SlidingExpiration = TimeSpan.FromSeconds(30)
         });
         return result;
     }

@@ -145,7 +145,7 @@
               [showClear]="true"
               [autoDisplayFirst]="false"
               styleClass="w-full"
-              (onChange)="getListOfUnits($event.value)"
+              (onChange)="changeUserType($event.value)"
             ></p-dropdown>
             <label>Loại tài khoản<span class="required">*</span></label>
           </span>
@@ -156,24 +156,34 @@
           </app-validation-message>
         </div>
         <!-- ---------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-12">
-          <span class="p-float-label">
-            <p-multiSelect 
-              [(ngModel)]="selectedUnits"
-              [options]="listOfUnits" 
+        <div
+          class="field col-12 md:col-12"
+          *ngIf="
+            formControls?.userType?.value && formControls?.userType?.value != UserType.QuanLyTinh
+          "
+        >
+          <span class="p-float-label w-full">
+            <p-treeSelect
+              [(ngModel)]="selectedNodes"
               formControlName="managedUnitIds"
-              [group]="listGroup"
+              [options]="unitOptions"
+              display="chip"
+              [metaKeySelection]="false"
+              selectionMode="multiple"
               [filter]="true"
-              optionLabel="label" 
-              optionValue="value"              
-              defaultLabel="Chọn đơn vị cần quản lý" 
-              scrollHeight="250px" 
-              styleClass="w-full"
-              [disabled] = "listType==''"
-              display="chip">
-            </p-multiSelect>
-            <label>{{listType}}</label>
+              [filterInputAutoFocus]="true"
+              appendTo="body"
+              class="w-full"
+              containerStyleClass="w-full"
+              [showClear]="true"
+            ></p-treeSelect>
+            <label for="managedUnitIds">{{ unitOptionLabel }}</label>
           </span>
+          <app-validation-message
+            [entityControl]="formControls.managedUnitIds"
+            [validationMessages]="validationMessages.managedUnitIds"
+          >
+          </app-validation-message>
         </div>
         <!-- ---------------------------------------------------------------------------------- -->
         <div class="col-12 md:col-6 flex align-items-center">

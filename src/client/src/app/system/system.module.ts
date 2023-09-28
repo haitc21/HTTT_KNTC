@@ -50,7 +50,9 @@ import { SysConfigDetailComponent } from './sys-config/detail/sys-config-detail.
 import { ValidationMessagedModule } from '../_shared/modules/validation-message/validation-message.module';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CommonModule } from '@angular/common';
-import { MultiSelectModule } from 'primeng/multiselect'
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TreeSelectModule } from 'primeng/treeselect';
+
 const COMPONENT = [
   RoleComponent,
   RoleDetailComponent,
@@ -109,6 +111,7 @@ const COMPONENT = [
     BreadcrumbModule,
     MultiSelectModule,
     InputSwitchModule,
+    TreeSelectModule
   ],
   entryComponents: [...COMPONENT],
 })

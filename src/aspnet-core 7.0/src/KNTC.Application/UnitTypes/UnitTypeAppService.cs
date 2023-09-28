@@ -87,7 +87,7 @@ public class UnitTypeAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber)
         });
 
         return new ListResultDto<UnitTypeLookupDto>(cacheItem.Items);

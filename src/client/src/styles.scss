@@ -1,7 +1,6 @@
 $gutter: 1rem; //for primeflex grid system
 @import 'assets/layout/styles/layout/layout.scss';
 
-
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background: #3b82f6;
   border-color: red;
@@ -199,4 +198,15 @@ li {
 }
 .accordionTab {
   //padding: 30px 0;
+}
+.p-treeselect {
+  width: 100% !important;
+}
+.p-tree .p-tree-container .p-treenode .p-treenode-content.p-highlight {
+  color: #fff;
+  background: #40a9ff;
+}
+.p-treeselect.p-treeselect-chip .p-treeselect-token {
+  color: #fff;
+  background: #40a9ff;
 }
