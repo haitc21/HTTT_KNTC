@@ -419,6 +419,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     const accessToken = this.oAuthService.getAccessToken();
 
     if (accessToken){//Chỉ có giá trị khi token là valid
+      debugger
       this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
       if (this.userInfo)
         this.userId = this.userInfo?.userId;
