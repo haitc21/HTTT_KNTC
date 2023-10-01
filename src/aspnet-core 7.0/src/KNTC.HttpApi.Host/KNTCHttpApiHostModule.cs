@@ -62,7 +62,7 @@ public class KNTCHttpApiHostModule : AbpModule
 
         ConfigureConventionalControllers();
         ConfigureAuthentication(context, configuration);
-        ConfigureCache(configuration);
+        //ConfigureCache(configuration);
         ConfigureVirtualFileSystem(context);
         ConfigureDataProtection(context, configuration, hostingEnvironment);
         ConfigureDistributedLocking(context, configuration);
@@ -117,18 +117,18 @@ public class KNTCHttpApiHostModule : AbpModule
         });
     }
 
-    private void ConfigureCache(IConfiguration configuration)
-    {
-        Configure<AbpDistributedCacheOptions>(options =>
-        {
-            options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
-            {
-                AbsoluteExpiration = DateTimeOffset.Now.AddHours(24),
-                SlidingExpiration = TimeSpan.FromHours(1),
-            };
-            options.KeyPrefix = "KNTC:";
-        });
-    }
+    //private void ConfigureCache(IConfiguration configuration)
+    //{
+    //    Configure<AbpDistributedCacheOptions>(options =>
+    //    {
+    //        options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
+    //        {
+    //            AbsoluteExpiration = DateTimeOffset.Now.AddHours(24),
+    //            SlidingExpiration = TimeSpan.FromHours(1),
+    //        };
+    //        options.KeyPrefix = "KNTC:";
+    //    });
+    //}
 
     private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)
     {

@@ -362,10 +362,21 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           this.dataMap[0].loaiVuViec = LoaiVuViec.KhieuNai;
           this.toado = res?.duLieuToaDo ?? '';
 
-          this.tinhChange(this.selectedEntity.maTinhTP, true);
-          this.huyenChange(this.selectedEntity.maQuanHuyen, true);
-          this.tinhThuaDatChange(this.selectedEntity.tinhThuaDat, true);
-          this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
+          if (this.selectedEntity.maTinhTP == this.selectedEntity.tinhThuaDat) {
+            this.tinhChange(this.selectedEntity.maTinhTP, 0, true);
+          }
+          else {
+            this.tinhChange(this.selectedEntity.maTinhTP, 1, true);
+            this.tinhChange(this.selectedEntity.maTinhTP, 2, true);
+          }
+
+          if (this.selectedEntity.maQuanHuyen == this.selectedEntity.huyenThuaDat) {
+            this.huyenChange(this.selectedEntity.maQuanHuyen, 0, true);
+          }
+          else {
+            this.huyenChange(this.selectedEntity.maQuanHuyen, 1, true);
+            this.huyenChange(this.selectedEntity.maQuanHuyen, 2, true);
+          }
 
           //setTimeout(() => {
           this.patchValueForm();
@@ -486,176 +497,134 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       );
   }
 
-  tinhChange(id: number, isFirst: boolean = false) {
+  // changeType = 1 : tinh nguoi nopo don, changeType = 2 tinh thua dat, changeType = -0 tat ca
+  tinhChange(id: number, changeType: number, isFirst: boolean = false) {
     if (id) {
       this.layoutService.blockUI$.next(true);
-      if (this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyHuyen)) {
-        //Nếu quản lý huyện thì load toàn bộ huyện quản lý
-
-        this.unitService.getLookupByIds(this.userInfo?.managedUnitIds)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            (res: ListResultDto<UnitLookupDto>) => {
+      let obs$ = this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyHuyen) ?
+        this.unitService.getLookupByIds(this.userInfo?.managedUnitIds) : this.unitService.getLookup(2, id);
+      obs$.pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<UnitLookupDto>) => {
+            if (changeType == 1) {
               this.huyenOptions = res.items;
               if (!isFirst) {
                 this.form.get('maQuanHuyen').reset();
                 this.form.get('maXaPhuongTT').reset();
               }
-              this.layoutService.blockUI$.next(false);
-            },
-            () => {
-              this.layoutService.blockUI$.next(false);
             }
-          );
-      }
-      else {
-        this.unitService.getLookup(2, id)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            (res: ListResultDto<UnitLookupDto>) => {
+            else if (changeType == 2) {
+              this.huyenThuaDatOptions = res.items;
+              if (!isFirst) {
+                this.form.get('huyenThuaDat').reset();
+                this.form.get('xaThuaDat').reset();
+              }
+            }
+            else {
               this.huyenOptions = res.items;
+              this.huyenThuaDatOptions = res.items;
               if (!isFirst) {
                 this.form.get('maQuanHuyen').reset();
                 this.form.get('maXaPhuongTT').reset();
+                this.form.get('huyenThuaDat').reset();
+                this.form.get('xaThuaDat').reset();
               }
-              this.layoutService.blockUI$.next(false);
-            },
-            () => {
-              this.layoutService.blockUI$.next(false);
             }
-          );
+            this.layoutService.blockUI$.next(false);
+          },
+          () => {
+            this.layoutService.blockUI$.next(false);
+          }
+        );
+    }
+    else {
+      if (changeType == 1) {
+        this.huyenOptions = [];
+        if (!isFirst) {
+          this.form.get('maQuanHuyen').reset();
+          this.form.get('maXaPhuongTT').reset();
+        }
       }
-    } else this.huyenOptions = [];
+      else if (changeType == 2) {
+        this.huyenThuaDatOptions = [];
+        if (!isFirst) {
+          this.form.get('huyenThuaDat').reset();
+          this.form.get('xaThuaDat').reset();
+        }
+      }
+      else {
+        this.huyenOptions = [];
+        this.huyenThuaDatOptions = [];
+        if (!isFirst) {
+          this.form.get('maQuanHuyen').reset();
+          this.form.get('maXaPhuongTT').reset();
+          this.form.get('huyenThuaDat').reset();
+          this.form.get('xaThuaDat').reset();
+        }
+      }
+    }
   }
-
-  huyenChange(id: number, isFirst: boolean = false) {
+  // changeType = 1 : huyen nguoi nopo don, changeType = 2 huyen thua dat, changeType = -0 tat ca
+  huyenChange(id: number, changeType: number, isFirst: boolean = false) {
     if (id) {
       this.layoutService.blockUI$.next(true);
-
-      if (this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyXa)) {
-
-        this.unitService //Nếu quản lý xã thì chỉ load các xã quản lý
-          .getLookupByIds(this.userInfo?.managedUnitIds)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            (res: ListResultDto<UnitLookupDto>) => {
+      //Nếu quản lý xã thì chỉ load các xã quản lý
+      let obs$ = this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyXa) ?
+        this.unitService.getLookupByIds(this.userInfo?.managedUnitIds) :
+        this.unitService.getLookup(3, id);
+      obs$.pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(
+          (res: ListResultDto<UnitLookupDto>) => {
+            if (changeType == 1) {
               this.xaOptions = res.items;
               if (!isFirst) {
                 this.form.get('maXaPhuongTT').reset();
               }
-              this.layoutService.blockUI$.next(false);
-            },
-            () => {
-              this.layoutService.blockUI$.next(false);
             }
-          );
-      }
-      else {
-        //Còn lại chỉ load các xã theo parentid, kể cả quản lý huyện vì huyện đã giới hạn trong huyenOptions
-        this.unitService
-          .getLookup(3, id)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            (res: ListResultDto<UnitLookupDto>) => {
+            else if (changeType == 2) {
+              this.xaThuaDatOptions = res.items;
+              if (!isFirst) {
+                this.form.get('xaThuaDat').reset();
+              }
+            }
+            else {
               this.xaOptions = res.items;
+              this.xaThuaDatOptions = res.items;
               if (!isFirst) {
                 this.form.get('maXaPhuongTT').reset();
-              }
-              this.layoutService.blockUI$.next(false);
-            },
-            () => {
-              this.layoutService.blockUI$.next(false);
-            }
-          );
-      }
-    } else this.xaOptions = [];
-  }
-
-  tinhThuaDatChange(id: number, isFirst: boolean = false) {
-    if (id) {
-      this.layoutService.blockUI$.next(true);
-
-      if (this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyHuyen)) {
-
-        //Nếu quản lý huyện thì load toàn bộ huyện quản lý
-        this.unitService.getLookupByIds(this.userInfo?.managedUnitIds)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            (res: ListResultDto<UnitLookupDto>) => {
-              this.huyenThuaDatOptions = res.items;
-              if (!isFirst) {
-                this.form.get('huyenThuaDat').reset();
                 this.form.get('xaThuaDat').reset();
               }
-              this.layoutService.blockUI$.next(false);
-            },
-            () => {
-              this.layoutService.blockUI$.next(false);
             }
-          );
+            this.layoutService.blockUI$.next(false);
+          },
+          () => {
+            this.layoutService.blockUI$.next(false);
+          }
+        );
+    }
+    else {
+      if (changeType == 1) {
+        this.xaOptions = [];
+        if (!isFirst) {
+          this.form.get('maXaPhuongTT').reset();
+        }
+      }
+      else if (changeType == 2) {
+        this.xaThuaDatOptions = [];
+        if (!isFirst) {
+          this.form.get('xaThuaDat').reset();
+        }
       }
       else {
-        this.unitService
-          .getLookup(2, id)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            (res: ListResultDto<UnitLookupDto>) => {
-              this.huyenThuaDatOptions = res.items;
-              if (!isFirst) {
-                this.form.get('huyenThuaDat').reset();
-                this.form.get('xaThuaDat').reset();
-              }
-              this.layoutService.blockUI$.next(false);
-            },
-            () => {
-              this.layoutService.blockUI$.next(false);
-            }
-          );
+        this.xaOptions = [];
+        this.xaThuaDatOptions = [];
+        if (!isFirst) {
+          this.form.get('maXaPhuongTT').reset();
+          this.form.get('xaThuaDat').reset();
+        }
       }
 
-    } else this.huyenThuaDatOptions = [];
-  }
-
-  huyenThuaDatChange(id: number, isFirst: boolean = false) {
-    if (id) {
-      this.layoutService.blockUI$.next(true);
-
-      if (this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyXa)) {
-
-        this.unitService //Nếu quản lý xã thì chỉ load các xã quản lý
-          .getLookupByIds(this.userInfo?.managedUnitIds)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            (res: ListResultDto<UnitLookupDto>) => {
-              this.xaThuaDatOptions = res.items;
-              if (!isFirst) {
-                this.form.get('xaThuaDat').reset();
-              }
-              this.layoutService.blockUI$.next(false);
-            },
-            () => {
-              this.layoutService.blockUI$.next(false);
-            }
-          );
-      }
-      else {
-        this.unitService
-          .getLookup(3, id)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(
-            (res: ListResultDto<UnitLookupDto>) => {
-              this.xaThuaDatOptions = res.items;
-              if (!isFirst) {
-                this.form.get('xaThuaDat').reset();
-              }
-              this.layoutService.blockUI$.next(false);
-            },
-            () => {
-              this.layoutService.blockUI$.next(false);
-            }
-          );
-      }
-    } else this.xaThuaDatOptions = [];
+    }
   }
   //#endregion
 

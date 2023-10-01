@@ -154,7 +154,7 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
-                        (onChange)="tinhChange($event?.value)"
+                        (onChange)="tinhChange($event?.value, 1)"
                       ></p-dropdown>
                       <label>Tỉnh/TP <span class="required">*</span></label>
                     </span>
@@ -178,7 +178,7 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
-                        (onChange)="huyenChange($event?.value)"
+                        (onChange)="huyenChange($event?.value, 1)"
                       ></p-dropdown>
                       <label>Quận/Huyện <span class="required">*</span></label>
                     </span>
@@ -439,7 +439,7 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
-                        (onChange)="tinhThuaDatChange($event?.value)"
+                        (onChange)="tinhChange($event?.value,2)"
                       ></p-dropdown>
                       <label>Tỉnh/TP <span class="required">*</span></label>
                     </span>
@@ -463,7 +463,7 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
-                        (onChange)="huyenThuaDatChange($event?.value)"
+                        (onChange)="huyenChange($event?.value,2)"
                       ></p-dropdown>
                       <label>Quận/Huyện <span class="required">*</span></label>
                     </span>

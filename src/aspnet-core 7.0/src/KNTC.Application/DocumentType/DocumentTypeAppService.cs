@@ -84,8 +84,8 @@ public class DocumentTypeAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber),
-            SlidingExpiration = TimeSpan.FromSeconds(30)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+            
         });
 
         return new ListResultDto<DocumentTypeLookupDto>(cacheItem.Items);

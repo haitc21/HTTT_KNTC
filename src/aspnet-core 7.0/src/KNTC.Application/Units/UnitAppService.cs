@@ -1,6 +1,7 @@
 ﻿using KNTC.CategoryUnitTypes;
 using KNTC.Localization;
 using KNTC.Permissions;
+using KNTC.RedisCache;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
@@ -28,12 +29,18 @@ public class UnitAppService : CrudAppService<
 {
     private readonly UnitManager _unitManager;
     private readonly IDistributedCache<UnitLookupCache, UnitCacheKey> _cacheUnit;
+    private readonly IDistributedCache<UnitLookupCache, UnitLookupByIdsKey> _cacheUnitByids;
+    private readonly IDistributedCache<UnitLookupCache, UnitLookupByParentIdsKey> _cacheUnitByParentIds;
     private readonly IDistributedCache<UnitTreeLookupCache> _cacheUnitTree;
+    private readonly IRedisCacheService _cacheService;
 
     public UnitAppService(IRepository<Unit, int> repository,
         UnitManager unitManager,
         IDistributedCache<UnitLookupCache, UnitCacheKey> cache,
-        IDistributedCache<UnitTreeLookupCache> cacheUnitTree) : base(repository)
+        IDistributedCache<UnitTreeLookupCache> cacheUnitTree,
+        IDistributedCache<UnitLookupCache, UnitLookupByIdsKey> cacheUnitByids,
+        IDistributedCache<UnitLookupCache, UnitLookupByParentIdsKey> cacheUnitByParentIds,
+        IRedisCacheService cacheService) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.UnitPermission.Create;
@@ -42,6 +49,9 @@ public class UnitAppService : CrudAppService<
         _unitManager = unitManager;
         _cacheUnit = cache;
         _cacheUnitTree = cacheUnitTree;
+        _cacheUnitByids = cacheUnitByids;
+        _cacheUnitByParentIds = cacheUnitByParentIds;
+        _cacheService = cacheService;
     }
 
     public override async Task<PagedResultDto<UnitDto>> GetListAsync(GetUnitListDto input)
@@ -94,8 +104,8 @@ public class UnitAppService : CrudAppService<
         async () => await GetListLookup(unitTypeId, parentId),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber),
-            SlidingExpiration = TimeSpan.FromSeconds(30)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+            
         });
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
@@ -105,13 +115,13 @@ public class UnitAppService : CrudAppService<
     {
         Random random = new Random();
         int randomNumber = random.Next(1, 11);
-        var cacheItem = await _cacheUnit.GetOrAddAsync(
-        new UnitCacheKey(unitIds),
+        var cacheItem = await _cacheUnitByids.GetOrAddAsync(
+        new UnitLookupByIdsKey(unitIds),
         async () => await GetListLookupByIds(unitIds),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber),
-            SlidingExpiration = TimeSpan.FromSeconds(30)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+            
         });
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
@@ -121,13 +131,13 @@ public class UnitAppService : CrudAppService<
     {
         Random random = new Random();
         int randomNumber = random.Next(1, 11);
-        var cacheItem = await _cacheUnit.GetOrAddAsync(
-        new UnitCacheKey(unitTypeId, parentIds),
+        var cacheItem = await _cacheUnitByParentIds.GetOrAddAsync(
+        new UnitLookupByParentIdsKey(unitTypeId, parentIds),
         async () => await GetListLookupByParentIds(unitTypeId, parentIds),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber),
-            SlidingExpiration = TimeSpan.FromSeconds(30)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+            
         });
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
@@ -180,11 +190,12 @@ public class UnitAppService : CrudAppService<
                                                    input.UnitName.Trim(),
                                                    input.ShortName.Trim(),
                                                    input.UnitTypeId,
+                                                   input.ParentId,
                                                    input.Description,
                                                    input.OrderIndex,
                                                    input.Status);
         await Repository.InsertAsync(entity);
-        await _cacheUnit.RemoveAsync(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(UnitCacheKey));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
 
@@ -197,18 +208,19 @@ public class UnitAppService : CrudAppService<
                                        input.UnitName.Trim(),
                                        input.ShortName.Trim(),
                                        input.UnitTypeId,
+                                       input.ParentId,
                                        input.Description,
                                        input.OrderIndex,
                                        input.Status);
         await Repository.UpdateAsync(entity);
-        await _cacheUnit.RemoveAsync(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(UnitCacheKey));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
 
     public override async Task DeleteAsync(int id)
     {
         var entity = await Repository.GetAsync(id, false);
-        await _cacheUnit.RemoveAsync(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
+        await _cacheService.DeleteCacheKeysSContainAsync(nameof(UnitCacheKey));
         await Repository.DeleteAsync(id);
     }
 
@@ -231,12 +243,12 @@ public class UnitAppService : CrudAppService<
         Random random = new Random();
         int randomNumber = random.Next(1, 11);
         var cacheItem = await _cacheUnitTree.GetOrAddAsync(
-        id.ToString(),
+        $"T{nameof(UnitCacheKey)}_ree_{id}",
         async () => await GetTreeLookupFromDbAsync(id),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber),
-            SlidingExpiration = TimeSpan.FromSeconds(30)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+            
         });
         return new ListResultDto<UnitTreeLookupDto>(cacheItem.Items);
     }
