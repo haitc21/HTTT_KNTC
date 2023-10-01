@@ -540,6 +540,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     else {
       if (changeType == 1) {
         this.huyenOptions = [];
+        this.xaOptions = [];
         if (!isFirst) {
           this.form.get('maQuanHuyen').reset();
           this.form.get('maXaPhuongTT').reset();
@@ -547,6 +548,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       }
       else if (changeType == 2) {
         this.huyenThuaDatOptions = [];
+        this.xaThuaDatOptions = [];
         if (!isFirst) {
           this.form.get('huyenThuaDat').reset();
           this.form.get('xaThuaDat').reset();
@@ -555,6 +557,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
       else {
         this.huyenOptions = [];
         this.huyenThuaDatOptions = [];
+        this.xaOptions = [];
+        this.xaThuaDatOptions = [];
         if (!isFirst) {
           this.form.get('maQuanHuyen').reset();
           this.form.get('maXaPhuongTT').reset();
