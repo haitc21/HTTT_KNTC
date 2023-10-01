@@ -365,7 +365,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  
+
   loadDetail(id: any) {
     this.layoutService.blockUI$.next(true);
     this.dataMap.splice(0); //clear the array
@@ -394,14 +394,14 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
           this.huyenThuaDatChange(this.selectedEntity.huyenThuaDat, true);
 
           //setTimeout(() => {
-            this.patchValueForm();
+          this.patchValueForm();
           //  this.layoutService.blockUI$.next(false);
           //}, 100);
 
-           //determine the mode if haspermission and not luutru
+          //determine the mode if haspermission and not luutru
           this.luuTru = this.selectedEntity.luuTru;
           if (!this.luuTru && this.hasPermissionUpdate) {
-            if (this.selectedEntity.trangThai==TrangThai.DaKetLuan)
+            if (this.selectedEntity.trangThai == TrangThai.DaKetLuan)
               this.showBtnLuuTru = true;
             this.changeMode(true);
           }
@@ -443,46 +443,46 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
     if (this.mode == 'view' && !this.hasPermissionUpdate) this.form.disable();
   }
 
-  getUserInfo(){
+  getUserInfo() {
     const accessToken = this.oAuthService.getAccessToken();
 
-    if (accessToken){//Chỉ có giá trị khi token là valid
+    if (accessToken) {//Chỉ có giá trị khi token là valid
       this.userInfo = JSON.parse(localStorage.getItem('userInfo'));
       if (this.userInfo)
         this.userId = this.userInfo?.userId;
-      else{
+      else {
         let decodedAccessToken = atob(accessToken.split('.')[1]);
         let accessTokenJson = JSON.parse(decodedAccessToken);
         this.userId = accessTokenJson.sub ?? '';
 
-        if (this.userId){
+        if (this.userId) {
           this.userService.getUserInfo(this.userId)
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe({
-            next: (response: UserDto) => {
-              this.userInfo = response.userInfo;            
-            },
-            error: () => {},
-          });
+            .pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe({
+              next: (response: UserDto) => {
+                this.userInfo = response.userInfo;
+              },
+              error: () => { },
+            });
         }
-      } 
+      }
     }
   }
-  
+
   checkPermission() {
     var hasRoleUpdate = this.permissionService.getGrantedPolicy('Denounces.Edit');
     var hasPermissionUpdate = false;
-    if (this.userId){//Chỉ có quyền update nếu được quản lý Huyen hoac Xa nay
-      if (this.denounceId){
-        if (((this.userInfo?.userType==UserType.QuanLyHuyen)  && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maQuanHuyen)))
-            || ((this.userInfo?.userType==UserType.QuanLyXa) && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maXaPhuongTT))))
+    if (this.userId) {//Chỉ có quyền update nếu được quản lý Huyen hoac Xa nay
+      if (this.denounceId) {
+        if (((this.userInfo?.userType == UserType.QuanLyHuyen) && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maQuanHuyen)))
+          || ((this.userInfo?.userType == UserType.QuanLyXa) && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maXaPhuongTT))))
           hasPermissionUpdate = true;
       }
       else //Tạo mới thì luôn có quyền
         hasPermissionUpdate = true;
     }
     this.hasPermissionUpdate = hasRoleUpdate && hasPermissionUpdate;
-    
+
     //if (this.mode == 'view' && !this.hasPermissionUpdate) this.form.disable();
   }
 
@@ -519,155 +519,170 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   tinhChange(id: number, isFirst: boolean = false) {
     if (id) {
       this.layoutService.blockUI$.next(true);
-      if (this.hasPermissionUpdate && (this.userInfo?.userType==UserType.QuanLyHuyen))
+
+      if (this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyHuyen)) {
         //Nếu quản lý huyện thì load toàn bộ huyện quản lý
         this.unitService.getLookupByIds(this.userInfo?.managedUnitIds)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.huyenOptions = res.items;
-            if (!isFirst) {
-              this.form.get('maQuanHuyen').reset();
-              this.form.get('maXaPhuongTT').reset();
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe(
+            (res: ListResultDto<UnitLookupDto>) => {
+              this.huyenOptions = res.items;
+              if (!isFirst) {
+                this.form.get('maQuanHuyen').reset();
+                this.form.get('maXaPhuongTT').reset();
+              }
+              this.layoutService.blockUI$.next(false);
+            },
+            () => {
+              this.layoutService.blockUI$.next(false);
             }
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );    
-      else
+          );
+      }
+      else {
         this.unitService.getLookup(2, id)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.huyenOptions = res.items;
-            if (!isFirst) {
-              this.form.get('maQuanHuyen').reset();
-              this.form.get('maXaPhuongTT').reset();
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe(
+            (res: ListResultDto<UnitLookupDto>) => {
+              this.huyenOptions = res.items;
+              if (!isFirst) {
+                this.form.get('maQuanHuyen').reset();
+                this.form.get('maXaPhuongTT').reset();
+              }
+              this.layoutService.blockUI$.next(false);
+            },
+            () => {
+              this.layoutService.blockUI$.next(false);
             }
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );
+          );
+      }
     } else this.huyenOptions = [];
   }
 
   huyenChange(id: number, isFirst: boolean = false) {
     if (id) {
       this.layoutService.blockUI$.next(true);
-      if (this.hasPermissionUpdate && (this.userInfo?.userType==UserType.QuanLyXa))
+
+      if (this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyXa)) {
         this.unitService //Nếu quản lý xã thì chỉ load các xã quản lý
-        .getLookupByIds(this.userInfo?.managedUnitIds)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.xaOptions = res.items;
-            if (!isFirst) {
-              this.form.get('maXaPhuongTT').reset();
+          .getLookupByIds(this.userInfo?.managedUnitIds)
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe(
+            (res: ListResultDto<UnitLookupDto>) => {
+              this.xaOptions = res.items;
+              if (!isFirst) {
+                this.form.get('maXaPhuongTT').reset();
+              }
+              this.layoutService.blockUI$.next(false);
+            },
+            () => {
+              this.layoutService.blockUI$.next(false);
             }
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );
-      else //Còn lại chỉ load các xã theo parentid, kể cả quản lý huyện vì huyện đã giới hạn trong huyenOptions
+          );
+      }
+      else {
+        //Còn lại chỉ load các xã theo parentid, kể cả quản lý huyện vì huyện đã giới hạn trong huyenOptions
         this.unitService
-        .getLookup(3, id)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.xaOptions = res.items;
-            if (!isFirst) {
-              this.form.get('maXaPhuongTT').reset();
+          .getLookup(3, id)
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe(
+            (res: ListResultDto<UnitLookupDto>) => {
+              this.xaOptions = res.items;
+              if (!isFirst) {
+                this.form.get('maXaPhuongTT').reset();
+              }
+              this.layoutService.blockUI$.next(false);
+            },
+            () => {
+              this.layoutService.blockUI$.next(false);
             }
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );
+          );
+      }
     } else this.xaOptions = [];
   }
 
   tinhThuaDatChange(id: number, isFirst: boolean = false) {
     if (id) {
       this.layoutService.blockUI$.next(true);
-      if (this.hasPermissionUpdate && (this.userInfo?.userType==UserType.QuanLyHuyen))
+
+      if (this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyHuyen)) {
         //Nếu quản lý huyện thì load toàn bộ huyện quản lý
         this.unitService.getLookupByIds(this.userInfo?.managedUnitIds)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.huyenOptions = res.items;
-            if (!isFirst) {
-              this.form.get('maQuanHuyen').reset();
-              this.form.get('maXaPhuongTT').reset();
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe(
+            (res: ListResultDto<UnitLookupDto>) => {
+              this.huyenThuaDatOptions = res.items;
+              if (!isFirst) {
+                this.form.get('huyenThuaDat').reset();
+                this.form.get('xaThuaDat').reset();
+              }
+              this.layoutService.blockUI$.next(false);
+            },
+            () => {
+              this.layoutService.blockUI$.next(false);
             }
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );    
-      else
+          );
+      }
+      else {
         this.unitService
-        .getLookup(2, id)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.huyenThuaDatOptions = res.items;
-            if (!isFirst) {
-              this.form.get('huyenThuaDat').reset();
-              this.form.get('xaThuaDat').reset();
+          .getLookup(2, id)
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe(
+            (res: ListResultDto<UnitLookupDto>) => {
+              this.huyenThuaDatOptions = res.items;
+              if (!isFirst) {
+                this.form.get('huyenThuaDat').reset();
+                this.form.get('xaThuaDat').reset();
+              }
+              this.layoutService.blockUI$.next(false);
+            },
+            () => {
+              this.layoutService.blockUI$.next(false);
             }
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );
+          );
+      }
+
     } else this.huyenThuaDatOptions = [];
   }
 
   huyenThuaDatChange(id: number, isFirst: boolean = false) {
     if (id) {
       this.layoutService.blockUI$.next(true);
-      if (this.hasPermissionUpdate && (this.userInfo?.userType==UserType.QuanLyXa))
+
+      if (this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyXa)) {
         this.unitService //Nếu quản lý xã thì chỉ load các xã quản lý
-        .getLookupByIds(this.userInfo?.managedUnitIds)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.xaOptions = res.items;
-            if (!isFirst) {
-              this.form.get('maXaPhuongTT').reset();
+          .getLookupByIds(this.userInfo?.managedUnitIds)
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe(
+            (res: ListResultDto<UnitLookupDto>) => {
+              this.xaThuaDatOptions = res.items;
+              if (!isFirst) {
+                this.form.get('xaThuaDat').reset();
+              }
+              this.layoutService.blockUI$.next(false);
+            },
+            () => {
+              this.layoutService.blockUI$.next(false);
             }
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        ); 
-      else //Còn lại chỉ load các xã theo parentid, kể cả quản lý huyện vì huyện đã giới hạn trong huyenOptions
+          );
+      }
+      else {
+        //Còn lại chỉ load các xã theo parentid, kể cả quản lý huyện vì huyện đã giới hạn trong huyenOptions
         this.unitService
-        .getLookup(3, id)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(
-          (res: ListResultDto<UnitLookupDto>) => {
-            this.xaThuaDatOptions = res.items;
-            if (!isFirst) {
-              this.form.get('xaThuaDat').reset();
+          .getLookup(3, id)
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe(
+            (res: ListResultDto<UnitLookupDto>) => {
+              this.xaThuaDatOptions = res.items;
+              if (!isFirst) {
+                this.form.get('xaThuaDat').reset();
+              }
+              this.layoutService.blockUI$.next(false);
+            },
+            () => {
+              this.layoutService.blockUI$.next(false);
             }
-            this.layoutService.blockUI$.next(false);
-          },
-          () => {
-            this.layoutService.blockUI$.next(false);
-          }
-        );
+          );
+      }
     } else this.xaThuaDatOptions = [];
   }
   //#endregion
@@ -748,11 +763,11 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   }
 
   changeMode(edit: boolean) {
-    if (edit){
+    if (edit) {
       this.mode = 'update';
       this.form.enable();
     }
-    else{
+    else {
       this.mode = 'view';
       this.form.disable();
     }

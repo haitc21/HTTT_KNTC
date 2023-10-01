@@ -28,12 +28,12 @@ public class UnitAppService : CrudAppService<
 {
     private readonly UnitManager _unitManager;
     private readonly IDistributedCache<UnitLookupCache, UnitCacheKey> _cacheUnit;
-    private readonly IDistributedCache<UnitTreeLookupCache, int> _cacheUnitTree;
+    private readonly IDistributedCache<UnitTreeLookupCache> _cacheUnitTree;
 
     public UnitAppService(IRepository<Unit, int> repository,
         UnitManager unitManager,
         IDistributedCache<UnitLookupCache, UnitCacheKey> cache,
-        IDistributedCache<UnitTreeLookupCache, int> cacheUnitTree) : base(repository)
+        IDistributedCache<UnitTreeLookupCache> cacheUnitTree) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.UnitPermission.Create;
@@ -101,13 +101,13 @@ public class UnitAppService : CrudAppService<
     }
 
     [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
-    public async Task<ListResultDto<UnitLookupDto>> GetLookupByIdsAsync(int[]? UnitIds)
+    public async Task<ListResultDto<UnitLookupDto>> GetLookupByIdsAsync(int[]? unitIds)
     {
         Random random = new Random();
         int randomNumber = random.Next(1, 11);
         var cacheItem = await _cacheUnit.GetOrAddAsync(
-        new UnitCacheKey(UnitIds),
-        async () => await GetListLookupByIds(UnitIds),
+        new UnitCacheKey(unitIds),
+        async () => await GetListLookupByIds(unitIds),
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(1).AddSeconds(randomNumber),
@@ -146,12 +146,12 @@ public class UnitAppService : CrudAppService<
         return result;
     }
 
-    private async Task<UnitLookupCache> GetListLookupByIds(int[]? UnitIds)
+    private async Task<UnitLookupCache> GetListLookupByIds(int[]? unitIds)
     {
         var queryable = await Repository.GetQueryableAsync();
         queryable = queryable
                     .Where(x => x.Status == Status.Active)
-                    .WhereIf(!UnitIds.IsNullOrEmpty(), x => UnitIds.Contains(x.Id))
+                    .WhereIf(!unitIds.IsNullOrEmpty(), x => unitIds.Contains(x.Id))
                     .OrderBy(nameof(UnitLookupDto.UnitName));
         var entities = await AsyncExecuter.ToListAsync(queryable);
         var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
@@ -231,7 +231,7 @@ public class UnitAppService : CrudAppService<
         Random random = new Random();
         int randomNumber = random.Next(1, 11);
         var cacheItem = await _cacheUnitTree.GetOrAddAsync(
-        id,
+        id.ToString(),
         async () => await GetTreeLookupFromDbAsync(id),
         () => new DistributedCacheEntryOptions
         {
