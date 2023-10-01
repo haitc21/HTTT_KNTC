@@ -72,6 +72,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
   visibleActionColumn = false;
+  hasPermissionViewPrivateInfo = false;
 
   // Thao tac
   Actions = Actions;
@@ -291,7 +292,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   getPermission() {
     this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Denounces.Edit');
     this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Denounces.Delete');
-
+    this.hasPermissionViewPrivateInfo = this.permissionService.getGrantedPolicy('Denounces.VuewPrivateInfo');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 

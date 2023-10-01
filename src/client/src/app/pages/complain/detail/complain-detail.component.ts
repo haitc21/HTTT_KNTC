@@ -42,6 +42,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   // Permissions
   hasPermissionUpdate = false;
+  hasPermissionViewPrivateInfo = false;
 
   loaiVuViec = LoaiVuViec.KhieuNai;
   fileUploads: FileUploadDto[] = [];
@@ -457,7 +458,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     var hasPermissionUpdate = false;
     if (this.userId) {//Chỉ có quyền update nếu được quản lý Huyen hoac Xa nay
       if (this.complainId) {
-        if (((this.userInfo?.userType == UserType.QuanLyHuyen) && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maQuanHuyen)))
+        if (((this.userInfo?.userType == UserType.QuanLyHuyen) 
+        && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maQuanHuyen)))
           || ((this.userInfo?.userType == UserType.QuanLyXa) && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maXaPhuongTT))))
           hasPermissionUpdate = true;
       }
@@ -465,6 +467,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
         hasPermissionUpdate = true;
     }
     this.hasPermissionUpdate = hasRoleUpdate && hasPermissionUpdate;
+    this.hasPermissionViewPrivateInfo = this.permissionService.getGrantedPolicy('Complains.VuewPrivateInfo');
   }
 
   //#region load options

@@ -69,7 +69,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------cccdCmnd---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="cccdCmnd"
@@ -87,7 +87,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ---------------------------------ngaySinh------------------------------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <p-calendar
                         id="ngaySinh"
@@ -106,7 +106,7 @@
                     </span>
                   </div>
                   <!-- ------------------------------dienThoai---------------------------------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="dienThoai"
@@ -124,7 +124,7 @@
                     </app-validation-message>
                   </div>
                   <!-- -----------------------------email----------------------------------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="email"
@@ -213,7 +213,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------diaChiThuongTru---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-12">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-12">
                     <span class="p-float-label">
                       <textarea
                         id="diaChiThuongTru"
@@ -233,7 +233,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------diaChiLienHe---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-">
                     <span class="p-float-label">
                       <textarea
                         id="diaChiLienHe"
@@ -321,7 +321,7 @@
               <p-accordionTab header="Thông tin thửa đất">
                 <div class="grid">
                   <!-- ----------------------------soThua---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="soThua"
@@ -339,7 +339,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------toBanDo---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="toBanDo"
@@ -357,7 +357,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------dienTich---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <!-- <input
                         id="dienTich"
@@ -383,7 +383,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------loaiDat---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <p-dropdown
                         id="loaiDat"
@@ -749,11 +749,19 @@
                   >
                   </app-validation-message>
                 </div>
-                <div class="field col-12 md:col-6 flex align-items-center">
+                <!-- ------------------------------------------------------------------- -->
+                <div
+                  *ngIf="hasPermissionViewPrivateInfo"
+                  class="field col-12 md:col-6 flex align-items-center"
+                >
                   <p-inputSwitch formControlName="congKhai"></p-inputSwitch>
                   <label class="ml-3">Công khai</label>
                 </div>
-                <div class="field col-12 md:col-6 flex align-items-center">
+                <!-- ---------------------------------------------------------------- -->
+                <div
+                  *ngIf="hasPermissionViewPrivateInfo"
+                  class="field col-12 md:col-6 flex align-items-center"
+                >
                   <p-inputSwitch
                     formControlName="luuTru"
                     [disabled]="true"
@@ -762,7 +770,7 @@
                   <label class="ml-3">{{ luuTru ? 'Đã khóa hồ sơ' : 'Hồ sơ chưa khóa' }}</label>
                 </div>
                 <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
-                <div class="field col-12 md:col-12">
+                <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-12">
                   <span class="p-float-label">
                     <textarea
                       id="ghiChu"
@@ -809,7 +817,7 @@
           <p-card header="Dữ liệu không gian" class="w-full" *ngIf="mode != 'view'">
             <div class="grid">
               <!-- -------------------------------duLieuToaDo--------------------------------------------------- -->
-              <div class="field grid col-12 md:col-12">
+              <div *ngIf="hasPermissionViewPrivateInfo" class="field grid col-12 md:col-12">
                 <div class="field col-10 md:col-10">
                   <span class="p-float-label">
                     <input
@@ -842,7 +850,7 @@
                 </div>
               </div>
               <!-- -------------------------------duLieuHinhHoc--------------------------------------------------- -->
-              <div class="field grid col-12 md:col-12">
+              <div *ngIf="hasPermissionViewPrivateInfo" class="field grid col-12 md:col-12">
                 <div class="field col-10 md:col-10">
                   <span class="p-float-label">
                     <textarea

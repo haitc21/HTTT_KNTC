@@ -133,7 +133,7 @@
             ></p-dropdown>
             <label>Trạng thái</label>
           </span>
-        </div> 
+        </div>
         <!-- --------------------------------------------------------------------------------- -->
         <div *abpPermission="'Denounces'" class="field col-12 md:col-3">
           <span class="p-float-label">
@@ -197,8 +197,8 @@
           <th style="min-width: 80px">Mã hồ sơ</th>
           <th style="min-width: 150px">Nội dung TC</th>
           <th style="min-width: 100px">Người nộp đơn</th>
-          <th>Số ĐT</th>
-          <th style="min-width: 130px">Địa chỉ</th>
+          <th *ngIf="hasPermissionViewPrivateInfo">Số ĐT</th>
+          <th *ngIf="hasPermissionViewPrivateInfo" style="min-width: 130px">Địa chỉ</th>
           <th style="min-width: 100px">Người bị tố cáo</th>
           <th style="min-width: 120px">Người giải quyết</th>
           <th>Thời gian nộp</th>
@@ -226,8 +226,8 @@
             }}</span>
           </td>
           <td>{{ row.nguoiNopDon }}</td>
-          <td>{{ row.dienThoai }}</td>
-          <td>{{ row.diaChiLienHe }}</td>
+          <td *ngIf="hasPermissionViewPrivateInfo">{{ row.dienThoai }}</td>
+          <td *ngIf="hasPermissionViewPrivateInfo">{{ row.diaChiLienHe }}</td>
           <td>{{ row.nguoiBiToCao }}</td>
           <td>{{ row.nguoiGQTC }}</td>
 
@@ -238,7 +238,7 @@
             {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
           </td>
           <td>{{ row?.boPhanDangXL }}</td>
-          <td style="color:blue">{{ TrangthaiOptions[(row?.trangThai)? row?.trangThai : 0]}}</td>
+          <td style="color: blue">{{ TrangthaiOptions[row?.trangThai ? row?.trangThai : 0] }}</td>
           <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
           <td *ngIf="visibleActionColumn">
             <p-tieredMenu

@@ -13,12 +13,14 @@ public class KNTCPermissionDefinitionProvider : PermissionDefinitionProvider
         complainsPermission.AddChild(KNTCPermissions.ComplainsPermission.Create, L("Permission:Complains.Create"));
         complainsPermission.AddChild(KNTCPermissions.ComplainsPermission.Edit, L("Permission:Complains.Edit"));
         complainsPermission.AddChild(KNTCPermissions.ComplainsPermission.Delete, L("Permission:Complains.Delete"));
+        complainsPermission.AddChild(KNTCPermissions.ComplainsPermission.VuewPrivateInfo, L("Permission:Complains.VuewPrivateInfo"));
 
         var denounceGroup = context.AddGroup(KNTCPermissions.DenounceGroupName, L("Permission:DenouncesGr"));
         var denouncesPermission = denounceGroup.AddPermission(KNTCPermissions.DenouncesPermission.Default, L("Permission:Denounces"));
         denouncesPermission.AddChild(KNTCPermissions.DenouncesPermission.Create, L("Permission:Denounces.Create"));
         denouncesPermission.AddChild(KNTCPermissions.DenouncesPermission.Edit, L("Permission:Denounces.Edit"));
         denouncesPermission.AddChild(KNTCPermissions.DenouncesPermission.Delete, L("Permission:Denounces.Delete"));
+        denouncesPermission.AddChild(KNTCPermissions.DenouncesPermission.VuewPrivateInfo, L("Permission:Denounces.VuewPrivateInfo"));
 
         var documentTypeGroup = context.AddGroup(KNTCPermissions.DocumentTypeGroupName, L("Permission:DocumentTypeGr"));
         var documentTypePermission = documentTypeGroup.AddPermission(KNTCPermissions.DocumentTypePermission.Default, L("Permission:DocumentTypes"));

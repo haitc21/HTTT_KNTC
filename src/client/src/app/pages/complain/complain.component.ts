@@ -82,6 +82,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
   visibleActionColumn = false;
+  hasPermissionViewPrivateInfo = false;
 
   // Thao tac
   Actions = Actions;
@@ -320,7 +321,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   getPermission() {
     this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Complains.Edit');
     this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Complains.Delete');
-
+    this.hasPermissionViewPrivateInfo = this.permissionService.getGrantedPolicy('Complains.VuewPrivateInfo');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 

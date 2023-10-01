@@ -41,6 +41,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
   mode: 'create' | 'update' | 'view' = 'view';
   // Permissions
   hasPermissionUpdate = false;
+  hasPermissionViewPrivateInfo = false;
 
   loaiVuViec = LoaiVuViec.ToCao;
   fileUploads: FileUploadDto[] = [];
@@ -493,6 +494,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
         hasPermissionUpdate = true;
     }
     this.hasPermissionUpdate = hasRoleUpdate && hasPermissionUpdate;
+    this.hasPermissionViewPrivateInfo = this.permissionService.getGrantedPolicy('Denounces.VuewPrivateInfo');
 
     //if (this.mode == 'view' && !this.hasPermissionUpdate) this.form.disable();
   }

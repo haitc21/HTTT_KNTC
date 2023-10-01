@@ -148,7 +148,7 @@
             ></p-dropdown>
             <label>Trạng thái</label>
           </span>
-        </div>        
+        </div>
         <!-- --------------------------------------------------------------------------------- -->
         <div *abpPermission="'Complains'" class="field col-12 md:col-2">
           <span class="p-float-label">
@@ -213,7 +213,7 @@
           <th>Mã hồ sơ</th>
           <th style="min-width: 120px">Nội dung KN/KK</th>
           <th style="min-width: 80px">Người nộp đơn</th>
-          <th *ngIf="!visibleActionColumn" style="min-width: 120px">Địa chỉ</th>
+          <th *ngIf="hasPermissionViewPrivateInfo" style="min-width: 120px">Địa chỉ</th>
           <!--th>Số ĐT</th-->
           <th>Thời gian nộp</th>
           <th style="min-width: 80px">Trạng thái</th>
@@ -246,12 +246,12 @@
             }}</span>
           </td>
           <td>{{ row.nguoiNopDon }}</td>
-          <td *ngIf="!visibleActionColumn">{{ row.diaChiLienHe }}</td>
+          <td *ngIf="hasPermissionViewPrivateInfo">{{ row.diaChiLienHe }}</td>
           <!--td>{{ row.dienThoai }}</td-->
           <td>
             {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
           </td>
-          <td style="color:blue">{{ TrangthaiOptions[(row?.trangThai)? row?.trangThai : 0]}}</td>
+          <td style="color: blue">{{ TrangthaiOptions[row?.trangThai ? row?.trangThai : 0] }}</td>
           <td>{{ row.boPhanDangXL }}</td>
           <td>
             {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
@@ -261,15 +261,15 @@
           </td>
           <td *ngIf="row?.thamQuyen1; else emptyTpl">
             {{ row?.thamQuyen1 }}
-          </td>          
-          <td>{{ KetquaOptions[(row?.ketQua1) ? row?.ketQua1 : 0] }}</td>
+          </td>
+          <td>{{ KetquaOptions[row?.ketQua1 ? row?.ketQua1 : 0] }}</td>
           <td *ngIf="row?.ngayTraKQ2; else emptyTpl">
             {{ row?.ngayTraKQ2 | date : 'dd/MM/yyyy' }}
           </td>
           <td *ngIf="row?.thamQuyen2; else emptyTpl">
             {{ row?.thamQuyen2 }}
           </td>
-          <td>{{ (row?.ketQua2 || (row?.ketQua2!=0))?KetquaOptions[row?.ketQua2]: '' }}</td>
+          <td>{{ row?.ketQua2 || row?.ketQua2 != 0 ? KetquaOptions[row?.ketQua2] : '' }}</td>
           <!--td>{{ KetquaOptions[(row?.ketQua) ? row?.ketQua : 0] }}</td-->
           <td *ngIf="visibleActionColumn">
             <p-tieredMenu

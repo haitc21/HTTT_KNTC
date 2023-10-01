@@ -62,11 +62,11 @@ export class UnitService {
     { apiName: this.apiName,...config });
   
 
-  getLookupByIds = (UnitIds: number[], config?: Partial<Rest.Config>) =>
+  getLookupByIds = (unitIds: number[], config?: Partial<Rest.Config>) =>
     this.restService.request<any, ListResultDto<UnitLookupDto>>({
       method: 'GET',
       url: '/api/app/unit/lookup-by-ids',
-      params: { unitIds: UnitIds },
+      params: { unitIds },
     },
     { apiName: this.apiName,...config });
   

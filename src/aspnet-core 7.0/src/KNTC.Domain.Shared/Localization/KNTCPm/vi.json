@@ -21,12 +21,14 @@
     "Permission:Complains.Create": "Thêm khiếu nại/khiếu kiện",
     "Permission:Complains.Edit": "Sửa khiếu nại/khiếu kiện",
     "Permission:Complains.Delete": "Xóa khiếu nại/khiếu kiện",
+    "Permission:Complains.VuewPrivateInfo": "Xem thông tin nhạy cảm khiếu nại/khiếu kiện",
     // tố cáo
     "Permission:DenouncesGr": "Tố cáo",
     "Permission:Denounces": "Xem DS tố cáo",
     "Permission:Denounces.Create": "Thêm tố cáo",
     "Permission:Denounces.Edit": "Sửa tố cáo",
     "Permission:Denounces.Delete": "Xóa tố cáo",
+    "Permission:Denounces.VuewPrivateInfo": "Xem thông tin nhạy cảm tố cáo",
     // DocumentType
     "Permission:DocumentTypeGr": "Loại hình thức tệp gắn kèm",
     "Permission:DocumentTypes": "Xem DS loại hình thức tệp gắn kèm",
