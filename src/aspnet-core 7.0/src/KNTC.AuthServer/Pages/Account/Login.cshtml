@@ -21,10 +21,16 @@
         <abp-script src="/Pages/Account/Login.js" />
     </abp-script-bundle>
 }
-
-<div class="card mt-3 shadow-sm rounded">
-    <div class="card-body p-5">
-        <h4>@L["Login"]</h4>
+<div class="card-img-top">
+    <center>
+        <img src="/images/logo/logo-white.svg"
+        alt="HTTTT hỗ trợ quản lý Đơn thư khiếu nại, tố cáo lĩnh vực TNMT tại tỉnh Thái Nguyên"
+        style="width: 150px; height: 150px" />
+    </center>
+</div>
+<div class="card mt-3 shadow-sm rounded" style="border: #0062AA solid 5px">
+    <div class="card-body p-4">
+        <h4 class="text-center">@L["Login"]</h4>
         @if (await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
         {
             <strong>

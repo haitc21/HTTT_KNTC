@@ -439,6 +439,7 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
+                        appendTo="body"
                         (onChange)="tinhChange($event?.value, 2)"
                       ></p-dropdown>
                       <label>Tỉnh/TP <span class="required">*</span></label>
@@ -463,6 +464,7 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
+                        appendTo="body"
                         (onChange)="huyenChange($event?.value, 2)"
                       ></p-dropdown>
                       <label>Quận/Huyện <span class="required">*</span></label>
@@ -486,6 +488,7 @@
                         [autoDisplayFirst]="false"
                         [filter]="true"
                         filterBy="unitName"
+                        appendTo="body"
                         styleClass="w-full"
                       ></p-dropdown>
                       <label>Xã/Phường/TT <span class="required">*</span></label>

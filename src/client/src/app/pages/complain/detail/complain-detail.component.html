@@ -1,4 +1,4 @@
-<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
+<form class="form-horizontal form-label-left" skipValidation [formGroup]="form" #frmDetail>
   <p-panel #pnlDetail [collapsed]="false">
     <p-tabView styleClass="tabview-custom">
       <!-- ----------------------------------------------------------------------- -->
@@ -420,6 +420,7 @@
                         filterBy="unitName"
                         styleClass="w-full"
                         (onChange)="tinhChange($event?.value, 2)"
+                        appendTo="body"
                       ></p-dropdown>
                       <label>Tỉnh/TP <span class="required">*</span></label>
                     </span>
@@ -443,6 +444,7 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
+                        appendTo="body"
                         (onChange)="huyenChange($event?.value, 2)"
                       ></p-dropdown>
                       <label>Quận/Huyện <span class="required">*</span></label>
@@ -451,7 +453,7 @@
                       [entityControl]="formControls.huyenThuaDat"
                       [validationMessages]="validationMessages.huyenThuaDat"
                     >
-                    </app-validation-message>
+                    </app-validation-message>                    
                   </div>
                   <!-- ----------------------------xaThuaDat---------------------------=----------------------------- -->
                   <div class="field col-12 md:col-6">
@@ -466,6 +468,7 @@
                         [autoDisplayFirst]="false"
                         [filter]="true"
                         filterBy="unitName"
+                        appendTo="body"
                         styleClass="w-full"
                       ></p-dropdown>
                       <label>Xã/Phường/TT<span class="required">*</span></label>
@@ -475,7 +478,7 @@
                       [validationMessages]="validationMessages.xaThuaDat"
                     >
                     </app-validation-message>
-                  </div>
+                  </div>                  
                   <!-- ----------------------------diaChiThuaDat---------------------------=----------------------------- -->
                   <div class="field col-12 md:col-12">
                     <span class="p-float-label">
