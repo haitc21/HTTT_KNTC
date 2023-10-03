@@ -1,38 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { LayoutService } from './layout/service/app.layout.service';
 import { GetSysConfigService } from './_shared/services/sysconfig.services';
 
 @Component({
   selector: 'app-root',
-  template: `
-    <p-panel *ngIf="configs" #layoutPnl>
-      <app-layout></app-layout>
-      <p-toast position="top-right"></p-toast>
-      <p-confirmDialog
-        header="Xác nhận"
-        acceptLabel="Có"
-        rejectLabel="Không"
-        icon="pi pi-exclamation-triangle"
-      ></p-confirmDialog>
-      <p-blockUI [target]="layoutPnl" [blocked]="blockedLayout">
-        <p-progressSpinner
-          [style]="{
-            width: '150px',
-            height: '150px',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)'
-          }"
-          strokeWidth="2"
-          animationDuration=".5s"
-        ></p-progressSpinner>
-      </p-blockUI>
-    </p-panel>
-  `,
+  templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   menuMode = 'static';
   blockedLayout = false;
   configs: any;
@@ -41,7 +16,7 @@ export class AppComponent implements OnInit {
     private primengConfig: PrimeNGConfig,
     public layoutService: LayoutService,
     private sysConfigService: GetSysConfigService
-  ) {}
+  ) { }
 
   ngOnInit() {
     document.documentElement.style.fontSize = '14px';
@@ -49,13 +24,20 @@ export class AppComponent implements OnInit {
     this.setBlockUi();
     this.configPrimeng();
   }
+  ngAfterViewInit() {
+    // Hide the spinner when the document is ready
+    const spinnerElement = document.getElementById('nb-global-spinner');
+    if (spinnerElement) {
+      spinnerElement.style.display = 'none';
+    }
+  }
 
   private getConfigs() {
     this.sysConfigService.getAll().subscribe(
       data => {
         this.configs = data;
       },
-      err => {}
+      err => { }
     );
   }
 

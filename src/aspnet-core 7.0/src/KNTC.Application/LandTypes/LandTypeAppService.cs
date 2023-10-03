@@ -70,7 +70,7 @@ public class LandTypeAppService : CrudAppService<
         );
     }
 
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    // 
     public async Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync()
     {
         Random random = new Random();

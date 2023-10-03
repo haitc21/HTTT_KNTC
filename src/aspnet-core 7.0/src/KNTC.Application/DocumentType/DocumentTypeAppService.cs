@@ -69,7 +69,7 @@ public class DocumentTypeAppService : CrudAppService<
         );
     }
 
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    // 
     public async Task<ListResultDto<DocumentTypeLookupDto>> GetLookupAsync()
     {
         Random random = new Random();

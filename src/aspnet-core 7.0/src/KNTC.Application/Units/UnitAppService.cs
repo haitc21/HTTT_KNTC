@@ -94,7 +94,7 @@ public class UnitAppService : CrudAppService<
         );
     }
 
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    // 
     public async Task<ListResultDto<UnitLookupDto>> GetLookupAsync(int unitTypeId, int? parentId = null)
     {
         Random random = new Random();
@@ -110,7 +110,6 @@ public class UnitAppService : CrudAppService<
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
 
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
     public async Task<ListResultDto<UnitLookupDto>> GetLookupByIdsAsync(int[]? unitIds)
     {
         Random random = new Random();
@@ -126,7 +125,6 @@ public class UnitAppService : CrudAppService<
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
 
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
     public async Task<ListResultDto<UnitLookupDto>> GetLookupByParentIdsAsync(int unitTypeId, int[]? parentIds)
     {
         Random random = new Random();

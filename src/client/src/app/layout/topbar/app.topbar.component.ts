@@ -281,6 +281,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
   }
   login() {
     // this.router.navigate([LOGIN_URL, this.router.url]);
+    this.layoutService.blockUI$.next(true);
     this.authService.navigateToLogin();
   }
   getAvatar() {

@@ -70,7 +70,7 @@ public class BaseMapAppService : CrudAppService<
         );
     }
 
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    
     public async Task<ListResultDto<BaseMapLookupDto>> GetLookupAsync()
     {
         Random random = new Random();

@@ -25,6 +25,7 @@ import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 import { AppValidatorFn } from 'src/app/_shared/functions/validator-fn';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { UserDto, UserInfoDto, UsersService } from '@proxy/users';
+import { de } from 'date-fns/locale';
 @Component({
   templateUrl: './complain-detail.component.html',
   styleUrls: ['./complain-detail.component.scss'],
@@ -368,7 +369,7 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           }
           else {
             this.tinhChange(this.selectedEntity.maTinhTP, 1, true);
-            this.tinhChange(this.selectedEntity.maTinhTP, 2, true);
+            this.tinhChange(this.selectedEntity.tinhThuaDat, 2, true);
           }
 
           if (this.selectedEntity.maQuanHuyen == this.selectedEntity.huyenThuaDat) {
@@ -376,13 +377,10 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           }
           else {
             this.huyenChange(this.selectedEntity.maQuanHuyen, 1, true);
-            this.huyenChange(this.selectedEntity.maQuanHuyen, 2, true);
+            this.huyenChange(this.selectedEntity.huyenThuaDat, 2, true);
           }
 
-          //setTimeout(() => {
-          this.patchValueForm();
-          //  this.layoutService.blockUI$.next(false);
-          //}, 100);
+
 
           //determine the mode if haspermission and not luutru
           this.luuTru = this.selectedEntity.luuTru;
@@ -393,7 +391,12 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
           }
           else this.changeMode(false);
 
-          this.layoutService.blockUI$.next(false);
+          // fix warning diablog
+          // don't comment
+          setTimeout(() => {
+            this.patchValueForm();
+            this.layoutService.blockUI$.next(false);
+          }, 100);
         },
         error: () => {
           this.layoutService.blockUI$.next(false);
@@ -424,7 +427,6 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     this.form
       .get('ngayTraKQ2')
       .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.ngayTraKQ2));
-    //if (this.mode == 'view' && !this.hasPermissionUpdate) this.form.disable();    
   }
 
   getUserInfo() {
@@ -458,8 +460,8 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
     var hasPermissionUpdate = false;
     if (this.userId) {//Chỉ có quyền update nếu được quản lý Huyen hoac Xa nay
       if (this.complainId) {
-        if (((this.userInfo?.userType == UserType.QuanLyHuyen) 
-        && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maQuanHuyen)))
+        if (((this.userInfo?.userType == UserType.QuanLyHuyen)
+          && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maQuanHuyen)))
           || ((this.userInfo?.userType == UserType.QuanLyXa) && (this.userInfo?.managedUnitIds.includes(this.selectedEntity?.maXaPhuongTT))))
           hasPermissionUpdate = true;
       }
@@ -502,13 +504,16 @@ export class ComplainDetailComponent implements OnInit, OnDestroy {
 
   // changeType = 1 : tinh nguoi nopo don, changeType = 2 tinh thua dat, changeType = -0 tat ca
   tinhChange(id: number, changeType: number, isFirst: boolean = false) {
+
     if (id) {
       this.layoutService.blockUI$.next(true);
       let obs$ = this.hasPermissionUpdate && (this.userInfo?.userType == UserType.QuanLyHuyen) ?
-        this.unitService.getLookupByIds(this.userInfo?.managedUnitIds) : this.unitService.getLookup(2, id);
+        this.unitService.getLookupByIds(this.userInfo?.managedUnitIds) :
+        this.unitService.getLookup(2, id);
       obs$.pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
+
             if (changeType == 1) {
               this.huyenOptions = res.items;
               if (!isFirst) {

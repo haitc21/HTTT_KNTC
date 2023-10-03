@@ -775,7 +775,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
     }
 
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    // 
     public async Task<SummaryChartDto> GetChartAsync()
     {
         Random random = new Random();

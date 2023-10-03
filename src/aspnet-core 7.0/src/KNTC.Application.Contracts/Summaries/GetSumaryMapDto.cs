@@ -37,8 +37,6 @@ public class GetSumaryMapDto
     {
         var stringBuilder = new StringBuilder();
         stringBuilder
-            .Append($"Summary_Map")
-            .Append("_")
             .Append(LandComplain)
             .Append("_")
             .Append(EnviromentComplain)
@@ -72,7 +70,7 @@ public class GetSumaryMapDto
             .Append(Keyword)
             .Append("_")
             .Append(NguoiNopDon);
-
-        return stringBuilder.ToString();
+        string result = "Summary_Map_" + stringBuilder.GetHashCode();
+        return result;
     }
 }

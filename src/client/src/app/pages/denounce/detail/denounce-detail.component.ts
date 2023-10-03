@@ -394,7 +394,7 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
           }
           else {
             this.tinhChange(this.selectedEntity.maTinhTP, 1, true);
-            this.tinhChange(this.selectedEntity.maTinhTP, 2, true);
+            this.tinhChange(this.selectedEntity.tinhThuaDat, 2, true);
           }
 
           if (this.selectedEntity.maQuanHuyen == this.selectedEntity.huyenThuaDat) {
@@ -402,13 +402,8 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
           }
           else {
             this.huyenChange(this.selectedEntity.maQuanHuyen, 1, true);
-            this.huyenChange(this.selectedEntity.maQuanHuyen, 2, true);
+            this.huyenChange(this.selectedEntity.huyenThuaDat, 2, true);
           }
-
-          //setTimeout(() => {
-          this.patchValueForm();
-          //  this.layoutService.blockUI$.next(false);
-          //}, 100);
 
           //determine the mode if haspermission and not luutru
           this.luuTru = this.selectedEntity.luuTru;
@@ -418,6 +413,13 @@ export class DenounceDetailComponent implements OnInit, OnDestroy {
             this.changeMode(true);
           }
           else this.changeMode(false);
+
+          // fix warning diablog
+          // don't comment
+          setTimeout(() => {
+            this.patchValueForm();
+            this.layoutService.blockUI$.next(false);
+          }, 100);
         },
         error: () => {
           this.layoutService.blockUI$.next(false);

@@ -72,7 +72,7 @@ public class UnitTypeAppService : CrudAppService<
         );
     }
 
-    [ResponseCache(VaryByHeader = "User-Agent", Duration = 10)]
+    // 
     public async Task<ListResultDto<UnitTypeLookupDto>> GetLookupAsync()
     {
         Random random = new Random();
