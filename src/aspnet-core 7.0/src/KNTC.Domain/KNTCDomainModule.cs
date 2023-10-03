@@ -33,14 +33,6 @@ namespace KNTC;
 )]
 public class KNTCDomainModule : AbpModule
 {
-    public override void PreConfigureServices(ServiceConfigurationContext context)
-    {
-        PreConfigure<IdentityBuilder>(builder =>
-        {
-            builder
-                .AddDefaultTokenProviders();
-        });
-    }
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpLocalizationOptions>(options =>
