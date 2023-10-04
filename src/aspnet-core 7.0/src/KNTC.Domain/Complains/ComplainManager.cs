@@ -203,9 +203,9 @@ public class ComplainManager : DomainService
                                    string? SoQD2,
                                    [NotNull] bool congKhai,
                                    bool luuTru,
-                                   [NotNull] TrangThai TrangThai,
-                                   LoaiKetQua? KetQua1 = null,
-                                   LoaiKetQua? KetQua2 = null
+                                   [NotNull] TrangThai trangThai,
+                                   LoaiKetQua? ketQua1 = null,
+                                   LoaiKetQua? ketQua2 = null
       )
     {
         Check.NotNull(complain, nameof(complain));
@@ -234,7 +234,7 @@ public class ComplainManager : DomainService
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
         Check.NotNull(congKhai, nameof(congKhai));
-        Check.NotNull(TrangThai, nameof(TrangThai));
+        Check.NotNull(trangThai, nameof(trangThai));
 
         if (complain.MaHoSo != maHoSo)
         {
@@ -274,16 +274,16 @@ public class ComplainManager : DomainService
         complain.NgayTraKQ1 = NgayTraKQ1;
         complain.ThamQuyen1 = ThamQuyen1;
         complain.SoQD1 = SoQD1;
-        complain.KetQua1 = KetQua1;
+        complain.KetQua1 = ketQua1;
         complain.loaiKhieuNai2 = loaiKhieuNai2;
         complain.NgayKhieuNai2 = ngayKhieuNai2;
         complain.NgayTraKQ2 = NgayTraKQ2;
         complain.ThamQuyen2 = ThamQuyen2;
         complain.SoQD2 = SoQD2;
-        complain.KetQua2 = KetQua2;
+        complain.KetQua2 = ketQua2;
         complain.CongKhai = congKhai;
         complain.LuuTru = luuTru;
-        complain.TrangThai = TrangThai;
-        complain.KetQua = KetQua2 ?? KetQua1;
+        complain.TrangThai = trangThai;
+        complain.KetQua = ketQua2 ?? ketQua1;
     }
 }

@@ -311,9 +311,9 @@ public class ComplainAppService : CrudAppService<
                                           SoQD2: input.SoQD2,
                                           congKhai: input.CongKhai,
                                           luuTru: input.LuuTru,
-                                          TrangThai: input.TrangThai,
-                                          KetQua1: input.KetQua1,
-                                          KetQua2: input.KetQua2);
+                                          trangThai: input.TrangThai,
+                                          ketQua1: input.KetQua1,
+                                          ketQua2: input.KetQua2);
         await _complainRepo.UpdateAsync(complain);
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
         var updateEto = ObjectMapper.Map<UpdateComplainDto, UpdateComplainEto>(input);

@@ -30,8 +30,8 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                DateTime? fromDate,
                                                DateTime? toDate,
                                                bool? CongKhai,
-                                               bool? LuuTru,
-                                               TrangThai? TrangThai,
+                                               bool? luuTru,
+                                               TrangThai? trangThai,
                                                string nguoiNopDon,
                                                UserType? userType,
                                                int[]? managedUnitIds
@@ -79,12 +79,12 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                 x => x.CongKhai == CongKhai
              )
              .WhereIf(
-                LuuTru.HasValue,
-                x => x.LuuTru == LuuTru
+                luuTru.HasValue,
+                x => x.LuuTru == luuTru
              )
              .WhereIf(
-                TrangThai.HasValue,
-                x => x.TrangThai == TrangThai
+                trangThai.HasValue,
+                x => x.TrangThai == trangThai
              )
              .WhereIf(
                 !string.IsNullOrEmpty(nguoiNopDon),
@@ -92,11 +92,11 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
              )
              .WhereIf(
                 (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
-                x => (managedUnitIds.Contains(x.MaQuanHuyen)) || x.CongKhai
+                x => managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai
              )
              .WhereIf(
                 (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
-                x => (managedUnitIds.Contains(x.MaXaPhuongTT)) || x.CongKhai
+                x => managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai
              )
             .OrderBy(sorting)
             .Skip(skipCount)
@@ -120,8 +120,8 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                    DateTime? fromDate,
                                                    DateTime? toDate,
                                                    bool? CongKhai,
-                                                   bool? LuuTru,
-                                                   TrangThai? TrangThai,
+                                                   bool? luuTru,
+                                                   TrangThai? trangThai,
                                                    string nguoiNopDon,
                                                    UserType? userType,
                                                    int[]? managedUnitIds
@@ -169,12 +169,12 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                 x => x.CongKhai == CongKhai
              )
              .WhereIf(
-                LuuTru.HasValue,
-                x => x.LuuTru == LuuTru
+                luuTru.HasValue,
+                x => x.LuuTru == luuTru
              )
              .WhereIf(
-                TrangThai.HasValue,
-                x => x.TrangThai == TrangThai
+                trangThai.HasValue,
+                x => x.TrangThai == trangThai
              )
              .WhereIf(
                 !string.IsNullOrEmpty(nguoiNopDon),
@@ -182,11 +182,11 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
              )
              .WhereIf(
                 (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
-                x => (managedUnitIds.Contains(x.MaQuanHuyen)) || x.CongKhai
+                x => managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai
              )
              .WhereIf(
                 (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
-                x => (managedUnitIds.Contains(x.MaXaPhuongTT)) || x.CongKhai
+                x => managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai
              )
             .OrderBy(sorting)
             .ToListAsync();

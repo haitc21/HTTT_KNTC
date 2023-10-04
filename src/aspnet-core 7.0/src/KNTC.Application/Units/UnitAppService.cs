@@ -140,48 +140,8 @@ public class UnitAppService : CrudAppService<
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
 
-    private async Task<UnitLookupCache> GetListLookup(int unitTypeId, int? parentId)
-    {
-        var queryable = await Repository.GetQueryableAsync();
-        queryable = queryable
-                    .Where(x => x.Status == Status.Active)
-                    .Where(x => x.UnitTypeId == unitTypeId)
-                    .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
-                    .OrderBy(nameof(UnitLookupDto.UnitName));
-        var entities = await AsyncExecuter.ToListAsync(queryable);
-        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
-        var result = new UnitLookupCache() { Items = dtos };
-        return result;
-    }
 
-    private async Task<UnitLookupCache> GetListLookupByIds(int[]? unitIds)
-    {
-        var queryable = await Repository.GetQueryableAsync();
-        queryable = queryable
-                    .Where(x => x.Status == Status.Active)
-                    .WhereIf(!unitIds.IsNullOrEmpty(), x => unitIds.Contains(x.Id))
-                    .OrderBy(nameof(UnitLookupDto.UnitName));
-        var entities = await AsyncExecuter.ToListAsync(queryable);
-        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
-
-        var result = new UnitLookupCache() { Items = dtos };
-        return result;
-    }
-
-    private async Task<UnitLookupCache> GetListLookupByParentIds(int unitTypeId, int[]? ParentIds)
-    {
-        var queryable = await Repository.GetQueryableAsync();
-        queryable = queryable
-                    .Where(x => x.Status == Status.Active)
-                    .Where(x => x.UnitTypeId == unitTypeId)
-                    .WhereIf(!ParentIds.IsNullOrEmpty(), x => x.ParentId.HasValue && ParentIds.Contains(x.ParentId.Value))
-                    .OrderBy(nameof(UnitLookupDto.UnitName));
-        var entities = await AsyncExecuter.ToListAsync(queryable);
-        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
-        var result = new UnitLookupCache() { Items = dtos };
-        return result;
-    }
-
+    [Authorize(KNTCPermissions.UnitPermission.Create)]
     public override async Task<UnitDto> CreateAsync(CreateAndUpdateUnitDto input)
     {
         var entity = await _unitManager.CreateAsync(input.UnitCode.Trim(),
@@ -196,7 +156,7 @@ public class UnitAppService : CrudAppService<
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(UnitCacheKey));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
-
+    [Authorize(KNTCPermissions.UnitPermission.Edit)]
     public override async Task<UnitDto> UpdateAsync(int id, CreateAndUpdateUnitDto input)
     {
         var entity = await Repository.GetAsync(id, false);
@@ -214,7 +174,7 @@ public class UnitAppService : CrudAppService<
         await _cacheService.DeleteCacheKeysSContainAsync(nameof(UnitCacheKey));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
-
+    [Authorize(KNTCPermissions.UnitPermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
         var entity = await Repository.GetAsync(id, false);
@@ -251,6 +211,49 @@ public class UnitAppService : CrudAppService<
         return new ListResultDto<UnitTreeLookupDto>(cacheItem.Items);
     }
 
+
+    #region Private method
+
+    private async Task<UnitLookupCache> GetListLookup(int unitTypeId, int? parentId)
+    {
+        var queryable = await Repository.GetQueryableAsync();
+        queryable = queryable
+                    .Where(x => x.Status == Status.Active)
+                    .Where(x => x.UnitTypeId == unitTypeId)
+                    .WhereIf(parentId.HasValue, x => x.ParentId == parentId)
+                    .OrderBy(nameof(UnitLookupDto.UnitName));
+        var entities = await AsyncExecuter.ToListAsync(queryable);
+        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
+        var result = new UnitLookupCache() { Items = dtos };
+        return result;
+    }
+    private async Task<UnitLookupCache> GetListLookupByIds(int[]? unitIds)
+    {
+        var queryable = await Repository.GetQueryableAsync();
+        queryable = queryable
+                    .Where(x => x.Status == Status.Active)
+                    .WhereIf(!unitIds.IsNullOrEmpty(), x => unitIds.Contains(x.Id))
+                    .OrderBy(nameof(UnitLookupDto.UnitName));
+        var entities = await AsyncExecuter.ToListAsync(queryable);
+        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
+
+        var result = new UnitLookupCache() { Items = dtos };
+        return result;
+    }
+
+    private async Task<UnitLookupCache> GetListLookupByParentIds(int unitTypeId, int[]? ParentIds)
+    {
+        var queryable = await Repository.GetQueryableAsync();
+        queryable = queryable
+                    .Where(x => x.Status == Status.Active)
+                    .Where(x => x.UnitTypeId == unitTypeId)
+                    .WhereIf(!ParentIds.IsNullOrEmpty(), x => x.ParentId.HasValue && ParentIds.Contains(x.ParentId.Value))
+                    .OrderBy(nameof(UnitLookupDto.UnitName));
+        var entities = await AsyncExecuter.ToListAsync(queryable);
+        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
+        var result = new UnitLookupCache() { Items = dtos };
+        return result;
+    }
     private async Task<UnitTreeLookupCache> GetTreeLookupFromDbAsync(int id)
     {
         var result = new List<UnitTreeLookupDto>();
@@ -286,9 +289,10 @@ public class UnitAppService : CrudAppService<
             Items = result
         };
     }
+
     private async Task<List<UnitTreeLookupDto>> GetUnitChildrenRecursive(int parentId)
     {
-        var childUnits = await Repository.GetListAsync(x => x.ParentId== parentId);
+        var childUnits = await Repository.GetListAsync(x => x.ParentId == parentId);
         var childNodes = new List<UnitTreeLookupDto>();
 
         foreach (var childUnit in childUnits)
@@ -306,4 +310,6 @@ public class UnitAppService : CrudAppService<
 
         return childNodes;
     }
+
+    #endregion
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Account;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 
@@ -36,4 +37,5 @@ public interface IUsersAppService
     Task<string> UploadAvatarAsync(IFormFile file);
 
     Task<byte[]> GetAvatarAsync(Guid? userId);
+    Task ChangePasswordAsync(ChangePasswordInput input);
 }

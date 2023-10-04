@@ -39,7 +39,7 @@ public class SummaryRepository : ISummaryRepository, ITransientDependency
                                                     DateTime? fromDate,
                                                     DateTime? toDate,
                                                     bool? congKhai,
-                                                    TrangThai? TrangThai,
+                                                    TrangThai? trangThai,
                                                     string nguoiNopDon,
                                                     UserType? userType,
                                                     int[]? managedUnitIds
@@ -94,8 +94,8 @@ public class SummaryRepository : ISummaryRepository, ITransientDependency
                x => x.CongKhai == congKhai
             )
             .WhereIf(
-               TrangThai.HasValue,
-               x => x.TrangThai == TrangThai
+               trangThai.HasValue,
+               x => x.TrangThai == trangThai
             )
             .WhereIf(
                !string.IsNullOrEmpty(nguoiNopDon),
@@ -103,11 +103,11 @@ public class SummaryRepository : ISummaryRepository, ITransientDependency
             )
             .WhereIf(
                (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
-               x => (managedUnitIds.Contains(x.MaQuanHuyen)) || x.CongKhai
+               x => managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai
             )
             .WhereIf(
                (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
-               x => (managedUnitIds.Contains(x.MaXaPhuongTT)) || x.CongKhai
+               x => managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai
             );
         return query;
     }

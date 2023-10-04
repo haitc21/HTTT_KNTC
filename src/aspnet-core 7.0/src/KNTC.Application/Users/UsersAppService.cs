@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
@@ -45,7 +46,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<UserDto> GetAsync(Guid id)
+    public  async Task<UserDto> GetAsync(Guid id)
     {
         var identityUser = await UserManager.GetByIdAsync(id);
         var result = ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, UserDto>(
@@ -58,7 +59,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<PagedResultDto<UserListDto>> GetListAsync(GetUserListDto input)
+    public  async Task<PagedResultDto<UserListDto>> GetListAsync(GetUserListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
@@ -95,7 +96,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
+    public  async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
     {
         //TODO: Should also include roles of the related OUs.
 
@@ -107,7 +108,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync(Guid id)
+    public  async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync(Guid id)
     {
         var assignEdRoles = (await UserRepository.GetRolesAsync(id)).Select(x => x.Id);
         var roles = await RoleRepository.GetListAsync(x => !assignEdRoles.Contains(x.Id));
@@ -128,7 +129,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Create)]
-    public virtual async Task<IdentityUserDto> CreateAsync(CreateAndUpdateUserDto input)
+    public  async Task<IdentityUserDto> CreateAsync(CreateAndUpdateUserDto input)
     {
         await IdentityOptions.SetAsync();
 
@@ -164,7 +165,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, CreateAndUpdateUserDto input)
+    public  async Task<IdentityUserDto> UpdateAsync(Guid id, CreateAndUpdateUserDto input)
     {
         await IdentityOptions.SetAsync();
 
@@ -218,7 +219,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
+    public  async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
     {
         var user = await UserManager.GetByIdAsync(id);
         (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
@@ -226,7 +227,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Delete)]
-    public virtual async Task DeleteAsync(Guid id)
+    public  async Task DeleteAsync(Guid id)
     {
         if (CurrentUser.Id == id)
         {
@@ -312,7 +313,26 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         userId = userId ?? CurrentUser.GetId();
         return await _blobContainer.GetAllBytesOrNullAsync(userId.ToString());
     }
+    public  async Task ChangePasswordAsync(ChangePasswordInput input)
+    {
+        await IdentityOptions.SetAsync();
 
+        var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+        if (currentUser.IsExternal)
+        {
+            throw new BusinessException(code: IdentityErrorCodes.ExternalUserPasswordChange);
+        }
+
+        if (currentUser.PasswordHash == null)
+        {
+            (await UserManager.AddPasswordAsync(currentUser, input.NewPassword)).CheckErrors();
+
+            return;
+        }
+
+    (await UserManager.ChangePasswordAsync(currentUser, input.CurrentPassword, input.NewPassword)).CheckErrors();
+    }
     #region private method
 
     private async Task hasViewUserInfo(Guid userId)
@@ -328,7 +348,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         }
     }
 
-    protected virtual async Task UpdateUserFromInput(Volo.Abp.Identity.IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
+    protected  async Task UpdateUserFromInput(Volo.Abp.Identity.IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
     {
         if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
         {

@@ -3,6 +3,7 @@ import { RestService, Rest } from '@abp/ng.core';
 import type { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 import type { IFormFile } from '../microsoft/asp-net-core/http/models';
+import type { ChangePasswordInput } from '../volo/abp/account/models';
 import type { IdentityRoleDto, IdentityUserDto, IdentityUserUpdateRolesDto } from '../volo/abp/identity/models';
 
 @Injectable({
@@ -10,6 +11,15 @@ import type { IdentityRoleDto, IdentityUserDto, IdentityUserUpdateRolesDto } fro
 })
 export class UsersService {
   apiName = 'Default';
+  
+
+  changePassword = (input: ChangePasswordInput, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, void>({
+      method: 'POST',
+      url: '/api/app/users/change-password',
+      body: input,
+    },
+    { apiName: this.apiName,...config });
   
 
   create = (input: CreateAndUpdateUserDto, config?: Partial<Rest.Config>) =>

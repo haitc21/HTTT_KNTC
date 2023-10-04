@@ -32,8 +32,8 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                DateTime? fromDate,
                                                DateTime? toDate,
                                                bool? congKhai,
-                                               bool? LuuTru,
-                                               TrangThai? TrangThai,
+                                               bool? luuTru,
+                                               TrangThai? trangThai,
                                                string nguoiNopDon,
                                                UserType? userType,
                                                int[]? managedUnitIds
@@ -87,12 +87,12 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 x => x.CongKhai == congKhai
              )
              .WhereIf(
-                LuuTru.HasValue,
-                x => x.LuuTru == LuuTru
+                luuTru.HasValue,
+                x => x.LuuTru == luuTru
              )
              .WhereIf(
-                TrangThai.HasValue,
-                x => x.TrangThai == TrangThai
+                trangThai.HasValue,
+                x => x.TrangThai == trangThai
              )
              .WhereIf(
                 !string.IsNullOrEmpty(nguoiNopDon),
@@ -100,11 +100,11 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              )
              .WhereIf(
                 (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
-                x => (managedUnitIds.Contains(x.MaQuanHuyen)) || x.CongKhai
+                x => managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai
              )
              .WhereIf(
                 (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
-                x => (managedUnitIds.Contains(x.MaXaPhuongTT)) || x.CongKhai
+                x => managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai
              )
             .OrderBy(sorting)
             .Skip(skipCount)
@@ -132,7 +132,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                bool? CongKhai,
                                                bool? LuuTru,
                                                TrangThai? TrangThai,
-                                               string nguoiNopDon,
+                                               string? nguoiNopDon,
                                                UserType? userType,
                                                int[]? managedUnitIds
                                                )
@@ -197,11 +197,11 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              )
              .WhereIf(
                 (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
-                x => (managedUnitIds.Contains(x.MaQuanHuyen)) || x.CongKhai
+                x => managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai
              )
              .WhereIf(
                 (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
-                x => (managedUnitIds.Contains(x.MaXaPhuongTT)) || x.CongKhai
+                x => managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai
              )
             .OrderBy(sorting)
             .ToListAsync();

@@ -52,6 +52,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { CommonModule } from '@angular/common';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TreeSelectModule } from 'primeng/treeselect';
+import { ChangePasswordComponent } from './user/change-password/change-password.component';
 
 const COMPONENT = [
   RoleComponent,
@@ -74,6 +75,7 @@ const COMPONENT = [
   UnitDetailComponent,
   SysConfigComponent,
   SysConfigDetailComponent,
+  ChangePasswordComponent
 ];
 
 @NgModule({

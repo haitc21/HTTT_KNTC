@@ -19,6 +19,7 @@ import { GetSysConfigService } from 'src/app/_shared/services/sysconfig.services
 import { Subject, takeUntil } from 'rxjs';
 import { SysConfigConsts } from 'src/app/_shared/constants/sys-config.consts';
 import { UserDto, UsersService } from '@proxy/users';
+import { ChangePasswordComponent } from 'src/app/system/user/change-password/change-password.component';
 @Component({
   selector: 'app-topbar',
   templateUrl: './app.topbar.component.html',
@@ -134,7 +135,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         label: 'Đổi mật khẩu',
         // icon: 'pi pi-key',
         command: event => {
-          this.setPassword();
+          this.changePassword();
         },
       },
       {
@@ -314,16 +315,16 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
       }
     });
   }
-  setPassword() {
+  changePassword() {
     if (!this.userId) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    const ref = this.dialogService.open(SetPasswordComponent, {
+    const ref = this.dialogService.open(ChangePasswordComponent, {
       data: {
         id: this.userId,
       },
-      header: `Đặt lại mật khẩu`,
+      header: `Đổi mật khẩu`,
       width: DIALOG_SM,
     });
   }
