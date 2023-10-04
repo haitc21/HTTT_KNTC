@@ -156,7 +156,7 @@
                         styleClass="w-full"
                         (onChange)="tinhChange($event?.value, 1)"
                       ></p-dropdown>
-                      <label>Tỉnh/TP <span class="required">*</span></label>
+                      <label>Tỉnh <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.maTinhTP"
@@ -180,7 +180,7 @@
                         styleClass="w-full"
                         (onChange)="huyenChange($event?.value, 1)"
                       ></p-dropdown>
-                      <label>Quận/Huyện <span class="required">*</span></label>
+                      <label>Huyện/TP <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.maQuanHuyen"
@@ -442,7 +442,7 @@
                         appendTo="body"
                         (onChange)="tinhChange($event?.value, 2)"
                       ></p-dropdown>
-                      <label>Tỉnh/TP <span class="required">*</span></label>
+                      <label>Tỉnh <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.tinhThuaDat"
@@ -467,7 +467,7 @@
                         appendTo="body"
                         (onChange)="huyenChange($event?.value, 2)"
                       ></p-dropdown>
-                      <label>Quận/Huyện <span class="required">*</span></label>
+                      <label>Huyện/TP <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.huyenThuaDat"
