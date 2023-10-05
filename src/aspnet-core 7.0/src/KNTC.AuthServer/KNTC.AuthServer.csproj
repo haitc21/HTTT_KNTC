@@ -23,6 +23,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="authserver.pfx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="authserver.pfx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Pages\**\*.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -32,6 +32,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
@@ -71,25 +72,38 @@ public class KNTCAuthServerModule : AbpModule
                 });
             }
         });
-        //    Production or Staging environment
-        //if (!hostingEnvironment.IsDevelopment())
-        //{
-        //    PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
-        //    {
-        //        options.AddDevelopmentEncryptionAndSigningCertificate = false;
-        //    });
+        // Development environment
+        if (hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                // This is default value, you can remove this line.
+                options.AddDevelopmentEncryptionAndSigningCertificate = true;
+            });
+        }
 
-        //    PreConfigure<OpenIddictServerBuilder>(builder =>
-        //    {
-        //        builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
-        //        builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
-        //    });
+        // Production or Staging environment
+        if (!hostingEnvironment.IsDevelopment())
+        {
+            PreConfigure<AbpOpenIddictAspNetCoreOptions>(options =>
+            {
+                options.AddDevelopmentEncryptionAndSigningCertificate = false;
+            });
+
+            PreConfigure<OpenIddictServerBuilder>(builder =>
+            {
+                builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
+                builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
+
+                //...
+            });
+        }
     }
 
     private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)
     {
         string fileName = Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx");
-        string password = "KNTC@Vnua2023";
+        string password = "VRTSf07DigQtgwFV6iApO5ckmnuk8MfVf2FRSkqn";
         return new X509Certificate2(fileName, password);
     }
 
