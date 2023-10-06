@@ -2,7 +2,6 @@ import { Environment } from '@abp/ng.core';
 
 const baseUrl = 'http://localhost:4201';
 
-
 export const environment = {
   production: false,
   application: {
@@ -20,11 +19,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://localhost:5102',
-      rootNamespace: 'KNTC',
-    },
-    geoserver: {
-      url: 'http://localhost:8080',
+      url: 'https://localhost:5101',
       rootNamespace: 'KNTC',
     },
   },
