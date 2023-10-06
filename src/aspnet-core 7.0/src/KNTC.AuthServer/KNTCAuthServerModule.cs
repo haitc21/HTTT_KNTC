@@ -8,11 +8,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StackExchange.Redis;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -94,8 +97,6 @@ public class KNTCAuthServerModule : AbpModule
             {
                 builder.AddSigningCertificate(GetSigningCertificate(hostingEnvironment));
                 builder.AddEncryptionCertificate(GetSigningCertificate(hostingEnvironment));
-
-                //...
             });
         }
     }
@@ -165,8 +166,7 @@ public class KNTCAuthServerModule : AbpModule
         {
             options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
             {
-                AbsoluteExpiration = DateTimeOffset.Now.AddHours(24),
-                SlidingExpiration = TimeSpan.FromHours(1),
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(24)
             };
             options.KeyPrefix = "KNTC:";
         });
@@ -218,8 +218,21 @@ public class KNTCAuthServerModule : AbpModule
         {
             app.UseDeveloperExceptionPage();
         }
-
-        app.UseAbpRequestLocalization();
+        var supportedCultures = new[]
+      {
+            new CultureInfo("vi")
+        };
+        app.UseAbpRequestLocalization(options =>
+        {
+            options.DefaultRequestCulture = new RequestCulture("vi");
+            options.SupportedCultures = supportedCultures;
+            options.SupportedUICultures = supportedCultures;
+            options.RequestCultureProviders = new List<IRequestCultureProvider>
+            {
+                new QueryStringRequestCultureProvider(),
+                new CookieRequestCultureProvider()
+            };
+        });
 
         if (!env.IsDevelopment())
         {

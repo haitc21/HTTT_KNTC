@@ -35,6 +35,7 @@ using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Modularity;
+using Volo.Abp.Security.Encryption;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.Timing;
 using Volo.Abp.VirtualFileSystem;
@@ -56,15 +57,6 @@ namespace KNTC;
 )]
 public class KNTCHttpApiHostModule : AbpModule
 {
-
-    public override void PreConfigureServices(ServiceConfigurationContext context)
-    {
-        PreConfigure<IdentityBuilder>(builder =>
-        {
-            builder
-                .AddDefaultTokenProviders();
-        });
-    }
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         var configuration = context.Services.GetConfiguration();
@@ -72,7 +64,7 @@ public class KNTCHttpApiHostModule : AbpModule
 
         ConfigureConventionalControllers();
         ConfigureAuthentication(context, configuration);
-        //ConfigureCache(configuration);
+        ConfigureCache(configuration);
         ConfigureVirtualFileSystem(context);
         ConfigureDataProtection(context, configuration, hostingEnvironment);
         ConfigureDistributedLocking(context, configuration);
@@ -86,6 +78,7 @@ public class KNTCHttpApiHostModule : AbpModule
         {
             options.Kind = DateTimeKind.Local;
         });
+
     }
 
     private void ConfigureJsonSerialize(ServiceConfigurationContext context)
@@ -93,8 +86,6 @@ public class KNTCHttpApiHostModule : AbpModule
         Configure<MvcNewtonsoftJsonOptions>(options =>
         {
             options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-            //var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
-            //options.SerializerSettings.Converters.Add(new GeometryConverter(geometryFactory));
             var geometryFactoryEx = new GeometryFactoryEx(new PrecisionModel(), 4326)
             {
                 OrientationOfExteriorRing = LinearRingOrientation.CounterClockwise,
@@ -127,18 +118,17 @@ public class KNTCHttpApiHostModule : AbpModule
         });
     }
 
-    //private void ConfigureCache(IConfiguration configuration)
-    //{
-    //    Configure<AbpDistributedCacheOptions>(options =>
-    //    {
-    //        options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
-    //        {
-    //            AbsoluteExpiration = DateTimeOffset.Now.AddHours(24),
-    //            SlidingExpiration = TimeSpan.FromHours(1),
-    //        };
-    //        options.KeyPrefix = "KNTC:";
-    //    });
-    //}
+    private void ConfigureCache(IConfiguration configuration)
+    {
+        Configure<AbpDistributedCacheOptions>(options =>
+        {
+            options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(24)
+            };
+            options.KeyPrefix = "KNTC:";
+        });
+    }
 
     private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)
     {

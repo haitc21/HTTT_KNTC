@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
@@ -32,6 +33,7 @@ public class Program
         {
             Log.Information("Starting KNTC.AuthServer.");
             var builder = WebApplication.CreateBuilder(args);
+            IdentityModelEventSource.ShowPII = true;
             builder.Host
                  .ConfigureAppConfiguration((context, config) =>
                  {
