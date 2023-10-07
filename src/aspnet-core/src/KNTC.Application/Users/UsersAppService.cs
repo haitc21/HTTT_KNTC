@@ -52,9 +52,12 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         var result = ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, UserDto>(
             identityUser
         );
-        var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
-        result.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
-        result.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(id.ToString());
+        var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == id);
+        if(userInfo != null)
+        {
+            result.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
+            result.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(id.ToString());
+        }
         return result;
     }
 
@@ -88,9 +91,12 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         );
         foreach (var item in result.Items)
         {
-            var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == item.Id);
-            item.Dob = userInfo.Dob;
-            item.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(item.Id.ToString());
+            var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == item.Id);
+            if(userInfo != null)
+            {
+                item.Dob = userInfo.Dob;
+                item.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(item.Id.ToString());
+            }
         }
         return result;
     }

@@ -124,20 +124,19 @@ export class UserDetailComponent implements OnInit, OnDestroy {
           this.selectedEntity = response;
 
           this.form.patchValue(this.selectedEntity);
+          if (this.selectedEntity?.userInfo) {
+            this.form
+              .get('dob')
+              .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.userInfo?.dob));
+            this.form
+              .get('userType')
+              .setValue(this.selectedEntity.userInfo?.userType);
 
-          this.form
-            .get('dob')
-            .setValue(this.utilService.convertDateToLocal(this.selectedEntity.userInfo.dob));
-          this.form
-            .get('userType')
-            .setValue(this.selectedEntity.userInfo.userType);
-
-          let managedUnitIds = this.selectedEntity.userInfo.managedUnitIds.map(x => String(x));
-          this.form.get('managedUnitIds').setValue(managedUnitIds);
-
-          //set list of units
-          this.getListOfUnits(this.selectedEntity.userInfo.userType, managedUnitIds);
-
+            let managedUnitIds = this.selectedEntity.userInfo.managedUnitIds.map(x => String(x));
+            this.form.get('managedUnitIds').setValue(managedUnitIds);
+            //set list of units
+            this.getListOfUnits(this.selectedEntity.userInfo.userType, managedUnitIds);
+          }
           this.setMode('update');
 
           if (response.avatarContent) {
