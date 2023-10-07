@@ -71,13 +71,13 @@ public class KNTCHttpApiHostModule : AbpModule
                 options.UseAspNetCore();
             });
             //    // disable https
-            if (!hostingEnvironment.IsDevelopment())
-            {
-                builder.AddServer(options =>
-                {
-                    options.UseAspNetCore().DisableTransportSecurityRequirement();
-                });
-            }
+            //if (!hostingEnvironment.IsDevelopment())
+            //{
+            //    builder.AddServer(options =>
+            //    {
+            //        options.UseAspNetCore().DisableTransportSecurityRequirement();
+            //    });
+            //}
         });
 
         // Production or Staging environment

@@ -10,16 +10,16 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'https://gqkntc.tnmtthainguyen.gov.vn:5101/',
+    issuer: 'http://gqkntc.tnmtthainguyen.gov.vn:5101/',
     redirectUri: baseUrl,
     clientId: 'KNTC_App',
     responseType: 'code',
     scope: 'offline_access KNTC',
-    requireHttps: true,
+    requireHttps: false,
   },
   apis: {
     default: {
-      url: 'https://gqkntc.tnmtthainguyen.gov.vn:5101',
+      url: 'http://gqkntc.tnmtthainguyen.gov.vn:5101',
       rootNamespace: 'KNTC',
     },
   },
