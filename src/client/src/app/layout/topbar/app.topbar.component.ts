@@ -20,6 +20,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { SysConfigConsts } from 'src/app/_shared/constants/sys-config.consts';
 import { UserDto, UsersService } from '@proxy/users';
 import { ChangePasswordComponent } from 'src/app/system/user/change-password/change-password.component';
+import { RegisterComponent } from 'src/app/system/user/register/register.component';
 @Component({
   selector: 'app-topbar',
   templateUrl: './app.topbar.component.html',
@@ -59,7 +60,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private userService: UsersService,
     private sysConfigService: GetSysConfigService
-  ) {}
+  ) { }
   ngOnInit(): void {
     if (this.isAutenticated) this.getUserInfoFromToken();
 
@@ -79,15 +80,15 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     });
 
     //store userinfo in storage
-    if (this.userId){
+    if (this.userId) {
       this.userService.getUserInfo(this.userId)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response: UserDto) => {
-          localStorage.setItem('userInfo', JSON.stringify(response.userInfo));          
-        },
-        error: () => {},
-      });
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (response: UserDto) => {
+            localStorage.setItem('userInfo', JSON.stringify(response.userInfo));
+          },
+          error: () => { },
+        });
     }
   }
 
@@ -119,7 +120,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
           }
           this.initMenu();
         },
-        err => {}
+        err => { }
       );
   }
   initMenu() {
@@ -286,6 +287,19 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     this.layoutService.blockUI$.next(true);
     this.authService.navigateToLogin();
   }
+  register() {
+    const ref = this.dialogService.open(RegisterComponent, {
+      header: 'Đăng ký',
+      width: DIALOG_MD,
+    });
+
+    ref.onClose.subscribe((data: RegisterComponent) => {
+      if (data) {
+        this.notificationService.showSuccess(MessageConstants.REGISTER_OK_MSG);
+      }
+    });
+  }
+
   getAvatar() {
     this.fileService
       .getAvatar(this.userId)

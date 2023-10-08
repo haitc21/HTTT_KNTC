@@ -29,10 +29,10 @@ interface Unit {
 }
 
 @Component({
-  templateUrl: './user-detail.component.html',
+  templateUrl: './register.component.html',
 })
 
-export class UserDetailComponent implements OnInit, OnDestroy {
+export class RegisterComponent implements OnInit, OnDestroy {
   @ViewChild('multiselect') multi: MultiSelect;
   private ngUnsubscribe = new Subject<void>();
 
@@ -43,11 +43,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   public btnDisabled = false;
   public countries: any[] = [];
   public provinces: any[] = [];
-  selectedEntity = {} as UserDto;
 
   userTypeOPtions = userTypeOptions;
-
-  mode: string;
   avatarUrl: any;
   unitOptionLabel: string = '';
   unitOptions: TreeNode<UnitTreeLookupDto>[];
@@ -103,72 +100,8 @@ export class UserDetailComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    //Init form
     this.buildForm();
-
-    if (this.utilService.isEmpty(this.config.data?.id) == false) {
-      this.loadFormDetails(this.config.data?.id);
-    } else {
-      this.setMode('create');
-      this.getListOfUnits(UserType.QuanLyTinh);
-    }
-  }
-
-  loadFormDetails(id: string) {
-    this.layoutService.blockUI$.next(true);
-    this.userService
-      .get(id)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response: UserDto) => {
-          this.selectedEntity = response;
-
-          this.form.patchValue(this.selectedEntity);
-          if (this.selectedEntity?.userInfo) {
-            this.form
-              .get('dob')
-              .setValue(this.utilService.convertDateToLocal(this.selectedEntity?.userInfo?.dob));
-            this.form
-              .get('userType')
-              .setValue(this.selectedEntity.userInfo?.userType);
-
-            let managedUnitIds = this.selectedEntity.userInfo.managedUnitIds.map(x => String(x));
-            this.form.get('managedUnitIds').setValue(managedUnitIds);
-            //set list of units
-            this.getListOfUnits(this.selectedEntity.userInfo.userType, managedUnitIds);
-          }
-          this.setMode('update');
-
-          if (response.avatarContent) {
-            let objectURL = 'data:image/png;base64,' + response.avatarContent;
-            this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-          }
-          this.layoutService.blockUI$.next(false);
-        },
-        error: () => {
-          this.layoutService.blockUI$.next(false);
-        },
-      });
-  }
-
-  setMode(mode: string) {
-    this.mode = mode;
-    if (mode == 'update') {
-      this.form.controls['userName'].clearValidators();
-      this.form.controls['userName'].disable();
-      this.form.controls['password'].clearValidators();
-      this.form.controls['password'].disable();
-    } else if (mode == 'create') {
-      this.form.controls['userName'].enable();
-      this.form.controls['userName'].addValidators(Validators.required);
-      this.form.controls['password'].enable();
-      this.form.controls['password'].addValidators([
-        Validators.required,
-        Validators.pattern(
-          '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&].{8,}$'
-        ),
-      ]);
-    }
+    this.getListOfUnits(UserType.QuanLyTinh);
   }
 
   buildForm() {
@@ -190,7 +123,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       phoneNumber: [null, [Validators.required, Validators.pattern('^(0[0-9]{9}|\\+84[0-9]{9})$')]],
       password: password,
       confirmPassword: new FormControl(null, [this.matchPasswordValidator(password)]),
-      isActive: [true],
+      isActive: [false],
       dob: [null],
       userType: [UserType.QuanLyTinh],
       managedUnitIds: [null]
@@ -204,41 +137,20 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       return;
     }
     this.layoutService.blockUI$.next(true);
-    if (this.utilService.isEmpty(this.config.data?.id)) {
-      let user = this.form.value as CreateAndUpdateUserDto;
-      user.managedUnitIds = this.form.value?.managedUnitIds?.map(x => Number(x.key));
-      this.userService
-        .create(user)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe({
-          next: () => {
-            this.ref.close(this.form.value);
-            this.layoutService.blockUI$.next(false);
-          },
-          error: () => {
-            this.layoutService.blockUI$.next(false);
-          },
-        });
-    } else {
-      let user = this.form.value as CreateAndUpdateUserDto;
-      user.userName = this.selectedEntity.userName;
-      user.email = this.selectedEntity.email;
-      user.managedUnitIds = this.form.value?.managedUnitIds?.map(x => Number(x.key));
-
-      this.userService
-        .update(this.config.data?.id, user)
-        .pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe({
-          next: () => {
-            this.layoutService.blockUI$.next(false);
-
-            this.ref.close(this.form.value);
-          },
-          error: () => {
-            this.layoutService.blockUI$.next(false);
-          },
-        });
-    }
+    let user = this.form.value as CreateAndUpdateUserDto;
+    user.managedUnitIds = this.form.value?.managedUnitIds?.map(x => Number(x.key));
+    this.userService
+      .register(user)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+          this.ref.close(this.form.value);
+          this.layoutService.blockUI$.next(false);
+        },
+        error: () => {
+          this.layoutService.blockUI$.next(false);
+        },
+      });
   }
   changeUserType(userType: number) {
     this.unitOptions = this.resetSelectable(this.unitOptions, userType);

@@ -38,4 +38,5 @@ public interface IUsersAppService
 
     Task<byte[]> GetAvatarAsync(Guid? userId);
     Task ChangePasswordAsync(ChangePasswordInput input);
+    Task<IdentityUserDto> RegisterAsync(CreateAndUpdateUserDto input);
 }

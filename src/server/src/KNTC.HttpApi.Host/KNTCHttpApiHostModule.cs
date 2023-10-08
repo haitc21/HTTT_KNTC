@@ -117,6 +117,18 @@ public class KNTCHttpApiHostModule : AbpModule
         ConfigureBlob(context, configuration);
         ConfigureJsonSerialize(context);
         ConfigureClock();
+        ConfigureCache(configuration);
+    }
+    private void ConfigureCache(IConfiguration configuration)
+    {
+        Configure<AbpDistributedCacheOptions>(options =>
+        {
+            options.GlobalCacheEntryOptions = new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(24)
+            };
+            options.KeyPrefix = "KNTC:";
+        });
     }
     private void ConfigureClock()
     {

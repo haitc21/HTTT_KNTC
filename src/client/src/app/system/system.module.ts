@@ -53,6 +53,7 @@ import { CommonModule } from '@angular/common';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { ChangePasswordComponent } from './user/change-password/change-password.component';
+import { RegisterComponent } from './user/register/register.component';
 
 const COMPONENT = [
   RoleComponent,
@@ -75,7 +76,8 @@ const COMPONENT = [
   UnitDetailComponent,
   SysConfigComponent,
   SysConfigDetailComponent,
-  ChangePasswordComponent
+  ChangePasswordComponent,
+  RegisterComponent
 ];
 
 @NgModule({

@@ -1,0 +1,200 @@
+<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
+  <p-panel #pnlDetail [collapsed]="false">
+    <!-- ---------------------------------------------------------------------------------- -->
+    <div class="grid col-12">
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <input id="userName" type="text" pInputText formControlName="userName" class="w-full" />
+          <label for="userName">Tài khoản <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.userName"
+          [validationMessages]="validationMessages.userName"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <input id="email" type="text" pInputText formControlName="email" class="w-full" />
+          <label for="email">Email<span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.email"
+          [validationMessages]="validationMessages.email"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <p-password
+            id="password"
+            formControlName="password"
+            [toggleMask]="true"
+            styleClass="w-full"
+            inputId="inputPassword"
+          ></p-password>
+          <label for="password">Mật khẩu <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.password"
+          [validationMessages]="validationMessages.password"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <p-password
+            appendTo="body"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            [toggleMask]="true"
+            styleClass="w-full"
+            inputId="inputPassword"
+          ></p-password>
+          <label for="password">Xác nhận khẩu <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.confirmPassword"
+          [validationMessages]="validationMessages.confirmPassword"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <input id="surname" type="text" pInputText formControlName="surname" class="w-full" />
+          <label for="surname">Họ<span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.surname"
+          [validationMessages]="validationMessages.surname"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <input id="name" type="text" pInputText formControlName="name" class="w-full" />
+          <label for="name" class="block">Tên <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.name"
+          [validationMessages]="validationMessages.name"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <input
+            id="phoneNumber"
+            type="text"
+            pInputText
+            formControlName="phoneNumber"
+            class="w-full"
+          />
+          <label for="phoneNumber">Số ĐT<span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.phoneNumber"
+          [validationMessages]="validationMessages.phoneNumber"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-6">
+        <span class="p-float-label">
+          <p-calendar
+            appendTo="body"
+            formControlName="dob"
+            dateFormat="dd/mm/yy"
+            [showClear]="true"
+            inputId="dob"
+          ></p-calendar>
+          <label for="dob">Ngày sinh</label>
+        </span>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-12">
+        <span class="p-float-label">
+          <p-dropdown
+            id="userType"
+            formControlName="userType"
+            [options]="userTypeOPtions"
+            optionLabel="text"
+            optionValue="value"
+            [showClear]="true"
+            [autoDisplayFirst]="false"
+            styleClass="w-full"
+            (onChange)="changeUserType($event.value)"
+          ></p-dropdown>
+          <label>Loại tài khoản<span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.userType"
+          [validationMessages]="validationMessages.userType"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div
+        class="field col-12 md:col-12"
+        *ngIf="
+          formControls?.userType?.value && formControls?.userType?.value != UserType.QuanLyTinh
+        "
+      >
+        <span class="p-float-label w-full">
+          <p-treeSelect
+            [(ngModel)]="selectedNodes"
+            formControlName="managedUnitIds"
+            [options]="unitOptions"
+            display="chip"
+            [metaKeySelection]="false"
+            selectionMode="multiple"
+            [filter]="true"
+            [filterInputAutoFocus]="true"
+            appendTo="body"
+            class="w-full"
+            containerStyleClass="w-full"
+            [showClear]="true"
+          ></p-treeSelect>
+          <label for="managedUnitIds">{{ unitOptionLabel }}</label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.managedUnitIds"
+          [validationMessages]="validationMessages.managedUnitIds"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+    </div>
+    <!-- ---------------------------------------------------------------------------------- -->
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-content-end">
+        <button
+          pButton
+          pRipples
+          type="button"
+          (click)="saveChange()"
+          label="Lưu"
+          class="p-button-info mr-2"
+          icon="pi pi-check"
+        ></button>
+        <button
+          pButton
+          pRipples
+          type="button"
+          (click)="close()"
+          label="Đóng"
+          class="p-button-danger"
+          icon="pi pi-times"
+        ></button>
+      </div>
+    </ng-template>
+  </p-panel>
+</form>

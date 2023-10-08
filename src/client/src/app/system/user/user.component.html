@@ -73,7 +73,7 @@
           <th>Số ĐT</th>
           <th>Ngày sinh</th>
           <th style="width: 150px">Trạng thái</th>
-          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -112,7 +112,8 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-           <button
+            <button
+              [disabled]="row.userName == 'admin' && currUserName != 'admin'"
               #btn
               pButton
               pRipple
