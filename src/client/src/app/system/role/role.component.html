@@ -63,7 +63,7 @@
           <th pSortableColumn="name">Tên</th>
           <th pSortableColumn="isPublic">Công khai</th>
           <th pSortableColumn="isDefault">Mặc định</th>
-          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -98,7 +98,8 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-           <button
+            <button
+              [disabled]="row.name == 'admin' && currUserName != 'admin'"
               #btn
               pButton
               pRipple

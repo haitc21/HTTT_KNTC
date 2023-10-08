@@ -170,6 +170,41 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         return ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, IdentityUserDto>(user);
     }
 
+    public async Task<IdentityUserDto> RegisterAsync(CreateAndUpdateUserDto input)
+    {
+        await IdentityOptions.SetAsync();
+
+        var user = new Volo.Abp.Identity.IdentityUser(
+            GuidGenerator.Create(),
+            input.UserName.Trim(),
+            input.Email
+        );
+        // add default roles
+        var roleDefault = await RoleRepository.GetListAsync(x => x.IsDefault);
+        if (roleDefault != null && roleDefault.Count > 0)
+        {
+            input.RoleNames = roleDefault.Select(x => x.Name).ToArray();
+        }
+        input.MapExtraPropertiesTo(user);
+
+        (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
+        await UpdateUserFromInput(user, input);
+        (await UserManager.UpdateAsync(user)).CheckErrors();
+
+        var userInfo = new UserInfo(GuidGenerator.Create())
+        {
+            UserId = user.Id,
+            Dob = input.Dob,
+            UserType = input.UserType,
+            ManagedUnitIds = input.ManagedUnitIds,
+        };
+        await _userInfoRepo.InsertAsync(userInfo);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
+
+        return ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, IdentityUserDto>(user);
+    }
+
     [Authorize(IdentityPermissions.Users.Update)]
     public  async Task<IdentityUserDto> UpdateAsync(Guid id, CreateAndUpdateUserDto input)
     {

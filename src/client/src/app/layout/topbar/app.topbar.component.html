@@ -31,10 +31,14 @@
         />
         <span class="username">{{ userName }} <i class="pi pi-angle-down"></i></span>
       </a>
-
-      <a class="user-profile mr-2" *ngIf="!isAutenticated" (click)="login()">
-        <span class="username">Đăng nhập</span>
-      </a>
+      <ng-container *ngIf="!isAutenticated">
+        <a class="user-profile mr-2" (click)="login()">
+          <span class="username">Đăng nhập</span>
+        </a>
+        <a class="user-profile mr-2" (click)="register()">
+          <span class="username">Đăng ký</span>
+        </a>
+      </ng-container>
     </span>
   </ng-template>
 </p-menubar>
@@ -46,7 +50,6 @@
   [showTransitionOptions]="'300ms'"
   [hideTransitionOptions]="'300ms'"
 ></p-tieredMenu>
-
 
 <!-- <p-tieredMenu
   #systemMenu

@@ -5,15 +5,15 @@ export class MessageConstants {
     public static CONFIRM_SET_DEFAULT_MSG = 'Bạn có chắc muốn đặt mặc định bản ghi này?';
     public static CONFIRM_SET_IS_HOME_MSG = 'Bạn có chắc muốn hiển thị bản ghi này tại trang chủ?';
     public static CONFIRM_SET_NOT_IS_HOME_MSG = 'Bạn có chắc muốn bỏ hiển thị bản ghi này tại trang chủ?';
-    public static CONFIRM_PUBLISH_POST='Bạn có chắc muốn xuất bản bài viết này?';
+    public static CONFIRM_PUBLISH_POST = 'Bạn có chắc muốn xuất bản bài viết này?';
     public static LOGIN_AGAIN_MSG = 'Bạn hết phiên đăng nhập. Mời đăng nhập lại.'
     public static CREATED_OK_MSG = 'Thêm mới thành công';
-    public static UPDATED_OK_MSG = 'Cập nhật thành công';F
+    public static UPDATED_OK_MSG = 'Cập nhật thành công'; F
     public static DELETED_OK_MSG = 'Xóa thành công';
     public static SET_DEFAULT_OK_MSG = 'Đặt mặc định thành công';
     public static SET_IS_HOME_OK_MSG = 'Đặt hiển thị trang chủ thành công';
     public static SET_NOT_IS_HOME_OK_MSG = 'Bỏ hiển thị trang chủ thành công';
-    public static  FORBIDDEN = 'Bạn bị chặn truy cập';
+    public static FORBIDDEN = 'Bạn bị chặn truy cập';
     public static CANNOT_EDIT_MULTIPLE = 'Bạn không thể sửa nhiều hơn 1 bản ghi.';
     public static NOT_CHOOSE_ANY_RECORD = 'Bạn phải chọn ít nhất một bản ghi.';
     public static UPLOAD_OK_MSG = 'Tải lên thành công';
@@ -31,5 +31,5 @@ export class MessageConstants {
     public static USE_MAP_DRAW = 'Bạn hãy Sử dụng công cụ Vẽ trên bản đồ để thể hiện thửa đất có Khiếu nại/Tố cáo!';
     public static CHOSE_COORDIATE = 'Bạn hãy chọn một điểm trên bản đồ để thay đổi Vị trí có Khiếu nại/Tố cáo!';
     public static GEOJSON_INVALID = 'Dữ liệu hình học không hợp lệ. Bạn hãy sử dụng công cụ Vẽ trên bản đồ hoặc gõ đúng dữ liệu dạng GeoJson!';
-
+    public static REGISTER_OK_MSG = 'Đăng ký thành công! Vui lòng liên hẹ quản trị viên để được kích hoạt tài khoản.';
 }

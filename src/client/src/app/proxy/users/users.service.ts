@@ -97,6 +97,15 @@ export class UsersService {
     { apiName: this.apiName,...config });
   
 
+  register = (input: CreateAndUpdateUserDto, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, IdentityUserDto>({
+      method: 'POST',
+      url: '/api/app/users/register',
+      body: input,
+    },
+    { apiName: this.apiName,...config });
+  
+
   setPassword = (userId: string, input: SetPasswordDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, void>({
       method: 'POST',
