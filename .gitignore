@@ -351,3 +351,5 @@ MigrationBackup/
 
 /src/server/deploy
 /src/client/src/app/proxy/generate-proxy.json
+/src/client/src/proxy.conf.json
+/dóc/Tài liệu hướng dẫn cài đặt HTTT_KNTC_v1.0.docx
