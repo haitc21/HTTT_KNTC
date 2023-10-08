@@ -252,7 +252,8 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
           },
           {
             label: 'Danh mục',
-            visible: this.isAutenticated,
+            visible: this.permissionService.getGrantedPolicy('UnitTypes') || this.permissionService.getGrantedPolicy('Units') || this.permissionService.getGrantedPolicy('LandTypes') || this.permissionService.getGrantedPolicy('DocumentTypes'),
+            //this.isAutenticated,
             items: [
               {
                 label: 'Loại địa danh',

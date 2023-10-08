@@ -12,7 +12,7 @@ import { SummaryDto } from '@proxy/summaries';
 
 
 import { format } from 'date-fns';
-import { LinhVucOptions, TrangThaiOptions } from '../../constants/consts';
+import { KetquaOptions, LinhVucOptions, TrangThaiOptions } from '../../constants/consts';
 import { GetSysConfigService } from '../../services/sysconfig.services';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { SysConfigConsts } from '../../constants/sys-config.consts';
@@ -30,6 +30,7 @@ import 'leaflet.markercluster.layersupport';
 import 'leaflet-draw';
 import 'leaflet.measurecontrol';
 import 'leaflet.locatecontrol';
+import 'leaflet-easyprint';
 //import { GeoServerService } from '../../services/geo-server.service';
 // import 'leaflet.markercluster/dist/leaflet.markercluster';
 //import "leaflet-draw/dist/leaflet.draw.css";
@@ -412,6 +413,7 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     this.info.LinhVucNameOptions = LinhVucOptions;
     this.info.TrangThaiNameOptions = TrangThaiOptions;
+    this.info.KetquaOptions = KetquaOptions;
     
     this.info.update = function () {
       //buildInfoContent
@@ -438,13 +440,13 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
         '<table cellpadding=2>\
         <tr>\
           <th scope="row">\
-          <td><b>Lĩnh vực:</b></td><td colspan=3><b><font color="#0277bd">' +
+          <td><b>Lĩnh vực:</b></td><td><b><font color="#0277bd">' +
             this.LinhVucNameOptions[props.linhVuc] +
           '</font></b></td>\
         </tr>\
         <tr>\
           <th scope="row">\
-          <td><b>Tiêu đề:</b></td><td colspan=3><b>' +
+          <td><b>Tiêu đề:</b></td><td><b>' +
             props.tieuDe +
           '</b></td>\
         </tr>\
@@ -453,37 +455,36 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
           <td>Mã hồ sơ:</td><td>' +
             props.maHoSo +
           '</td>\
-          <td>Trạng thái:</td><td><b><font color="#3388ff">' +            
-          this.TrangThaiNameOptions[props.trangThai] +
-          '</font></b></td>\
         </tr>\
         <tr>\
           <th scope="row">\
-          <td>Người ' +
-            type +
-          ':</td><td>' +
-            props.nguoiNopDon +
-          '</td>\
-          <td>Số ĐT:</td><td>' +
-            props.dienThoai +
-          '</td>\
+          <td>Người ' + type + ':</td><td><b>' +            
+             props.nguoiNopDon +
+          '</b></td>\
         </tr>\
         <tr>\
           <th scope="row">\
           <td>Ngày nhận đơn:</td><td>' +
             format(new Date(props.thoiGianTiepNhan), 'dd/MM/yyyy HH:mm') +
-          '</td><td>Ngày hẹn trả KQ:</td><td>' +
+          '</td>\
+        </tr>\
+        <tr>\
+          <th scope="row">\
+          <td>Ngày hẹn trả KQ:</td><td>' +
             format(new Date(props.thoiGianHenTraKQ), 'dd/MM/yyyy HH:mm') +
           '</td>\
         </tr>\
         <tr>\
           <th scope="row">\
-          <td>Số thửa:</td><td>' +
-            props.soThua +
-          '</td>\
-          <td>Tờ BĐ:</td><td>' +
-            props.toBanDo +
-          '</td>\
+          <td>Trạng thái:</td><td><font color="#3388ff">' +
+            this.TrangThaiNameOptions[props.trangThai] +
+          '</font></td>\
+        </tr>\
+        <tr>\
+          <th scope="row">\
+          <td>Kết luận:</td><td><font color="#3388ff">' +
+            this.KetquaOptions[props?.ketQua] +
+          '</font></td>\
         </tr>\
         <tr>\
           <th scope="row">\
@@ -521,6 +522,15 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.drawningBoard = new L.FeatureGroup();
     this.drawningBoard.addTo(this.map);
     //this.map.addLayer(this.drawningBoard);
+
+    // Thêm chức năng print
+    var printer = L.easyPrint({
+      title: 'In bản đồ',
+      position: 'topleft',
+      sizeModes: ['A4Landscape', 'A4Portrait'],
+      exportOnly: true,
+      hideControlContainer: true
+    }).addTo(this.map);
   }
 
   letCoordinate() {
