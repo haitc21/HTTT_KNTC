@@ -97,6 +97,7 @@ public class KNTCHttpApiHostModule : AbpModule
             });
         }
     }
+    
     private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)
     {
         string fileName = Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx");
@@ -120,6 +121,11 @@ public class KNTCHttpApiHostModule : AbpModule
         ConfigureJsonSerialize(context);
         ConfigureClock();
         ConfigureCache(configuration);
+        ConfigureSameSiteCookie(context);
+    }
+    private void ConfigureSameSiteCookie(ServiceConfigurationContext context)
+    {
+        context.Services.AddSameSiteCookiePolicy(); // cookie policy to deal with temporary browser incompatibilities
     }
     private void ConfigureCache(IConfiguration configuration)
     {
@@ -184,6 +190,7 @@ public class KNTCHttpApiHostModule : AbpModule
                 bundle =>
                 {
                     bundle.AddFiles("/global-styles.css");
+                    bundle.AddFiles("/login.css");
                 }
             );
         });
@@ -303,6 +310,9 @@ public class KNTCHttpApiHostModule : AbpModule
         app.UseStaticFiles();
         app.UseRouting();
         app.UseCors();
+
+        app.UseCookiePolicy();
+
         app.UseAuthentication();
         app.UseAbpOpenIddictValidation();
 

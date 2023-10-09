@@ -1,15 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authentication;
 using Volo.Abp.Account.Web.Pages.Account;
+using Microsoft.Extensions.Options;
 
 namespace KNTC.Pages.Account;
 
 public class CustomLoginModel : LoginModel
 {
     public CustomLoginModel(
-    Microsoft.AspNetCore.Authentication.IAuthenticationSchemeProvider schemeProvider,
-    Microsoft.Extensions.Options.IOptions<Volo.Abp.Account.Web.AbpAccountOptions> accountOptions,
-    Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Identity.IdentityOptions> identityOptions)
+    IAuthenticationSchemeProvider schemeProvider,
+    IOptions<Volo.Abp.Account.Web.AbpAccountOptions> accountOptions,
+    IOptions<IdentityOptions> identityOptions)
         : base(schemeProvider, accountOptions, identityOptions)
     {
     }
