@@ -41,6 +41,7 @@
     "date-fns": "2.21.1",
     "leaflet": "latest",
     "leaflet-draw": "1.0.4",
+    "leaflet-easyprint": "^2.1.9",
     "leaflet.locatecontrol": "latest",
     "leaflet.markercluster": "^1.5.3",
     "leaflet.markercluster.layersupport": "2.0.1",
