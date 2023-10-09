@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,6 +42,7 @@ using Volo.Abp.Caching;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using Volo.Abp.Json.Newtonsoft;
+using Volo.Abp.Caching.StackExchangeRedis;
 
 namespace KNTC;
 [DependsOn(
@@ -55,7 +56,8 @@ typeof(KNTCHttpApiModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpBlobStoringMinioModule),
-    typeof(AbpJsonNewtonsoftModule)
+    typeof(AbpJsonNewtonsoftModule),
+    typeof(AbpCachingStackExchangeRedisModule) // Có the không sử dụng khi là single layer. Nếu không sử dụng sẽ mặc định về ÁP.NET Memory Cache
 )]
 public class KNTCHttpApiHostModule : AbpModule
 {
