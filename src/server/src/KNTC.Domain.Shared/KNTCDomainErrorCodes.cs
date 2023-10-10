@@ -9,4 +9,5 @@ public static class KNTCDomainErrorCodes
     public const string TepDinhKemMotExist = "KNTCEx:00005";
     public const string CodeAlreadyExist = "KNTCEx:00006";
     public const string NameAlreadyExist = "KNTCEx:00007";
+    public const string ExceltemplateNotExist = "KNTCEx:00008";
 }

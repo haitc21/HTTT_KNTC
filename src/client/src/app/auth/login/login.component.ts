@@ -116,8 +116,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           )
         ) {
           errorMsg = this.localizationService.instant('AbpAccount::UserLockedOutMessage');
+        } else if (errorMsg.includes('Your account is inactive')) {
+          errorMsg = 'Tài khoản của bạn chưa được kích hoạt. Vui lòng liên hệ quản trị viên!';
         }
-        this.notificationService.showError(errorMsg);
+        this.notificationService.showWarn(errorMsg);
         this.layoutService.blockUI$.next(false);
       }
     );

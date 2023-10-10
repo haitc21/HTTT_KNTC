@@ -1,8 +1,13 @@
 {
   "culture": "en",
   "texts": {
-    "Menu:Home": "Home",
-    "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
+    "KNTCEx:00001": "Code '{maHoSo}' already exists",
+    "KNTCEx:00002": "Case resolution already exists",
+    "KNTCEx:00003": "Case resolution result does not exist",
+    "KNTCEx:00004": "Document '{tenTaiLieu}' already exists in case '{maHoSo}'",
+    "KNTCEx:00005": "Attached file for the case does not exist",
+    "KNTCEx:00006": "Code '{code}' already exists",
+    "KNTCEx:00007": "Name '{name}' already exists",
+    "KNTCEx:00008": "Excel template does not exist"
   }
 }

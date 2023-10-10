@@ -7,6 +7,7 @@
     "KNTCEx:00004": "Tên tài liệu '{tenTaiLieu}' đã tồn tại trong hồ sơ '{maHoSo}'",
     "KNTCEx:00005": "Tệp đính kèm hồ sơ không tồn tại",
     "KNTCEx:00006": "Mã '{code}'' đã tồn tại",
-    "KNTCEx:00007": "Tên'{name}'' đã tồn tại"
+    "KNTCEx:00007": "Tên'{name}'' đã tồn tại",
+    "KNTCEx:00008": "Template Excel không tồn tại"
   }
 }

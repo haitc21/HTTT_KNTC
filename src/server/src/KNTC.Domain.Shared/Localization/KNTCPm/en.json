@@ -1,8 +1,72 @@
 {
   "culture": "en",
   "texts": {
-    "Menu:Home": "Home",
-    "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
+    // Roles
+    "Permission:AbpIdentity.RolesGr": "Roles",
+    "Permission:AbpIdentity.Roles": "View Roles List",
+    "Permission:AbpIdentity.Roles.Create": "Add Role",
+    "Permission:AbpIdentity.Roles.Update": "Edit Role",
+    "Permission:AbpIdentity.Roles.Delete": "Delete Role",
+    "Permission:AbpIdentity.Roles.ManagePermissions": "Manage Role Permissions",
+    // Users
+    "Permission:AbpIdentity.UsersGr": "Users",
+    "Permission:AbpIdentity.Users": "View Users List",
+    "Permission:AbpIdentity.Users.Create": "Add User",
+    "Permission:AbpIdentity.Users.Update": "Edit User",
+    "Permission:AbpIdentity.Users.Delete": "Delete User",
+    "Permission:AbpIdentity.Users.ManagePermissions": "Manage User Permissions",
+    // Complaints
+    "Permission:ComplainsGr": "Complaints",
+    "Permission:Complains": "View Complaints List",
+    "Permission:Complains.Create": "Add Complaint",
+    "Permission:Complains.Edit": "Edit Complaint",
+    "Permission:Complains.Delete": "Delete Complaint",
+    "Permission:Complains.VuewPrivateInfo": "View Sensitive Complaint Information",
+    // Denunciations
+    "Permission:DenouncesGr": "Denunciations",
+    "Permission:Denounces": "View Denunciations List",
+    "Permission:Denounces.Create": "Add Denunciation",
+    "Permission:Denounces.Edit": "Edit Denunciation",
+    "Permission:Denounces.Delete": "Delete Denunciation",
+    "Permission:Denounces.VuewPrivateInfo": "View Sensitive Denunciation Information",
+    // Document Type
+    "Permission:DocumentTypeGr": "Document Types",
+    "Permission:DocumentTypes": "View Document Types List",
+    "Permission:DocumentTypes.Create": "Add Document Type",
+    "Permission:DocumentTypes.Edit": "Edit Document Type",
+    "Permission:DocumentTypes.Delete": "Delete Document Type",
+    // Land Type
+    "Permission:LandTypeGr": "Land Types",
+    "Permission:LandTypes": "View Land Types List",
+    "Permission:LandTypes.Create": "Add Land Type",
+    "Permission:LandTypes.Edit": "Edit Land Type",
+    "Permission:LandTypes.Delete": "Delete Land Type",
+    // Unit
+    "Permission:UnitGr": "Locations",
+    "Permission:Units": "View Locations List",
+    "Permission:Units.Create": "Add Location",
+    "Permission:Units.Edit": "Edit Location",
+    "Permission:Units.Delete": "Delete Location",
+    // Unit Type
+    "Permission:UnitTypeGr": "Location Types",
+    "Permission:UnitTypes": "View Location Types List",
+    "Permission:UnitTypes.Create": "Add Location Type",
+    "Permission:UnitTypes.Edit": "Edit Location Type",
+    "Permission:UnitTypes.Delete": "Delete Location Type",
+    // GeoServer
+    "Permission:GeoServerGr": "Map Planning Management",
+    "Permission:GeoServesrs": "Map Planning Management",
+    // Base Maps
+    "Permission:BaseMapGr": "Base Maps",
+    "Permission:BaseMaps": "View Base Maps List",
+    "Permission:BaseMaps.Create": "Add Base Map",
+    "Permission:BaseMaps.Edit": "Edit Base Map",
+    "Permission:BaseMaps.Delete": "Delete Base Map",
+    // Config
+    "Permission:SysConfigGr": "System Configuration",
+    "Permission:SysConfigs": "System Configuration",
+    "Permission:SysConfigs.Create": "Add System Configuration",
+    "Permission:SysConfigs.Edit": "Edit System Configuration",
+    "Permission:SysConfigs.Delete": "Delete System Configuration"
   }
 }
