@@ -22,6 +22,7 @@ import { UserDto, UsersService } from '@proxy/users';
 import { ChangePasswordComponent } from 'src/app/system/user/change-password/change-password.component';
 import { RegisterComponent } from 'src/app/system/user/register/register.component';
 import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
+import { ChangePasswordInput } from '@proxy/volo/abp/account';
 @Component({
   selector: 'app-topbar',
   templateUrl: './app.topbar.component.html',
@@ -344,6 +345,11 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
       },
       header: `Đổi mật khẩu`,
       width: DIALOG_SM,
+    });
+    ref.onClose.subscribe((data: ChangePasswordInput) => {
+      if (data) {
+        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
+      }
     });
   }
   ngOnDestroy(): void {
