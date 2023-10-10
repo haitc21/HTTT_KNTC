@@ -21,6 +21,7 @@ import { SysConfigConsts } from 'src/app/_shared/constants/sys-config.consts';
 import { UserDto, UsersService } from '@proxy/users';
 import { ChangePasswordComponent } from 'src/app/system/user/change-password/change-password.component';
 import { RegisterComponent } from 'src/app/system/user/register/register.component';
+import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
 @Component({
   selector: 'app-topbar',
   templateUrl: './app.topbar.component.html',
@@ -144,7 +145,7 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
         // icon: 'pi pi-sign-out',
         command: event => {
           this.oAuthService.logOut();
-          // window.location.reload();
+          window.location.reload(); // login in angular
         },
       },
     ];
@@ -283,9 +284,11 @@ export class AppTopBarComponent implements OnInit, OnDestroy {
     ];
   }
   login() {
-    // this.router.navigate([LOGIN_URL, this.router.url]);
-    this.layoutService.blockUI$.next(true);
-    this.authService.navigateToLogin();
+    // login in angular
+    this.router.navigate([LOGIN_URL, this.router.url]);
+    //login in auth server
+    // this.layoutService.blockUI$.next(true);
+    // this.authService.navigateToLogin();
   }
   register() {
     const ref = this.dialogService.open(RegisterComponent, {

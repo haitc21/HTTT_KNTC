@@ -38,7 +38,8 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
-  // { path: 'account/login', redirectTo: 'auth/login', pathMatch: 'full' },
+  // login in angular
+  { path: 'account/login', redirectTo: 'auth/login', pathMatch: 'full' },
   {
     path: '**',
     loadChildren: () => import('./auth/error/error.module').then(m => m.ErrorModule),
