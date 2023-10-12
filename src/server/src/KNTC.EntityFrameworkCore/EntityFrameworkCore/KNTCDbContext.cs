@@ -345,7 +345,9 @@ public class KNTCDbContext :
             b.Property(x => x.Status).IsRequired().HasDefaultValue(Status.Active);
 
             b.HasIndex(x => x.UnitTypeId);
+            b.HasIndex(x => x.ParentId);
             b.HasIndex(u => new { u.UnitTypeId, u.ParentId });
+            b.HasMany<Unit>().WithOne().HasForeignKey(ou => ou.ParentId);
         });
 
         builder.Entity<UnitType>(b =>
