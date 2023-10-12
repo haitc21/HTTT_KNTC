@@ -12,8 +12,8 @@ public enum LinhVuc
     TatCa = 0,
     DatDai = 1,
     MoiTruong = 2,
-    TaiNguyenNuoc = 3,
-    KhoangSan = 4
+    KhoangSan = 3,
+    TaiNguyenNuoc = 4
 }
 
 public enum LoaiKetQua

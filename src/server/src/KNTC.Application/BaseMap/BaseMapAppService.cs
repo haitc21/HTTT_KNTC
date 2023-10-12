@@ -69,7 +69,6 @@ public class BaseMapAppService : CrudAppService<
             ObjectMapper.Map<List<BaseMap>, List<BaseMapDto>>(queryResult)
         );
     }
-
     
     public async Task<ListResultDto<BaseMapLookupDto>> GetLookupAsync()
     {

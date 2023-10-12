@@ -44,10 +44,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\login.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Pages\Index.cshtml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
