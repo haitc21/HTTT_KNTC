@@ -3,6 +3,7 @@ using System;
 using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -13,9 +14,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace KNTC.Migrations
 {
     [DbContext(typeof(KNTCDbContext))]
-    partial class KNTCDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231013030535_remove_col_tinh-trang")]
+    partial class remove_col_tinhtrang
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,37 +29,13 @@ namespace KNTC.Migrations
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.HasSequence("Sequence-BaseMap")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("Sequence-DocumentType")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("Sequence-History")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("Sequence-LandType")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("Sequence-SpatialData")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("Sequence-SysConfig")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("Sequence-Unit")
-                .IncrementsBy(10);
-
-            modelBuilder.HasSequence("Sequence-UnitType")
-                .IncrementsBy(10);
-
             modelBuilder.Entity("KNTC.BaseMaps.BaseMap", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "Sequence-BaseMap");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BaseMapCode")
                         .IsRequired()
@@ -117,7 +96,7 @@ namespace KNTC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "Sequence-UnitType");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -688,7 +667,7 @@ namespace KNTC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "Sequence-DocumentType");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -863,7 +842,7 @@ namespace KNTC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "Sequence-History");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("GhiChu")
                         .HasMaxLength(250)
@@ -901,7 +880,7 @@ namespace KNTC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "Sequence-LandType");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -962,7 +941,7 @@ namespace KNTC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "Sequence-SpatialData");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CccdCmnd")
                         .IsRequired()
@@ -1101,8 +1080,7 @@ namespace KNTC.Migrations
                         .HasColumnName("loai_vu_viec");
 
                     b.Property<bool>("LuuTru")
-                        .HasColumnType("boolean")
-                        .HasColumnName("luu_tru");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("MaHoSo")
                         .IsRequired()
@@ -1164,7 +1142,7 @@ namespace KNTC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "Sequence-SysConfig");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -1218,7 +1196,7 @@ namespace KNTC.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "Sequence-Unit");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()

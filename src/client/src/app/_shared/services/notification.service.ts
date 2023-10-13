@@ -10,7 +10,7 @@ export class NotificationService {
   }
 
   showError(message: string) {
-    this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: message });
+    this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: message, life: 5000 });
   }
 
   showWarn(message: string) {

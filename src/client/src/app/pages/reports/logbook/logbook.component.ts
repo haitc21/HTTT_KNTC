@@ -52,7 +52,7 @@ export class LogBookComponent implements OnInit, OnDestroy {
   maXa: number;
   thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
-  tinhTrang: number;
+  ketQua: number;
   congKhai: boolean | null;
   trangThai: number;
   // option
@@ -113,7 +113,7 @@ export class LogBookComponent implements OnInit, OnDestroy {
     this.maXa = null;
     this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
-    this.tinhTrang = null;
+    this.ketQua = null;
     this.trangThai = null;
   }
 
@@ -232,7 +232,7 @@ export class LogBookComponent implements OnInit, OnDestroy {
         this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
-      ketQua: this.tinhTrang,
+      ketQua: this.ketQua,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
       trangThai: this.trangThai,
       nguoiNopDon: this.nguoiNopDon
@@ -283,7 +283,7 @@ export class LogBookComponent implements OnInit, OnDestroy {
         this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
-      ketQua: this.tinhTrang,
+      ketQua: this.ketQua,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
       trangThai: this.trangThai,
       nguoiNopDon: this.nguoiNopDon,

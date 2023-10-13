@@ -53,7 +53,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   maXa: number;
   thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
-  tinhTrang: number;
+  ketQua: number;
   congKhai: boolean | null;
   trangThai: number;
   // option
@@ -114,7 +114,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.maXa = null;
     this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
-    this.tinhTrang = null;
+    this.ketQua = null;
     this.trangThai = null;
   }
 
@@ -216,7 +216,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
             ? this.thoiGianTiepNhanRange[1].toUTCString()
             : null,
         linhVuc: this.linhVuc,
-        ketQua: this.tinhTrang,
+        ketQua: this.ketQua,
         giaiDoan: this.giaiDoan,
         congKhai: this.congKhai,
         trangThai: this.trangThai,
@@ -260,7 +260,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
       linhVuc: this.linhVuc,
-      ketQua: this.tinhTrang,
+      ketQua: this.ketQua,
       giaiDoan: this.giaiDoan,
       congKhai: this.congKhai,
       trangThai: this.trangThai,

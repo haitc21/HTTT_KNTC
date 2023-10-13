@@ -10,7 +10,7 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { TrangThaiOptions, congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
 import { Chart } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { TinhTrang, tinhTrangOptions } from '@proxy';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -79,16 +79,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   waterDenounce = true;
   mineralDenounce = true;
   filter: GetSummaryListDto;
-  keyword: string = '';
-  congKhai: boolean | null;
-  maTinh: number = 24;
-  maHuyen: number;
-  maXa: number;
-  thoiGianTiepNhanRange: Date[];
-  tinhTrang: number;
 
-  loaiKQOptions = loaiKQOptions;
-  congKhaiOptions = congKhaiOptions;
   // ẩn hiện menu trái
   visibleFilterLeff = true;
   hideColumnState = 'visible';
@@ -166,7 +157,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.filter = {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
-      keyword: this.keyword,
 
       landComplain: this.landComplain,
       enviromentComplain: this.enviromentComplain,
@@ -177,24 +167,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       waterDenounce: this.waterDenounce,
       mineralDenounce: this.mineralDenounce,
 
-      maTinhTP: this.maTinh,
-      maQuanHuyen: this.maHuyen,
-      maXaPhuongTT: this.maXa,
-      fromDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
-      toDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-          ? this.thoiGianTiepNhanRange[1].toUTCString()
-          : null,
-      ketQua: this.tinhTrang,
-      congKhai: this.hasLoggedIn ? this.congKhai : true,
+      maTinhTP: 24,
+      congKhai: this.hasLoggedIn,
     } as GetSummaryListDto;
 
     this.summaryService
       .getList(this.filter)
-      //.getMap(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: PagedResultDto<SummaryDto>) => {

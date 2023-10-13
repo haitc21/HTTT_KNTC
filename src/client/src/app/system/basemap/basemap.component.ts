@@ -98,6 +98,7 @@ export class BaseMapComponent implements OnInit, OnDestroy {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
         this.selectedItems = [];
+        this.actionItem = null;
         this.loadData();
       }
     });
@@ -126,6 +127,7 @@ export class BaseMapComponent implements OnInit, OnDestroy {
       if (data) {
         this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
+        this.actionItem = null;
         this.loadData();
       }
     });
@@ -157,6 +159,7 @@ export class BaseMapComponent implements OnInit, OnDestroy {
           this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
           this.loadData();
           this.selectedItems = [];
+          this.actionItem = null;
           this.layoutService.blockUI$.next(false);
         },
         error: () => {
@@ -188,6 +191,7 @@ export class BaseMapComponent implements OnInit, OnDestroy {
           this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
           this.loadData();
           this.selectedItems = [];
+          this.actionItem = null;
           this.layoutService.blockUI$.next(false);
         },
         error: () => {

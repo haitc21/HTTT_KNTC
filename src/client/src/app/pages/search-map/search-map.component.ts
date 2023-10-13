@@ -108,7 +108,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   maHuyen: number;
   maXa: number;
   thoiGianTiepNhanRange: Date[];
-  tinhTrang: number;
+  ketQua: number;
   trangThai: number;
 
   // option
@@ -207,7 +207,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
-      ketQua: this.tinhTrang,
+      ketQua: this.ketQua,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
       trangThai: this.trangThai,
       nguoiNopDon: this.nguoiNopDon
@@ -282,7 +282,7 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
-      ketQua: this.tinhTrang,
+      ketQua: this.ketQua,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
       trangThai: this.trangThai,
       nguoiNopDon: this.nguoiNopDon,

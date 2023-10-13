@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Reflection.Emit;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -106,6 +107,7 @@ public class KNTCDbContext :
         builder.ConfigureFeatureManagement();
         builder.ConfigureTenantManagement();
 
+
         builder.Entity<UserInfo>(b =>
         {
             b.ToTable(KNTCConsts.DbTablePrefix + "UserInfos");
@@ -127,7 +129,7 @@ public class KNTCDbContext :
             b.HasIndex(x => x.LinhVuc);
             b.HasIndex(x => new { x.ThoiGianTiepNhan, x.MaHoSo });
             b.HasIndex(x => x.TrangThai);
-            b.HasIndex(x => x.TinhTrang);
+            //b.HasIndex(x => x.TinhTrang);
 
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
@@ -185,9 +187,9 @@ public class KNTCDbContext :
             b.Property(x => x.TrangThai)
              .HasColumnName("trang_thai")
              .HasDefaultValue(TrangThai.TiepNhan);
-            b.Property(x => x.TinhTrang)
-             .HasColumnName("tinh_trang")
-             .HasDefaultValue(TinhTrang.ChuaXuLy);
+            //b.Property(x => x.TinhTrang)
+            // .HasColumnName("tinh_trang")
+            // .HasDefaultValue(TinhTrang.ChuaXuLy);
         });
 
         builder.Entity<Denounce>(b =>
@@ -199,7 +201,7 @@ public class KNTCDbContext :
             b.HasIndex(x => x.LinhVuc);
             b.HasIndex(x => new { x.ThoiGianTiepNhan, x.MaHoSo });
             b.HasIndex(x => x.TrangThai);
-            b.HasIndex(x => x.TinhTrang);
+            //b.HasIndex(x => x.TinhTrang);
 
             b.Property(x => x.MaHoSo).IsRequired().HasColumnName("ma_ho_so").HasMaxLength(KNTCValidatorConsts.MaxMaHoSoLength);
             b.Property(x => x.LinhVuc).IsRequired().HasColumnName("linh_vuc");
@@ -255,9 +257,9 @@ public class KNTCDbContext :
             b.Property(x => x.TrangThai)
             .HasColumnName("trang_thai")
             .HasDefaultValue(TrangThai.TiepNhan);
-            b.Property(x => x.TinhTrang)
-             .HasColumnName("tinh_trang")
-             .HasDefaultValue(TinhTrang.ChuaXuLy);
+            //b.Property(x => x.TinhTrang)
+            // .HasColumnName("tinh_trang")
+            // .HasDefaultValue(TinhTrang.ChuaXuLy);
         });
 
         builder.Entity<FileAttachment>(b =>
@@ -289,7 +291,7 @@ public class KNTCDbContext :
         {
             b.ToTable("DocumentTypes", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(DocumentType)}");
             b.Property(x => x.DocumentTypeCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
             b.Property(x => x.DocumentTypeName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
@@ -305,7 +307,7 @@ public class KNTCDbContext :
         {
             b.ToTable("LandTypes", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(LandType)}");
             b.Property(x => x.LandTypeCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
             b.Property(x => x.LandTypeName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
@@ -326,7 +328,7 @@ public class KNTCDbContext :
         {
             b.ToTable("BaseMaps", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(BaseMap)}");
             b.Property(x => x.BaseMapCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
             b.Property(x => x.BaseMapName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
@@ -337,7 +339,7 @@ public class KNTCDbContext :
         {
             b.ToTable("Units", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(Unit)}");
             b.Property(x => x.UnitCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
             b.Property(x => x.UnitName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
             b.Property(x => x.ShortName).HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
@@ -354,7 +356,7 @@ public class KNTCDbContext :
         {
             b.ToTable("UnitTypes", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(UnitType)}");
             b.Property(x => x.UnitTypeCode).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxCodeLength);
             b.Property(x => x.UnitTypeName).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
@@ -371,7 +373,7 @@ public class KNTCDbContext :
             b.ToTable(KNTCConsts.DbTablePrefix + "SysConfigs");
             b.HasIndex(x => x.Name);
             b.ConfigureByConvention(); //auto configure for the base class props
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(SysConfig)}");
             b.Property(x => x.Name).IsRequired().HasMaxLength(KNTCValidatorConsts.MaxNameLength);
             b.Property(x => x.Description).HasMaxLength(KNTCValidatorConsts.MaxDescriptionLength);
         });
@@ -380,7 +382,7 @@ public class KNTCDbContext :
         {
             b.ToTable("SpatialDatas", KNTCConsts.SpatialDataDbSchema);
             b.ConfigureByConvention();
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(SpatialData)}");
             b.HasIndex(x => x.IdHoSo);
             b.Property(x => x.IdHoSo).HasColumnName("id_ho_so");
             b.Property(x => x.LoaiVuViec).HasColumnName("loai_vu_viec");
@@ -430,13 +432,14 @@ public class KNTCDbContext :
             b.Property(x => x.CongKhai).HasColumnName("cong_khai");
             b.Property(x => x.TrangThai).HasColumnName("trang_thai");
             b.Property(x => x.CccdCmnd).HasColumnName("cccd_cmnd");
+            b.Property(x => x.LuuTru).HasColumnName("luu_tru");
         });
 
         builder.Entity<History>(b =>
         {
             b.ToTable("Histories", KNTCConsts.KNTCDbSchema);
             b.ConfigureByConvention();
-            b.Property(p => p.Id).ValueGeneratedOnAdd();
+            b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(History)}");
             b.HasIndex(x => x.IdHoSo);
             b.HasIndex(x => x.LoaiVuViec);
             b.Property(x => x.IdHoSo).HasColumnName("id_ho_so");

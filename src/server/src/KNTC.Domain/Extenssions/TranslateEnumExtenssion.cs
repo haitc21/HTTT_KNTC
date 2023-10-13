@@ -19,7 +19,7 @@ public static class EnumExtensions
                 return "Có đúng, có sai";
 
             default:
-                throw new ArgumentException("Giá trị không hợp lệ");
+                return string.Empty;
         }
     }
 
@@ -41,7 +41,7 @@ public static class EnumExtensions
                 return "Khoáng sản";
 
             default:
-                throw new ArgumentException("Giá trị không hợp lệ");
+                return string.Empty;
         }
     }
 
@@ -57,7 +57,7 @@ public static class EnumExtensions
                 return "Tố cáo";
 
             default:
-                throw new ArgumentException("Giá trị không hợp lệ");
+                return string.Empty;
         }
     }
 
@@ -88,7 +88,7 @@ public static class EnumExtensions
                 return "Chuyển đơn";
 
             default:
-                throw new ArgumentException("Giá trị không hợp lệ");
+                return string.Empty;
         }
     }
 }

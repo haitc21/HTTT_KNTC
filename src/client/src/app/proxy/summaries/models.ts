@@ -96,14 +96,20 @@ export interface SummaryDto {
   linhVuc: LinhVuc;
   tieuDe?: string;
   thoiGianTiepNhan?: string;
-  thoiGianHenTraKQ?: string;
   boPhanDangXL?: string;
+  thoiGianHenTraKQ?: string;
   ketQua?: LoaiKetQua;
   duLieuToaDo?: string;
   duLieuHinhHoc?: string;
   soThua?: string;
   toBanDo?: string;
-  trangThai?: TrangThai;
+  maTinhTP: number;
+  maQuanHuyen: number;
+  maXaPhuongTT: number;
+  congKhai: boolean;
+  cccdCmnd?: string;
+  trangThai: TrangThai;
+  luuTru: boolean;
 }
 
 export interface SummaryMapDto {

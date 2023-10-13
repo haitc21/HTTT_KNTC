@@ -13,17 +13,7 @@ public class BaseMap : AuditedAggregateRoot<int>
     {
     }
 
-    public BaseMap(int id) : base(id)
-    {
-    }
-
     public BaseMap(string code, string name)
-    {
-        ChangeCode(code);
-        ChangeName(name);
-    }
-
-    public BaseMap(int id, string code, string name) : base(id)
     {
         ChangeCode(code);
         ChangeName(name);
