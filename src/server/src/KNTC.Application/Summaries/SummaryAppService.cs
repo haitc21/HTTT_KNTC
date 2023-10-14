@@ -781,7 +781,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         Random random = new Random();
         int randomNumber = random.Next(1, 11);
         var result = await _cacheChart.GetOrAddAsync(
-        $"nameof(Summary)_Chart",
+        $"{nameof(Summary)}_Chart",
         async () => await GetDataChartFromDbAsync(),
         () => new DistributedCacheEntryOptions
         {

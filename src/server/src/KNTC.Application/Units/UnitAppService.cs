@@ -1,7 +1,7 @@
 ﻿using KNTC.CategoryUnitTypes;
 using KNTC.Localization;
 using KNTC.Permissions;
-using KNTC.RedisCache;
+using KNTC.Caches;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
@@ -32,7 +32,7 @@ public class UnitAppService : CrudAppService<
     private readonly IDistributedCache<UnitLookupCache, UnitLookupByIdsKey> _cacheUnitByids;
     private readonly IDistributedCache<UnitLookupCache, UnitLookupByParentIdsKey> _cacheUnitByParentIds;
     private readonly IDistributedCache<UnitTreeLookupCache> _cacheUnitTree;
-    private readonly IRedisCacheService _cacheService;
+    private readonly IKNTCRedisCacheService _cacheService;
 
     public UnitAppService(IRepository<Unit, int> repository,
         UnitManager unitManager,
@@ -40,7 +40,7 @@ public class UnitAppService : CrudAppService<
         IDistributedCache<UnitTreeLookupCache> cacheUnitTree,
         IDistributedCache<UnitLookupCache, UnitLookupByIdsKey> cacheUnitByids,
         IDistributedCache<UnitLookupCache, UnitLookupByParentIdsKey> cacheUnitByParentIds,
-        IRedisCacheService cacheService) : base(repository)
+        IKNTCRedisCacheService cacheService) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.UnitPermission.Create;
@@ -153,7 +153,7 @@ public class UnitAppService : CrudAppService<
                                                    input.OrderIndex,
                                                    input.Status);
         await Repository.InsertAsync(entity);
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(UnitCacheKey));
+        await _cacheService.DeleteContainAsync(nameof(UnitCacheKey));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
     [Authorize(KNTCPermissions.UnitPermission.Edit)]
@@ -171,14 +171,14 @@ public class UnitAppService : CrudAppService<
                                        input.OrderIndex,
                                        input.Status);
         await Repository.UpdateAsync(entity);
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(UnitCacheKey));
+        await _cacheService.DeleteContainAsync(nameof(UnitCacheKey));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
     [Authorize(KNTCPermissions.UnitPermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
         var entity = await Repository.GetAsync(id, false);
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(UnitCacheKey));
+        await _cacheService.DeleteContainAsync(nameof(UnitCacheKey));
         await Repository.DeleteAsync(id);
     }
 
@@ -201,7 +201,7 @@ public class UnitAppService : CrudAppService<
         Random random = new Random();
         int randomNumber = random.Next(1, 11);
         var cacheItem = await _cacheUnitTree.GetOrAddAsync(
-        $"T{nameof(UnitCacheKey)}_ree_{id}",
+        $"T{nameof(UnitCacheKey)}_tree_{id}",
         async () => await GetTreeLookupFromDbAsync(id),
         () => new DistributedCacheEntryOptions
         {

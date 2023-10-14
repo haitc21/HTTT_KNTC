@@ -54,15 +54,15 @@ public enum TrangThai
 //    QuaHan = 4
 //}
 
-public enum ThaoTac
-{
-    TiepNhan = 0,
-    ThuLy = 1,
-    KetLuan = 2,
-    TraDon = 3,
-    RutDon = 4,
-    ChuyenDon = 5
-}
+//public enum ThaoTac
+//{
+//    TiepNhan = 0,
+//    ThuLy = 1,
+//    KetLuan = 2,
+//    TraDon = 3,
+//    RutDon = 4,
+//    ChuyenDon = 5
+//}
 public enum UserType : int
 {
     QuanLyTinh = 1,

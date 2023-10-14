@@ -4,7 +4,7 @@ using KNTC.Helpers;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
-using KNTC.RedisCache;
+using KNTC.Caches;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
 using KNTC.Units;
@@ -43,7 +43,7 @@ public class DenounceAppService : CrudAppService<
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
     private readonly IHostEnvironment _env;
     private readonly IRepository<Unit, int> _unitRepo;
-    private readonly IRedisCacheService _cacheService;
+    private readonly IKNTCRedisCacheService _cacheService;
     private readonly IDistributedEventBus _distributedEventBus;
     private readonly ISpatialDataRepository _spatialDataRepo;
 
@@ -56,7 +56,7 @@ public class DenounceAppService : CrudAppService<
         FileAttachmentManager fileAttachmentManager,
         IHostEnvironment env,
         IRepository<Unit, int> unitRepo,
-        IRedisCacheService cacheService,
+        IKNTCRedisCacheService cacheService,
         IDistributedEventBus distributedEventBus,
         ISpatialDataRepository spatialDataRepo) : base(repository)
     {
@@ -249,7 +249,7 @@ public class DenounceAppService : CrudAppService<
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
         }
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _cacheService.DeleteContainAsync(nameof(Summary));
         var createEto = ObjectMapper.Map<CreateDenounceDto, CreateDenounceEto>(input);
         createEto.Id = denounce.Id;
         await _distributedEventBus.PublishAsync(createEto);
@@ -307,7 +307,7 @@ public class DenounceAppService : CrudAppService<
                                           luutru: input.LuuTru,
                                           TrangThai: input.TrangThai);
         await _denounceRepo.UpdateAsync(denounce);
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _cacheService.DeleteContainAsync(nameof(Summary));
         var updateEto = ObjectMapper.Map<UpdateDenounceDto, UpdateDenounceEto>(input);
         updateEto.Id = denounce.Id;
         await _distributedEventBus.PublishAsync(updateEto);
@@ -323,7 +323,7 @@ public class DenounceAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _cacheService.DeleteContainAsync(nameof(Summary));
         await _denounceRepo.DeleteAsync(id);
         await _distributedEventBus.PublishAsync(new DeleteDenounceEto(id));
     }
@@ -337,7 +337,7 @@ public class DenounceAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _cacheService.DeleteContainAsync(nameof(Summary));
         await _denounceRepo.DeleteManyAsync(ids);
         await _distributedEventBus.PublishAsync(new DeleteMultipleDenounceEto(ids.ToList()));
     }

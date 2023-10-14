@@ -4,7 +4,7 @@ using KNTC.Complains;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.FileAttachments;
-using KNTC.Histories;
+//using KNTC.Histories;
 using KNTC.LandTypes;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
@@ -85,7 +85,7 @@ public class KNTCDbContext :
     public DbSet<SysConfig> SysConfigs { get; set; }
     public DbSet<SpatialData> SpatialDatas { get; set; }
     public DbSet<Summary> Summaries { get; set; }
-    public DbSet<History> Histories { get; set; }
+    //public DbSet<History> Histories { get; set; }
 
     public KNTCDbContext(DbContextOptions<KNTCDbContext> options)
         : base(options)
@@ -435,18 +435,18 @@ public class KNTCDbContext :
             b.Property(x => x.LuuTru).HasColumnName("luu_tru");
         });
 
-        builder.Entity<History>(b =>
-        {
-            b.ToTable("Histories", KNTCConsts.KNTCDbSchema);
-            b.ConfigureByConvention();
-            b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(History)}");
-            b.HasIndex(x => x.IdHoSo);
-            b.HasIndex(x => x.LoaiVuViec);
-            b.Property(x => x.IdHoSo).HasColumnName("id_ho_so");
-            b.Property(x => x.LoaiVuViec).HasColumnName("loai_vu_viec");
-            b.Property(x => x.ThaoTac).HasColumnName("thao_tac");
-            b.Property(x => x.NguoithucHien).HasColumnName("nguoi_thuc_hien");
-            b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
-        });
+        //builder.Entity<History>(b =>
+        //{
+        //    b.ToTable("Histories", KNTCConsts.KNTCDbSchema);
+        //    b.ConfigureByConvention();
+        //    b.Property(p => p.Id).UseHiLo($"Sequence-{nameof(History)}");
+        //    b.HasIndex(x => x.IdHoSo);
+        //    b.HasIndex(x => x.LoaiVuViec);
+        //    b.Property(x => x.IdHoSo).HasColumnName("id_ho_so");
+        //    b.Property(x => x.LoaiVuViec).HasColumnName("loai_vu_viec");
+        //    b.Property(x => x.ThaoTac).HasColumnName("thao_tac");
+        //    b.Property(x => x.NguoithucHien).HasColumnName("nguoi_thuc_hien");
+        //    b.Property(x => x.GhiChu).HasColumnName("ghi_chu").HasMaxLength(KNTCValidatorConsts.MaxGhiChuLength);
+        //});
     }
 }

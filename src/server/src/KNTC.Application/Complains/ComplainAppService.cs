@@ -4,7 +4,7 @@ using KNTC.Helpers;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
-using KNTC.RedisCache;
+using KNTC.Caches;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
 using KNTC.Units;
@@ -43,7 +43,7 @@ public class ComplainAppService : CrudAppService<
     private readonly IBlobContainer<FileAttachmentContainer> _blobContainer;
     private readonly IHostEnvironment _env;
     private readonly IRepository<Unit, int> _unitRepo;
-    private readonly IRedisCacheService _cacheService;
+    private readonly IKNTCRedisCacheService _cacheService;
     private readonly IDistributedEventBus _distributedEventBus;
     private readonly ISpatialDataRepository _spatialDataRepo;
 
@@ -56,7 +56,7 @@ public class ComplainAppService : CrudAppService<
         FileAttachmentManager fileAttachmentManager,
         IHostEnvironment env,
         IRepository<Unit, int> unitRepo,
-        IRedisCacheService cacheService,
+        IKNTCRedisCacheService cacheService,
         IDistributedEventBus distributedEventBus,
         ISpatialDataRepository spatialDataRepo) : base(repository)
     {
@@ -256,7 +256,7 @@ public class ComplainAppService : CrudAppService<
                 result.FileAttachments.Add(ObjectMapper.Map<FileAttachment, FileAttachmentDto>(fileAttach));
             }
         }
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _cacheService.DeleteContainAsync(nameof(Summary));
         var createEto = ObjectMapper.Map<CreateComplainDto, CreateComplainEto>(input);
         createEto.Id = complain.Id;
         await _distributedEventBus.PublishAsync(createEto);
@@ -315,7 +315,7 @@ public class ComplainAppService : CrudAppService<
                                           ketQua1: input.KetQua1,
                                           ketQua2: input.KetQua2);
         await _complainRepo.UpdateAsync(complain);
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _cacheService.DeleteContainAsync(nameof(Summary));
         var updateEto = ObjectMapper.Map<UpdateComplainDto, UpdateComplainEto>(input);
         updateEto.Id = complain.Id;
         await _distributedEventBus.PublishAsync(updateEto);
@@ -331,7 +331,7 @@ public class ComplainAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _cacheService.DeleteContainAsync(nameof(Summary));
         await _distributedEventBus.PublishAsync(new DeleteComplainEto(id));
         await _complainRepo.DeleteAsync(id);
     }
@@ -345,7 +345,7 @@ public class ComplainAppService : CrudAppService<
         {
             await _blobContainer.DeleteAsync(item.ToString());
         }
-        await _cacheService.DeleteCacheKeysSContainAsync(nameof(Summary));
+        await _cacheService.DeleteContainAsync(nameof(Summary));
         await _distributedEventBus.PublishAsync(new DeleteMultipleComplainEto(ids.ToList()));
         await _complainRepo.DeleteManyAsync(ids);
     }
