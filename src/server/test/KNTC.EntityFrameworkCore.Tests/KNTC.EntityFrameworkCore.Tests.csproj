@@ -11,11 +11,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\KNTC.EntityFrameworkCore\KNTC.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\KNTC.TestBase\KNTC.TestBase.csproj" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="7.3.3" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="7.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
   </ItemGroup>
 
 </Project>

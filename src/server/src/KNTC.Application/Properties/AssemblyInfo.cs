@@ -1,3 +1,2 @@
 ﻿using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleToAttribute("KNTC.Application.Tests")]
+[assembly:InternalsVisibleToAttribute("KNTC.Application.Tests")]
