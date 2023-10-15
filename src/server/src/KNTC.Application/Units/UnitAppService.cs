@@ -156,6 +156,7 @@ public class UnitAppService : CrudAppService<
         await _cacheService.DeleteContainAsync(nameof(UnitCacheKey));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
+
     [Authorize(KNTCPermissions.UnitPermission.Edit)]
     public override async Task<UnitDto> UpdateAsync(int id, CreateAndUpdateUnitDto input)
     {
@@ -174,6 +175,7 @@ public class UnitAppService : CrudAppService<
         await _cacheService.DeleteContainAsync(nameof(UnitCacheKey));
         return ObjectMapper.Map<Unit, UnitDto>(entity);
     }
+
     [Authorize(KNTCPermissions.UnitPermission.Delete)]
     public override async Task DeleteAsync(int id)
     {

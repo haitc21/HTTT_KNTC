@@ -289,7 +289,8 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
       'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
 
     const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
+      maxNativeZoom: 19, // OSM max available zoom is at 19.
+    maxZoom: 22, // Match the map maxZoom, or leave map.options.maxZoom undefined.
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(this.map);
 

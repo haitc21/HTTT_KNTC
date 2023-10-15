@@ -92,6 +92,7 @@ public class LandTypeAppService : CrudAppService<
         return new ListResultDto<LandTypeLookupDto>(cacheItem.Items);
     }
 
+    [Authorize(KNTCPermissions.LandTypePermission.Create)]
     public override async Task<LandTypeDto> CreateAsync(CreateAndUpdateLandTypeDto input)
     {
         var entity = await _landTypeManager.CreateAsync(input.LandTypeCode.Trim(),
@@ -104,6 +105,7 @@ public class LandTypeAppService : CrudAppService<
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.LandTypePermission.Edit)]
     public override async Task<LandTypeDto> UpdateAsync(int id, CreateAndUpdateLandTypeDto input)
     {
         var entity = await Repository.GetAsync(id, false);
@@ -119,6 +121,7 @@ public class LandTypeAppService : CrudAppService<
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.LandTypePermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);

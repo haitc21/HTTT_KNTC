@@ -91,6 +91,7 @@ public class DocumentTypeAppService : CrudAppService<
         return new ListResultDto<DocumentTypeLookupDto>(cacheItem.Items);
     }
 
+    [Authorize(KNTCPermissions.DocumentTypePermission.Create)]
     public override async Task<DocumentTypeDto> CreateAsync(CreateAndUpdateDocumentTypeDto input)
     {
         var entity = await _documentTypeManager.CreateAsync(input.DocumentTypeCode.Trim(),
@@ -103,6 +104,7 @@ public class DocumentTypeAppService : CrudAppService<
         return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.DocumentTypePermission.Edit)]
     public override async Task<DocumentTypeDto> UpdateAsync(int id, CreateAndUpdateDocumentTypeDto input)
     {
         var entity = await Repository.GetAsync(id, false);
@@ -118,6 +120,7 @@ public class DocumentTypeAppService : CrudAppService<
         return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.DocumentTypePermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);

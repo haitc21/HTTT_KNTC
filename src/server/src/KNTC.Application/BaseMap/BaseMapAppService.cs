@@ -69,7 +69,7 @@ public class BaseMapAppService : CrudAppService<
             ObjectMapper.Map<List<BaseMap>, List<BaseMapDto>>(queryResult)
         );
     }
-    
+
     public async Task<ListResultDto<BaseMapLookupDto>> GetLookupAsync()
     {
         Random random = new Random();
@@ -90,6 +90,7 @@ public class BaseMapAppService : CrudAppService<
         return new ListResultDto<BaseMapLookupDto>(cacheItem.Items);
     }
 
+    [Authorize(KNTCPermissions.BaseMapPermission.Create)]
     public override async Task<BaseMapDto> CreateAsync(CreateAndUpdateBaseMapDto input)
     {
         var entity = await _BaseMapManager.CreateAsync(input.BaseMapCode.Trim(),
@@ -102,6 +103,7 @@ public class BaseMapAppService : CrudAppService<
         return ObjectMapper.Map<BaseMap, BaseMapDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.BaseMapPermission.Edit)]
     public override async Task<BaseMapDto> UpdateAsync(int id, CreateAndUpdateBaseMapDto input)
     {
         var entity = await Repository.GetAsync(id, false);
@@ -117,6 +119,7 @@ public class BaseMapAppService : CrudAppService<
         return ObjectMapper.Map<BaseMap, BaseMapDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.BaseMapPermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);

@@ -94,6 +94,7 @@ public class UnitTypeAppService : CrudAppService<
         return new ListResultDto<UnitTypeLookupDto>(cacheItem.Items);
     }
 
+    [Authorize(KNTCPermissions.UnitTypePermission.Create)]
     public override async Task<UnitTypeDto> CreateAsync(CreateAndUpdateUnitTypeDto input)
     {
         var entity = await _unitTypeManager.CreateAsync(input.UnitTypeCode.Trim(),
@@ -106,6 +107,7 @@ public class UnitTypeAppService : CrudAppService<
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.UnitTypePermission.Edit)]
     public override async Task<UnitTypeDto> UpdateAsync(int id, CreateAndUpdateUnitTypeDto input)
     {
         var entity = await Repository.GetAsync(id, false);
@@ -121,6 +123,7 @@ public class UnitTypeAppService : CrudAppService<
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.UnitTypePermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);
