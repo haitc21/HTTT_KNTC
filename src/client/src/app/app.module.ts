@@ -7,7 +7,6 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AppLayoutModule } from './layout/app.layout.module';
 import { APP_ROUTE_PROVIDER } from './route.provider';
 import { MessageService } from 'primeng/api';
 import { NotificationService } from './_shared/services/notification.service';
@@ -27,7 +26,6 @@ import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { PanelModule } from 'primeng/panel';
 import { CommonModule } from '@angular/common';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
 
 @NgModule({
   imports: [
@@ -35,7 +33,6 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AppLayoutModule,
     CoreModule.forRoot({
       environment,
       registerLocaleFn: registerLocale(
@@ -52,7 +49,7 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
     ToastModule,
     BlockUIModule,
     ProgressSpinnerModule,
-    PanelModule
+    PanelModule,
   ],
   declarations: [AppComponent],
   providers: [

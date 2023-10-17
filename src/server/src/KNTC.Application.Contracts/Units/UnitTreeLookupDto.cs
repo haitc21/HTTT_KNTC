@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Volo.Abp.Caching;
 
 namespace KNTC.Units;
@@ -10,6 +8,7 @@ public class UnitTreeLookupCache
 {
     public List<UnitTreeLookupDto> Items { get; set; }
 }
+
 public class UnitTreeLookupDto
 {
     public int Id { get; set; }

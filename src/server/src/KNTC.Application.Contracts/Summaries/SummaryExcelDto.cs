@@ -18,6 +18,6 @@ public class SummaryExcelDto
     public string BoPhanDangXL { get; set; }
     public string TrangThai { get; set; }
     public string KetQua { get; set; }
-    
+
     //public string? GhiChu { get; set; } = "";
 }

@@ -1,11 +1,9 @@
 ﻿using KNTC.Complains;
 using KNTC.Denounces;
 using KNTC.NPOI;
-using KNTC.Permissions;
 using KNTC.Units;
 using KNTC.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Hosting;
 using NPOI.SS.UserModel;
@@ -65,7 +63,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         else
         {
-            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
@@ -104,7 +102,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
                     .Skip(input.SkipCount)
                     .Take(input.MaxResultCount);
         var result = await AsyncExecuter.ToListAsync(query);
-        
+
         return new PagedResultDto<SummaryDto>(
             totalCount,
             ObjectMapper.Map<List<Summary>, List<SummaryDto>>(result)
@@ -122,7 +120,6 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            
         });
         return cacheItem.Items;
     }
@@ -138,7 +135,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         else
         {
-            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
@@ -190,7 +187,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         else
         {
-            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
@@ -399,7 +396,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         else
         {
-            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
@@ -606,7 +603,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
         else
         {
-            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
@@ -775,7 +772,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
         }
     }
 
-    // 
+    //
     public async Task<SummaryChartDto> GetChartAsync()
     {
         Random random = new Random();
@@ -862,7 +859,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             result.DenounceByStatus[i] = await _denounceRepo.CountAsync(x => x.TrangThai == t);
             i++;
         }
-        
+
         return result;
     }
 }

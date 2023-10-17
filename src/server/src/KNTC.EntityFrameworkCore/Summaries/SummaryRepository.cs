@@ -1,14 +1,10 @@
-﻿using KNTC.Complains;
-using KNTC.Denounces;
-using KNTC.EntityFrameworkCore;
+﻿using KNTC.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace KNTC.Summaries;
@@ -21,6 +17,7 @@ public class SummaryRepository : ISummaryRepository, ITransientDependency
     {
         _dbContextProvider = dbContextProvider;
     }
+
     public async Task<IQueryable<Summary>> GetListAsync(LoaiVuViec? loaiVuViec,
                                                     LinhVuc? linhVuc,
                                                     bool landComplain,

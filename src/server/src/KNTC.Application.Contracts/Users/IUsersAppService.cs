@@ -37,6 +37,8 @@ public interface IUsersAppService
     Task<string> UploadAvatarAsync(IFormFile file);
 
     Task<byte[]> GetAvatarAsync(Guid? userId);
+
     Task ChangePasswordAsync(ChangePasswordInput input);
+
     Task<IdentityUserDto> RegisterAsync(CreateAndUpdateUserDto input);
 }

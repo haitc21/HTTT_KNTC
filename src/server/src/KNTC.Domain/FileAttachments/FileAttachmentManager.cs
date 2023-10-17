@@ -1,7 +1,6 @@
 ﻿using KNTC.Complains;
 using KNTC.Denounces;
 using System;
-using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Volo.Abp;

@@ -19,7 +19,6 @@ public class KNTCTestBaseModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
-
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)

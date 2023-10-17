@@ -1,7 +1,6 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
@@ -69,7 +68,7 @@ public class DocumentTypeAppService : CrudAppService<
         );
     }
 
-    // 
+    //
     public async Task<ListResultDto<DocumentTypeLookupDto>> GetLookupAsync()
     {
         Random random = new Random();
@@ -85,7 +84,6 @@ public class DocumentTypeAppService : CrudAppService<
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            
         });
 
         return new ListResultDto<DocumentTypeLookupDto>(cacheItem.Items);

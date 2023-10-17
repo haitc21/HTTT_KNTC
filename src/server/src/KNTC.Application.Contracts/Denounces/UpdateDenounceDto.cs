@@ -137,6 +137,7 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
 
     [Required]
     public bool CongKhai { get; set; }
+
     public bool LuuTru { get; set; }
 
     [Required]

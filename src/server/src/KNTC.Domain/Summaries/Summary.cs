@@ -1,5 +1,4 @@
 ﻿using System;
-using Volo.Abp.Domain.Entities;
 
 namespace KNTC.Summaries;
 
@@ -27,6 +26,7 @@ public class Summary
     public bool CongKhai { get; set; }
     public string CccdCmnd { get; set; }
     public TrangThai TrangThai { get; set; }
+
     //public TinhTrang TinhTrang { get; set; }
     public bool LuuTru { get; set; }
 }

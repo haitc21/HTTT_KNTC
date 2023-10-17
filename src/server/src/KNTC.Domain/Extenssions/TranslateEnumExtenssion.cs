@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KNTC.Extenssions;
+﻿namespace KNTC.Extenssions;
 
 public static class EnumExtensions
 {

@@ -1,10 +1,10 @@
-﻿using KNTC.Extenssions;
+﻿using KNTC.Caches;
+using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Helpers;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
-using KNTC.Caches;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
 using KNTC.Units;
@@ -98,7 +98,6 @@ public class ComplainAppService : CrudAppService<
                     geometry = spatialData.Geometry
                 });
             }
-
         }
         return result;
     }
@@ -115,7 +114,7 @@ public class ComplainAppService : CrudAppService<
         }
         else
         {
-            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
@@ -172,7 +171,7 @@ public class ComplainAppService : CrudAppService<
                 && (input.NguoiNopDon.IsNullOrEmpty()
                     || (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon))
                 && (
-                userType == UserType.QuanLyTinh || managedUnitIds.IsNullOrEmpty() 
+                userType == UserType.QuanLyTinh || managedUnitIds.IsNullOrEmpty()
                 || (userType == null && x.CongKhai)
                 || (userType == UserType.QuanLyHuyen && managedUnitIds.Contains(x.MaQuanHuyen))
                 || (userType == UserType.QuanLyXa && managedUnitIds.Contains(x.MaXaPhuongTT))
@@ -362,7 +361,7 @@ public class ComplainAppService : CrudAppService<
         }
         else
         {
-            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {

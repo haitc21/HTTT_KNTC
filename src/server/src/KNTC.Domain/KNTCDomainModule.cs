@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using KNTC.MultiTenancy;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using KNTC.MultiTenancy;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing;
@@ -36,7 +36,6 @@ public class KNTCDomainModule : AbpModule
     {
         Configure<AbpLocalizationOptions>(options =>
         {
-
             options.Languages.Add(new LanguageInfo("vi", "vi", "Tiếng Việt"));
             //options.Languages.Add(new LanguageInfo("en", "en", "English", "gb"));
         });

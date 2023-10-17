@@ -1,7 +1,6 @@
 ﻿using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Collections.Generic;
@@ -70,7 +69,7 @@ public class LandTypeAppService : CrudAppService<
         );
     }
 
-    // 
+    //
     public async Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync()
     {
         Random random = new Random();
@@ -86,7 +85,6 @@ public class LandTypeAppService : CrudAppService<
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            
         });
 
         return new ListResultDto<LandTypeLookupDto>(cacheItem.Items);

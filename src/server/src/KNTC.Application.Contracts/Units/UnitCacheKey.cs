@@ -1,8 +1,4 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Text;
-
-namespace KNTC.Units;
+﻿namespace KNTC.Units;
 
 public class UnitCacheKey
 {
@@ -11,7 +7,6 @@ public class UnitCacheKey
         UnitTypeId = unitTypeId;
         ParentId = parentId;
     }
-
 
     public int UnitTypeId { get; set; }
     public int? ParentId { get; set; }

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authentication;
-using Volo.Abp.Account.Web.Pages.Account;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Volo.Abp.Account.Web.Pages.Account;
 
 namespace KNTC.Pages.Account;
 
@@ -15,4 +15,3 @@ public class CustomLoginModel : LoginModel
     {
     }
 }
-

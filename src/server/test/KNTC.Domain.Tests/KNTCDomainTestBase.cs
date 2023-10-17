@@ -2,5 +2,4 @@
 
 public abstract class KNTCDomainTestBase : KNTCTestBase<KNTCDomainTestModule>
 {
-
 }

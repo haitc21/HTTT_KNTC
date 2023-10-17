@@ -1,12 +1,8 @@
-﻿using KNTC.CategoryUnitTypes;
+﻿using KNTC.Caches;
 using KNTC.Localization;
 using KNTC.Permissions;
-using KNTC.Caches;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
-using NPOI.POIFS.Properties;
-using NPOI.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,7 +90,7 @@ public class UnitAppService : CrudAppService<
         );
     }
 
-    // 
+    //
     public async Task<ListResultDto<UnitLookupDto>> GetLookupAsync(int unitTypeId, int? parentId = null)
     {
         Random random = new Random();
@@ -105,7 +101,6 @@ public class UnitAppService : CrudAppService<
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            
         });
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
@@ -120,7 +115,6 @@ public class UnitAppService : CrudAppService<
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            
         });
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
@@ -135,11 +129,9 @@ public class UnitAppService : CrudAppService<
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            
         });
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
-
 
     [Authorize(KNTCPermissions.UnitPermission.Create)]
     public override async Task<UnitDto> CreateAsync(CreateAndUpdateUnitDto input)
@@ -197,7 +189,7 @@ public class UnitAppService : CrudAppService<
         await _cacheUnit.RemoveManyAsync(lstCacheKey);
         await Repository.DeleteManyAsync(ids);
     }
-    
+
     public async Task<ListResultDto<UnitTreeLookupDto>> GetTreeLookupAsync(int id)
     {
         Random random = new Random();
@@ -208,11 +200,9 @@ public class UnitAppService : CrudAppService<
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            
         });
         return new ListResultDto<UnitTreeLookupDto>(cacheItem.Items);
     }
-
 
     #region Private method
 
@@ -229,6 +219,7 @@ public class UnitAppService : CrudAppService<
         var result = new UnitLookupCache() { Items = dtos };
         return result;
     }
+
     private async Task<UnitLookupCache> GetListLookupByIds(int[]? unitIds)
     {
         var queryable = await Repository.GetQueryableAsync();
@@ -256,6 +247,7 @@ public class UnitAppService : CrudAppService<
         var result = new UnitLookupCache() { Items = dtos };
         return result;
     }
+
     private async Task<UnitTreeLookupCache> GetTreeLookupFromDbAsync(int id)
     {
         var result = new List<UnitTreeLookupDto>();
@@ -313,5 +305,5 @@ public class UnitAppService : CrudAppService<
         return childNodes;
     }
 
-    #endregion
+    #endregion Private method
 }

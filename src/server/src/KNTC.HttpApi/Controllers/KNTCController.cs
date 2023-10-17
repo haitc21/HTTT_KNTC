@@ -5,6 +5,7 @@ namespace KNTC.Controllers;
 
 /* Inherit your controllers from this class.
  */
+
 public abstract class KNTCController : AbpControllerBase
 {
     protected KNTCController()

@@ -14,10 +14,10 @@ public class ComplainExcelDto
     public string BoPhanDangXL { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
     public DateTime? NgayTraKQ1 { get; set; }
-    public string? ThamQuyen1 { get; set; }    
+    public string? ThamQuyen1 { get; set; }
     public string KetQua1 { get; set; }
     public DateTime? NgayTraKQ2 { get; set; }
     public string? ThamQuyen2 { get; set; }
     public string KetQua2 { get; set; }
-    //public string KetQua { get; set; }    
+    //public string KetQua { get; set; }
 }

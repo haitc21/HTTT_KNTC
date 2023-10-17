@@ -35,6 +35,7 @@ public enum Status
     DeActive = -1,
     Active = 1,
 }
+
 public enum TrangThai
 {
     TiepNhan = 0,
@@ -45,6 +46,7 @@ public enum TrangThai
     TraLaiDon = 5,
     ChuyenDon = 6
 }
+
 //public enum TinhTrang
 //{
 //    ChuaXuLy = 0,
@@ -69,4 +71,3 @@ public enum UserType : int
     QuanLyHuyen = 2,
     QuanLyXa = 3,
 }
-

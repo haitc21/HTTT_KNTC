@@ -347,7 +347,6 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(
           (res: ListResultDto<UnitLookupDto>) => {
-            debugger
             this.huyenOptions = res.items;
             this.layoutService.blockUI$.next(false);
           },

@@ -62,7 +62,7 @@
           <th class="row-num-column">STT</th>
           <th pSortableColumn="name">Tên</th>
           <th pSortableColumn="value">Giá trị</th>
-          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -82,7 +82,7 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-           <button
+            <button
               #btn
               pButton
               pRipple

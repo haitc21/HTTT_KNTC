@@ -37,6 +37,7 @@ public class FileAttachment : AuditedAggregateRoot<Guid>
     public DocumentType DocumentType { get; set; }
     public bool CongKhai { get; set; }
     public bool ChoPhepDownload { get; set; }
+
     private void SetTenTaiLieu([NotNull] string tenTaiLieu)
     {
         TenTaiLieu = Check.NotNullOrWhiteSpace(

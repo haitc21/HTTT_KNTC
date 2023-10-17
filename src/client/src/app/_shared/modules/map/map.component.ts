@@ -31,20 +31,6 @@ import 'leaflet-draw';
 import 'leaflet.measurecontrol';
 import 'leaflet.locatecontrol';
 import 'leaflet-easyprint';
-//import { GeoServerService } from '../../services/geo-server.service';
-// import 'leaflet.markercluster/dist/leaflet.markercluster';
-//import "leaflet-draw/dist/leaflet.draw.css";
-//import "leaflet-draw/dist/leaflet.draw.js";
-//import "leaflet-loading";
-//import "leaflet-measure";
-//import 'leaflet.locatecontrol';
-//change projection - 0 cần projection nữa
-//import "leaflet/dist/leaflet.css";
-//import "proj4leaflet";
-//import "proj4/dist/proj4.js";
-//import "proj4leaflet/src/proj4leaflet.js";
-//import { Proj4GeoJSONFeature } from 'proj4leaflet';
-//import proj4 from 'proj4'
 
 const iconComplainLand = new L.Icon({
   iconUrl: 'assets/images/map/marker-complain-land.png',
@@ -163,40 +149,6 @@ export class MapComponent implements AfterViewInit, OnChanges, OnDestroy {
   ) { }
   ngAfterViewInit() {
     this.getSysConfigAndInitMap();
-    /*
-    this.geoServerService.getFeatureTypes().subscribe(
-      xmlResponse => {
-        let parser = new xml2js.Parser(
-          {
-            trim: true,
-            explicitArray: true
-          });
-        parser.parseString(xmlResponse, (err, result) => {
-          if (err) {
-            console.error('Error parsing XML:', err);
-            return;
-          }
-          const featureTypes = result["wfs:WFS_Capabilities"]?.FeatureTypeList[0]?.FeatureType;
-          console.log('featureTypes', featureTypes);
-          featureTypes.forEach(featureType => {
-            const layerName = featureType.Name[0];
-            const title = featureType.Title[0];
-            const abstract = featureType.Abstract[0];
-
-            this.layerInfo.push({
-              name: layerName,
-              title: title,
-              abstract: abstract
-            });
-          });
-          console.log('lyers', this.layerInfo);
-        });
-      },
-      error => {
-        console.error('Error fetching data from GeoServer:', error);
-      }
-    );
-    */
   }
 
   private getSysConfigAndInitMap() {

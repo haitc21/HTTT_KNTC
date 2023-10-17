@@ -1,50 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using KNTC.EntityFrameworkCore;
+using KNTC.MultiTenancy;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using KNTC.EntityFrameworkCore;
-using KNTC.MultiTenancy;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Microsoft.OpenApi.Models;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Converters;
 using OpenIddict.Validation.AspNetCore;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
-using Volo.Abp.Localization;
+using Volo.Abp.BlobStoring;
+using Volo.Abp.BlobStoring.Minio;
+using Volo.Abp.Caching;
+using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.Json.Newtonsoft;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict;
 using Volo.Abp.Swashbuckle;
+using Volo.Abp.Timing;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
-using Microsoft.AspNetCore.Hosting;
-using System.Security.Cryptography.X509Certificates;
-using Volo.Abp.OpenIddict;
-using Volo.Abp.Timing;
-using Volo.Abp.BlobStoring;
-using Microsoft.AspNetCore.Mvc;
-using NetTopologySuite.Geometries;
-using NetTopologySuite.IO.Converters;
-using Volo.Abp.BlobStoring.Minio;
-using Microsoft.Extensions.Caching.Distributed;
-using Volo.Abp.Caching;
-using Microsoft.AspNetCore.Localization;
-using System.Globalization;
-using Volo.Abp.Json.Newtonsoft;
-using Volo.Abp.Caching.StackExchangeRedis;
 
 namespace KNTC;
+
 [DependsOn(
 typeof(KNTCHttpApiModule),
     typeof(AbpAutofacModule),
@@ -97,7 +97,7 @@ public class KNTCHttpApiHostModule : AbpModule
             });
         }
     }
-    
+
     private X509Certificate2 GetSigningCertificate(IWebHostEnvironment hostingEnv)
     {
         string fileName = Path.Combine(hostingEnv.ContentRootPath, "authserver.pfx");
@@ -123,10 +123,12 @@ public class KNTCHttpApiHostModule : AbpModule
         ConfigureCache(configuration);
         ConfigureSameSiteCookie(context);
     }
+
     private void ConfigureSameSiteCookie(ServiceConfigurationContext context)
     {
         context.Services.AddSameSiteCookiePolicy(); // cookie policy to deal with temporary browser incompatibilities
     }
+
     private void ConfigureCache(IConfiguration configuration)
     {
         Configure<AbpDistributedCacheOptions>(options =>
@@ -138,6 +140,7 @@ public class KNTCHttpApiHostModule : AbpModule
             options.KeyPrefix = "KNTC:";
         });
     }
+
     private void ConfigureClock()
     {
         Configure<AbpClockOptions>(options =>
@@ -145,6 +148,7 @@ public class KNTCHttpApiHostModule : AbpModule
             options.Kind = DateTimeKind.Local;
         });
     }
+
     private void ConfigureJsonSerialize(ServiceConfigurationContext context)
     {
         Configure<MvcNewtonsoftJsonOptions>(options =>
@@ -159,6 +163,7 @@ public class KNTCHttpApiHostModule : AbpModule
             options.SerializerSettings.Converters.Add(new FeatureConverter());
         });
     }
+
     private void ConfigureBlob(ServiceConfigurationContext context, IConfiguration configuration)
     {
         Configure<AbpBlobStoringOptions>(options =>

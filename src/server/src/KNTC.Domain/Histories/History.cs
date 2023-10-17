@@ -11,7 +11,6 @@
 //{
 //    public History()
 //    {
-
 //    }
 //    public History(Guid idHoSo, LoaiVuViec loaiVuViec)
 //    {

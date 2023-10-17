@@ -102,6 +102,7 @@ public static class KNTCPermissions
     }
 
     public const string UserUnitGroupName = "UserUnits";
+
     public static class UserUnitPermission
     {
         public const string Default = UserUnitGroupName;

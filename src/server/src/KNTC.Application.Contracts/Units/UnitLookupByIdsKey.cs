@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace KNTC.Units;
+﻿namespace KNTC.Units;
 
 public class UnitLookupByIdsKey
 {
@@ -10,6 +6,7 @@ public class UnitLookupByIdsKey
     {
         UnitIds = unitIds;
     }
+
     public int[]? UnitIds { get; set; }
 
     public override string ToString()

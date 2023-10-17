@@ -15,5 +15,5 @@ public class LogBookExcelDto
     public string BoPhanDangXL { get; set; }
     public string TrangThai { get; set; }
     public string DaGQ { get; set; }
-    public string DangGQ { get; set; }    
+    public string DangGQ { get; set; }
 }

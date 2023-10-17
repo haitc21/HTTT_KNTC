@@ -10,10 +10,9 @@ namespace KNTC.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-
             string sql = @"
                         UPDATE ""KNTC"".""FileAttachments""
-                        SET ""id_ho_so"" = 
+                        SET ""id_ho_so"" =
                             CASE
                                 WHEN ""ComplainId"" IS NOT NULL THEN ""ComplainId""
                                 ELSE ""DenounceId""
@@ -25,7 +24,6 @@ namespace KNTC.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
             string sql = @"
                         UPDATE ""KNTC"".""FileAttachments""
                         SET ""id_ho_so"" = NULL";

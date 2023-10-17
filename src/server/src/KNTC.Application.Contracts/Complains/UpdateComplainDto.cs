@@ -137,6 +137,7 @@ public class UpdateComplainDto : EntityDto<Guid>, IHasConcurrencyStamp
 
     [Required]
     public bool CongKhai { get; set; }
+
     public bool LuuTru { get; set; }
 
     public string? ConcurrencyStamp { get; set; }

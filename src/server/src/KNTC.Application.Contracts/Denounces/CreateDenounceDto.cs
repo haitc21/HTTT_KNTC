@@ -139,6 +139,7 @@ public class CreateDenounceDto
 
     [Required]
     public bool CongKhai { get; set; }
+
     public bool LuuTru { get; set; }
 
     public virtual List<CreateAndUpdateFileAttachmentDto>? FileAttachments { get; set; }

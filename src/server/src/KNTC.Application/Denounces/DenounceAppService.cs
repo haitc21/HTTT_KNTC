@@ -1,10 +1,10 @@
-﻿using KNTC.Extenssions;
+﻿using KNTC.Caches;
+using KNTC.Extenssions;
 using KNTC.FileAttachments;
 using KNTC.Helpers;
 using KNTC.Localization;
 using KNTC.NPOI;
 using KNTC.Permissions;
-using KNTC.Caches;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
 using KNTC.Units;
@@ -114,7 +114,7 @@ public class DenounceAppService : CrudAppService<
         }
         else
         {
-            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
@@ -354,7 +354,7 @@ public class DenounceAppService : CrudAppService<
         }
         else
         {
-            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý    
+            //Nếu là user trong hệ thống -> Chỉ cho phép xem các đơn vị người đó được quản lý
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {

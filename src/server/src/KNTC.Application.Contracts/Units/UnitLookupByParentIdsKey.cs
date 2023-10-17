@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace KNTC.Units;
 
-namespace KNTC.Units;
 public class UnitLookupByParentIdsKey
 {
     public UnitLookupByParentIdsKey(int[]? parentIds)
     {
         ParentIds = parentIds;
     }
+
     public UnitLookupByParentIdsKey(int unitTypeId, int[]? parentIds)
     {
         UnitTypeId = unitTypeId;
         ParentIds = parentIds;
     }
+
     public int UnitTypeId { get; set; }
     public int[]? ParentIds { get; set; }
 

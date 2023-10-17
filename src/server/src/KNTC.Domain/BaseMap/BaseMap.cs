@@ -1,7 +1,4 @@
-﻿using KNTC.Complains;
-using KNTC.Denounces;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 

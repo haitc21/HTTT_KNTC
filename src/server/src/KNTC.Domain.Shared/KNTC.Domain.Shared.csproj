@@ -26,6 +26,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Localization\KNTCEx\en.json" />
+    <None Remove="Localization\KNTCEx\vi.json" />
+    <None Remove="Localization\KNTCPm\en.json" />
+    <None Remove="Localization\KNTCPm\vi.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\KNTCEx\en.json" />
+    <EmbeddedResource Include="Localization\KNTCEx\vi.json" />
+    <EmbeddedResource Include="Localization\KNTCPm\en.json" />
+    <EmbeddedResource Include="Localization\KNTCPm\vi.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.10" />
   </ItemGroup>
 

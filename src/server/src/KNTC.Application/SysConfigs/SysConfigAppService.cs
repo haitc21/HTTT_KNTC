@@ -59,7 +59,6 @@ public class SysConfigAppService : CrudAppService<
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            
         });
         return cacheItem;
     }
@@ -152,7 +151,6 @@ public class SysConfigAppService : CrudAppService<
         () => new DistributedCacheEntryOptions
         {
             AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
-            
         });
         return result;
     }

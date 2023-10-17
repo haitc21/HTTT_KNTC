@@ -123,6 +123,7 @@
         <span class="p-float-label">
           <p-dropdown
             id="userType"
+            appendTo="body"
             formControlName="userType"
             [options]="userTypeOPtions"
             optionLabel="text"
@@ -149,6 +150,7 @@
       >
         <span class="p-float-label w-full">
           <p-treeSelect
+          appendTo="body"
             [(ngModel)]="selectedNodes"
             formControlName="managedUnitIds"
             [options]="unitOptions"

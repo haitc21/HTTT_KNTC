@@ -68,7 +68,6 @@ export class ChangePasswordComponent implements OnInit, OnDestroy {
   saveChange() {
     this.utilService.markAllControlsAsDirty([this.form]);
     if (this.form.invalid) return;;
-    debugger
     let value = {
       currentPassword: this.form.value.currentPassword,
       newPassword: this.form.value.newPassword,
