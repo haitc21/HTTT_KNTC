@@ -7,6 +7,7 @@
           <span class="p-input-icon-left w-full">
             <i class="pi pi-search"></i>
             <input
+              autofocus
               pInputText
               type="text"
               (keyup.enter)="loadData()"
@@ -18,21 +19,26 @@
         </div>
         <!-- --------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-3">
-          <p-selectButton [options]="loaiVuviecOptions" [(ngModel)]="loaiVuViec" 
-          optionLabel="text" optionValue="value" (onChange)="initData($event)"></p-selectButton>
+          <p-selectButton
+            [options]="loaiVuviecOptions"
+            [(ngModel)]="loaiVuViec"
+            optionLabel="text"
+            optionValue="value"
+            (onChange)="initData($event)"
+          ></p-selectButton>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-2">
           <span class="p-float-label">
             <p-dropdown
-            [options]="linhvucOptions"
-            [(ngModel)]="linhVuc"
-            optionLabel="text"
-            optionValue="value"
-            [showClear]="true"
-            [autoDisplayFirst]="false"
-            styleClass="w-full"
-            (onChange)="loadData()"
+              [options]="linhvucOptions"
+              [(ngModel)]="linhVuc"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
             ></p-dropdown>
             <label>Lĩnh vực</label>
           </span>
@@ -120,7 +126,7 @@
             ></p-calendar>
             <label>Thời gian tiếp nhận</label>
           </span>
-        </div>      
+        </div>
         <!-- --------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-2">
           <span class="p-float-label">
@@ -153,7 +159,7 @@
             ></p-dropdown>
             <label>Trạng thái</label>
           </span>
-        </div>        
+        </div>
         <!-- --------------------------------------------------------------------------------- -->
         <div *abpPermission="'Complains'" class="field col-12 md:col-2">
           <span class="p-float-label">
@@ -192,68 +198,65 @@
       </ng-template>
     </p-toolbar>
 
-    <p-table
-            #dt
-            [value]="items"
-            [rows]="10"
-            [paginator]="false"
-            [rowHover]="true"
-            dataKey="id"
-          >
-            <ng-template pTemplate="header">
-              <tr>
-                <th class="row-num-column">STT</th>
-                <th>Mã hồ sơ</th>
-                <th style="min-width: 180px">Nội dung</th>
-                <th>Loại vụ việc</th>
-                <th>Lĩnh vực</th>  
-                <th style="min-width: 100px">Người nộp đơn</th>
-                <th>Số ĐT</th>
-                <th>Địa chỉ</th>                              
-                <th>Thời gian nộp</th>
-                <th>Ngày hẹn trả KQ</th>
-                <th style="min-width: 150px">Bộ phận thực hiện</th>
-                <th style="min-width: 150px">Trạng thái</th>
-                <th style="min-width: 150px">Kết luận</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
-              <tr>
-                <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
-                <td>
-                  <span [ngClass]="p-link" (click)="viewDetail(row)"><strong>{{ row.maHoSo }}</strong></span>
-                </td>
-                <td>
-                  <span [ngClass]="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
-                </td>
-                <td [ngClass]="(row.loaiVuViec == 1)?'kn':'tc'">{{ LoaiVuViecOptions[row.loaiVuViec] }}</td>
-                <td>{{ LinhVucOptions[row.linhVuc] }}</td>
-                <td>{{ row.nguoiNopDon }}</td>
-                <td>{{ row.dienThoai }}</td>
-                <td>{{ row.diaChiLienHe }}</td>
-                <td>
-                  {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
-                </td>
-                <td>
-                  {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
-                </td>
-                <td>{{ row.boPhanDangXL }}</td>
-                <td style="color:blue">{{ TrangthaiOptions[(row?.trangThai)? row?.trangThai : 0]}}</td>
-                <td>{{ KetquaOptions[(row?.ketQua)? row?.ketQua : 0]}}</td>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="summary">
-              <p-paginator
-                [rows]="maxResultCount"
-                [totalRecords]="totalCount"
-                [showCurrentPageReport]="true"
-                [showJumpToPageInput]="true"
-                (onPageChange)="pageChanged($event)"
-                currentPageReportTemplate="{totalRecords} bản ghi"
-                [rowsPerPageOptions]="[10, 20, 50, 100]"
-              ></p-paginator>
-            </ng-template>
-          </p-table>
+    <p-table #dt [value]="items" [rows]="10" [paginator]="false" [rowHover]="true" dataKey="id">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="row-num-column">STT</th>
+          <th>Mã hồ sơ</th>
+          <th style="min-width: 180px">Nội dung</th>
+          <th>Loại vụ việc</th>
+          <th>Lĩnh vực</th>
+          <th style="min-width: 100px">Người nộp đơn</th>
+          <th>Số ĐT</th>
+          <th>Địa chỉ</th>
+          <th>Thời gian nộp</th>
+          <th>Ngày hẹn trả KQ</th>
+          <th style="min-width: 150px">Bộ phận thực hiện</th>
+          <th style="min-width: 150px">Trạng thái</th>
+          <th style="min-width: 150px">Kết luận</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+        <tr>
+          <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
+          <td>
+            <span [ngClass]="p - link" (click)="viewDetail(row)"
+              ><strong>{{ row.maHoSo }}</strong></span
+            >
+          </td>
+          <td>
+            <span [ngClass]="p - link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
+          </td>
+          <td [ngClass]="row.loaiVuViec == 1 ? 'kn' : 'tc'">
+            {{ LoaiVuViecOptions[row.loaiVuViec] }}
+          </td>
+          <td>{{ LinhVucOptions[row.linhVuc] }}</td>
+          <td>{{ row.nguoiNopDon }}</td>
+          <td>{{ row.dienThoai }}</td>
+          <td>{{ row.diaChiLienHe }}</td>
+          <td>
+            {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
+          </td>
+          <td>
+            {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
+          </td>
+          <td>{{ row.boPhanDangXL }}</td>
+          <td style="color: blue">{{ TrangthaiOptions[row?.trangThai ? row?.trangThai : 0] }}</td>
+          <td>{{ KetquaOptions[row?.ketQua ? row?.ketQua : 0] }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <p-paginator
+          [rows]="maxResultCount"
+          [totalRecords]="totalCount"
+          [showCurrentPageReport]="true"
+          [showJumpToPageInput]="true"
+          (onPageChange)="pageChanged($event)"
+          currentPageReportTemplate="{totalRecords} bản ghi"
+          [rowsPerPageOptions]="[10, 20, 50, 100]"
+        ></p-paginator>
+      </ng-template>
+    </p-table>
     <!-- ----------------------------------------------------------------------- -->
   </p-panel>
 </div>

@@ -20,7 +20,14 @@
         <!-- ---------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-6">
           <span class="p-float-label">
-            <input id="userName" type="text" pInputText formControlName="userName" class="w-full" />
+            <input
+              autofocus
+              id="userName"
+              type="text"
+              pInputText
+              formControlName="userName"
+              class="w-full"
+            />
             <label for="userName">Tài khoản <span class="required">*</span></label>
           </span>
           <app-validation-message

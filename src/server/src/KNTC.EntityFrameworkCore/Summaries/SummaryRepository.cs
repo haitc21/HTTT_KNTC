@@ -37,9 +37,9 @@ public class SummaryRepository : ISummaryRepository, ITransientDependency
                                                     DateTime? toDate,
                                                     bool? congKhai,
                                                     TrangThai? trangThai,
-                                                    string nguoiNopDon,
-                                                    UserType? userType,
-                                                    int[]? managedUnitIds
+                                                    string? nguoiNopDon = null,
+                                                    UserType? userType = null,
+                                                    int[]? managedUnitIds = null
                                                     )
     {
         var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper().Trim() : keyword;

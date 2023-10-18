@@ -9,7 +9,7 @@
       <div class="grid col-12 md:col-12">
         <div class="group-header ml-3">
           <img src="assets/images/map/quyhoach_icon.png" alt="Bản đồ nền" />
-          <span>Bản đồ nền</span>          
+          <span>Bản đồ nền</span>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div *ngFor="let basemap of baseMapList; let i = index" class="inputgroup">
@@ -26,22 +26,38 @@
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Đất đai</span>
-          <p-inputSwitch class="land-switch" [(ngModel)]="landComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="land-switch"
+            [(ngModel)]="landComplain"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch class="enviroment-switch" [(ngModel)]="enviromentComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="enviroment-switch"
+            [(ngModel)]="enviromentComplain"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch class="mineral-switch" [(ngModel)]="mineralComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="mineral-switch"
+            [(ngModel)]="mineralComplain"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch class="water-switch" [(ngModel)]="waterComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="water-switch"
+            [(ngModel)]="waterComplain"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="group-header ml-3 mt-5 tc">
@@ -51,22 +67,38 @@
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Đất đai</span>
-          <p-inputSwitch class="land-switch" [(ngModel)]="landDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="land-switch"
+            [(ngModel)]="landDenounce"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch class="enviroment-switch" [(ngModel)]="enviromentDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="enviroment-switch"
+            [(ngModel)]="enviromentDenounce"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch class="mineral-switch" [(ngModel)]="mineralDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="mineral-switch"
+            [(ngModel)]="mineralDenounce"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch class="water-switch" [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="water-switch"
+            [(ngModel)]="waterDenounce"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
       </div>
     </p-card>
@@ -105,6 +137,7 @@
               <span class="p-input-icon-left w-full">
                 <i class="pi pi-search"></i>
                 <input
+                  autofocus
                   pInputText
                   type="text"
                   (keyup.enter)="loadData()"
@@ -235,7 +268,7 @@
                 ></p-dropdown>
                 <label>Trạng thái</label>
               </span>
-            </div>            
+            </div>
             <!-- --------------------------------------------------------------------------------- -->
             <div *ngIf="hasLoggedIn" class="field col-12 md:col-2">
               <span class="p-float-label">
@@ -300,7 +333,7 @@
                 <th>Thời gian nộp</th>
                 <th>Ngày hẹn trả KQ</th>
                 <th style="min-width: 80px">Trạng thái</th>
-                <th style="min-width: 80px">Bộ phận thực hiện</th>                
+                <th style="min-width: 80px">Bộ phận thực hiện</th>
                 <th style="min-width: 80px">Kết luận</th>
                 <th>Vị trí</th>
               </tr>
@@ -317,7 +350,8 @@
                   <span class="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
                 </td>
                 <td [ngClass]="row.loaiVuViec == 1 ? 'kn' : 'tc'">
-                  {{ LoaiVuViecOptions[row.loaiVuViec] }}/{{ LinhVucOptions[row.linhVuc] }}</td>
+                  {{ LoaiVuViecOptions[row.loaiVuViec] }}/{{ LinhVucOptions[row.linhVuc] }}
+                </td>
                 <td>{{ row.nguoiNopDon }}</td>
                 <td>{{ row.dienThoai }}</td>
                 <td>{{ row.diaChiLienHe }}</td>
@@ -326,16 +360,33 @@
                 </td>
                 <td>
                   {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
-                </td>                
-                <td style="color:blue">{{ TrangthaiOptions[(row?.trangThai)? row?.trangThai : 0]}}</td>
-                <td>{{ row.boPhanDangXL }}</td>                
+                </td>
+                <td style="color: blue">
+                  {{ TrangthaiOptions[row?.trangThai ? row?.trangThai : 0] }}
+                </td>
+                <td>{{ row.boPhanDangXL }}</td>
                 <td>{{ KetquaOptions[row?.ketQua ? row?.ketQua : 0] }}</td>
                 <td>
-                  <span class="p-link" (click)="setPosition(row?.duLieuToaDo ? row?.duLieuToaDo : null)">
-                  <img 
-                  [src]='row?.duLieuToaDo ? (row?.loaiVuViec == 1 ? "assets/images/map/marker-icon.png" : "assets/images/map/marker-icon-red.png"):"assets/images/map/marker-icon-disabled.png"'
-                  [title]='row?.duLieuToaDo ? (row?.loaiVuViec == 1 ? "Vị trí Khiếu nại trên bản đồ" : "Vị trí Tố cáo trên bản đồ"):"Chưa có thông tin vị trí!"'
+                  <span
+                    class="p-link"
+                    (click)="setPosition(row?.duLieuToaDo ? row?.duLieuToaDo : null)"
                   >
+                    <img
+                      [src]="
+                        row?.duLieuToaDo
+                          ? row?.loaiVuViec == 1
+                            ? 'assets/images/map/marker-icon.png'
+                            : 'assets/images/map/marker-icon-red.png'
+                          : 'assets/images/map/marker-icon-disabled.png'
+                      "
+                      [title]="
+                        row?.duLieuToaDo
+                          ? row?.loaiVuViec == 1
+                            ? 'Vị trí Khiếu nại trên bản đồ'
+                            : 'Vị trí Tố cáo trên bản đồ'
+                          : 'Chưa có thông tin vị trí!'
+                      "
+                    />
                   </span>
                 </td>
               </tr>

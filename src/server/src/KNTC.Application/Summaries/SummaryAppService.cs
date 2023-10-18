@@ -52,7 +52,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
     [AllowAnonymous]
     public async Task<PagedResultDto<SummaryDto>> GetListAsync(GetSummaryListDto input)
     {
-        int[] managedUnitIds = null;
+        int[]? managedUnitIds = null;
         UserType? userType = null;
         var userId = CurrentUser.Id;
         if (userId == null)
@@ -67,7 +67,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.UserType.Value;
+                userType = userInfo.UserType ?? null;
                 managedUnitIds = userInfo.ManagedUnitIds;
             }
         }

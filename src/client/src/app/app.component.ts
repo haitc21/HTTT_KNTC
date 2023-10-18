@@ -80,6 +80,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       clear: 'Xóa',
       dateFormat: 'dd/mm/yy',
       weekHeader: 'Tuần',
+      weak: "mật khẩu yếu",
+      medium: "mật khẩu trung bình",
+      strong: "mật khẩu mạnh"
     });
   }
 
@@ -93,7 +96,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       if (block === false) {
         setTimeout(() => {
           this.blockedLayout = false;
-        }, 100);
+        }, 500);
       }
     });
   }
