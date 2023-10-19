@@ -1,4 +1,5 @@
 ﻿using KNTC.SpatialDatas;
+using KNTC.Summaries;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
@@ -11,16 +12,20 @@ public class UpdateDenounceHandler
 {
     private readonly ISpatialDataRepository _spatialDataRepo;
     private readonly SpatialDataManager _spatialDataManager;
+    private readonly ISummaryDapperRepository _summaryDapperRepo;
 
     public UpdateDenounceHandler(ISpatialDataRepository spatialDataRepo,
-        SpatialDataManager spatialDataManager)
+        SpatialDataManager spatialDataManager,
+        ISummaryDapperRepository summaryDapperRepo)
     {
         _spatialDataRepo = spatialDataRepo;
         _spatialDataManager = spatialDataManager;
+        _summaryDapperRepo = summaryDapperRepo;
     }
 
     public async Task HandleEventAsync(UpdateDenounceEto eventData)
     {
+        await _summaryDapperRepo.RefreshView();
         var spatialData = await _spatialDataRepo.FindByIdHoSoAsync(eventData.Id);
         if (spatialData != null)
         {

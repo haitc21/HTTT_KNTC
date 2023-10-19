@@ -1,4 +1,5 @@
 ﻿using KNTC.SpatialDatas;
+using KNTC.Summaries;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
@@ -10,17 +11,18 @@ public class DeleteMultipleComplainHandler
           ITransientDependency
 {
     private readonly ISpatialDataRepository _spatialDataRepo;
-    private readonly SpatialDataManager _spatialDataManager;
+    private readonly ISummaryDapperRepository _summaryDapperRepo;
 
     public DeleteMultipleComplainHandler(ISpatialDataRepository spatialDataRepo,
-        SpatialDataManager spatialDataManager)
+    ISummaryDapperRepository summaryDapperRepo)
     {
         _spatialDataRepo = spatialDataRepo;
-        _spatialDataManager = spatialDataManager;
+        _summaryDapperRepo = summaryDapperRepo;
     }
 
     public async Task HandleEventAsync(DeleteMultipleComplainEto eventData)
     {
+        await _summaryDapperRepo.RefreshView();
         var spatialDatas = await _spatialDataRepo.GetListByIdHoSoAsync(eventData.Ids);
         await _spatialDataRepo.DeleteManyAsync(spatialDatas);
     }

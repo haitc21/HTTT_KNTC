@@ -65,7 +65,7 @@ public class FileAttachmentAppService : CrudAppService<
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(FileAttachmentDto.ThuTuButLuc);
+            input.Sorting = $"{nameof(FileAttachmentDto.ThuTuButLuc)}, {nameof(FileAttachmentDto.TenTaiLieu)}";
         }
 
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
@@ -186,7 +186,7 @@ public class FileAttachmentAppService : CrudAppService<
         }
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(FileAttachmentDto.TenTaiLieu);
+            input.Sorting = $"{nameof(FileAttachmentDto.ThuTuButLuc)}, {nameof(FileAttachmentDto.TenTaiLieu)}";
         }
         var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
 
