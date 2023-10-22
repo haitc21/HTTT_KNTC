@@ -13,7 +13,7 @@ public class UserInfo : Entity<Guid>
     public DateTime? Dob { get; set; }
 
     //Loại user -> Cũng là cấp độ quản lý
-    public UserType? UserType { get; set; }
+    public UserType UserType { get; set; }
 
     //Danh sách các đơn vị được quản lý, tùy thuộc vào cấp độ quản lý
     public int[]? ManagedUnitIds { get; set; }

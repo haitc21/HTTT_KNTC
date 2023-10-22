@@ -115,7 +115,7 @@ public class KNTCDbContext :
                 .WithOne()
                 .HasForeignKey<UserInfo>(x => x.UserId)
                 .IsRequired();
-            b.Property(x => x.UserType).HasColumnName("user_type");
+            b.Property(x => x.UserType).IsRequired().HasColumnName("user_type").HasDefaultValue(UserType.QuanLyTinh);
             b.Property(x => x.ManagedUnitIds).HasColumnName("managed_unit_ids");
         });
 
@@ -126,7 +126,6 @@ public class KNTCDbContext :
 
             b.HasIndex(x => x.MaHoSo);
             b.HasIndex(x => x.LinhVuc);
-            b.HasIndex(x => new { x.ThoiGianTiepNhan, x.MaHoSo });
             b.HasIndex(x => x.TrangThai);
             //b.HasIndex(x => x.TinhTrang);
 
@@ -198,7 +197,6 @@ public class KNTCDbContext :
 
             b.HasIndex(x => x.MaHoSo);
             b.HasIndex(x => x.LinhVuc);
-            b.HasIndex(x => new { x.ThoiGianTiepNhan, x.MaHoSo });
             b.HasIndex(x => x.TrangThai);
             //b.HasIndex(x => x.TinhTrang);
 

@@ -118,7 +118,7 @@ public class ComplainAppService : CrudAppService<
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.UserType.Value;
+                userType = userInfo.UserType;
                 managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
@@ -365,7 +365,7 @@ public class ComplainAppService : CrudAppService<
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.UserType.Value;
+                userType = userInfo.UserType;
                 managedUnitIds = userInfo.ManagedUnitIds;
             }
         }

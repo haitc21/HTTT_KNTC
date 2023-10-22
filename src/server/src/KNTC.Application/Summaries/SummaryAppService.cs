@@ -67,7 +67,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.UserType ?? null;
+                userType = userInfo.UserType;
                 managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
@@ -139,7 +139,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.UserType.Value;
+                userType = userInfo.UserType;
                 managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
@@ -191,7 +191,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.UserType.Value;
+                userType = userInfo.UserType;
                 managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
@@ -400,7 +400,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.UserType.Value;
+                userType = userInfo.UserType;
                 managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
@@ -607,7 +607,7 @@ public class SummaryAppService : KNTCAppService, ISummaryAppService
             var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == CurrentUser.Id);
             if (userInfo != null)
             {
-                userType = userInfo.UserType.Value;
+                userType = userInfo.UserType;
                 managedUnitIds = userInfo.ManagedUnitIds;
             }
         }
