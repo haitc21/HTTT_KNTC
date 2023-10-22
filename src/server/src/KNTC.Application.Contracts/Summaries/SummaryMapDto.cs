@@ -18,6 +18,6 @@ public class SummaryMapDto
 
     public Guid Id { get; set; }
     public LoaiVuViec LoaiVuViec { get; set; }
-    public string DuLieuToaDo { get; set; }
-    public string DuLieuHinhHoc { get; set; }
+    public string? DuLieuToaDo { get; set; }
+    public string? DuLieuHinhHoc { get; set; }
 }

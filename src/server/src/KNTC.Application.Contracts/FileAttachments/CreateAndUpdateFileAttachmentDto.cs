@@ -8,8 +8,7 @@ public class CreateAndUpdateFileAttachmentDto : IHasConcurrencyStamp
 {
     public Guid? Id { get; set; }
     public LoaiVuViec LoaiVuViec { get; set; }
-    public Guid? ComplainId { get; set; }
-    public Guid? DenounceId { get; set; }
+    public Guid IdHoSo { get; set; }
 
     [Required]
     public string TenTaiLieu { get; set; }
@@ -30,12 +29,18 @@ public class CreateAndUpdateFileAttachmentDto : IHasConcurrencyStamp
     [MaxLength(KNTCValidatorConsts.MaxThuTuButLucLength)]
     public string ThuTuButLuc { get; set; }
 
+    [Required]
     public string NoiDungChinh { get; set; }
+
+    [Required]
     public string FileName { get; set; }
+
     public string ContentType { get; set; }
     public long ContentLength { get; set; }
-    public string ConcurrencyStamp { get; set; }
+    public string? ConcurrencyStamp { get; set; }
 
     [Required]
     public bool CongKhai { get; set; }
+
+    public bool ChoPhepDownload { get; set; }
 }

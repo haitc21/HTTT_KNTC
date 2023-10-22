@@ -3,14 +3,13 @@
     <div class="topmenu-logo">
       <a routerLink="" class="flex align-items-center">
         <img src="assets/layout/images/logo-white.svg" alt="logo" />
-        <span class="ml-2">HTTTTT Quản lý Đơn thư Khiếu nại, Tố cáo</span>
+        <span class="ml-2">{{ title }}</span>
       </a>
 
       <button
         #menubutton
         pButton
         pRipple
-        
         icon="pi pi-bars"
         class="p-button-info"
         (click)="layoutService.onMenuToggle()"
@@ -20,20 +19,9 @@
 
   <ng-template pTemplate="end">
     <span class="flex align-items-center">
-      <!-- <button
-        *ngIf="isAutenticated"
-        pButton
-        pRipple
-        type="button"
-        label="Hệ thống"
-        icon="fa fa-cogs"
-        class="p-button-lg p-button-info mr-2"
-        (click)="systemMenu.toggle($event)"
-      ></button> -->
-      <a class="user-profile mr-2" *ngIf="isAutenticated" (click)="systemMenu.toggle($event)">
+      <!-- <a class="user-profile mr-2" *ngIf="isAutenticated" (click)="systemMenu.toggle($event)">
         <span class="username"><i class="fa fa-cogs"></i> Hệ thống</span>
-      </a>
-
+      </a> -->
 
       <a class="user-profile" *ngIf="isAutenticated" (click)="userMenu.toggle($event)">
         <img
@@ -43,16 +31,14 @@
         />
         <span class="username">{{ userName }} <i class="pi pi-angle-down"></i></span>
       </a>
-
-      <button
-        *ngIf="!isAutenticated"
-        pButton
-        pRipple
-        type="button"
-        label="!Đăng nhập"
-        class="p-button-info"
-        (click)="login()"
-      ></button>
+      <ng-container *ngIf="!isAutenticated">
+        <a class="user-profile mr-2" (click)="login()">
+          <span class="username">Đăng nhập</span>
+        </a>
+        <a class="user-profile mr-2" (click)="register()">
+          <span class="username">Đăng ký</span>
+        </a>
+      </ng-container>
     </span>
   </ng-template>
 </p-menubar>
@@ -65,10 +51,10 @@
   [hideTransitionOptions]="'300ms'"
 ></p-tieredMenu>
 
-<p-tieredMenu
+<!-- <p-tieredMenu
   #systemMenu
   [model]="systemMenuItems"
   [popup]="true"
   [showTransitionOptions]="'300ms'"
   [hideTransitionOptions]="'300ms'"
-></p-tieredMenu>
+></p-tieredMenu> -->

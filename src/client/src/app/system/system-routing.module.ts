@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RoleComponent } from './role/role.component';
 import { UserComponent } from './user/user.component';
+import { BaseMapComponent } from './basemap/basemap.component';
 import { DocumentTypeComponent } from './document-type/document-type.component';
 import { LandTypeComponent } from './land-type/land-type.component';
 import { UnitTypeComponent } from './unit-type/unit-type.component';
 import { UnitComponent } from './unit/unit.component';
+import { SysConfigComponent } from './sys-config/sys-config.component';
 
 const routes: Routes = [
   {
@@ -31,7 +33,7 @@ const routes: Routes = [
     component: DocumentTypeComponent,
     canActivate: [PermissionGuard],
     data: {
-      requiredPolicy: 'DocumentType',
+      requiredPolicy: 'DocumentTypes',
     },
   },
   {
@@ -39,7 +41,7 @@ const routes: Routes = [
     component: LandTypeComponent,
     canActivate: [PermissionGuard],
     data: {
-      requiredPolicy: 'LandType',
+      requiredPolicy: 'LandTypes',
     },
   },
   {
@@ -47,7 +49,7 @@ const routes: Routes = [
     component: UnitTypeComponent,
     canActivate: [PermissionGuard],
     data: {
-      requiredPolicy: 'UnitType',
+      requiredPolicy: 'UnitTypes',
     },
   },
   {
@@ -55,7 +57,23 @@ const routes: Routes = [
     component: UnitComponent,
     canActivate: [PermissionGuard],
     data: {
-      requiredPolicy: 'Unit',
+      requiredPolicy: 'Units',
+    },
+  },
+  {
+    path: 'basemap',
+    component: BaseMapComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      requiredPolicy: 'BaseMaps',
+    },
+  },
+  {
+    path: 'sys-config',
+    component: SysConfigComponent,
+    canActivate: [PermissionGuard],
+    data: {
+      requiredPolicy: 'SysConfigs',
     },
   },
 ];

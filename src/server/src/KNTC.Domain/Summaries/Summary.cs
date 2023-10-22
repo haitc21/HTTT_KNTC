@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KNTC.Summaries;
 
-[NotMapped]
 public class Summary
 {
     public Guid Id { get; set; }
@@ -18,8 +16,17 @@ public class Summary
     public string BoPhanDangXL { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
     public LoaiKetQua? KetQua { get; set; }
-    public string DuLieuToaDo { get; set; }
-    public string DuLieuHinhHoc { get; set; }
+    public string? DuLieuToaDo { get; set; }
+    public string? DuLieuHinhHoc { get; set; }
     public string SoThua { get; set; }
     public string ToBanDo { get; set; }
+    public int MaTinhTP { get; set; }
+    public int MaQuanHuyen { get; set; }
+    public int MaXaPhuongTT { get; set; }
+    public bool CongKhai { get; set; }
+    public string CccdCmnd { get; set; }
+    public TrangThai TrangThai { get; set; }
+
+    //public TinhTrang TinhTrang { get; set; }
+    public bool LuuTru { get; set; }
 }

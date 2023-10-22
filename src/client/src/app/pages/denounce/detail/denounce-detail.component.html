@@ -4,7 +4,7 @@
       <p-tabPanel>
         <ng-template pTemplate="header">
           <i class="pi pi-fw pi-envelope mr-2"></i>
-          <span>Hồ sơ</span>
+          <span>Thông tin Tố cáo</span>
         </ng-template>
 
         <ng-template pTemplate="content">
@@ -17,6 +17,7 @@
                   <div class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
+                        autofocus
                         id="maHoSo"
                         formControlName="maHoSo"
                         type="text"
@@ -68,7 +69,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------cccdCmnd---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="cccdCmnd"
@@ -86,7 +87,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ---------------------------------ngaySinh------------------------------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <p-calendar
                         id="ngaySinh"
@@ -105,7 +106,7 @@
                     </span>
                   </div>
                   <!-- ------------------------------dienThoai---------------------------------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="dienThoai"
@@ -123,7 +124,7 @@
                     </app-validation-message>
                   </div>
                   <!-- -----------------------------email----------------------------------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="email"
@@ -154,9 +155,9 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
-                        (onChange)="tinhChange($event?.value)"
+                        (onChange)="tinhChange($event?.value, 1)"
                       ></p-dropdown>
-                      <label>Tỉnh/TP <span class="required">*</span></label>
+                      <label>Tỉnh <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.maTinhTP"
@@ -178,9 +179,9 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
-                        (onChange)="huyenChange($event?.value)"
+                        (onChange)="huyenChange($event?.value, 1)"
                       ></p-dropdown>
-                      <label>Quận/Huyện <span class="required">*</span></label>
+                      <label>Huyện/TP <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.maQuanHuyen"
@@ -212,16 +213,18 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------diaChiThuongTru---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-12">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-12">
                     <span class="p-float-label">
                       <textarea
                         id="diaChiThuongTru"
                         formControlName="diaChiThuongTru"
-                        [rows]="5"
+                        [rows]="3"
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiThuongTru">Địa chỉ thường trú <span class="required">*</span></label>
+                      <label for="diaChiThuongTru"
+                        >Địa chỉ thường trú <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiThuongTru"
@@ -230,16 +233,18 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------diaChiLienHe---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-">
                     <span class="p-float-label">
                       <textarea
                         id="diaChiLienHe"
                         formControlName="diaChiLienHe"
-                        [rows]="5"
+                        [rows]="3"
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiLienHe">Địa chỉ liên hệ <span class="required">*</span></label>
+                      <label for="diaChiLienHe"
+                        >Địa chỉ liên hệ <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiLienHe"
@@ -297,7 +302,9 @@
                         pInputText
                         [style]="{ width: '100%' }"
                       />
-                      <label for="nguoiNopDon">Người bị tố cáo <span class="required">*</span></label>
+                      <label for="nguoiNopDon"
+                        >Người bị tố cáo <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.nguoiBiToCao"
@@ -305,56 +312,7 @@
                     >
                     </app-validation-message>
                   </div>
-                  <!-- ----------------------------boPhanDangXL---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                      <input
-                        id="boPhanDangXL"
-                        formControlName="boPhanDangXL"
-                        type="text"
-                        pInputText
-                        [style]="{ width: '100%' }"
-                      />
-                      <label for="boPhanDangXL">Bộ phận đang XL <span class="required">*</span></label>
-                    </span>
-                    <app-validation-message
-                      [entityControl]="formControls.boPhanDangXL"
-                      [validationMessages]="validationMessages.boPhanDangXL"
-                    >
-                    </app-validation-message>
-                  </div>
 
-                  <!-- ----------------------------congKhai---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
-                    <p-checkbox
-                      binary="true"
-                      label="Công khai *"
-                      formControlName="congKhai"
-                    ></p-checkbox>
-                    <app-validation-message
-                      [entityControl]="formControls.congKhai"
-                      [validationMessages]="validationMessages.congKhai"
-                    >
-                    </app-validation-message>
-                  </div>
-                  <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-12">
-                    <span class="p-float-label">
-                      <textarea
-                        id="ghiChu"
-                        formControlName="ghiChu"
-                        [rows]="5"
-                        pInputTextarea
-                        class="w-full"
-                      ></textarea>
-                      <label for="ghiChu">Ghi chú</label>
-                    </span>
-                    <app-validation-message
-                      [entityControl]="formControls.ghiChu"
-                      [validationMessages]="validationMessages.ghiChu"
-                    >
-                    </app-validation-message>
-                  </div>
                   <!-- ----------------------------noiDungVuViec---------------------------=----------------------------- -->
                   <div class="field col-12 md:col-12">
                     <!-- <textarea
@@ -369,7 +327,7 @@
                       id="noiDungVuViec"
                       formControlName="noiDungVuViec"
                       class="w-full"
-                      [style]="{ height: '150px' }"
+                      [style]="{ height: '120px' }"
                       [readonly]="mode == 'view'"
                     ></p-editor>
                     <app-validation-message
@@ -384,7 +342,7 @@
                 <!-- -------------------------------Thông tin thửa đất--------------------------------------------------- -->
                 <div class="grid">
                   <!-- ----------------------------soThua---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="soThua"
@@ -402,7 +360,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------toBanDo---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <input
                         id="toBanDo"
@@ -420,16 +378,24 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------dienTich---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
-                      <input
+                      <!-- <input
                         id="dienTich"
                         formControlName="dienTich"
                         type="text"
                         pInputText
                         [style]="{ width: '100%' }"
-                      />
-                      <label for="dienTich">Diện tích <span class="required">*</span></label>
+                      /> -->
+
+                      <p-inputNumber
+                        formControlName="dienTich"
+                        class="w-full"
+                        [style]="{ width: '100%' }"
+                        mode="decimal"
+                        [minFractionDigits]="2"
+                      ></p-inputNumber>
+                      <label for="dienTich">Diện tích (m2) <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.dienTich"
@@ -438,7 +404,7 @@
                     </app-validation-message>
                   </div>
                   <!-- ----------------------------loaiDat---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
+                  <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-6">
                     <span class="p-float-label">
                       <p-dropdown
                         id="loaiDat"
@@ -474,9 +440,10 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
-                        (onChange)="tinhThuaDatChange($event?.value)"
+                        appendTo="body"
+                        (onChange)="tinhChange($event?.value, 2)"
                       ></p-dropdown>
-                      <label>Tỉnh/TP <span class="required">*</span></label>
+                      <label>Tỉnh <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.tinhThuaDat"
@@ -490,7 +457,7 @@
                       <p-dropdown
                         id="huyenThuaDat"
                         formControlName="huyenThuaDat"
-                        [options]="huyenThuaDateOptions"
+                        [options]="huyenThuaDatOptions"
                         optionLabel="unitName"
                         optionValue="id"
                         [showClear]="true"
@@ -498,9 +465,10 @@
                         [filter]="true"
                         filterBy="unitName"
                         styleClass="w-full"
-                        (onChange)="huyenThuaDatChange($event?.value)"
+                        appendTo="body"
+                        (onChange)="huyenChange($event?.value, 2)"
                       ></p-dropdown>
-                      <label>Quận/Huyện <span class="required">*</span></label>
+                      <label>Huyện/TP <span class="required">*</span></label>
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.huyenThuaDat"
@@ -521,6 +489,7 @@
                         [autoDisplayFirst]="false"
                         [filter]="true"
                         filterBy="unitName"
+                        appendTo="body"
                         styleClass="w-full"
                       ></p-dropdown>
                       <label>Xã/Phường/TT <span class="required">*</span></label>
@@ -537,11 +506,13 @@
                       <textarea
                         id="diaChiThuaDat"
                         formControlName="diaChiThuaDat"
-                        [rows]="5"
+                        [rows]="3"
                         pInputTextarea
                         class="w-full"
                       ></textarea>
-                      <label for="diaChiThuaDat">Địa chỉ thửa đất <span class="required">*</span></label>
+                      <label for="diaChiThuaDat"
+                        >Địa chỉ thửa đất <span class="required">*</span></label
+                      >
                     </span>
                     <app-validation-message
                       [entityControl]="formControls.diaChiThuaDat"
@@ -551,9 +522,30 @@
                   </div>
                 </div>
               </p-accordionTab>
-              <p-accordionTab header="Thông tin giải quyết tố cáo" class="w-full">
+              <p-accordionTab header="Thông tin giải quyết Tố cáo" class="w-full">
                 <!-- -------------------------------Thông tin giải quyết--------------------------------------------------- -->
                 <div class="grid">
+                  <!-- ----------------------------ketQua---------------------------=----------------------------- -->
+                  <div class="field col-12 md:col-6">
+                    <span class="p-float-label">
+                      <p-dropdown
+                        id="ketQua"
+                        formControlName="ketQua"
+                        [options]="loaiKQOPtions"
+                        optionLabel="text"
+                        optionValue="value"
+                        [showClear]="true"
+                        [autoDisplayFirst]="false"
+                        styleClass="w-full"
+                      ></p-dropdown>
+                      <label>Kết luận nội dung tố cáo </label>
+                      <app-validation-message
+                        [entityControl]="formControls.ketQua"
+                        [validationMessages]="validationMessages.ketQua"
+                      >
+                      </app-validation-message>
+                    </span>
+                  </div>
                   <!-- ---------------------------------ngayGQTC------------------------------------------------- -->
                   <div class="field col-12 md:col-6">
                     <span class="p-float-label">
@@ -654,7 +646,7 @@
                         dateFormat="dd/mm/yy"
                         [showClear]="true"
                       ></p-calendar>
-                      <label>Ngày gia hạn GQTC 1</label>
+                      <label>Ngày gia hạn GQTC L1</label>
                     </span>
                   </div>
                   <!-- ---------------------------------giaHanGQTC2------------------------------------------------- -->
@@ -667,7 +659,7 @@
                         dateFormat="dd/mm/yy"
                         [showClear]="true"
                       ></p-calendar>
-                      <label>Ngày gia hạn GQTC 2</label>
+                      <label>Ngày gia hạn GQTC L2</label>
                     </span>
                   </div>
                   <!-- -------------------------------soVBKLNDTC--------------------------------------------------- -->
@@ -706,31 +698,93 @@
                     >
                     </app-validation-message>
                   </div>
-                  <!-- ----------------------------ketQua---------------------------=----------------------------- -->
-                  <div class="field col-12 md:col-6">
-                    <span class="p-float-label">
-                      <p-dropdown
-                        id="ketQua"
-                        formControlName="ketQua"
-                        [options]="loaiKQOPtions"
-                        optionLabel="text"
-                        optionValue="value"
-                        [showClear]="true"
-                        [autoDisplayFirst]="false"
-                        styleClass="w-full"
-                      ></p-dropdown>
-                      <label>Kết luận nội dung tố cáo </label>
-                      <app-validation-message
-                        [entityControl]="formControls.ketQua"
-                        [validationMessages]="validationMessages.ketQua"
-                      >
-                      </app-validation-message>
-                    </span>
-                  </div>
+                  <!-- ---------------------------------------------------------------- -->
                 </div>
               </p-accordionTab>
               <!-- ---------------------------------------------------------------------------------- -->
             </p-accordion>
+            <p-panel class="w-full" iconPos="start">
+              <ng-template pTemplate="header">
+                <span style="margin: 10px" class="font-semibold text-xl"
+                  ><i class="pi pi-star"></i> Tình trạng xử lý</span
+                >
+              </ng-template>
+              <div class="grid">
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <p-dropdown
+                      id="trangThai"
+                      formControlName="trangThai"
+                      [options]="trangThaiOPtions"
+                      optionLabel="text"
+                      optionValue="value"
+                      [showClear]="true"
+                      [autoDisplayFirst]="false"
+                      styleClass="w-full"
+                    ></p-dropdown>
+                    <label>Trạng thái <span class="required">*</span></label>
+                  </span>
+                </div>
+                <!-- ----------------------------boPhanDangXL---------------------------=----------------------------- -->
+                <div class="field col-12 md:col-6">
+                  <span class="p-float-label">
+                    <input
+                      id="boPhanDangXL"
+                      formControlName="boPhanDangXL"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="boPhanDangXL"
+                      >Bộ phận thực hiện <span class="required">*</span>
+                    </label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.boPhanDangXL"
+                    [validationMessages]="validationMessages.boPhanDangXL"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- -------------------------------------------------------=----------------------------- -->
+                <div
+                  *ngIf="hasPermissionViewPrivateInfo"
+                  class="field col-12 md:col-6 flex align-items-center"
+                >
+                  <p-inputSwitch formControlName="congKhai"></p-inputSwitch>
+                  <label class="ml-3">Công khai</label>
+                </div>
+                <!-- -------------------------------------------------------=----------------------------- -->
+                <div
+                  *ngIf="hasPermissionViewPrivateInfo"
+                  class="field col-12 md:col-6 flex align-items-center"
+                >
+                  <p-inputSwitch
+                    formControlName="luuTru"
+                    [disabled]="true"
+                    readonly="true"
+                  ></p-inputSwitch>
+                  <label class="ml-3">{{ luuTru ? 'Đã khóa hồ sơ' : 'Hồ sơ chưa khóa' }}</label>
+                </div>
+                <!-- ----------------------------ghiChu---------------------------=----------------------------- -->
+                <div *ngIf="hasPermissionViewPrivateInfo" class="field col-12 md:col-12">
+                  <span class="p-float-label">
+                    <textarea
+                      id="ghiChu"
+                      formControlName="ghiChu"
+                      [rows]="4"
+                      pInputTextarea
+                      class="w-full"
+                    ></textarea>
+                    <label for="ghiChu" class="text-red-400">Ghi chú</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.ghiChu"
+                    [validationMessages]="validationMessages.ghiChu"
+                  >
+                  </app-validation-message>
+                </div>
+              </div>
+            </p-panel>
           </div>
         </ng-template>
       </p-tabPanel>
@@ -738,14 +792,14 @@
       <p-tabPanel>
         <ng-template pTemplate="header">
           <i class="pi pi-folder mr-2"></i>
-          <span>Tệp gắn kèm</span>
+          <span>Hồ sơ gắn kèm</span>
         </ng-template>
 
         <ng-template pTemplate="content">
           <app-file-attachment
             [loaiVuViec]="loaiVuViec"
             [modeHoSo]="mode"
-            [denounceId]="denounceId"
+            [idHoSo]="denounceId"
           ></app-file-attachment>
         </ng-template>
       </p-tabPanel>
@@ -753,136 +807,134 @@
       <p-tabPanel>
         <ng-template pTemplate="header">
           <i class="pi pi-fw pi-map-marker mr-2"></i>
-          <span>Bản đồ</span>
+          <span>Dữ liệu không gian</span>
         </ng-template>
 
         <ng-template pTemplate="content">
           <p-card header="Dữ liệu không gian" class="w-full" *ngIf="mode != 'view'">
             <!-- -------------------------------Dữ liệu--------------------------------------------------- -->
             <div class="grid">
-              <!-- -------------------------------maHoSo--------------------------------------------------- -->
-              <div class="field col-12 md:col-6">
-                <span class="p-float-label">
-                  <input
-                    id="duLieuToaDo"
-                    formControlName="duLieuToaDo"
-                    type="text"
-                    pInputText
-                    [style]="{ width: '100%' }"
-                  />
-                  <label for="duLieuToaDo">Dữ liệu tọa độ</label>
-                </span>
-                <app-validation-message
-                  [entityControl]="formControls.duLieuToaDo"
-                  [validationMessages]="validationMessages.duLieuToaDo"
-                >
-                </app-validation-message>
+              <!-- -------------------------------duLieuToaDo--------------------------------------------------- -->
+              <div *ngIf="hasPermissionViewPrivateInfo" class="field grid col-12 md:col-12">
+                <div class="field col-10 md:col-10">
+                  <span class="p-float-label">
+                    <input
+                      id="duLieuToaDo"
+                      formControlName="duLieuToaDo"
+                      type="text"
+                      pInputText
+                      [style]="{ width: '100%' }"
+                    />
+                    <label for="duLieuToaDo">Dữ liệu tọa độ</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.duLieuToaDo"
+                    [validationMessages]="validationMessages.duLieuToaDo"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- -------------------------------getCoordiate--------------------------------------------------- -->
+                <div class="field col-2 md:col-2">
+                  <button
+                    *ngIf="mode != 'view'"
+                    pButton
+                    pRipples
+                    type="button"
+                    (click)="getCoordiate()"
+                    label="{{ coordinateLabel }}"
+                    class="p-button-info mr-2"
+                    icon="pi pi-map-marker"
+                  ></button>
+                </div>
               </div>
-              <div class="field col-12 md:col-6">
-                <button
-                  *ngIf="mode != 'view'"
-                  pButton
-                  pRipples
-                  type="button"
-                  (click)="getCoordiate()"
-                  label="{{coordinateLabel}}"
-                  class="p-button-info mr-2"
-                  icon="pi pi-map-marker"
-                ></button>
+              <!-- -------------------------------duLieuHinhHoc--------------------------------------------------- -->
+              <div *ngIf="hasPermissionViewPrivateInfo" class="field grid col-12 md:col-12">
+                <div class="field col-10 md:col-10">
+                  <span class="p-float-label">
+                    <textarea
+                      id="duLieuHinhHoc"
+                      formControlName="duLieuHinhHoc"
+                      [rows]="5"
+                      pInputTextarea
+                      class="w-full"
+                    ></textarea>
+                    <label for="duLieuHinhHoc">Dữ liệu hình học</label>
+                  </span>
+                  <app-validation-message
+                    [entityControl]="formControls.duLieuHinhHoc"
+                    [validationMessages]="validationMessages.duLieuHinhHoc"
+                  >
+                  </app-validation-message>
+                </div>
+                <!-- -------------------------------getDraw--------------------------------------------------- -->
+                <div class="field col-2 md:col-2">
+                  <button
+                    *ngIf="mode != 'view'"
+                    pButton
+                    pRipples
+                    type="button"
+                    (click)="getDraw()"
+                    label="{{ drawLabel }}"
+                    class="p-button-info mr-2"
+                    icon="pi pi-map-marker"
+                  ></button>
+                </div>
               </div>
-              <div class="field col-12 md:col-8">
-                <span class="p-float-label">
-                  <textarea
-                    id="duLieuHinhHoc"
-                    formControlName="duLieuHinhHoc"
-                    [rows]="5"
-                    pInputTextarea
-                    class="w-full"
-                  ></textarea>
-                  <label for="duLieuHinhHoc">Dữ liệu hình học</label>
-                </span>
-                <app-validation-message
-                  [entityControl]="formControls.duLieuHinhHoc"
-                  [validationMessages]="validationMessages.duLieuHinhHoc"
-                >
-                </app-validation-message>
-              </div>
-              <!-- -------------------------------getDraw--------------------------------------------------- -->
-              <div class="field col-12 md:col-4">
-                <button
-                  *ngIf="mode != 'view'"
-                  pButton
-                  pRipples
-                  type="button"
-                  (click)="letDraw()"
-                  label="{{drawLabel}}"
-                  class="p-button-info mr-2"
-                  icon="pi pi-map-marker"
-                ></button>
-              </div>
+              <!-- ---------------------------------------------------------------- -->
             </div>
           </p-card>
           <p-card>
             <!-- -------------------------------Bản đồ--------------------------------------------------- -->
-            <app-map [data]="dataMap"></app-map>
+            <app-map [data]="dataMap" [duLieuToaDo]="toado"></app-map>
           </p-card>
         </ng-template>
       </p-tabPanel>
-      <!-- ----------------------------------------------------------------------- -->
     </p-tabView>
 
-    <ng-template *ngIf="mode != 'view'" pTemplate="footer">
-      <div class="flex justify-content-end">
-        <button
-          pButton
-          pRipples
-          type="button"
-          (click)="saveChange()"
-          label="Lưu"
-          class="p-button-info mr-2"
-          icon="pi pi-check"
-        ></button>
-        <button
-          pButton
-          pRipples
-          type="button"
-          (click)="close()"
-          label="Đóng"
-          class="p-button-danger"
-          icon="pi pi-times"
-        ></button>
-      </div>
-    </ng-template>
-    <ng-template *ngIf="(mode == 'view') && hasPermissionUpdate" pTemplate="footer">
-      <div class="flex justify-content-end">
-        <button *ngIf="(mode == 'view')"
-          pButton
-          pRipples
-          type="button"
-          (click)="changeEditMode()"
-          label="Sửa"
-          class="p-button-info mr-2"
-          icon="pi pi-check"
-        ></button>
-        <button *ngIf="(mode != 'view')"
-          pButton
-          pRipples
-          type="button"
-          (click)="saveChange()"
-          label="Lưu"
-          class="p-button-info mr-2"
-          icon="pi pi-check"
-        ></button>
-        <button
-          pButton
-          pRipples
-          type="button"
-          (click)="close()"
-          label="Đóng"
-          class="p-button-danger"
-          icon="pi pi-times"
-        ></button>
-      </div>
-    </ng-template>
+    <ng-container>
+      <ng-template pTemplate="footer">
+        <div class="flex justify-content-end">
+          <button
+            *ngIf="mode != 'view'"
+            pButton
+            pRipples
+            type="button"
+            (click)="saveChange()"
+            label="Lưu"
+            class="p-button-info mr-2"
+            icon="pi pi-check"
+          ></button>
+          <button
+            *ngIf="showBtnLuuTru"
+            pButton
+            pRipples
+            type="button"
+            (click)="Lock()"
+            label="Khóa hồ sơ"
+            class="p-button-info mr-2"
+            icon="pi pi-check"
+          ></button>
+          <button
+            *ngIf="luuTru"
+            pButton
+            pRipples
+            type="button"
+            (click)="UnLock()"
+            label="Mở Khóa"
+            class="p-button-info mr-2"
+            icon="pi pi-check"
+          ></button>
+          <button
+            pButton
+            pRipples
+            type="button"
+            (click)="close()"
+            label="Đóng"
+            class="p-button-danger"
+            icon="pi pi-times"
+          ></button>
+        </div>
+      </ng-template>
+    </ng-container>
   </p-panel>
 </form>

@@ -4,10 +4,10 @@ import { LandTypeDto, LandTypeService } from '@proxy/land-types';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
-import { Actions } from 'src/app/shared/enums/actions.enum';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { DIALOG_MD } from 'src/app/_shared/constants/sizes.const';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { LandTypeDetailComponent } from './detail/land-type-detail.component';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
@@ -49,15 +49,20 @@ export class LandTypeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.breadcrumb = [{ label: 'Danh mục loại đất' }];
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [{ label: ' Quản trị hệ thống', icon: 'pi pi-cog', disabled: true }];
+    this.breadcrumb.push({
+      label: ' Danh mục loại đất',
+      icon: 'pi pi-images',
+    });
+
     this.getPermission();
     this.buildActionMenu();
     this.loadData();
   }
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('LandType.Edit');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('LandType.Delete');
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('LandTypes.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('LandTypes.Delete');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 

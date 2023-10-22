@@ -1,7 +1,6 @@
 import { Environment } from '@abp/ng.core';
 
-const baseUrl = 'http://localhost:4201';
-
+const baseUrl = 'http://gqkntc.tnmtthainguyen.gov.vn:4201';
 
 export const environment = {
   production: false,
@@ -11,18 +10,16 @@ export const environment = {
     logoUrl: '',
   },
   oAuthConfig: {
-    issuer: 'http://localhost:5101/',
+    issuer: 'http://gqkntc.tnmtthainguyen.gov.vn:5101/',
+    // redirectUri: baseUrl,
     clientId: 'KNTC_App',
+    // responseType: 'code',
     scope: 'offline_access KNTC',
     requireHttps: false,
   },
   apis: {
     default: {
-      url: 'http://localhost:5102',
-      rootNamespace: 'KNTC',
-    },
-    geoserver: {
-      url: 'http://localhost:8080',
+      url: 'http://gqkntc.tnmtthainguyen.gov.vn:5101',
       rootNamespace: 'KNTC',
     },
   },

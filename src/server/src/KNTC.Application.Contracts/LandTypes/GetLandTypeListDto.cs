@@ -1,6 +1,6 @@
 ﻿namespace KNTC.LandTypes;
 
-public class GetLandTypeListDto : BaseListFilterDto
+public class GetLandTypesListDto : BaseListFilterDto
 {
     public Status? Status { get; set; }
 }

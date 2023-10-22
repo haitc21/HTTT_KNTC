@@ -1,8 +1,11 @@
 import type { GetIdentityUsersInput, IdentityUserDto, IdentityUserUpdateDto } from '../volo/abp/identity/models';
+import type { UserType } from '../user-type.enum';
 import type { EntityDto } from '@abp/ng.core';
 
-export interface CrateAndUpdateUserDto extends IdentityUserUpdateDto {
+export interface CreateAndUpdateUserDto extends IdentityUserUpdateDto {
   dob?: string;
+  userType?: UserType;
+  managedUnitIds: number[];
 }
 
 export interface GetUserListDto extends GetIdentityUsersInput {
@@ -25,6 +28,8 @@ export interface UserDto extends IdentityUserDto {
 export interface UserInfoDto extends EntityDto<string> {
   userId?: string;
   dob?: string;
+  userType?: number;
+  managedUnitIds: number[];
 }
 
 export interface UserListDto extends EntityDto<string> {
@@ -33,6 +38,7 @@ export interface UserListDto extends EntityDto<string> {
   surname?: string;
   email?: string;
   phoneNumber?: string;
+  userType?: number;
   dob?: string;
   avatarContent: number[];
   isActive: boolean;

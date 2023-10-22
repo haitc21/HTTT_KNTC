@@ -1,0 +1,263 @@
+<div class="animated fadeIn grid card col-12">
+  <p-breadcrumb [model]="breadcrumb" [home]="home"></p-breadcrumb>
+  <p-panel #pnl class="col-12">
+    <p-toolbar>
+      <div class="formgrid grid">
+        <div class="field col-12 md:col-3">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-search"></i>
+            <input
+              autofocus
+              pInputText
+              type="text"
+              (keyup.enter)="loadData()"
+              [(ngModel)]="keyword"
+              placeholder="Tìm kiếm"
+              class="w-full"
+            />
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <p-selectButton
+            [options]="loaiVuviecOptions"
+            [(ngModel)]="loaiVuViec"
+            optionLabel="text"
+            optionValue="value"
+            (onChange)="initData($event)"
+          ></p-selectButton>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="linhvucOptions"
+              [(ngModel)]="linhVuc"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label>Lĩnh vực</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-2">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-user"></i>
+            <input
+              pInputText
+              type="text"
+              (keyup.enter)="loadData()"
+              [(ngModel)]="nguoiNopDon"
+              placeholder="Người nộp đơn"
+              class="w-full"
+            />
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="tinhOptions"
+              [(ngModel)]="maTinh"
+              optionLabel="unitName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitName"
+              styleClass="w-full"
+              (onChange)="tinhChange($event)"
+            ></p-dropdown>
+            <label>Tỉnh</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="huyenOptions"
+              [(ngModel)]="maHuyen"
+              optionLabel="unitName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitName"
+              styleClass="w-full"
+              (onChange)="huyenChange($event)"
+            ></p-dropdown>
+            <label>Huyện/TP</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="xaOptions"
+              [(ngModel)]="maXa"
+              optionLabel="unitName"
+              optionValue="id"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="unitName"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label>Phường/Xã</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-calendar
+              appendTo="body"
+              [(ngModel)]="thoiGianTiepNhanRange"
+              selectionMode="range"
+              dateFormat="dd/mm/yy"
+              [showClear]="true"
+              inputId="thoiGianTiepNhanRange"
+              (onSelect)="thoiGiantiepNhanChange()"
+              (onClear)="thoiGiantiepNhanChange()"
+            ></p-calendar>
+            <label>Thời gian tiếp nhận</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="loaiKQOptions"
+              [(ngModel)]="ketQua"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label>Kết luận</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-dropdown
+              id="trangThai"
+              [options]="trangThaiOPtions"
+              [(ngModel)]="trangThai"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label>Trạng thái</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div *abpPermission="'Complains'" class="field col-12 md:col-2">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="congKhaiOptions"
+              [(ngModel)]="congKhai"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label>Công khai</label>
+          </span>
+        </div>
+      </div>
+    </p-toolbar>
+    <!-- ----------------------------------------------------------------------- -->
+    <p-toolbar>
+      <ng-template pTemplate="left">
+        <!-- <i class="pi pi-search mr-2"></i>
+        <h5>Kết quả tìm kiếm</h5> -->
+      </ng-template>
+
+      <ng-template pTemplate="right">
+        <button
+          type="button"
+          pButton
+          pRipple
+          label="In Sổ"
+          icon="pi pi-download"
+          class="p-button-info mr-2"
+          (click)="exportExcel()"
+        ></button>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table #dt [value]="items" [rows]="10" [paginator]="false" [rowHover]="true" dataKey="id">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="row-num-column">STT</th>
+          <th>Mã hồ sơ</th>
+          <th style="min-width: 180px">Nội dung</th>
+          <th>Loại vụ việc</th>
+          <th>Lĩnh vực</th>
+          <th style="min-width: 100px">Người nộp đơn</th>
+          <th>Số ĐT</th>
+          <th>Địa chỉ</th>
+          <th>Thời gian nộp</th>
+          <th>Ngày hẹn trả KQ</th>
+          <th style="min-width: 150px">Bộ phận thực hiện</th>
+          <th style="min-width: 150px">Trạng thái</th>
+          <th style="min-width: 150px">Kết luận</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+        <tr>
+          <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
+          <td>
+            <span [ngClass]="p - link" (click)="viewDetail(row)"
+              ><strong>{{ row.maHoSo }}</strong></span
+            >
+          </td>
+          <td>
+            <span [ngClass]="p - link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
+          </td>
+          <td [ngClass]="row.loaiVuViec == 1 ? 'kn' : 'tc'">
+            {{ LoaiVuViecOptions[row.loaiVuViec] }}
+          </td>
+          <td>{{ LinhVucOptions[row.linhVuc] }}</td>
+          <td>{{ row.nguoiNopDon }}</td>
+          <td>{{ row.dienThoai }}</td>
+          <td>{{ row.diaChiLienHe }}</td>
+          <td>
+            {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
+          </td>
+          <td>
+            {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
+          </td>
+          <td>{{ row.boPhanDangXL }}</td>
+          <td style="color: blue">{{ TrangthaiOptions[row?.trangThai ? row?.trangThai : 0] }}</td>
+          <td>{{ KetquaOptions[row?.ketQua ? row?.ketQua : 0] }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <p-paginator
+          [rows]="maxResultCount"
+          [totalRecords]="totalCount"
+          [showCurrentPageReport]="true"
+          [showJumpToPageInput]="true"
+          (onPageChange)="pageChanged($event)"
+          currentPageReportTemplate="{totalRecords} bản ghi"
+          [rowsPerPageOptions]="[10, 20, 50, 100]"
+        ></p-paginator>
+      </ng-template>
+    </p-table>
+    <!-- ----------------------------------------------------------------------- -->
+  </p-panel>
+</div>
+<ng-template #emptyTpl><td></td></ng-template>

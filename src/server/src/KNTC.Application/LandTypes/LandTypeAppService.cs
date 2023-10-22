@@ -19,7 +19,7 @@ public class LandTypeAppService : CrudAppService<
             LandType,
             LandTypeDto,
             int,
-            GetLandTypeListDto,
+            GetLandTypesListDto,
             CreateAndUpdateLandTypeDto>, ILandTypeAppService
 {
     private readonly LandTypeManager _landTypeManager;
@@ -35,14 +35,14 @@ public class LandTypeAppService : CrudAppService<
         _cache = cache;
     }
 
-    public override async Task<PagedResultDto<LandTypeDto>> GetListAsync(GetLandTypeListDto input)
+    public override async Task<PagedResultDto<LandTypeDto>> GetListAsync(GetLandTypesListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
             input.Sorting = $"{nameof(LandType.OrderIndex)}, {nameof(LandType.LandTypeName)}";
         }
 
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
@@ -69,8 +69,11 @@ public class LandTypeAppService : CrudAppService<
         );
     }
 
+    //
     public async Task<ListResultDto<LandTypeLookupDto>> GetLookupAsync()
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var cacheItem = await _cache.GetOrAddAsync(
         "All",
         async () =>
@@ -81,16 +84,17 @@ public class LandTypeAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
         });
 
         return new ListResultDto<LandTypeLookupDto>(cacheItem.Items);
     }
 
+    [Authorize(KNTCPermissions.LandTypePermission.Create)]
     public override async Task<LandTypeDto> CreateAsync(CreateAndUpdateLandTypeDto input)
     {
-        var entity = await _landTypeManager.CreateAsync(input.LandTypeCode,
-                                                          input.LandTypeName,
+        var entity = await _landTypeManager.CreateAsync(input.LandTypeCode.Trim(),
+                                                          input.LandTypeName.Trim(),
                                                           input.Description,
                                                           input.OrderIndex,
                                                           input.Status);
@@ -99,13 +103,14 @@ public class LandTypeAppService : CrudAppService<
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.LandTypePermission.Edit)]
     public override async Task<LandTypeDto> UpdateAsync(int id, CreateAndUpdateLandTypeDto input)
     {
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _landTypeManager.UpdateAsync(entity,
-                                           input.LandTypeCode,
-                                           input.LandTypeName,
+                                           input.LandTypeCode.Trim(),
+                                           input.LandTypeName.Trim(),
                                            input.Description,
                                            input.OrderIndex,
                                            input.Status);
@@ -114,6 +119,7 @@ public class LandTypeAppService : CrudAppService<
         return ObjectMapper.Map<LandType, LandTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.LandTypePermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);

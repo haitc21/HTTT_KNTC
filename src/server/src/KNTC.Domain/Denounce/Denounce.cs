@@ -32,7 +32,7 @@ public class Denounce : AuditedAggregateRoot<Guid>
     public DateTime NgaySinh { get; set; }
 
     public string DienThoai { get; set; }
-    public string Email { get; set; }
+    public string? Email { get; set; }
     public string DiaChiThuongTru { get; set; }
     public string DiaChiLienHe { get; set; }
     public int MaTinhTP { get; set; }
@@ -51,22 +51,27 @@ public class Denounce : AuditedAggregateRoot<Guid>
     public int TinhThuaDat { get; set; }
     public int HuyenThuaDat { get; set; }
     public int XaThuaDat { get; set; }
-    public string DuLieuToaDo { get; set; }
-    public string DuLieuHinhHoc { get; set; }
-    public string GhiChu { get; set; }
+    public string? DuLieuToaDo { get; set; }
+    public string? DuLieuHinhHoc { get; set; }
+    public string? GhiChu { get; set; }
 
     public DateTime? NgayGQTC { get; set; }
-    public string NguoiGQTC { get; set; }
-    public string QuyerDinhThuLyGQTC { get; set; }
+    public string? NguoiGQTC { get; set; }
+    public string? QuyerDinhThuLyGQTC { get; set; }
     public DateTime? NgayQDGQTC { get; set; }
-    public string QuyetDinhDinhChiGQTC { get; set; }
+    public string? QuyetDinhDinhChiGQTC { get; set; }
     public DateTime? GiaHanGQTC1 { get; set; }
     public DateTime? GiaHanGQTC2 { get; set; }
-    public string SoVBKLNDTC { get; set; }
+    public string? SoVBKLNDTC { get; set; }
     public DateTime? NgayNhanTBKQXLKLTC { get; set; }
     public LoaiKetQua? KetQua { get; set; }
 
     public bool CongKhai { get; set; }
+    public TrangThai TrangThai { get; set; }
+
+    //public TinhTrang TinhTrang { get; set; }
+    public bool LuuTru { get; set; }
+
     public LandType LandType { get; set; }
 
     private void SetMaHoSo([NotNull] string maHoSo)

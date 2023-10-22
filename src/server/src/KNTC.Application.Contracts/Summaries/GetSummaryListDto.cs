@@ -4,6 +4,9 @@ namespace KNTC.Summaries;
 
 public class GetSummaryListDto : BaseListFilterDto
 {
+    public LoaiVuViec? loaiVuViec { get; set; }
+    public LinhVuc? linhVuc { get; set; }
+
     public bool LandComplain { get; set; }
     public bool EnviromentComplain { get; set; }
     public bool WaterComplain { get; set; }
@@ -21,5 +24,6 @@ public class GetSummaryListDto : BaseListFilterDto
     public DateTime? ToDate { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public bool? CongKhai { get; set; }
-    public string NguoiNopDon { get; set; }
+    public TrangThai? TrangThai { get; set; }
+    public string? NguoiNopDon { get; set; }
 }

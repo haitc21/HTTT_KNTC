@@ -14,8 +14,9 @@ public class FileAttachmentDto : AuditedEntityDto<Guid>
     public DateTime NgayNhan { get; set; }
     public string ThuTuButLuc { get; set; }
     public string NoiDungChinh { get; set; }
-    public string FileName { get; set; }
-    public string ContentType { get; set; }
-    public long ContentLength { get; set; }
+    public string? FileName { get; set; }
+    public string? ContentType { get; set; }
+    public long? ContentLength { get; set; }
     public bool CongKhai { get; set; }
+    public bool ChoPhepDownload { get; set; }
 }

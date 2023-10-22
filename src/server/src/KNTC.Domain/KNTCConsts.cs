@@ -5,11 +5,12 @@ public static class KNTCConsts
     public const string DbTablePrefix = "App";
 
     public const string KNTCDbSchema = "KNTC";
+    public const string SpatialDataDbSchema = "SPATIAL_DATA";
 }
 
 public struct RegexDefine
 {
-    public const string Email = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
+    public const string? Email = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
     public const string Year = @"^\d{4}$";
     public const string IntergerDuong = @"^\d*$";//"^0|([1-9]+[0-9]*)$";
     public const string Interger = @"^((\-\d+)|(\d*))$";//@"^0|(\-?[1-9]+[0-9]*)$";

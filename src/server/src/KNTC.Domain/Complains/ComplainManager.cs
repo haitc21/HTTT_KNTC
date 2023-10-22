@@ -28,7 +28,7 @@ public class ComplainManager : DomainService
                                               //[NotNull] string noiCapCccdCmnd,
                                               [NotNull] DateTime ngaySinh,
                                               [NotNull] string DienThoai,
-                                              string email,
+                                              string? email,
                                               [NotNull] string diaChiThuongTru,
                                               [NotNull] string diaChiLienHe,
                                               [NotNull] int maTinhTP,
@@ -46,20 +46,22 @@ public class ComplainManager : DomainService
                                               [NotNull] int tinhThuaDat,
                                               [NotNull] int huyenThuaDat,
                                               [NotNull] int xaThuaDat,
-                                              string duLieuToaDo,
-                                              string duLieuHinhHoc,
-                                              string GhiChu,
+                                              string? duLieuToaDo,
+                                              string? duLieuHinhHoc,
+                                              string? GhiChu,
                                               LoaiKhieuNai? loaiKhieuNai1,
                                               DateTime? ngayKhieuNai1,
                                               DateTime? NgayTraKQ1,
-                                              string ThamQuyen1,
-                                              string SoQD1,
+                                              string? ThamQuyen1,
+                                              string? SoQD1,
                                               LoaiKhieuNai? loaiKhieuNai2,
                                               DateTime? ngayKhieuNai2,
                                               DateTime? NgayTraKQ2,
-                                              string ThamQuyen2,
-                                              string SoQD2,
+                                              string? ThamQuyen2,
+                                              string? SoQD2,
                                               [NotNull] bool congKhai,
+                                              bool luuTru,
+                                              [NotNull] TrangThai TrangThai,
                                               LoaiKetQua? KetQua1 = null,
                                               LoaiKetQua? KetQua2 = null
         )
@@ -89,6 +91,7 @@ public class ComplainManager : DomainService
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
         Check.NotNull(congKhai, nameof(congKhai));
+        Check.NotNull(TrangThai, nameof(TrangThai));
 
         var existedHoSo = await _hoSoRepo.FindByMaHoSoAsync(maHoSo, false);
         if (existedHoSo != null)
@@ -139,7 +142,9 @@ public class ComplainManager : DomainService
             SoQD2 = SoQD2,
             KetQua2 = KetQua2,
             KetQua = KetQua2 ?? KetQua1,
-            CongKhai = congKhai
+            CongKhai = congKhai,
+            TrangThai = TrangThai,
+            LuuTru = luuTru
         };
     }
 
@@ -183,22 +188,24 @@ public class ComplainManager : DomainService
                                    [NotNull] int tinhThuaDat,
                                    [NotNull] int huyenThuaDat,
                                    [NotNull] int xaThuaDat,
-                                   string duLieuToaDo,
-                                   string duLieuHinhHoc,
-                                   string GhiChu,
+                                   string? duLieuToaDo,
+                                   string? duLieuHinhHoc,
+                                   string? GhiChu,
                                    LoaiKhieuNai? loaiKhieuNai1,
                                    DateTime? ngayKhieuNai1,
                                    DateTime? NgayTraKQ1,
-                                   string ThamQuyen1,
-                                   string SoQD1,
+                                   string? ThamQuyen1,
+                                   string? SoQD1,
                                    LoaiKhieuNai? loaiKhieuNai2,
                                    DateTime? ngayKhieuNai2,
                                    DateTime? NgayTraKQ2,
-                                   string ThamQuyen2,
-                                   string SoQD2,
+                                   string? ThamQuyen2,
+                                   string? SoQD2,
                                    [NotNull] bool congKhai,
-                                   LoaiKetQua? KetQua1 = null,
-                                   LoaiKetQua? KetQua2 = null
+                                   bool luuTru,
+                                   [NotNull] TrangThai trangThai,
+                                   LoaiKetQua? ketQua1 = null,
+                                   LoaiKetQua? ketQua2 = null
       )
     {
         Check.NotNull(complain, nameof(complain));
@@ -227,6 +234,7 @@ public class ComplainManager : DomainService
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
         Check.NotNull(congKhai, nameof(congKhai));
+        Check.NotNull(trangThai, nameof(trangThai));
 
         if (complain.MaHoSo != maHoSo)
         {
@@ -266,14 +274,16 @@ public class ComplainManager : DomainService
         complain.NgayTraKQ1 = NgayTraKQ1;
         complain.ThamQuyen1 = ThamQuyen1;
         complain.SoQD1 = SoQD1;
-        complain.KetQua1 = KetQua1;
+        complain.KetQua1 = ketQua1;
         complain.loaiKhieuNai2 = loaiKhieuNai2;
         complain.NgayKhieuNai2 = ngayKhieuNai2;
         complain.NgayTraKQ2 = NgayTraKQ2;
         complain.ThamQuyen2 = ThamQuyen2;
         complain.SoQD2 = SoQD2;
-        complain.KetQua2 = KetQua2;
+        complain.KetQua2 = ketQua2;
         complain.CongKhai = congKhai;
-        complain.KetQua = KetQua2 ?? KetQua1;
+        complain.LuuTru = luuTru;
+        complain.TrangThai = trangThai;
+        complain.KetQua = ketQua2 ?? ketQua1;
     }
 }

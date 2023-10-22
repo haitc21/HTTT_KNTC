@@ -44,7 +44,7 @@ public class UnitTypeAppService : CrudAppService<
             input.Sorting = $"{nameof(UnitType.OrderIndex)}, {nameof(UnitType.UnitTypeName)}";
         }
 
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
@@ -71,8 +71,11 @@ public class UnitTypeAppService : CrudAppService<
         );
     }
 
+    //
     public async Task<ListResultDto<UnitTypeLookupDto>> GetLookupAsync()
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var cacheItem = await _cache.GetOrAddAsync(
         "All",
         async () =>
@@ -83,16 +86,17 @@ public class UnitTypeAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
         });
 
         return new ListResultDto<UnitTypeLookupDto>(cacheItem.Items);
     }
 
+    [Authorize(KNTCPermissions.UnitTypePermission.Create)]
     public override async Task<UnitTypeDto> CreateAsync(CreateAndUpdateUnitTypeDto input)
     {
-        var entity = await _unitTypeManager.CreateAsync(input.UnitTypeCode,
-                                                          input.UnitTypeName,
+        var entity = await _unitTypeManager.CreateAsync(input.UnitTypeCode.Trim(),
+                                                          input.UnitTypeName.Trim(),
                                                           input.Description,
                                                           input.OrderIndex,
                                                           input.Status);
@@ -101,13 +105,14 @@ public class UnitTypeAppService : CrudAppService<
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.UnitTypePermission.Edit)]
     public override async Task<UnitTypeDto> UpdateAsync(int id, CreateAndUpdateUnitTypeDto input)
     {
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _unitTypeManager.UpdateAsync(entity,
-                                           input.UnitTypeCode,
-                                           input.UnitTypeName,
+                                           input.UnitTypeCode.Trim(),
+                                           input.UnitTypeName.Trim(),
                                            input.Description,
                                            input.OrderIndex,
                                            input.Status);
@@ -116,6 +121,7 @@ public class UnitTypeAppService : CrudAppService<
         return ObjectMapper.Map<UnitType, UnitTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.UnitTypePermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);

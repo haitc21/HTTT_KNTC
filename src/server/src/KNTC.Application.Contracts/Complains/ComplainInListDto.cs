@@ -17,4 +17,5 @@ public class ComplainInListDto
     public DateTime? NgayTraKQ2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
+    public TrangThai TrangThai { get; set; }
 }

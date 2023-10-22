@@ -1,11 +1,6 @@
 $gutter: 1rem; //for primeflex grid system
 @import 'assets/layout/styles/layout/layout.scss';
 
-/* PrimeNG */
-@import '../node_modules/primeng/resources/primeng.min.css';
-@import '../node_modules/primeflex/primeflex.scss';
-@import '../node_modules/primeicons/primeicons.css';
-
 .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
   background: #3b82f6;
   border-color: red;
@@ -14,6 +9,13 @@ $gutter: 1rem; //for primeflex grid system
 #inputPassword {
   width: 100% !important;
 }
+.p-password-mask > div > i::before {
+  margin-left: -25px;
+}
+#password1 > div > i {
+  margin-left: -15px;
+}
+
 .search-width {
   width: 250px;
 }
@@ -26,9 +28,6 @@ $gutter: 1rem; //for primeflex grid system
 }
 .row-num-cell {
   text-align: center !important;
-}
-.p-dropdown-panel {
-  width: 100%;
 }
 
 .topmenu {
@@ -157,29 +156,11 @@ li {
 .p-float-label textarea.p-filled ~ label,
 .p-float-label .p-inputwrapper-focus ~ label,
 .p-float-label .p-inputwrapper-filled ~ label {
-  top: -0.75rem;
-  font-size: 12px;
-}
-.p-float-label input:focus ~ label,
-.p-float-label input.p-filled ~ label,
-.p-float-label textarea:focus ~ label,
-.p-float-label textarea.p-filled ~ label,
-.p-float-label .p-inputwrapper-focus ~ label,
-.p-float-label .p-inputwrapper-filled ~ label {
   top: -0.5rem !important;
   background-color: #ffffff;
   padding: 2px 4px;
   margin-left: -4px;
   margin-top: 0;
-}
-.p-float-label label {
-  position: absolute;
-  pointer-events: none;
-  top: 50%;
-  margin-top: -0.5rem;
-  transition-property: all;
-  transition-timing-function: ease;
-  line-height: 1;
 }
 .p-float-label > label {
   left: 1rem;
@@ -202,5 +183,16 @@ li {
   background: #40a9ff;
 }
 .accordionTab {
-  padding: 30px 0;
+  //padding: 30px 0;
+}
+.p-treeselect {
+  width: 100% !important;
+}
+.p-tree .p-tree-container .p-treenode .p-treenode-content.p-highlight {
+  color: #fff;
+  background: #40a9ff;
+}
+.p-treeselect.p-treeselect-chip .p-treeselect-token {
+  color: #fff;
+  background: #40a9ff;
 }

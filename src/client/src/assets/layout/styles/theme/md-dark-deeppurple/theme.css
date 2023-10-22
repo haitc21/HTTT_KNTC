@@ -1176,7 +1176,7 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   border-radius: 4px;
 }
 .p-inputtext:enabled:hover {
-  border-color: rgba(255, 255, 255, 0.6);
+  background-color: #383838;
 }
 .p-inputtext:enabled:focus {
   outline: 0 none;

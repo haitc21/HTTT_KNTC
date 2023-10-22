@@ -44,7 +44,7 @@ public class CreateComplainDto
 
     [EmailAddress]
     [MaxLength(KNTCValidatorConsts.MaxEmailLength)]
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxDiaChiLength)]
@@ -104,21 +104,21 @@ public class CreateComplainDto
     public int xaThuaDat { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxToaDoLength)]
-    public string DuLieuToaDo { get; set; }
+    public string? DuLieuToaDo { get; set; }
 
     //[MaxLength(KNTCValidatorConsts.MaxHinhHocLength)]
-    public string DuLieuHinhHoc { get; set; }
+    public string? DuLieuHinhHoc { get; set; }
 
-    public string GhiChu { get; set; }
+    public string? GhiChu { get; set; }
     public LoaiKhieuNai? loaiKhieuNai1 { get; set; }
     public DateTime? NgayKhieuNai1 { get; set; }
     public DateTime? NgayTraKQ1 { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxThamQuyenLength)]
-    public string ThamQuyen1 { get; set; }
+    public string? ThamQuyen1 { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
-    public string SoQD1 { get; set; }
+    public string? SoQD1 { get; set; }
 
     public LoaiKetQua? KetQua1 { get; set; }
     public LoaiKhieuNai? loaiKhieuNai2 { get; set; }
@@ -126,15 +126,20 @@ public class CreateComplainDto
     public DateTime? NgayTraKQ2 { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxThamQuyenLength)]
-    public string ThamQuyen2 { get; set; }
+    public string? ThamQuyen2 { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
-    public string SoQD2 { get; set; }
+    public string? SoQD2 { get; set; }
 
     public LoaiKetQua? KetQua2 { get; set; }
 
     [Required]
+    public TrangThai TrangThai { get; set; }
+
+    [Required]
     public bool CongKhai { get; set; }
 
-    public virtual List<CreateAndUpdateFileAttachmentDto> FileAttachments { get; set; }
+    public bool LuuTru { get; set; }
+
+    public virtual List<CreateAndUpdateFileAttachmentDto>? FileAttachments { get; set; }
 }

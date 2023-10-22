@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.BlobStoring;
 using Volo.Abp.Data;
@@ -23,7 +24,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 {
     protected IdentityUserManager UserManager { get; }
     protected IIdentityUserRepository UserRepository { get; }
-    protected IRepository<IdentityRole, Guid> RoleRepository { get; }
+    protected IRepository<Volo.Abp.Identity.IdentityRole, Guid> RoleRepository { get; }
     protected IOptions<IdentityOptions> IdentityOptions { get; }
     protected IBlobContainer<AvatarContainer> _blobContainer { get; }
     protected IRepository<UserInfo> _userInfoRepo { get; }
@@ -31,7 +32,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     public UsersAppService(
         IdentityUserManager userManager,
         IIdentityUserRepository userRepository,
-        IRepository<IdentityRole, Guid> roleRepository,
+        IRepository<Volo.Abp.Identity.IdentityRole, Guid> roleRepository,
         IOptions<IdentityOptions> identityOptions,
         IBlobContainer<AvatarContainer> blobContainer,
         IRepository<UserInfo> userInfoRepo)
@@ -45,27 +46,31 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<UserDto> GetAsync(Guid id)
+    public async Task<UserDto> GetAsync(Guid id)
     {
         var identityUser = await UserManager.GetByIdAsync(id);
-        var result = ObjectMapper.Map<IdentityUser, UserDto>(
+        var result = ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, UserDto>(
             identityUser
         );
-        var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
-        result.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
-        result.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(id.ToString());
+        var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == id);
+        if (userInfo != null)
+        {
+            result.UserInfo = ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
+            result.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(id.ToString());
+        }
         return result;
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<PagedResultDto<UserListDto>> GetListAsync(GetUserListDto input)
+    public async Task<PagedResultDto<UserListDto>> GetListAsync(GetUserListDto input)
     {
         if (input.Sorting.IsNullOrWhiteSpace())
         {
-            input.Sorting = nameof(IdentityUser.UserName);
+            input.Sorting = nameof(Volo.Abp.Identity.IdentityUser.UserName);
         }
         var count = await UserRepository.GetCountAsync(input.Filter,
-                                                      input.roleId, null,
+                                                      input.RoleId,
+                                                      null,
                                                       input.PhoneNumber,
                                                       input.Email);
         var list = await UserRepository.GetListAsync(
@@ -74,7 +79,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
                                         input.SkipCount,
                                         input.Filter,
                                         false,
-                                        input.roleId,
+                                        input.RoleId,
                                         null,
                                         null,
                                         input.PhoneNumber,
@@ -82,43 +87,46 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         var result = new PagedResultDto<UserListDto>(
             count,
-            ObjectMapper.Map<List<IdentityUser>, List<UserListDto>>(list)
+            ObjectMapper.Map<List<Volo.Abp.Identity.IdentityUser>, List<UserListDto>>(list)
         );
         foreach (var item in result.Items)
         {
-            var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == item.Id);
-            item.Dob = userInfo.Dob;
-            item.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(item.Id.ToString());
+            var userInfo = await _userInfoRepo.FindAsync(x => x.UserId == item.Id);
+            if (userInfo != null)
+            {
+                item.Dob = userInfo.Dob;
+                item.AvatarContent = await _blobContainer.GetAllBytesOrNullAsync(item.Id.ToString());
+            }
         }
         return result;
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
+    public async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
     {
         //TODO: Should also include roles of the related OUs.
 
         var roles = await UserRepository.GetRolesAsync(id);
 
         return new ListResultDto<IdentityRoleDto>(
-            ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles)
+            ObjectMapper.Map<List<Volo.Abp.Identity.IdentityRole>, List<IdentityRoleDto>>(roles)
         );
     }
 
     [Authorize(IdentityPermissions.Users.Default)]
-    public virtual async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync(Guid id)
+    public async Task<ListResultDto<IdentityRoleDto>> GetAssignableRolesAsync(Guid id)
     {
         var assignEdRoles = (await UserRepository.GetRolesAsync(id)).Select(x => x.Id);
         var roles = await RoleRepository.GetListAsync(x => !assignEdRoles.Contains(x.Id));
         return new ListResultDto<IdentityRoleDto>(
-            ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(roles));
+            ObjectMapper.Map<List<Volo.Abp.Identity.IdentityRole>, List<IdentityRoleDto>>(roles));
     }
 
     [Authorize]
     public async Task<UserDto> GetUserInfoAsync(Guid userId)
     {
         var identityUser = await UserManager.GetByIdAsync(userId);
-        var result = ObjectMapper.Map<IdentityUser, UserDto>(
+        var result = ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, UserDto>(
             identityUser
         );
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == userId);
@@ -127,18 +135,18 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Create)]
-    public virtual async Task<IdentityUserDto> CreateAsync(CrateAndUpdateUserDto input)
+    public async Task<IdentityUserDto> CreateAsync(CreateAndUpdateUserDto input)
     {
         await IdentityOptions.SetAsync();
 
-        var user = new IdentityUser(
+        var user = new Volo.Abp.Identity.IdentityUser(
             GuidGenerator.Create(),
-            input.UserName,
+            input.UserName.Trim(),
             input.Email
         );
         // add default roles
         var roleDefault = await RoleRepository.GetListAsync(x => x.IsDefault);
-        if (roleDefault != null)
+        if (roleDefault != null && roleDefault.Count > 0)
         {
             input.RoleNames = roleDefault.Select(x => x.Name).ToArray();
         }
@@ -150,17 +158,55 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         var userInfo = new UserInfo(GuidGenerator.Create())
         {
-            UserId = user.Id
+            UserId = user.Id,
+            Dob = input.Dob,
+            UserType = input.UserType,
+            ManagedUnitIds = input.ManagedUnitIds,
         };
         await _userInfoRepo.InsertAsync(userInfo);
 
         await CurrentUnitOfWork.SaveChangesAsync();
 
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        return ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, IdentityUserDto>(user);
+    }
+
+    public async Task<IdentityUserDto> RegisterAsync(CreateAndUpdateUserDto input)
+    {
+        await IdentityOptions.SetAsync();
+
+        var user = new Volo.Abp.Identity.IdentityUser(
+            GuidGenerator.Create(),
+            input.UserName.Trim(),
+            input.Email
+        );
+        // add default roles
+        var roleDefault = await RoleRepository.GetListAsync(x => x.IsDefault);
+        if (roleDefault != null && roleDefault.Count > 0)
+        {
+            input.RoleNames = roleDefault.Select(x => x.Name).ToArray();
+        }
+        input.MapExtraPropertiesTo(user);
+
+        (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
+        await UpdateUserFromInput(user, input);
+        (await UserManager.UpdateAsync(user)).CheckErrors();
+
+        var userInfo = new UserInfo(GuidGenerator.Create())
+        {
+            UserId = user.Id,
+            Dob = input.Dob,
+            UserType = input.UserType,
+            ManagedUnitIds = input.ManagedUnitIds,
+        };
+        await _userInfoRepo.InsertAsync(userInfo);
+
+        await CurrentUnitOfWork.SaveChangesAsync();
+
+        return ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, IdentityUserDto>(user);
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, CrateAndUpdateUserDto input)
+    public async Task<IdentityUserDto> UpdateAsync(Guid id, CreateAndUpdateUserDto input)
     {
         await IdentityOptions.SetAsync();
 
@@ -168,7 +214,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         user.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
 
-        (await UserManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+        (await UserManager.SetUserNameAsync(user, input.UserName.Trim())).CheckErrors();
 
         await UpdateUserFromInput(user, input);
         input.MapExtraPropertiesTo(user);
@@ -182,13 +228,15 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         }
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == id);
         userInfo.Dob = input.Dob;
+        userInfo.UserType = input.UserType;
+        userInfo.ManagedUnitIds = input.ManagedUnitIds;
         await _userInfoRepo.UpdateAsync(userInfo);
         await CurrentUnitOfWork.SaveChangesAsync();
-        return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        return ObjectMapper.Map<Volo.Abp.Identity.IdentityUser, IdentityUserDto>(user);
     }
 
     [Authorize]
-    public async Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CrateAndUpdateUserDto input)
+    public async Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CreateAndUpdateUserDto input)
     {
         await hasViewUserInfo(userId);
         var user = await UserManager.GetByIdAsync(userId);
@@ -204,13 +252,15 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
 
         var userInfo = await _userInfoRepo.GetAsync(x => x.UserId == userId);
         userInfo.Dob = input.Dob;
+        userInfo.UserType = input.UserType;
+        userInfo.ManagedUnitIds = input.ManagedUnitIds;
         await _userInfoRepo.UpdateAsync(userInfo);
         await UnitOfWorkManager.Current.SaveChangesAsync();
         return ObjectMapper.Map<UserInfo, UserInfoDto>(userInfo);
     }
 
     [Authorize(IdentityPermissions.Users.Update)]
-    public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
+    public async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
     {
         var user = await UserManager.GetByIdAsync(id);
         (await UserManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
@@ -218,7 +268,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     }
 
     [Authorize(IdentityPermissions.Users.Delete)]
-    public virtual async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
         if (CurrentUser.Id == id)
         {
@@ -261,7 +311,7 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         var user = await UserManager.FindByIdAsync(userId.ToString());
         if (user == null)
         {
-            throw new EntityNotFoundException(typeof(IdentityUser), userId);
+            throw new EntityNotFoundException(typeof(Volo.Abp.Identity.IdentityUser), userId);
         }
         var token = await UserManager.GeneratePasswordResetTokenAsync(user);
         var result = await UserManager.ResetPasswordAsync(user, token, input.NewPassword);
@@ -284,12 +334,11 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         if (file == null) throw new UserFriendlyException("Vui lòng chộn ảnh đại diện");
         try
         {
-            //var blobName = String.Concat(CurrentUser.GetId().ToString(), ".", GetFileExtension(avatarStream.FileName));
             var blobName = CurrentUser.GetId().ToString();
             using (var stream = new MemoryStream())
             {
-                await file.CopyToAsync(stream); // sao chép dữ liệu từ IFormFile vào MemoryStream
-                await _blobContainer.SaveAsync(blobName, stream, overrideExisting: true);
+                await file.CopyToAsync(stream);
+                await _blobContainer.SaveAsync(blobName, stream.ToArray(), overrideExisting: true);
             }
             return blobName;
         }
@@ -304,6 +353,27 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
     {
         userId = userId ?? CurrentUser.GetId();
         return await _blobContainer.GetAllBytesOrNullAsync(userId.ToString());
+    }
+
+    public async Task ChangePasswordAsync(ChangePasswordInput input)
+    {
+        await IdentityOptions.SetAsync();
+
+        var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+        if (currentUser.IsExternal)
+        {
+            throw new BusinessException(code: IdentityErrorCodes.ExternalUserPasswordChange);
+        }
+
+        if (currentUser.PasswordHash == null)
+        {
+            (await UserManager.AddPasswordAsync(currentUser, input.NewPassword)).CheckErrors();
+
+            return;
+        }
+
+    (await UserManager.ChangePasswordAsync(currentUser, input.CurrentPassword, input.NewPassword)).CheckErrors();
     }
 
     #region private method
@@ -321,22 +391,22 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         }
     }
 
-    protected virtual async Task UpdateUserFromInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
+    protected async Task UpdateUserFromInput(Volo.Abp.Identity.IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
     {
         if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
         {
             (await UserManager.SetEmailAsync(user, input.Email)).CheckErrors();
         }
 
-        if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
+        if (!string.Equals(user.PhoneNumber, input.PhoneNumber.Trim(), StringComparison.InvariantCultureIgnoreCase))
         {
-            (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            (await UserManager.SetPhoneNumberAsync(user, input.PhoneNumber.Trim())).CheckErrors();
         }
 
         (await UserManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
 
-        user.Name = input.Name;
-        user.Surname = input.Surname;
+        user.Name = input.Name.Trim();
+        user.Surname = input.Surname.Trim();
         (await UserManager.UpdateAsync(user)).CheckErrors();
         user.SetIsActive(input.IsActive);
         if (input.RoleNames != null)
@@ -359,6 +429,14 @@ public class UsersAppService : IdentityAppServiceBase, IUsersAppService
         }
 
         return fileName.Substring(lastDotIndex + 1);
+    }
+
+    public static Guid ToGuid(int? value)
+    {
+        if (!value.HasValue) return Guid.Empty;
+        byte[] bytes = new byte[16];
+        BitConverter.GetBytes(value.Value).CopyTo(bytes, 0);
+        return new Guid(bytes);
     }
 
     #endregion private method

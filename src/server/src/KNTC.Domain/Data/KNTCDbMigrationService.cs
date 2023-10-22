@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.TenantManagement;
 
 namespace KNTC.Data;
 
@@ -20,15 +22,21 @@ public class KNTCDbMigrationService : ITransientDependency
 
     private readonly IDataSeeder _dataSeeder;
     private readonly IEnumerable<IKNTCDbSchemaMigrator> _dbSchemaMigrators;
+    private readonly ITenantRepository _tenantRepository;
+    private readonly ICurrentTenant _currentTenant;
     private readonly IConfiguration _configuration;
 
     public KNTCDbMigrationService(
         IDataSeeder dataSeeder,
         IEnumerable<IKNTCDbSchemaMigrator> dbSchemaMigrators,
+        ITenantRepository tenantRepository,
+        ICurrentTenant currentTenant,
         IConfiguration configuration)
     {
         _dataSeeder = dataSeeder;
         _dbSchemaMigrators = dbSchemaMigrators;
+        _tenantRepository = tenantRepository;
+        _currentTenant = currentTenant;
 
         Logger = NullLogger<KNTCDbMigrationService>.Instance;
         _configuration = configuration;
@@ -50,40 +58,41 @@ public class KNTCDbMigrationService : ITransientDependency
 
         Logger.LogInformation($"Successfully completed host database migrations.");
 
-        //var tenants = await _tenantRepository.GetListAsync(includeDetails: true);
+        var tenants = await _tenantRepository.GetListAsync(includeDetails: true);
 
-        //var migratedDatabaseSchemas = new HashSet<string>();
-        //foreach (var tenant in tenants)
-        //{
-        //    using (_currentTenant.Change(tenant.Id))
-        //    {
-        //        if (tenant.ConnectionStrings.Any())
-        //        {
-        //            var tenantConnectionStrings = tenant.ConnectionStrings
-        //                .Select(x => x.Value)
-        //                .ToList();
+        var migratedDatabaseSchemas = new HashSet<string>();
+        foreach (var tenant in tenants)
+        {
+            using (_currentTenant.Change(tenant.Id))
+            {
+                if (tenant.ConnectionStrings.Any())
+                {
+                    var tenantConnectionStrings = tenant.ConnectionStrings
+                        .Select(x => x.Value)
+                        .ToList();
 
-        //            if (!migratedDatabaseSchemas.IsSupersetOf(tenantConnectionStrings))
-        //            {
-        //                await MigrateDatabaseSchemaAsync(tenant);
+                    if (!migratedDatabaseSchemas.IsSupersetOf(tenantConnectionStrings))
+                    {
+                        await MigrateDatabaseSchemaAsync(tenant);
 
-        //                migratedDatabaseSchemas.AddIfNotContains(tenantConnectionStrings);
-        //            }
-        //        }
+                        migratedDatabaseSchemas.AddIfNotContains(tenantConnectionStrings);
+                    }
+                }
 
-        //        await SeedDataAsync(tenant);
-        //    }
+                await SeedDataAsync(tenant);
+            }
 
-        //    Logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
-        //}
+            Logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
+        }
 
         Logger.LogInformation("Successfully completed all database migrations.");
         Logger.LogInformation("You can safely end this process...");
     }
 
-    private async Task MigrateDatabaseSchemaAsync()
+    private async Task MigrateDatabaseSchemaAsync(Tenant? tenant = null)
     {
-        Logger.LogInformation($"Migrating schema for database...");
+        Logger.LogInformation(
+            $"Migrating schema for {(tenant == null ? "host" : tenant.Name + " tenant")} database...");
 
         foreach (var migrator in _dbSchemaMigrators)
         {
@@ -91,12 +100,13 @@ public class KNTCDbMigrationService : ITransientDependency
         }
     }
 
-    private async Task SeedDataAsync()
+    private async Task SeedDataAsync(Tenant? tenant = null)
     {
-        Logger.LogInformation($"Executing database seed...");
+        Logger.LogInformation($"Executing {(tenant == null ? "host" : tenant.Name + " tenant")} database seed...");
+
         var AdminEmailDefaultValue = _configuration.GetSection("UserDefault:AdminEmailDefaultValue").Value ?? IdentityDataSeedContributor.AdminEmailDefaultValue;
         var AdminPasswordDefaultValue = _configuration.GetSection("UserDefault:AdminPasswordDefaultValue").Value ?? IdentityDataSeedContributor.AdminPasswordDefaultValue;
-        await _dataSeeder.SeedAsync(new DataSeedContext()
+        await _dataSeeder.SeedAsync(new DataSeedContext(tenant?.Id)
             .WithProperty(IdentityDataSeedContributor.AdminEmailPropertyName, AdminEmailDefaultValue)
             .WithProperty(IdentityDataSeedContributor.AdminPasswordPropertyName, AdminPasswordDefaultValue)
         );
@@ -145,8 +155,7 @@ public class KNTCDbMigrationService : ITransientDependency
     private bool MigrationsFolderExists()
     {
         var dbMigrationsProjectFolder = GetEntityFrameworkCoreProjectFolderPath();
-
-        return Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "Migrations"));
+        return dbMigrationsProjectFolder != null && Directory.Exists(Path.Combine(dbMigrationsProjectFolder, "Migrations"));
     }
 
     private void AddInitialMigration()
@@ -181,7 +190,7 @@ public class KNTCDbMigrationService : ITransientDependency
         }
     }
 
-    private string GetEntityFrameworkCoreProjectFolderPath()
+    private string? GetEntityFrameworkCoreProjectFolderPath()
     {
         var slnDirectoryPath = GetSolutionDirectoryPath();
 
@@ -196,15 +205,15 @@ public class KNTCDbMigrationService : ITransientDependency
             .FirstOrDefault(d => d.EndsWith(".EntityFrameworkCore"));
     }
 
-    private string GetSolutionDirectoryPath()
+    private string? GetSolutionDirectoryPath()
     {
         var currentDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
 
-        while (Directory.GetParent(currentDirectory.FullName) != null)
+        while (currentDirectory != null && Directory.GetParent(currentDirectory.FullName) != null)
         {
             currentDirectory = Directory.GetParent(currentDirectory.FullName);
 
-            if (Directory.GetFiles(currentDirectory.FullName).FirstOrDefault(f => f.EndsWith(".sln")) != null)
+            if (currentDirectory != null && Directory.GetFiles(currentDirectory.FullName).FirstOrDefault(f => f.EndsWith(".sln")) != null)
             {
                 return currentDirectory.FullName;
             }

@@ -1,4 +1,5 @@
-﻿using KNTC.Localization;
+﻿using KNTC.Caches;
+using KNTC.Localization;
 using KNTC.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Distributed;
@@ -23,17 +24,30 @@ public class UnitAppService : CrudAppService<
             CreateAndUpdateUnitDto>, IUnitAppService
 {
     private readonly UnitManager _unitManager;
-    private readonly IDistributedCache<UnitLookupCache, UnitCacheKey> _cache;
+    private readonly IDistributedCache<UnitLookupCache, UnitCacheKey> _cacheUnit;
+    private readonly IDistributedCache<UnitLookupCache, UnitLookupByIdsKey> _cacheUnitByids;
+    private readonly IDistributedCache<UnitLookupCache, UnitLookupByParentIdsKey> _cacheUnitByParentIds;
+    private readonly IDistributedCache<UnitTreeLookupCache> _cacheUnitTree;
+    private readonly IKNTCRedisCacheService _cacheService;
 
-    public UnitAppService(IRepository<Unit, int> repository, UnitManager unitManager,
-        IDistributedCache<UnitLookupCache, UnitCacheKey> cache) : base(repository)
+    public UnitAppService(IRepository<Unit, int> repository,
+        UnitManager unitManager,
+        IDistributedCache<UnitLookupCache, UnitCacheKey> cache,
+        IDistributedCache<UnitTreeLookupCache> cacheUnitTree,
+        IDistributedCache<UnitLookupCache, UnitLookupByIdsKey> cacheUnitByids,
+        IDistributedCache<UnitLookupCache, UnitLookupByParentIdsKey> cacheUnitByParentIds,
+        IKNTCRedisCacheService cacheService) : base(repository)
     {
         LocalizationResource = typeof(KNTCResource);
         CreatePolicyName = KNTCPermissions.UnitPermission.Create;
         UpdatePolicyName = KNTCPermissions.UnitPermission.Edit;
         DeletePolicyName = KNTCPermissions.UnitPermission.Delete;
         _unitManager = unitManager;
-        _cache = cache;
+        _cacheUnit = cache;
+        _cacheUnitTree = cacheUnitTree;
+        _cacheUnitByids = cacheUnitByids;
+        _cacheUnitByParentIds = cacheUnitByParentIds;
+        _cacheService = cacheService;
     }
 
     public override async Task<PagedResultDto<UnitDto>> GetListAsync(GetUnitListDto input)
@@ -42,7 +56,7 @@ public class UnitAppService : CrudAppService<
         {
             input.Sorting = $"{nameof(Unit.OrderIndex)}, {nameof(Unit.Id)}";
         }
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
@@ -76,17 +90,121 @@ public class UnitAppService : CrudAppService<
         );
     }
 
+    //
     public async Task<ListResultDto<UnitLookupDto>> GetLookupAsync(int unitTypeId, int? parentId = null)
     {
-        var cacheItem = await _cache.GetOrAddAsync(
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
+        var cacheItem = await _cacheUnit.GetOrAddAsync(
         new UnitCacheKey(unitTypeId, parentId),
         async () => await GetListLookup(unitTypeId, parentId),
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
         });
         return new ListResultDto<UnitLookupDto>(cacheItem.Items);
     }
+
+    public async Task<ListResultDto<UnitLookupDto>> GetLookupByIdsAsync(int[]? unitIds)
+    {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
+        var cacheItem = await _cacheUnitByids.GetOrAddAsync(
+        new UnitLookupByIdsKey(unitIds),
+        async () => await GetListLookupByIds(unitIds),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+        });
+        return new ListResultDto<UnitLookupDto>(cacheItem.Items);
+    }
+
+    public async Task<ListResultDto<UnitLookupDto>> GetLookupByParentIdsAsync(int unitTypeId, int[]? parentIds)
+    {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
+        var cacheItem = await _cacheUnitByParentIds.GetOrAddAsync(
+        new UnitLookupByParentIdsKey(unitTypeId, parentIds),
+        async () => await GetListLookupByParentIds(unitTypeId, parentIds),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+        });
+        return new ListResultDto<UnitLookupDto>(cacheItem.Items);
+    }
+
+    [Authorize(KNTCPermissions.UnitPermission.Create)]
+    public override async Task<UnitDto> CreateAsync(CreateAndUpdateUnitDto input)
+    {
+        var entity = await _unitManager.CreateAsync(input.UnitCode.Trim(),
+                                                   input.UnitName.Trim(),
+                                                   input.ShortName.Trim(),
+                                                   input.UnitTypeId,
+                                                   input.ParentId,
+                                                   input.Description,
+                                                   input.OrderIndex,
+                                                   input.Status);
+        await Repository.InsertAsync(entity);
+        await _cacheService.DeleteContainAsync(nameof(UnitCacheKey));
+        return ObjectMapper.Map<Unit, UnitDto>(entity);
+    }
+
+    [Authorize(KNTCPermissions.UnitPermission.Edit)]
+    public override async Task<UnitDto> UpdateAsync(int id, CreateAndUpdateUnitDto input)
+    {
+        var entity = await Repository.GetAsync(id, false);
+        entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
+        await _unitManager.UpdateAsync(entity,
+                                       input.UnitCode.Trim(),
+                                       input.UnitName.Trim(),
+                                       input.ShortName.Trim(),
+                                       input.UnitTypeId,
+                                       input.ParentId,
+                                       input.Description,
+                                       input.OrderIndex,
+                                       input.Status);
+        await Repository.UpdateAsync(entity);
+        await _cacheService.DeleteContainAsync(nameof(UnitCacheKey));
+        return ObjectMapper.Map<Unit, UnitDto>(entity);
+    }
+
+    [Authorize(KNTCPermissions.UnitPermission.Delete)]
+    public override async Task DeleteAsync(int id)
+    {
+        var entity = await Repository.GetAsync(id, false);
+        await _cacheService.DeleteContainAsync(nameof(UnitCacheKey));
+        await Repository.DeleteAsync(id);
+    }
+
+    [Authorize(KNTCPermissions.UnitPermission.Delete)]
+    public async Task DeleteMultipleAsync(IEnumerable<int> ids)
+    {
+        if (ids.Count() <= 0) return;
+        var lstCacheKey = new List<UnitCacheKey>();
+        var entities = await Repository.GetListAsync(x => ids.Contains(x.Id), false);
+        foreach (var entity in entities)
+        {
+            lstCacheKey.Add(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
+        }
+        await _cacheUnit.RemoveManyAsync(lstCacheKey);
+        await Repository.DeleteManyAsync(ids);
+    }
+
+    public async Task<ListResultDto<UnitTreeLookupDto>> GetTreeLookupAsync(int id)
+    {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
+        var cacheItem = await _cacheUnitTree.GetOrAddAsync(
+        $"T{nameof(UnitCacheKey)}_tree_{id}",
+        async () => await GetTreeLookupFromDbAsync(id),
+        () => new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
+        });
+        return new ListResultDto<UnitTreeLookupDto>(cacheItem.Items);
+    }
+
+    #region Private method
 
     private async Task<UnitLookupCache> GetListLookup(int unitTypeId, int? parentId)
     {
@@ -102,54 +220,90 @@ public class UnitAppService : CrudAppService<
         return result;
     }
 
-    public override async Task<UnitDto> CreateAsync(CreateAndUpdateUnitDto input)
+    private async Task<UnitLookupCache> GetListLookupByIds(int[]? unitIds)
     {
-        var entity = await _unitManager.CreateAsync(input.UnitCode,
-                                                   input.UnitName,
-                                                   input.ShortName,
-                                                   input.UnitTypeId,
-                                                   input.Description,
-                                                   input.OrderIndex,
-                                                   input.Status);
-        await Repository.InsertAsync(entity);
-        await _cache.RemoveAsync(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
-        return ObjectMapper.Map<Unit, UnitDto>(entity);
+        var queryable = await Repository.GetQueryableAsync();
+        queryable = queryable
+                    .Where(x => x.Status == Status.Active)
+                    .WhereIf(!unitIds.IsNullOrEmpty(), x => unitIds.Contains(x.Id))
+                    .OrderBy(nameof(UnitLookupDto.UnitName));
+        var entities = await AsyncExecuter.ToListAsync(queryable);
+        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
+
+        var result = new UnitLookupCache() { Items = dtos };
+        return result;
     }
 
-    public override async Task<UnitDto> UpdateAsync(int id, CreateAndUpdateUnitDto input)
+    private async Task<UnitLookupCache> GetListLookupByParentIds(int unitTypeId, int[]? ParentIds)
     {
-        var entity = await Repository.GetAsync(id, false);
-        entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
-        await _unitManager.UpdateAsync(entity,
-                                       input.UnitCode,
-                                       input.UnitName,
-                                       input.ShortName,
-                                       input.UnitTypeId,
-                                       input.Description,
-                                       input.OrderIndex,
-                                       input.Status);
-        await Repository.UpdateAsync(entity);
-        await _cache.RemoveAsync(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
-        return ObjectMapper.Map<Unit, UnitDto>(entity);
+        var queryable = await Repository.GetQueryableAsync();
+        queryable = queryable
+                    .Where(x => x.Status == Status.Active)
+                    .Where(x => x.UnitTypeId == unitTypeId)
+                    .WhereIf(!ParentIds.IsNullOrEmpty(), x => x.ParentId.HasValue && ParentIds.Contains(x.ParentId.Value))
+                    .OrderBy(nameof(UnitLookupDto.UnitName));
+        var entities = await AsyncExecuter.ToListAsync(queryable);
+        var dtos = ObjectMapper.Map<List<Unit>, List<UnitLookupDto>>(entities);
+        var result = new UnitLookupCache() { Items = dtos };
+        return result;
     }
 
-    public override async Task DeleteAsync(int id)
+    private async Task<UnitTreeLookupCache> GetTreeLookupFromDbAsync(int id)
     {
-        var entity = await Repository.GetAsync(id, false);
-        await _cache.RemoveAsync(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
-        await Repository.DeleteAsync(id);
-    }
-
-    [Authorize(KNTCPermissions.UnitPermission.Delete)]
-    public async Task DeleteMultipleAsync(IEnumerable<int> ids)
-    {
-        var lstCache = new List<UnitCacheKey>();
-        foreach (var id in ids)
+        var result = new List<UnitTreeLookupDto>();
+        if (id != null)
         {
-            var entity = await Repository.GetAsync(id, false);
-            lstCache.Add(new UnitCacheKey(entity.UnitTypeId, entity.ParentId));
+            var unit = await Repository.GetAsync(x => x.Id == id);
+            var childNode = new UnitTreeLookupDto
+            {
+                Id = unit.Id,
+                UnitName = unit.UnitName,
+                UnitTypeId = unit.UnitTypeId,
+                Children = await GetUnitChildrenRecursive(unit.Id)
+            };
+            result.Add(childNode);
         }
-        await _cache.RemoveManyAsync(lstCache);
-        await Repository.DeleteManyAsync(ids);
+        else
+        {
+            var units = await Repository.GetListAsync();
+            foreach (var unit in units)
+            {
+                var childNode = new UnitTreeLookupDto
+                {
+                    Id = unit.Id,
+                    UnitName = unit.UnitName,
+                    UnitTypeId = unit.UnitTypeId,
+                    Children = await GetUnitChildrenRecursive(unit.Id)
+                };
+                result.Add(childNode);
+            }
+        }
+        return new UnitTreeLookupCache()
+        {
+            Items = result
+        };
     }
+
+    private async Task<List<UnitTreeLookupDto>> GetUnitChildrenRecursive(int parentId)
+    {
+        var childUnits = await Repository.GetListAsync(x => x.ParentId == parentId);
+        var childNodes = new List<UnitTreeLookupDto>();
+
+        foreach (var childUnit in childUnits)
+        {
+            var childNode = new UnitTreeLookupDto
+            {
+                Id = childUnit.Id,
+                UnitName = childUnit.UnitName,
+                UnitTypeId = childUnit.UnitTypeId,
+                Children = await GetUnitChildrenRecursive(childUnit.Id)
+            };
+
+            childNodes.Add(childNode);
+        }
+
+        return childNodes;
+    }
+
+    #endregion Private method
 }

@@ -4,9 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 
 @Component({
   selector: 'app-login',
@@ -42,14 +43,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   public blockedPanel: boolean = false;
   validationMessages = {
     username: [
-      { type: 'required', message: 'Tên tài khoàn không được để trống!' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxlength',
         message: 'Tên tài khoản không quá 255 ký tự',
       },
     ],
     password: [
-      { type: 'required', message: 'Mật khẩukhông được để trống!' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxlength',
         message: 'Mật khẩu không quá 255 ký tự',
@@ -86,7 +87,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   onSubmit() {
     this.utilService.markAllControlsAsDirty([this.form]);
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.notificationService.showWarn(MessageConstants.FORM_INVALID);
+      this.layoutService.blockUI$.next(false);
+      return;
+    }
     this.layoutService.blockUI$.next(true);
 
     const { username, password, rememberMe } = this.form.value;
@@ -95,6 +100,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login(loginParams).subscribe(
       () => {
         this.layoutService.blockUI$.next(false);
+        window.location.reload();
         this.router.navigate([redirectUrl]);
       },
       err => {
@@ -110,14 +116,16 @@ export class LoginComponent implements OnInit, OnDestroy {
           )
         ) {
           errorMsg = this.localizationService.instant('AbpAccount::UserLockedOutMessage');
+        } else if (errorMsg.includes('Your account is inactive')) {
+          errorMsg = 'Tài khoản của bạn chưa được kích hoạt. Vui lòng liên hệ quản trị viên!';
         }
-        this.notificationService.showError(errorMsg);
+        this.notificationService.showWarn(errorMsg);
         this.layoutService.blockUI$.next(false);
       }
     );
   }
 
- ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

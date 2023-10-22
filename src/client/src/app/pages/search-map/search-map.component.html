@@ -7,63 +7,99 @@
       </ng-template>
       <!-- ----------------------------------------------------------------------- -->
       <div class="grid col-12 md:col-12">
-        <div id="quyhoach" class="group-header ml-3">
-          <img src="assets/images/map/quyhoach_icon.png" alt="Bản đồ quy hoạch" />
-          <span>Bản đồ quy hoạch</span>
-          <p-inputSwitch [(ngModel)]="geo" (onChange)="loadGeo()"></p-inputSwitch>
+        <div class="group-header ml-3">
+          <img src="assets/images/map/quyhoach_icon.png" alt="Bản đồ nền" />
+          <span>Bản đồ nền</span>
+        </div>
+        <!-- ----------------------------------------------------------------------- -->
+        <div *ngFor="let basemap of baseMapList; let i = index" class="inputgroup">
+          <span class="ml-5">{{ basemap.baseMapName }}</span>
+          <p-inputSwitch (onChange)="changeBaseMap(i, basemap.baseMapCode, $event)"></p-inputSwitch>
         </div>
       </div>
       <!-- ----------------------------------------------------------------------- -->
       <div class="grid col-12 md:col-12">
-        <div class="group-header ml-3">
-          <img src="assets/images/map/marker-icon.png" alt="Khiếu nại" />
+        <div class="group-header ml-3 kn">
+          <i class="pi pi-envelope" style="font-size: 2rem"></i>
           <span>Khiếu nại</span>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Đất đai</span>
-          <p-inputSwitch [(ngModel)]="landComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="land-switch"
+            [(ngModel)]="landComplain"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch [(ngModel)]="enviromentComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="enviroment-switch"
+            [(ngModel)]="enviromentComplain"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch [(ngModel)]="mineralComplain" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="mineral-switch"
+            [(ngModel)]="mineralComplain"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch [(ngModel)]="waterComplain" (onChange)="loadData()"></p-inputSwitch>
-        </div>        
+          <p-inputSwitch
+            class="water-switch"
+            [(ngModel)]="waterComplain"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
+        </div>
         <!-- ----------------------------------------------------------------------- -->
-        <div class="group-header ml-3 mt-5">
-          <img src="assets/images/map/marker-icon-red.png" class="icon-red" alt="Tố cáo" />
+        <div class="group-header ml-3 mt-5 tc">
+          <i class="fa fa-balance-scale" style="font-size: 2rem"></i>
           <span>Tố Cáo</span>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Đất đai</span>
-          <p-inputSwitch [(ngModel)]="landDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="land-switch"
+            [(ngModel)]="landDenounce"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Môi trường</span>
-          <p-inputSwitch [(ngModel)]="enviromentDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="enviroment-switch"
+            [(ngModel)]="enviromentDenounce"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Khoáng sản</span>
-          <p-inputSwitch [(ngModel)]="mineralDenounce" (onChange)="loadData()"></p-inputSwitch>
+          <p-inputSwitch
+            class="mineral-switch"
+            [(ngModel)]="mineralDenounce"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
         </div>
         <!-- ----------------------------------------------------------------------- -->
         <div class="inputgroup">
           <span class="ml-5">Tài nguyên nước</span>
-          <p-inputSwitch [(ngModel)]="waterDenounce" (onChange)="loadData()"></p-inputSwitch>
-        </div>        
+          <p-inputSwitch
+            class="water-switch"
+            [(ngModel)]="waterDenounce"
+            (onChange)="loadData()"
+          ></p-inputSwitch>
+        </div>
       </div>
     </p-card>
   </div>
@@ -101,6 +137,7 @@
               <span class="p-input-icon-left w-full">
                 <i class="pi pi-search"></i>
                 <input
+                  autofocus
                   pInputText
                   type="text"
                   (keyup.enter)="loadData()"
@@ -139,7 +176,7 @@
                   styleClass="w-full"
                   (onChange)="tinhChange($event)"
                 ></p-dropdown>
-                <label>Tỉnh/TP</label>
+                <label>Tỉnh</label>
               </span>
             </div>
             <!-- --------------------------------------------------------------------------------- -->
@@ -158,7 +195,7 @@
                   styleClass="w-full"
                   (onChange)="huyenChange($event)"
                 ></p-dropdown>
-                <label>Quận/Huyện</label>
+                <label>Huyện/TP</label>
               </span>
             </div>
             <!-- --------------------------------------------------------------------------------- -->
@@ -198,9 +235,42 @@
                 <label>Thời gian tiếp nhận</label>
               </span>
             </div>
-
             <!-- --------------------------------------------------------------------------------- -->
-            <div *ngIf="hasLoggedIn" class="field col-12 md:col-3">
+            <div class="field col-12 md:col-2">
+              <span class="p-float-label">
+                <p-dropdown
+                  id="ketQua"
+                  [options]="loaiKQOptions"
+                  [(ngModel)]="ketQua"
+                  optionLabel="text"
+                  optionValue="value"
+                  [showClear]="true"
+                  [autoDisplayFirst]="false"
+                  styleClass="w-full"
+                  (onChange)="loadData()"
+                ></p-dropdown>
+                <label>Kết luận</label>
+              </span>
+            </div>
+            <!-- --------------------------------------------------------------------------------- -->
+            <div class="field col-12 md:col-2">
+              <span class="p-float-label">
+                <p-dropdown
+                  id="trangThai"
+                  [options]="trangThaiOPtions"
+                  [(ngModel)]="trangThai"
+                  optionLabel="text"
+                  optionValue="value"
+                  [showClear]="true"
+                  [autoDisplayFirst]="false"
+                  styleClass="w-full"
+                  (onChange)="loadData()"
+                ></p-dropdown>
+                <label>Trạng thái</label>
+              </span>
+            </div>
+            <!-- --------------------------------------------------------------------------------- -->
+            <div *ngIf="hasLoggedIn" class="field col-12 md:col-2">
               <span class="p-float-label">
                 <p-dropdown
                   id="congkhai"
@@ -216,35 +286,18 @@
                 <label>Công khai</label>
               </span>
             </div>
-            <!-- --------------------------------------------------------------------------------- -->
-            <div class="field col-12 md:col-3">
-              <span class="p-float-label">
-                <p-dropdown
-                  id="tinhtrang"
-                  [options]="loaiKQOptions"
-                  [(ngModel)]="tinhTrang"
-                  optionLabel="text"
-                  optionValue="value"
-                  [showClear]="true"
-                  [autoDisplayFirst]="false"
-                  styleClass="w-full"
-                  (onChange)="loadData()"
-                ></p-dropdown>
-                <label>Tình trạng</label>
-              </span>
-            </div>
           </div>
         </p-toolbar>
         <p-card>
           <!--app-map [data]="items" [spatialData]="spatialData"></app-map-->
-          <app-map [data]="items" [bShowSpatial]="geo"></app-map>
+          <app-map [data]="dataMap" [basemap]="baseMap" [duLieuToaDo]="toado"></app-map>
         </p-card>
         <!-- ----------------------------------------------------------------------- -->
         <p-card>
           <p-toolbar>
             <ng-template pTemplate="left">
               <i class="pi pi-search mr-2"></i>
-              <h5>Kết quả tìm kiếm</h5>
+              <span class="heading">Kết quả tìm kiếm</span>
             </ng-template>
 
             <ng-template pTemplate="right">
@@ -262,7 +315,7 @@
 
           <p-table
             #dt
-            [value]="items"
+            [value]="dataMap"
             [rows]="10"
             [paginator]="false"
             [rowHover]="true"
@@ -271,30 +324,34 @@
             <ng-template pTemplate="header">
               <tr>
                 <th class="row-num-column">STT</th>
-                <th>Mã hồ sơ</th>
-                <th style="width: 180px">Nội dung</th>
-                <th>Loại vụ việc</th>
-                <th>Lĩnh vực</th>  
-                <th style="width: 100px">Người nộp đơn</th>
+                <th style="max-width: 80px">Mã hồ sơ</th>
+                <th style="min-width: 120px">Nội dung</th>
+                <th>Loại vụ việc/Lĩnh vực</th>
+                <th style="min-width: 80px">Người nộp đơn</th>
                 <th>Số ĐT</th>
-                <th>Địa chỉ</th>                              
+                <th style="min-width: 100px">Địa chỉ</th>
                 <th>Thời gian nộp</th>
                 <th>Ngày hẹn trả KQ</th>
-                <th>Bộ phận đang XL</th>
-                <th style="width: 150px">Trạng thái</th>
+                <th style="min-width: 80px">Trạng thái</th>
+                <th style="min-width: 80px">Bộ phận thực hiện</th>
+                <th style="min-width: 80px">Kết luận</th>
+                <th>Vị trí</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
               <tr>
                 <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
                 <td>
-                  <span [ngClass]="p-link" (click)="viewDetail(row)"><strong>{{ row.maHoSo }}</strong></span>
+                  <span class="p-link" (click)="viewDetail(row)"
+                    ><strong>{{ row.maHoSo }}</strong></span
+                  >
                 </td>
                 <td>
-                  <span [ngClass]="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
+                  <span class="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
                 </td>
-                <td [ngClass]="(row.loaiVuViec == 1)?'kn':'tc'">{{ LoaiVuViecOptions[row.loaiVuViec] }}</td>
-                <td>{{ LinhVucNameOptions[row.linhVuc] }}</td>
+                <td [ngClass]="row.loaiVuViec == 1 ? 'kn' : 'tc'">
+                  {{ LoaiVuViecOptions[row.loaiVuViec] }}/{{ LinhVucOptions[row.linhVuc] }}
+                </td>
                 <td>{{ row.nguoiNopDon }}</td>
                 <td>{{ row.dienThoai }}</td>
                 <td>{{ row.diaChiLienHe }}</td>
@@ -304,8 +361,34 @@
                 <td>
                   {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
                 </td>
+                <td style="color: blue">
+                  {{ TrangthaiOptions[row?.trangThai ? row?.trangThai : 0] }}
+                </td>
                 <td>{{ row.boPhanDangXL }}</td>
-                <td>{{ KetquaOptions[(row?.ketQua)? row?.ketQua : 0]}}</td>
+                <td>{{ KetquaOptions[row?.ketQua ? row?.ketQua : 0] }}</td>
+                <td>
+                  <span
+                    class="p-link"
+                    (click)="setPosition(row?.duLieuToaDo ? row?.duLieuToaDo : null)"
+                  >
+                    <img
+                      [src]="
+                        row?.duLieuToaDo
+                          ? row?.loaiVuViec == 1
+                            ? 'assets/images/map/marker-icon.png'
+                            : 'assets/images/map/marker-icon-red.png'
+                          : 'assets/images/map/marker-icon-disabled.png'
+                      "
+                      [title]="
+                        row?.duLieuToaDo
+                          ? row?.loaiVuViec == 1
+                            ? 'Vị trí Khiếu nại trên bản đồ'
+                            : 'Vị trí Tố cáo trên bản đồ'
+                          : 'Chưa có thông tin vị trí!'
+                      "
+                    />
+                  </span>
+                </td>
               </tr>
             </ng-template>
             <ng-template pTemplate="summary">

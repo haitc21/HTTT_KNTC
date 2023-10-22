@@ -4,5 +4,5 @@ namespace KNTC;
 
 public class BaseListFilterDto : PagedAndSortedResultRequestDto
 {
-    public string Keyword { get; set; }
+    public string? Keyword { get; set; }
 }

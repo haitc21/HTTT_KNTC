@@ -1,11 +1,11 @@
 <div
-  class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden"
+  class="flex flex align-items-center justify-content-center min-w-screen min-h-screen"
 >
-  <div class="grid justify-content-center p-2 lg:p-0 w-full">
-    <div class="col-12 mt-5 xl:mt-0 text-center">
+  <div class="grid justify-content-center w-full h-full">
+    <div class="col-12 text-center">
       <img
         src="assets/layout/images/{{
-          layoutService.config.colorScheme === 'light' ? 'logo-white':'logo-dark'
+          layoutService.config.colorScheme === 'light' ? 'logo-white' : 'logo-dark'
         }}.svg"
         alt="HTTTT hỗ trợ quản lý Đơn thư khiếu nại, tố cáo lĩnh vực TNMT tại tỉnh Thái Nguyên"
         class="mb-1"
@@ -15,18 +15,16 @@
     <div
       class="col-12 xl:col-4"
       style="
-        border: unset!important;
-        background-color: #006aae!important;
-        border-radius: 10px!important;
-        transition: all .3s;
-        padding: 0.4rem!important;
+        border: unset !important;
+        background-color: #006aae !important;
+        border-radius: 10px !important;
+        transition: all 0.3s;
+        padding: 0.4rem !important;
       "
     >
       <div
         class="h-full w-full m-0 py-4 px-4"
-        style="
-          background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));
-        "
+        style="background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0))"
       >
         <div class="text-center mb-5">
           <!-- <div class="text-900 text-3xl font-medium mb-3">Xin chào quản trị!</div> -->
@@ -34,15 +32,15 @@
         </div>
 
         <form class="w-full md:w-10 mx-auto" [formGroup]="form">
-          <div class="p-field col-12 md-12" style="padding:2px !important">
-            <label for="username" class="block text-900 text-xl font-medium mb-2">{{
-              'AbpAccount::UserNameOrEmailAddress' | abpLocalization
-            }}</label>
+          <div class="p-field col-12 md-12" style="padding: 2px !important">
+            <label for="username" class="block text-900 text-xl font-medium mb-2"
+              >Tên đăng nhập</label
+            >
             <input
               id="username"
               formControlName="username"
               type="text"
-              placeholder="{{ 'AbpAccount::UserNameOrEmailAddress' | abpLocalization }}"
+              placeholder="Tài khoản hoặc mật khẩu"
               pInputText
               autofocus
               class="w-full mb-3"
@@ -53,14 +51,12 @@
             >
             </app-validation-message>
           </div>
-          <div class="p-field col-12 md-12" style="padding:2px !important">
-            <label for="password1" class="block text-900 font-medium text-xl mb-2">{{
-              'AbpIdentity::Password' | abpLocalization
-            }}</label>
+          <div class="p-field col-12 md-12" style="padding: 2px !important">
+            <label for="password1" class="block text-900 font-medium text-xl mb-2">Mật hẩu</label>
             <p-password
               id="password1"
               formControlName="password"
-              placeholder="{{ 'AbpIdentity::Password' | abpLocalization }}"
+              placeholder="Mật khẩu"
               [toggleMask]="true"
               styleClass="w-full mb-3"
               inputId="inputPassword"
@@ -71,13 +67,10 @@
             >
             </app-validation-message>
           </div>
-          
-          <div class="field col-12 md:col-12">
-            <p-checkbox
-              binary="true"
-              label="Ghi nhớ tài khoản"
-              formControlName="rememberMe"
-            ></p-checkbox>
+
+          <div class="col-12 md:col-12 flex align-items-center">
+            <p-inputSwitch formControlName="rememberMe"></p-inputSwitch>
+            <label class="ml-3" for="rememberMe">Ghi nhớ tài khoản</label>
           </div>
 
           <button

@@ -23,7 +23,7 @@ public class ComplainDto : AuditedEntityDto<Guid>
     public DateTime NgaySinh { get; set; }
 
     public string DienThoai { get; set; }
-    public string Email { get; set; }
+    public string? Email { get; set; }
     public string DiaChiThuongTru { get; set; }
     public string DiaChiLienHe { get; set; }
     public int maTinhTP { get; set; }
@@ -41,23 +41,25 @@ public class ComplainDto : AuditedEntityDto<Guid>
     public int tinhThuaDat { get; set; }
     public int huyenThuaDat { get; set; }
     public int xaThuaDat { get; set; }
-    public string DuLieuToaDo { get; set; }
-    public string DuLieuHinhHoc { get; set; }
-    public string GhiChu { get; set; }
+    public string? DuLieuToaDo { get; set; }
+    public string? DuLieuHinhHoc { get; set; }
+    public string? GhiChu { get; set; }
     public LoaiKhieuNai? loaiKhieuNai1 { get; set; }
     public DateTime? NgayKhieuNai1 { get; set; }
     public DateTime? NgayTraKQ1 { get; set; }
-    public string ThamQuyen1 { get; set; }
-    public string SoQD1 { get; set; }
+    public string? ThamQuyen1 { get; set; }
+    public string? SoQD1 { get; set; }
     public LoaiKetQua? KetQua1 { get; set; }
     public LoaiKhieuNai? loaiKhieuNai2 { get; set; }
     public DateTime? NgayKhieuNai2 { get; set; }
     public DateTime? NgayTraKQ2 { get; set; }
-    public string ThamQuyen2 { get; set; }
-    public string SoQD2 { get; set; }
+    public string? ThamQuyen2 { get; set; }
+    public string? SoQD2 { get; set; }
     public LoaiKetQua? KetQua2 { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public bool CongKhai { get; set; }
+    public bool LuuTru { get; set; }
+    public TrangThai TrangThai { get; set; }
     public virtual List<FileAttachmentDto> FileAttachments { get; set; }
-    public string ConcurrencyStamp { get; set; }
+    public string? ConcurrencyStamp { get; set; }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace KNTC.Extenssions;
+﻿namespace KNTC.Extenssions;
 
 public static class EnumExtensions
 {
@@ -18,11 +16,8 @@ public static class EnumExtensions
             case LoaiKetQua.CoDungCoSai:
                 return "Có đúng, có sai";
 
-            case LoaiKetQua.ChuaCoKQ:
-                return "Chưa có KQ";
-
             default:
-                throw new ArgumentException("Giá trị không hợp lệ");
+                return string.Empty;
         }
     }
 
@@ -44,7 +39,7 @@ public static class EnumExtensions
                 return "Khoáng sản";
 
             default:
-                throw new ArgumentException("Giá trị không hợp lệ");
+                return string.Empty;
         }
     }
 
@@ -60,7 +55,38 @@ public static class EnumExtensions
                 return "Tố cáo";
 
             default:
-                throw new ArgumentException("Giá trị không hợp lệ");
+                return string.Empty;
+        }
+    }
+
+    public static string ToVNString(this TrangThai value)
+    {
+        if (value == null) return string.Empty;
+        switch (value)
+        {
+            case TrangThai.TiepNhan:
+                return "Tiếp nhận";
+
+            case TrangThai.DangXuLy:
+                return "Đang xử lý";
+
+            case TrangThai.DaThuLy:
+                return "Đã thụ lý";
+
+            case TrangThai.DaKetLuan:
+                return "Đã kết luận";
+
+            case TrangThai.RutDon:
+                return "Rút đơn";
+
+            case TrangThai.TraLaiDon:
+                return "Trả lại đơn";
+
+            case TrangThai.ChuyenDon:
+                return "Chuyển đơn";
+
+            default:
+                return string.Empty;
         }
     }
 }

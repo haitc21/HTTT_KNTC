@@ -25,8 +25,7 @@ public class FileAttachmentManager : DomainService
     }
 
     public async Task<FileAttachment> CreateAsync([NotNull] LoaiVuViec loaiVuViec,
-                                                   Guid? complainId,
-                                                   Guid? denounceId,
+                                                   Guid idHoSo,
                                                    [NotNull] int giaiDoan,
                                                    [NotNull] string tenTaiLieu,
                                                    [NotNull] int hinhThuc,
@@ -37,7 +36,8 @@ public class FileAttachmentManager : DomainService
                                                    [NotNull] string fileName,
                                                    [NotNull] string contentType,
                                                    [NotNull] long contentLength,
-                                                   [NotNull] bool congKhai)
+                                                   [NotNull] bool congKhai,
+                                                   bool chophepDownload)
     {
         Check.NotNull(loaiVuViec, nameof(loaiVuViec));
         Check.NotNull(giaiDoan, nameof(giaiDoan));
@@ -52,32 +52,26 @@ public class FileAttachmentManager : DomainService
         Check.NotNull(contentLength, nameof(contentLength));
         Check.NotNull(congKhai, nameof(congKhai));
 
-        var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
-                                                     && (
-                                                     (loaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == complainId)
-                                                     || (loaiVuViec == LoaiVuViec.ToCao && x.DenounceId == denounceId)
-                                                     ));
+        var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu && x.IdHoSo == idHoSo);
         if (existTepDinhKem != null)
         {
             string maHoSo = "";
             if (loaiVuViec == LoaiVuViec.KhieuNai)
             {
-                var complain = await _complainRepo.GetAsync(complainId.Value, false);
+                var complain = await _complainRepo.GetAsync(idHoSo, false);
                 maHoSo = complain.MaHoSo;
             }
             if (loaiVuViec == LoaiVuViec.ToCao)
             {
-                var denounce = await _dunounceRepo.GetAsync(complainId.Value, false);
+                var denounce = await _dunounceRepo.GetAsync(idHoSo, false);
                 maHoSo = denounce.MaHoSo;
             }
             throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
                 .WithData("tenTaiLieu", tenTaiLieu)
                 .WithData("maHoSo", maHoSo);
         }
-        return new FileAttachment(GuidGenerator.Create(), tenTaiLieu)
+        return new FileAttachment(GuidGenerator.Create(), tenTaiLieu, idHoSo)
         {
-            ComplainId = complainId,
-            DenounceId = denounceId,
             GiaiDoan = giaiDoan,
             HinhThuc = hinhThuc,
             ThoiGianBanHanh = thoiGianBanHanh,
@@ -87,8 +81,9 @@ public class FileAttachmentManager : DomainService
             FileName = fileName,
             ContentType = contentType,
             ContentLength = contentLength,
-            LoaiVuViec = complainId.HasValue ? LoaiVuViec.KhieuNai : LoaiVuViec.ToCao,
-            CongKhai = congKhai
+            LoaiVuViec = loaiVuViec,
+            CongKhai = congKhai,
+            ChoPhepDownload = chophepDownload
         };
     }
 
@@ -104,7 +99,8 @@ public class FileAttachmentManager : DomainService
                                    string fileName,
                                    string contentType,
                                    long contentLength,
-                                   [NotNull] bool congKhai)
+                                   [NotNull] bool congKhai,
+                                   bool chophepDownload)
     {
         Check.NotNull(loaiVuViec, nameof(loaiVuViec));
         Check.NotNull(giaiDoan, nameof(giaiDoan));
@@ -122,22 +118,18 @@ public class FileAttachmentManager : DomainService
 
         if (fileAttachment.TenTaiLieu != tenTaiLieu)
         {
-            var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu
-                                                     && (
-                                                     (loaiVuViec == LoaiVuViec.KhieuNai && x.ComplainId == fileAttachment.ComplainId)
-                                                     || (loaiVuViec == LoaiVuViec.ToCao && x.DenounceId == fileAttachment.DenounceId)
-                                                     ));
+            var existTepDinhKem = await _fileAttachmentRepo.FindAsync(x => x.TenTaiLieu == tenTaiLieu && x.IdHoSo == fileAttachment.IdHoSo);
             if (existTepDinhKem != null)
             {
                 string maHoSo = "";
                 if (loaiVuViec == LoaiVuViec.KhieuNai)
                 {
-                    var complain = await _complainRepo.GetAsync(fileAttachment.ComplainId.Value, false);
+                    var complain = await _complainRepo.GetAsync(fileAttachment.IdHoSo, false);
                     maHoSo = complain.MaHoSo;
                 }
                 if (loaiVuViec == LoaiVuViec.ToCao)
                 {
-                    var denounce = await _dunounceRepo.GetAsync(fileAttachment.ComplainId.Value, false);
+                    var denounce = await _dunounceRepo.GetAsync(fileAttachment.IdHoSo, false);
                     maHoSo = denounce.MaHoSo;
                 }
                 throw new BusinessException(KNTCDomainErrorCodes.TepDinhKemAlreadyExist)
@@ -153,6 +145,7 @@ public class FileAttachmentManager : DomainService
         fileAttachment.ThuTuButLuc = thuTuButLuc;
         fileAttachment.NoiDungChinh = noiDungChinh;
         fileAttachment.CongKhai = congKhai;
+        fileAttachment.ChoPhepDownload = chophepDownload;
         if (!!string.IsNullOrEmpty(fileName))
         {
             fileAttachment.FileName = fileName;

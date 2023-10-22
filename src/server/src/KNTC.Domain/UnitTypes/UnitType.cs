@@ -30,7 +30,7 @@ public class UnitType : AuditedAggregateRoot<int>
 
     public string UnitTypeCode { get; private set; }
     public string UnitTypeName { get; private set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public virtual List<Unit> Units { get; set; }

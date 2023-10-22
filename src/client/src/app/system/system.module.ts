@@ -9,9 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { EditorModule } from 'primeng/editor';
 import { BadgeModule } from 'primeng/badge';
 import { ImageModule } from 'primeng/image';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -22,7 +20,6 @@ import { PermissionGrantComponent } from './permission-grant/permission-grant.co
 import { UserComponent } from './user/user.component';
 import { SystemRoutingModule } from './system-routing.module';
 import { PickListModule } from 'primeng/picklist';
-import { KeyFilterModule } from 'primeng/keyfilter';
 import { ToolbarModule } from 'primeng/toolbar';
 import { TagModule } from 'primeng/tag';
 import { ListboxModule } from 'primeng/listbox';
@@ -36,8 +33,9 @@ import { PasswordModule } from 'primeng/password';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { CardModule } from 'primeng/card';
 import { FileUploadModule } from 'primeng/fileupload';
-import { KNTCSharedModule } from '../shared/modules/shared.module';
 import { ProfileComponent } from './user/profile/profile.component';
+import { BaseMapComponent } from './basemap/basemap.component';
+import { BaseMapDetailComponent } from './basemap/detail/basemap-detail.component';
 import { DocumentTypeComponent } from './document-type/document-type.component';
 import { DocumentTypeDetailComponent } from './document-type/detail/document-type-detail.component';
 import { LandTypeComponent } from './land-type/land-type.component';
@@ -47,7 +45,15 @@ import { UnitTypeDetailComponent } from './unit-type/detail/unit-type-detail.com
 import { UnitComponent } from './unit/unit.component';
 import { UnitDetailComponent } from './unit/detail/unit-detail.component';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
-import { DividerModule } from 'primeng/divider';
+import { SysConfigComponent } from './sys-config/sys-config.component';
+import { SysConfigDetailComponent } from './sys-config/detail/sys-config-detail.component';
+import { ValidationMessagedModule } from '../_shared/modules/validation-message/validation-message.module';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { CommonModule } from '@angular/common';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TreeSelectModule } from 'primeng/treeselect';
+import { ChangePasswordComponent } from './user/change-password/change-password.component';
+import { RegisterComponent } from './user/register/register.component';
 
 const COMPONENT = [
   RoleComponent,
@@ -58,6 +64,8 @@ const COMPONENT = [
   RoleAssignComponent,
   SetPasswordComponent,
   ProfileComponent,
+  BaseMapComponent,
+  BaseMapDetailComponent,
   DocumentTypeComponent,
   DocumentTypeDetailComponent,
   LandTypeComponent,
@@ -65,12 +73,17 @@ const COMPONENT = [
   UnitTypeComponent,
   UnitTypeDetailComponent,
   UnitComponent,
-  UnitDetailComponent
+  UnitDetailComponent,
+  SysConfigComponent,
+  SysConfigDetailComponent,
+  ChangePasswordComponent,
+  RegisterComponent
 ];
 
 @NgModule({
   declarations: [...COMPONENT],
   imports: [
+    CommonModule,
     CoreModule,
     PanelModule,
     TableModule,
@@ -82,17 +95,14 @@ const COMPONENT = [
     ProgressSpinnerModule,
     DynamicDialogModule,
     InputNumberModule,
-    CheckboxModule,
     InputTextareaModule,
-    EditorModule,
-    KNTCSharedModule,
+    ValidationMessagedModule,
     BadgeModule,
     ImageModule,
     ConfirmDialogModule,
     CalendarModule,
     SystemRoutingModule,
     PickListModule,
-    KeyFilterModule,
     ToolbarModule,
     TagModule,
     ListboxModule,
@@ -103,7 +113,9 @@ const COMPONENT = [
     CardModule,
     FileUploadModule,
     BreadcrumbModule,
-    DividerModule
+    MultiSelectModule,
+    InputSwitchModule,
+    TreeSelectModule
   ],
   entryComponents: [...COMPONENT],
 })

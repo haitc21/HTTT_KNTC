@@ -31,7 +31,7 @@ public class LandType : AuditedAggregateRoot<int>
 
     public string LandTypeCode { get; private set; }
     public string LandTypeName { get; private set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public virtual List<Complain> Complains { get; set; }

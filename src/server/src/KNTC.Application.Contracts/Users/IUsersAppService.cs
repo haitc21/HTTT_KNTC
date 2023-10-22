@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Account;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 
@@ -19,11 +20,11 @@ public interface IUsersAppService
 
     Task<UserDto> GetUserInfoAsync(Guid id);
 
-    Task<IdentityUserDto> CreateAsync(CrateAndUpdateUserDto input);
+    Task<IdentityUserDto> CreateAsync(CreateAndUpdateUserDto input);
 
-    Task<IdentityUserDto> UpdateAsync(Guid id, CrateAndUpdateUserDto input);
+    Task<IdentityUserDto> UpdateAsync(Guid id, CreateAndUpdateUserDto input);
 
-    Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CrateAndUpdateUserDto input);
+    Task<UserInfoDto> UpdateUserInfoAsync(Guid userId, CreateAndUpdateUserDto input);
 
     Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
 
@@ -36,4 +37,8 @@ public interface IUsersAppService
     Task<string> UploadAvatarAsync(IFormFile file);
 
     Task<byte[]> GetAvatarAsync(Guid? userId);
+
+    Task ChangePasswordAsync(ChangePasswordInput input);
+
+    Task<IdentityUserDto> RegisterAsync(CreateAndUpdateUserDto input);
 }

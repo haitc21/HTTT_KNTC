@@ -1,25 +1,25 @@
 import { ListResultDto } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
-import { Actions } from 'src/app/shared/enums/actions.enum';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { DenounceDto, DenounceService, GetDenounceListDto } from '@proxy/denounces';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
 import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { DenounceDetailComponent } from './detail/denounce-detail.component';
-import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
-import { FileUploadDto as FileUploadDto } from 'src/app/shared/models/file-upload.class';
-import { FileService } from 'src/app/shared/services/file.service';
+import { DIALOG_BG } from 'src/app/_shared/constants/sizes.const';
+import { FileUploadDto as FileUploadDto } from 'src/app/_shared/models/file-upload.class';
+import { FileService } from 'src/app/_shared/services/file.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KetquaOptions, congKhaiOptions, loaiKQOptions } from 'src/app/shared/constants/consts';
+import { TrangThaiOptions, KetquaOptions, LinhVucOptions, congKhaiOptions, loaiKQOptions, trangthaiOptions } from 'src/app/_shared/constants/consts';
 
 @Component({
   selector: 'app-denounce',
@@ -53,9 +53,9 @@ export class DenounceComponent implements OnInit, OnDestroy {
   maXa: number;
   thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
-  tinhTrang: number;
+  ketQua: number;
   congKhai: boolean | null;
-
+  trangThai: number;
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
@@ -63,12 +63,16 @@ export class DenounceComponent implements OnInit, OnDestroy {
 
   loaiKQOptions = loaiKQOptions;
   congKhaiOptions = congKhaiOptions;
+  LinhVucOptions = LinhVucOptions;
   KetquaOptions = KetquaOptions;
-
+  trangThaiOPtions = trangthaiOptions;
+  TrangthaiOptions = TrangThaiOptions;
+  
   // Permissions
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
   visibleActionColumn = false;
+  hasPermissionViewPrivateInfo = false;
 
   // Thao tac
   Actions = Actions;
@@ -110,7 +114,8 @@ export class DenounceComponent implements OnInit, OnDestroy {
     this.maXa = null;
     this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
-    this.tinhTrang = null;
+    this.ketQua = null;
+    this.trangThai = null;
   }
 
   private setHeader() {
@@ -165,6 +170,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         );
     } else this.huyenOptions = [];
   }
+
   huyenChange(event) {
     this.loadData();
     if (event.value) {
@@ -210,9 +216,10 @@ export class DenounceComponent implements OnInit, OnDestroy {
             ? this.thoiGianTiepNhanRange[1].toUTCString()
             : null,
         linhVuc: this.linhVuc,
-        ketQua: this.tinhTrang,
+        ketQua: this.ketQua,
         giaiDoan: this.giaiDoan,
         congKhai: this.congKhai,
+        trangThai: this.trangThai,
       } as GetDenounceListDto;
     }
 
@@ -222,6 +229,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: PagedResultDto<DenounceDto>) => {
           this.items = response.items;
+          
 
           this.totalCount = response.totalCount;
           this.layoutService.blockUI$.next(false);
@@ -252,9 +260,10 @@ export class DenounceComponent implements OnInit, OnDestroy {
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
       linhVuc: this.linhVuc,
-      ketQua: this.tinhTrang,
+      ketQua: this.ketQua,
       giaiDoan: this.giaiDoan,
       congKhai: this.congKhai,
+      trangThai: this.trangThai,
     } as GetDenounceListDto;
     this.denounceService
       .getExcel(this.filter)
@@ -283,7 +292,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
   getPermission() {
     this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Denounces.Edit');
     this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Denounces.Delete');
-
+    this.hasPermissionViewPrivateInfo = this.permissionService.getGrantedPolicy('Denounces.VuewPrivateInfo');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 
@@ -344,10 +353,11 @@ export class DenounceComponent implements OnInit, OnDestroy {
   setActionItem(item) {
     this.actionItem = item;
   }
+
   showAddModal() {
     const ref = this.dialogService.open(DenounceDetailComponent, {
       height: '92vh',
-      header: 'Thêm tố cáo',
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + 'Thêm mới tố cáo',
       width: DIALOG_BG,
       data: {
         loaiVuViec: LoaiVuViec.ToCao,
@@ -404,13 +414,12 @@ export class DenounceComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         mode: 'update',
       },
-      header: `Cập nhật tố cáo "${row.tieuDe}"`,
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + `Cập nhật tố cáo "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
 
     ref.onClose.subscribe((data: DenounceDto) => {
       if (data) {
-        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
         this.actionItem = null;
         this.resetFilter();
@@ -432,7 +441,7 @@ export class DenounceComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         mode: 'view',
       },
-      header: `Chi tiết đơn tố cáo "${row.tieuDe}"`,
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + `Chi tiết đơn tố cáo "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
   }
@@ -489,28 +498,28 @@ export class DenounceComponent implements OnInit, OnDestroy {
         this.breadcrumb.push({
           label: ' Đất đai',
           icon: 'pi pi-image',
-          routerLink: [`/pages/denounce/${LinhVuc.DatDai}`],
+          routerLink: [`/denounce/${LinhVuc.DatDai}`],
         });
         break;
       case LinhVuc.MoiTruong:
         this.breadcrumb.push({
           label: ' Môi trường',
           icon: 'pi pi-sun',
-          routerLink: [`/pages/denounce/${LinhVuc.MoiTruong}`],
+          routerLink: [`/denounce/${LinhVuc.MoiTruong}`],
         });
         break;
       case LinhVuc.TaiNguyenNuoc:
         this.breadcrumb.push({
           label: ' Tài nguyên nước',
           icon: 'pi pi-flag-fill',
-          routerLink: [`/pages/denounce/${LinhVuc.TaiNguyenNuoc}`],
+          routerLink: [`/denounce/${LinhVuc.TaiNguyenNuoc}`],
         });
         break;
       case LinhVuc.KhoangSan:
         this.breadcrumb.push({
           label: ' Khoáng sản',
           icon: 'pi pi-bitcoin',
-          routerLink: [`/pages/denounce/${LinhVuc.KhoangSan}`],
+          routerLink: [`/denounce/${LinhVuc.KhoangSan}`],
         });
         break;
       default:

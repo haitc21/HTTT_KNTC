@@ -6,7 +6,7 @@ export interface CreateAndUpdateDocumentTypeDto extends EntityDto<number> {
   documentTypeCode: string;
   documentTypeName: string;
   description?: string;
-  orderIndex: number;
+  orderIndex?: number;
   status: Status;
   concurrencyStamp?: string;
 }
@@ -15,7 +15,7 @@ export interface DocumentTypeDto extends FullAuditedEntityDto<number> {
   documentTypeCode: string;
   documentTypeName: string;
   description: string;
-  orderIndex: number;
+  orderIndex?: number;
   status: Status;
   concurrencyStamp?: string;
 }

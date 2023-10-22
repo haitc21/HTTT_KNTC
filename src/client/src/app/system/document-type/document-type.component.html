@@ -4,7 +4,7 @@
     <p-toolbar>
       <ng-template pTemplate="left">
         <button
-          *abpPermission="'DocumentType.Create'"
+          *abpPermission="'DocumentTypes.Create'"
           type="button"
           pButton
           pRipple
@@ -16,7 +16,7 @@
           (click)="showAddModal()"
         ></button>
         <button
-          *abpPermission="'DocumentType.Delete'"
+          *abpPermission="'DocumentTypes.Delete'"
           type="button"
           pButton
           pRipple
@@ -34,6 +34,7 @@
         <span class="p-input-icon-left search-width">
           <i class="pi pi-search"></i>
           <input
+            autofocus
             pInputText
             type="text"
             (keyup.enter)="loadData()"
@@ -63,7 +64,7 @@
           <th pSortableColumn="documentTypeCode">Mã</th>
           <th pSortableColumn="documentTypeName">Tên</th>
           <th pSortableColumn="status">Trạng thái</th>
-          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -91,7 +92,7 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-           <button
+            <button
               #btn
               pButton
               pRipple
@@ -117,6 +118,5 @@
         ></p-paginator>
       </ng-template>
     </p-table>
-
   </p-panel>
 </div>
