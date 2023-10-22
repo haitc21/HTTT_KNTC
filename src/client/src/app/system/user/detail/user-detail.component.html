@@ -1,9 +1,4 @@
-<form
-  class="form-horizontal form-label-left"
-  skipValidation
-  [formGroup]="form"
-  
->
+<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
   <p-panel #pnlDetail [collapsed]="false">
     <div class="grid">
       <!-- --------------------------------AVATAR-------------------------------------------------- -->
@@ -25,7 +20,14 @@
         <!-- ---------------------------------------------------------------------------------- -->
         <div class="field col-12 md:col-6">
           <span class="p-float-label">
-            <input id="userName" type="text" pInputText formControlName="userName" class="w-full" />
+            <input
+              autofocus
+              id="userName"
+              type="text"
+              pInputText
+              formControlName="userName"
+              class="w-full"
+            />
             <label for="userName">Tài khoản <span class="required">*</span></label>
           </span>
           <app-validation-message
@@ -139,8 +141,61 @@
           </span>
         </div>
         <!-- ---------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-6">
-          <p-checkbox binary="true" label="Kích hoạt" formControlName="isActive"></p-checkbox>
+        <div class="field col-12 md:col-12">
+          <span class="p-float-label">
+            <p-dropdown
+              id="userType"
+              formControlName="userType"
+              [options]="userTypeOPtions"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="changeUserType($event.value)"
+            ></p-dropdown>
+            <label>Loại tài khoản<span class="required">*</span></label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.userType"
+            [validationMessages]="validationMessages.userType"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div
+          class="field col-12 md:col-12"
+          *ngIf="
+            formControls?.userType?.value && formControls?.userType?.value != UserType.QuanLyTinh
+          "
+        >
+          <span class="p-float-label w-full">
+            <p-treeSelect
+              [(ngModel)]="selectedNodes"
+              formControlName="managedUnitIds"
+              [options]="unitOptions"
+              display="chip"
+              [metaKeySelection]="false"
+              selectionMode="multiple"
+              [filter]="true"
+              [filterInputAutoFocus]="true"
+              appendTo="body"
+              class="w-full"
+              containerStyleClass="w-full"
+              [showClear]="true"
+            ></p-treeSelect>
+            <label for="managedUnitIds">{{ unitOptionLabel }}</label>
+          </span>
+          <app-validation-message
+            [entityControl]="formControls.managedUnitIds"
+            [validationMessages]="validationMessages.managedUnitIds"
+          >
+          </app-validation-message>
+        </div>
+        <!-- ---------------------------------------------------------------------------------- -->
+        <div class="col-12 md:col-6 flex align-items-center">
+          <p-inputSwitch formControlName="isActive"></p-inputSwitch>
+          <label class="ml-3" for="isActive">Kích hoạt</label>
         </div>
         <!-- ---------------------------------------------------------------------------------- -->
       </div>
@@ -148,12 +203,12 @@
 
     <!-- ---------------------------------------------------------------------------------- -->
 
-       <ng-template pTemplate="footer">
+    <ng-template pTemplate="footer">
       <div class="flex justify-content-end">
         <button
           pButton
           pRipples
-          type="submit"
+          type="button"
           (click)="saveChange()"
           label="Lưu"
           class="p-button-info mr-2"
@@ -170,7 +225,5 @@
         ></button>
       </div>
     </ng-template>
-
-   
   </p-panel>
 </form>

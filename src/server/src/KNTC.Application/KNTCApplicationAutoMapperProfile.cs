@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using KNTC.BaseMaps;
 using KNTC.CategoryUnitTypes;
 using KNTC.Complains;
-using KNTC.Configs;
 using KNTC.Denounces;
 using KNTC.DocumentTypes;
 using KNTC.Extenssions;
@@ -10,6 +10,7 @@ using KNTC.LandTypes;
 using KNTC.Roles;
 using KNTC.SpatialDatas;
 using KNTC.Summaries;
+using KNTC.SysConfigs;
 using KNTC.Units;
 using KNTC.Users;
 using Volo.Abp.Identity;
@@ -37,26 +38,32 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<IdentityUser, UserDto>();
         CreateMap<IdentityUser, UserListDto>();
         CreateMap<UserInfo, UserInfoDto>();
-        CreateMap<CrateAndUpdateUserDto, IdentityUser>();
-        CreateMap<CrateAndUpdateUserDto, UserInfo>();
+        CreateMap<CreateAndUpdateUserDto, IdentityUser>();
+        CreateMap<CreateAndUpdateUserDto, UserInfo>();
         CreateMap<IdentityUser, UserInfo>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
 
         CreateMap<Complain, ComplainDto>();
         CreateMap<Complain, ComplainInListDto>();
         CreateMap<Complain, ComplainExcelDto>()
+                 .ForMember(dto => dto.TrangThai, opt => opt.MapFrom(c => c.TrangThai.ToVNString()))
                  .ForMember(dto => dto.KetQua1, opt => opt.MapFrom(c => c.KetQua1.HasValue ? c.KetQua1.Value.ToVNString() : string.Empty))
-                 .ForMember(dto => dto.KetQua2, opt => opt.MapFrom(c => c.KetQua2.HasValue ? c.KetQua2.Value.ToVNString() : string.Empty))
-                 .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVNString() : string.Empty));
+                 .ForMember(dto => dto.KetQua2, opt => opt.MapFrom(c => c.KetQua2.HasValue ? c.KetQua2.Value.ToVNString() : string.Empty));
+        //.ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVNString() : string.Empty));
         CreateMap<CreateComplainDto, Complain>();
         CreateMap<UpdateComplainDto, Complain>();
+        CreateMap<CreateComplainDto, CreateComplainEto>();
+        CreateMap<UpdateComplainDto, UpdateComplainEto>();
 
         CreateMap<Denounce, DenounceDto>();
         CreateMap<Denounce, DenounceInListDto>();
         CreateMap<Denounce, DenounceExcelDto>()
-                 .ForMember(dto => dto.KetQua, opt => opt.MapFrom(denounce => denounce.KetQua.Value.ToVNString()));
+                 .ForMember(dto => dto.TrangThai, opt => opt.MapFrom(c => c.TrangThai.ToVNString()))
+                 .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.Value.ToVNString()));
         CreateMap<CreateDenounceDto, Denounce>();
         CreateMap<UpdateDenounceDto, Denounce>();
+        CreateMap<CreateDenounceDto, CreateDenounceEto>();
+        CreateMap<UpdateDenounceDto, UpdateDenounceEto>();
 
         CreateMap<FileAttachment, FileAttachmentDto>();
         CreateMap<CreateAndUpdateFileAttachmentDto, FileAttachment>();
@@ -69,6 +76,10 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<LandType, LandTypeLookupDto>();
         CreateMap<CreateAndUpdateLandTypeDto, LandType>();
 
+        CreateMap<BaseMap, BaseMapDto>();
+        CreateMap<BaseMap, BaseMapLookupDto>();
+        CreateMap<CreateAndUpdateBaseMapDto, BaseMap>();
+
         CreateMap<Unit, UnitDto>();
         CreateMap<Unit, UnitLookupDto>();
         CreateMap<CreateAndUpdateUnitDto, Unit>();
@@ -77,9 +88,10 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<UnitType, UnitTypeLookupDto>();
         CreateMap<CreateAndUpdateUnitTypeDto, UnitType>();
 
-        CreateMap<Config, ConfigDto>();
-        CreateMap<Config, ConfigLookupDto>();
-        CreateMap<CreateAndUpdateConfigDto, Config>();
+        CreateMap<SysConfig, SysConfigDto>();
+        CreateMap<SysConfig, SysConfigCacheItem>();
+        CreateMap<CreateSysConfigDto, SysConfig>();
+        CreateMap<UpdateSysConfigDto, SysConfig>();
 
         CreateMap<SpatialData, SpatialDataDto>();
         CreateMap<SpatialData, SpatialDataLookupDto>();
@@ -88,8 +100,16 @@ public class KNTCApplicationAutoMapperProfile : Profile
         CreateMap<Summary, SummaryDto>();
         CreateMap<Summary, SummaryMapDto>();
         CreateMap<Summary, SummaryExcelDto>()
+            .ForMember(dto => dto.TrangThai, opt => opt.MapFrom(c => c.TrangThai.ToVNString()))
             .ForMember(dto => dto.LoaiVuViec, opt => opt.MapFrom(c => c.LoaiVuViec.ToVNString()))
             .ForMember(dto => dto.LinhVuc, opt => opt.MapFrom(c => c.LinhVuc.ToVNString()))
-            .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue ? c.KetQua.Value.ToVNString() : string.Empty));
+            .ForMember(dto => dto.KetQua, opt => opt.MapFrom(c => c.KetQua.HasValue && c.KetQua != null ? c.KetQua.Value.ToVNString() : string.Empty));
+        CreateMap<Summary, LogBookExcelDto>()
+            .ForMember(dto => dto.TrangThai, opt => opt.MapFrom(c => c.TrangThai.ToVNString()))
+            .ForMember(dto => dto.KN, opt => opt.MapFrom(c => (c.LoaiVuViec == LoaiVuViec.KhieuNai) ? "☑" : "☒"))
+            .ForMember(dto => dto.TC, opt => opt.MapFrom(c => (c.LoaiVuViec == LoaiVuViec.ToCao) ? "☑" : "☒"))
+            .ForMember(dto => dto.LinhVuc, opt => opt.MapFrom(c => c.LinhVuc.ToVNString()))
+            .ForMember(dto => dto.DaGQ, opt => opt.MapFrom(c => c.KetQua.HasValue && c.KetQua != null ? c.KetQua.Value.ToVNString() : string.Empty))
+            .ForMember(dto => dto.DangGQ, opt => opt.MapFrom(c => c.KetQua.HasValue && c.KetQua != null ? string.Empty : "☑"));
     }
 }

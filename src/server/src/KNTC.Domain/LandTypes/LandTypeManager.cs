@@ -8,17 +8,17 @@ namespace KNTC.LandTypes;
 
 public class LandTypeManager : DomainService
 {
-    private readonly IRepository<LandType, int> _landTypeRepo;
+    private readonly IRepository<LandType, int> _LandTypeRepo;
 
-    public LandTypeManager(IRepository<LandType, int> landTypeRepo)
+    public LandTypeManager(IRepository<LandType, int> LandTypeRepo)
     {
-        _landTypeRepo = landTypeRepo;
+        _LandTypeRepo = LandTypeRepo;
     }
 
     public async Task<LandType> CreateAsync([NotNull] string code,
                                                 [NotNull] string name,
-                                                string description,
-                                                int orderIndex,
+                                                string? description,
+                                                int? orderIndex,
                                                 Status status)
     {
         Check.NotNullOrWhiteSpace(code, nameof(code));
@@ -33,61 +33,61 @@ public class LandTypeManager : DomainService
         };
     }
 
-    public async Task UpdateAsync([NotNull] LandType landType,
+    public async Task UpdateAsync([NotNull] LandType LandType,
                                   [NotNull] string code,
                                   [NotNull] string name,
-                                  string description,
-                                  int orderIndex,
+                                  string? description,
+                                  int? orderIndex,
                                   Status status)
     {
-        Check.NotNull(landType, nameof(landType));
+        Check.NotNull(LandType, nameof(LandType));
         Check.NotNullOrWhiteSpace(code, nameof(code));
         Check.NotNullOrWhiteSpace(name, nameof(name));
-        if (landType.LandTypeCode != code)
+        if (LandType.LandTypeCode != code)
         {
-            await ChangeCode(landType, code);
+            await ChangeCode(LandType, code);
         }
-        if (landType.LandTypeName != name)
+        if (LandType.LandTypeName != name)
         {
-            await ChangeName(landType, name);
+            await ChangeName(LandType, name);
         }
-        landType.Description = description;
-        landType.OrderIndex = orderIndex;
-        landType.Status = status;
+        LandType.Description = description;
+        LandType.OrderIndex = orderIndex;
+        LandType.Status = status;
     }
 
-    private async Task ChangeName(LandType landType, string name)
+    private async Task ChangeName(LandType LandType, string name)
     {
-        var existedName = await _landTypeRepo.FindAsync(x => x.LandTypeName == name, false);
-        if (existedName != null && existedName.Id != landType.Id)
+        var existedName = await _LandTypeRepo.FindAsync(x => x.LandTypeName == name, false);
+        if (existedName != null && existedName.Id != LandType.Id)
         {
             throw new BusinessException(KNTCDomainErrorCodes.NameAlreadyExist).WithData("name", name);
         }
-        landType.ChangeName(name);
+        LandType.ChangeName(name);
     }
 
     private async Task CheckName(string name)
     {
-        var existedName = await _landTypeRepo.FindAsync(x => x.LandTypeName == name, false);
+        var existedName = await _LandTypeRepo.FindAsync(x => x.LandTypeName == name, false);
         if (existedName != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.NameAlreadyExist).WithData("name", name);
         }
     }
 
-    private async Task ChangeCode(LandType landType, string code)
+    private async Task ChangeCode(LandType LandType, string code)
     {
-        var existedCode = await _landTypeRepo.FindAsync(x => x.LandTypeCode == code, false);
-        if (existedCode != null && existedCode.Id != landType.Id)
+        var existedCode = await _LandTypeRepo.FindAsync(x => x.LandTypeCode == code, false);
+        if (existedCode != null && existedCode.Id != LandType.Id)
         {
             throw new BusinessException(KNTCDomainErrorCodes.CodeAlreadyExist).WithData("code", code);
         }
-        landType.ChangeCode(code);
+        LandType.ChangeCode(code);
     }
 
     private async Task CheckCode(string code)
     {
-        var existedCode = await _landTypeRepo.FindAsync(x => x.LandTypeCode == code, false);
+        var existedCode = await _LandTypeRepo.FindAsync(x => x.LandTypeCode == code, false);
         if (existedCode != null)
         {
             throw new BusinessException(KNTCDomainErrorCodes.CodeAlreadyExist).WithData("code", code);

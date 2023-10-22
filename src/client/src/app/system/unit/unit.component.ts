@@ -4,10 +4,10 @@ import { UnitDto, UnitLookupDto, UnitService } from '@proxy/units';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
-import { Actions } from 'src/app/shared/enums/actions.enum';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { DIALOG_MD } from 'src/app/_shared/constants/sizes.const';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { UnitDetailComponent } from './detail/unit-detail.component';
 import { UnitTypeLookupDto, UnitTypeService } from '@proxy/category-unit-types';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
@@ -56,8 +56,13 @@ export class UnitComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.breadcrumb = [{ label: 'Danh mục địa danh' }];
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [{ label: ' Quản trị hệ thống', icon: 'pi pi-cog', disabled: true }];
+    this.breadcrumb.push({
+      label: ' Danh mục địa danh',
+      icon: 'pi pi-flag',
+    });
+
     this.getOptions();
     this.getPermission();
     this.buildActionMenu();
@@ -104,8 +109,8 @@ export class UnitComponent implements OnInit, OnDestroy {
   }
 
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Unit.Edit');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Unit.Delete');
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Units.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Units.Delete');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 

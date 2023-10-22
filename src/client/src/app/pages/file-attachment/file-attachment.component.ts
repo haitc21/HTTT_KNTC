@@ -3,23 +3,20 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { LoaiVuViec } from '@proxy';
 import { DocumentTypeLookupDto, DocumentTypeService } from '@proxy/document-types';
 import {
-  CreateAndUpdateFileAttachmentDto,
   FileAttachmentDto,
   FileAttachmentService,
 } from '@proxy/file-attachments';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
-import { Actions } from 'src/app/shared/enums/actions.enum';
-import { FileService } from 'src/app/shared/services/file.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { UtilityService } from 'src/app/shared/services/utility.service';
-import { FileAttachmentDetailComponent } from './detial/file-attachment-detail.component';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
+import { FileService } from 'src/app/_shared/services/file.service';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
+import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { congKhaiOptions, giaiDoanOptions } from 'src/app/_shared/constants/consts';
 
 @Component({
   selector: 'app-file-attachment',
@@ -31,8 +28,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
   @Input() loaiVuViec!: LoaiVuViec;
   @Input() modeHoSo: 'create' | 'update' | 'view';
-  @Input() complainId: string | null = null;
-  @Input() denounceId: string | null = null;
+  @Input() idHoSo: string;
 
   LoaiVuViec = LoaiVuViec;
   blockedPanel = false;
@@ -51,15 +47,8 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   selectedItem: FileAttachmentDto;
 
   documentTypeOptions: DocumentTypeLookupDto[] = [];
-  giaiDoanOptions = [
-    { value: 0, text: 'Tất cả' },
-    { value: 1, text: 'Khiếu nại lần I' },
-    { value: 2, text: 'Khiếu nại lần II' },
-  ];
-  congKhaiOptions = [
-    { value: true, text: 'Công khai' },
-    { value: false, text: 'Không công khai' },
-  ];
+  giaiDoanOptions = giaiDoanOptions;
+  congKhaiOptions = congKhaiOptions;
 
   giaiDoan: number;
   hinhThuc: number;
@@ -77,7 +66,6 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
   constructor(
     private documentTypeService: DocumentTypeService,
-    private dialogService: DialogService,
     private utilService: UtilityService,
     private confirmationService: ConfirmationService,
     private notificationService: NotificationService,
@@ -101,8 +89,8 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           maxResultCount: this.maxResultCount,
           skipCount: this.skipCount,
           keyword: this.keyword,
-          complainId: this.complainId,
-          denounceId: this.denounceId,
+          idHoSo: this.idHoSo,
+          loaiVuViec: this.loaiVuViec,
           giaiDoan: this.giaiDoan,
           hinhThuc: this.hinhThuc,
           congKhai: this.hasLoggedIn ? this.congKhai : true,
@@ -138,8 +126,8 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
         maxResultCount: this.maxResultCount,
         skipCount: this.skipCount,
         keyword: this.keyword,
-        complainId: this.complainId,
-        denounceId: this.denounceId,
+        idHoSo: this.idHoSo,
+        loaiVuViec: this.loaiVuViec,
         giaiDoan: this.giaiDoan,
         hinhThuc: this.hinhThuc,
         congKhai: this.modeHoSo == 'view' ? true : this.congKhai,
@@ -178,16 +166,16 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
 
   showAddModal() {
     this.visibleAddModal = true;
-    this.headerModal = 'Thêm mới tệp gắn kèm';
+    this.headerModal = 'Thêm mới Hồ sơ gắn kèm';
   }
+  
   submitAdd(dto: any) {
     if (dto) {
       this.layoutService.blockUI$.next(true);
       if (this.modeHoSo == 'create') {
         let fileAttachment = {
           loaiVuViec: this.loaiVuViec,
-          complainId: this.complainId,
-          denounceId: this.denounceId,
+          idHoSo: this.idHoSo,
           giaiDoan: dto.giaiDoan,
           tenTaiLieu: dto.tenTaiLieu,
           hinhThuc: dto.hinhThuc,
@@ -199,6 +187,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           contentType: dto.contentType,
           contentLength: dto.contentLength,
           congKhai: dto.congKhai,
+          choPhepDownload: dto.choPhepDownload
         } as FileAttachmentDto;
         this.data.push(fileAttachment);
         this.files.push(dto.file);
@@ -210,8 +199,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       }
       if (this.modeHoSo == 'update') {
         dto.loaiVuViec = this.loaiVuViec;
-        dto.complainId = this.complainId;
-        dto.denounceId = this.denounceId;
+        dto.idHoSo = this.idHoSo;
         this.fileAttachmentService
           .create(dto)
           .pipe(takeUntil(this.ngUnsubscribe))
@@ -248,7 +236,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
   }
   showUpdateModal(item: FileAttachmentDto) {
     this.selectedItem = item;
-    this.headerModal = `Cập nhật tệp gắn kèm "${item.tenTaiLieu}"`;
+    this.headerModal = `Cập nhật Hồ sơ gắn kèm "${item.tenTaiLieu}"`;
     this.visibleUpdateModal = true;
   }
   submitUpdate(dto: any) {
@@ -266,6 +254,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
           contentType: dto.contentType,
           contentLength: dto.contentLength,
           congKhai: dto.congKhai,
+          choPhepDownload: dto.choPhepDownload
         } as FileAttachmentDto;
         let index = this.data.indexOf(this.selectedItem);
         if (index > -1) {
@@ -321,16 +310,19 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   closeUpdateModal() {
     this.visibleUpdateModal = false;
     this.headerModal = '';
     this.selectedItem = null;
   }
+
   viewDetail(item: FileAttachmentDto) {
     this.selectedItem = item;
-    this.headerModal = `Chi tiết tệp gắn kèm "${item.tenTaiLieu}"`;
+    this.headerModal = `Chi tiết Hồ sơ gắn kèm "${item.tenTaiLieu}"`;
     this.visibleViewModal = true;
   }
+
   closeViewModal() {
     this.visibleViewModal = false;
     this.headerModal = '';
@@ -354,6 +346,7 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
         }
       );
   }
+
   deleteRow(item) {
     if (!item) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
@@ -400,10 +393,12 @@ export class FileAttachmentComponent implements OnInit, OnDestroy {
     let documentType = this.documentTypeOptions.find(x => x.id === id);
     return documentType?.documentTypeName ?? '';
   }
+
   getGiaiDoan(id): string {
     let giaiDoan = this.giaiDoanOptions.find(x => x.value === id);
     return giaiDoan?.text ?? '';
   }
+  
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;

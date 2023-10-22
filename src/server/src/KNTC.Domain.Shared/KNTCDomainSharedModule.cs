@@ -1,4 +1,5 @@
 ﻿using KNTC.Localization;
+using System;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -9,8 +10,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
-
-//using Volo.Abp.TenantManagement;
+using Volo.Abp.TenantManagement;
+using Volo.Abp.Timing;
 using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
@@ -23,8 +24,8 @@ namespace KNTC;
     typeof(AbpIdentityDomainSharedModule),
     typeof(AbpOpenIddictDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
-    typeof(AbpSettingManagementDomainSharedModule)
-    //typeof(AbpTenantManagementDomainSharedModule)
+    typeof(AbpSettingManagementDomainSharedModule),
+    typeof(AbpTenantManagementDomainSharedModule)
     )]
 public class KNTCDomainSharedModule : AbpModule
 {
@@ -46,12 +47,8 @@ public class KNTCDomainSharedModule : AbpModule
             options.Resources
                 .Add<KNTCResource>("vi")
                 .AddBaseTypes(typeof(AbpValidationResource))
-                .AddVirtualJson("/Localization/KNTC");
-            options.Resources
-                .Get<KNTCResource>()
-                .AddVirtualJson("/Localization/KNTCPm");
-            options.Resources
-                .Get<KNTCResource>()
+                .AddVirtualJson("/Localization/KNTC")
+                .AddVirtualJson("/Localization/KNTCPm")
                 .AddVirtualJson("/Localization/KNTCEx");
 
             options.DefaultResourceType = typeof(KNTCResource);
@@ -60,6 +57,10 @@ public class KNTCDomainSharedModule : AbpModule
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
             options.MapCodeNamespace("KNTCEx", typeof(KNTCResource));
+        });
+        Configure<AbpClockOptions>(options =>
+        {
+            options.Kind = DateTimeKind.Local;
         });
     }
 }

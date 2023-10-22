@@ -13,6 +13,7 @@ public class UnitCacheKey
 
     public override string ToString()
     {
-        return $"{UnitTypeId}_{ParentId}";
+        string parentId = ParentId.HasValue ? $"{ParentId}" : string.Empty;
+        return $"{nameof(UnitCacheKey)}_{UnitTypeId}_{parentId}";
     }
 }

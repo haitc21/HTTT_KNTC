@@ -33,7 +33,7 @@ public class Unit : AuditedAggregateRoot<int>
     public int UnitTypeId { get; set; }
     public int? ConfigId { get; set; }
     public int? ParentId { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public UnitType UnitType { get; set; }

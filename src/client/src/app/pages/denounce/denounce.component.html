@@ -7,17 +7,33 @@
           <span class="p-input-icon-left w-full">
             <i class="pi pi-search"></i>
             <input
+              autofocus
               pInputText
               type="text"
               (keyup.enter)="loadData()"
               [(ngModel)]="keyword"
-              placeholder="Tìm kiếm"
+              placeholder="Mã hồ sơ"
+              class="w-full"
+            />
+          </span>
+        </div>
+
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-user"></i>
+            <input
+              pInputText
+              type="text"
+              (keyup.enter)="loadData()"
+              [(ngModel)]="nguoiNopDon"
+              placeholder="Người nộp đơn"
               class="w-full"
             />
           </span>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-3">
+        <div class="field col-12 md:col-2">
           <span class="p-float-label">
             <p-dropdown
               [options]="tinhOptions"
@@ -31,11 +47,11 @@
               styleClass="w-full"
               (onChange)="tinhChange($event)"
             ></p-dropdown>
-            <label>Tỉnh/TP</label>
+            <label>Tỉnh</label>
           </span>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-3">
+        <div class="field col-12 md:col-2">
           <span class="p-float-label">
             <p-dropdown
               [options]="huyenOptions"
@@ -49,11 +65,11 @@
               styleClass="w-full"
               (onChange)="huyenChange($event)"
             ></p-dropdown>
-            <label>Quận/Huyện</label>
+            <label>Huyện/TP</label>
           </span>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-3">
+        <div class="field col-12 md:col-2">
           <span class="p-float-label">
             <p-dropdown
               [options]="xaOptions"
@@ -87,6 +103,39 @@
           </span>
         </div>
         <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="loaiKQOptions"
+              [(ngModel)]="ketQua"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label>Kết luận</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
+        <div class="field col-12 md:col-3">
+          <span class="p-float-label">
+            <p-dropdown
+              id="trangThai"
+              [options]="trangThaiOPtions"
+              [(ngModel)]="trangThai"
+              optionLabel="text"
+              optionValue="value"
+              [showClear]="true"
+              [autoDisplayFirst]="false"
+              styleClass="w-full"
+              (onChange)="loadData()"
+            ></p-dropdown>
+            <label>Trạng thái</label>
+          </span>
+        </div>
+        <!-- --------------------------------------------------------------------------------- -->
         <div *abpPermission="'Denounces'" class="field col-12 md:col-3">
           <span class="p-float-label">
             <p-dropdown
@@ -102,23 +151,6 @@
             <label>Công khai</label>
           </span>
         </div>
-        <!-- --------------------------------------------------------------------------------- -->
-        <div class="field col-12 md:col-3">
-          <span class="p-float-label">
-            <p-dropdown
-              [options]="loaiKQOptions"
-              [(ngModel)]="tinhTrang"
-              optionLabel="text"
-              optionValue="value"
-              [showClear]="true"
-              [autoDisplayFirst]="false"
-              styleClass="w-full"
-              (onChange)="loadData()"
-            ></p-dropdown>
-            <label>Kết luận</label>
-          </span>
-        </div>
-        <!-- --------------------------------------------------------------------------------- -->
       </div>
     </p-toolbar>
     <!-- ----------------------------------------------------------------------- -->
@@ -163,18 +195,19 @@
       <ng-template pTemplate="header">
         <tr>
           <th class="row-num-column">STT</th>
-          <th>Mã hồ sơ</th>
-          <th style="width: 180px">Nội dung TC</th>
-          <th style="width: 100px">Người tố cáo</th>
-          <th>Số ĐT</th>
-          <th style="width: 150px">Địa chỉ</th>
-          <th style="width: 100px">Người bị tố cáo</th>
-          <th>Người giải quyết</th>          
+          <th style="min-width: 80px">Mã hồ sơ</th>
+          <th style="min-width: 150px">Nội dung TC</th>
+          <th style="min-width: 100px">Người nộp đơn</th>
+          <th *ngIf="hasPermissionViewPrivateInfo">Số ĐT</th>
+          <th *ngIf="hasPermissionViewPrivateInfo" style="min-width: 130px">Địa chỉ</th>
+          <th style="min-width: 100px">Người bị tố cáo</th>
+          <th style="min-width: 120px">Người giải quyết</th>
           <th>Thời gian nộp</th>
           <th>Ngày hẹn trả KQ</th>
-          <th style="width: 150px">Bộ phận đang XL</th>
-          <th style="width: 100px">Kết luận</th>
-          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
+          <th style="min-width: 110px">Bộ phận thực hiện</th>
+          <th style="min-width: 90px">Trạng thái</th>
+          <th style="min-width: 100px">Kết luận</th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -184,17 +217,21 @@
           </td> -->
           <td class="row-num-cell">{{ skipCount + rowIndex + 1 }}</td>
           <td>
-            <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.maHoSo }}</span>
+            <span [ngStyle]="{ color: '#ed5565' }" class="p-link" (click)="viewDetail(row)">{{
+              row.maHoSo
+            }}</span>
           </td>
           <td>
-            <span [ngStyle]="{color: '#ed5565'}" class="p-link" (click)="viewDetail(row)">{{ row.tieuDe }}</span>
+            <span [ngStyle]="{ color: '#ed5565' }" class="p-link" (click)="viewDetail(row)">{{
+              row.tieuDe
+            }}</span>
           </td>
           <td>{{ row.nguoiNopDon }}</td>
-          <td>{{ row.dienThoai }}</td>
-          <td>{{ row.diaChiLienHe }}</td>
+          <td *ngIf="hasPermissionViewPrivateInfo">{{ row.dienThoai }}</td>
+          <td *ngIf="hasPermissionViewPrivateInfo">{{ row.diaChiLienHe }}</td>
           <td>{{ row.nguoiBiToCao }}</td>
           <td>{{ row.nguoiGQTC }}</td>
-          
+
           <td>
             {{ row?.thoiGianTiepNhan | date : 'dd/MM/yyyy HH:mm' }}
           </td>
@@ -202,6 +239,7 @@
             {{ row?.thoiGianHenTraKQ | date : 'dd/MM/yyyy HH:mm' }}
           </td>
           <td>{{ row?.boPhanDangXL }}</td>
+          <td style="color: blue">{{ TrangthaiOptions[row?.trangThai ? row?.trangThai : 0] }}</td>
           <td>{{ getLoaiKetQua(row?.ketQua) }}</td>
           <td *ngIf="visibleActionColumn">
             <p-tieredMenu
@@ -212,7 +250,7 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-           <button
+            <button
               #btn
               pButton
               pRipple
@@ -239,7 +277,6 @@
       </ng-template>
     </p-table>
     <!-- ----------------------------------------------------------------------- -->
-
   </p-panel>
 </div>
 <ng-template #emptyTpl><td></td></ng-template>

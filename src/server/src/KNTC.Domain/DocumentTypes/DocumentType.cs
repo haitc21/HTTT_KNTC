@@ -30,7 +30,7 @@ public class DocumentType : AuditedAggregateRoot<int>
 
     public string DocumentTypeCode { get; private set; }
     public string DocumentTypeName { get; private set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public int? OrderIndex { get; set; }
     public Status Status { get; set; }
     public virtual List<FileAttachment> FileAttachments { get; set; }

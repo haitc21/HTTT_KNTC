@@ -30,15 +30,21 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                DateTime? fromDate,
                                                DateTime? toDate,
                                                bool? CongKhai,
-                                               bool includeDetails = false)
+                                               bool? luuTru,
+                                               TrangThai? trangThai,
+                                               string nguoiNopDon,
+                                               UserType? userType,
+                                               int[]? managedUnitIds
+                                               )
     {
-        var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
+        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(
-                !filter.IsNullOrWhiteSpace(),
-                x => x.MaHoSo.ToUpper().Contains(filter)
-                || x.TieuDe.ToUpper().Contains(filter)
+                !keyword.IsNullOrWhiteSpace(),
+                x => x.MaHoSo.ToUpper().Contains(keyword)
+                || x.TieuDe.ToUpper().Contains(keyword)
              )
             .WhereIf(
                 linhVuc.HasValue,
@@ -46,7 +52,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
              )
              .WhereIf(
                 ketQua.HasValue,
-                x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
+                x => x.KetQua == ketQua
              )
              .WhereIf(
                 maTinhTp.HasValue,
@@ -72,6 +78,26 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                 CongKhai.HasValue,
                 x => x.CongKhai == CongKhai
              )
+             .WhereIf(
+                luuTru.HasValue,
+                x => x.LuuTru == luuTru
+             )
+             .WhereIf(
+                trangThai.HasValue,
+                x => x.TrangThai == trangThai
+             )
+             .WhereIf(
+                !string.IsNullOrEmpty(nguoiNopDon),
+                x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
+             )
+             .WhereIf(
+                (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
+                x => managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai
+             )
+             .WhereIf(
+                (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
+                x => managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai
+             )
             .OrderBy(sorting)
             .Skip(skipCount)
             .Take(maxResultCount)
@@ -85,6 +111,7 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
     }
 
     public async Task<List<Denounce>> GetDataExportAsync(string sorting,
+                                                   string keyword,
                                                    LinhVuc? linhVuc,
                                                    LoaiKetQua? ketQua,
                                                    int? maTinhTP,
@@ -92,17 +119,30 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
                                                    int? maXaPhuongTT,
                                                    DateTime? fromDate,
                                                    DateTime? toDate,
-                                                   bool? CongKhai)
+                                                   bool? CongKhai,
+                                                   bool? luuTru,
+                                                   TrangThai? trangThai,
+                                                   string nguoiNopDon,
+                                                   UserType? userType,
+                                                   int[]? managedUnitIds
+                                                   )
     {
+        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();
         return await dbSet
+            .WhereIf(
+                !keyword.IsNullOrWhiteSpace(),
+                x => x.MaHoSo.ToUpper().Contains(keyword)
+                || x.TieuDe.ToUpper().Contains(keyword)
+             )
             .WhereIf(
                 linhVuc.HasValue,
                 x => x.LinhVuc == linhVuc
              )
              .WhereIf(
                 ketQua.HasValue,
-                x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
+                x => x.KetQua == ketQua
              )
              .WhereIf(
                 maTinhTP.HasValue,
@@ -127,6 +167,26 @@ public class EfCoreDenounceRepository : EfCoreRepository<KNTCDbContext, Denounce
              .WhereIf(
                 CongKhai.HasValue,
                 x => x.CongKhai == CongKhai
+             )
+             .WhereIf(
+                luuTru.HasValue,
+                x => x.LuuTru == luuTru
+             )
+             .WhereIf(
+                trangThai.HasValue,
+                x => x.TrangThai == trangThai
+             )
+             .WhereIf(
+                !string.IsNullOrEmpty(nguoiNopDon),
+                x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
+             )
+             .WhereIf(
+                (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
+                x => managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai
+             )
+             .WhereIf(
+                (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
+                x => managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai
              )
             .OrderBy(sorting)
             .ToListAsync();

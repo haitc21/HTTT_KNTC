@@ -11,14 +11,14 @@ namespace KNTC.Data;
 
 public class UnitTypeSeedContributor : IDataSeedContributor, ITransientDependency
 {
-    public ILogger<UserInfoSeedContributor> Logger { get; set; }
+    public ILogger<UnitTypeSeedContributor> Logger { get; set; }
 
     private readonly IRepository<UnitType, int> _unitTypeRepo;
 
     public UnitTypeSeedContributor(IRepository<UnitType, int> unitTypeRepo)
     {
         _unitTypeRepo = unitTypeRepo;
-        Logger = NullLogger<UserInfoSeedContributor>.Instance;
+        Logger = NullLogger<UnitTypeSeedContributor>.Instance;
     }
 
     public async Task SeedAsync(DataSeedContext context)

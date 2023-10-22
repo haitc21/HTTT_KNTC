@@ -16,29 +16,6 @@ export class AppMenuComponent implements OnInit {
   constructor(public layoutService: LayoutService, private permissionService: PermissionService) {}
 
   ngOnInit() {
-    // this.model = [
-    //   {
-    //     label: 'Trang chủ',
-    //     items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }],
-    //   },
-    //   {
-    //     label: 'Hệ thống',
-    //     items: [
-    //       {
-    //         label: 'Danh sách quyền',
-    //         icon: 'pi pi-fw pi-circle',
-    //         routerLink: ['/system/role'],
-    //         permission: 'AbpIdentity.Roles',
-    //       },
-    //       {
-    //         label: 'Danh sách người dùng',
-    //         icon: 'pi pi-fw pi-circle',
-    //         routerLink: ['/system/user'],
-    //         permission: 'AbpIdentity.Users',
-    //       },
-    //     ],
-    //   },
-    // ];
     this.items = [
       {
         label: 'Trang chủ',
@@ -46,14 +23,14 @@ export class AppMenuComponent implements OnInit {
         routerLink: ['/'],
       },
       {
-        label: 'Dash Board',
+        label: 'Thống kê',
         icon: 'pi pi-fw pi-calendar',
-        routerLink: ['/pages/dashboard'],
+        routerLink: ['/dashboard'],
       },
       {
         label: 'Bản đồ',
         icon: 'pi pi-fw pi-map',
-        routerLink: ['/pages/map'],
+        routerLink: ['/map'],
       },
       {
         label: 'Khiếu nại',
@@ -61,20 +38,20 @@ export class AppMenuComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: [`/pages/complain/${LinhVuc.DatDai}`],
+            routerLink: [`/complain/${LinhVuc.DatDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`],
+            routerLink: [`/complain/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`],
+            routerLink: [`/complain/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`],
+            routerLink: [`/complain/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },
@@ -84,20 +61,20 @@ export class AppMenuComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: [`/pages/denounce/${LinhVuc.DatDai}`],
+            routerLink: [`/denounce/${LinhVuc.DatDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: [`/pages/denounce/${LinhVuc.MoiTruong}`],
+            routerLink: [`/denounce/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: [`/pages/denounce/${LinhVuc.KhoangSan}`],
+            routerLink: [`/denounce/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: [`/pages/denounce/${LinhVuc.TaiNguyenNuoc}`],
+            routerLink: [`/denounce/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },

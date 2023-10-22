@@ -1,64 +1,48 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
-import { LOGIN_URL } from './shared/constants/urls.const';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { LayoutService } from './layout/service/app.layout.service';
+import { GetSysConfigService } from './_shared/services/sysconfig.services';
 
 @Component({
   selector: 'app-root',
-  template: `
-    <p-panel #layoutPnl>
-      <router-outlet></router-outlet>
-      <p-toast position="top-right"></p-toast>
-      <p-confirmDialog
-        header="Xác nhận"
-        acceptLabel="Có"
-        rejectLabel="Không"
-        icon="pi pi-exclamation-triangle"
-      ></p-confirmDialog>
-      <p-blockUI [target]="layoutPnl" [blocked]="blockedLayout">
-        <p-progressSpinner
-          [style]="{
-            width: '150px',
-            height: '150px',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)'
-          }"
-          strokeWidth="2"
-          animationDuration=".5s"
-        ></p-progressSpinner>
-      </p-blockUI>
-    </p-panel>
-  `,
+  templateUrl: './app.component.html',
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit {
   menuMode = 'static';
   blockedLayout = false;
+  configs: any;
 
   constructor(
     private primengConfig: PrimeNGConfig,
-    public layoutService: LayoutService
-  ) {
-    this.layoutService.blockUI$.subscribe(block => {
-      if (block === true) {
-        setTimeout(() => {
-          this.blockedLayout = true;
-        }, 1);
-      }
-      if (block === false) {
-        setTimeout(() => {
-          this.blockedLayout = false;
-        }, 500);
-      }
-    });
-  }
+    public layoutService: LayoutService,
+    private sysConfigService: GetSysConfigService
+  ) { }
 
   ngOnInit() {
-    this.primengConfig.ripple = true;
     document.documentElement.style.fontSize = '14px';
+    this.getConfigs();
+    this.setBlockUi();
+    this.configPrimeng();
+  }
+  ngAfterViewInit() {
+    // Hide the spinner when the document is ready
+    const spinnerElement = document.getElementById('nb-global-spinner');
+    if (spinnerElement) {
+      spinnerElement.style.display = 'none';
+    }
+  }
+
+  private getConfigs() {
+    this.sysConfigService.getAll().subscribe(
+      data => {
+        this.configs = data;
+      },
+      err => { }
+    );
+  }
+
+  private configPrimeng() {
+    this.primengConfig.ripple = true;
     this.primengConfig.setTranslation({
       firstDayOfWeek: 0,
       dayNames: ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'],
@@ -96,6 +80,24 @@ export class AppComponent {
       clear: 'Xóa',
       dateFormat: 'dd/mm/yy',
       weekHeader: 'Tuần',
+      weak: "mật khẩu yếu",
+      medium: "mật khẩu trung bình",
+      strong: "mật khẩu mạnh"
+    });
+  }
+
+  private setBlockUi() {
+    this.layoutService.blockUI$.subscribe(block => {
+      if (block === true) {
+        setTimeout(() => {
+          this.blockedLayout = true;
+        }, 1);
+      }
+      if (block === false) {
+        setTimeout(() => {
+          this.blockedLayout = false;
+        }, 500);
+      }
     });
   }
 }

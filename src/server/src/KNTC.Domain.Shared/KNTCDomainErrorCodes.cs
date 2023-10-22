@@ -2,5 +2,12 @@
 
 public static class KNTCDomainErrorCodes
 {
-    /* You can add your business exception error codes here, as constants */
+    public const string HoSoAlreadyExist = "KNTCEx:00001";
+    public const string LanGQAlreadyExist = "KNTCEx:00002";
+    public const string KQGQHoSoNotExist = "KNTCEx:00003";
+    public const string TepDinhKemAlreadyExist = "KNTCEx:00004";
+    public const string TepDinhKemMotExist = "KNTCEx:00005";
+    public const string CodeAlreadyExist = "KNTCEx:00006";
+    public const string NameAlreadyExist = "KNTCEx:00007";
+    public const string ExceltemplateNotExist = "KNTCEx:00008";
 }

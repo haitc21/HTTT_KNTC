@@ -5,14 +5,15 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { Subject, takeUntil } from 'rxjs';
 //import { UnitLookupDto } from '@proxy/units/models';
 import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
+import { BaseMapLookupDto } from '../../proxy/base-maps/models';
 import { SummaryService } from '@proxy/summaries';
-//import { MessageConstants } from 'src/app/shared/constants/messages.const';
+//import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 //import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
 //import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 import { MenuItem } from 'primeng/api';
+import { BaseMapService } from '@proxy/base-maps';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { PagedResultDto } from '@abp/ng.core';
-
+import { ListResultDto, PagedResultDto } from '@abp/ng.core';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -64,8 +65,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   
   //dataMap: SummaryMapDto[] = [];
   dataMap: SummaryDto[] = [];
+  baseMapList: BaseMapLookupDto[] = [];
 
   geo = false;
+  baseMap: string[] = [];
   filter: GetSummaryListDto;
 
   landComplain = true;
@@ -91,12 +94,32 @@ export class HomeComponent implements OnInit, OnDestroy {
     public layoutService: LayoutService,
     private oAuthService: OAuthService,
     //private spatialDataService: SpatialDataService,
+    private baseMapService: BaseMapService,    
     private summaryService: SummaryService
   ) {}
 
   ngOnInit(): void {
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.loadBaseMapMenu();
     this.loadData(true);
+  }
+
+  loadBaseMapMenu() {//load base-map options
+    this.layoutService.blockUI$.next(true);
+    this.baseMapService
+      .getLookup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<BaseMapLookupDto>) => {
+          this.baseMapList = res.items;
+        
+          this.layoutService.blockUI$.next(false);
+        },
+        () => {
+          this.layoutService.blockUI$.next(false);
+        }
+      );
+    this.layoutService.blockUI$.next(true);
   }
 
   loadData(isFirst: boolean = false) {
@@ -119,12 +142,25 @@ export class HomeComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: PagedResultDto<SummaryDto>) => {
           this.dataMap = res.items;//response;
+          
           this.layoutService.blockUI$.next(false);
         },
         error: () => {
           this.layoutService.blockUI$.next(false);
         },
       });
+  }
+
+  changeBaseMap(i: number, data: string, e: any){
+    if (e.checked){
+      if (this.baseMap.indexOf(data)==-1)
+        this.baseMap.push(data);
+    }
+    else{
+      if (this.baseMap.indexOf(data)!=-1)
+        this.baseMap.splice(this.baseMap.indexOf(data), 1);
+    }
+    this.baseMap = [...this.baseMap];
   }
 
   toggleMenuLeft() {
@@ -143,3 +179,5 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 }
+
+

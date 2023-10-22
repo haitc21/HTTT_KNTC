@@ -2,12 +2,13 @@ import { Component, OnInit, EventEmitter, OnDestroy, ChangeDetectorRef } from '@
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { UserDto, UsersService } from '@proxy/users';
-import { FileService } from 'src/app/shared/services/file.service';
+import { FileService } from 'src/app/_shared/services/file.service';
 import { DomSanitizer } from '@angular/platform-browser';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 
 @Component({
   templateUrl: './profile.component.html',
@@ -30,15 +31,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   // Validate
   validationMessages = {
-    name: [{ type: 'required', message: 'Tên không được để trống' }],
-    surname: [{ type: 'required', message: 'Họ không được để trống' }],
+    name: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  }],
+    surname: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  }],
     email: [
-      { type: 'required', message: 'Email không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  },
       { type: 'email', message: 'Địa chỉ email không chính xác' },
     ],
-    userName: [{ type: 'required', message: 'Tên tài khoản không được để trống' }],
+    userName: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  }],
     phoneNumber: [
-      { type: 'required', message: 'Số ĐT không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG  },
       { type: 'pattern', message: 'Số ĐT không chính xác' },
     ],
   };
@@ -74,7 +75,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   loadFormDetails(id: string) {
     this.layoutService.blockUI$.next(true);
     this.userService
-      .get(id)
+      .getUserInfo(id)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (response: UserDto) => {

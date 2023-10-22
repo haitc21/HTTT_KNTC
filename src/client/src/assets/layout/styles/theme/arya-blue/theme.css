@@ -4168,7 +4168,8 @@ p-treeselect.p-treeselect-clearable .p-treeselect-clear-icon {
 
 .p-panel .p-panel-header {
   border: 1px solid #383838;
-  padding: 1rem;
+  font-size: 14px !important;
+  padding: 1rem 0 1rem 0 !important;
   background: #1e1e1e;
   color: rgba(255, 255, 255, 0.87);
   border-top-right-radius: 3px;

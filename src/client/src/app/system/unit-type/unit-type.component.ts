@@ -3,10 +3,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { DIALOG_MD } from 'src/app/shared/constants/sizes.const';
-import { Actions } from 'src/app/shared/enums/actions.enum';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { DIALOG_MD } from 'src/app/_shared/constants/sizes.const';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { UnitTypeDetailComponent } from './detail/unit-type-detail.component';
 import { UnitTypeDto, UnitTypeService } from '@proxy/category-unit-types';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
@@ -49,15 +49,20 @@ export class UnitTypeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.breadcrumb = [{ label: 'Danh mục loại địa danh' }];
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [{ label: ' Quản trị hệ thống', icon: 'pi pi-cog', disabled: true }];
+    this.breadcrumb.push({
+      label: ' Danh mục loại địa danh',
+      icon: 'pi pi-star',
+    });
+
     this.getPermission();
     this.buildActionMenu();
     this.loadData();
   }
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('UnitType.Edit');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('UnitType.Delete');
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('UnitTypes.Edit');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('UnitTypes.Delete');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 

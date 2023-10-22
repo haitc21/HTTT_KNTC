@@ -5,20 +5,20 @@ import type { BaseListFilterDto } from '../models';
 export interface CreateAndUpdateFileAttachmentDto {
   id?: string;
   loaiVuViec: LoaiVuViec;
-  complainId?: string;
-  denounceId?: string;
+  idHoSo?: string;
   tenTaiLieu: string;
   giaiDoan: number;
   hinhThuc: number;
   thoiGianBanHanh: string;
   ngayNhan: string;
   thuTuButLuc: string;
-  noiDungChinh?: string;
-  fileName?: string;
+  noiDungChinh: string;
+  fileName: string;
   contentType?: string;
   contentLength: number;
   concurrencyStamp?: string;
   congKhai: boolean;
+  choPhepDownload: boolean;
 }
 
 export interface FileAttachmentDto extends AuditedEntityDto<string> {
@@ -33,13 +33,14 @@ export interface FileAttachmentDto extends AuditedEntityDto<string> {
   noiDungChinh?: string;
   fileName?: string;
   contentType?: string;
-  contentLength: number;
+  contentLength?: number;
   congKhai: boolean;
+  choPhepDownload: boolean;
 }
 
 export interface GetFileAttachmentListDto extends BaseListFilterDto {
-  complainId?: string;
-  denounceId?: string;
+  idHoSo?: string;
+  loaiVuViec: LoaiVuViec;
   giaiDoan?: number;
   hinhThuc?: number;
   congKhai?: boolean;

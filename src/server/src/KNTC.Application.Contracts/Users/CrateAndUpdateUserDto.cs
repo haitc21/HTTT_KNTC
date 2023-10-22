@@ -5,5 +5,5 @@ namespace KNTC.Users;
 
 public class CrateAndUpdateUserDto : IdentityUserUpdateDto
 {
-    public DateTime Dob { get; set; }
+    public DateTime? Dob { get; set; }
 }

@@ -1,25 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppLayoutComponent } from './layout/app.layout.component';
 import { AuthGuard } from '@abp/ng.core';
+import { AppLayoutComponent } from './layout/app.layout.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'pages/home', pathMatch: 'full' },
   {
-    path: 'pages',
+    path: '',
+    component: AppLayoutComponent,
     loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
-    component: AppLayoutComponent,
-  },
-  {
-    path: 'system',
-    loadChildren: () => import('./system/system.module').then(m => m.SystemModule),
-    component: AppLayoutComponent,
-    canActivate: [AuthGuard],
   },
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
   },
+  // login in angular
   { path: 'account/login', redirectTo: 'auth/login', pathMatch: 'full' },
   {
     path: '**',

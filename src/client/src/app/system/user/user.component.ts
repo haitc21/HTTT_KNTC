@@ -7,17 +7,18 @@ import { GetUserListDto, UserListDto, UsersService } from '@proxy/users';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { USER_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
-import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
-import { Actions } from 'src/app/shared/enums/actions.enum';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { USER_PROVIDER } from 'src/app/_shared/constants/provider-namex.const';
+import { DIALOG_MD, DIALOG_SM } from 'src/app/_shared/constants/sizes.const';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { PermissionGrantComponent } from '../permission-grant/permission-grant.component';
 import { UserDetailComponent } from './detail/user-detail.component';
 import { RoleAssignComponent } from './role-assign/role-assign.component';
 import { SetPasswordComponent } from './set-password/set-password.component';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'app-user',
@@ -56,7 +57,7 @@ export class UserComponent implements OnInit, OnDestroy {
   hasPermissionManagementPermionsion = false;
   visibleActionColumn = false;
   avatarUrl: any;
-
+  currUserName = '';
   constructor(
     public layoutService: LayoutService,
     private userService: UsersService,
@@ -66,17 +67,35 @@ export class UserComponent implements OnInit, OnDestroy {
     private confirmationService: ConfirmationService,
     private permissionService: PermissionService,
     private utilService: UtilityService,
-    private sanitizer: DomSanitizer
-  ) {}
+    private sanitizer: DomSanitizer,
+    private oAuthService: OAuthService
+  ) { }
 
   ngOnInit() {
-    this.breadcrumb = [{ label: 'Quản lý người dùng' }];
-    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.getCurrUser();
+    this.buildBreadcumb();
     this.getPermission();
     this.buildActionMenu();
     this.loadOptions();
     this.loadData();
   }
+
+  buildBreadcumb() {
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [{ label: ' Quản trị hệ thống', icon: 'pi pi-cog', disabled: true }];
+    this.breadcrumb.push({
+      label: ' Quản lý người dùng',
+      icon: 'pi pi-users',
+    });
+  }
+
+  getCurrUser() {
+    const accessToken = this.oAuthService.getAccessToken();
+    let decodedAccessToken = atob(accessToken.split('.')[1]);
+    let accessTokenJson = JSON.parse(decodedAccessToken);
+    this.currUserName = accessTokenJson.preferred_username ?? '';
+  }
+
   loadOptions() {
     this.layoutService.blockUI$.next(true);
     this.roleService
@@ -362,7 +381,7 @@ export class UserComponent implements OnInit, OnDestroy {
       }
     });
   }
- ngOnDestroy(): void {
+  ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

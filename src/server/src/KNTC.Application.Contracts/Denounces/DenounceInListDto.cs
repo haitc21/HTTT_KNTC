@@ -15,5 +15,6 @@ public class DenounceInListDto : AuditedEntityDto<Guid>
     public DateTime ThoiGianTiepNhan { get; set; }
     public DateTime ThoiGianHenTraKQ { get; set; }
     public string BoPhanDangXL { get; set; }
+    public TrangThai TrangThai { get; set; }
     public bool CongKhai { get; set; }
 }

@@ -1,0 +1,85 @@
+<form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
+  <p-panel #pnlDetail [collapsed]="false">
+    <div class="formgrid grid">
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-12">
+        <span class="p-float-label">
+          <input
+            autofocus
+            id="name"
+            type="text"
+            pInputText
+            formControlName="name"
+            [style]="{ width: '100%' }"
+          />
+          <label for="name">Tên <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.name"
+          [validationMessages]="validationMessages.name"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+      <div class="field col-12 md:col-12">
+        <span class="p-float-label">
+          <input
+            id="value"
+            type="text"
+            pInputText
+            formControlName="value"
+            [style]="{ width: '100%' }"
+          />
+          <label for="name">Giá trị <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.value"
+          [validationMessages]="validationMessages.value"
+        >
+        </app-validation-message>
+      </div>
+      <!-- -------------------------------------------------------=----------------------------- -->
+      <div class="field col-12 md:col-12">
+        <span class="p-float-label">
+          <input
+            id="description"
+            type="text"
+            pInputText
+            formControlName="description"
+            [style]="{ width: '100%' }"
+          />
+          <label for="description">Mô tả <span class="required">*</span></label>
+        </span>
+        <app-validation-message
+          [entityControl]="formControls.description"
+          [validationMessages]="validationMessages.description"
+        >
+        </app-validation-message>
+      </div>
+      <!-- ---------------------------------------------------------------------------------- -->
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-content-end">
+        <button
+          pButton
+          pRipples
+          type="button"
+          (click)="saveChange()"
+          label="Lưu"
+          class="p-button-info mr-2"
+          icon="pi pi-check"
+        ></button>
+        <button
+          pButton
+          pRipples
+          type="button"
+          (click)="close()"
+          label="Đóng"
+          class="p-button-danger"
+          icon="pi pi-times"
+        ></button>
+      </div>
+    </ng-template>
+  </p-panel>
+</form>

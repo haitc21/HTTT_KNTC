@@ -22,12 +22,17 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                      DateTime? fromDate,
                      DateTime? toDate,
                      bool? congKhai,
-                     bool includeDetails = false);
+                     bool? luuTru,
+                     TrangThai? TrangThai,
+                     string nguoiNopDon,
+                     UserType? userType,
+                     int[]? managedUnitIds);
 
     Task<Complain> FindByMaHoSoAsync(string maHoSo, bool includeDetails = false);
 
     Task<List<Complain>> GetDataExportAsync(
                  string sorting,
+                 string keyword,
                  LinhVuc? linhVuc,
                  LoaiKetQua? ketQua,
                  int? maTinhTp,
@@ -35,5 +40,11 @@ public interface IComplainRepository : IRepository<Complain, Guid>
                  int? maXaPhuongTT,
                  int? giaiDoan,
                  DateTime? FromDate,
-                 DateTime? ToDate);
+                 DateTime? ToDate,
+                 bool? CongKhai,
+                 bool? luutru,
+                 TrangThai? TrangThai,
+                 string nguoiNopDon,
+                 UserType? userType,
+                 int[]? managedUnitIds);
 }

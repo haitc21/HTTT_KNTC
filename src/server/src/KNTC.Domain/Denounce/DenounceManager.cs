@@ -47,20 +47,22 @@ public class DenounceManager : DomainService
                                               [NotNull] int tinhThuaDat,
                                               [NotNull] int huyenThuaDat,
                                               [NotNull] int xaThuaDat,
-                                              string duLieuToaDo,
-                                              string duLieuHinhHoc,
-                                              string GhiChu,
+                                              string? duLieuToaDo,
+                                              string? duLieuHinhHoc,
+                                              string? GhiChu,
                                               DateTime? ngayGQTC,
-                                              string nguoiGQTC,
-                                              string quyerDinhThuLyGQTC,
+                                              string? nguoiGQTC,
+                                              string? quyerDinhThuLyGQTC,
                                               DateTime? ngayQDGQTC,
-                                              string quyetDinhDinhChiGQTC,
+                                              string? quyetDinhDinhChiGQTC,
                                               DateTime? giaHanGQTC1,
                                               DateTime? giaHanGQTC2,
-                                              string soVBKLNDTC,
+                                              string? soVBKLNDTC,
                                               DateTime? ngayNhanTBKQXLKLTC,
                                               LoaiKetQua? ketQua,
-                                              bool congKhai
+                                              bool congKhai,
+                                              bool luuTru,
+                                              [NotNull] TrangThai TrangThai
         )
     {
         Check.NotNullOrWhiteSpace(maHoSo, nameof(maHoSo));
@@ -88,6 +90,7 @@ public class DenounceManager : DomainService
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
+        Check.NotNull(TrangThai, nameof(TrangThai));
 
         var existedHoSo = await _hoSoRepo.FindByMaHoSoAsync(maHoSo, false);
         if (existedHoSo != null)
@@ -136,7 +139,9 @@ public class DenounceManager : DomainService
             SoVBKLNDTC = soVBKLNDTC,
             NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC,
             KetQua = ketQua,
-            CongKhai = congKhai
+            CongKhai = congKhai,
+            LuuTru = luuTru,
+            TrangThai = TrangThai
         };
     }
 
@@ -162,7 +167,7 @@ public class DenounceManager : DomainService
                                    //[NotNull] string noiCapCccdCmnd,
                                    [NotNull] DateTime ngaySinh,
                                    [NotNull] string DienThoai,
-                                   string email,
+                                   string? email,
                                    [NotNull] string diaChiThuongTru,
                                    [NotNull] string diaChiLienHe,
                                    [NotNull] int maTinhTP,
@@ -183,18 +188,20 @@ public class DenounceManager : DomainService
                                    [NotNull] int xaThuaDat,
                                    string duLieuToaDo,
                                    string duLieuHinhHoc,
-                                   string GhiChu,
+                                   string? GhiChu,
                                    DateTime? ngayGQTC,
-                                   string nguoiGQTC,
-                                   string quyerDinhThuLyGQTC,
+                                   string? nguoiGQTC,
+                                   string? quyerDinhThuLyGQTC,
                                    DateTime? ngayQDGQTC,
-                                   string quyetDinhDinhChiGQTC,
+                                   string? quyetDinhDinhChiGQTC,
                                    DateTime? giaHanGQTC1,
                                    DateTime? giaHanGQTC2,
-                                   string soVBKLNDTC,
+                                   string? soVBKLNDTC,
                                    DateTime? ngayNhanTBKQXLKLTC,
                                    LoaiKetQua? ketQua,
-                                   bool congKhai
+                                   bool congKhai,
+                                   bool luutru,
+                                   [NotNull] TrangThai TrangThai
       )
     {
         Check.NotNull(denounce, nameof(denounce));
@@ -224,6 +231,7 @@ public class DenounceManager : DomainService
         Check.NotNull(tinhThuaDat, nameof(tinhThuaDat));
         Check.NotNull(huyenThuaDat, nameof(huyenThuaDat));
         Check.NotNull(xaThuaDat, nameof(xaThuaDat));
+        Check.NotNull(TrangThai, nameof(TrangThai));
 
         if (denounce.MaHoSo != maHoSo)
         {
@@ -270,5 +278,7 @@ public class DenounceManager : DomainService
         denounce.NgayNhanTBKQXLKLTC = ngayNhanTBKQXLKLTC;
         denounce.KetQua = ketQua;
         denounce.CongKhai = congKhai;
+        denounce.LuuTru = luutru;
+        denounce.TrangThai = TrangThai;
     }
 }

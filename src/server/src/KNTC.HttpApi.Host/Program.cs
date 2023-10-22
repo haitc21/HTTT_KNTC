@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Events;
 using System;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace KNTC;
@@ -15,7 +15,6 @@ public class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        Console.OutputEncoding = Encoding.UTF8;
         Log.Logger = new LoggerConfiguration()
 #if DEBUG
             .MinimumLevel.Debug()
@@ -25,7 +24,9 @@ public class Program
             .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
             .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
             .Enrich.FromLogContext()
-            .WriteTo.Async(c => c.File("Logs/logs.txt"))
+            .WriteTo.Map(
+             evt => evt.Level,
+             (level, wt) => wt.RollingFile("Logs\\" + level + "-{Date}.log"))
             .WriteTo.Async(c => c.Console())
             .CreateLogger();
 
@@ -33,18 +34,19 @@ public class Program
         {
             Log.Information("Starting KNTC.HttpApi.Host.");
             var builder = WebApplication.CreateBuilder(args);
+            IdentityModelEventSource.ShowPII = true;
             builder.WebHost.ConfigureKestrel(options =>
             {
                 options.Limits.MaxRequestBodySize = null; // không giới hạn dung lượng request. Mặc định 30MB
             });
-
-            builder.Host.ConfigureAppConfiguration((context, config) =>
-            {
-                var env = context.HostingEnvironment;
-                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                    .AddEnvironmentVariables();
-            })
+            builder.Host
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    var env = context.HostingEnvironment;
+                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                        .AddEnvironmentVariables();
+                })
                 .AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog();
@@ -56,6 +58,11 @@ public class Program
         }
         catch (Exception ex)
         {
+            if (ex is HostAbortedException)
+            {
+                throw;
+            }
+
             Log.Fatal(ex, "Host terminated unexpectedly!");
             return 1;
         }

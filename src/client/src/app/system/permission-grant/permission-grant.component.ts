@@ -13,7 +13,7 @@ import { SelectItemGroup } from 'primeng/api';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { ROLE_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
+import { ROLE_PROVIDER } from 'src/app/_shared/constants/provider-namex.const';
 
 @Component({
   templateUrl: 'permission-grant.component.html',
@@ -40,7 +40,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     protected localizationService: LocalizationService,
     private layoutService: LayoutService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadDetail(this.config.data.providerName, this.config.data.providerKey);
@@ -64,10 +64,7 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
             grPm.permissions.forEach(pm => {
               this.permissions.push(pm);
               gr.items.push({
-                label:
-                  grPm.name != 'AbpIdentity'
-                    ? pm.displayName
-                    : this.localizationService.instant(`::Permission:${pm.name}`),
+                label: pm.displayName,
                 value: pm.name,
               });
             });
@@ -117,8 +114,8 @@ export class PermissionGrantComponent implements OnInit, OnDestroy {
     }
   }
 
-  
-  
+
+
 
   close() {
     if (this.ref) {

@@ -4,14 +4,15 @@ import { RoleDto, RolesService } from '@proxy/roles';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { PermissionGrantComponent } from '../permission-grant/permission-grant.component';
 import { RoleDetailComponent } from './detail/role-detail.component';
-import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
-import { ROLE_PROVIDER } from 'src/app/shared/constants/provider-namex.const';
-import { Actions } from 'src/app/shared/enums/actions.enum';
+import { DIALOG_MD, DIALOG_SM } from 'src/app/_shared/constants/sizes.const';
+import { ROLE_PROVIDER } from 'src/app/_shared/constants/provider-namex.const';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'app-role',
@@ -41,6 +42,7 @@ export class RoleComponent implements OnInit, OnDestroy {
   hasPermissionManagementPermionsion = false;
   visibleActionColumn = false;
   actionMenu: MenuItem[];
+  currUserName: string;
 
   constructor(
     public layoutService: LayoutService,
@@ -48,21 +50,39 @@ export class RoleComponent implements OnInit, OnDestroy {
     public dialogService: DialogService,
     private notificationService: NotificationService,
     private confirmationService: ConfirmationService,
-    private permissionService: PermissionService
-  ) {}
+    private permissionService: PermissionService,
+    private oAuthService: OAuthService
+  ) { }
 
   ngOnInit() {
-    this.breadcrumb = [{ label: 'Quản lý vai trò' }];
-    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.getCurrUser();
+    this.buildBreadcumb();
     this.getPermission();
     this.buildActionMenu();
     this.loadData();
   }
+
+  getCurrUser() {
+    const accessToken = this.oAuthService.getAccessToken();
+    let decodedAccessToken = atob(accessToken.split('.')[1]);
+    let accessTokenJson = JSON.parse(decodedAccessToken);
+    this.currUserName = accessTokenJson.preferred_username ?? '';
+  }
+
+  buildBreadcumb() {
+    this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
+    this.breadcrumb = [{ label: ' Quản trị hệ thống', icon: 'pi pi-cog', disabled: true }];
+    this.breadcrumb.push({
+      label: ' Quản lý vai trò',
+      icon: 'pi pi-id-card',
+    });
+  }
+
   getPermission() {
-    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('AbpIdentity.Users.Update');
-    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('AbpIdentity.Users.Delete');
+    this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('AbpIdentity.Roles.Update');
+    this.hasPermissionDelete = this.permissionService.getGrantedPolicy('AbpIdentity.Roles.Delete');
     this.hasPermissionManagementPermionsion = this.permissionService.getGrantedPolicy(
-      'AbpIdentity.Users.ManagePermissions'
+      'AbpIdentity.Roles.ManagePermissions'
     );
     this.visibleActionColumn =
       this.hasPermissionUpdate ||

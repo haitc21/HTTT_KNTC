@@ -11,14 +11,14 @@ namespace KNTC.Data;
 
 public class LandTypeSeedContributor : IDataSeedContributor, ITransientDependency
 {
-    public ILogger<UserInfoSeedContributor> Logger { get; set; }
+    public ILogger<LandTypeSeedContributor> Logger { get; set; }
 
     private readonly IRepository<LandType, int> _LandTypeRepo;
 
     public LandTypeSeedContributor(IRepository<LandType, int> LandTypeRepo)
     {
         _LandTypeRepo = LandTypeRepo;
-        Logger = NullLogger<UserInfoSeedContributor>.Instance;
+        Logger = NullLogger<LandTypeSeedContributor>.Instance;
     }
 
     public async Task SeedAsync(DataSeedContext context)

@@ -11,6 +11,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Volo.Abp;
 
 namespace KNTC.NPOI;
 
@@ -876,7 +877,7 @@ public static class ExcelNpoi
     public static IWorkbook WriteExcelByTemp<T>(List<T> dataList, string filePath, int rowStart, int colStart, bool isCount = false) where T : class
     {
         if (!File.Exists(filePath))
-            return null;
+            throw new BusinessException(KNTCDomainErrorCodes.ExceltemplateNotExist);
 
         using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
         {

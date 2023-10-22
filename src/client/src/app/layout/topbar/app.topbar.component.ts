@@ -1,27 +1,35 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, isDevMode } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { PermissionService } from '@abp/ng.core';
+import { AuthService, PermissionService } from '@abp/ng.core';
 import { LayoutService } from '../service/app.layout.service';
-import { LOGIN_URL } from 'src/app/shared/constants/urls.const';
+//import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FileService } from 'src/app/shared/services/file.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
-import { NotificationService } from 'src/app/shared/services/notification.service';
+import { FileService } from 'src/app/_shared/services/file.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
 import { ProfileComponent } from 'src/app/system/user/profile/profile.component';
-import { DIALOG_MD, DIALOG_SM } from 'src/app/shared/constants/sizes.const';
+import { DIALOG_MD, DIALOG_SM } from 'src/app/_shared/constants/sizes.const';
 import { UserInfoDto } from '@proxy/users';
 import { DialogService } from 'primeng/dynamicdialog';
 import { SetPasswordComponent } from 'src/app/system/user/set-password/set-password.component';
 import { LinhVuc } from '@proxy';
-
+import { GetSysConfigService } from 'src/app/_shared/services/sysconfig.services';
+import { Subject, takeUntil } from 'rxjs';
+import { SysConfigConsts } from 'src/app/_shared/constants/sys-config.consts';
+import { UserDto, UsersService } from '@proxy/users';
+import { ChangePasswordComponent } from 'src/app/system/user/change-password/change-password.component';
+import { RegisterComponent } from 'src/app/system/user/register/register.component';
+import { LOGIN_URL } from 'src/app/_shared/constants/urls.const';
+import { ChangePasswordInput } from '@proxy/volo/abp/account';
 @Component({
   selector: 'app-topbar',
   templateUrl: './app.topbar.component.html',
   styleUrls: ['./app.topbar.component.scss'],
 })
-export class AppTopBarComponent implements OnInit {
+export class AppTopBarComponent implements OnInit, OnDestroy {
+  private ngUnsubscribe = new Subject<void>();
   items!: MenuItem[];
   userMenuItems: MenuItem[];
   systemMenuItems: MenuItem[];
@@ -35,6 +43,8 @@ export class AppTopBarComponent implements OnInit {
   userName = '';
   userId = '';
   avatarUrl: any;
+  geoserverUrl: string;
+  title: string;
 
   get isAutenticated() {
     return this.oAuthService.hasValidAccessToken();
@@ -44,29 +54,78 @@ export class AppTopBarComponent implements OnInit {
     public layoutService: LayoutService,
     private router: Router,
     private oAuthService: OAuthService,
+    private authService: AuthService,
     private permissionService: PermissionService,
     private fileService: FileService,
     private notificationService: NotificationService,
     public dialogService: DialogService,
-    private sanitizer: DomSanitizer
-  ) {}
+    private sanitizer: DomSanitizer,
+    private userService: UsersService,
+    private sysConfigService: GetSysConfigService
+  ) { }
   ngOnInit(): void {
-    if (this.isAutenticated) {
-      const accessToken = this.oAuthService.getAccessToken();
-      let decodedAccessToken = atob(accessToken.split('.')[1]);
-      let accessTokenJson = JSON.parse(decodedAccessToken);
-      this.userName = accessTokenJson.preferred_username ?? '';
-      this.userId = accessTokenJson.sub ?? '';
-      this.getAvatar();
-      this.fileService.avatarUrl$.subscribe(url => {
-        if (url) this.avatarUrl = url; // Cập nhật đường dẫn tới avatar của người dùng
-      });
-    }
-    this.initMenu();
-    this.initMenuUser();
-    this.initMenuSystem();
+    if (this.isAutenticated) this.getUserInfoFromToken();
+
+    this.getSysConfigAmdInitMenu();
   }
-  initMenuUser() {
+
+  private getUserInfoFromToken() {
+    const accessToken = this.oAuthService.getAccessToken();
+    let decodedAccessToken = atob(accessToken.split('.')[1]);
+    let accessTokenJson = JSON.parse(decodedAccessToken);
+    this.userName = accessTokenJson.preferred_username ?? '';
+    this.userId = accessTokenJson.sub ?? '';
+
+    this.getAvatar();
+    this.fileService.avatarUrl$.subscribe(url => {
+      if (url) this.avatarUrl = url;
+    });
+
+    //store userinfo in storage
+    if (this.userId) {
+      this.userService.getUserInfo(this.userId)
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe({
+          next: (response: UserDto) => {
+            localStorage.setItem('userInfo', JSON.stringify(response.userInfo));
+          },
+          error: () => { },
+        });
+    }
+  }
+
+  getSysConfigAmdInitMenu() {
+    const cacheKey = SysConfigConsts.Prefix;
+    const storedConfig = localStorage.getItem(cacheKey);
+    if (storedConfig) {
+      const { value, expiry } = JSON.parse(storedConfig);
+      const currentTime = new Date().getTime();
+      if (currentTime < expiry) {
+        let configs = value.items;
+        this.geoserverUrl = configs.find(x => x.name === SysConfigConsts.GEOSERVER_DOMAIN)?.value;
+        this.title = configs.find(x => x.name == SysConfigConsts.TITLE)?.value;
+        this.initMenu();
+        return;
+      }
+    }
+    this.sysConfigService
+      .getAll()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        data => {
+          let configs = data.items;
+          if (configs) {
+            this.geoserverUrl = configs.find(
+              x => x.name == SysConfigConsts.GEOSERVER_DOMAIN
+            )?.value;
+            this.title = configs.find(x => x.name == SysConfigConsts.TITLE)?.value;
+          }
+          this.initMenu();
+        },
+        err => { }
+      );
+  }
+  initMenu() {
     this.userMenuItems = [
       {
         label: 'Thông tin cá nhân',
@@ -79,7 +138,7 @@ export class AppTopBarComponent implements OnInit {
         label: 'Đổi mật khẩu',
         // icon: 'pi pi-key',
         command: event => {
-          this.setPassword();
+          this.changePassword();
         },
       },
       {
@@ -87,14 +146,10 @@ export class AppTopBarComponent implements OnInit {
         // icon: 'pi pi-sign-out',
         command: event => {
           this.oAuthService.logOut();
-          window.location.reload();
-          // this.router.navigate(['/']);
+          window.location.reload(); // login in angular
         },
       },
     ];
-  }
-
-  initMenu() {
     this.items = [
       {
         icon: 'pi pi-fw pi-home',
@@ -103,7 +158,7 @@ export class AppTopBarComponent implements OnInit {
       {
         label: 'Bản đồ',
         icon: 'pi pi-fw pi-map-marker',
-        routerLink: ['/pages/map'],
+        routerLink: ['/map'],
       },
       {
         label: 'Khiếu nại',
@@ -111,20 +166,20 @@ export class AppTopBarComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: [`/pages/complain/${LinhVuc.DatDai}`],
+            routerLink: [`/complain/${LinhVuc.DatDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`],
+            routerLink: [`/complain/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`],
+            routerLink: [`/complain/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`],
+            routerLink: [`/complain/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },
@@ -134,98 +189,131 @@ export class AppTopBarComponent implements OnInit {
         items: [
           {
             label: 'Đất đai',
-            routerLink: [`/pages/denounce/${LinhVuc.DatDai}`],
+            routerLink: [`/denounce/${LinhVuc.DatDai}`],
           },
           {
             label: 'Môi trường',
-            routerLink: [`/pages/denounce/${LinhVuc.MoiTruong}`],
+            routerLink: [`/denounce/${LinhVuc.MoiTruong}`],
           },
 
           {
             label: 'Khoáng sản',
-            routerLink: [`/pages/denounce/${LinhVuc.KhoangSan}`],
+            routerLink: [`/denounce/${LinhVuc.KhoangSan}`],
           },
           {
             label: 'Tài nguyên nước',
-            routerLink: [`/pages/denounce/${LinhVuc.TaiNguyenNuoc}`],
+            routerLink: [`/denounce/${LinhVuc.TaiNguyenNuoc}`],
           },
         ],
       },
       {
-        label: 'Thống kê',
+        label: 'Báo cáo/Thống kê',
         icon: 'fa fa-chart-bar',
         items: [
           {
-            label: 'Dashboard',
-            routerLink: ['/pages/dashboard'],
+            label: 'Thống kê',
+            routerLink: ['/dashboard'],
           },
           {
-            label: 'Hồ sơ',
-            routerLink: ['/pages/reports'],
+            label: 'Báo cáo KN/TC',
+            routerLink: ['/reports/report'],
           },
-
           {
-            label: 'Bảng tổng hợp',
-            routerLink: ['/pages/stats'],
+            label: 'Sổ theo dõi KN/TC',
+            routerLink: ['/reports/logbook'],
           },
         ],
       },
-    ];
-  }
-
-  initMenuSystem() {
-    this.systemMenuItems = [
       {
-        label: 'Cấu hình hệ thống',
-        routerLink: ['/system/config'],
-        //visible: this.permissionService.getGrantedPolicy('AbpIdentity.Config'),
-      },
-      {
-        label: 'Quản lý người dùng',
-        // icon: 'pi pi-fw pi-users',
-        routerLink: ['/system/user'],
-        visible: this.permissionService.getGrantedPolicy('AbpIdentity.Users'),
-      },
-      {
-        label: 'Quản trị phân quyền',
-        // icon: 'pi pi-fw pi-user-edit',
-        routerLink: ['/system/role'],
-        visible: this.permissionService.getGrantedPolicy('AbpIdentity.Roles'),
-      },
-      {
-        label: 'Danh mục',
+        label: 'Hệ thống',
+        icon: 'fa fa-cogs',
+        visible: this.isAutenticated,
         items: [
           {
-            label: 'Hình thức tệp',
-            routerLink: [`/system/document-type`],
+            label: 'Cấu hình hệ thống',
+            routerLink: ['/system/sys-config'],
+            visible: this.permissionService.getGrantedPolicy('SysConfigs'),
           },
           {
-            label: 'Loại đất',
-            routerLink: [`/system/land-type`],
+            label: 'Quản lý bản đồ quy hoạch',
+            routerLink: ['/system/basemap'],
+            visible: this.permissionService.getGrantedPolicy('BaseMaps'),
+            //url: `${this.geoserverUrl}/geoserver/web/`,
+            //visible: this.permissionService.getGrantedPolicy('GeoServesrs'),
           },
           {
-            label: 'Loại địa danh',
-            routerLink: [`/system/unit-type`],
+            label: 'Quản lý người dùng',
+            // icon: 'pi pi-fw pi-users',
+            routerLink: ['/system/user'],
+            visible: this.permissionService.getGrantedPolicy('AbpIdentity.Users'),
           },
           {
-            label: 'Địa danh',
-            routerLink: [`/system/unit`],
+            label: 'Quản trị phân quyền',
+            // icon: 'pi pi-fw pi-user-edit',
+            routerLink: ['/system/role'],
+            visible: this.permissionService.getGrantedPolicy('AbpIdentity.Roles'),
+          },
+          {
+            label: 'Danh mục',
+            visible: this.permissionService.getGrantedPolicy('UnitTypes') || this.permissionService.getGrantedPolicy('Units') || this.permissionService.getGrantedPolicy('LandTypes') || this.permissionService.getGrantedPolicy('DocumentTypes'),
+            //this.isAutenticated,
+            items: [
+              {
+                label: 'Loại địa danh',
+                routerLink: [`/system/unit-type`],
+                visible: this.permissionService.getGrantedPolicy('UnitTypes'),
+              },
+              {
+                label: 'Địa danh',
+                routerLink: [`/system/unit`],
+                visible: this.permissionService.getGrantedPolicy('Units'),
+              },
+              {
+                label: 'Phân loại đất',
+                routerLink: [`/system/land-type`],
+                visible: this.permissionService.getGrantedPolicy('LandTypes'),
+              },
+              {
+                label: 'Hình thức tệp',
+                routerLink: [`/system/document-type`],
+                visible: this.permissionService.getGrantedPolicy('DocumentTypes'),
+              },
+            ],
           },
         ],
       },
     ];
   }
-
   login() {
+    // login in angular
     this.router.navigate([LOGIN_URL, this.router.url]);
+    //login in auth server
+    // this.layoutService.blockUI$.next(true);
+    // this.authService.navigateToLogin();
   }
-  getAvatar() {
-    this.fileService.getAvatar(this.userId).subscribe(data => {
+  register() {
+    const ref = this.dialogService.open(RegisterComponent, {
+      header: 'Đăng ký',
+      width: DIALOG_MD,
+    });
+
+    ref.onClose.subscribe((data: RegisterComponent) => {
       if (data) {
-        let objectURL = 'data:image/png;base64,' + data;
-        this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        this.notificationService.showSuccess(MessageConstants.REGISTER_OK_MSG);
       }
     });
+  }
+
+  getAvatar() {
+    this.fileService
+      .getAvatar(this.userId)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(data => {
+        if (data) {
+          let objectURL = 'data:image/png;base64,' + data;
+          this.avatarUrl = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        }
+      });
   }
   profileModal() {
     if (!this.userId) {
@@ -246,17 +334,26 @@ export class AppTopBarComponent implements OnInit {
       }
     });
   }
-  setPassword() {
+  changePassword() {
     if (!this.userId) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
       return;
     }
-    const ref = this.dialogService.open(SetPasswordComponent, {
+    const ref = this.dialogService.open(ChangePasswordComponent, {
       data: {
         id: this.userId,
       },
-      header: `Đặt lại mật khẩu`,
+      header: `Đổi mật khẩu`,
       width: DIALOG_SM,
     });
+    ref.onClose.subscribe((data: ChangePasswordInput) => {
+      if (data) {
+        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
+      }
+    });
+  }
+  ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

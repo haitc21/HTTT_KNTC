@@ -1,24 +1,33 @@
 import { ListResultDto } from '@abp/ng.core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PagedResultDto, PermissionService } from '@abp/ng.core';
-import { Actions } from 'src/app/shared/enums/actions.enum';
+import { Actions } from 'src/app/_shared/enums/actions.enum';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 import { forkJoin, Subject, takeUntil } from 'rxjs';
 import { ComplainDto, ComplainService, GetComplainListDto } from '@proxy/complains';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
 import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { ComplainDetailComponent } from './detail/complain-detail.component';
-import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
-import { FileUploadDto as FileUploadDto } from 'src/app/shared/models/file-upload.class';
-import { FileService } from 'src/app/shared/services/file.service';
+import { DIALOG_BG } from 'src/app/_shared/constants/sizes.const';
+import { FileUploadDto as FileUploadDto } from 'src/app/_shared/models/file-upload.class';
+import { FileService } from 'src/app/_shared/services/file.service';
 import { DialogService } from 'primeng/dynamicdialog';
 import { ActivatedRoute } from '@angular/router';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
+import {
+  KetquaOptions,
+  LinhVucOptions,
+  congKhaiOptions,
+  giaiDoanOptions,
+  loaiKQOptions,
+  trangthaiOptions,
+  TrangThaiOptions,
+} from 'src/app/_shared/constants/consts';
 
 @Component({
   selector: 'app-complain',
@@ -46,38 +55,34 @@ export class ComplainComponent implements OnInit, OnDestroy {
   // filter
   filter: GetComplainListDto;
   keyword: string = '';
+  nguoiNopDon = '';
   maTinh: number;
   maHuyen: number;
   maXa: number;
   thoiGianTiepNhanRange: Date[];
   giaiDoan: number;
-  tinhTrang: number;
+  ketQua: number;
   congKhai: boolean | null;
+  trangThai: number;
 
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
 
-  giaiDoanOptions = [
-    { value: 1, text: 'Khiếu nại lần I' },
-    { value: 2, text: 'Khiếu nại lần II' },
-  ];
-  loaiKQOptions = [
-    { value: LoaiKetQua.Dung, text: 'Đúng' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
-    { value: LoaiKetQua.ChuaCoKQ, text: 'Chưa có KQ' },
-  ];
-  congKhaiOptions = [
-    { value: true, text: 'Công khai' },
-    { value: false, text: 'Không công khai' },
-  ];
-
+  giaiDoanOptions = giaiDoanOptions;
+  LinhVucOptions = LinhVucOptions;
+  loaiKQOptions = loaiKQOptions;
+  congKhaiOptions = congKhaiOptions;
+  KetquaOptions = KetquaOptions;
+  trangThaiOPtions = trangthaiOptions;
+  TrangthaiOptions = TrangThaiOptions;
+  
   // Permissions
   hasPermissionUpdate = false;
   hasPermissionDelete = false;
   visibleActionColumn = false;
+  hasPermissionViewPrivateInfo = false;
 
   // Thao tac
   Actions = Actions;
@@ -114,12 +119,14 @@ export class ComplainComponent implements OnInit, OnDestroy {
     this.maxResultCount = 20;
     this.totalCount = 0;
     this.keyword = '';
+    this.nguoiNopDon = '';
     this.maTinh = null;
     this.maHuyen = null;
     this.maXa = null;
     this.thoiGianTiepNhanRange = null;
     this.giaiDoan = null;
-    this.tinhTrang = null;
+    this.ketQua = null;
+    this.trangThai = null;
   }
 
   buildBreadcrumb() {
@@ -130,28 +137,28 @@ export class ComplainComponent implements OnInit, OnDestroy {
         this.breadcrumb.push({
           label: ' Đất đai',
           icon: 'pi pi-image',
-          routerLink: [`/pages/complain/${LinhVuc.DatDai}`],
+          routerLink: [`/complain/${LinhVuc.DatDai}`],
         });
         break;
       case LinhVuc.MoiTruong:
         this.breadcrumb.push({
           label: ' Môi trường',
           icon: 'pi pi-sun',
-          routerLink: [`/pages/complain/${LinhVuc.MoiTruong}`],
+          routerLink: [`/complain/${LinhVuc.MoiTruong}`],
         });
         break;
       case LinhVuc.TaiNguyenNuoc:
         this.breadcrumb.push({
           label: ' Tài nguyên nước',
           icon: 'pi pi-flag-fill',
-          routerLink: [`/pages/complain/${LinhVuc.TaiNguyenNuoc}`],
+          routerLink: [`/complain/${LinhVuc.TaiNguyenNuoc}`],
         });
         break;
       case LinhVuc.KhoangSan:
         this.breadcrumb.push({
           label: ' Khoáng sản',
           icon: 'pi pi-bitcoin',
-          routerLink: [`/pages/complain/${LinhVuc.KhoangSan}`],
+          routerLink: [`/complain/${LinhVuc.KhoangSan}`],
         });
         break;
       default:
@@ -174,6 +181,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         }
       );
   }
+
   tinhChange(event) {
     this.loadData();
     if (event.value) {
@@ -225,6 +233,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         skipCount: this.skipCount,
         maxResultCount: this.maxResultCount,
         keyword: this.keyword,
+        nguoiNopDon: this.nguoiNopDon,
         maTinhTP: this.maTinh,
         maQuanHuyen: this.maHuyen,
         maXaPhuongTT: this.maXa,
@@ -237,9 +246,10 @@ export class ComplainComponent implements OnInit, OnDestroy {
             ? this.thoiGianTiepNhanRange[1].toUTCString()
             : null,
         linhVuc: this.linhVuc,
-        ketQua: this.tinhTrang,
+        ketQua: this.ketQua,
         giaiDoan: this.giaiDoan,
         congKhai: this.congKhai,
+        trangThai: this.trangThai,
       } as GetComplainListDto;
     }
 
@@ -259,12 +269,14 @@ export class ComplainComponent implements OnInit, OnDestroy {
       });
     this.layoutService.blockUI$.next(false);
   }
+
   exportExcel() {
     this.layoutService.blockUI$.next(true);
     this.filter = {
       skipCount: this.skipCount,
       maxResultCount: this.maxResultCount,
       keyword: this.keyword,
+      nguoiNopDon: this.nguoiNopDon,
       maTinhTP: this.maTinh,
       maQuanHuyen: this.maHuyen,
       maXaPhuongTT: this.maXa,
@@ -277,8 +289,9 @@ export class ComplainComponent implements OnInit, OnDestroy {
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
       linhVuc: this.linhVuc,
-      ketQua: this.tinhTrang,
+      ketQua: this.ketQua,
       giaiDoan: this.giaiDoan,
+      trangThai: this.trangThai,
     } as GetComplainListDto;
     this.complainService
       .getExcel(this.filter)
@@ -308,7 +321,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
   getPermission() {
     this.hasPermissionUpdate = this.permissionService.getGrantedPolicy('Complains.Edit');
     this.hasPermissionDelete = this.permissionService.getGrantedPolicy('Complains.Delete');
-
+    this.hasPermissionViewPrivateInfo = this.permissionService.getGrantedPolicy('Complains.VuewPrivateInfo');
     this.visibleActionColumn = this.hasPermissionUpdate || this.hasPermissionDelete;
   }
 
@@ -351,19 +364,22 @@ export class ComplainComponent implements OnInit, OnDestroy {
   deleteRowConfirm(id) {
     this.layoutService.blockUI$.next(true);
 
-    this.complainService.delete(id).subscribe({
-      next: () => {
-        this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
-        this.resetFilter();
-        this.loadData();
-        this.selectedItems = [];
-        this.actionItem = null;
-        this.layoutService.blockUI$.next(false);
-      },
-      error: () => {
-        this.layoutService.blockUI$.next(false);
-      },
-    });
+    this.complainService
+      .delete(id)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+          this.resetFilter();
+          this.loadData();
+          this.selectedItems = [];
+          this.actionItem = null;
+          this.layoutService.blockUI$.next(false);
+        },
+        error: () => {
+          this.layoutService.blockUI$.next(false);
+        },
+      });
   }
 
   setActionItem(item) {
@@ -374,7 +390,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
     const ref = this.dialogService.open(ComplainDetailComponent, {
       modal: true,
       height: '92vh',
-      header: 'Thêm khiếu nại/khiếu kiện',
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - Thêm mới khiếu nại/khiếu kiện',
       width: DIALOG_BG,
       data: {
         loaiVuViec: LoaiVuViec.KhieuNai,
@@ -395,9 +411,6 @@ export class ComplainComponent implements OnInit, OnDestroy {
 
           forkJoin(uploadObservables).subscribe(
             results => {
-              // results.forEach(res => {
-              //   this.notificationService.showSuccess(`${res}`);
-              // });
               this.notificationService.showSuccess(MessageConstants.CREATED_OK_MSG);
               this.layoutService.blockUI$.next(false);
               this.selectedItems = [];
@@ -432,13 +445,12 @@ export class ComplainComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         mode: 'update',
       },
-      header: `Cập nhật khiếu nại/khiếu kiện "${row.tieuDe}"`,
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + `Cập nhật khiếu nại/khiếu kiện "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
 
     ref.onClose.subscribe((data: ComplainDto) => {
       if (data) {
-        this.notificationService.showSuccess(MessageConstants.UPDATED_OK_MSG);
         this.selectedItems = [];
         this.actionItem = null;
         this.resetFilter();
@@ -446,6 +458,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   viewDetail(row) {
     if (!row) {
       this.notificationService.showError(MessageConstants.NOT_CHOOSE_ANY_RECORD);
@@ -460,7 +473,7 @@ export class ComplainComponent implements OnInit, OnDestroy {
         linhVuc: this.linhVuc,
         mode: 'view',
       },
-      header: `Chi tiết khiếu nại/khiếu kiện "${row.tieuDe}"`,
+      header: 'Lĩnh vực: ' + this.LinhVucOptions[this.linhVuc] + ' - ' + `Chi tiết khiếu nại/khiếu kiện "${row.tieuDe}"`,
       width: DIALOG_BG,
     });
   }
@@ -489,18 +502,21 @@ export class ComplainComponent implements OnInit, OnDestroy {
 
   deleteItemsConfirm(ids: any[]) {
     this.layoutService.blockUI$.next(true);
-    this.complainService.deleteMultiple(ids).subscribe({
-      next: () => {
-        this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
-        this.resetFilter();
-        this.loadData();
-        this.selectedItems = [];
-        this.layoutService.blockUI$.next(false);
-      },
-      error: () => {
-        this.layoutService.blockUI$.next(false);
-      },
-    });
+    this.complainService
+      .deleteMultiple(ids)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe({
+        next: () => {
+          this.notificationService.showSuccess(MessageConstants.DELETED_OK_MSG);
+          this.resetFilter();
+          this.loadData();
+          this.selectedItems = [];
+          this.layoutService.blockUI$.next(false);
+        },
+        error: () => {
+          this.layoutService.blockUI$.next(false);
+        },
+      });
   }
 
   thoiGiantiepNhanChange() {

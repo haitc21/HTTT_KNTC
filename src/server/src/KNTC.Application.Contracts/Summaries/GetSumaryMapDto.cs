@@ -9,6 +9,9 @@ public class GetSumaryMapDto
     {
     }
 
+    public LoaiVuViec? loaiVuViec { get; set; }
+    public LinhVuc? linhVuc { get; set; }
+
     public bool LandComplain { get; set; }
     public bool EnviromentComplain { get; set; }
     public bool WaterComplain { get; set; }
@@ -26,13 +29,14 @@ public class GetSumaryMapDto
     public DateTime? ToDate { get; set; }
     public LoaiKetQua? KetQua { get; set; }
     public bool? CongKhai { get; set; }
+    public TrangThai? TrangThai { get; set; }
     public string Keyword { get; set; }
+    public string NguoiNopDon { get; set; }
 
     public override string ToString()
     {
         var stringBuilder = new StringBuilder();
         stringBuilder
-            .Append(nameof(SummaryMapCache))
             .Append(LandComplain)
             .Append("_")
             .Append(EnviromentComplain)
@@ -63,8 +67,10 @@ public class GetSumaryMapDto
             .Append("_")
             .Append(CongKhai.HasValue ? CongKhai.ToString() : string.Empty)
             .Append("_")
-            .Append(Keyword);
-
-        return stringBuilder.ToString();
+            .Append(Keyword)
+            .Append("_")
+            .Append(NguoiNopDon);
+        string result = "Summary_Map_" + stringBuilder.GetHashCode();
+        return result;
     }
 }

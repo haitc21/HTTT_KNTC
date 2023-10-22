@@ -28,17 +28,13 @@
     </div>
 
     <div class="col-12 md:col-8">
-      <form
-        class="form-horizontal form-label-left"
-        skipValidation
-        [formGroup]="form"
-        
-      >
+      <form class="form-horizontal form-label-left" skipValidation [formGroup]="form">
         <div class="formgrid grid">
           <!-- ---------------------------------------------------------------------------------- -->
           <div class="field col-12 md:col-6">
             <span class="p-float-label">
               <input
+                autofocus
                 id="userName"
                 type="text"
                 pInputText
@@ -126,29 +122,29 @@
     </div>
   </div>
   <!-- ---------------------------------------------------------------------------------- -->
-       <ng-template pTemplate="footer">
-      <div class="flex justify-content-end">
-        <button
-          pButton
-          pRipples
-          type="submit"
-          (click)="saveChange()"
-          label="Lưu"
-          class="p-button-info mr-2"
-          icon="pi pi-check"
-        ></button>
-        <button
-          pButton
-          pRipples
-          type="button"
-          (click)="close()"
-          label="Đóng"
-          class="p-button-danger"
-          icon="pi pi-times"
-        ></button>
-      </div>
-    </ng-template>
-    
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end">
+      <button
+        pButton
+        pRipples
+        type="button"
+        (click)="saveChange()"
+        label="Lưu"
+        class="p-button-info mr-2"
+        icon="pi pi-check"
+      ></button>
+      <button
+        pButton
+        pRipples
+        type="button"
+        (click)="close()"
+        label="Đóng"
+        class="p-button-danger"
+        icon="pi pi-times"
+      ></button>
+    </div>
+  </ng-template>
+
   <p-blockUI [target]="pnlDetail" [blocked]="blockedPanelDetail">
     <p-progressSpinner
       [style]="{

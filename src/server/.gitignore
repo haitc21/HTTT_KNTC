@@ -251,15 +251,15 @@ paket-files/
 .idea/
 *.sln.iml
 
-# WebBase
-src/WebBase.Web/Logs/*
-src/WebBase.Web.Host/Logs/*
-src/WebBase.AuthServer/Logs/*
-src/WebBase.HttpApi.Host/Logs/*
-src/WebBase.HttpApi.HostWithIds/Logs/*
-src/WebBase.DbMigrator/Logs/*
-src/WebBase.Blazor.Server/Logs/*
-src/WebBase.Blazor.Server.Tiered/Logs/*
+# KNTC
+src/KNTC.Web/Logs/*
+src/KNTC.Web.Host/Logs/*
+src/KNTC.AuthServer/Logs/*
+src/KNTC.HttpApi.Host/Logs/*
+src/KNTC.HttpApi.Host/Logs/*
+src/KNTC.DbMigrator/Logs/*
+src/KNTC.Blazor.Server/Logs/*
+src/KNTC.Blazor.Server.Tiered/Logs/*
 
 # Use abp install-libs to restore.
 **/wwwroot/libs/*

@@ -2,24 +2,26 @@ import { ListResultDto, PagedResultDto } from '@abp/ng.core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { SpatialDataDto, SpatialDataService, GetSpatialDataListDto } from '@proxy/spatial-datas';
 import { Subject, takeUntil } from 'rxjs';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 import { UnitService } from '@proxy/units';
 import { UnitLookupDto } from '@proxy/units/models';
-import { LinhVuc, LoaiKetQua, LoaiVuViec } from '@proxy';
+import { LoaiVuViec } from '@proxy';
 import { MenuItem } from 'primeng/api';
 import { GetSummaryListDto, SummaryDto } from '../../proxy/summaries/models';
 import { SummaryService } from '@proxy/summaries';
-import { MessageConstants } from 'src/app/shared/constants/messages.const';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
 import { ComplainDetailComponent } from '../complain/detail/complain-detail.component';
-import { DIALOG_BG } from 'src/app/shared/constants/sizes.const';
+import { DIALOG_BG } from 'src/app/_shared/constants/sizes.const';
 import { DenounceDetailComponent } from '../denounce/detail/denounce-detail.component';
 import { DialogService } from 'primeng/dynamicdialog';
-import { NotificationService } from 'src/app/shared/services/notification.service';
-import { TYPE_EXCEL } from 'src/app/shared/constants/file-type.consts';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { TYPE_EXCEL } from 'src/app/_shared/constants/file-type.consts';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-
+import { TrangThaiOptions, KetquaOptions, LinhVucOptions, LoaiVuViecOptions, congKhaiOptions, loaiKQOptions } from 'src/app/_shared/constants/consts';
+import { BaseMapLookupDto } from '../../proxy/base-maps/models';
+import { BaseMapService } from '@proxy/base-maps';
+import { trangthaiOptions} from 'src/app/_shared/constants/consts';
 @Component({
   selector: 'app-search-map',
   templateUrl: './search-map.component.html',
@@ -68,10 +70,11 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   breadcrumb: MenuItem[];
 
   blockedPanel = false;
-  items: SummaryDto[] = [];
+  dataMap: SummaryDto[] = [];
+  baseMapList: BaseMapLookupDto[] = [];
   //dataMap: SummaryDto[] = [];
 
-  spatialData: SpatialDataDto[];
+  //spatialData: SpatialDataDto[];
 
   //Paging variables
   public skipCount: number = 0;
@@ -81,6 +84,9 @@ export class SearchMapComponent implements OnInit, OnDestroy {
 
   // filter
   geo = false;
+  baseMap: string[] = [];
+  toado: string;
+
   filter: GetSummaryListDto;
   //filter: GetSpatialDataListDto;
   //filter: GetComplainListDto;
@@ -96,28 +102,27 @@ export class SearchMapComponent implements OnInit, OnDestroy {
   mineralDenounce = true;
 
   keyword: string = '';
+  nguoiNopDon: string = '';
   congKhai: boolean | null;
   maTinh: number = 24;
   maHuyen: number;
   maXa: number;
   thoiGianTiepNhanRange: Date[];
-  tinhTrang: number;
+  ketQua: number;
+  trangThai: number;
 
   // option
   tinhOptions: UnitLookupDto[] = [];
   huyenOptions: UnitLookupDto[] = [];
   xaOptions: UnitLookupDto[] = [];
 
-  loaiKQOptions = [
-    { value: LoaiKetQua.Dung, text: 'Đúng' },
-    { value: LoaiKetQua.Sai, text: 'Sai' },
-    { value: LoaiKetQua.CoDungCoSai, text: 'Có Đúng/Có Sai' },
-    { value: LoaiKetQua.ChuaCoKQ, text: 'Chưa có KQ' },
-  ];
-  congKhaiOptions = [
-    { value: true, text: 'Công khai' },
-    { value: false, text: 'Không công khai' },
-  ];
+  loaiKQOptions = loaiKQOptions;
+  LoaiVuViecOptions = LoaiVuViecOptions;
+  LinhVucOptions = LinhVucOptions;
+  KetquaOptions = KetquaOptions;
+  trangThaiOPtions = trangthaiOptions;
+  TrangthaiOptions = TrangThaiOptions;
+  congKhaiOptions = congKhaiOptions;
   // ẩn hiện menu trái
   visibleFilterLeff = true;
   hideColumnState = 'visible';
@@ -132,15 +137,17 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private notificationService: NotificationService,
     private oAuthService: OAuthService,
-    private spatialDataService: SpatialDataService,
+    //private spatialDataService: SpatialDataService,
     private unitService: UnitService,
     private utilService: UtilityService,
+    private baseMapService: BaseMapService, 
     private summaryService: SummaryService
   ) {}
 
   ngOnInit(): void {
     this.buildBreadcumb();
     //this.mockData = this.mockService.mockData();
+    this.loadBaseMapMenu();
     this.loadOptions();
     //this.loadGeo();
     this.loadData(true);
@@ -151,56 +158,28 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     this.home = { label: ' Trang chủ', icon: 'pi pi-home', routerLink: '/' };
   }
 
+  loadBaseMapMenu() {//load base-map options
+    this.layoutService.blockUI$.next(true);
+    this.baseMapService
+      .getLookup()
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(
+        (res: ListResultDto<BaseMapLookupDto>) => {
+          this.baseMapList = res.items;
+          
+          this.layoutService.blockUI$.next(false);
+        },
+        () => {
+          this.layoutService.blockUI$.next(false);
+        }
+      );
+    this.layoutService.blockUI$.next(true);
+  }
+
   loadData(isFirst: boolean = false) {
     this.getDataTable();
-    //this.getDataMap();//Đoạn này code thừa! 0 cần thiết load lại 1 lần nữa
   }
 
-  /*
-  private getDataMap() {
-    this.layoutService.blockUI$.next(true);
-    this.filter = {
-      skipCount: this.skipCount,
-      maxResultCount: this.maxResultCount,
-      keyword: this.keyword,
-
-      landComplain: this.landComplain,
-      enviromentComplain: this.enviromentComplain,
-      waterComplain: this.waterComplain,
-      mineralComplain: this.mineralComplain,
-      landDenounce: this.landDenounce,
-      enviromentDenounce: this.enviromentDenounce,
-      waterDenounce: this.waterDenounce,
-      mineralDenounce: this.mineralDenounce,
-
-      maTinhTP: this.maTinh,
-      maQuanHuyen: this.maHuyen,
-      maXaPhuongTT: this.maXa,
-      fromDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[0]
-          ? this.thoiGianTiepNhanRange[0].toUTCString()
-          : null,
-      toDate:
-        this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
-          ? this.thoiGianTiepNhanRange[1].toUTCString()
-          : null,
-      ketQua: this.tinhTrang,
-      congKhai: this.hasLoggedIn ? this.congKhai : true,
-    } as GetSummaryListDto;
-    this.summaryService
-      .getMap(this.filter)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe({
-        next: (response: SummaryDto[]) => {
-          this.dataMap = response;
-          this.layoutService.blockUI$.next(false);
-        },
-        error: () => {
-          this.layoutService.blockUI$.next(false);
-        },
-      });
-  }
-  */
   private getDataTable() {
     this.layoutService.blockUI$.next(true);
     this.filter = {
@@ -228,15 +207,17 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
-      ketQua: this.tinhTrang,
+      ketQua: this.ketQua,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
+      trangThai: this.trangThai,
+      nguoiNopDon: this.nguoiNopDon
     } as GetSummaryListDto;
     this.summaryService
       .getList(this.filter)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe({
         next: (res: PagedResultDto<SummaryDto>) => {
-          this.items = res.items;
+          this.dataMap = res.items;
           this.totalCount = res.totalCount;
           this.layoutService.blockUI$.next(false);
         },
@@ -301,8 +282,10 @@ export class SearchMapComponent implements OnInit, OnDestroy {
         this.thoiGianTiepNhanRange && this.thoiGianTiepNhanRange[1]
           ? this.thoiGianTiepNhanRange[1].toUTCString()
           : null,
-      ketQua: this.tinhTrang,
+      ketQua: this.ketQua,
       congKhai: this.hasLoggedIn ? this.congKhai : true,
+      trangThai: this.trangThai,
+      nguoiNopDon: this.nguoiNopDon,
     } as GetSummaryListDto;
 
     this.summaryService
@@ -432,6 +415,23 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     }
   }
 
+  setPosition(duLieuToaDo){
+    if (duLieuToaDo!=null)
+      this.toado = duLieuToaDo;
+  }
+
+  changeBaseMap(i: number, data: string, e: any){
+    if (e.checked){
+      if (this.baseMap.indexOf(data)==-1)
+        this.baseMap.push(data);
+    }
+    else{
+      if (this.baseMap.indexOf(data)!=-1)
+        this.baseMap.splice(this.baseMap.indexOf(data), 1);
+    }
+    this.baseMap = [...this.baseMap];
+  }
+
   pageChanged(event: any): void {
     this.skipCount = event.page * this.maxResultCount;
     this.maxResultCount = event.rows;
@@ -446,41 +446,6 @@ export class SearchMapComponent implements OnInit, OnDestroy {
     } else {
       this.hideColumnState = 'visible';
       this.expandColumnState = 'normal';
-    }
-  }
-  getLoaiKetQua(kq: any): string {
-    if (!kq) return 'Chưa có KQ';
-    return this.loaiKQOptions.find(x => x.value == kq).text;
-  }
-
-  getLoaiVuViecName(loaiVuViec: LoaiVuViec) {
-    switch (loaiVuViec) {
-      case LoaiVuViec.KhieuNai:
-        return 'Khiếu nại/Khiếu kiện';
-        break;
-      case LoaiVuViec.ToCao:
-        return 'Tố cáo';
-        break;
-      default:
-        return '';
-    }
-  }
-  getLinhVucName(linhVuc: LinhVuc) {
-    switch (linhVuc) {
-      case LinhVuc.DatDai:
-        return 'Đất đai';
-        break;
-      case LinhVuc.MoiTruong:
-        return 'Môi trường';
-        break;
-      case LinhVuc.TaiNguyenNuoc:
-        return 'Tài nguyên nước';
-        break;
-      case LinhVuc.KhoangSan:
-        return 'Khoáng sản';
-        break;
-      default:
-        return '';
     }
   }
 

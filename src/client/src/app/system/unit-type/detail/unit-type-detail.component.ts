@@ -5,8 +5,10 @@ import { UnitTypeDto, UnitTypeService } from '@proxy/category-unit-types';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { KNTCValidatorConsts } from 'src/app/shared/constants/validator.const';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { MessageConstants } from 'src/app/_shared/constants/messages.const';
+import { KNTCValidatorConsts } from 'src/app/_shared/constants/validator.const';
+import { NotificationService } from 'src/app/_shared/services/notification.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 
 @Component({
   templateUrl: './unit-type-detail.component.html',
@@ -30,8 +32,9 @@ export class UnitTypeDetailComponent implements OnInit, OnDestroy {
     public config: DynamicDialogConfig,
     private unitTypeService: UnitTypeService,
     private utilService: UtilityService,
+    private notificationService: NotificationService,
     private fb: FormBuilder,
-    private layoutService: LayoutService,
+    private layoutService: LayoutService
   ) {}
 
   ngOnInit() {
@@ -44,20 +47,20 @@ export class UnitTypeDetailComponent implements OnInit, OnDestroy {
   // Validate
   validationMessages = {
     unitTypeCode: [
-      { type: 'required', message: 'Mã không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Mã không vượt quá ${KNTCValidatorConsts.MaxMaHoSoLength} kí tự`,
       },
     ],
     unitTypeName: [
-      { type: 'required', message: 'Tên không được để trống' },
+      { type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG },
       {
         type: 'maxLength',
         message: `Tên không vượt quá ${KNTCValidatorConsts.MaxNameLength} kí tự`,
       },
     ],
-    status: [{ type: 'required', message: 'Tên không được để trống' }],
+    status: [{ type: 'required', message: MessageConstants.REQUIRED_ERROR_MSG }],
     description: [
       {
         type: 'maxLength',
@@ -90,7 +93,11 @@ export class UnitTypeDetailComponent implements OnInit, OnDestroy {
   saveChange() {
     this.layoutService.blockUI$.next(true);
     this.utilService.markAllControlsAsDirty([this.form]);
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.notificationService.showWarn(MessageConstants.FORM_INVALID);
+      this.layoutService.blockUI$.next(false);
+      return;
+    }
     let obs$ = this.utilService.isEmpty(this.config.data?.id)
       ? this.unitTypeService.create(this.form.value)
       : this.unitTypeService.update(this.config.data.id, this.form.value);
@@ -122,7 +129,6 @@ export class UnitTypeDetailComponent implements OnInit, OnDestroy {
     });
   }
 
-  
   close() {
     if (this.ref) {
       this.ref.close();

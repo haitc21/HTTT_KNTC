@@ -41,7 +41,7 @@ public class DocumentTypeAppService : CrudAppService<
         {
             input.Sorting = $"{nameof(DocumentType.OrderIndex)}, {nameof(DocumentType.DocumentTypeName)}";
         }
-        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.ToUpper() : "";
+        var filter = !input.Keyword.IsNullOrEmpty() ? input.Keyword.Trim().ToUpper() : "";
         var queryable = await Repository.GetQueryableAsync();
 
         queryable = queryable
@@ -68,8 +68,11 @@ public class DocumentTypeAppService : CrudAppService<
         );
     }
 
+    //
     public async Task<ListResultDto<DocumentTypeLookupDto>> GetLookupAsync()
     {
+        Random random = new Random();
+        int randomNumber = random.Next(1, 11);
         var cacheItem = await _cache.GetOrAddAsync(
         "All",
         async () =>
@@ -80,16 +83,17 @@ public class DocumentTypeAppService : CrudAppService<
         },
         () => new DistributedCacheEntryOptions
         {
-            AbsoluteExpiration = DateTimeOffset.Now.AddHours(12)
+            AbsoluteExpiration = DateTimeOffset.Now.AddMinutes(10).AddSeconds(randomNumber),
         });
 
         return new ListResultDto<DocumentTypeLookupDto>(cacheItem.Items);
     }
 
+    [Authorize(KNTCPermissions.DocumentTypePermission.Create)]
     public override async Task<DocumentTypeDto> CreateAsync(CreateAndUpdateDocumentTypeDto input)
     {
-        var entity = await _documentTypeManager.CreateAsync(input.DocumentTypeCode,
-                                                            input.DocumentTypeName,
+        var entity = await _documentTypeManager.CreateAsync(input.DocumentTypeCode.Trim(),
+                                                            input.DocumentTypeName.Trim(),
                                                             input.Description,
                                                             input.OrderIndex,
                                                             input.Status);
@@ -98,13 +102,14 @@ public class DocumentTypeAppService : CrudAppService<
         return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.DocumentTypePermission.Edit)]
     public override async Task<DocumentTypeDto> UpdateAsync(int id, CreateAndUpdateDocumentTypeDto input)
     {
         var entity = await Repository.GetAsync(id, false);
         entity.SetConcurrencyStampIfNotNull(input.ConcurrencyStamp);
         await _documentTypeManager.UpdateAsync(entity,
-                                              input.DocumentTypeCode,
-                                              input.DocumentTypeName,
+                                              input.DocumentTypeCode.Trim(),
+                                              input.DocumentTypeName.Trim(),
                                               input.Description,
                                               input.OrderIndex,
                                               input.Status);
@@ -113,6 +118,7 @@ public class DocumentTypeAppService : CrudAppService<
         return ObjectMapper.Map<DocumentType, DocumentTypeDto>(entity);
     }
 
+    [Authorize(KNTCPermissions.DocumentTypePermission.Delete)]
     public override async Task DeleteAsync(int id)
     {
         await Repository.DeleteAsync(id);

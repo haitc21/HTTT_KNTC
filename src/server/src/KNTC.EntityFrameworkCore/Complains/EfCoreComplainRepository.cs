@@ -32,15 +32,22 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                DateTime? fromDate,
                                                DateTime? toDate,
                                                bool? congKhai,
-                                               bool includeDetails = false)
+                                               bool? luuTru,
+                                               TrangThai? trangThai,
+                                               string nguoiNopDon,
+                                               UserType? userType,
+                                               int[]? managedUnitIds
+                                               )
     {
-        var filter = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : keyword;
+        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
+
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(
-                !filter.IsNullOrWhiteSpace(),
-                x => x.MaHoSo.ToUpper().Contains(filter)
-                || x.TieuDe.ToUpper().Contains(filter)
+                !keyword.IsNullOrWhiteSpace(),
+                x => x.MaHoSo.ToUpper().Contains(keyword)
+                || x.TieuDe.ToUpper().Contains(keyword)
              )
             .WhereIf(
                 linhVuc.HasValue,
@@ -48,7 +55,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              )
              .WhereIf(
                 ketQua.HasValue,
-                x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
+                x => x.KetQua == ketQua
              )
              .WhereIf(
                 maTinhTP.HasValue,
@@ -63,7 +70,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 x => x.MaXaPhuongTT == maXaPhuongTT
              )
              .WhereIf(
-                giaiDoan.HasValue,
+                giaiDoan.HasValue && giaiDoan != 0,
                 x => (giaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) ||
                 (giaiDoan == 2 && x.NgayKhieuNai2 != null)
              )
@@ -74,6 +81,30 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              .WhereIf(
                 toDate.HasValue,
                 x => x.ThoiGianTiepNhan <= toDate
+             )
+             .WhereIf(
+                congKhai.HasValue,
+                x => x.CongKhai == congKhai
+             )
+             .WhereIf(
+                luuTru.HasValue,
+                x => x.LuuTru == luuTru
+             )
+             .WhereIf(
+                trangThai.HasValue,
+                x => x.TrangThai == trangThai
+             )
+             .WhereIf(
+                !string.IsNullOrEmpty(nguoiNopDon),
+                x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
+             )
+             .WhereIf(
+                (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
+                x => managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai
+             )
+             .WhereIf(
+                (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
+                x => managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai
              )
             .OrderBy(sorting)
             .Skip(skipCount)
@@ -89,6 +120,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
 
     public async Task<List<Complain>> GetDataExportAsync(
                                                string sorting,
+                                               string keyword,
                                                LinhVuc? linhVuc,
                                                LoaiKetQua? ketQua,
                                                int? maTinhTP,
@@ -96,17 +128,31 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                                                int? maXaPhuongTT,
                                                int? giaiDoan,
                                                DateTime? fromDate,
-                                               DateTime? toDate)
+                                               DateTime? toDate,
+                                               bool? CongKhai,
+                                               bool? LuuTru,
+                                               TrangThai? TrangThai,
+                                               string? nguoiNopDon,
+                                               UserType? userType,
+                                               int[]? managedUnitIds
+                                               )
     {
+        keyword = !keyword.IsNullOrWhiteSpace() ? keyword.ToUpper() : "";
+        nguoiNopDon = !nguoiNopDon.IsNullOrWhiteSpace() ? nguoiNopDon.ToUpper() : "";
         var dbSet = await GetDbSetAsync();
         return await dbSet
+            .WhereIf(
+                !keyword.IsNullOrWhiteSpace(),
+                x => x.MaHoSo.ToUpper().Contains(keyword)
+                || x.TieuDe.ToUpper().Contains(keyword)
+             )
             .WhereIf(
                 linhVuc.HasValue,
                 x => x.LinhVuc == linhVuc
              )
              .WhereIf(
                 ketQua.HasValue,
-                x => (ketQua != LoaiKetQua.ChuaCoKQ && x.KetQua == ketQua) || x.KetQua == null
+                x => x.KetQua == ketQua
              )
              .WhereIf(
                 maTinhTP.HasValue,
@@ -121,7 +167,7 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
                 x => x.MaXaPhuongTT == maXaPhuongTT
              )
              .WhereIf(
-                giaiDoan.HasValue,
+                giaiDoan.HasValue && giaiDoan != 0,
                 x => (giaiDoan == 1 && x.NgayKhieuNai1 != null && x.NgayKhieuNai2 == null) ||
                 (giaiDoan == 2 && x.NgayKhieuNai2 != null)
              )
@@ -132,6 +178,30 @@ public class EfCoreComplainRepository : EfCoreRepository<KNTCDbContext, Complain
              .WhereIf(
                 toDate.HasValue,
                 x => x.ThoiGianTiepNhan <= toDate
+             )
+             .WhereIf(
+                CongKhai.HasValue,
+                x => x.CongKhai == CongKhai
+             )
+             .WhereIf(
+                LuuTru.HasValue,
+                x => x.LuuTru == LuuTru
+             )
+             .WhereIf(
+                TrangThai.HasValue,
+                x => x.TrangThai == TrangThai
+             )
+             .WhereIf(
+                !string.IsNullOrEmpty(nguoiNopDon),
+                x => (x.NguoiNopDon.ToUpper().Contains(nguoiNopDon) || x.CccdCmnd == nguoiNopDon || x.DienThoai == nguoiNopDon)
+             )
+             .WhereIf(
+                (userType == UserType.QuanLyHuyen && !managedUnitIds.IsNullOrEmpty()),
+                x => managedUnitIds.Contains(x.MaQuanHuyen) || x.CongKhai
+             )
+             .WhereIf(
+                (userType == UserType.QuanLyXa && !managedUnitIds.IsNullOrEmpty()),
+                x => managedUnitIds.Contains(x.MaXaPhuongTT) || x.CongKhai
              )
             .OrderBy(sorting)
             .ToListAsync();

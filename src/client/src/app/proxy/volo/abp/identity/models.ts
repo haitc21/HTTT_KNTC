@@ -28,6 +28,7 @@ export interface IdentityUserDto extends ExtensibleFullAuditedEntityDto<string> 
   lockoutEnabled: boolean;
   lockoutEnd?: string;
   concurrencyStamp?: string;
+  entityVersion: number;
 }
 
 export interface IdentityUserUpdateDto extends IdentityUserCreateOrUpdateDtoBase {

@@ -33,6 +33,7 @@
       <ng-template pTemplate="right">
         <div class="p-inputgroup search-width">
           <input
+            autofocus
             pInputText
             type="text"
             (keyup.enter)="loadData()"
@@ -73,7 +74,7 @@
           <th>Số ĐT</th>
           <th>Ngày sinh</th>
           <th style="width: 150px">Trạng thái</th>
-          <th *ngIf="visibleActionColumn" class="action-column">{{Actions.ACTION}}</th>
+          <th *ngIf="visibleActionColumn" class="action-column">{{ Actions.ACTION }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
@@ -95,7 +96,7 @@
           <td>{{ row.surname ? row.surname + ' ' + row.name : row.name }}</td>
           <td>{{ row.email }}</td>
           <td>{{ row.phoneNumber }}</td>
-          <td>{{ row?.dob | date : 'dd-MM-yyyy' }}</td>
+          <td>{{ row?.dob | date : 'dd/MM/yyyy' }}</td>
           <td>
             <p-tag
               [severity]="row.isActive ? 'info' : 'warning'"
@@ -112,7 +113,8 @@
               [popup]="true"
               appendTo="body"
             ></p-tieredMenu>
-           <button
+            <button
+              [disabled]="row.userName == 'admin' && currUserName != 'admin'"
               #btn
               pButton
               pRipple

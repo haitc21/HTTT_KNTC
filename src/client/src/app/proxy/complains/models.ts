@@ -2,6 +2,7 @@ import type { AuditedEntityDto, EntityDto } from '@abp/ng.core';
 import type { LinhVuc } from '../linh-vuc.enum';
 import type { LoaiKhieuNai } from '../loai-khieu-nai.enum';
 import type { LoaiKetQua } from '../loai-ket-qua.enum';
+import type { TrangThai } from '../trang-thai.enum';
 import type { CreateAndUpdateFileAttachmentDto, FileAttachmentDto } from '../file-attachments/models';
 import type { BaseListFilterDto } from '../models';
 
@@ -48,6 +49,8 @@ export interface ComplainDto extends AuditedEntityDto<string> {
   ketQua2?: LoaiKetQua;
   ketQua?: LoaiKetQua;
   congKhai: boolean;
+  luuTru: boolean;
+  trangThai: TrangThai;
   fileAttachments: FileAttachmentDto[];
   concurrencyStamp?: string;
 }
@@ -93,7 +96,9 @@ export interface CreateComplainDto {
   thamQuyen2?: string;
   soQD2?: string;
   ketQua2?: LoaiKetQua;
+  trangThai: TrangThai;
   congKhai: boolean;
+  luuTru: boolean;
   fileAttachments: CreateAndUpdateFileAttachmentDto[];
 }
 
@@ -108,6 +113,9 @@ export interface GetComplainListDto extends BaseListFilterDto {
   ketQua?: LoaiKetQua;
   giaiDoan?: number;
   congKhai?: boolean;
+  luuTru?: boolean;
+  nguoiNopDon?: string;
+  trangThai?: TrangThai;
 }
 
 export interface UpdateComplainDto extends EntityDto<string> {
@@ -151,6 +159,8 @@ export interface UpdateComplainDto extends EntityDto<string> {
   thamQuyen2?: string;
   soQD2?: string;
   ketQua2?: LoaiKetQua;
+  trangThai: TrangThai;
   congKhai: boolean;
+  luuTru: boolean;
   concurrencyStamp?: string;
 }

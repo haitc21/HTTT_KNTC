@@ -7,12 +7,11 @@ import {
   ValidatorFn,
   AbstractControl,
 } from '@angular/forms';
-import { RoleDto } from '@proxy/roles';
 import { UsersService } from '@proxy/users';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Subject, takeUntil } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
-import { UtilityService } from 'src/app/shared/services/utility.service';
+import { UtilityService } from 'src/app/_shared/services/utility.service';
 
 @Component({
   templateUrl: './set-password.component.html',
@@ -26,7 +25,6 @@ export class SetPasswordComponent implements OnInit, OnDestroy {
   public title: string;
   public btnDisabled = false;
   public closeBtnName: string;
-  selectedEntity = {} as RoleDto;
   // Validate
   noSpecial: RegExp = /^[^<>*!_~]+$/;
   validationMessages = {

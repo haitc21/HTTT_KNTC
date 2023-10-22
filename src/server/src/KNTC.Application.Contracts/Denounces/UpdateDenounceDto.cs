@@ -31,8 +31,8 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
     public DateTime NgayCapCccdCmnd { get; set; }
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxNoiCapCccdCmnd)]
-    */
     public string NoiCapCccdCmnd { get; set; }
+    */
 
     [Required]
     public DateTime NgaySinh { get; set; }
@@ -44,7 +44,7 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
 
     [EmailAddress]
     [MaxLength(KNTCValidatorConsts.MaxEmailLength)]
-    public string Email { get; set; }
+    public string? Email { get; set; }
 
     [Required]
     [MaxLength(KNTCValidatorConsts.MaxDiaChiLength)]
@@ -106,31 +106,31 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
     public int XaThuaDat { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxToaDoLength)]
-    public string DuLieuToaDo { get; set; }
+    public string? DuLieuToaDo { get; set; }
 
     //[MaxLength(KNTCValidatorConsts.MaxHinhHocLength)]
-    public string DuLieuHinhHoc { get; set; }
+    public string? DuLieuHinhHoc { get; set; }
 
-    public string GhiChu { get; set; }
+    public string? GhiChu { get; set; }
 
     public DateTime? NgayGQTC { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxTenNguoiLength)]
-    public string NguoiGQTC { get; set; }
+    public string? NguoiGQTC { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
-    public string QuyerDinhThuLyGQTC { get; set; }
+    public string? QuyerDinhThuLyGQTC { get; set; }
 
     public DateTime? NgayQDGQTC { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
-    public string QuyetDinhDinhChiGQTC { get; set; }
+    public string? QuyetDinhDinhChiGQTC { get; set; }
 
     public DateTime? GiaHanGQTC1 { get; set; }
     public DateTime? GiaHanGQTC2 { get; set; }
 
     [MaxLength(KNTCValidatorConsts.MaxSoQDLength)]
-    public string SoVBKLNDTC { get; set; }
+    public string? SoVBKLNDTC { get; set; }
 
     public DateTime? NgayNhanTBKQXLKLTC { get; set; }
     public LoaiKetQua? KetQua { get; set; }
@@ -138,5 +138,10 @@ public class UpdateDenounceDto : EntityDto<Guid>, IHasConcurrencyStamp
     [Required]
     public bool CongKhai { get; set; }
 
-    public string ConcurrencyStamp { get; set; }
+    public bool LuuTru { get; set; }
+
+    [Required]
+    public TrangThai TrangThai { get; set; }
+
+    public string? ConcurrencyStamp { get; set; }
 }
