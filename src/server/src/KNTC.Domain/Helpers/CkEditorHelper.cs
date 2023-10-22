@@ -16,8 +16,7 @@ public class CkEditorHelper
         });
 
         // Replace multiple whitespaces with a single space
-        plainText = Regex.Replace(plainText, @"\s+", " ").Trim();
-
-        return plainText;
+        plainText = Regex.Replace(plainText, @"\s+", " ").Trim().TrimStart('.');
+        return plainText.Trim();
     }
 }
